@@ -102,6 +102,10 @@ dev-angular: ## 僅啟動 Angular Dashboard 服務
 	@echo "$(BLUE)[INFO]$(NC) 啟動 Angular Dashboard 服務 (http://localhost:4200)..."
 	@pnpm exec nx serve angular-dashboard
 
+dev-profile: ## 僅啟動 Profile 服務
+	@echo "$(BLUE)[INFO]$(NC) 啟動 Profile 服務 (http://localhost:3003)..."
+	@pnpm exec nx serve @nx-playground/profile
+
 setup: ## 設置開發環境
 	@echo "$(BLUE)[INFO]$(NC) 設置 NX Playground 開發環境..."
 	@echo "$(BLUE)[INFO]$(NC) 檢查 Node.js 版本..."

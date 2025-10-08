@@ -1,0 +1,18 @@
+{
+  "name": "@nx-playground/{{PROJECT_NAME}}",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@nx-playground/auth-client": "workspace:*",
+    "@nx-playground/design-system": "workspace:*",
+    "@nx-playground/api-client": "workspace:*",
+    "@nx-playground/ui-components": "workspace:*",
+    "@nx-playground/i18n": "workspace:*",
+    "@nx-playground/hooks": "workspace:*"
+  }
+}
