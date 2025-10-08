@@ -1,0 +1,246 @@
+# ==================== 第一階段：依賴快取 (生產環境) ====================
+# 這個階段只負責安裝最終應用程式運行時所需的生產依賴。
+FROM node:18-alpine AS deps
+
+WORKDIR /app
+
+# 安裝 pnpm
+ARG PNPM_VERSION=10.13.1
+RUN npm install -g pnpm@$PNPM_VERSION
+
+# 複製 Nx Monorepo 根目錄的配置和 pnpm 相關文件
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
+COPY nx.json ./
+
+# 複製 apps 和 libs 專案的 package.json
+COPY apps/*/package.json ./apps/
+COPY libs/*/package.json ./libs/
+
+# 僅安裝生產環境所需的依賴，避免不必要的檔案
+# 使用 --ignore-scripts 來避免 husky 腳本在建構時執行
+RUN pnpm install --prod --no-frozen-lockfile --ignore-scripts
+
+# ==================== 第二階段：建構應用程式 (所有依賴) ====================
+# 這個階段會安裝所有依賴，包含開發依賴，以確保所有建構步驟都成功執行。
+FROM node:18-alpine AS builder
+
+# 安裝建構時需要的系統依賴，並清理快取
+RUN apk add --no-cache \
+    git \
+    openssh-client \
+    bash \
+    libc6-compat \
+    && rm -rf /var/cache/apk/*
+
+# 設定工作目錄
+WORKDIR /app
+
+# 安裝 pnpm
+ARG PNPM_VERSION=10.13.1
+RUN npm install -g pnpm@$PNPM_VERSION
+
+# 複製所有原始碼
+COPY . .
+
+# 驗證源碼複製
+RUN echo "=== 驗證源碼複製 ===" && \
+    ls -la /app/ && \
+    ls -la /app/apps/ && \
+    echo "=== 源碼驗證完成 ==="
+
+# 安裝所有依賴，包含開發依賴，並執行所有腳本
+RUN pnpm install --no-frozen-lockfile
+
+# 接收建置時傳入的專案名稱和建置配置
+ARG PROJECT_NAME
+ARG BUILD_CONFIG=production
+
+# 建置專案
+RUN echo "=== 開始建置專案: $PROJECT_NAME (配置: $BUILD_CONFIG) ===" && \
+    echo "=== 檢查當前目錄 ===" && \
+    ls -la /app/ && \
+    echo "=== 檢查 apps 目錄 ===" && \
+    ls -la /app/apps/ && \
+    if [ "$PROJECT_NAME" = "events" ] || [ "$PROJECT_NAME" = "@nx-playground/events" ]; then \
+        echo "=== 建置 Next.js 專案 (使用 Nx) ===" && \
+        echo "=== 開始 Nx Next.js 建置 ===" && \
+        pnpm exec nx build events --configuration=$BUILD_CONFIG && \
+        echo "=== Nx Next.js 建置完成 ===" && \
+        echo "=== 檢查建置輸出 ===" && \
+        ls -la /app/apps/events/ && \
+        ls -la /app/apps/events/.next/ 2>/dev/null || echo "No .next directory" && \
+        if [ -d "/app/apps/events/.next" ]; then \
+            echo "=== .next 目錄內容 ===" && \
+            ls -la /app/apps/events/.next/ && \
+            echo "=== 清理 Next.js 快取以減少映像檔大小 ===" && \
+            rm -rf /app/apps/events/.next/cache && \
+            echo "=== 快取清理完成 ===" && \
+            du -sh /app/apps/events/.next/; \
+        fi; \
+    elif [ "$PROJECT_NAME" = "console" ] || [ "$PROJECT_NAME" = "@nx-playground/console" ]; then \
+        echo "=== 建置 Console Vite 專案 ===" && \
+        pnpm exec nx build console --configuration=$BUILD_CONFIG && \
+        echo "=== 檢查 Console 建置輸出 ===" && \
+        ls -la /app/dist/apps/console/; \
+    else \
+        echo "=== 建置其他 Vite 專案 ===" && \
+        pnpm exec nx build "$PROJECT_NAME" --configuration=$BUILD_CONFIG && \
+        echo "=== 檢查 Vite 建置輸出 ===" && \
+        ls -la /app/dist/apps/*/; \
+    fi && \
+    echo "=== 建置完成，檢查輸出 ===" && \
+    ls -la /app/apps/ && \
+    if [ "$PROJECT_NAME" = "events" ] || [ "$PROJECT_NAME" = "@nx-playground/events" ]; then \
+        echo "=== 檢查 Next.js 建構輸出 ===" && \
+        ls -la /app/apps/events/ && \
+        ls -la /app/apps/events/.next/ 2>/dev/null || echo "No .next directory found" && \
+        if [ -d "/app/apps/events/.next" ]; then \
+            echo "=== .next 目錄內容 ===" && \
+            ls -la /app/apps/events/.next/ && \
+            echo "=== 檢查 buildId ===" && \
+            cat /app/apps/events/.next/BUILD_ID 2>/dev/null || echo "No BUILD_ID found" && \
+            echo "=== 最終清理 Next.js 快取 ===" && \
+            rm -rf /app/apps/events/.next/cache && \
+            echo "=== 最終 .next 目錄大小 ===" && \
+            du -sh /app/apps/events/.next/; \
+        fi; \
+    fi && \
+    echo "=== 建置驗證完成 ==="
+
+# ==================== 第三階段：生產運行環境 ====================
+# 這個階段只包含運行應用程式所需的最小化環境。
+FROM node:18-alpine AS runner
+
+# 建立非 root 用戶
+RUN addgroup --system --gid 1001 nodejs
+RUN adduser --system --uid 1001 --shell /bin/sh nextjs
+RUN adduser --system --uid 1002 --shell /bin/sh viteuser
+
+# 設定工作目錄
+WORKDIR /app
+
+# 接收專案名稱參數
+ARG PROJECT_NAME
+
+# 複製基本檔案
+COPY --from=deps /app/package.json ./package.json
+
+# 條件性複製 node_modules（只有 Next.js 需要）
+# Next.js 需要 node_modules 來運行 SSR，Vite 只需要靜態檔案
+COPY --from=deps /app/node_modules ./node_modules
+RUN if [ "$PROJECT_NAME" = "events" ] || [ "$PROJECT_NAME" = "@nx-playground/events" ]; then \
+        echo "=== Next.js 專案：保留 node_modules 來運行 SSR ==="; \
+    else \
+        echo "=== Vite 專案：清理 node_modules，節省 741MB 空間 ===" && \
+        rm -rf ./node_modules && \
+        echo "=== 已節省 741MB 空間 ==="; \
+    fi
+
+# 從 builder 階段複製建置輸出
+RUN mkdir -p ./apps ./dist
+
+# 根據專案類型條件性複製建置輸出
+# Next.js: 需要 apps 目錄中的 .next 等檔案
+# Vite: 需要 dist 目錄中的靜態檔案
+ARG PROJECT_NAME
+RUN if [ "$PROJECT_NAME" = "events" ] || [ "$PROJECT_NAME" = "@nx-playground/events" ]; then \
+        echo "=== Next.js 專案：準備複製 apps 目錄 ==="; \
+    else \
+        echo "=== Vite 專案：準備複製 apps 和 dist 目錄 ==="; \
+    fi
+
+# 總是複製專案的 apps 目錄（包含建置輸出）
+COPY --from=builder /app/apps/$PROJECT_NAME ./apps/$PROJECT_NAME
+
+# 只有 Vite 專案才複製 dist 目錄
+RUN if [ "$PROJECT_NAME" != "events" ] && [ "$PROJECT_NAME" != "@nx-playground/events" ]; then \
+        echo "=== 複製 Vite 專案的 dist 目錄 ===" && \
+        cp -r /app/dist ./dist 2>/dev/null || echo "Warning: dist directory not found, creating empty dist..."; \
+    else \
+        echo "=== Next.js 專案：跳過 dist 目錄複製（避免找不到檔案的錯誤）==="; \
+    fi
+
+# 根據專案類型安裝必要的工具
+ARG PNPM_VERSION=10.13.1
+RUN if [ "$PROJECT_NAME" = "events" ] || [ "$PROJECT_NAME" = "@nx-playground/events" ]; then \
+        echo "=== 安裝 Next.js 運行時工具 ===" && \
+        npm install -g pnpm@$PNPM_VERSION; \
+    else \
+        echo "=== 安裝 Vite 預覽工具 ===" && \
+        npm install -g vite serve; \
+    fi
+
+ENV PROJECT_NAME=$PROJECT_NAME
+
+# 複製建置輸出並進行專案特定的優化
+RUN if [ "$PROJECT_NAME" = "events" ] || [ "$PROJECT_NAME" = "@nx-playground/events" ]; then \
+        echo "=== 複製 Next.js 建置檔案 ===" && \
+        cp -r /app/apps/events/.next ./.next && \
+        cp -r /app/apps/events/public ./public && \
+        cp /app/apps/events/next.config.mjs ./next.config.mjs && \
+        cp /app/apps/events/package.json ./package.json && \
+        echo "=== Next.js 設定完成，保留 node_modules ==="; \
+    elif [ "$PROJECT_NAME" = "console" ] || [ "$PROJECT_NAME" = "@nx-playground/console" ]; then \
+        echo "=== 複製 Console Vite 建置檔案 ===" && \
+        cp -r ./dist/apps/console/* ./dist && \
+        cp ./dist/package.json ./package.json && \
+        echo "=== 清理 node_modules 以減少 Vite 映像檔大小 ===" && \
+        rm -rf ./node_modules && \
+        echo "=== Vite 專案優化完成，節省 741MB 空間 ==="; \
+    else \
+        echo "=== 複製其他 Vite 專案建置檔案 ===" && \
+        cp -r ./dist/apps/*/* ./dist && \
+        cp /app/apps/*/package.json ./package.json && \
+        echo "=== 清理 node_modules 以減少映像檔大小 ===" && \
+        rm -rf ./node_modules && \
+        echo "=== 其他 Vite 專案優化完成 ==="; \
+    fi
+
+# 將 pnpm 的可執行路徑加入到環境變數中
+ENV PATH="/usr/local/bin:${PATH}"
+
+# 設定文件所有權給兩個用戶
+RUN chown -R nextjs:nodejs /app && \
+    chown -R viteuser:nodejs /app
+
+# 設定環境變數
+ENV NEXT_TELEMETRY_DISABLED=1
+ENV HOSTNAME=0.0.0.0
+# 根據專案類型設定不同的預設端口
+ENV PORT=3000
+ENV VITE_PORT=3002
+
+# 啟動應用程式
+# 根據專案類型和建構輸出使用不同的啟動指令
+CMD ["sh", "-c", "echo 'Starting application for project: $PROJECT_NAME' && \
+    if [ \"$PROJECT_NAME\" = \"events\" ] || [ \"$PROJECT_NAME\" = \"@nx-playground/events\" ]; then \
+        echo 'Starting Next.js application as nextjs user...' && \
+        su nextjs -c 'cd /app && \
+            if [ -d \".next\" ]; then \
+                echo \"Starting Next.js SSR application...\" && \
+                pnpm exec next start; \
+            else \
+                echo \"No .next directory found for events\" && \
+                exit 1; \
+            fi'; \
+    elif [ \"$PROJECT_NAME\" = \"console\" ] || [ \"$PROJECT_NAME\" = \"@nx-playground/console\" ]; then \
+        echo 'Starting Console Vite application as viteuser...' && \
+        su viteuser -c 'cd /app && \
+            if [ -d \"dist\" ]; then \
+                echo \"Starting Console Vite application...\" && \
+                vite preview --host 0.0.0.0 --port ${VITE_PORT:-3002}; \
+            else \
+                echo \"No dist directory found for console\" && \
+                exit 1; \
+            fi'; \
+    else \
+        echo 'Starting other Vite application as viteuser...' && \
+        su viteuser -c 'cd /app && \
+            if [ -d \"dist\" ]; then \
+                echo \"Starting other Vite application...\" && \
+                vite preview --host 0.0.0.0 --port ${VITE_PORT:-3002}; \
+            else \
+                echo \"No dist directory found\" && \
+                exit 1; \
+            fi'; \
+    fi"]

@@ -1,0 +1,84 @@
+{
+  "name": "design-system",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/design-system/src",
+  "projectType": "library",
+  "targets": {
+    "prebuild": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "cd libs/design-system && npm run tokens:generate"
+      }
+    },
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/libs/design-system",
+        "main": "libs/design-system/src/index.ts",
+        "tsConfig": "libs/design-system/tsconfig.lib.json",
+        "assets": [
+          "libs/design-system/*.md",
+          "libs/design-system/src/index.css",
+          "libs/design-system/src/tokens/generated/tailwind-variables.css",
+          "libs/design-system/src/tokens/generated/tailwind-config.js"
+        ]
+      },
+      "dependsOn": [
+        {
+          "target": "build",
+          "projects": "dependencies"
+        },
+        {
+          "target": "prebuild"
+        }
+      ]
+    },
+    "build:tsc": {
+      "executor": "@nx/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/libs/design-system",
+        "main": "libs/design-system/src/index.ts",
+        "tsConfig": "libs/design-system/tsconfig.lib.json",
+        "assets": [
+          "libs/design-system/*.md",
+          "libs/design-system/src/index.css",
+          "libs/design-system/src/tokens/generated/tailwind-variables.css",
+          "libs/design-system/src/tokens/generated/tailwind-config.js"
+        ]
+      },
+      "dependsOn": [
+        {
+          "target": "build",
+          "projects": "dependencies"
+        }
+      ]
+    },
+    "test": {
+      "executor": "@nx/vite:test",
+      "outputs": ["{options.reportsDirectory}"],
+      "options": {
+        "passWithNoTests": true,
+        "reportsDirectory": "../../coverage/libs/design-system"
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["libs/design-system/src/**/*.{ts,tsx,js,jsx}"]
+      }
+    },
+    "typecheck": {
+      "executor": "@nx/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/libs/design-system/tsc",
+        "main": "libs/design-system/src/index.ts",
+        "tsConfig": "libs/design-system/tsconfig.typecheck.json"
+      }
+    }
+  },
+  "tags": []
+}

@@ -1,0 +1,89 @@
+{
+  "name": "@nx-playground/console",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/console/src",
+  "projectType": "application",
+  "targets": {
+    "build": {
+      "executor": "@nx/vite:build",
+      "outputs": ["{options.outputPath}"],
+      "defaultConfiguration": "production",
+      "options": {
+        "outputPath": "dist/apps/console",
+        "tsConfig": "apps/console/tsconfig.app.json"
+      },
+      "configurations": {
+        "development": {
+          "mode": "development"
+        },
+        "production": {
+          "mode": "production"
+        }
+      },
+      "dependsOn": [
+        {
+          "target": "build",
+          "projects": "dependencies"
+        }
+      ]
+    },
+    "serve": {
+      "executor": "@nx/vite:dev-server",
+      "defaultConfiguration": "development",
+      "options": {
+        "buildTarget": "@nx-playground/console:build"
+      },
+      "configurations": {
+        "development": {
+          "buildTarget": "@nx-playground/console:build:development",
+          "hmr": true
+        },
+        "production": {
+          "buildTarget": "@nx-playground/console:build:production",
+          "hmr": false
+        }
+      }
+    },
+    "preview": {
+      "executor": "@nx/vite:preview-server",
+      "defaultConfiguration": "development",
+      "options": {
+        "buildTarget": "@nx-playground/console:build"
+      },
+      "configurations": {
+        "development": {
+          "buildTarget": "@nx-playground/console:build:development"
+        },
+        "production": {
+          "buildTarget": "@nx-playground/console:build:production"
+        }
+      }
+    },
+    "test": {
+      "executor": "@nx/vite:test",
+      "outputs": ["{options.reportsDirectory}"],
+      "options": {
+        "passWithNoTests": true,
+        "reportsDirectory": "../../coverage/apps/console"
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["apps/console/src/**/*.{ts,tsx,js,jsx}"]
+      }
+    },
+    "typecheck": {
+      "executor": "@nx/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/apps/console/tsc",
+        "main": "apps/console/src/main.tsx",
+        "tsConfig": "apps/console/tsconfig.typecheck.json",
+        "assets": ["apps/console/src/favicon.ico", "apps/console/src/assets"]
+      }
+    }
+  },
+  "tags": []
+}

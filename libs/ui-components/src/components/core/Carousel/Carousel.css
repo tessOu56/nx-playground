@@ -1,0 +1,48 @@
+.swiper-container {
+  padding: 0 0 20px 0;
+}
+
+.swiper-container .swiper-button-next,
+.swiper-container .swiper-button-prev {
+  color: hsl(var(--primary));
+  background: hsl(var(--background));
+  border: 1px solid hsl(var(--border));
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
+    0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.swiper-container .swiper-button-next:hover,
+.swiper-container .swiper-button-prev:hover {
+  background: hsl(var(--accent));
+  transform: scale(1.05);
+}
+
+.swiper-container .swiper-button-next:after,
+.swiper-container .swiper-button-prev:after {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.swiper-container .swiper-button-disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.swiper-container .swiper-pagination-bullet {
+  background: hsl(var(--muted-foreground));
+  opacity: 0.5;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.swiper-container .swiper-pagination-bullet-active {
+  background: hsl(var(--primary));
+  opacity: 1;
+}
+
+.swiper-container .swiper-pagination-bullet:hover {
+  opacity: 0.8;
+}

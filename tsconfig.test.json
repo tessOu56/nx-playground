@@ -1,0 +1,33 @@
+{
+  "extends": "./tsconfig.base.json",
+  "compilerOptions": {
+    "types": ["jest", "@testing-library/jest-dom", "node"],
+    "noEmit": true,
+    "jsx": "react-jsx",
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["apps/events/src/*"],
+      "@nx-playground/api-client": ["dist/libs/api-client"],
+      "@nx-playground/auth-client": ["dist/libs/auth-client/src"],
+      "@nx-playground/auth": ["dist/libs/auth"],
+      "@nx-playground/console": ["dist/libs/console"],
+      "@nx-playground/design-system": ["dist/libs/design-system/src"],
+      "@nx-playground/events": ["dist/libs/events"],
+      "@nx-playground/hooks": ["dist/libs/hooks"],
+      "@nx-playground/i18n": ["dist/libs/i18n"],
+      "@nx-playground/ui-components": ["dist/libs/ui-components"]
+    }
+  },
+  "include": [
+    "apps/**/*.test.ts",
+    "apps/**/*.test.tsx",
+    "apps/**/*.spec.ts",
+    "apps/**/*.spec.tsx",
+    "libs/**/*.test.ts",
+    "libs/**/*.test.tsx",
+    "libs/**/*.spec.ts",
+    "libs/**/*.spec.tsx",
+    "jest.setup.js"
+  ],
+  "exclude": []
+}

@@ -1,0 +1,30 @@
+# Build outputs
+/dist
+/build
+/out
+/.next
+
+# Coverage reports
+/coverage
+
+# Cache directories
+/.nx/cache
+/.nx/workspace-data
+/node_modules
+
+# Generated files
+/generated
+*.generated.*
+*.d.ts
+
+# Lock files
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# Config files that should not be formatted
+*.min.js
+*.min.css
+
+# Documentation that should not be formatted
+CHANGELOG.md

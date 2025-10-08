@@ -1,0 +1,43 @@
+#!/usr/bin/env sh
+
+echo "🔍 Running pre-commit checks..."
+
+# 運行 lint-staged (Prettier 格式化 + ESLint 修復)
+echo "📝 Formatting code with Prettier and fixing ESLint issues..."
+npx lint-staged
+
+# 檢查是否有暫存的文件
+if git diff --cached --quiet; then
+    echo "✅ No staged files to check"
+    exit 0
+fi
+
+# 運行 Nx affected lint 檢查 (只檢查受影響的項目)
+echo "🔧 Running ESLint on affected projects..."
+if ! npx nx affected --target=lint --fix; then
+    echo "❌ ESLint check failed"
+    exit 1
+fi
+
+# 運行 TypeScript 類型檢查 (只檢查受影響的項目)
+echo "🔍 Running TypeScript type check on affected projects..."
+if ! npx nx affected --target=typecheck; then
+    echo "❌ TypeScript type check failed"
+    exit 1
+fi
+
+# 運行 Jest 測試 (包括 mock data 測試)
+echo "🧪 Running Jest tests..."
+if ! pnpm test:mock-data; then
+    echo "❌ Jest tests failed"
+    exit 1
+fi
+
+# 檢查測試覆蓋率
+echo "📊 Checking test coverage..."
+if ! pnpm test:coverage --passWithNoTests; then
+    echo "❌ Test coverage check failed"
+    exit 1
+fi
+
+echo "✅ Pre-commit checks completed!"

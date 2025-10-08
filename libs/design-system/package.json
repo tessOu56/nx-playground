@@ -1,0 +1,24 @@
+{
+  "name": "@nx-playground/design-system",
+  "version": "0.1.0",
+  "private": true,
+  "main": "./dist/libs/design-system/src/index.js",
+  "types": "./dist/libs/design-system/src/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/libs/design-system/src/index.js",
+      "types": "./dist/libs/design-system/src/index.d.ts"
+    },
+    "./index.css": "./dist/libs/design-system/src/index.css",
+    "./tokens/generated/tailwind-variables.css": "./dist/libs/design-system/src/tokens/generated/tailwind-variables.css",
+    "./tokens/generated/tailwind-config.js": "./dist/libs/design-system/src/tokens/generated/tailwind-config.js"
+  },
+  "scripts": {
+    "tokens:css-to-json": "node scripts/css-to-json.js",
+    "tokens:json-to-themes": "node scripts/build-tokens.js",
+    "tokens:build": "npm run tokens:css-to-json && npm run tokens:json-to-themes",
+    "tokens:generate": "npm run tokens:build",
+    "tokens:view": "node scripts/tokens-viewer.js",
+    "tokens:colors": "node scripts/color-preview.js"
+  }
+}

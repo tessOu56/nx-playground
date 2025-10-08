@@ -1,0 +1,22 @@
+# Ignore build and dependency directories
+node_modules
+# dist - 保留給建構階段使用
+# .next - 保留給建構階段使用
+# out - 保留給建構階段使用
+
+# Ignore local development files
+.env.local
+.env.*.local
+.vscode
+.cache
+
+# Ignore version control and logs
+.git
+.gitignore
+npm-debug.log*
+yarn-debug.log*
+pnpm-debug.log*
+
+# Nx related cache and temporary files
+.nx/
+tmp/

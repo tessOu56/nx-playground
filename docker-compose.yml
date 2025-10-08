@@ -1,0 +1,69 @@
+networks:
+  nx-playground-network:
+    external: true
+    name: nx-playground-network
+
+services:
+  # Events 前台應用
+  events:
+    build:
+      context: .
+      dockerfile: Dockerfile.nx
+      args:
+        PROJECT_NAME: 'events'
+        BUILD_CONFIG: 'production'
+        # LINE 登入配置
+        NEXT_PUBLIC_LIFF_ID: ${NEXT_PUBLIC_LIFF_ID:-test-liff-id}
+        NEXT_PUBLIC_LINE_REDIRECT_URI: ${NEXT_PUBLIC_LINE_REDIRECT_URI:-http://localhost:3000}
+        NEXT_PUBLIC_LINE_CLIENT_ID: ${NEXT_PUBLIC_LINE_CLIENT_ID:-test-client-id}
+        LINE_CLIENT_SECRET: ${LINE_CLIENT_SECRET:-test-secret}
+        # API 配置
+        NEXT_PUBLIC_API_BASE_URL: ${NEXT_PUBLIC_API_BASE_URL:-http://localhost:8080}
+        NEXT_PUBLIC_API_TIMEOUT: ${NEXT_PUBLIC_API_TIMEOUT:-30000}
+        # 域名配置
+        NEXT_PUBLIC_PRODUCTION_DOMAIN: ${NEXT_PUBLIC_PRODUCTION_DOMAIN:-events.nx-playground.local}
+        NEXT_PUBLIC_DEVELOPMENT_DOMAIN: ${NEXT_PUBLIC_DEVELOPMENT_DOMAIN:-localhost:3000}
+        # 應用配置
+        NEXT_PUBLIC_APP_NAME: ${NEXT_PUBLIC_APP_NAME:-NX Playground Events}
+        NEXT_PUBLIC_APP_VERSION: ${NEXT_PUBLIC_APP_VERSION:-1.0.0}
+        NEXT_PUBLIC_ENABLE_DEVTOOLS: ${NEXT_PUBLIC_ENABLE_DEVTOOLS:-false}
+        NEXT_PUBLIC_ENABLE_MOCK_DATA: ${NEXT_PUBLIC_ENABLE_MOCK_DATA:-true}
+    container_name: nx-playground-events
+    restart: unless-stopped
+    ports:
+      - '3000:3000'
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+      - HOSTNAME=0.0.0.0
+      - NEXT_TELEMETRY_DISABLED=1
+    networks:
+      - nx-playground-network
+    healthcheck:
+      test: ['CMD', 'curl', '-f', 'http://localhost:3000/api/health']
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # Console 應用
+  console:
+    build:
+      context: .
+      dockerfile: Dockerfile.nx
+      args:
+        PROJECT_NAME: 'console'
+        BUILD_CONFIG: 'production'
+        # Console 配置
+        VITE_APP_NAME: ${VITE_APP_NAME:-NX Playground Console}
+        VITE_APP_VERSION: ${VITE_APP_VERSION:-1.0.0}
+    container_name: nx-playground-console
+    restart: unless-stopped
+    environment:
+      - NODE_ENV=production
+      - VITE_PORT=3002
+      - HOSTNAME=0.0.0.0
+    ports:
+      - '3002:3002'
+    networks:
+      - nx-playground-network

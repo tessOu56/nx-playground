@@ -1,0 +1,234 @@
+# ==================== Dependencies ====================
+FROM node:18-alpine AS deps
+
+WORKDIR /app
+
+ARG PNPM_VERSION=10.13.1
+RUN npm install -g pnpm@$PNPM_VERSION
+
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml nx.json ./
+COPY apps/*/package.json ./apps/
+COPY libs/*/package.json ./libs/
+
+RUN pnpm install --prod --no-frozen-lockfile --ignore-scripts
+
+# ==================== Builder ====================
+FROM node:18-alpine AS builder
+
+RUN apk add --no-cache git bash && rm -rf /var/cache/apk/*
+
+WORKDIR /app
+
+ARG PNPM_VERSION=10.13.1
+RUN npm install -g pnpm@$PNPM_VERSION
+
+COPY . .
+RUN pnpm install --no-frozen-lockfile
+
+# ARG BUILD_CONFIG=production
+
+# Build both projects
+# RUN echo "Building events..." && \
+#     pnpm exec nx build events --configuration=$BUILD_CONFIG && \
+#     echo "Building console..." && \
+#     pnpm exec nx build console --configuration=$BUILD_CONFIG
+
+# Build 不操作 DB
+ENV NX_DAEMON=false
+ARG BUILD_CONFIG=production
+RUN pnpm exec nx build events --configuration=$BUILD_CONFIG --skip-nx-cache
+RUN pnpm exec nx build console --configuration=$BUILD_CONFIG --skip-nx-cache
+
+# ==================== Events Runner (Next.js with Node.js) ====================
+FROM node:18-alpine AS events-runner
+
+WORKDIR /app
+
+RUN adduser --system --uid 1001 --shell /bin/sh nextjs
+
+ARG PNPM_VERSION=10.13.1
+RUN npm install -g pnpm@$PNPM_VERSION
+
+# Copy Next.js files
+COPY --from=builder /app/apps/events/.next ./.next
+COPY --from=builder /app/apps/events/public ./public
+COPY --from=builder /app/apps/events/next.config.mjs ./next.config.mjs
+COPY --from=builder /app/apps/events/package.json ./package.json
+
+# Copy and optimize node_modules
+COPY --from=deps /app/node_modules ./node_modules
+RUN rm -rf node_modules/.cache && \
+    find node_modules -name "*.md" -delete 2>/dev/null || true && \
+    find node_modules -name "*.txt" -delete 2>/dev/null || true && \
+    find node_modules -name "test*" -type d -exec rm -rf {} + 2>/dev/null || true && \
+    find node_modules -name "example*" -type d -exec rm -rf {} + 2>/dev/null || true && \
+    find node_modules -name "*.map" -delete 2>/dev/null || true
+
+RUN chown -R nextjs /app
+
+ENV NEXT_TELEMETRY_DISABLED=1
+ENV NODE_ENV=production
+
+EXPOSE 3000
+
+CMD ["su", "nextjs", "-c", "pnpm exec next start -p 3000"]
+
+# ==================== Console Runner (Static with Nginx) ====================
+FROM nginx:alpine AS console-runner
+
+RUN adduser --system --uid 1002 viteuser
+
+# Copy static files
+COPY --from=builder /app/dist/apps/console /usr/share/nginx/html
+
+# Create optimized nginx config for SPA
+RUN cat > /etc/nginx/conf.d/default.conf << 'EOF'
+server {
+    listen 3000;
+    server_name localhost;
+    root /usr/share/nginx/html;
+    index index.html;
+
+    # Enable gzip compression
+    gzip on;
+    gzip_vary on;
+    gzip_min_length 1024;
+    gzip_types text/plain text/css application/json application/javascript text/xml application/xml;
+
+    # Cache static assets
+    location ~* \.(js|css|png|jpg|jpeg|gif|ico|svg|woff|woff2|ttf|eot)$ {
+        expires 1y;
+        add_header Cache-Control "public, immutable";
+    }
+
+    # Handle SPA routing
+    location / {
+        try_files $uri $uri/ /index.html;
+    }
+}
+EOF
+
+# Run nginx on port 3000
+RUN sed -i 's/80 default_server/3000 default_server/g' /etc/nginx/conf.d/default.conf
+
+EXPOSE 3000
+
+CMD ["nginx", "-g", "daemon off;"]
+
+# ==================== Multi-stage Runtime Selector ====================
+FROM scratch AS runtime
+
+# This stage is just for organization - actual runtime is selected dynamically
+
+# ==================== Final Runner (Dynamic Selection) ====================
+FROM alpine:3.18 AS runner
+
+# Install minimal runtime dependencies
+RUN apk add --no-cache \
+    nodejs \
+    npm \
+    nginx \
+    su-exec \
+    && rm -rf /var/cache/apk/*
+
+WORKDIR /app
+
+# Create users
+RUN adduser -D -s /bin/sh -u 1001 nextjs
+
+# Install minimal tools
+ARG PNPM_VERSION=10.13.1
+RUN npm install -g pnpm@$PNPM_VERSION --production
+
+# Copy Next.js files
+COPY --from=builder /app/apps/events/.next /app/events/.next
+COPY --from=builder /app/apps/events/public /app/events/public
+COPY --from=builder /app/apps/events/next.config.mjs /app/events/next.config.mjs
+COPY --from=builder /app/apps/events/package.json /app/events/package.json
+
+# Copy Console static files
+COPY --from=builder /app/dist/apps/console /app/console
+
+# Copy minimal production dependencies for Next.js
+COPY --from=deps /app/node_modules /app/events/node_modules
+
+# Conservative cleanup - only remove clearly unnecessary files
+RUN cd /app/events && \
+    rm -rf node_modules/.cache 2>/dev/null || true && \
+    find node_modules -name "*.md" -delete 2>/dev/null || true && \
+    find node_modules -name "*.txt" -delete 2>/dev/null || true && \
+    find node_modules -name "LICENSE*" -delete 2>/dev/null || true
+
+# Set ownership
+RUN chown -R nextjs /app/events
+
+# Create nginx config
+RUN cat > /etc/nginx/nginx.conf << 'EOF'
+worker_processes 1;
+
+pid /var/run/nginx.pid;
+
+events {
+    worker_connections 1024;
+}
+
+http {
+    include /etc/nginx/mime.types;
+    default_type application/octet-stream;
+
+    log_format main '$remote_addr - $remote_user [$time_local] "$request" '
+                    '$status $body_bytes_sent "$http_referer" '
+                    '"$http_user_agent" "$http_x_forwarded_for"';
+
+    access_log /proc/self/fd/1 main;
+    error_log /proc/self/fd/2 warn;
+
+    include /etc/nginx/conf.d/*.conf;
+}
+EOF
+
+# Create nginx config for console
+RUN mkdir -p /etc/nginx/conf.d && \
+    cat > /etc/nginx/conf.d/console.conf << 'EOF'
+server {
+    listen 3000;
+    root /app/console;
+    index index.html;
+
+    gzip on;
+    gzip_types text/plain text/css application/json application/javascript;
+
+    location ~* \.(js|css|png|jpg|jpeg|gif|ico|svg)$ {
+        expires 1y;
+        add_header Cache-Control "public";
+    }
+
+    location / {
+        try_files $uri $uri/ /index.html;
+    }
+}
+EOF
+
+
+ENV NEXT_TELEMETRY_DISABLED=1
+ENV NODE_ENV=production
+ENV PORT=3000
+
+EXPOSE 3000
+
+# Ultra-lightweight startup script
+CMD ["sh", "-c", "\
+    case \"${PROJECT_NAME:-events}\" in \
+        events) \
+            echo 'Starting Events (Next.js)' && \
+            cd /app/events && \
+            su-exec nextjs pnpm exec next start -p 3000 \
+            ;; \
+        console) \
+            echo 'Starting Console (Nginx)' && \
+            nginx -g 'daemon off;' \
+            ;; \
+        *) \
+            echo 'Error: PROJECT_NAME must be events or console' && exit 1 \
+            ;; \
+    esac"]

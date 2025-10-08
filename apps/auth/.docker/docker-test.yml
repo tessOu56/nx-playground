@@ -1,0 +1,21 @@
+
+name: oosa-ui
+services:
+  sso:
+    image: sso-ui:test
+    restart: always
+    env_file:
+      - ./.env.test
+    networks:
+      - oosa-network
+    labels:
+    - traefik.enable=true
+    - traefik.http.routers.sso-ui.entrypoints=web
+    - traefik.http.routers.sso-ui.rule= Host(`dev-sso.oosa.life`)
+    - traefik.http.services.sso-ui.loadbalancer.server.port=8080
+    - traefik.http.routers.sso-ui.service=sso-ui
+    - traefik.http.routers.sso-ui.middlewares=sso-oathkeeper
+networks:
+  oosa-network:
+    external: true
+    name: network.oosa

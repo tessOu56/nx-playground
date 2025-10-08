@@ -1,0 +1,634 @@
+openapi: 3.0.1
+info:
+  title: NX Playground
+  description: ''
+  version: 1.0.0
+tags:
+  - name: MediaService
+  - name: ImageService
+  - name: SaaS_API
+paths:
+  /media/image/_batch_delete:
+    post:
+      summary: 批次刪除圖片
+      deprecated: false
+      description: ''
+      operationId: ImageService_BatchDelete
+      tags:
+        - MediaService
+        - ImageService
+        - SaaS_API
+      parameters:
+        - name: x-user-id
+          in: header
+          description: ''
+          example: '12345678'
+          schema:
+            type: string
+            default: '12345678'
+        - name: x-user-account
+          in: header
+          description: ''
+          example: nx-playground-tester
+          schema:
+            type: string
+            default: nx-playground-tester
+        - name: x-user-email
+          in: header
+          description: ''
+          example: nx-playground-test@gmail.com
+          schema:
+            type: string
+            default: nx-playground-test@gmail.com
+        - name: x-user-name
+          in: header
+          description: ''
+          example: nx-playground
+          schema:
+            type: string
+            default: nx-playground
+        - name: x-user-language
+          in: header
+          description: ''
+          example: zh-TW
+          schema:
+            type: string
+            default: zh-TW
+        - name: X-Merchant-Id
+          in: header
+          description: ''
+          example: '168'
+          schema:
+            type: string
+            default: '168'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/mediaServiceBatchDeleteRequest'
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/mediaServiceBatchDeleteResponse'
+          headers: {}
+        x-200:Success:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/rpcStatus'
+          headers: {}
+      security: []
+  /media/image/_complete:
+    post:
+      summary: 檢查圖片上傳狀態
+      deprecated: false
+      description: ''
+      operationId: ImageService_Complete
+      tags:
+        - MediaService
+        - ImageService
+        - SaaS_API
+      parameters:
+        - name: x-user-id
+          in: header
+          description: ''
+          example: '12345678'
+          schema:
+            type: string
+            default: '12345678'
+        - name: x-user-account
+          in: header
+          description: ''
+          example: nx-playground-tester
+          schema:
+            type: string
+            default: nx-playground-tester
+        - name: x-user-email
+          in: header
+          description: ''
+          example: nx-playground-test@gmail.com
+          schema:
+            type: string
+            default: nx-playground-test@gmail.com
+        - name: x-user-name
+          in: header
+          description: ''
+          example: nx-playground
+          schema:
+            type: string
+            default: nx-playground
+        - name: x-user-language
+          in: header
+          description: ''
+          example: zh-TW
+          schema:
+            type: string
+            default: zh-TW
+        - name: X-Merchant-Id
+          in: header
+          description: ''
+          example: '168'
+          schema:
+            type: string
+            default: '168'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/mediaServiceStatusRequest'
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/mediaServiceStatusResponse'
+          headers: {}
+        x-200:Success:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/rpcStatus'
+          headers: {}
+      security: []
+  /media/image/{id}:
+    get:
+      summary: 取得圖片URI
+      deprecated: false
+      description: ''
+      operationId: ImageService_GetImageURI
+      tags:
+        - MediaService
+        - ImageService
+        - SaaS_API
+      parameters:
+        - name: id
+          in: path
+          description: ''
+          required: true
+          example: ''
+          schema:
+            type: string
+        - name: variant
+          in: query
+          description: ''
+          required: false
+          schema:
+            type: string
+        - name: x-user-id
+          in: header
+          description: ''
+          example: '12345678'
+          schema:
+            type: string
+            default: '12345678'
+        - name: x-user-account
+          in: header
+          description: ''
+          example: nx-playground-tester
+          schema:
+            type: string
+            default: nx-playground-tester
+        - name: x-user-email
+          in: header
+          description: ''
+          example: nx-playground-test@gmail.com
+          schema:
+            type: string
+            default: nx-playground-test@gmail.com
+        - name: x-user-name
+          in: header
+          description: ''
+          example: nx-playground
+          schema:
+            type: string
+            default: nx-playground
+        - name: x-user-language
+          in: header
+          description: ''
+          example: zh-TW
+          schema:
+            type: string
+            default: zh-TW
+        - name: X-Merchant-Id
+          in: header
+          description: ''
+          example: '168'
+          schema:
+            type: string
+            default: '168'
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/mediaServiceImageResponse'
+          headers: {}
+        x-200:Success:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/rpcStatus'
+          headers: {}
+      security: []
+      x-krakend-redirect: false
+  /media/image/{imageId}:
+    delete:
+      summary: 刪除圖片
+      deprecated: false
+      description: ''
+      operationId: ImageService_Delete
+      tags:
+        - MediaService
+        - ImageService
+        - SaaS_API
+      parameters:
+        - name: imageId
+          in: path
+          description: ''
+          required: true
+          example: ''
+          schema:
+            type: string
+        - name: x-user-id
+          in: header
+          description: ''
+          example: '12345678'
+          schema:
+            type: string
+            default: '12345678'
+        - name: x-user-account
+          in: header
+          description: ''
+          example: nx-playground-tester
+          schema:
+            type: string
+            default: nx-playground-tester
+        - name: x-user-email
+          in: header
+          description: ''
+          example: nx-playground-test@gmail.com
+          schema:
+            type: string
+            default: nx-playground-test@gmail.com
+        - name: x-user-name
+          in: header
+          description: ''
+          example: nx-playground
+          schema:
+            type: string
+            default: nx-playground
+        - name: x-user-language
+          in: header
+          description: ''
+          example: zh-TW
+          schema:
+            type: string
+            default: zh-TW
+        - name: X-Merchant-Id
+          in: header
+          description: ''
+          example: '168'
+          schema:
+            type: string
+            default: '168'
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/mediaServiceDeleteResponse'
+          headers: {}
+        x-200:Success:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/rpcStatus'
+          headers: {}
+      security: []
+      x-authorizer-config: >-
+        {"namespace": "Image","object": "{{ printIndex
+        .MatchContext.RegexpCaptureGroups 2 }}", "relation":
+        "access","subject_set": {"namespace": "User","object": "{{ print
+        .Subject }}"}}
+  /media/image/signed-url:
+    delete:
+      summary: 清除暫存
+      deprecated: false
+      description: ''
+      operationId: ImageService_Clear
+      tags:
+        - MediaService
+        - ImageService
+        - SaaS_API
+      parameters:
+        - name: x-user-id
+          in: header
+          description: ''
+          example: '12345678'
+          schema:
+            type: string
+            default: '12345678'
+        - name: x-user-account
+          in: header
+          description: ''
+          example: nx-playground-tester
+          schema:
+            type: string
+            default: nx-playground-tester
+        - name: x-user-email
+          in: header
+          description: ''
+          example: nx-playground-test@gmail.com
+          schema:
+            type: string
+            default: nx-playground-test@gmail.com
+        - name: x-user-name
+          in: header
+          description: ''
+          example: nx-playground
+          schema:
+            type: string
+            default: nx-playground
+        - name: x-user-language
+          in: header
+          description: ''
+          example: zh-TW
+          schema:
+            type: string
+            default: zh-TW
+        - name: X-Merchant-Id
+          in: header
+          description: ''
+          example: '168'
+          schema:
+            type: string
+            default: '168'
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/mediaServiceClearResponse'
+          headers: {}
+        x-200:Success:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/rpcStatus'
+          headers: {}
+      security: []
+  /media/image/signed-url/_batch:
+    post:
+      summary: 批次取得上傳URL
+      deprecated: false
+      description: ''
+      operationId: ImageService_BatchUpload
+      tags:
+        - MediaService
+        - ImageService
+        - SaaS_API
+      parameters:
+        - name: x-user-id
+          in: header
+          description: ''
+          example: '12345678'
+          schema:
+            type: string
+            default: '12345678'
+        - name: x-user-account
+          in: header
+          description: ''
+          example: nx-playground-tester
+          schema:
+            type: string
+            default: nx-playground-tester
+        - name: x-user-email
+          in: header
+          description: ''
+          example: nx-playground-test@gmail.com
+          schema:
+            type: string
+            default: nx-playground-test@gmail.com
+        - name: x-user-name
+          in: header
+          description: ''
+          example: nx-playground
+          schema:
+            type: string
+            default: nx-playground
+        - name: x-user-language
+          in: header
+          description: ''
+          example: zh-TW
+          schema:
+            type: string
+            default: zh-TW
+        - name: X-Merchant-Id
+          in: header
+          description: ''
+          example: '168'
+          schema:
+            type: string
+            default: '168'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/mediaServiceUploadRequest'
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/mediaServiceUploadResponse'
+          headers: {}
+        x-200:Success:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/rpcStatus'
+          headers: {}
+      security: []
+components:
+  schemas:
+    mediaServiceBatchDeleteRequest:
+      properties:
+        imageIds:
+          items:
+            type: string
+          type: array
+      title: 批次刪除圖片請求
+      type: object
+    mediaServiceBatchDeleteResponse:
+      properties:
+        message:
+          type: string
+      title: 批次刪除圖片響應
+      type: object
+    mediaServiceClearResponse:
+      properties:
+        message:
+          type: string
+      title: 清除暫存響應
+      type: object
+    mediaServiceDeleteResponse:
+      properties:
+        message:
+          type: string
+      title: 刪除圖片響應
+      type: object
+    mediaServiceImageFormat:
+      default: NOT_SUPPORT
+      enum:
+        - NOT_SUPPORT
+        - PNG
+        - GIF
+        - JPEG
+        - WEBP
+        - SVG
+        - HEIC
+      title: 圖片格式枚舉
+      type: string
+    mediaServiceImageMetadata:
+      properties:
+        width:
+          format: int64
+          title: 寬度必須大於0且小於10000
+          type: integer
+        height:
+          format: int64
+          title: 高度必須大於0且小於10000
+          type: integer
+        format:
+          $ref: '#/components/schemas/mediaServiceImageFormat'
+        size:
+          format: uint64
+          title: 大小必須大於0且小於10MB
+          type: string
+        uploadTime:
+          title: RFC3339格式
+          type: string
+      title: 圖片元數據
+      type: object
+    mediaServiceImageResponse:
+      properties:
+        uri:
+          type: string
+      title: 取得圖片URI響應
+      type: object
+    mediaServiceImageStatus:
+      properties:
+        imageId:
+          title: 必須非空且只能包含字母、數字和連字符
+          type: string
+        metadata:
+          $ref: '#/components/schemas/mediaServiceImageMetadata'
+        variants:
+          additionalProperties:
+            type: string
+          title: 必須至少有一個元素
+          type: object
+          properties: {}
+      type: object
+    mediaServiceSignedUrl:
+      properties:
+        imageId:
+          title: 必須非空且只能包含字母、數字和連字符
+          type: string
+        signedUrl:
+          title: 必須非空且必須是HTTP或HTTPS URL
+          type: string
+      type: object
+    mediaServiceStatusRequest:
+      properties:
+        imageIds:
+          items:
+            type: string
+          type: array
+      title: 圖片狀態請求
+      type: object
+    mediaServiceStatusResponse:
+      properties:
+        images:
+          items:
+            $ref: '#/components/schemas/mediaServiceImageStatus'
+          type: array
+      title: 圖片狀態響應
+      type: object
+    mediaServiceUploadImage:
+      properties:
+        contentType:
+          $ref: '#/components/schemas/mediaServiceImageFormat'
+        size:
+          type: integer
+          title: 大小必須大於0且小於10MB
+          format: uint64
+        width:
+          format: int64
+          title: 寬度必須大於0且小於10000
+          type: integer
+        height:
+          format: int64
+          title: 高度必須大於0且小於10000
+          type: integer
+        latitude:
+          format: double
+          title: 緯度
+          type: number
+        longitude:
+          format: double
+          title: 經度
+          type: number
+      type: object
+    mediaServiceUploadRequest:
+      properties:
+        images:
+          items:
+            $ref: '#/components/schemas/mediaServiceUploadImage'
+          type: array
+      title: 圖片上傳請求
+      type: object
+    mediaServiceUploadResponse:
+      properties:
+        images:
+          items:
+            $ref: '#/components/schemas/mediaServiceSignedUrl'
+          type: array
+      title: 圖片上傳響應
+      type: object
+    protobufAny:
+      additionalProperties:
+        type: string
+      properties:
+        '@type':
+          type: string
+      type: object
+    rpcStatus:
+      properties:
+        code:
+          format: int32
+          type: integer
+        message:
+          type: string
+        details:
+          items:
+            $ref: '#/components/schemas/protobufAny'
+          type: array
+      type: object
+  securitySchemes: {}
+servers: []
+security: []

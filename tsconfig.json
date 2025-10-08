@@ -1,0 +1,28 @@
+{
+  "extends": "./tsconfig.base.json",
+  "compileOnSave": false,
+  "files": [],
+  "references": [
+    {
+      "path": "./apps/console"
+    },
+    {
+      "path": "./libs/ui-components"
+    },
+    {
+      "path": "./libs/api-client"
+    },
+    {
+      "path": "./libs/design-system"
+    },
+    {
+      "path": "./libs/i18n"
+    },
+    {
+      "path": "./libs/auth-client"
+    },
+    {
+      "path": "./libs/hooks"
+    }
+  ]
+}

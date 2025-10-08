@@ -1,0 +1,10 @@
+packages:
+  # Apps
+  - 'apps/*'
+  - 'events'
+
+  # Libraries
+  - 'libs/*'
+
+# 禁用嚴格的對等依賴檢查
+strictPeerDependencies: false

@@ -1,0 +1,28 @@
+import { createFeatureTranslation } from '@nx-playground/i18n';
+
+export const useDashboardTranslation = createFeatureTranslation('dashboard', [
+  'dashboard.title',
+  'dashboard.welcome',
+  'dashboard.stats.totalEvents',
+  'dashboard.stats.activeUsers',
+  'dashboard.stats.monthlyRevenue',
+  'dashboard.stats.systemStatus',
+  'dashboard.stats.normal',
+  'dashboard.quickActions.title',
+  'dashboard.quickActions.createEvent',
+  'dashboard.quickActions.manageUsers',
+  'dashboard.quickActions.viewReports',
+  'dashboard.quickActions.systemSettings',
+  'dashboard.searchAndFilter.title',
+  'dashboard.searchAndFilter.searchEvents',
+  'dashboard.searchAndFilter.searchPlaceholder',
+  'dashboard.searchAndFilter.statusFilter',
+  'dashboard.searchAndFilter.statusPlaceholder',
+  'dashboard.searchAndFilter.all',
+  'dashboard.searchAndFilter.active',
+  'dashboard.searchAndFilter.upcoming',
+  'dashboard.searchAndFilter.completed',
+  'dashboard.searchAndFilter.cancelled',
+  'dashboard.searchAndFilter.search',
+  'dashboard.searchAndFilter.reset',
+]);

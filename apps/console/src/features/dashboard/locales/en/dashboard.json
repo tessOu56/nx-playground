@@ -1,0 +1,34 @@
+{
+  "dashboard": {
+    "title": "Dashboard",
+    "welcome": "Welcome to NX Playground Admin Console",
+    "stats": {
+      "totalEvents": "Total Events",
+      "activeUsers": "Active Users",
+      "monthlyRevenue": "Monthly Revenue",
+      "systemStatus": "System Status",
+      "normal": "Normal"
+    },
+    "quickActions": {
+      "title": "Quick Actions",
+      "createEvent": "Create Event",
+      "manageUsers": "Manage Users",
+      "viewReports": "View Reports",
+      "systemSettings": "System Settings"
+    },
+    "searchAndFilter": {
+      "title": "Search and Filter",
+      "searchEvents": "Search Events",
+      "searchPlaceholder": "Enter event name or ID...",
+      "statusFilter": "Status Filter",
+      "statusPlaceholder": "Select status",
+      "all": "All",
+      "active": "Active",
+      "upcoming": "Upcoming",
+      "completed": "Completed",
+      "cancelled": "Cancelled",
+      "search": "Search",
+      "reset": "Reset"
+    }
+  }
+}

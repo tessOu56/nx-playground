@@ -1,0 +1,6 @@
+#!/usr/bin/env sh
+
+echo "🔍 Checking commit message format..."
+
+# 使用 commitlint 檢查 commit 訊息
+npx --no -- commitlint --edit "$1" 
