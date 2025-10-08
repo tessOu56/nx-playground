@@ -32,7 +32,7 @@
       "@nx-playground/console": ["dist/libs/console"],
       "@nx-playground/design-system": ["dist/libs/design-system/src"],
       "@nx-playground/events": ["dist/libs/events"],
-      "@nx-playground/hooks": ["dist/libs/hooks"],
+      "@nx-playground/hooks": ["dist/libs/hooks/src"],
       "@nx-playground/i18n": ["dist/libs/i18n"],
       "@nx-playground/ui-components": ["dist/libs/ui-components"],
       "@nx-playground/vue-motion": ["libs/vue-motion/src"],
