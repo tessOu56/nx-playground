@@ -1,0 +1,1 @@
+export { settingsMetaData } from './metaData';

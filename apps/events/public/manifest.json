@@ -1,0 +1,32 @@
+{
+  "name": "NX Playground Events - 活動管理平台",
+  "short_name": "NX Playground Events",
+  "description": "基於 LIFF 的活動管理平台，提供豐富的活動體驗",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#3b82f6",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/favicon.ico",
+      "sizes": "16x16 32x32",
+      "type": "image/x-icon"
+    },
+    {
+      "src": "/logo192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/logo512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["events", "lifestyle", "social"],
+  "lang": "zh-TW",
+  "dir": "ltr"
+}

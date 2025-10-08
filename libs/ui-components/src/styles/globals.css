@@ -1,0 +1,62 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* 使用 design-system 的語義化顏色變數 */
+    --background: var(--color-background-primary);
+    --foreground: var(--color-text-primary);
+    --card: var(--color-background-primary);
+    --card-foreground: var(--color-text-primary);
+    --popover: var(--color-background-primary);
+    --popover-foreground: var(--color-text-primary);
+    --primary: var(--color-brand-600);
+    --primary-foreground: var(--color-base-white);
+    --secondary: var(--color-background-secondary);
+    --secondary-foreground: var(--color-text-secondary);
+    --muted: var(--color-background-tertiary);
+    --muted-foreground: var(--color-text-tertiary);
+    --accent: var(--color-brand-50);
+    --accent-foreground: var(--color-brand-700);
+    --destructive: var(--color-error-600);
+    --destructive-foreground: var(--color-base-white);
+    --border: var(--color-border-primary);
+    --input: var(--color-border-primary);
+    --ring: var(--color-border-focus);
+    --radius: 0.5rem;
+  }
+
+  /* 深色模式 - 使用 data-color-mode='dark' 選擇器 */
+  [data-color-mode='dark'] {
+    --background: var(--color-background-primary);
+    --foreground: var(--color-text-primary);
+    --card: var(--color-background-primary);
+    --card-foreground: var(--color-text-primary);
+    --popover: var(--color-background-primary);
+    --popover-foreground: var(--color-text-primary);
+    --primary: var(--color-brand-600);
+    --primary-foreground: var(--color-base-white);
+    --secondary: var(--color-background-secondary);
+    --secondary-foreground: var(--color-text-secondary);
+    --muted: var(--color-background-tertiary);
+    --muted-foreground: var(--color-text-tertiary);
+    --accent: var(--color-brand-50);
+    --accent-foreground: var(--color-brand-700);
+    --destructive: var(--color-error-600);
+    --destructive-foreground: var(--color-base-white);
+    --border: var(--color-border-primary);
+    --input: var(--color-border-primary);
+    --ring: var(--color-border-focus);
+  }
+}
+
+@layer base {
+  * {
+    border-color: var(--border);
+  }
+  body {
+    background-color: var(--background);
+    color: var(--foreground);
+  }
+}

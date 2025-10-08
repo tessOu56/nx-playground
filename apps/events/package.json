@@ -1,0 +1,58 @@
+{
+  "name": "@nx-playground/events",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "start": "next start"
+  },
+  "dependencies": {
+    "@line/liff": "2.27.1",
+    "@nx-playground/api-client": "workspace:*",
+    "@nx-playground/auth-client": "workspace:*",
+    "@nx-playground/design-system": "workspace:*",
+    "@nx-playground/i18n": "workspace:*",
+    "@nx-playground/ui-components": "workspace:*",
+    "@radix-ui/react-dropdown-menu": "2.1.15",
+    "@radix-ui/react-progress": "1.1.7",
+    "@radix-ui/react-select": "2.2.5",
+    "@radix-ui/react-separator": "1.1.7",
+    "@radix-ui/react-tooltip": "1.2.7",
+    "@tailwindcss/forms": "0.5.10",
+    "@tailwindcss/typography": "0.5.16",
+    "@tanstack/react-query": "5.83.0",
+    "@tanstack/react-query-devtools": "5.83.0",
+    "@vanilla-extract/css": "1.17.4",
+    "@vanilla-extract/next-plugin": "2.4.14",
+    "axios": "1.11.0",
+    "class-variance-authority": "0.7.1",
+    "clsx": "2.1.1",
+    "i18next": "25.5.2",
+    "i18next-browser-languagedetector": "8.2.0",
+    "lucide-react": "0.525.0",
+    "next": "15.5.2",
+    "next-intl": "4.3.6",
+    "qr-code-styling": "1.9.2",
+    "react": "19.0.0",
+    "react-dom": "19.0.0",
+    "react-hook-form": "7.62.0",
+    "react-i18next": "15.6.1",
+    "react-router-dom": "6.29.0",
+    "sharp": "0.34.3",
+    "style-dictionary": "5.0.1",
+    "swiper": "12.0.1",
+    "tailwind-merge": "3.3.1",
+    "tailwindcss-animate": "1.0.7",
+    "typescript": "5.8.2",
+    "zustand": "5.0.6"
+  },
+  "pnpm": {
+    "overrides": {
+      "react": "19.0.0",
+      "react-dom": "19.0.0",
+      "tmp@<=0.2.3": ">=0.2.4",
+      "next@>=15.0.0 <=15.4.4": ">=15.4.5",
+      "next@>=15.0.0-canary.0 <15.4.7": ">=15.4.7",
+      "react-hook-form": "7.62.0"
+    }
+  }
+}

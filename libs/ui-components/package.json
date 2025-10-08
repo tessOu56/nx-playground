@@ -1,0 +1,23 @@
+{
+  "name": "@nx-playground/ui-components",
+  "version": "0.1.0",
+  "private": true,
+  "main": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.mjs",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "scripts": {
+    "build": "vite build",
+    "dev": "vite build --watch",
+    "test": "vitest",
+    "lint": "eslint ."
+  },
+  "dependencies": {
+    "@nx-playground/design-system": "workspace:*",
+    "@nx-playground/i18n": "workspace:*"
+  }
+}

@@ -1,0 +1,55 @@
+when:
+  - event: [push, manual]
+
+steps:
+  build-events:
+    image: woodpeckerci/plugin-docker-buildx
+    settings:
+      build_args:
+        PROJECT_NAME: "events"
+        BUILD_CONFIG: "production"
+        NEXT_PUBLIC_LIFF_ID:
+          from_secret: LINE_LIFF_ID
+        NEXT_PUBLIC_LINE_REDIRECT_URI: "https://nx-playground-dev.arwork.tw"
+        NEXT_PUBLIC_LINE_CLIENT_ID:
+          from_secret: LINE_CLIENT_ID
+        LINE_CLIENT_SECRET:
+          from_secret: LINE_CLIENT_SECRET
+        NEXT_PUBLIC_API_BASE_URL: "https://nx-playground-dev.arwork.tw/api/"
+        NEXT_PUBLIC_API_TIMEOUT: "10000"
+        NEXT_PUBLIC_PRODUCTION_DOMAIN: "https://nx-playground-dev.arwork.tw"
+        NEXT_PUBLIC_APP_NAME: "NX Playground"
+        NEXT_PUBLIC_APP_VERSION: "${CI_COMMIT_SHA:0:8}"
+        NEXT_PUBLIC_ENABLE_DEVTOOLS: "false"
+        NEXT_PUBLIC_ENABLE_MOCK_DATA: "true"
+      repo: sjc.vultrcr.com/oosa/nx-playground-events
+      dockerfile: ./Dockerfile_mini.nx
+      platforms: linux/amd64,linux/arm64
+      registry: https://sjc.vultrcr.com/oosa
+      tag: dev
+      username:
+        from_secret: REGISTRY_USER
+      password:
+        from_secret: REGISTRY_TOKEN
+    when:
+      - event: manual
+      - event: push
+        changeset:
+          includes:
+            - apps/events/**
+            - libs/**
+
+
+  notify-for-events:
+    image: 94peter/woodpecker-webhook:v0.0.3
+    settings:
+      webhooks:
+        - webhook:
+            from_secret: PORTAINER_WEBHOOK_URL # <-- Use a specific webhook for events if needed
+          provider: portainer
+        - webhook:
+            from_secret: GOOGLE_WEBHOOK_URL
+          provider: google_chat
+      debug: false
+    depends_on:
+      - build-events

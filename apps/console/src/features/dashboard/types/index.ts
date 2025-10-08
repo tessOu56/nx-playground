@@ -1,0 +1,1 @@
+export { dashboardMetaData } from './metaData';

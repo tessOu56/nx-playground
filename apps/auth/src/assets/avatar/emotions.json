@@ -1,0 +1,28 @@
+{
+    "images": [
+        {
+            "name": "emotion_1.svg",
+            "id": "7b941c68-0955-415e-00e7-a508bfa53500"
+        },
+        {
+            "name": "emotion_2.svg",
+            "id": "49693506-22ac-4d95-a067-f83971443b00"
+        },
+        {
+            "name": "emotion_3.svg",
+            "id": "ba3a2312-b47b-4a14-56ef-378645c96900"
+        },
+        {
+            "name": "emotion_4.svg",
+            "id": "a442ccbb-3eec-473f-b89d-87e0950b1b00"
+        },
+        {
+            "name": "emotion_5.svg",
+            "id": "72c9e4ee-23a6-460e-bfdb-8d228b4d4200"
+        },
+        {
+            "name": "emotion_6.svg",
+            "id": "b5e17b33-1eea-4a3d-e0a1-5a63600d9900"
+        }
+    ]
+}

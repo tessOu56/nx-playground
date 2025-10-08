@@ -1,0 +1,90 @@
+{
+    "SucessCodes": {
+        "1060003": {
+            "text": "An email containing a recovery code has been sent to the email address you provided. If you have not received an email, check the spelling of the address and make sure to use the address you registered with.",
+            "feild": "email",
+            "method": "recovery, verification",
+            "tips": "驗證信已寄出囉"
+        },
+        "1080002": {
+            "text": "You successfully verified your email address.",
+            "feild": "code",
+            "method": "verification",
+            "tips": "驗證通過"
+        }
+    },
+    "ErrorCodes": {
+        "1010016": {
+            "text": "You tried to sign in with \"tess_ou@arwork.tw\", but that email is already used by another account. Sign in to your account with one of the options below to add your account \"tess_ou@arwork.tw\" at \"apple\" as another way to sign in.",
+            "feild": "email",
+            "method": "login",
+            "tips": "這組帳號的信箱已被其他用戶註冊，請使用其他帳號登入"
+        },
+        "4000001": {
+            "text": "\"TJdnhgaa.@test.com\" is not valid \"email\"",
+            "feild": "email",
+            "method": "registration",
+            "tips": "這看起來不像信箱地址"
+        },
+        "4000002": {
+            "text": "property missing",
+            "feild": "filed name",
+            "method": "filed",
+            "tips": ""
+        },
+        "4000006": {
+            "text": "The provided credentials are invalid, check for spelling mistakes in your password or username, email address, or phone number.",
+            "feild": "password",
+            "method": "login",
+            "tips": "您輸入的帳號或密碼不正確"
+        },
+        "4000007":{
+            "text": "An account with the same identifier (email, phone, username, ...) exists already.",
+            "feild": "email",
+            "method": "registration",
+            "tips": "這個信箱已被註冊，請更換其他信箱"
+        },
+        "4000017": {
+            "text": "length must be <= 20, but got 34",
+            "feild": "username",
+            "method": "registration",
+            "tips": "請輸入 8-20 位字元"
+        },
+        "4000031": {
+            "text": "The password can not be used because it is too similar to the identifier.",
+            "feild": "password",
+            "method": "registration",
+            "tips": "密碼與帳號太相似，請更換其他密碼"
+        },
+        "4000032": {
+            "text": "The password must be at least 8 characters long, but got 6.",
+            "feild": "password",
+            "method": "registration",
+            "tips": "請輸入 8-12 位字元"
+        },
+        "4000034": {
+            "text": "The password has been found in data breaches and must no longer be used.",
+            "feild": "password",
+            "method": "registration, recovery",
+            "tips": "這個密碼比較簡單，請更換強度更高的密碼"
+        },
+        "4010003": {
+            "text": "Could not find a strategy to sign you up with. Did you fill out the form correctly?",
+            "feild": "token",
+            "method": "registration",
+            "tips": "註冊失敗，請再試一次"
+        },
+        "4060006": {
+            "text": "The recovery code is invalid or has already been used. Please try again.",
+            "feild": "code",
+            "method": "recovery, verification",
+            "tips": "這組驗證碼已經失效(已被使用過)"
+        },
+        "4010005": {
+            "text": "Could not find a strategy to recover your account with. Did you fill out the form correctly?",
+            "feild": "code",
+            "method": "recovery, verification",
+            "tips": "驗證碼不對哦😕"
+        }
+    }
+}

@@ -1,0 +1,11 @@
+{
+  "settings.title": "Platform Settings",
+  "settings.description": "Manage system configuration and preferences",
+  "settings.appearance.title": "Appearance Settings",
+  "settings.appearance.theme.title": "Theme Switch",
+  "settings.appearance.theme.description": "Choose different design themes: Base (Blue-Gray), Enterprise (Brand), Dev Mode (Gray)",
+  "settings.appearance.colorMode.title": "Color Mode",
+  "settings.appearance.colorMode.description": "Choose light or dark mode",
+  "settings.appearance.language.title": "Language Settings",
+  "settings.appearance.language.description": "Choose interface language"
+}

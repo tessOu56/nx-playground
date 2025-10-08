@@ -1,0 +1,78 @@
+{
+  "name": "@nx-playground/api-client",
+  "version": "0.0.1",
+  "description": "NX Playground API Client with auto-generated API client from OpenAPI spec",
+  "type": "module",
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    "./package.json": "./package.json",
+    ".": {
+      "development": "./src/index.ts",
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
+    },
+    "./form/dev": {
+      "types": "./src/generated/form/dev/nx-playgroundAPI.ts",
+      "import": "./src/generated/form/dev/nx-playgroundAPI.ts",
+      "default": "./src/generated/form/dev/nx-playgroundAPI.ts"
+    },
+    "./form/v1": {
+      "types": "./src/generated/form/v1/nx-playgroundAPI.ts",
+      "import": "./src/generated/form/v1/nx-playgroundAPI.ts",
+      "default": "./src/generated/form/v1/nx-playgroundAPI.ts"
+    },
+    "./identity/dev": {
+      "types": "./src/generated/identity/dev/nx-playgroundAPI.ts",
+      "import": "./src/generated/identity/dev/nx-playgroundAPI.ts",
+      "default": "./src/generated/identity/dev/nx-playgroundAPI.ts"
+    },
+    "./media/dev": {
+      "types": "./src/generated/media/dev/nx-playgroundAPI.ts",
+      "import": "./src/generated/media/dev/nx-playgroundAPI.ts",
+      "default": "./src/generated/media/dev/nx-playgroundAPI.ts"
+    },
+    "./community/dev": {
+      "types": "./src/generated/community/dev/nx-playgroundAPI.ts",
+      "import": "./src/generated/community/dev/nx-playgroundAPI.ts",
+      "default": "./src/generated/community/dev/nx-playgroundAPI.ts"
+    },
+    "./tickets/dev": {
+      "types": "./src/generated/tickets/dev/nx-playgroundAPI.ts",
+      "import": "./src/generated/tickets/dev/nx-playgroundAPI.ts",
+      "default": "./src/generated/tickets/dev/nx-playgroundAPI.ts"
+    },
+    "./event/dev": {
+      "types": "./src/generated/event/dev/nx-playgroundAPI.ts",
+      "import": "./src/generated/event/dev/nx-playgroundAPI.ts",
+      "default": "./src/generated/event/dev/nx-playgroundAPI.ts"
+    }
+  },
+  "scripts": {
+    "generate:api": "orval --config orval.config.ts",
+    "generate:api:dev": "API_ENV=dev orval --config orval.config.ts",
+    "generate:api:prod": "API_ENV=prod orval --config orval.config.ts",
+    "generate:api:form:dev": "API_MODULE=form API_ENV=dev orval --config orval.config.ts",
+    "generate:api:form:v1": "API_MODULE=form API_ENV=v1 orval --config orval.config.ts",
+    "generate:api:identity:dev": "API_MODULE=identity API_ENV=dev orval --config orval.config.ts",
+    "generate:api:media:dev": "API_MODULE=media API_ENV=dev orval --config orval.config.ts",
+    "generate:api:community:dev": "API_MODULE=community API_ENV=dev orval --config orval.config.ts",
+    "generate:api:tickets:dev": "API_MODULE=tickets API_ENV=dev orval --config orval.config.ts",
+    "generate:api:event:dev": "API_MODULE=event API_ENV=dev orval --config orval.config.ts",
+    "generate:api:all": "npm run generate:api:form:dev && npm run generate:api:form:v1 && npm run generate:api:identity:dev && npm run generate:api:media:dev && npm run generate:api:community:dev && npm run generate:api:tickets:dev && npm run generate:api:event:dev",
+    "generate:types": "openapi-typescript ./specs/openapi.yaml -o ./src/generated/types.ts",
+    "prebuild": "npm run generate:api:all"
+  },
+  "keywords": [
+    "react",
+    "sdk",
+    "api-client",
+    "openapi",
+    "typescript",
+    "react-query"
+  ],
+  "author": "NX Playground Team",
+  "license": "MIT"
+}

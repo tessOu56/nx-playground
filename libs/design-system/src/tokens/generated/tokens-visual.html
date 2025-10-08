@@ -1,0 +1,1918 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Design Tokens Visual Reference</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .color-preview {
+            width: 60px;
+            height: 40px;
+            border-radius: 6px;
+            border: 1px solid #e5e7eb;
+            display: inline-block;
+            margin-right: 12px;
+            vertical-align: middle;
+        }
+        .token-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 24px;
+            margin: 24px 0;
+        }
+        .token-card {
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            padding: 16px;
+            background: white;
+        }
+        .token-item {
+            display: flex;
+            align-items: center;
+            margin: 8px 0;
+            padding: 8px;
+            border-radius: 4px;
+            background: #f9fafb;
+        }
+        .token-info {
+            flex: 1;
+        }
+        .token-name {
+            font-weight: 600;
+            font-size: 14px;
+            color: #374151;
+        }
+        .token-value {
+            font-family: monospace;
+            font-size: 12px;
+            color: #6b7280;
+            margin-top: 2px;
+        }
+        .token-class {
+            font-family: monospace;
+            font-size: 12px;
+            color: #059669;
+            background: #d1fae5;
+            padding: 2px 6px;
+            border-radius: 3px;
+            margin-top: 4px;
+        }
+        .spacing-preview {
+            background: #3b82f6;
+            display: inline-block;
+            margin-right: 12px;
+            vertical-align: middle;
+        }
+        .radius-preview {
+            background: #3b82f6;
+            display: inline-block;
+            margin-right: 12px;
+            vertical-align: middle;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <div class="container mx-auto px-6 py-8">
+        <h1 class="text-3xl font-bold text-gray-900 mb-2">Design Tokens Visual Reference</h1>
+        <p class="text-gray-600 mb-8">Visual representation of all design tokens with their actual values and Tailwind CSS classes.</p>
+        
+        <div class="mb-8">
+            <h2 class="text-2xl font-semibold text-gray-800 mb-4">Colors</h2>
+            <div class="token-card">
+                <h3 class="text-lg font-semibold text-gray-800 mb-4">Base</h3>
+                <div class="token-item">
+                    <div class="color-preview" style="background-color: #ffffff"></div>
+                    <div class="token-info">
+                        <div class="token-name">White</div>
+                        <div class="token-value">#ffffff</div>
+                        <div class="token-class">bg-base-white | text-base-white</div>
+                    </div>
+                </div>
+                <div class="token-item">
+                    <div class="color-preview" style="background-color: #000000"></div>
+                    <div class="token-info">
+                        <div class="token-name">Black</div>
+                        <div class="token-value">#000000</div>
+                        <div class="token-class">bg-base-black | text-base-black</div>
+                    </div>
+                </div>
+                <div class="token-item">
+                    <div class="color-preview" style="background-color: rgba(255, 255, 255, 0)"></div>
+                    <div class="token-info">
+                        <div class="token-name">Transparent</div>
+                        <div class="token-value">rgba(255, 255, 255, 0)</div>
+                        <div class="token-class">bg-base-transparent | text-base-transparent</div>
+                    </div>
+                </div>
+            </div>
+            <div class="token-card">
+                <h3 class="text-lg font-semibold text-gray-800 mb-4">Gray</h3>
+                <div class="token-item">
+                    <div class="color-preview" style="background-color: #fafafa"></div>
+                    <div class="token-info">
+                        <div class="token-name">25</div>
+                        <div class="token-value">#fafafa</div>
+                        <div class="token-class">bg-gray-25 | text-gray-25</div>
+                    </div>
+                </div>
+                <div class="token-item">
+                    <div class="color-preview" style="background-color: #f7f7f7"></div>
+                    <div class="token-info">
+                        <div class="token-name">50</div>
+                        <div class="token-value">#f7f7f7</div>
+                        <div class="token-class">bg-gray-50 | text-gray-50</div>
+                    </div>
+                </div>
+                <div class="token-item">
+                    <div class="color-preview" style="background-color: #f0f0f1"></div>
+                    <div class="token-info">
+                        <div class="token-name">100</div>
+                        <div class="token-value">#f0f0f1</div>
+                        <div class="token-class">bg-gray-100 | text-gray-100</div>
+                    </div>
+                </div>
+                <div class="token-item">
+                    <div class="color-preview" style="background-color: #ececed"></div>
+                    <div class="token-info">
+                        <div class="token-name">200</div>
+                        <div class="token-value">#ececed</div>
+                        <div class="token-class">bg-gray-200 | text-gray-200</div>
+                    </div>
+                </div>
+                <div class="token-item">
+                    <div class="color-preview" style="background-color: #cecfd2"></div>
+                    <div class="token-info">
+                        <div class="token-name">300</div>
+                        <div class="token-value">#cecfd2</div>
+                        <div class="token-class">bg-gray-300 | text-gray-300</div>
+                    </div>
+                </div>
+                <div class="token-item">
+                    <div class="color-preview" style="background-color: #94979c"></div>
+                    <div class="token-info">
+                        <div class="token-name">400</div>
+                        <div class="token-value">#94979c</div>
+                        <div class="token-class">bg-gray-400 | text-gray-400</div>
+                    </div>
+                </div>
+                <div class="token-item">
+                    <div class="color-preview" style="background-color: #85888e"></div>
+                    <div class="token-info">
+                        <div class="token-name">500</div>
+                        <div class="token-value">#85888e</div>
+                        <div class="token-class">bg-gray-500 | text-gray-500</div>
+                    </div>
+                </div>
+                <div class="token-item">
+                    <div class="color-preview" style="background-color: #61656c"></div>
+                    <div class="token-info">
+                        <div class="token-name">600</div>
+                        <div class="token-value">#61656c</div>
+                        <div class="token-class">bg-gray-600 | text-gray-600</div>
+                    </div>
+                </div>
+                <div class="token-item">
+                    <div class="color-preview" style="background-color: #373a41"></div>
+                    <div class="token-info">
+                        <div class="token-name">700</div>
+                        <div class="token-value">#373a41</div>
+                        <div class="token-class">bg-gray-700 | text-gray-700</div>
+                    </div>
+                </div>
+                <div class="token-item">
+                    <div class="color-preview" style="background-color: #22262f"></div>
+                    <div class="token-info">
+                        <div class="token-name">800</div>
+                        <div class="token-value">#22262f</div>
+                        <div class="token-class">bg-gray-800 | text-gray-800</div>
+                    </div>
+                </div>
+                <div class="token-item">
+                    <div class="color-preview" style="background-color: #13161b"></div>
+                    <div class="token-info">
+                        <div class="token-name">900</div>
+                        <div class="token-value">#13161b</div>
+                        <div class="token-class">bg-gray-900 | text-gray-900</div>
+                    </div>
+                </div>
+                <div class="token-item">
+                    <div class="color-preview" style="background-color: #0c0e12"></div>
+                    <div class="token-info">
+                        <div class="token-name">950</div>
+                        <div class="token-value">#0c0e12</div>
+                        <div class="token-class">bg-gray-950 | text-gray-950</div>
+                    </div>
+                </div>
+                <div class="token-item">
+                    <div class="color-preview" style="background-color: #fcfcfd"></div>
+                    <div class="token-info">
+                        <div class="token-name">Blue-25</div>
+                        <div class="token-value">#fcfcfd</div>
+                        <div class="token-class">bg-gray-blue-25 | text-gray-blue-25</div>
+                    </div>
+                </div>
+                <div class="token-item">
+                    <div class="color-preview" style="background-color: #fcfcfd"></div>
+                    <div class="token-info">
+                        <div class="token-name">Cool-25</div>
+                        <div class="token-value">#fcfcfd</div>
+                        <div class="token-class">bg-gray-cool-25 | text-gray-cool-25</div>
+                    </div>
+                </div>
+                <div class="token-item">
+                    <div class="color-preview" style="background-color: #fcfcfd"></div>
+                    <div class="token-info">
+                        <div class="token-name">Modern-25</div>
+                        <div class="token-value">#fcfcfd</div>
+                        <div class="token-class">bg-gray-modern-25 | text-gray-modern-25</div>
+                    </div>
+                </div>
+                <div class="token-item">
+                    <div class="color-preview" style="background-color: #fcfcfd"></div>
+                    <div class="token-info">
+                        <div class="token-name">Neutral-25</div>
+                        <div class="token-value">#fcfcfd</div>
+                        <div class="token-class">bg-gray-neutral-25 | text-gray-neutral-25</div>
+                    </div>
+                </div>
+                <div class="token-item">
+                    <div class="color-preview" style="background-color: #f9fafb"></div>
+                    <div class="token-info">
+                        <div class="token-name">Neutral-50</div>
+                        <div class="token-value">#f9fafb</div>
+                        <div class="token-class">bg-gray-neutral-50 | text-gray-neutral-50</div>
+                    </div>
+                </div>
+                <div class="token-item">
+                    <div class="color-preview" style="background-color: #f8f9fc"></div>
+                    <div class="token-info">
+                        <div class="token-name">Blue-50</div>
+                        <div class="token-value">#f8f9fc</div>
+                        <div class="token-class">bg-gray-blue-50 | text-gray-blue-50</div>
+                    </div>
+                </div>
+                <div class="token-item">
+                    <div class="color-preview" style="background-color: #eaecf5"></div>
+                    <div class="token-info">
+                        <div class="token-name">Blue-100</div>
+                        <div class="token-value">#eaecf5</div>
+                        <div class="token-class">bg-gray-blue-100 | text-gray-blue-100</div>
+                    </div>
+                </div>
+                <div class="token-item">
+                    <div class="color-preview" style="background-color: #d5d9eb"></div>
+                    <div class="token-info">
+                        <div class="token-name">Blue-200</div>
+                        <div class="token-value">#d5d9eb</div>
+                        <div class="token-class">bg-gray-blue-200 | text-gray-blue-200</div>
+                    </div>
+                </div>
+                <div class="token-item">
+                    <div class="color-preview" style="background-color: #b3b8db"></div>
+                    <div class="token-info">
+                        <div class="token-name">Blue-300</div>
+                        <div class="token-value">#b3b8db</div>
+                        <div class="token-class">bg-gray-blue-300 | text-gray-blue-300</div>
+                    </div>
+                </div>
+                <div class="token-item">
+                    <div class="color-preview" style="background-color: #717bbc"></div>
+                    <div class="token-info">
+                        <div class="token-name">Blue-400</div>
+                        <div class="token-value">#717bbc</div>
+                        <div class="token-class">bg-gray-blue-400 | text-gray-blue-400</div>
+                    </div>
+                </div>
+                <div class="token-item">
+                    <div class="color-preview" style="background-color: #4e5ba6"></div>
+                    <div class="token-info">
+                        <div class="token-name">Blue-500</div>
+                        <div class="token-value">#4e5ba6</div>
+                        <div class="token-class">bg-gray-blue-500 | text-gray-blue-500</div>
+                    </div>
+                </div>
+                <div class="token-item">
+                    <div class="color-preview" style="background-color: #3e4784"></div>
+                    <div class="token-info">
+                        <div class="token-name">Blue-600</div>
+                        <div class="token-value">#3e4784</div>
+                        <div class="token-class">bg-gray-blue-600 | text-gray-blue-600</div>
+                    </div>
+                </div>
+                <div class="token-item">
+                    <div class="color-preview" style="background-color: #363f72"></div>
+                    <div class="token-info">
+                        <div class="token-name">Blue-700</div>
+                        <div class="token-value">#363f72</div>
+                        <div class="token-class">bg-gray-blue-700 | text-gray-blue-700</div>
+                    </div>
+                </div>
+                <div class="token-item">
+                    <div class="color-preview" style="background-color: #293056"></div>
+                    <div class="token-info">
+                        <div class="token-name">Blue-800</div>
+                        <div class="token-value">#293056</div>
+                        <div class="token-class">bg-gray-blue-800 | text-gray-blue-800</div>
+                    </div>
+                </div>
+                <div class="token-item">
+                    <div class="color-preview" style="background-color: #101323"></div>
+                    <div class="token-info">
+                        <div class="token-name">Blue-900</div>
+                        <div class="token-value">#101323</div>
+                        <div class="token-class">bg-gray-blue-900 | text-gray-blue-900</div>
+                    </div>
+                </div>
+                <div class="token-item">
+                    <div class="color-preview" style="background-color: #0d0f1c"></div>
+                    <div class="token-info">
+                        <div class="token-name">Blue-950</div>
+                        <div class="token-value">#0d0f1c</div>
+                        <div class="token-class">bg-gray-blue-950 | text-gray-blue-950</div>
+                    </div>
+                </div>
+                <div class="token-item">
+                    <div class="color-preview" style="background-color: #f9f9fb"></div>
+                    <div class="token-info">
+                        <div class="token-name">Cool-50</div>
+                        <div class="token-value">#f9f9fb</div>
+                        <div class="token-class">bg-gray-cool-50 | text-gray-cool-50</div>
+                    </div>
+                </div>
+                <div class="token-item">
+                    <div class="color-preview" style="background-color: #eff1f5"></div>
+                    <div class="token-info">
+                        <div class="token-name">Cool-100</div>
+                        <div class="token-value">#eff1f5</div>
+                        <div class="token-class">bg-gray-cool-100 | text-gray-cool-100</div>
+                    </div>
+                </div>
+                <div class="token-item">
+                    <div class="color-preview" style="background-color: #dcdfea"></div>
+                    <div class="token-info">
+                        <div class="token-name">Cool-200</div>
+                        <div class="token-value">#dcdfea</div>
+                        <div class="token-class">bg-gray-cool-200 | text-gray-cool-200</div>
+                    </div>
+                </div>
+                <div class="token-item">
+                    <div class="color-preview" style="background-color: #b9c0d4"></div>
+                    <div class="token-info">
+                        <div class="token-name">Cool-300</div>
+                        <div class="token-value">#b9c0d4</div>
+                        <div class="token-class">bg-gray-cool-300 | text-gray-cool-300</div>
+                    </div>
+                </div>
+                <div class="token-item">
+                    <div class="color-preview" style="background-color: #7d89b0"></div>
+                    <div class="token-info">
+                        <div class="token-name">Cool-400</div>
+                        <div class="token-value">#7d89b0</div>
+                        <div class="token-class">bg-gray-cool-400 | text-gray-cool-400</div>
+                    </div>
+                </div>
+                <div class="token-item">
+                    <div class="color-preview" style="background-color: #5d6b98"></div>
+                    <div class="token-info">
+                        <div class="token-name">Cool-500</div>
+                        <div class="token-value">#5d6b98</div>
+                        <div class="token-class">bg-gray-cool-500 | text-gray-cool-500</div>
+                    </div>
+                </div>
+                <div class="token-item">
+                    <div class="color-preview" style="background-color: #4a5578"></div>
+                    <div class="token-info">
+                        <div class="token-name">Cool-600</div>
+                        <div class="token-value">#4a5578</div>
+                        <div class="token-class">bg-gray-cool-600 | text-gray-cool-600</div>
+                    </div>
+                </div>
+                <div class="token-item">
+                    <div class="color-preview" style="background-color: #404968"></div>
+                    <div class="token-info">
+                        <div class="token-name">Cool-700</div>
+                        <div class="token-value">#404968</div>
+                        <div class="token-class">bg-gray-cool-700 | text-gray-cool-700</div>
+                    </div>
+                </div>
+                <div class="token-item">
+                    <div class="color-preview" style="background-color: #30374f"></div>
+                    <div class="token-info">
+                        <div class="token-name">Cool-800</div>
+                        <div class="token-value">#30374f</div>
+                        <div class="token-class">bg-gray-cool-800 | text-gray-cool-800</div>
+                    </div>
+                </div>
+                <div class="token-item">
+                    <div class="color-preview" style="background-color: #111322"></div>
+                    <div class="token-info">
+                        <div class="token-name">Cool-900</div>
+                        <div class="token-value">#111322</div>
+                        <div class="token-class">bg-gray-cool-900 | text-gray-cool-900</div>
+                    </div>
+                </div>
+                <div class="token-item">
+                    <div class="color-preview" style="background-color: #f8fafc"></div>
+                    <div class="token-info">
+                        <div class="token-name">Modern-50</div>
+                        <div class="token-value">#f8fafc</div>
+                        <div class="token-class">bg-gray-modern-50 | text-gray-modern-50</div>
+                    </div>
+                </div>
+                <div class="token-item">
+                    <div class="color-preview" style="background-color: #eef2f6"></div>
+                    <div class="token-info">
+                        <div class="token-name">Modern-100</div>
+                        <div class="token-value">#eef2f6</div>
+                        <div class="token-class">bg-gray-modern-100 | text-gray-modern-100</div>
+                    </div>
+                </div>
+                <div class="token-item">
+                    <div class="color-preview" style="background-color: #e3e8ef"></div>
+                    <div class="token-info">
+                        <div class="token-name">Modern-200</div>
+                        <div class="token-value">#e3e8ef</div>
+                        <div class="token-class">bg-gray-modern-200 | text-gray-modern-200</div>
+                    </div>
+                </div>
+                <div class="token-item">
+                    <div class="color-preview" style="background-color: #cdd5df"></div>
+                    <div class="token-info">
+                        <div class="token-name">Modern-300</div>
+                        <div class="token-value">#cdd5df</div>
+                        <div class="token-class">bg-gray-modern-300 | text-gray-modern-300</div>
+                    </div>
+                </div>
+                <div class="token-item">
+                    <div class="color-preview" style="background-color: #9aa4b2"></div>
+                    <div class="token-info">
+                        <div class="token-name">Modern-400</div>
+                        <div class="token-value">#9aa4b2</div>
+                        <div class="token-class">bg-gray-modern-400 | text-gray-modern-400</div>
+                    </div>
+                </div>
+                <div class="token-item">
+                    <div class="color-preview" style="background-color: #697586"></div>
+                    <div class="token-info">
+                        <div class="token-name">Modern-500</div>
+                        <div class="token-value">#697586</div>
+                        <div class="token-class">bg-gray-modern-500 | text-gray-modern-500</div>
+                    </div>
+                </div>
+                <div class="token-item">
+                    <div class="color-preview" style="background-color: #4b5565"></div>
+                    <div class="token-info">
+                        <div class="token-name">Modern-600</div>
+                        <div class="token-value">#4b5565</div>
+                        <div class="token-class">bg-gray-modern-600 | text-gray-modern-600</div>
+                    </div>
+                </div>
+                <div class="token-item">
+                    <div class="color-preview" style="background-color: #364152"></div>
+                    <div class="token-info">
+                        <div class="token-name">Modern-700</div>
+                        <div class="token-value">#364152</div>
+                        <div class="token-class">bg-gray-modern-700 | text-gray-modern-700</div>
+                    </div>
+                </div>
+                <div class="token-item">
+                    <div class="color-preview" style="background-color: #202939"></div>
+                    <div class="token-info">
+                        <div class="token-name">Modern-800</div>
+                        <div class="token-value">#202939</div>
+                        <div class="token-class">bg-gray-modern-800 | text-gray-modern-800</div>
+                    </div>
+                </div>
+                <div class="token-item">
+                    <div class="color-preview" style="background-color: #121926"></div>
+                    <div class="token-info">
+                        <div class="token-name">Modern-900</div>
+                        <div class="token-value">#121926</div>
+                        <div class="token-class">bg-gray-modern-900 | text-gray-modern-900</div>
+                    </div>
+                </div>
+                <div class="token-item">
+                    <div class="color-preview" style="background-color: #f3f4f6"></div>
+                    <div class="token-info">
+                        <div class="token-name">Neutral-100</div>
+                        <div class="token-value">#f3f4f6</div>
+                        <div class="token-class">bg-gray-neutral-100 | text-gray-neutral-100</div>
+                    </div>
+                </div>
+                <div class="token-item">
+                    <div class="color-preview" style="background-color: #e5e7eb"></div>
+                    <div class="token-info">
+                        <div class="token-name">Neutral-200</div>
+                        <div class="token-value">#e5e7eb</div>
+                        <div class="token-class">bg-gray-neutral-200 | text-gray-neutral-200</div>
+                    </div>
+                </div>
+                <div class="token-item">
+                    <div class="color-preview" style="background-color: #d2d6db"></div>
+                    <div class="token-info">
+                        <div class="token-name">Neutral-300</div>
+                        <div class="token-value">#d2d6db</div>
+                        <div class="token-class">bg-gray-neutral-300 | text-gray-neutral-300</div>
+                    </div>
+                </div>
+                <div class="token-item">
+                    <div class="color-preview" style="background-color: #9da4ae"></div>
+                    <div class="token-info">
+                        <div class="token-name">Neutral-400</div>
+                        <div class="token-value">#9da4ae</div>
+                        <div class="token-class">bg-gray-neutral-400 | text-gray-neutral-400</div>
+                    </div>
+                </div>
+                <div class="token-item">
+                    <div class="color-preview" style="background-color: #6c737f"></div>
+                    <div class="token-info">
+                        <div class="token-name">Neutral-500</div>
+                        <div class="token-value">#6c737f</div>
+                        <div class="token-class">bg-gray-neutral-500 | text-gray-neutral-500</div>
+                    </div>
+                </div>
+                <div class="token-item">
+                    <div class="color-preview" style="background-color: #4d5761"></div>
+                    <div class="token-info">
+                        <div class="token-name">Neutral-600</div>
+                        <div class="token-value">#4d5761</div>
+                        <div class="token-class">bg-gray-neutral-600 | text-gray-neutral-600</div>
+                    </div>
+                </div>
+                <div class="token-item">
+                    <div class="color-preview" style="background-color: #384250"></div>
+                    <div class="token-info">
+                        <div class="token-name">Neutral-700</div>
+                        <div class="token-value">#384250</div>
+                        <div class="token-class">bg-gray-neutral-700 | text-gray-neutral-700</div>
+                    </div>
+                </div>
+                <div class="token-item">
+                    <div class="color-preview" style="background-color: #1f2a37"></div>
+                    <div class="token-info">
+                        <div class="token-name">Neutral-800</div>
+                        <div class="token-value">#1f2a37</div>
+                        <div class="token-class">bg-gray-neutral-800 | text-gray-neutral-800</div>
+                    </div>
+                </div>
+                <div class="token-item">
+                    <div class="color-preview" style="background-color: #111927"></div>
+                    <div class="token-info">
+                        <div class="token-name">Neutral-900</div>
+                        <div class="token-value">#111927</div>
+                        <div class="token-class">bg-gray-neutral-900 | text-gray-neutral-900</div>
+                    </div>
+                </div>
+                <div class="token-item">
+                    <div class="color-preview" style="background-color: #fcfcfc"></div>
+                    <div class="token-info">
+                        <div class="token-name">Iron-25</div>
+                        <div class="token-value">#fcfcfc</div>
+                        <div class="token-class">bg-gray-iron-25 | text-gray-iron-25</div>
+                    </div>
+                </div>
+                <div class="token-item">
+                    <div class="color-preview" style="background-color: #fcfcfc"></div>
+                    <div class="token-info">
+                        <div class="token-name">True-25</div>
+                        <div class="token-value">#fcfcfc</div>
+                        <div class="token-class">bg-gray-true-25 | text-gray-true-25</div>
+                    </div>
+                </div>
+                <div class="token-item">
+                    <div class="color-preview" style="background-color: #fafafa"></div>
+                    <div class="token-info">
+                        <div class="token-name">Iron-50</div>
+                        <div class="token-value">#fafafa</div>
+                        <div class="token-class">bg-gray-iron-50 | text-gray-iron-50</div>
+                    </div>
+                </div>
+                <div class="token-item">
+                    <div class="color-preview" style="background-color: #f7f7f7"></div>
+                    <div class="token-info">
+                        <div class="token-name">True-50</div>
+                        <div class="token-value">#f7f7f7</div>
+                        <div class="token-class">bg-gray-true-50 | text-gray-true-50</div>
+                    </div>
+                </div>
+                <div class="token-item">
+                    <div class="color-preview" style="background-color: #f4f4f5"></div>
+                    <div class="token-info">
+                        <div class="token-name">Iron-100</div>
+                        <div class="token-value">#f4f4f5</div>
+                        <div class="token-class">bg-gray-iron-100 | text-gray-iron-100</div>
+                    </div>
+                </div>
+                <div class="token-item">
+                    <div class="color-preview" style="background-color: #e4e4e7"></div>
+                    <div class="token-info">
+                        <div class="token-name">Iron-200</div>
+                        <div class="token-value">#e4e4e7</div>
+                        <div class="token-class">bg-gray-iron-200 | text-gray-iron-200</div>
+                    </div>
+                </div>
+                <div class="token-item">
+                    <div class="color-preview" style="background-color: #d1d1d6"></div>
+                    <div class="token-info">
+                        <div class="token-name">Iron-300</div>
+                        <div class="token-value">#d1d1d6</div>
+                        <div class="token-class">bg-gray-iron-300 | text-gray-iron-300</div>
+                    </div>
+                </div>
+                <div class="token-item">
+                    <div class="color-preview" style="background-color: #a0a0ab"></div>
+                    <div class="token-info">
+                        <div class="token-name">Iron-400</div>
+                        <div class="token-value">#a0a0ab</div>
+                        <div class="token-class">bg-gray-iron-400 | text-gray-iron-400</div>
+                    </div>
+                </div>
+                <div class="token-item">
+                    <div class="color-preview" style="background-color: #70707b"></div>
+                    <div class="token-info">
+                        <div class="token-name">Iron-500</div>
+                        <div class="token-value">#70707b</div>
+                        <div class="token-class">bg-gray-iron-500 | text-gray-iron-500</div>
+                    </div>
+                </div>
+                <div class="token-item">
+                    <div class="color-preview" style="background-color: #51525c"></div>
+                    <div class="token-info">
+                        <div class="token-name">Iron-600</div>
+                        <div class="token-value">#51525c</div>
+                        <div class="token-class">bg-gray-iron-600 | text-gray-iron-600</div>
+                    </div>
+                </div>
+                <div class="token-item">
+                    <div class="color-preview" style="background-color: #3f3f46"></div>
+                    <div class="token-info">
+                        <div class="token-name">Iron-700</div>
+                        <div class="token-value">#3f3f46</div>
+                        <div class="token-class">bg-gray-iron-700 | text-gray-iron-700</div>
+                    </div>
+                </div>
+                <div class="token-item">
+                    <div class="color-preview" style="background-color: #26272b"></div>
+                    <div class="token-info">
+                        <div class="token-name">Iron-800</div>
+                        <div class="token-value">#26272b</div>
+                        <div class="token-class">bg-gray-iron-800 | text-gray-iron-800</div>
+                    </div>
+                </div>
+                <div class="token-item">
+                    <div class="color-preview" style="background-color: #1a1a1e"></div>
+                    <div class="token-info">
+                        <div class="token-name">Iron-900</div>
+                        <div class="token-value">#1a1a1e</div>
+                        <div class="token-class">bg-gray-iron-900 | text-gray-iron-900</div>
+                    </div>
+                </div>
+                <div class="token-item">
+                    <div class="color-preview" style="background-color: #f5f5f5"></div>
+                    <div class="token-info">
+                        <div class="token-name">True-100</div>
+                        <div class="token-value">#f5f5f5</div>
+                        <div class="token-class">bg-gray-true-100 | text-gray-true-100</div>
+                    </div>
+                </div>
+                <div class="token-item">
+                    <div class="color-preview" style="background-color: #e5e5e5"></div>
+                    <div class="token-info">
+                        <div class="token-name">True-200</div>
+                        <div class="token-value">#e5e5e5</div>
+                        <div class="token-class">bg-gray-true-200 | text-gray-true-200</div>
+                    </div>
+                </div>
+                <div class="token-item">
+                    <div class="color-preview" style="background-color: #d6d6d6"></div>
+                    <div class="token-info">
+                        <div class="token-name">True-300</div>
+                        <div class="token-value">#d6d6d6</div>
+                        <div class="token-class">bg-gray-true-300 | text-gray-true-300</div>
+                    </div>
+                </div>
+                <div class="token-item">
+                    <div class="color-preview" style="background-color: #a3a3a3"></div>
+                    <div class="token-info">
+                        <div class="token-name">True-400</div>
+                        <div class="token-value">#a3a3a3</div>
+                        <div class="token-class">bg-gray-true-400 | text-gray-true-400</div>
+                    </div>
+                </div>
+                <div class="token-item">
+                    <div class="color-preview" style="background-color: #737373"></div>
+                    <div class="token-info">
+                        <div class="token-name">True-500</div>
+                        <div class="token-value">#737373</div>
+                        <div class="token-class">bg-gray-true-500 | text-gray-true-500</div>
+                    </div>
+                </div>
+                <div class="token-item">
+                    <div class="color-preview" style="background-color: #525252"></div>
+                    <div class="token-info">
+                        <div class="token-name">True-600</div>
+                        <div class="token-value">#525252</div>
+                        <div class="token-class">bg-gray-true-600 | text-gray-true-600</div>
+                    </div>
+                </div>
+                <div class="token-item">
+                    <div class="color-preview" style="background-color: #424242"></div>
+                    <div class="token-info">
+                        <div class="token-name">True-700</div>
+                        <div class="token-value">#424242</div>
+                        <div class="token-class">bg-gray-true-700 | text-gray-true-700</div>
+                    </div>
+                </div>
+                <div class="token-item">
+                    <div class="color-preview" style="background-color: #fdfdfc"></div>
+                    <div class="token-info">
+                        <div class="token-name">Warm-25</div>
+                        <div class="token-value">#fdfdfc</div>
+                        <div class="token-class">bg-gray-warm-25 | text-gray-warm-25</div>
+                    </div>
+                </div>
+                <div class="token-item">
+                    <div class="color-preview" style="background-color: #fafaf9"></div>
+                    <div class="token-info">
+                        <div class="token-name">Warm-50</div>
+                        <div class="token-value">#fafaf9</div>
+                        <div class="token-class">bg-gray-warm-50 | text-gray-warm-50</div>
+                    </div>
+                </div>
+                <div class="token-item">
+                    <div class="color-preview" style="background-color: #f5f5f4"></div>
+                    <div class="token-info">
+                        <div class="token-name">Warm-100</div>
+                        <div class="token-value">#f5f5f4</div>
+                        <div class="token-class">bg-gray-warm-100 | text-gray-warm-100</div>
+                    </div>
+                </div>
+                <div class="token-item">
+                    <div class="color-preview" style="background-color: #e7e5e4"></div>
+                    <div class="token-info">
+                        <div class="token-name">Warm-200</div>
+                        <div class="token-value">#e7e5e4</div>
+                        <div class="token-class">bg-gray-warm-200 | text-gray-warm-200</div>
+                    </div>
+                </div>
+                <div class="token-item">
+                    <div class="color-preview" style="background-color: #d7d3d0"></div>
+                    <div class="token-info">
+                        <div class="token-name">Warm-300</div>
+                        <div class="token-value">#d7d3d0</div>
+                        <div class="token-class">bg-gray-warm-300 | text-gray-warm-300</div>
+                    </div>
+                </div>
+                <div class="token-item">
+                    <div class="color-preview" style="background-color: #a9a29d"></div>
+                    <div class="token-info">
+                        <div class="token-name">Warm-400</div>
+                        <div class="token-value">#a9a29d</div>
+                        <div class="token-class">bg-gray-warm-400 | text-gray-warm-400</div>
+                    </div>
+                </div>
+                <div class="token-item">
+                    <div class="color-preview" style="background-color: #79716b"></div>
+                    <div class="token-info">
+                        <div class="token-name">Warm-500</div>
+                        <div class="token-value">#79716b</div>
+                        <div class="token-class">bg-gray-warm-500 | text-gray-warm-500</div>
+                    </div>
+                </div>
+                <div class="token-item">
+                    <div class="color-preview" style="background-color: #57534e"></div>
+                    <div class="token-info">
+                        <div class="token-name">Warm-600</div>
+                        <div class="token-value">#57534e</div>
+                        <div class="token-class">bg-gray-warm-600 | text-gray-warm-600</div>
+                    </div>
+                </div>
+                <div class="token-item">
+                    <div class="color-preview" style="background-color: #44403c"></div>
+                    <div class="token-info">
+                        <div class="token-name">Warm-700</div>
+                        <div class="token-value">#44403c</div>
+                        <div class="token-class">bg-gray-warm-700 | text-gray-warm-700</div>
+                    </div>
+                </div>
+                <div class="token-item">
+                    <div class="color-preview" style="background-color: #292524"></div>
+                    <div class="token-info">
+                        <div class="token-name">Warm-800</div>
+                        <div class="token-value">#292524</div>
+                        <div class="token-class">bg-gray-warm-800 | text-gray-warm-800</div>
+                    </div>
+                </div>
+                <div class="token-item">
+                    <div class="color-preview" style="background-color: #1c1917"></div>
+                    <div class="token-info">
+                        <div class="token-name">Warm-900</div>
+                        <div class="token-value">#1c1917</div>
+                        <div class="token-class">bg-gray-warm-900 | text-gray-warm-900</div>
+                    </div>
+                </div>
+                <div class="token-item">
+                    <div class="color-preview" style="background-color: #171412"></div>
+                    <div class="token-info">
+                        <div class="token-name">Warm-950</div>
+                        <div class="token-value">#171412</div>
+                        <div class="token-class">bg-gray-warm-950 | text-gray-warm-950</div>
+                    </div>
+                </div>
+                <div class="token-item">
+                    <div class="color-preview" style="background-color: #0e101b"></div>
+                    <div class="token-info">
+                        <div class="token-name">Cool-950</div>
+                        <div class="token-value">#0e101b</div>
+                        <div class="token-class">bg-gray-cool-950 | text-gray-cool-950</div>
+                    </div>
+                </div>
+                <div class="token-item">
+                    <div class="color-preview" style="background-color: #0d121c"></div>
+                    <div class="token-info">
+                        <div class="token-name">Modern-950</div>
+                        <div class="token-value">#0d121c</div>
+                        <div class="token-class">bg-gray-modern-950 | text-gray-modern-950</div>
+                    </div>
+                </div>
+                <div class="token-item">
+                    <div class="color-preview" style="background-color: #0d121c"></div>
+                    <div class="token-info">
+                        <div class="token-name">Neutral-950</div>
+                        <div class="token-value">#0d121c</div>
+                        <div class="token-class">bg-gray-neutral-950 | text-gray-neutral-950</div>
+                    </div>
+                </div>
+                <div class="token-item">
+                    <div class="color-preview" style="background-color: #131316"></div>
+                    <div class="token-info">
+                        <div class="token-name">Iron-950</div>
+                        <div class="token-value">#131316</div>
+                        <div class="token-class">bg-gray-iron-950 | text-gray-iron-950</div>
+                    </div>
+                </div>
+                <div class="token-item">
+                    <div class="color-preview" style="background-color: #292929"></div>
+                    <div class="token-info">
+                        <div class="token-name">True-800</div>
+                        <div class="token-value">#292929</div>
+                        <div class="token-class">bg-gray-true-800 | text-gray-true-800</div>
+                    </div>
+                </div>
+                <div class="token-item">
+                    <div class="color-preview" style="background-color: #141414"></div>
+                    <div class="token-info">
+                        <div class="token-name">True-900</div>
+                        <div class="token-value">#141414</div>
+                        <div class="token-class">bg-gray-true-900 | text-gray-true-900</div>
+                    </div>
+                </div>
+                <div class="token-item">
+                    <div class="color-preview" style="background-color: #0f0f0f"></div>
+                    <div class="token-info">
+                        <div class="token-name">True-950</div>
+                        <div class="token-value">#0f0f0f</div>
+                        <div class="token-class">bg-gray-true-950 | text-gray-true-950</div>
+                    </div>
+                </div>
+            </div>
+            <div class="token-card">
+                <h3 class="text-lg font-semibold text-gray-800 mb-4">Brand</h3>
+                <div class="token-item">
+                    <div class="color-preview" style="background-color: #fcfaff"></div>
+                    <div class="token-info">
+                        <div class="token-name">25</div>
+                        <div class="token-value">#fcfaff</div>
+                        <div class="token-class">bg-brand-25 | text-brand-25</div>
+                    </div>
+                </div>
+                <div class="token-item">
+                    <div class="color-preview" style="background-color: #f9f5ff"></div>
+                    <div class="token-info">
+                        <div class="token-name">50</div>
+                        <div class="token-value">#f9f5ff</div>
+                        <div class="token-class">bg-brand-50 | text-brand-50</div>
+                    </div>
+                </div>
+                <div class="token-item">
+                    <div class="color-preview" style="background-color: #f4ebff"></div>
+                    <div class="token-info">
+                        <div class="token-name">100</div>
+                        <div class="token-value">#f4ebff</div>
+                        <div class="token-class">bg-brand-100 | text-brand-100</div>
+                    </div>
+                </div>
+                <div class="token-item">
+                    <div class="color-preview" style="background-color: #e9d7fe"></div>
+                    <div class="token-info">
+                        <div class="token-name">200</div>
+                        <div class="token-value">#e9d7fe</div>
+                        <div class="token-class">bg-brand-200 | text-brand-200</div>
+                    </div>
+                </div>
+                <div class="token-item">
+                    <div class="color-preview" style="background-color: #d6bbfb"></div>
+                    <div class="token-info">
+                        <div class="token-name">300</div>
+                        <div class="token-value">#d6bbfb</div>
+                        <div class="token-class">bg-brand-300 | text-brand-300</div>
+                    </div>
+                </div>
+                <div class="token-item">
+                    <div class="color-preview" style="background-color: #b692f6"></div>
+                    <div class="token-info">
+                        <div class="token-name">400</div>
+                        <div class="token-value">#b692f6</div>
+                        <div class="token-class">bg-brand-400 | text-brand-400</div>
+                    </div>
+                </div>
+                <div class="token-item">
+                    <div class="color-preview" style="background-color: #9e77ed"></div>
+                    <div class="token-info">
+                        <div class="token-name">500</div>
+                        <div class="token-value">#9e77ed</div>
+                        <div class="token-class">bg-brand-500 | text-brand-500</div>
+                    </div>
+                </div>
+                <div class="token-item">
+                    <div class="color-preview" style="background-color: #7f56d9"></div>
+                    <div class="token-info">
+                        <div class="token-name">600</div>
+                        <div class="token-value">#7f56d9</div>
+                        <div class="token-class">bg-brand-600 | text-brand-600</div>
+                    </div>
+                </div>
+                <div class="token-item">
+                    <div class="color-preview" style="background-color: #6941c6"></div>
+                    <div class="token-info">
+                        <div class="token-name">700</div>
+                        <div class="token-value">#6941c6</div>
+                        <div class="token-class">bg-brand-700 | text-brand-700</div>
+                    </div>
+                </div>
+                <div class="token-item">
+                    <div class="color-preview" style="background-color: #53389e"></div>
+                    <div class="token-info">
+                        <div class="token-name">800</div>
+                        <div class="token-value">#53389e</div>
+                        <div class="token-class">bg-brand-800 | text-brand-800</div>
+                    </div>
+                </div>
+                <div class="token-item">
+                    <div class="color-preview" style="background-color: #42307d"></div>
+                    <div class="token-info">
+                        <div class="token-name">900</div>
+                        <div class="token-value">#42307d</div>
+                        <div class="token-class">bg-brand-900 | text-brand-900</div>
+                    </div>
+                </div>
+                <div class="token-item">
+                    <div class="color-preview" style="background-color: #2c1c5f"></div>
+                    <div class="token-info">
+                        <div class="token-name">950</div>
+                        <div class="token-value">#2c1c5f</div>
+                        <div class="token-class">bg-brand-950 | text-brand-950</div>
+                    </div>
+                </div>
+            </div>
+            <div class="token-card">
+                <h3 class="text-lg font-semibold text-gray-800 mb-4">Error</h3>
+                <div class="token-item">
+                    <div class="color-preview" style="background-color: #fffbfa"></div>
+                    <div class="token-info">
+                        <div class="token-name">25</div>
+                        <div class="token-value">#fffbfa</div>
+                        <div class="token-class">bg-error-25 | text-error-25</div>
+                    </div>
+                </div>
+                <div class="token-item">
+                    <div class="color-preview" style="background-color: #fef3f2"></div>
+                    <div class="token-info">
+                        <div class="token-name">50</div>
+                        <div class="token-value">#fef3f2</div>
+                        <div class="token-class">bg-error-50 | text-error-50</div>
+                    </div>
+                </div>
+                <div class="token-item">
+                    <div class="color-preview" style="background-color: #fee4e2"></div>
+                    <div class="token-info">
+                        <div class="token-name">100</div>
+                        <div class="token-value">#fee4e2</div>
+                        <div class="token-class">bg-error-100 | text-error-100</div>
+                    </div>
+                </div>
+                <div class="token-item">
+                    <div class="color-preview" style="background-color: #fecdca"></div>
+                    <div class="token-info">
+                        <div class="token-name">200</div>
+                        <div class="token-value">#fecdca</div>
+                        <div class="token-class">bg-error-200 | text-error-200</div>
+                    </div>
+                </div>
+                <div class="token-item">
+                    <div class="color-preview" style="background-color: #fda29b"></div>
+                    <div class="token-info">
+                        <div class="token-name">300</div>
+                        <div class="token-value">#fda29b</div>
+                        <div class="token-class">bg-error-300 | text-error-300</div>
+                    </div>
+                </div>
+                <div class="token-item">
+                    <div class="color-preview" style="background-color: #f97066"></div>
+                    <div class="token-info">
+                        <div class="token-name">400</div>
+                        <div class="token-value">#f97066</div>
+                        <div class="token-class">bg-error-400 | text-error-400</div>
+                    </div>
+                </div>
+                <div class="token-item">
+                    <div class="color-preview" style="background-color: #f04438"></div>
+                    <div class="token-info">
+                        <div class="token-name">500</div>
+                        <div class="token-value">#f04438</div>
+                        <div class="token-class">bg-error-500 | text-error-500</div>
+                    </div>
+                </div>
+                <div class="token-item">
+                    <div class="color-preview" style="background-color: #d92d20"></div>
+                    <div class="token-info">
+                        <div class="token-name">600</div>
+                        <div class="token-value">#d92d20</div>
+                        <div class="token-class">bg-error-600 | text-error-600</div>
+                    </div>
+                </div>
+                <div class="token-item">
+                    <div class="color-preview" style="background-color: #b42318"></div>
+                    <div class="token-info">
+                        <div class="token-name">700</div>
+                        <div class="token-value">#b42318</div>
+                        <div class="token-class">bg-error-700 | text-error-700</div>
+                    </div>
+                </div>
+                <div class="token-item">
+                    <div class="color-preview" style="background-color: #912018"></div>
+                    <div class="token-info">
+                        <div class="token-name">800</div>
+                        <div class="token-value">#912018</div>
+                        <div class="token-class">bg-error-800 | text-error-800</div>
+                    </div>
+                </div>
+                <div class="token-item">
+                    <div class="color-preview" style="background-color: #7a271a"></div>
+                    <div class="token-info">
+                        <div class="token-name">900</div>
+                        <div class="token-value">#7a271a</div>
+                        <div class="token-class">bg-error-900 | text-error-900</div>
+                    </div>
+                </div>
+                <div class="token-item">
+                    <div class="color-preview" style="background-color: #55160c"></div>
+                    <div class="token-info">
+                        <div class="token-name">950</div>
+                        <div class="token-value">#55160c</div>
+                        <div class="token-class">bg-error-950 | text-error-950</div>
+                    </div>
+                </div>
+            </div>
+            <div class="token-card">
+                <h3 class="text-lg font-semibold text-gray-800 mb-4">Warning</h3>
+                <div class="token-item">
+                    <div class="color-preview" style="background-color: #fffcf5"></div>
+                    <div class="token-info">
+                        <div class="token-name">25</div>
+                        <div class="token-value">#fffcf5</div>
+                        <div class="token-class">bg-warning-25 | text-warning-25</div>
+                    </div>
+                </div>
+                <div class="token-item">
+                    <div class="color-preview" style="background-color: #fffaeb"></div>
+                    <div class="token-info">
+                        <div class="token-name">50</div>
+                        <div class="token-value">#fffaeb</div>
+                        <div class="token-class">bg-warning-50 | text-warning-50</div>
+                    </div>
+                </div>
+                <div class="token-item">
+                    <div class="color-preview" style="background-color: #fef0c7"></div>
+                    <div class="token-info">
+                        <div class="token-name">100</div>
+                        <div class="token-value">#fef0c7</div>
+                        <div class="token-class">bg-warning-100 | text-warning-100</div>
+                    </div>
+                </div>
+                <div class="token-item">
+                    <div class="color-preview" style="background-color: #fedf89"></div>
+                    <div class="token-info">
+                        <div class="token-name">200</div>
+                        <div class="token-value">#fedf89</div>
+                        <div class="token-class">bg-warning-200 | text-warning-200</div>
+                    </div>
+                </div>
+                <div class="token-item">
+                    <div class="color-preview" style="background-color: #fec84b"></div>
+                    <div class="token-info">
+                        <div class="token-name">300</div>
+                        <div class="token-value">#fec84b</div>
+                        <div class="token-class">bg-warning-300 | text-warning-300</div>
+                    </div>
+                </div>
+                <div class="token-item">
+                    <div class="color-preview" style="background-color: #fdb022"></div>
+                    <div class="token-info">
+                        <div class="token-name">400</div>
+                        <div class="token-value">#fdb022</div>
+                        <div class="token-class">bg-warning-400 | text-warning-400</div>
+                    </div>
+                </div>
+                <div class="token-item">
+                    <div class="color-preview" style="background-color: #f79009"></div>
+                    <div class="token-info">
+                        <div class="token-name">500</div>
+                        <div class="token-value">#f79009</div>
+                        <div class="token-class">bg-warning-500 | text-warning-500</div>
+                    </div>
+                </div>
+                <div class="token-item">
+                    <div class="color-preview" style="background-color: #dc6803"></div>
+                    <div class="token-info">
+                        <div class="token-name">600</div>
+                        <div class="token-value">#dc6803</div>
+                        <div class="token-class">bg-warning-600 | text-warning-600</div>
+                    </div>
+                </div>
+                <div class="token-item">
+                    <div class="color-preview" style="background-color: #b54708"></div>
+                    <div class="token-info">
+                        <div class="token-name">700</div>
+                        <div class="token-value">#b54708</div>
+                        <div class="token-class">bg-warning-700 | text-warning-700</div>
+                    </div>
+                </div>
+                <div class="token-item">
+                    <div class="color-preview" style="background-color: #93370d"></div>
+                    <div class="token-info">
+                        <div class="token-name">800</div>
+                        <div class="token-value">#93370d</div>
+                        <div class="token-class">bg-warning-800 | text-warning-800</div>
+                    </div>
+                </div>
+                <div class="token-item">
+                    <div class="color-preview" style="background-color: #7a2e0e"></div>
+                    <div class="token-info">
+                        <div class="token-name">900</div>
+                        <div class="token-value">#7a2e0e</div>
+                        <div class="token-class">bg-warning-900 | text-warning-900</div>
+                    </div>
+                </div>
+                <div class="token-item">
+                    <div class="color-preview" style="background-color: #4e1d09"></div>
+                    <div class="token-info">
+                        <div class="token-name">950</div>
+                        <div class="token-value">#4e1d09</div>
+                        <div class="token-class">bg-warning-950 | text-warning-950</div>
+                    </div>
+                </div>
+            </div>
+            <div class="token-card">
+                <h3 class="text-lg font-semibold text-gray-800 mb-4">Success</h3>
+                <div class="token-item">
+                    <div class="color-preview" style="background-color: #f6fef9"></div>
+                    <div class="token-info">
+                        <div class="token-name">25</div>
+                        <div class="token-value">#f6fef9</div>
+                        <div class="token-class">bg-success-25 | text-success-25</div>
+                    </div>
+                </div>
+                <div class="token-item">
+                    <div class="color-preview" style="background-color: #ecfdf3"></div>
+                    <div class="token-info">
+                        <div class="token-name">50</div>
+                        <div class="token-value">#ecfdf3</div>
+                        <div class="token-class">bg-success-50 | text-success-50</div>
+                    </div>
+                </div>
+                <div class="token-item">
+                    <div class="color-preview" style="background-color: #dcfae6"></div>
+                    <div class="token-info">
+                        <div class="token-name">100</div>
+                        <div class="token-value">#dcfae6</div>
+                        <div class="token-class">bg-success-100 | text-success-100</div>
+                    </div>
+                </div>
+                <div class="token-item">
+                    <div class="color-preview" style="background-color: #abefc6"></div>
+                    <div class="token-info">
+                        <div class="token-name">200</div>
+                        <div class="token-value">#abefc6</div>
+                        <div class="token-class">bg-success-200 | text-success-200</div>
+                    </div>
+                </div>
+                <div class="token-item">
+                    <div class="color-preview" style="background-color: #75e0a7"></div>
+                    <div class="token-info">
+                        <div class="token-name">300</div>
+                        <div class="token-value">#75e0a7</div>
+                        <div class="token-class">bg-success-300 | text-success-300</div>
+                    </div>
+                </div>
+                <div class="token-item">
+                    <div class="color-preview" style="background-color: #47cd89"></div>
+                    <div class="token-info">
+                        <div class="token-name">400</div>
+                        <div class="token-value">#47cd89</div>
+                        <div class="token-class">bg-success-400 | text-success-400</div>
+                    </div>
+                </div>
+                <div class="token-item">
+                    <div class="color-preview" style="background-color: #17b26a"></div>
+                    <div class="token-info">
+                        <div class="token-name">500</div>
+                        <div class="token-value">#17b26a</div>
+                        <div class="token-class">bg-success-500 | text-success-500</div>
+                    </div>
+                </div>
+                <div class="token-item">
+                    <div class="color-preview" style="background-color: #079455"></div>
+                    <div class="token-info">
+                        <div class="token-name">600</div>
+                        <div class="token-value">#079455</div>
+                        <div class="token-class">bg-success-600 | text-success-600</div>
+                    </div>
+                </div>
+                <div class="token-item">
+                    <div class="color-preview" style="background-color: #067647"></div>
+                    <div class="token-info">
+                        <div class="token-name">700</div>
+                        <div class="token-value">#067647</div>
+                        <div class="token-class">bg-success-700 | text-success-700</div>
+                    </div>
+                </div>
+                <div class="token-item">
+                    <div class="color-preview" style="background-color: #085d3a"></div>
+                    <div class="token-info">
+                        <div class="token-name">800</div>
+                        <div class="token-value">#085d3a</div>
+                        <div class="token-class">bg-success-800 | text-success-800</div>
+                    </div>
+                </div>
+                <div class="token-item">
+                    <div class="color-preview" style="background-color: #074d31"></div>
+                    <div class="token-info">
+                        <div class="token-name">900</div>
+                        <div class="token-value">#074d31</div>
+                        <div class="token-class">bg-success-900 | text-success-900</div>
+                    </div>
+                </div>
+                <div class="token-item">
+                    <div class="color-preview" style="background-color: #053321"></div>
+                    <div class="token-info">
+                        <div class="token-name">950</div>
+                        <div class="token-value">#053321</div>
+                        <div class="token-class">bg-success-950 | text-success-950</div>
+                    </div>
+                </div>
+            </div>
+            <div class="token-card">
+                <h3 class="text-lg font-semibold text-gray-800 mb-4">Green</h3>
+                <div class="token-item">
+                    <div class="color-preview" style="background-color: #f6fef9"></div>
+                    <div class="token-info">
+                        <div class="token-name">25</div>
+                        <div class="token-value">#f6fef9</div>
+                        <div class="token-class">bg-green-25 | text-green-25</div>
+                    </div>
+                </div>
+                <div class="token-item">
+                    <div class="color-preview" style="background-color: #edfcf2"></div>
+                    <div class="token-info">
+                        <div class="token-name">50</div>
+                        <div class="token-value">#edfcf2</div>
+                        <div class="token-class">bg-green-50 | text-green-50</div>
+                    </div>
+                </div>
+                <div class="token-item">
+                    <div class="color-preview" style="background-color: #d3f8df"></div>
+                    <div class="token-info">
+                        <div class="token-name">100</div>
+                        <div class="token-value">#d3f8df</div>
+                        <div class="token-class">bg-green-100 | text-green-100</div>
+                    </div>
+                </div>
+                <div class="token-item">
+                    <div class="color-preview" style="background-color: #aaf0c4"></div>
+                    <div class="token-info">
+                        <div class="token-name">200</div>
+                        <div class="token-value">#aaf0c4</div>
+                        <div class="token-class">bg-green-200 | text-green-200</div>
+                    </div>
+                </div>
+                <div class="token-item">
+                    <div class="color-preview" style="background-color: #73e2a3"></div>
+                    <div class="token-info">
+                        <div class="token-name">300</div>
+                        <div class="token-value">#73e2a3</div>
+                        <div class="token-class">bg-green-300 | text-green-300</div>
+                    </div>
+                </div>
+                <div class="token-item">
+                    <div class="color-preview" style="background-color: #3ccb7f"></div>
+                    <div class="token-info">
+                        <div class="token-name">400</div>
+                        <div class="token-value">#3ccb7f</div>
+                        <div class="token-class">bg-green-400 | text-green-400</div>
+                    </div>
+                </div>
+                <div class="token-item">
+                    <div class="color-preview" style="background-color: #16b364"></div>
+                    <div class="token-info">
+                        <div class="token-name">500</div>
+                        <div class="token-value">#16b364</div>
+                        <div class="token-class">bg-green-500 | text-green-500</div>
+                    </div>
+                </div>
+                <div class="token-item">
+                    <div class="color-preview" style="background-color: #099250"></div>
+                    <div class="token-info">
+                        <div class="token-name">600</div>
+                        <div class="token-value">#099250</div>
+                        <div class="token-class">bg-green-600 | text-green-600</div>
+                    </div>
+                </div>
+                <div class="token-item">
+                    <div class="color-preview" style="background-color: #087443"></div>
+                    <div class="token-info">
+                        <div class="token-name">700</div>
+                        <div class="token-value">#087443</div>
+                        <div class="token-class">bg-green-700 | text-green-700</div>
+                    </div>
+                </div>
+                <div class="token-item">
+                    <div class="color-preview" style="background-color: #095c37"></div>
+                    <div class="token-info">
+                        <div class="token-name">800</div>
+                        <div class="token-value">#095c37</div>
+                        <div class="token-class">bg-green-800 | text-green-800</div>
+                    </div>
+                </div>
+                <div class="token-item">
+                    <div class="color-preview" style="background-color: #084c2e"></div>
+                    <div class="token-info">
+                        <div class="token-name">900</div>
+                        <div class="token-value">#084c2e</div>
+                        <div class="token-class">bg-green-900 | text-green-900</div>
+                    </div>
+                </div>
+                <div class="token-item">
+                    <div class="color-preview" style="background-color: #052e1c"></div>
+                    <div class="token-info">
+                        <div class="token-name">950</div>
+                        <div class="token-value">#052e1c</div>
+                        <div class="token-class">bg-green-950 | text-green-950</div>
+                    </div>
+                </div>
+                <div class="token-item">
+                    <div class="color-preview" style="background-color: #15290a"></div>
+                    <div class="token-info">
+                        <div class="token-name">Light</div>
+                        <div class="token-value">#15290a</div>
+                        <div class="token-class">bg-green-light | text-green-light</div>
+                    </div>
+                </div>
+            </div>
+            <div class="token-card">
+                <h3 class="text-lg font-semibold text-gray-800 mb-4">Blue</h3>
+                <div class="token-item">
+                    <div class="color-preview" style="background-color: #f5faff"></div>
+                    <div class="token-info">
+                        <div class="token-name">25</div>
+                        <div class="token-value">#f5faff</div>
+                        <div class="token-class">bg-blue-25 | text-blue-25</div>
+                    </div>
+                </div>
+                <div class="token-item">
+                    <div class="color-preview" style="background-color: #eff8ff"></div>
+                    <div class="token-info">
+                        <div class="token-name">50</div>
+                        <div class="token-value">#eff8ff</div>
+                        <div class="token-class">bg-blue-50 | text-blue-50</div>
+                    </div>
+                </div>
+                <div class="token-item">
+                    <div class="color-preview" style="background-color: #d1e9ff"></div>
+                    <div class="token-info">
+                        <div class="token-name">100</div>
+                        <div class="token-value">#d1e9ff</div>
+                        <div class="token-class">bg-blue-100 | text-blue-100</div>
+                    </div>
+                </div>
+                <div class="token-item">
+                    <div class="color-preview" style="background-color: #b2ddff"></div>
+                    <div class="token-info">
+                        <div class="token-name">200</div>
+                        <div class="token-value">#b2ddff</div>
+                        <div class="token-class">bg-blue-200 | text-blue-200</div>
+                    </div>
+                </div>
+                <div class="token-item">
+                    <div class="color-preview" style="background-color: #84caff"></div>
+                    <div class="token-info">
+                        <div class="token-name">300</div>
+                        <div class="token-value">#84caff</div>
+                        <div class="token-class">bg-blue-300 | text-blue-300</div>
+                    </div>
+                </div>
+                <div class="token-item">
+                    <div class="color-preview" style="background-color: #53b1fd"></div>
+                    <div class="token-info">
+                        <div class="token-name">400</div>
+                        <div class="token-value">#53b1fd</div>
+                        <div class="token-class">bg-blue-400 | text-blue-400</div>
+                    </div>
+                </div>
+                <div class="token-item">
+                    <div class="color-preview" style="background-color: #2e90fa"></div>
+                    <div class="token-info">
+                        <div class="token-name">500</div>
+                        <div class="token-value">#2e90fa</div>
+                        <div class="token-class">bg-blue-500 | text-blue-500</div>
+                    </div>
+                </div>
+                <div class="token-item">
+                    <div class="color-preview" style="background-color: #1570ef"></div>
+                    <div class="token-info">
+                        <div class="token-name">600</div>
+                        <div class="token-value">#1570ef</div>
+                        <div class="token-class">bg-blue-600 | text-blue-600</div>
+                    </div>
+                </div>
+                <div class="token-item">
+                    <div class="color-preview" style="background-color: #175cd3"></div>
+                    <div class="token-info">
+                        <div class="token-name">700</div>
+                        <div class="token-value">#175cd3</div>
+                        <div class="token-class">bg-blue-700 | text-blue-700</div>
+                    </div>
+                </div>
+                <div class="token-item">
+                    <div class="color-preview" style="background-color: #1849a9"></div>
+                    <div class="token-info">
+                        <div class="token-name">800</div>
+                        <div class="token-value">#1849a9</div>
+                        <div class="token-class">bg-blue-800 | text-blue-800</div>
+                    </div>
+                </div>
+                <div class="token-item">
+                    <div class="color-preview" style="background-color: #194185"></div>
+                    <div class="token-info">
+                        <div class="token-name">900</div>
+                        <div class="token-value">#194185</div>
+                        <div class="token-class">bg-blue-900 | text-blue-900</div>
+                    </div>
+                </div>
+                <div class="token-item">
+                    <div class="color-preview" style="background-color: #102a56"></div>
+                    <div class="token-info">
+                        <div class="token-name">950</div>
+                        <div class="token-value">#102a56</div>
+                        <div class="token-class">bg-blue-950 | text-blue-950</div>
+                    </div>
+                </div>
+                <div class="token-item">
+                    <div class="color-preview" style="background-color: #062c41"></div>
+                    <div class="token-info">
+                        <div class="token-name">Light</div>
+                        <div class="token-value">#062c41</div>
+                        <div class="token-class">bg-blue-light | text-blue-light</div>
+                    </div>
+                </div>
+                <div class="token-item">
+                    <div class="color-preview" style="background-color: #002266"></div>
+                    <div class="token-info">
+                        <div class="token-name">Dark</div>
+                        <div class="token-value">#002266</div>
+                        <div class="token-class">bg-blue-dark | text-blue-dark</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="mb-8">
+            <h2 class="text-2xl font-semibold text-gray-800 mb-4">Spacing</h2>
+            <div class="token-card">
+                <div class="token-item">
+                    <div class="spacing-preview" style="width: 0px; height: 20px;"></div>
+                    <div class="token-info">
+                        <div class="token-name">0</div>
+                        <div class="token-value">0px</div>
+                        <div class="token-class">p-0 | m-0 | gap-0</div>
+                    </div>
+                </div>
+                <div class="token-item">
+                    <div class="spacing-preview" style="width: 4px; height: 20px;"></div>
+                    <div class="token-info">
+                        <div class="token-name">1</div>
+                        <div class="token-value">4px</div>
+                        <div class="token-class">p-1 | m-1 | gap-1</div>
+                    </div>
+                </div>
+                <div class="token-item">
+                    <div class="spacing-preview" style="width: 8px; height: 20px;"></div>
+                    <div class="token-info">
+                        <div class="token-name">2</div>
+                        <div class="token-value">8px</div>
+                        <div class="token-class">p-2 | m-2 | gap-2</div>
+                    </div>
+                </div>
+                <div class="token-item">
+                    <div class="spacing-preview" style="width: 12px; height: 20px;"></div>
+                    <div class="token-info">
+                        <div class="token-name">3</div>
+                        <div class="token-value">12px</div>
+                        <div class="token-class">p-3 | m-3 | gap-3</div>
+                    </div>
+                </div>
+                <div class="token-item">
+                    <div class="spacing-preview" style="width: 16px; height: 20px;"></div>
+                    <div class="token-info">
+                        <div class="token-name">4</div>
+                        <div class="token-value">16px</div>
+                        <div class="token-class">p-4 | m-4 | gap-4</div>
+                    </div>
+                </div>
+                <div class="token-item">
+                    <div class="spacing-preview" style="width: 20px; height: 20px;"></div>
+                    <div class="token-info">
+                        <div class="token-name">5</div>
+                        <div class="token-value">20px</div>
+                        <div class="token-class">p-5 | m-5 | gap-5</div>
+                    </div>
+                </div>
+                <div class="token-item">
+                    <div class="spacing-preview" style="width: 24px; height: 20px;"></div>
+                    <div class="token-info">
+                        <div class="token-name">6</div>
+                        <div class="token-value">24px</div>
+                        <div class="token-class">p-6 | m-6 | gap-6</div>
+                    </div>
+                </div>
+                <div class="token-item">
+                    <div class="spacing-preview" style="width: 32px; height: 20px;"></div>
+                    <div class="token-info">
+                        <div class="token-name">8</div>
+                        <div class="token-value">32px</div>
+                        <div class="token-class">p-8 | m-8 | gap-8</div>
+                    </div>
+                </div>
+                <div class="token-item">
+                    <div class="spacing-preview" style="width: 40px; height: 20px;"></div>
+                    <div class="token-info">
+                        <div class="token-name">10</div>
+                        <div class="token-value">40px</div>
+                        <div class="token-class">p-10 | m-10 | gap-10</div>
+                    </div>
+                </div>
+                <div class="token-item">
+                    <div class="spacing-preview" style="width: 48px; height: 20px;"></div>
+                    <div class="token-info">
+                        <div class="token-name">12</div>
+                        <div class="token-value">48px</div>
+                        <div class="token-class">p-12 | m-12 | gap-12</div>
+                    </div>
+                </div>
+                <div class="token-item">
+                    <div class="spacing-preview" style="width: 64px; height: 20px;"></div>
+                    <div class="token-info">
+                        <div class="token-name">16</div>
+                        <div class="token-value">64px</div>
+                        <div class="token-class">p-16 | m-16 | gap-16</div>
+                    </div>
+                </div>
+                <div class="token-item">
+                    <div class="spacing-preview" style="width: 80px; height: 20px;"></div>
+                    <div class="token-info">
+                        <div class="token-name">20</div>
+                        <div class="token-value">80px</div>
+                        <div class="token-class">p-20 | m-20 | gap-20</div>
+                    </div>
+                </div>
+                <div class="token-item">
+                    <div class="spacing-preview" style="width: 96px; height: 20px;"></div>
+                    <div class="token-info">
+                        <div class="token-name">24</div>
+                        <div class="token-value">96px</div>
+                        <div class="token-class">p-24 | m-24 | gap-24</div>
+                    </div>
+                </div>
+                <div class="token-item">
+                    <div class="spacing-preview" style="width: 128px; height: 20px;"></div>
+                    <div class="token-info">
+                        <div class="token-name">32</div>
+                        <div class="token-value">128px</div>
+                        <div class="token-class">p-32 | m-32 | gap-32</div>
+                    </div>
+                </div>
+                <div class="token-item">
+                    <div class="spacing-preview" style="width: 160px; height: 20px;"></div>
+                    <div class="token-info">
+                        <div class="token-name">40</div>
+                        <div class="token-value">160px</div>
+                        <div class="token-class">p-40 | m-40 | gap-40</div>
+                    </div>
+                </div>
+                <div class="token-item">
+                    <div class="spacing-preview" style="width: 192px; height: 20px;"></div>
+                    <div class="token-info">
+                        <div class="token-name">48</div>
+                        <div class="token-value">192px</div>
+                        <div class="token-class">p-48 | m-48 | gap-48</div>
+                    </div>
+                </div>
+                <div class="token-item">
+                    <div class="spacing-preview" style="width: 224px; height: 20px;"></div>
+                    <div class="token-info">
+                        <div class="token-name">56</div>
+                        <div class="token-value">224px</div>
+                        <div class="token-class">p-56 | m-56 | gap-56</div>
+                    </div>
+                </div>
+                <div class="token-item">
+                    <div class="spacing-preview" style="width: 256px; height: 20px;"></div>
+                    <div class="token-info">
+                        <div class="token-name">64</div>
+                        <div class="token-value">256px</div>
+                        <div class="token-class">p-64 | m-64 | gap-64</div>
+                    </div>
+                </div>
+                <div class="token-item">
+                    <div class="spacing-preview" style="width: 320px; height: 20px;"></div>
+                    <div class="token-info">
+                        <div class="token-name">80</div>
+                        <div class="token-value">320px</div>
+                        <div class="token-class">p-80 | m-80 | gap-80</div>
+                    </div>
+                </div>
+                <div class="token-item">
+                    <div class="spacing-preview" style="width: 384px; height: 20px;"></div>
+                    <div class="token-info">
+                        <div class="token-name">96</div>
+                        <div class="token-value">384px</div>
+                        <div class="token-class">p-96 | m-96 | gap-96</div>
+                    </div>
+                </div>
+                <div class="token-item">
+                    <div class="spacing-preview" style="width: 480px; height: 20px;"></div>
+                    <div class="token-info">
+                        <div class="token-name">120</div>
+                        <div class="token-value">480px</div>
+                        <div class="token-class">p-120 | m-120 | gap-120</div>
+                    </div>
+                </div>
+                <div class="token-item">
+                    <div class="spacing-preview" style="width: 560px; height: 20px;"></div>
+                    <div class="token-info">
+                        <div class="token-name">140</div>
+                        <div class="token-value">560px</div>
+                        <div class="token-class">p-140 | m-140 | gap-140</div>
+                    </div>
+                </div>
+                <div class="token-item">
+                    <div class="spacing-preview" style="width: 640px; height: 20px;"></div>
+                    <div class="token-info">
+                        <div class="token-name">160</div>
+                        <div class="token-value">640px</div>
+                        <div class="token-class">p-160 | m-160 | gap-160</div>
+                    </div>
+                </div>
+                <div class="token-item">
+                    <div class="spacing-preview" style="width: 720px; height: 20px;"></div>
+                    <div class="token-info">
+                        <div class="token-name">180</div>
+                        <div class="token-value">720px</div>
+                        <div class="token-class">p-180 | m-180 | gap-180</div>
+                    </div>
+                </div>
+                <div class="token-item">
+                    <div class="spacing-preview" style="width: 768px; height: 20px;"></div>
+                    <div class="token-info">
+                        <div class="token-name">192</div>
+                        <div class="token-value">768px</div>
+                        <div class="token-class">p-192 | m-192 | gap-192</div>
+                    </div>
+                </div>
+                <div class="token-item">
+                    <div class="spacing-preview" style="width: 1024px; height: 20px;"></div>
+                    <div class="token-info">
+                        <div class="token-name">256</div>
+                        <div class="token-value">1024px</div>
+                        <div class="token-class">p-256 | m-256 | gap-256</div>
+                    </div>
+                </div>
+                <div class="token-item">
+                    <div class="spacing-preview" style="width: 1280px; height: 20px;"></div>
+                    <div class="token-info">
+                        <div class="token-name">320</div>
+                        <div class="token-value">1280px</div>
+                        <div class="token-class">p-320 | m-320 | gap-320</div>
+                    </div>
+                </div>
+                <div class="token-item">
+                    <div class="spacing-preview" style="width: 1440px; height: 20px;"></div>
+                    <div class="token-info">
+                        <div class="token-name">360</div>
+                        <div class="token-value">1440px</div>
+                        <div class="token-class">p-360 | m-360 | gap-360</div>
+                    </div>
+                </div>
+                <div class="token-item">
+                    <div class="spacing-preview" style="width: 1600px; height: 20px;"></div>
+                    <div class="token-info">
+                        <div class="token-name">400</div>
+                        <div class="token-value">1600px</div>
+                        <div class="token-class">p-400 | m-400 | gap-400</div>
+                    </div>
+                </div>
+                <div class="token-item">
+                    <div class="spacing-preview" style="width: 1920px; height: 20px;"></div>
+                    <div class="token-info">
+                        <div class="token-name">480</div>
+                        <div class="token-value">1920px</div>
+                        <div class="token-class">p-480 | m-480 | gap-480</div>
+                    </div>
+                </div>
+                <div class="token-item">
+                    <div class="spacing-preview" style="width: 2px; height: 20px;"></div>
+                    <div class="token-info">
+                        <div class="token-name">0․5</div>
+                        <div class="token-value">2px</div>
+                        <div class="token-class">p-0․5 | m-0․5 | gap-0․5</div>
+                    </div>
+                </div>
+                <div class="token-item">
+                    <div class="spacing-preview" style="width: 6px; height: 20px;"></div>
+                    <div class="token-info">
+                        <div class="token-name">1․5</div>
+                        <div class="token-value">6px</div>
+                        <div class="token-class">p-1․5 | m-1․5 | gap-1․5</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="mb-8">
+            <h2 class="text-2xl font-semibold text-gray-800 mb-4">Border Radius</h2>
+            <div class="token-card">
+                <div class="token-item">
+                    <div class="radius-preview" style="width: 60px; height: 40px; border-radius: 0px;"></div>
+                    <div class="token-info">
+                        <div class="token-name">None</div>
+                        <div class="token-value">0px</div>
+                        <div class="token-class">rounded-none</div>
+                    </div>
+                </div>
+                <div class="token-item">
+                    <div class="radius-preview" style="width: 60px; height: 40px; border-radius: 2px;"></div>
+                    <div class="token-info">
+                        <div class="token-name">Xxs</div>
+                        <div class="token-value">2px</div>
+                        <div class="token-class">rounded-xxs</div>
+                    </div>
+                </div>
+                <div class="token-item">
+                    <div class="radius-preview" style="width: 60px; height: 40px; border-radius: 4px;"></div>
+                    <div class="token-info">
+                        <div class="token-name">Xs</div>
+                        <div class="token-value">4px</div>
+                        <div class="token-class">rounded-xs</div>
+                    </div>
+                </div>
+                <div class="token-item">
+                    <div class="radius-preview" style="width: 60px; height: 40px; border-radius: 6px;"></div>
+                    <div class="token-info">
+                        <div class="token-name">Sm</div>
+                        <div class="token-value">6px</div>
+                        <div class="token-class">rounded-sm</div>
+                    </div>
+                </div>
+                <div class="token-item">
+                    <div class="radius-preview" style="width: 60px; height: 40px; border-radius: 8px;"></div>
+                    <div class="token-info">
+                        <div class="token-name">Md</div>
+                        <div class="token-value">8px</div>
+                        <div class="token-class">rounded-md</div>
+                    </div>
+                </div>
+                <div class="token-item">
+                    <div class="radius-preview" style="width: 60px; height: 40px; border-radius: 12px;"></div>
+                    <div class="token-info">
+                        <div class="token-name">Xl</div>
+                        <div class="token-value">12px</div>
+                        <div class="token-class">rounded-xl</div>
+                    </div>
+                </div>
+                <div class="token-item">
+                    <div class="radius-preview" style="width: 60px; height: 40px; border-radius: 16px;"></div>
+                    <div class="token-info">
+                        <div class="token-name">2xl</div>
+                        <div class="token-value">16px</div>
+                        <div class="token-class">rounded-2xl</div>
+                    </div>
+                </div>
+                <div class="token-item">
+                    <div class="radius-preview" style="width: 60px; height: 40px; border-radius: 24px;"></div>
+                    <div class="token-info">
+                        <div class="token-name">4xl</div>
+                        <div class="token-value">24px</div>
+                        <div class="token-class">rounded-4xl</div>
+                    </div>
+                </div>
+                <div class="token-item">
+                    <div class="radius-preview" style="width: 60px; height: 40px; border-radius: 9999px;"></div>
+                    <div class="token-info">
+                        <div class="token-name">Full</div>
+                        <div class="token-value">9999px</div>
+                        <div class="token-class">rounded-full</div>
+                    </div>
+                </div>
+                <div class="token-item">
+                    <div class="radius-preview" style="width: 60px; height: 40px; border-radius: 10px;"></div>
+                    <div class="token-info">
+                        <div class="token-name">Lg</div>
+                        <div class="token-value">10px</div>
+                        <div class="token-class">rounded-lg</div>
+                    </div>
+                </div>
+                <div class="token-item">
+                    <div class="radius-preview" style="width: 60px; height: 40px; border-radius: 20px;"></div>
+                    <div class="token-info">
+                        <div class="token-name">3xl</div>
+                        <div class="token-value">20px</div>
+                        <div class="token-class">rounded-3xl</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="mb-8">
+            <h2 class="text-2xl font-semibold text-gray-800 mb-4">Typography</h2>
+            <div class="token-card">
+                <h3 class="text-lg font-semibold text-gray-800 mb-4">Font Sizes</h3>
+                <div class="token-item">
+                    <div class="token-info">
+                        <div class="token-name" style="font-size: 20px;">Text</div>
+                        <div class="token-value">20px</div>
+                        <div class="token-class">text-text</div>
+                    </div>
+                </div>
+                <div class="token-item">
+                    <div class="token-info">
+                        <div class="token-name" style="font-size: 72px;">Display</div>
+                        <div class="token-value">72px</div>
+                        <div class="token-class">text-display</div>
+                    </div>
+                </div>
+            </div>
+            <div class="token-card">
+                <h3 class="text-lg font-semibold text-gray-800 mb-4">Font Weights</h3>
+                <div class="token-item">
+                    <div class="token-info">
+                        <div class="token-name" style="font-weight: Regular italic;">Regular</div>
+                        <div class="token-value">Regular italic</div>
+                        <div class="token-class">font-regular</div>
+                    </div>
+                </div>
+                <div class="token-item">
+                    <div class="token-info">
+                        <div class="token-name" style="font-weight: Medium italic;">Medium</div>
+                        <div class="token-value">Medium italic</div>
+                        <div class="token-class">font-medium</div>
+                    </div>
+                </div>
+                <div class="token-item">
+                    <div class="token-info">
+                        <div class="token-name" style="font-weight: Semibold italic;">Semibold</div>
+                        <div class="token-value">Semibold italic</div>
+                        <div class="token-class">font-semibold</div>
+                    </div>
+                </div>
+                <div class="token-item">
+                    <div class="token-info">
+                        <div class="token-name" style="font-weight: Bold italic;">Bold</div>
+                        <div class="token-value">Bold italic</div>
+                        <div class="token-class">font-bold</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="bg-blue-50 border border-blue-200 rounded-lg p-6 mt-8">
+            <h3 class="text-lg font-semibold text-blue-800 mb-2">How to Use</h3>
+            <p class="text-blue-700 mb-4">This visual reference shows all available design tokens with their actual values. Use the Tailwind CSS classes in your components for consistent styling.</p>
+            <div class="text-sm text-blue-600">
+                <p><strong>Example:</strong></p>
+                <code class="bg-blue-100 px-2 py-1 rounded">className="bg-blue-500 text-white p-4 rounded-md"</code>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

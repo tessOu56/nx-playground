@@ -1,0 +1,15 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "composite": true,
+    "outDir": "../../dist/libs/auth-client",
+    "declaration": true,
+    "declarationMap": true,
+    "emitDeclarationOnly": false,
+    "rootDir": "src",
+    "types": ["node"],
+    "jsx": "react-jsx"
+  },
+  "include": ["src/**/*.ts", "src/**/*.tsx", "src/**/*.json"],
+  "exclude": ["node_modules", "dist"]
+}

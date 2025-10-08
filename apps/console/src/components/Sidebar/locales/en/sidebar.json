@@ -1,0 +1,9 @@
+{
+  "sidebar.title": "NX Playground Console",
+  "sidebar.navigation.dashboard": "Dashboard",
+  "sidebar.navigation.events": "Events",
+  "sidebar.navigation.users": "Users",
+  "sidebar.navigation.forms": "Form Templates",
+  "sidebar.navigation.components": "Components",
+  "sidebar.navigation.settings": "Settings"
+}

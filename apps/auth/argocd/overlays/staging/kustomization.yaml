@@ -1,0 +1,17 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - ../../base
+
+
+patches:
+- path: deploy.yaml
+- target:
+    kind: Ingress
+    name: ui
+  path: ingress-patch.json
+- target:
+    kind: Deployment
+    name: ui-deployment
+  path: deploy_patch.json

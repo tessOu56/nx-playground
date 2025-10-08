@@ -1,0 +1,28 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "composite": true,
+    "declaration": true,
+    "jsx": "react-jsx",
+    "module": "esnext",
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": false,
+    "outDir": "../../dist/apps/auth",
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./src/*"]
+    }
+  },
+  "include": [
+    "src/**/*.ts",
+    "src/**/*.tsx",
+    "src/**/*.js",
+    "src/**/*.jsx",
+    "src/**/*.json",
+    "src/vite-env.d.ts",
+    "package.json"
+  ],
+  "exclude": ["node_modules", "dist"]
+}

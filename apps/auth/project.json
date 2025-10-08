@@ -1,0 +1,81 @@
+{
+  "name": "@nx-playground/auth",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/auth/src",
+  "projectType": "application",
+  "targets": {
+    "build": {
+      "executor": "@nx/vite:build",
+      "outputs": ["{options.outputPath}"],
+      "defaultConfiguration": "production",
+      "options": {
+        "outputPath": "dist/apps/auth"
+      },
+      "configurations": {
+        "development": {
+          "mode": "development"
+        },
+        "production": {
+          "mode": "production"
+        }
+      }
+    },
+    "serve": {
+      "executor": "@nx/vite:dev-server",
+      "defaultConfiguration": "development",
+      "options": {
+        "buildTarget": "@nx-playground/auth:build"
+      },
+      "configurations": {
+        "development": {
+          "buildTarget": "@nx-playground/auth:build:development",
+          "hmr": true
+        },
+        "production": {
+          "buildTarget": "@nx-playground/auth:build:production",
+          "hmr": false
+        }
+      }
+    },
+    "preview": {
+      "executor": "@nx/vite:preview-server",
+      "defaultConfiguration": "development",
+      "options": {
+        "buildTarget": "@nx-playground/auth:build"
+      },
+      "configurations": {
+        "development": {
+          "buildTarget": "@nx-playground/auth:build:development"
+        },
+        "production": {
+          "buildTarget": "@nx-playground/auth:build:production"
+        }
+      }
+    },
+    "test": {
+      "executor": "@nx/vite:test",
+      "outputs": ["{options.reportsDirectory}"],
+      "options": {
+        "passWithNoTests": true,
+        "reportsDirectory": "../../coverage/apps/auth"
+      }
+    },
+    "lint": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "echo 'Lint skipped for auth project'"
+      }
+    },
+    "typecheck": {
+      "executor": "@nx/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/apps/auth/tsc",
+        "main": "apps/auth/src/main.tsx",
+        "tsConfig": "apps/auth/tsconfig.json",
+        "assets": ["apps/auth/src/favicon.ico", "apps/auth/src/assets"]
+      }
+    }
+  },
+  "tags": []
+}

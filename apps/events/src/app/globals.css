@@ -1,0 +1,48 @@
+/* Import design system - 使用 webpack alias 自動處理環境路徑 */
+@import '@design-system/tokens/generated/tailwind-variables.css';
+@import '@design-system/index.css';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* 自定義樣式 */
+@layer base {
+  html {
+    font-family: 'Inter', system-ui, sans-serif;
+  }
+
+  body {
+    @apply bg-gray-50 text-gray-900;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg transition-colors duration-200;
+  }
+
+  .btn-secondary {
+    @apply bg-gray-200 hover:bg-gray-300 text-gray-800 font-medium py-2 px-4 rounded-lg transition-colors duration-200;
+  }
+
+  .card {
+    @apply bg-white rounded-lg shadow-md p-6;
+  }
+
+  /* 公版容器 - 限制最大寬度為 896px */
+  .container-max {
+    @apply max-w-[896px] mx-auto px-4 sm:px-6 lg:px-8;
+  }
+
+  /* 公版頁面容器 - 用於主要內容區域 */
+  .page-container {
+    @apply container-max py-6 sm:py-8;
+  }
+}
+
+@layer utilities {
+  .text-gradient {
+    @apply bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent;
+  }
+}
