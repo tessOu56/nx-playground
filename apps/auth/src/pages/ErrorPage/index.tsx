@@ -60,7 +60,7 @@ export default function ErrorPage() {
       <p className='my-4'>status：{error.status}</p>
       <p className='my-4'>message：{error.message}</p>
       <p className='my-4'>reason：{error.reason}</p>
-      <PrimaryTxtInterLink txt='回到 APP' to='https://app.oosa.life/' />
+      <PrimaryTxtInterLink txt='回到 APP' to='https://app.nx-playground.local/' />
     </div>
   );
 }

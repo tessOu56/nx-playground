@@ -9,11 +9,11 @@ export const ENV_CONFIG = {
   LIFF_ID: process.env.NEXT_PUBLIC_LIFF_ID ?? '2007835339-AmngJedQ',
   LINE_CLIENT_ID: process.env.NEXT_PUBLIC_LINE_CLIENT_ID ?? '2007835339',
   LINE_REDIRECT_URI:
-    process.env.NEXT_PUBLIC_LINE_REDIRECT_URI ?? 'https://frontend.oosa.life',
+    process.env.NEXT_PUBLIC_LINE_REDIRECT_URI ?? 'https://frontend.nx-playground.local',
 
   // 域名相關
   PRODUCTION_DOMAIN:
-    process.env.NEXT_PUBLIC_PRODUCTION_DOMAIN ?? 'https://frontend.oosa.life',
+    process.env.NEXT_PUBLIC_PRODUCTION_DOMAIN ?? 'https://frontend.nx-playground.local',
   DEVELOPMENT_DOMAIN:
     process.env.NEXT_PUBLIC_DEVELOPMENT_DOMAIN ?? 'http://localhost:3000',
 

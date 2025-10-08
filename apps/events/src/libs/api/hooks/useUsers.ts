@@ -93,7 +93,7 @@ export function isUserOrganizer(lineId: string): boolean {
   // 暫時基於 email domain 或 bio 來判斷（實際應用中會有專門的權限系統）
   return !!(
     user &&
-    (user?.email?.includes('@oosa.life') ||
+    (user?.email?.includes('@nx-playground.local') ||
       user?.bio?.includes('主辦') ||
       user?.bio?.includes('策劃'))
   );

@@ -23,12 +23,12 @@
 **Endpoint URL 設置**
 
 ```
-✅ 正確設置: https://frontend.oosa.life
+✅ 正確設置: https://frontend.nx-playground.local
 ❌ 錯誤設置:
-  - http://frontend.oosa.life
-  - https://www.frontend.oosa.life
-  - https://frontend.oosa.life/
-  - https://frontend.oosa.life:3000
+  - http://frontend.nx-playground.local
+  - https://www.frontend.nx-playground.local
+  - https://frontend.nx-playground.local/
+  - https://frontend.nx-playground.local:3000
 ```
 
 **Scope 設置**
@@ -60,7 +60,7 @@
 
 **步驟 1: 在 LINE 中測試**
 
-1. 在 LINE 聊天中發送連結: `https://frontend.oosa.life/test-liff`
+1. 在 LINE 聊天中發送連結: `https://frontend.nx-playground.local/test-liff`
 2. 點擊連結，應該在 LINE 內建瀏覽器中打開
 3. 查看調試信息
 
@@ -97,7 +97,7 @@
 
 1. **更新 LINE Developers Console 設置**
 2. **等待 5-10 分鐘讓設置生效**
-3. **在 LINE 中重新訪問**: `https://frontend.oosa.life/test-liff`
+3. **在 LINE 中重新訪問**: `https://frontend.nx-playground.local/test-liff`
 4. **檢查是否顯示「在 LIFF 中：是」**
 
 #### 6. 如果問題持續

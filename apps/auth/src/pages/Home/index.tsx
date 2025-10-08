@@ -18,12 +18,12 @@ function Home() {
   }, [returnUrl]);
   return (
     <div className='App'>
-      <p className='mt-[440px] text-[28px] leading-[34px]'>OOSA</p>
+      <p className='mt-[440px] text-[28px] leading-[34px]'>NX Playground</p>
       <p className='mt-[13px] text-[17px] leading-[22px] mb-[114px]'>
-        記錄你戶外生活的大小事
+        實驗性專案
       </p>
       <div className='w-[345px] m-[auto] flex flex-col'>
-        <PrimaryTxtOuterLink txt='前往 APP' to={`https://app.oosa.life/`} />
+        <PrimaryTxtOuterLink txt='前往 APP' to={`https://app.nx-playground.local/`} />
       </div>
       <hr className='mb-6 w-full h-0 border-transparent' />
     </div>

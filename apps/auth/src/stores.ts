@@ -2,7 +2,7 @@ import { makeAutoObservable } from 'mobx';
 
 class Store {
   token = '';
-  returnUrl = 'https://dev.oosa.life'; // url encoded
+  returnUrl = 'https://dev.nx-playground.local'; // url encoded
 
   constructor() {
     makeAutoObservable(this);

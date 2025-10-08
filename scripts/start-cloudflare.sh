@@ -34,7 +34,7 @@ sudo systemctl enable cloudflared
 echo "🔍 檢查服務狀態..."
 if sudo systemctl is-active --quiet cloudflared; then
     echo "✅ 服務已啟動"
-    echo "🌐 域名: https://frontend.oosa.life"
+    echo "🌐 域名: https://frontend.nx-playground.local"
     echo "🔗 本地: http://localhost:3000"
     echo ""
     echo "服務已在背景運行，按 Ctrl+C 退出"

@@ -41,7 +41,7 @@
 ```bash
 # LINE 登入配置
 NEXT_PUBLIC_LIFF_ID=2007835339-AmngJedQ
-NEXT_PUBLIC_LINE_REDIRECT_URI=https://frontend.oosa.life
+NEXT_PUBLIC_LINE_REDIRECT_URI=https://frontend.nx-playground.local
 NEXT_PUBLIC_LINE_CLIENT_ID=2007835339
 
 # LINE OAuth 後端配置（重要！）
@@ -69,13 +69,13 @@ NODE_ENV=development
 ### 1. LIFF 應用設置
 
 - LIFF ID: `2007835339-AmngJedQ`
-- Endpoint URL: `https://frontend.oosa.life`
+- Endpoint URL: `https://frontend.nx-playground.local`
 - Scope: `profile`, `openid`, `email`
 
 ### 2. LINE Login 應用設置
 
 - Channel ID: `2007835339`
-- Callback URL: `https://frontend.oosa.life`
+- Callback URL: `https://frontend.nx-playground.local`
 - Scope: `profile`, `openid`, `email`
 
 ## 功能特點

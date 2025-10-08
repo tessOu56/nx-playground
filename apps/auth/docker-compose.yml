@@ -13,17 +13,17 @@ services:
     ports:
       - "3000:3000"
     networks:
-      - oosa-network
+      - nx-network
     labels:
       - traefik.enable=true
       - traefik.http.routers.sso-ui.entrypoints=websecure
       - traefik.http.routers.sso-ui.tls=true
-      - traefik.http.routers.sso-ui.rule= Host(`sso.oosa.docker`)
+      - traefik.http.routers.sso-ui.rule= Host(`sso.nx-playground.docker`)
       - traefik.http.services.sso-ui.loadbalancer.server.port=3000
       - traefik.http.routers.sso-ui.service=sso-ui
     volumes:
       - .:/app
 networks:
-  oosa-network:
+  nx-network:
     name: ${NETWORK}
     external: true

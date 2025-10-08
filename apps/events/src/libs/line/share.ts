@@ -108,7 +108,7 @@ export const shareToExternal = async (event: Event) => {
         text: shareText,
         url: `${
           process.env.NEXT_PUBLIC_PRODUCTION_DOMAIN ||
-          'https://frontend.oosa.life'
+          'https://frontend.nx-playground.local'
         }/events/${event.id}`,
       });
 
