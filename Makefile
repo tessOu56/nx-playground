@@ -94,6 +94,14 @@ dev-console: ## 僅啟動 Console 服務
 	@echo "$(BLUE)[INFO]$(NC) 啟動 Console 服務 (http://localhost:3002)..."
 	@pnpm exec nx serve @nx-playground/console --port 3002
 
+dev-vue: ## 僅啟動 Vue Motion 服務
+	@echo "$(BLUE)[INFO]$(NC) 啟動 Vue Motion 服務 (http://localhost:8080)..."
+	@pnpm exec nx serve vue-motion
+
+dev-angular: ## 僅啟動 Angular Dashboard 服務
+	@echo "$(BLUE)[INFO]$(NC) 啟動 Angular Dashboard 服務 (http://localhost:4200)..."
+	@pnpm exec nx serve angular-dashboard
+
 setup: ## 設置開發環境
 	@echo "$(BLUE)[INFO]$(NC) 設置 NX Playground 開發環境..."
 	@echo "$(BLUE)[INFO]$(NC) 檢查 Node.js 版本..."
