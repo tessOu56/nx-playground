@@ -20,6 +20,9 @@ help: ## 顯示此幫助信息
 	@echo "  dev          啟動所有服務 (Events + Console)"
 	@echo "  dev-events   僅啟動 Events 服務 (http://localhost:3000)"
 	@echo "  dev-console  僅啟動 Console 服務 (http://localhost:3002)"
+	@echo "  dev-profile  僅啟動 Profile 服務 (http://localhost:3003)"
+	@echo "  dev-vue      僅啟動 Vue Motion 服務 (http://localhost:8080)"
+	@echo "  dev-angular  僅啟動 Angular Dashboard 服務 (http://localhost:4200)"
 	@echo "  setup        設置開發環境 (安裝依賴、環境變數)"
 	@echo "  stop         停止當前開發站台"
 	@echo "  restart      重啟所有開發服務"
@@ -85,6 +88,7 @@ dev: ## 啟動所有服務 (Events + Console)
 	@echo "$(YELLOW)📱 服務網址:$(NC)"
 	@echo "  Events:  http://localhost:3000"
 	@echo "  Console: http://localhost:3002"
+	@echo "  Profile: http://localhost:3003"
 
 dev-events: ## 僅啟動 Events 服務
 	@echo "$(BLUE)[INFO]$(NC) 啟動 Events 服務 (http://localhost:3000)..."
