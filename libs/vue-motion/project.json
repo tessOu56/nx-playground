@@ -1,0 +1,33 @@
+{
+  "name": "vue-motion",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/vue-motion/src",
+  "projectType": "library",
+  "tags": ["type:lib", "platform:vue"],
+  "targets": {
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/libs/vue-motion",
+        "main": "libs/vue-motion/src/main.js",
+        "tsConfig": "libs/vue-motion/tsconfig.lib.json",
+        "assets": ["libs/vue-motion/*.md"]
+      }
+    },
+    "serve": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "vue-cli-service serve",
+        "cwd": "libs/vue-motion"
+      }
+    },
+    "lint": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "vue-cli-service lint",
+        "cwd": "libs/vue-motion"
+      }
+    }
+  }
+}

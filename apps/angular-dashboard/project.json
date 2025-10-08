@@ -1,0 +1,96 @@
+{
+  "name": "angular-dashboard",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "application",
+  "sourceRoot": "apps/angular-dashboard/src",
+  "prefix": "app",
+  "tags": ["type:app", "platform:angular"],
+  "targets": {
+    "build": {
+      "executor": "@angular-devkit/build-angular:application",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/apps/angular-dashboard",
+        "index": "apps/angular-dashboard/src/index.html",
+        "browser": "apps/angular-dashboard/src/main.ts",
+        "polyfills": ["zone.js"],
+        "tsConfig": "apps/angular-dashboard/tsconfig.app.json",
+        "assets": [
+          {
+            "glob": "**/*",
+            "input": "apps/angular-dashboard/public"
+          }
+        ],
+        "styles": ["apps/angular-dashboard/src/styles.css"],
+        "scripts": []
+      },
+      "configurations": {
+        "production": {
+          "budgets": [
+            {
+              "type": "initial",
+              "maximumWarning": "500kB",
+              "maximumError": "1MB"
+            },
+            {
+              "type": "anyComponentStyle",
+              "maximumWarning": "2kB",
+              "maximumError": "4kB"
+            }
+          ],
+          "outputHashing": "all"
+        },
+        "development": {
+          "optimization": false,
+          "extractLicenses": false,
+          "sourceMap": true
+        }
+      },
+      "defaultConfiguration": "production"
+    },
+    "serve": {
+      "executor": "@angular-devkit/build-angular:dev-server",
+      "configurations": {
+        "production": {
+          "buildTarget": "angular-dashboard:build:production"
+        },
+        "development": {
+          "buildTarget": "angular-dashboard:build:development"
+        }
+      },
+      "defaultConfiguration": "development",
+      "options": {
+        "port": 4200
+      }
+    },
+    "extract-i18n": {
+      "executor": "@angular-devkit/build-angular:extract-i18n"
+    },
+    "test": {
+      "executor": "@angular-devkit/build-angular:karma",
+      "options": {
+        "polyfills": ["zone.js", "zone.js/testing"],
+        "tsConfig": "apps/angular-dashboard/tsconfig.spec.json",
+        "karmaConfig": "apps/angular-dashboard/karma.conf.js",
+        "assets": [
+          {
+            "glob": "**/*",
+            "input": "apps/angular-dashboard/public"
+          }
+        ],
+        "styles": ["apps/angular-dashboard/src/styles.css"],
+        "scripts": []
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint"
+    },
+    "e2e": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "playwright test",
+        "cwd": "apps/angular-dashboard"
+      }
+    }
+  }
+}
