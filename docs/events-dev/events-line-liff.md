@@ -11,7 +11,7 @@
 1. **LIFF 應用設置**
 
    - LIFF ID: `2007835339-AmngJedQ`
-   - Endpoint URL: `https://frontend.oosa.life`
+   - Endpoint URL: `https://frontend.nx-playground.local`
    - Scope: `profile`, `openid`, `email`
 
 2. **Bot Link Feature**
@@ -20,7 +20,7 @@
    - 建議啟用「允許外部瀏覽器」
 
 3. **域名驗證**
-   - 確保 `frontend.oosa.life` 已通過域名驗證
+   - 確保 `frontend.nx-playground.local` 已通過域名驗證
    - HTTPS 證書必須有效
 
 ### 設置檢查清單
@@ -83,7 +83,7 @@ function MyComponent() {
 
 ### 調試和測試
 
-1. **訪問調試頁面**: `https://frontend.oosa.life/debug`
+1. **訪問調試頁面**: `https://frontend.nx-playground.local/debug`
 2. **掃描 QR Code**: 在 LINE 應用中掃描頁面上的 QR Code
 3. **查看調試信息**: 檢查 LIFF 狀態、環境信息、用戶資料
 4. **測試功能**: 使用登入/登出按鈕測試認證流程
@@ -133,7 +133,7 @@ useEffect(() => {
   ) {
     const currentPath =
       window.location.pathname + window.location.search + window.location.hash;
-    const newUrl = `https://frontend.oosa.life${currentPath}`;
+    const newUrl = `https://frontend.nx-playground.local${currentPath}`;
 
     // 重定向到生產環境
     window.location.href = newUrl;
@@ -143,9 +143,9 @@ useEffect(() => {
 
 ### 重定向規則
 
-- `http://localhost:3000/debug` → `https://frontend.oosa.life/debug`
-- `http://localhost:3000/vendors/1` → `https://frontend.oosa.life/vendors/1`
-- `http://localhost:3000/events/1` → `https://frontend.oosa.life/events/1`
+- `http://localhost:3000/debug` → `https://frontend.nx-playground.local/debug`
+- `http://localhost:3000/vendors/1` → `https://frontend.nx-playground.local/vendors/1`
+- `http://localhost:3000/events/1` → `https://frontend.nx-playground.local/events/1`
 
 ## 故障排除
 

@@ -10,7 +10,7 @@
 ## 開發環境配置
 
 - **本地開發端口**: 3000 (`http://localhost:3000`)
-- **生產環境域名**: `https://frontend.oosa.life`
+- **生產環境域名**: `https://frontend.nx-playground.local`
 - **LIFF ID**: `2007835339-AmngJedQ`
 
 ### 啟動開發服務器
@@ -139,7 +139,7 @@ apps/events/src/
 
 ### 3. 真實 LIFF 環境測試
 
-1. 通過 Cloudflare 訪問 `https://frontend.oosa.life`
+1. 通過 Cloudflare 訪問 `https://frontend.nx-playground.local`
 2. 在 LINE 中打開 LIFF 應用程式
 3. 測試完整的現金付款流程
 

@@ -128,8 +128,8 @@ export function testMockVendors() {
 
   const vendor1 = mockVendors.find(v => v.id === 'vendor-1');
   if (vendor1) {
-    const expectedEmail = 'hello@oosa.life';
-    const expectedLineId = '@oosa_life';
+    const expectedEmail = 'hello@nx-playground.local';
+    const expectedLineId = '@nx_playground';
     if (
       vendor1.email === expectedEmail &&
       vendor1.lineOfficialAccountId === expectedLineId

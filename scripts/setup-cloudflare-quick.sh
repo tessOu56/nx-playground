@@ -33,8 +33,8 @@ echo "🔧 安裝 Cloudflare 隧道服務..."
 echo "📝 配置系統 hosts 文件..."
 HOSTS_FILE="/etc/hosts"
 HOSTS_ENTRIES=(
-    "127.0.0.1 frontend.oosa.life"
-    "::1 frontend.oosa.life"
+    "127.0.0.1 frontend.nx-playground.local"
+    "::1 frontend.nx-playground.local"
 )
 
 # 檢查是否已經配置
@@ -59,7 +59,7 @@ if sudo systemctl is-active --quiet cloudflared; then
     echo ""
     echo "🌐 現在可以通過以下地址訪問:"
     echo "  - http://localhost:3000 (本地開發)"
-    echo "  - https://frontend.oosa.life (生產域名)"
+    echo "  - https://frontend.nx-playground.local (生產域名)"
     echo ""
     echo "📋 常用命令:"
     echo "  - 啟動服務: pnpm cloudflare:start"

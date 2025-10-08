@@ -99,7 +99,7 @@ export const sendEventMessage = async (event: EventInfo) => {
 ${event.description}
 
 立即報名: ${
-    process.env.NEXT_PUBLIC_PRODUCTION_DOMAIN ?? 'https://frontend.oosa.life'
+    process.env.NEXT_PUBLIC_PRODUCTION_DOMAIN ?? 'https://frontend.nx-playground.local'
   }/events/${event.id}`;
 
   return await sendTextMessage(message);

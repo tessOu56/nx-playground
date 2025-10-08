@@ -6,12 +6,12 @@ import type { LineSettings } from '@/types';
 const specificLineSettings: Record<string, LineSettings> = {};
 
 // 使用動態屬性避免 ESLint 警告
-specificLineSettings['@oosa_life'] = generateLineSettings('@oosa_life', {
-  displayName: 'Oosa Life',
+specificLineSettings['@nx_playground'] = generateLineSettings('@nx_playground', {
+  displayName: 'NX Playground',
   description:
-    'Oosa Life 官方 LINE 帳號，提供最新戶外活動資訊、報名服務和相關諮詢。',
-  statusMessage: '歡迎來到 Oosa Life！我們提供最棒的戶外活動體驗。',
-  pictureUrl: 'https://picsum.photos/seed/oosa/200/200',
+    'NX Playground 官方 LINE 帳號，提供最新活動資訊、報名服務和相關諮詢。',
+  statusMessage: '歡迎來到 NX Playground！我們提供最棒的活動體驗。',
+  pictureUrl: 'https://picsum.photos/seed/nx-playground/200/200',
 });
 
 specificLineSettings['@nx-playground_official'] = generateLineSettings(

@@ -63,7 +63,7 @@ export const getLineLoginUrl = (): string => {
     response_type: 'code',
     client_id: process.env.NEXT_PUBLIC_LINE_CLIENT_ID ?? '2007835339',
     redirect_uri:
-      process.env.NEXT_PUBLIC_LINE_REDIRECT_URI ?? 'https://frontend.oosa.life',
+      process.env.NEXT_PUBLIC_LINE_REDIRECT_URI ?? 'https://frontend.nx-playground.local',
     state,
     scope: 'profile openid',
   });
@@ -219,7 +219,7 @@ export const handleLineCallback = async () => {
           code,
           redirect_uri:
             process.env.NEXT_PUBLIC_LINE_REDIRECT_URI ??
-            'https://frontend.oosa.life',
+            'https://frontend.nx-playground.local',
         }),
       });
 

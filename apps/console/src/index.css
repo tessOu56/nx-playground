@@ -1,8 +1,8 @@
 /* Import design system generated Tailwind variables first */
-@import '@partivo/design-system/tokens/generated/tailwind-variables.css';
+@import '@nx-playground/design-system/tokens/generated/tailwind-variables.css';
 
 /* Import design system semantic CSS variables */
-@import '@partivo/design-system/index.css';
+@import '@nx-playground/design-system/index.css';
 
 @tailwind base;
 @tailwind components;

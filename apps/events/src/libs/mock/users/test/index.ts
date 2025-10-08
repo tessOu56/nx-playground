@@ -130,7 +130,7 @@ export function testMockUsers() {
     if (isOrganizer) {
       console.log(
         `  PASS: 主辦方身份正確 (${
-          user.email?.includes('@oosa.life') ? 'email' : 'bio'
+          user.email?.includes('@nx-playground.local') ? 'email' : 'bio'
         } 判斷)`
       );
     } else {
@@ -241,14 +241,14 @@ export function testMockUsers() {
   // 測試 isUserOrganizer
   const organizerUsers = mockUsers.filter(
     u =>
-      u.email?.includes('@oosa.life') ||
+      u.email?.includes('@nx-playground.local') ||
       u.bio?.includes('主辦') ||
       u.bio?.includes('策劃')
   );
   const nonOrganizerUsers = mockUsers.filter(
     u =>
       !(
-        u.email?.includes('@oosa.life') ||
+        u.email?.includes('@nx-playground.local') ||
         u.bio?.includes('主辦') ||
         u.bio?.includes('策劃')
       )
@@ -277,14 +277,14 @@ export function testMockUsers() {
   console.log('\n檢查用戶類型分佈:');
   const organizers = mockUsers.filter(
     u =>
-      u.email?.includes('@oosa.life') ||
+      u.email?.includes('@nx-playground.local') ||
       u.bio?.includes('主辦') ||
       u.bio?.includes('策劃')
   );
   const regularUsers = mockUsers.filter(
     u =>
       !(
-        u.email?.includes('@oosa.life') ||
+        u.email?.includes('@nx-playground.local') ||
         u.bio?.includes('主辦') ||
         u.bio?.includes('策劃')
       )

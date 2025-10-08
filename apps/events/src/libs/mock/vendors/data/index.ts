@@ -6,13 +6,13 @@ import type { Vendor } from '@/types';
 const specificVendors = [
   {
     ...generateVendor('vendor-1', {
-      email: 'hello@oosa.life',
+      email: 'hello@nx-playground.local',
       bankCode: '013',
       accountNumber: '1234567890123',
-      accountName: 'Oosa Life',
+      accountName: 'NX Playground',
       events: 4,
     }),
-    lineOfficialAccountId: '@oosa_life',
+    lineOfficialAccountId: '@nx_playground',
   },
   {
     ...generateVendor('vendor-2', {

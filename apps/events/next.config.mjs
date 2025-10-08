@@ -31,7 +31,7 @@ const nextConfig = {
     position: 'bottom-right',
   },
   // 允許開發環境的跨域請求
-  allowedDevOrigins: ['frontend.oosa.life'],
+  allowedDevOrigins: ['frontend.nx-playground.local'],
   // 簡化的 Safari 相容性配置 - 僅在非靜態導出時啟用
   ...(process.env.NODE_ENV !== 'production' && {
     async headers() {

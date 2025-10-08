@@ -11,7 +11,7 @@ import type { LineSettings } from '@/types';
  * - 必要欄位完整性檢查 (officialAccountId, displayName, description)
  * - 可選欄位驗證 (statusMessage, pictureUrl)
  * - Key 與 officialAccountId 匹配性檢查
- * - 特定業務邏輯驗證 (Oosa Life, NX Playground 官方, 古亭社區基金會)
+ * - 特定業務邏輯驗證 (NX Playground, NX Playground 官方, 古亭社區基金會)
  * - 生成資料驗證
  * - 與 vendors 資料的對應關係驗證
  * - 唯一性檢查
@@ -130,26 +130,26 @@ export function testMockLineSettings() {
   // 3. 檢查特定 line setting 的業務邏輯
   console.log('\n檢查特定 Line Setting 的業務邏輯:');
 
-  const oosaLife = mockLineSettings['@oosa_life'];
-  if (oosaLife) {
-    const expectedDisplayName = 'Oosa Life';
-    // const expectedDescriptionContains = 'Oosa Life 官方 LINE 帳號';
+  const nxPlayground = mockLineSettings['@nx_playground'];
+  if (nxPlayground) {
+    const expectedDisplayName = 'NX Playground';
+    // const expectedDescriptionContains = 'NX Playground 官方 LINE 帳號';
 
     if (
-      oosaLife.displayName === expectedDisplayName &&
-      oosaLife.description.includes('Oosa Life')
+      nxPlayground.displayName === expectedDisplayName &&
+      nxPlayground.description.includes('NX Playground')
     ) {
-      console.log(`  PASS: @oosa_life 業務邏輯正確`);
-      console.log(`  INFO: DisplayName: ${oosaLife.displayName}`);
+      console.log(`  PASS: @nx_playground 業務邏輯正確`);
+      console.log(`  INFO: DisplayName: ${nxPlayground.displayName}`);
       console.log(
-        `  INFO: Description: ${oosaLife.description.substring(0, 50)}...`
+        `  INFO: Description: ${nxPlayground.description.substring(0, 50)}...`
       );
     } else {
-      console.error(`  ERROR: @oosa_life 業務邏輯錯誤`);
+      console.error(`  ERROR: @nx_playground 業務邏輯錯誤`);
       allValid = false;
     }
   } else {
-    console.error('  ERROR: 找不到 @oosa_life');
+    console.error('  ERROR: 找不到 @nx_playground');
     allValid = false;
   }
 
@@ -227,7 +227,7 @@ export function testMockLineSettings() {
   // 6. 檢查與 vendors 的對應關係
   console.log('\n檢查與 Vendors 的對應關係:');
   const expectedLineIds = [
-    '@oosa_life',
+    '@nx_playground',
     '@nx-playground_official',
     '@guting_community',
     '@vendor4',

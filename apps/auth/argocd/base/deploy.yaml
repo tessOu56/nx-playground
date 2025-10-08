@@ -18,7 +18,7 @@ spec:
         app: ui
     spec:
       containers:
-      - image: sjc.vultrcr.com/oosa/ssoui:v1.0.0
+      - image: sjc.vultrcr.com/nx-playground/ssoui:v1.0.0
         name: ui
         livenessProbe:
           httpGet:
