@@ -153,11 +153,11 @@ export function testMockLineSettings() {
     allValid = false;
   }
 
-  const nx-playgroundOfficial = mockLineSettings['@nx-playground_official'];
-  if (nx-playgroundOfficial) {
+  const nxPlaygroundOfficial = mockLineSettings['@nx-playground_official'];
+  if (nxPlaygroundOfficial) {
     if (
-      nx-playgroundOfficial.displayName === 'NX Playground 官方' &&
-      nx-playgroundOfficial.description.includes('NX Playground')
+      nxPlaygroundOfficial.displayName === 'NX Playground 官方' &&
+      nxPlaygroundOfficial.description.includes('NX Playground')
     ) {
       console.log(`  PASS: @nx-playground_official 業務邏輯正確`);
     } else {
