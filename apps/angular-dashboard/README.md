@@ -1,14 +1,15 @@
-# Angular Dashboard Sandbox
+# Angular Dashboard - 企業級管理系統
 
-> 大型企業內部管理專業後台系統 - 展示企業級 Angular 架構、RBAC 權限控制、Dual-control 審批流程、即時事件監控與完整稽核軌跡
+> 展示企業級 Angular 架構、RBAC 權限控制、Dual-control 審批流程、即時事件監控與完整稽核軌跡
 
 [![Angular](https://img.shields.io/badge/Angular-20.3.0-red.svg)](https://angular.dev)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.9.2-blue.svg)](https://www.typescriptlang.org/)
-[![pnpm](https://img.shields.io/badge/pnpm-9.0.0-orange.svg)](https://pnpm.io/)
 
 ## 🎯 專案簡介
 
-這是一個模擬大型企業內部管理系統的專業後台應用程式，展示了現代 Angular 開發的最佳實踐和企業級功能實現。
+NX Playground 中的 Angular 應用，展示現代 Angular 開發的最佳實踐和企業級功能實現。
+
+> **Note:** 此專案整合至 nx-playground monorepo，使用 Nx 管理構建和依賴。
 
 ### 核心特色
 
@@ -29,32 +30,37 @@
 
 ## 🚀 快速開始
 
-### 安裝依賴
+### 在 Monorepo 中啟動
 
 ```bash
-# 使用 pnpm
+# 使用 Makefile
+make dev-angular
+
+# 或使用 pnpm
+pnpm dev:angular
+
+# 或使用 Nx
+nx serve angular-dashboard
+```
+
+服務運行在: **http://localhost:4200**
+
+### 獨立開發
+
+```bash
+cd apps/angular-dashboard
 pnpm install
-```
-
-### 開發伺服器
-
-```bash
-# 設定 Node.js 路徑（macOS with Homebrew）
-export PATH="/opt/homebrew/opt/node@20/bin:$PATH"
-
-# 啟動開發伺服器
 pnpm start
-
-# 應用程式將在 http://localhost:4200/ 運行
 ```
 
-### 建置專案
+### 構建
 
 ```bash
-# 生產環境建置
-pnpm build
+# 在 Monorepo 根目錄
+nx build angular-dashboard
 
-# 建置檔案將輸出到 dist/ 目錄
+# 輸出目錄
+dist/apps/angular-dashboard/
 ```
 
 ## 🧪 測試
@@ -62,27 +68,25 @@ pnpm build
 ### 單元測試
 
 ```bash
-# 執行所有測試
-pnpm test
+# 在 Monorepo 根目錄
+nx test angular-dashboard
 
 # Watch 模式
-pnpm test:watch
+nx test angular-dashboard --watch
 
 # 產生覆蓋率報告
-pnpm test:coverage
+nx test angular-dashboard --coverage
 ```
 
 ### E2E 測試
 
 ```bash
-# 執行所有 E2E 測試
+# 執行 E2E 測試
+nx e2e angular-dashboard
+
+# 或在專案目錄
+cd apps/angular-dashboard
 pnpm e2e
-
-# UI 模式（互動式）
-pnpm e2e:ui
-
-# Debug 模式
-pnpm e2e:debug
 ```
 
 ## 📚 專案文檔
