@@ -797,6 +797,27 @@ importers:
         specifier: 5.0.6
         version: 5.0.6(@types/react@19.0.0)(immer@9.0.21)(react@19.0.0)(use-sync-external-store@1.6.0(react@19.0.0))
 
+  apps/profile:
+    dependencies:
+      '@nx-playground/api-client':
+        specifier: workspace:*
+        version: link:../../libs/api-client
+      '@nx-playground/auth-client':
+        specifier: workspace:*
+        version: link:../../libs/auth-client
+      '@nx-playground/design-system':
+        specifier: workspace:*
+        version: link:../../libs/design-system
+      '@nx-playground/hooks':
+        specifier: workspace:*
+        version: link:../../libs/hooks
+      '@nx-playground/i18n':
+        specifier: workspace:*
+        version: link:../../libs/i18n
+      '@nx-playground/ui-components':
+        specifier: workspace:*
+        version: link:../../libs/ui-components
+
   libs/api-client: {}
 
   libs/auth-client: {}
