@@ -1,135 +1,200 @@
-# Vue Motion Sandbox
+# @nx-playground/vue-motion
 
-A Vue 3 sandbox for experimenting with motion effects, animations, and interactive web experiences. This project provides a playground for testing various animation techniques, 3D graphics, and interactive elements using modern libraries and frameworks.
+> Vue 3 動畫效果實驗庫 - 展示各種動畫技術、3D 圖形和互動效果
 
-## ✨ Features
+## 🎯 專案簡介
 
-- **Particle Effects**: Interactive canvas-based particle systems with customizable parameters
-- **GSAP Animations**: Professional-grade animations using GreenSock Animation Platform
-- **Three.js 3D**: 3D graphics and interactive 3D objects
-- **Lottie Animations**: After Effects animations rendered in the browser
-- **VueUse Motion**: Declarative animations with VueUse Motion
-- **Interactive Effects**: Mouse follow, ripple effects, hover animations, and touch gestures
+NX Playground 中的 Vue 函式庫，用於實驗和展示各種動畫技術和互動效果。
 
-## 🚀 Technologies Used
+> **Note:** 此專案整合至 nx-playground monorepo，可作為獨立函式庫或參考範例使用。
 
-- **Vue 3** - Progressive JavaScript framework with Composition API
-- **Vue Router 4** - Official router for Vue.js
-- **Tailwind CSS** - Utility-first CSS framework
-- **GSAP** - Professional-grade animation library
-- **Three.js** - 3D graphics library
-- **Lottie Web** - After Effects animations for the web
-- **VueUse Motion** - Declarative animation system
-- **Tween.js** - JavaScript tweening engine
+## ✨ 功能展示
 
-## 📦 Installation
+- **Particle Effects** - 互動式粒子系統
+- **GSAP Animations** - 專業級動畫
+- **Three.js 3D** - 3D 圖形和互動物件
+- **Lottie Animations** - After Effects 動畫
+- **VueUse Motion** - 聲明式動畫系統
+- **Interactive Effects** - 滑鼠追蹤、漣漪效果、拖放
+
+## 🚀 快速開始
+
+### 在 Monorepo 中啟動
 
 ```bash
-# Clone the repository
-git clone git@github.com:tessOu56/vue-motion-sandbox.git
+# 使用 Makefile
+make dev-vue
 
-# Navigate to the project directory
-cd vue-motion-sandbox
+# 或使用 pnpm
+pnpm dev:vue-motion
 
-# Install dependencies
+# 或使用 Nx
+nx serve vue-motion
+```
+
+服務運行在: **http://localhost:8080**
+
+### 獨立開發
+
+```bash
+cd libs/vue-motion
 pnpm install
+pnpm serve
 ```
 
-## 🛠️ Development
+## 🛠️ 技術棧
 
-```bash
-# Start development server
-pnpm run serve
+- **Vue 3** - Composition API
+- **Vue Router 4** - 路由管理
+- **Tailwind CSS** - 樣式系統
+- **GSAP** - 專業動畫庫
+- **Three.js** - 3D 圖形庫
+- **Lottie Web** - After Effects 動畫
+- **VueUse Motion** - 聲明式動畫
+- **Tween.js** - 補間動畫引擎
 
-# Build for production
-pnpm run build
+## 📂 專案結構
 
-# Lint and fix files
-pnpm run lint
+```
+src/
+├── views/
+│   ├── Home.vue              # 首頁
+│   └── effects/              # 各種效果展示
+│       ├── Particles.vue     # 粒子效果
+│       ├── GSAPAnimations.vue # GSAP 動畫
+│       ├── ThreeJS.vue       # 3D 圖形
+│       ├── Lottie.vue        # Lottie 動畫
+│       ├── Motion.vue        # VueUse Motion
+│       └── Interactive.vue   # 互動效果
+├── components/
+│   ├── Layout.vue            # 佈局組件
+│   └── HelloWorld.vue
+├── router/
+│   └── index.js              # 路由配置
+├── assets/
+│   └── tailwind.css          # 全局樣式
+└── App.vue                   # 根組件
 ```
 
-## 🎯 Available Effects
+## 🎨 效果展示
 
-### 1. Particle Effects
+### 1. 粒子效果
+- 互動式粒子系統
+- 滑鼠互動
+- 可調參數（粒子數量、速度、連接距離）
 
-- Interactive particle system with mouse interaction
-- Customizable particle count, speed, and connection distance
-- Real-time parameter adjustment
-
-### 2. GSAP Animations
-
-- Basic animations (fade, scale, rotate)
-- Timeline-based complex animations
-- Text animations and effects
-- Motion path animations
+### 2. GSAP 動畫
+- 基礎動畫（淡入、縮放、旋轉）
+- Timeline 複雜動畫
+- 文字動畫
+- Motion Path 動畫
 
 ### 3. Three.js 3D
+- 互動 3D 物件（立方體、球體、圓環）
+- 即時旋轉和縮放控制
+- 平滑動畫和過渡
 
-- Interactive 3D objects (cube, sphere, torus)
-- Real-time rotation and scaling controls
-- Smooth animations and transitions
-
-### 4. Lottie Animations
-
-- Loading animations
-- Success/error states
-- Custom After Effects animations
-- Playback controls
+### 4. Lottie 動畫
+- 載入動畫
+- 成功/錯誤狀態
+- 自定義 After Effects 動畫
+- 播放控制
 
 ### 5. VueUse Motion
+- 聲明式動畫組件
+- 滑動、旋轉、彈性動畫
+- 序列和路徑動畫
 
-- Declarative animation components
-- Slide, rotate, and elastic animations
-- Sequence and path animations
+### 6. 互動效果
+- 滑鼠追蹤效果
+- 點擊漣漪效果
+- 懸停動畫
+- 拖放互動
+- 觸控手勢支援
 
-### 6. Interactive Effects
+## 💡 使用範例
 
-- Mouse follow effects
-- Ripple effects on click
-- Hover animations
-- Keyboard controls
-- Drag and drop interactions
-- Touch gesture support
+### 在其他 Vue 專案中使用
 
-## 🎨 Customization
+```vue
+<script setup>
+import { ParticleEffect } from '@nx-playground/vue-motion';
+</script>
 
-The project uses Tailwind CSS for styling, making it easy to customize:
+<template>
+  <ParticleEffect :count="100" :speed="2" />
+</template>
+```
 
-- Modify colors in `tailwind.config.js`
-- Add custom animations in `src/assets/tailwind.css`
-- Create new effect components in `src/views/effects/`
+### 參考實現
 
-## 📱 Responsive Design
+```vue
+<script setup>
+import gsap from 'gsap';
+import { onMounted, ref } from 'vue';
 
-All effects are designed to work across different screen sizes:
+const box = ref(null);
 
-- Desktop: Full interactive experience
-- Tablet: Touch-optimized interactions
-- Mobile: Simplified controls and gestures
+onMounted(() => {
+  gsap.to(box.value, {
+    x: 100,
+    rotation: 360,
+    duration: 1,
+  });
+});
+</script>
 
-## 🤝 Contributing
+<template>
+  <div ref="box" class="w-20 h-20 bg-blue-500"></div>
+</template>
+```
 
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/AmazingEffect`)
-3. Commit your changes (`git commit -m 'Add some AmazingEffect'`)
-4. Push to the branch (`git push origin feature/AmazingEffect`)
-5. Open a Pull Request
+## 📦 構建
 
-## 📄 License
+```bash
+# 在 Monorepo 根目錄
+nx build vue-motion
+```
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+## 🎓 學習資源
 
-## 🙏 Acknowledgments
+此專案作為動畫技術的學習範例，展示：
+- 如何整合各種動畫庫
+- 效能優化技巧
+- 互動設計模式
+- Canvas 和 WebGL 使用
 
-- [Vue.js](https://vuejs.org/) - The progressive JavaScript framework
-- [GSAP](https://greensock.com/gsap/) - Professional-grade animation library
-- [Three.js](https://threejs.org/) - 3D graphics library
-- [Lottie](https://lottiefiles.com/) - After Effects animations for the web
-- [VueUse](https://vueuse.org/) - Collection of Vue composition utilities
-- [Tailwind CSS](https://tailwindcss.com/) - Utility-first CSS framework
+## 📱 響應式設計
 
-## 📞 Contact
+所有效果都針對不同螢幕大小優化：
+- **桌面** - 完整互動體驗
+- **平板** - 觸控優化
+- **手機** - 簡化控制和手勢
 
-tessOu56 - [@tessOu56](https://github.com/tessOu56)
+## 🔧 自定義配置
 
-Project Link: [https://github.com/tessOu56/vue-motion-sandbox](https://github.com/tessOu56/vue-motion-sandbox)
+### Tailwind 配置
+
+```javascript
+// tailwind.config.js
+module.exports = {
+  content: ['./src/**/*.{vue,js,ts,jsx,tsx}'],
+  theme: {
+    extend: {
+      // 自定義配置
+    },
+  },
+};
+```
+
+## 🔗 相關連結
+
+- [Vue.js Documentation](https://vuejs.org/)
+- [GSAP Documentation](https://greensock.com/docs/)
+- [Three.js Documentation](https://threejs.org/docs/)
+- [Lottie Files](https://lottiefiles.com/)
+- [VueUse](https://vueuse.org/)
+
+## 📞 原始專案
+
+原始專案來源: [vue-motion-sandbox](https://github.com/tessOu56/vue-motion-sandbox)
