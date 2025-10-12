@@ -106,4 +106,3 @@ export function useAsync<T, Args extends any[] = []>(
     ...state,
   };
 }
-

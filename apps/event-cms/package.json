@@ -1,5 +1,5 @@
 {
-  "name": "@nx-playground/console",
+  "name": "@nx-playground/event-cms",
   "version": "0.0.1",
   "private": true,
   "scripts": {

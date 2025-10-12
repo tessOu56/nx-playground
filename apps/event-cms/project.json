@@ -1,7 +1,7 @@
 {
-  "name": "@nx-playground/console",
+  "name": "@nx-playground/event-cms",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "apps/console/src",
+  "sourceRoot": "apps/event-cms/src",
   "projectType": "application",
   "targets": {
     "build": {
@@ -9,8 +9,8 @@
       "outputs": ["{options.outputPath}"],
       "defaultConfiguration": "production",
       "options": {
-        "outputPath": "dist/apps/console",
-        "tsConfig": "apps/console/tsconfig.app.json"
+        "outputPath": "dist/apps/event-cms",
+        "tsConfig": "apps/event-cms/tsconfig.app.json"
       },
       "configurations": {
         "development": {
@@ -31,15 +31,15 @@
       "executor": "@nx/vite:dev-server",
       "defaultConfiguration": "development",
       "options": {
-        "buildTarget": "@nx-playground/console:build"
+        "buildTarget": "@nx-playground/event-cms:build"
       },
       "configurations": {
         "development": {
-          "buildTarget": "@nx-playground/console:build:development",
+          "buildTarget": "@nx-playground/event-cms:build:development",
           "hmr": true
         },
         "production": {
-          "buildTarget": "@nx-playground/console:build:production",
+          "buildTarget": "@nx-playground/event-cms:build:production",
           "hmr": false
         }
       }
@@ -48,14 +48,14 @@
       "executor": "@nx/vite:preview-server",
       "defaultConfiguration": "development",
       "options": {
-        "buildTarget": "@nx-playground/console:build"
+        "buildTarget": "@nx-playground/event-cms:build"
       },
       "configurations": {
         "development": {
-          "buildTarget": "@nx-playground/console:build:development"
+          "buildTarget": "@nx-playground/event-cms:build:development"
         },
         "production": {
-          "buildTarget": "@nx-playground/console:build:production"
+          "buildTarget": "@nx-playground/event-cms:build:production"
         }
       }
     },
@@ -64,24 +64,27 @@
       "outputs": ["{options.reportsDirectory}"],
       "options": {
         "passWithNoTests": true,
-        "reportsDirectory": "../../coverage/apps/console"
+        "reportsDirectory": "../../coverage/apps/event-cms"
       }
     },
     "lint": {
       "executor": "@nx/eslint:lint",
       "outputs": ["{options.outputFile}"],
       "options": {
-        "lintFilePatterns": ["apps/console/src/**/*.{ts,tsx,js,jsx}"]
+        "lintFilePatterns": ["apps/event-cms/src/**/*.{ts,tsx,js,jsx}"]
       }
     },
     "typecheck": {
       "executor": "@nx/js:tsc",
       "outputs": ["{options.outputPath}"],
       "options": {
-        "outputPath": "dist/apps/console/tsc",
-        "main": "apps/console/src/main.tsx",
-        "tsConfig": "apps/console/tsconfig.typecheck.json",
-        "assets": ["apps/console/src/favicon.ico", "apps/console/src/assets"]
+        "outputPath": "dist/apps/event-cms/tsc",
+        "main": "apps/event-cms/src/main.tsx",
+        "tsConfig": "apps/event-cms/tsconfig.typecheck.json",
+        "assets": [
+          "apps/event-cms/src/favicon.ico",
+          "apps/event-cms/src/assets"
+        ]
       }
     }
   },
