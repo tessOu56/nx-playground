@@ -39,7 +39,7 @@
       "@nx-playground/i18n": ["dist/libs/i18n"],
       "@nx-playground/ui-components": ["dist/libs/ui-components"],
       "@nx-playground/vue-motion": ["apps/vue-motion/src"],
-      "@nx-playground/angular-dashboard": ["apps/angular-dashboard/src"],
+      "@nx-playground/enterprise-admin": ["apps/enterprise-admin/src"],
       "@nx-playground/profile": ["apps/profile/src"]
     }
   },

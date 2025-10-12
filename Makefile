@@ -22,7 +22,7 @@ help: ## 顯示此幫助信息
 	@echo "  dev-event-cms     僅啟動 Event CMS 服務 (http://localhost:3002)"
 	@echo "  dev-profile       僅啟動 Profile 服務 (http://localhost:3003)"
 	@echo "  dev-vue           僅啟動 Vue Motion 服務 (http://localhost:8080)"
-	@echo "  dev-angular       僅啟動 Angular Dashboard 服務 (http://localhost:4200)"
+	@echo "  dev-enterprise    僅啟動 Enterprise Admin 服務 (http://localhost:4200)"
 	@echo "  setup        設置開發環境 (安裝依賴、環境變數)"
 	@echo "  stop         停止當前開發站台"
 	@echo "  restart      重啟所有開發服務"
@@ -104,9 +104,9 @@ dev-vue: ## 僅啟動 Vue Motion 服務
 	@echo "$(BLUE)[INFO]$(NC) 啟動 Vue Motion 服務 (http://localhost:8080)..."
 	@pnpm exec nx serve vue-motion
 
-dev-angular: ## 僅啟動 Angular Dashboard 服務
-	@echo "$(BLUE)[INFO]$(NC) 啟動 Angular Dashboard 服務 (http://localhost:4200)..."
-	@pnpm exec nx serve angular-dashboard
+dev-enterprise: ## 僅啟動 Enterprise Admin 服務
+	@echo "$(BLUE)[INFO]$(NC) 啟動 Enterprise Admin 服務 (http://localhost:4200)..."
+	@pnpm exec nx serve enterprise-admin
 
 dev-profile: ## 僅啟動 Profile 服務
 	@echo "$(BLUE)[INFO]$(NC) 啟動 Profile 服務 (http://localhost:3003)..."

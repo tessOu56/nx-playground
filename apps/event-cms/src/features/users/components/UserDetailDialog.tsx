@@ -10,7 +10,14 @@ import {
   TabsTrigger,
   TabsContent,
 } from '@nx-playground/ui-components';
-import { Mail, Phone, Calendar, Clock, Shield, User as UserIcon } from 'lucide-react';
+import {
+  Mail,
+  Phone,
+  Calendar,
+  Clock,
+  Shield,
+  User as UserIcon,
+} from 'lucide-react';
 import type { User } from '../types';
 import { ROLES, STATUSES } from '../types';
 
@@ -121,7 +128,9 @@ export function UserDetailDialog({
                   <UserIcon className='w-4 h-4' />
                   <span className='text-sm font-medium'>簡介</span>
                 </div>
-                <p className='text-gray-700 bg-gray-50 p-3 rounded'>{user.bio}</p>
+                <p className='text-gray-700 bg-gray-50 p-3 rounded'>
+                  {user.bio}
+                </p>
               </div>
             )}
           </TabsContent>
@@ -140,7 +149,9 @@ export function UserDetailDialog({
                       key={permission}
                       className='flex items-center justify-between p-3 bg-gray-50 rounded border border-gray-200'
                     >
-                      <span className='text-sm text-gray-700'>{permission}</span>
+                      <span className='text-sm text-gray-700'>
+                        {permission}
+                      </span>
                       <Badge variant='default'>已授權</Badge>
                     </div>
                   ))}
@@ -161,13 +172,15 @@ export function UserDetailDialog({
           <TabsContent value='activity' className='mt-4'>
             <div className='space-y-4'>
               <h3 className='font-semibold text-gray-700 mb-4'>近期活動</h3>
-              
+
               {/* Mock activity data */}
               <div className='space-y-3'>
                 <div className='flex items-start gap-3 p-3 bg-gray-50 rounded'>
                   <div className='w-2 h-2 bg-green-500 rounded-full mt-2'></div>
                   <div>
-                    <p className='text-sm font-medium text-gray-900'>登入系統</p>
+                    <p className='text-sm font-medium text-gray-900'>
+                      登入系統
+                    </p>
                     <p className='text-xs text-gray-500'>
                       {formatDate(user.lastLogin)}
                     </p>
@@ -177,7 +190,9 @@ export function UserDetailDialog({
                 <div className='flex items-start gap-3 p-3 bg-gray-50 rounded'>
                   <div className='w-2 h-2 bg-blue-500 rounded-full mt-2'></div>
                   <div>
-                    <p className='text-sm font-medium text-gray-900'>帳號創建</p>
+                    <p className='text-sm font-medium text-gray-900'>
+                      帳號創建
+                    </p>
                     <p className='text-xs text-gray-500'>
                       {formatDate(user.createdAt)}
                     </p>
@@ -188,8 +203,12 @@ export function UserDetailDialog({
                   <div className='flex items-start gap-3 p-3 bg-gray-50 rounded'>
                     <div className='w-2 h-2 bg-green-500 rounded-full mt-2'></div>
                     <div>
-                      <p className='text-sm font-medium text-gray-900'>帳號啟用</p>
-                      <p className='text-xs text-gray-500'>系統管理員審核通過</p>
+                      <p className='text-sm font-medium text-gray-900'>
+                        帳號啟用
+                      </p>
+                      <p className='text-xs text-gray-500'>
+                        系統管理員審核通過
+                      </p>
                     </div>
                   </div>
                 )}
@@ -205,4 +224,3 @@ export function UserDetailDialog({
     </Dialog>
   );
 }
-
