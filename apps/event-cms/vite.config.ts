@@ -31,6 +31,18 @@ export default defineConfig(() => ({
         __dirname,
         '../../libs/auth-client/src/index.ts'
       ),
+      '@nx-playground/charts': resolve(
+        __dirname,
+        '../../libs/charts/src/index.ts'
+      ),
+      '@nx-playground/charts/recharts': resolve(
+        __dirname,
+        '../../libs/charts/src/recharts/index.ts'
+      ),
+      '@nx-playground/charts/chartjs': resolve(
+        __dirname,
+        '../../libs/charts/src/chartjs/index.ts'
+      ),
       '@nx-playground/design-system': resolve(
         __dirname,
         '../../libs/design-system/src'

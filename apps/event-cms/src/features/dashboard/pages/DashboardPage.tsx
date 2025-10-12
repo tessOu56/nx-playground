@@ -33,6 +33,12 @@ import { SEO } from '../../../components/SEO';
 import { useDashboardTranslation } from '../hooks/useDashboardTranslation';
 import '../i18n';
 import { dashboardMetaData } from '../types';
+import {
+  EventTrendChart,
+  ParticipationChart,
+  TimeTrendChart,
+  StatusDistributionChart,
+} from '../components/charts';
 
 // Mock data for dashboard
 const mockStats = {
@@ -491,6 +497,19 @@ export const DashboardPage = () => {
               </div>
             </CardContent>
           </Card>
+        </div>
+
+        {/* Charts Section */}
+        <div className='mt-8'>
+          <h2 className='text-2xl font-bold text-text-primary mb-6'>
+            📊 數據分析
+          </h2>
+          <div className='grid grid-cols-1 lg:grid-cols-2 gap-6'>
+            <EventTrendChart />
+            <ParticipationChart />
+            <TimeTrendChart />
+            <StatusDistributionChart />
+          </div>
         </div>
       </div>
     </>
