@@ -1,7 +1,7 @@
 {
-  "name": "@nx-playground/events",
+  "name": "@nx-playground/event-portal",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "apps/events/src",
+  "sourceRoot": "apps/event-portal/src",
   "projectType": "application",
   "targets": {
     "build": {
@@ -9,14 +9,14 @@
       "outputs": ["{options.outputPath}"],
       "defaultConfiguration": "production",
       "options": {
-        "outputPath": "dist/apps/events"
+        "outputPath": "dist/apps/event-portal"
       },
       "configurations": {
         "development": {
-          "outputPath": "apps/events"
+          "outputPath": "apps/event-portal"
         },
         "production": {
-          "outputPath": "apps/events"
+          "outputPath": "apps/event-portal"
         }
       },
       "dependsOn": [
@@ -57,7 +57,7 @@
       "executor": "@nx/jest:jest",
       "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
       "options": {
-        "jestConfig": "apps/events/jest.config.ts",
+        "jestConfig": "apps/event-portal/jest.config.ts",
         "passWithNoTests": true
       },
       "configurations": {

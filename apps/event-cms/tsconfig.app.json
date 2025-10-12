@@ -58,6 +58,9 @@
     },
     {
       "path": "../../libs/i18n/tsconfig.lib.json"
+    },
+    {
+      "path": "../../libs/charts/tsconfig.lib.json"
     }
   ]
 }
