@@ -34,6 +34,9 @@ export * from './components/core/Tooltip/TooltipWithArrow';
 export * from './components/core/Separator/Separator';
 export * from './components/core/Carousel';
 export * from './components/composite/Sidebar';
+export * from './components/core/Dialog';
+export * from './components/core/Tabs';
+export * from './components/core/Alert';
 
 // 工具函數
 export * from './utils';

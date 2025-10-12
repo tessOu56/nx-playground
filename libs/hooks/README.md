@@ -7,7 +7,11 @@
 此函式庫已整合到 workspace，所有 React 專案可直接使用：
 
 ```tsx
-import { useDebounce, useLocalStorage, useThrottle } from '@nx-playground/hooks';
+import {
+  useDebounce,
+  useLocalStorage,
+  useThrottle,
+} from '@nx-playground/hooks';
 ```
 
 ## 🚀 可用的 Hooks
@@ -15,6 +19,7 @@ import { useDebounce, useLocalStorage, useThrottle } from '@nx-playground/hooks'
 ### 自定義 Hooks
 
 #### useDebounce
+
 防抖 hook，延遲更新值直到停止變化
 
 ```tsx
@@ -34,14 +39,15 @@ function SearchComponent() {
   return (
     <input
       value={searchTerm}
-      onChange={(e) => setSearchTerm(e.target.value)}
-      placeholder="搜索..."
+      onChange={e => setSearchTerm(e.target.value)}
+      placeholder='搜索...'
     />
   );
 }
 ```
 
 #### useThrottle
+
 節流 hook，限制函數執行頻率
 
 ```tsx
@@ -62,31 +68,34 @@ function ScrollComponent() {
 ```
 
 #### useLocalStorage
+
 本地存儲 hook，支援類型安全
 
 ```tsx
 import { useLocalStorage } from '@nx-playground/hooks';
 
 function SettingsComponent() {
-  const [settings, setSettings, removeSettings] = useLocalStorage('app-settings', {
-    theme: 'light',
-    language: 'zh-TW',
-  });
+  const [settings, setSettings, removeSettings] = useLocalStorage(
+    'app-settings',
+    {
+      theme: 'light',
+      language: 'zh-TW',
+    }
+  );
 
   return (
     <div>
       <button onClick={() => setSettings({ ...settings, theme: 'dark' })}>
         切換到深色模式
       </button>
-      <button onClick={removeSettings}>
-        重置設定
-      </button>
+      <button onClick={removeSettings}>重置設定</button>
     </div>
   );
 }
 ```
 
 #### useSessionStorage
+
 會話存儲 hook，類似 useLocalStorage 但使用 sessionStorage
 
 ```tsx
@@ -104,6 +113,7 @@ function FormComponent() {
 以下 hooks 直接從 usehooks-ts 導出，可直接使用：
 
 #### 狀態管理
+
 - `useBoolean` - 布爾值狀態管理
 - `useCounter` - 計數器
 - `useToggle` - 切換狀態
@@ -111,6 +121,7 @@ function FormComponent() {
 - `useStep` - 步驟管理
 
 #### DOM 和事件
+
 - `useEventListener` - 事件監聽器
 - `useClickAnyWhere` - 點擊任何地方
 - `useOnClickOutside` - 點擊外部
@@ -118,6 +129,7 @@ function FormComponent() {
 - `useScrollLock` - 鎖定滾動
 
 #### 瀏覽器 API
+
 - `useCopyToClipboard` - 複製到剪貼板
 - `useMediaQuery` - 媒體查詢
 - `useWindowSize` - 視窗大小
@@ -125,6 +137,7 @@ function FormComponent() {
 - `useReadLocalStorage` - 讀取本地存儲
 
 #### 工具
+
 - `useDebounceCallback` - 防抖回調
 - `useDebounceValue` - 防抖值
 - `useInterval` - 定時器
@@ -132,12 +145,14 @@ function FormComponent() {
 - `useCountdown` - 倒計時
 
 #### 生命週期
+
 - `useIsClient` - 檢測客戶端渲染
 - `useIsMounted` - 檢測組件掛載
 - `useUnmount` - 卸載時執行
 - `useIsomorphicLayoutEffect` - 同構 layout effect
 
 #### 其他
+
 - `useDocumentTitle` - 設置文檔標題
 - `useDarkMode` - 深色模式
 - `useTernaryDarkMode` - 三態深色模式
@@ -150,10 +165,10 @@ function FormComponent() {
 ### 組合多個 Hooks
 
 ```tsx
-import { 
-  useDebounce, 
-  useLocalStorage, 
-  useMediaQuery 
+import {
+  useDebounce,
+  useLocalStorage,
+  useMediaQuery,
 } from '@nx-playground/hooks';
 
 function ResponsiveSearch() {
@@ -169,9 +184,9 @@ function ResponsiveSearch() {
 
   return (
     <input
-      type="text"
+      type='text'
       value={search}
-      onChange={(e) => setSearch(e.target.value)}
+      onChange={e => setSearch(e.target.value)}
       placeholder={isMobile ? '搜索...' : '輸入關鍵字搜索...'}
     />
   );
@@ -186,13 +201,13 @@ import { useDebounce, useThrottle } from '@nx-playground/hooks';
 function OptimizedComponent() {
   const [input, setInput] = useState('');
   const [scrollPos, setScrollPos] = useState(0);
-  
+
   // 防抖：適合搜索、輸入驗證
   const debouncedInput = useDebounce(input, 500);
-  
+
   // 節流：適合滾動、窗口大小調整
   const throttledScroll = useThrottle(scrollPos, 100);
-  
+
   return <div>優化後的組件</div>;
 }
 ```
