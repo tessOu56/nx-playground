@@ -61,27 +61,27 @@ RUN echo "=== 開始建置專案: $PROJECT_NAME (配置: $BUILD_CONFIG) ===" && 
     ls -la /app/ && \
     echo "=== 檢查 apps 目錄 ===" && \
     ls -la /app/apps/ && \
-    if [ "$PROJECT_NAME" = "events" ] || [ "$PROJECT_NAME" = "@nx-playground/events" ]; then \
+    if [ "$PROJECT_NAME" = "event-portal" ] || [ "$PROJECT_NAME" = "@nx-playground/event-portal" ]; then \
         echo "=== 建置 Next.js 專案 (使用 Nx) ===" && \
         echo "=== 開始 Nx Next.js 建置 ===" && \
-        pnpm exec nx build events --configuration=$BUILD_CONFIG && \
+        pnpm exec nx build event-portal --configuration=$BUILD_CONFIG && \
         echo "=== Nx Next.js 建置完成 ===" && \
         echo "=== 檢查建置輸出 ===" && \
-        ls -la /app/apps/events/ && \
-        ls -la /app/apps/events/.next/ 2>/dev/null || echo "No .next directory" && \
-        if [ -d "/app/apps/events/.next" ]; then \
+        ls -la /app/apps/event-portal/ && \
+        ls -la /app/apps/event-portal/.next/ 2>/dev/null || echo "No .next directory" && \
+        if [ -d "/app/apps/event-portal/.next" ]; then \
             echo "=== .next 目錄內容 ===" && \
-            ls -la /app/apps/events/.next/ && \
+            ls -la /app/apps/event-portal/.next/ && \
             echo "=== 清理 Next.js 快取以減少映像檔大小 ===" && \
-            rm -rf /app/apps/events/.next/cache && \
+            rm -rf /app/apps/event-portal/.next/cache && \
             echo "=== 快取清理完成 ===" && \
-            du -sh /app/apps/events/.next/; \
+            du -sh /app/apps/event-portal/.next/; \
         fi; \
-    elif [ "$PROJECT_NAME" = "console" ] || [ "$PROJECT_NAME" = "@nx-playground/console" ]; then \
-        echo "=== 建置 Console Vite 專案 ===" && \
-        pnpm exec nx build console --configuration=$BUILD_CONFIG && \
-        echo "=== 檢查 Console 建置輸出 ===" && \
-        ls -la /app/dist/apps/console/; \
+    elif [ "$PROJECT_NAME" = "event-cms" ] || [ "$PROJECT_NAME" = "@nx-playground/event-cms" ]; then \
+        echo "=== 建置 Event CMS Vite 專案 ===" && \
+        pnpm exec nx build event-cms --configuration=$BUILD_CONFIG && \
+        echo "=== 檢查 Event CMS 建置輸出 ===" && \
+        ls -la /app/dist/apps/event-cms/; \
     else \
         echo "=== 建置其他 Vite 專案 ===" && \
         pnpm exec nx build "$PROJECT_NAME" --configuration=$BUILD_CONFIG && \
@@ -90,19 +90,19 @@ RUN echo "=== 開始建置專案: $PROJECT_NAME (配置: $BUILD_CONFIG) ===" && 
     fi && \
     echo "=== 建置完成，檢查輸出 ===" && \
     ls -la /app/apps/ && \
-    if [ "$PROJECT_NAME" = "events" ] || [ "$PROJECT_NAME" = "@nx-playground/events" ]; then \
+    if [ "$PROJECT_NAME" = "event-portal" ] || [ "$PROJECT_NAME" = "@nx-playground/event-portal" ]; then \
         echo "=== 檢查 Next.js 建構輸出 ===" && \
-        ls -la /app/apps/events/ && \
-        ls -la /app/apps/events/.next/ 2>/dev/null || echo "No .next directory found" && \
-        if [ -d "/app/apps/events/.next" ]; then \
+        ls -la /app/apps/event-portal/ && \
+        ls -la /app/apps/event-portal/.next/ 2>/dev/null || echo "No .next directory found" && \
+        if [ -d "/app/apps/event-portal/.next" ]; then \
             echo "=== .next 目錄內容 ===" && \
-            ls -la /app/apps/events/.next/ && \
+            ls -la /app/apps/event-portal/.next/ && \
             echo "=== 檢查 buildId ===" && \
-            cat /app/apps/events/.next/BUILD_ID 2>/dev/null || echo "No BUILD_ID found" && \
+            cat /app/apps/event-portal/.next/BUILD_ID 2>/dev/null || echo "No BUILD_ID found" && \
             echo "=== 最終清理 Next.js 快取 ===" && \
-            rm -rf /app/apps/events/.next/cache && \
+            rm -rf /app/apps/event-portal/.next/cache && \
             echo "=== 最終 .next 目錄大小 ===" && \
-            du -sh /app/apps/events/.next/; \
+            du -sh /app/apps/event-portal/.next/; \
         fi; \
     fi && \
     echo "=== 建置驗證完成 ==="
@@ -128,7 +128,7 @@ COPY --from=deps /app/package.json ./package.json
 # 條件性複製 node_modules（只有 Next.js 需要）
 # Next.js 需要 node_modules 來運行 SSR，Vite 只需要靜態檔案
 COPY --from=deps /app/node_modules ./node_modules
-RUN if [ "$PROJECT_NAME" = "events" ] || [ "$PROJECT_NAME" = "@nx-playground/events" ]; then \
+RUN if [ "$PROJECT_NAME" = "event-portal" ] || [ "$PROJECT_NAME" = "@nx-playground/event-portal" ]; then \
         echo "=== Next.js 專案：保留 node_modules 來運行 SSR ==="; \
     else \
         echo "=== Vite 專案：清理 node_modules，節省 741MB 空間 ===" && \
@@ -143,7 +143,7 @@ RUN mkdir -p ./apps ./dist
 # Next.js: 需要 apps 目錄中的 .next 等檔案
 # Vite: 需要 dist 目錄中的靜態檔案
 ARG PROJECT_NAME
-RUN if [ "$PROJECT_NAME" = "events" ] || [ "$PROJECT_NAME" = "@nx-playground/events" ]; then \
+RUN if [ "$PROJECT_NAME" = "event-portal" ] || [ "$PROJECT_NAME" = "@nx-playground/event-portal" ]; then \
         echo "=== Next.js 專案：準備複製 apps 目錄 ==="; \
     else \
         echo "=== Vite 專案：準備複製 apps 和 dist 目錄 ==="; \
@@ -153,7 +153,7 @@ RUN if [ "$PROJECT_NAME" = "events" ] || [ "$PROJECT_NAME" = "@nx-playground/eve
 COPY --from=builder /app/apps/$PROJECT_NAME ./apps/$PROJECT_NAME
 
 # 只有 Vite 專案才複製 dist 目錄
-RUN if [ "$PROJECT_NAME" != "events" ] && [ "$PROJECT_NAME" != "@nx-playground/events" ]; then \
+RUN if [ "$PROJECT_NAME" != "event-portal" ] && [ "$PROJECT_NAME" != "@nx-playground/event-portal" ]; then \
         echo "=== 複製 Vite 專案的 dist 目錄 ===" && \
         cp -r /app/dist ./dist 2>/dev/null || echo "Warning: dist directory not found, creating empty dist..."; \
     else \
@@ -162,7 +162,7 @@ RUN if [ "$PROJECT_NAME" != "events" ] && [ "$PROJECT_NAME" != "@nx-playground/e
 
 # 根據專案類型安裝必要的工具
 ARG PNPM_VERSION=10.13.1
-RUN if [ "$PROJECT_NAME" = "events" ] || [ "$PROJECT_NAME" = "@nx-playground/events" ]; then \
+RUN if [ "$PROJECT_NAME" = "event-portal" ] || [ "$PROJECT_NAME" = "@nx-playground/event-portal" ]; then \
         echo "=== 安裝 Next.js 運行時工具 ===" && \
         npm install -g pnpm@$PNPM_VERSION; \
     else \
@@ -173,16 +173,16 @@ RUN if [ "$PROJECT_NAME" = "events" ] || [ "$PROJECT_NAME" = "@nx-playground/eve
 ENV PROJECT_NAME=$PROJECT_NAME
 
 # 複製建置輸出並進行專案特定的優化
-RUN if [ "$PROJECT_NAME" = "events" ] || [ "$PROJECT_NAME" = "@nx-playground/events" ]; then \
+RUN if [ "$PROJECT_NAME" = "event-portal" ] || [ "$PROJECT_NAME" = "@nx-playground/event-portal" ]; then \
         echo "=== 複製 Next.js 建置檔案 ===" && \
-        cp -r /app/apps/events/.next ./.next && \
-        cp -r /app/apps/events/public ./public && \
-        cp /app/apps/events/next.config.mjs ./next.config.mjs && \
-        cp /app/apps/events/package.json ./package.json && \
+        cp -r /app/apps/event-portal/.next ./.next && \
+        cp -r /app/apps/event-portal/public ./public && \
+        cp /app/apps/event-portal/next.config.mjs ./next.config.mjs && \
+        cp /app/apps/event-portal/package.json ./package.json && \
         echo "=== Next.js 設定完成，保留 node_modules ==="; \
-    elif [ "$PROJECT_NAME" = "console" ] || [ "$PROJECT_NAME" = "@nx-playground/console" ]; then \
-        echo "=== 複製 Console Vite 建置檔案 ===" && \
-        cp -r ./dist/apps/console/* ./dist && \
+    elif [ "$PROJECT_NAME" = "event-cms" ] || [ "$PROJECT_NAME" = "@nx-playground/event-cms" ]; then \
+        echo "=== 複製 Event CMS Vite 建置檔案 ===" && \
+        cp -r ./dist/apps/event-cms/* ./dist && \
         cp ./dist/package.json ./package.json && \
         echo "=== 清理 node_modules 以減少 Vite 映像檔大小 ===" && \
         rm -rf ./node_modules && \
@@ -213,24 +213,24 @@ ENV VITE_PORT=3002
 # 啟動應用程式
 # 根據專案類型和建構輸出使用不同的啟動指令
 CMD ["sh", "-c", "echo 'Starting application for project: $PROJECT_NAME' && \
-    if [ \"$PROJECT_NAME\" = \"events\" ] || [ \"$PROJECT_NAME\" = \"@nx-playground/events\" ]; then \
+    if [ \"$PROJECT_NAME\" = \"event-portal\" ] || [ \"$PROJECT_NAME\" = \"@nx-playground/event-portal\" ]; then \
         echo 'Starting Next.js application as nextjs user...' && \
         su nextjs -c 'cd /app && \
             if [ -d \".next\" ]; then \
                 echo \"Starting Next.js SSR application...\" && \
                 pnpm exec next start; \
             else \
-                echo \"No .next directory found for events\" && \
+                echo \"No .next directory found for event-portal\" && \
                 exit 1; \
             fi'; \
-    elif [ \"$PROJECT_NAME\" = \"console\" ] || [ \"$PROJECT_NAME\" = \"@nx-playground/console\" ]; then \
-        echo 'Starting Console Vite application as viteuser...' && \
+    elif [ \"$PROJECT_NAME\" = \"event-cms\" ] || [ \"$PROJECT_NAME\" = \"@nx-playground/event-cms\" ]; then \
+        echo 'Starting Event CMS Vite application as viteuser...' && \
         su viteuser -c 'cd /app && \
             if [ -d \"dist\" ]; then \
-                echo \"Starting Console Vite application...\" && \
+                echo \"Starting Event CMS Vite application...\" && \
                 vite preview --host 0.0.0.0 --port ${VITE_PORT:-3002}; \
             else \
-                echo \"No dist directory found for console\" && \
+                echo \"No dist directory found for event-cms\" && \
                 exit 1; \
             fi'; \
     else \

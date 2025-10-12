@@ -36,11 +36,11 @@ RUN pnpm install --no-frozen-lockfile
 # Build 不操作 DB
 ENV NX_DAEMON=false
 ARG BUILD_CONFIG=production
-RUN pnpm exec nx build events --configuration=$BUILD_CONFIG --skip-nx-cache
-RUN pnpm exec nx build console --configuration=$BUILD_CONFIG --skip-nx-cache
+RUN pnpm exec nx build event-portal --configuration=$BUILD_CONFIG --skip-nx-cache
+RUN pnpm exec nx build event-cms --configuration=$BUILD_CONFIG --skip-nx-cache
 
-# ==================== Events Runner (Next.js with Node.js) ====================
-FROM node:18-alpine AS events-runner
+# ==================== Event Portal Runner (Next.js with Node.js) ====================
+FROM node:18-alpine AS event-portal-runner
 
 WORKDIR /app
 
@@ -50,10 +50,10 @@ ARG PNPM_VERSION=10.13.1
 RUN npm install -g pnpm@$PNPM_VERSION
 
 # Copy Next.js files
-COPY --from=builder /app/apps/events/.next ./.next
-COPY --from=builder /app/apps/events/public ./public
-COPY --from=builder /app/apps/events/next.config.mjs ./next.config.mjs
-COPY --from=builder /app/apps/events/package.json ./package.json
+COPY --from=builder /app/apps/event-portal/.next ./.next
+COPY --from=builder /app/apps/event-portal/public ./public
+COPY --from=builder /app/apps/event-portal/next.config.mjs ./next.config.mjs
+COPY --from=builder /app/apps/event-portal/package.json ./package.json
 
 # Copy and optimize node_modules
 COPY --from=deps /app/node_modules ./node_modules
@@ -73,13 +73,13 @@ EXPOSE 3000
 
 CMD ["su", "nextjs", "-c", "pnpm exec next start -p 3000"]
 
-# ==================== Console Runner (Static with Nginx) ====================
-FROM nginx:alpine AS console-runner
+# ==================== Event CMS Runner (Static with Nginx) ====================
+FROM nginx:alpine AS event-cms-runner
 
 RUN adduser --system --uid 1002 viteuser
 
 # Copy static files
-COPY --from=builder /app/dist/apps/console /usr/share/nginx/html
+COPY --from=builder /app/dist/apps/event-cms /usr/share/nginx/html
 
 # Create optimized nginx config for SPA
 RUN cat > /etc/nginx/conf.d/default.conf << 'EOF'
@@ -141,13 +141,13 @@ ARG PNPM_VERSION=10.13.1
 RUN npm install -g pnpm@$PNPM_VERSION --production
 
 # Copy Next.js files
-COPY --from=builder /app/apps/events/.next /app/events/.next
-COPY --from=builder /app/apps/events/public /app/events/public
-COPY --from=builder /app/apps/events/next.config.mjs /app/events/next.config.mjs
-COPY --from=builder /app/apps/events/package.json /app/events/package.json
+COPY --from=builder /app/apps/event-portal/.next /app/event-portal/.next
+COPY --from=builder /app/apps/event-portal/public /app/event-portal/public
+COPY --from=builder /app/apps/event-portal/next.config.mjs /app/event-portal/next.config.mjs
+COPY --from=builder /app/apps/event-portal/package.json /app/event-portal/package.json
 
-# Copy Console static files
-COPY --from=builder /app/dist/apps/console /app/console
+# Copy Event CMS static files
+COPY --from=builder /app/dist/apps/event-cms /app/event-cms
 
 # Copy minimal production dependencies for Next.js
 COPY --from=deps /app/node_modules /app/events/node_modules
@@ -160,7 +160,7 @@ RUN cd /app/events && \
     find node_modules -name "LICENSE*" -delete 2>/dev/null || true
 
 # Set ownership
-RUN chown -R nextjs /app/events
+RUN chown -R nextjs /app/event-portal
 
 # Create nginx config
 RUN cat > /etc/nginx/nginx.conf << 'EOF'
@@ -187,12 +187,12 @@ http {
 }
 EOF
 
-# Create nginx config for console
+# Create nginx config for event-cms
 RUN mkdir -p /etc/nginx/conf.d && \
-    cat > /etc/nginx/conf.d/console.conf << 'EOF'
+    cat > /etc/nginx/conf.d/event-cms.conf << 'EOF'
 server {
     listen 3000;
-    root /app/console;
+    root /app/event-cms;
     index index.html;
 
     gzip on;
@@ -218,17 +218,17 @@ EXPOSE 3000
 
 # Ultra-lightweight startup script
 CMD ["sh", "-c", "\
-    case \"${PROJECT_NAME:-events}\" in \
-        events) \
-            echo 'Starting Events (Next.js)' && \
-            cd /app/events && \
+    case \"${PROJECT_NAME:-event-portal}\" in \
+        event-portal) \
+            echo 'Starting Event Portal (Next.js)' && \
+            cd /app/event-portal && \
             su-exec nextjs pnpm exec next start -p 3000 \
             ;; \
-        console) \
-            echo 'Starting Console (Nginx)' && \
+        event-cms) \
+            echo 'Starting Event CMS (Nginx)' && \
             nginx -g 'daemon off;' \
             ;; \
         *) \
-            echo 'Error: PROJECT_NAME must be events or console' && exit 1 \
+            echo 'Error: PROJECT_NAME must be event-portal or event-cms' && exit 1 \
             ;; \
     esac"]
