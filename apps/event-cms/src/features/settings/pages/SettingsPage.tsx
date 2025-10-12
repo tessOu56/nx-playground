@@ -1,14 +1,25 @@
-import { LanguageSwitcher ,
+import {
+  LanguageSwitcher,
   Card,
   CardContent,
   CardHeader,
   CardTitle,
+  Tabs,
+  TabsList,
+  TabsTrigger,
+  TabsContent,
 } from '@nx-playground/ui-components';
 import * as React from 'react';
 
 import { ColorModeSwitcher } from '../../../components/ColorModeSwitcher';
 import { ThemeSwitcher } from '../../../components/ThemeSwitcher';
 import { useSettingsTranslation } from '../hooks/useSettingsTranslation';
+import {
+  NotificationSettings,
+  SecuritySettings,
+  SystemSettings,
+  ProfileSettings,
+} from '../components';
 
 import '../i18n';
 
@@ -24,50 +35,83 @@ export const SettingsPage: React.FC = () => {
         <p className='text-gray-600'>{t('settings.description') as string}</p>
       </div>
 
-      <Card>
-        <CardHeader>
-          <CardTitle>{t('settings.appearance.title') as string}</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className='space-y-4'>
-            <div className='flex items-center justify-between'>
-              <div>
-                <h3 className='font-medium'>
-                  {t('settings.appearance.theme.title') as string}
-                </h3>
-                <p className='text-sm text-gray-500'>
-                  {t('settings.appearance.theme.description') as string}
-                </p>
-              </div>
-              <ThemeSwitcher />
-            </div>
+      <Tabs defaultValue='appearance' className='space-y-6'>
+        <TabsList className='grid w-full grid-cols-5'>
+          <TabsTrigger value='appearance'>外觀</TabsTrigger>
+          <TabsTrigger value='profile'>個人資料</TabsTrigger>
+          <TabsTrigger value='notifications'>通知</TabsTrigger>
+          <TabsTrigger value='security'>安全</TabsTrigger>
+          <TabsTrigger value='system'>系統</TabsTrigger>
+        </TabsList>
 
-            <div className='flex items-center justify-between'>
-              <div>
-                <h3 className='font-medium'>
-                  {t('settings.appearance.colorMode.title') as string}
-                </h3>
-                <p className='text-sm text-gray-500'>
-                  {t('settings.appearance.colorMode.description') as string}
-                </p>
-              </div>
-              <ColorModeSwitcher />
-            </div>
+        {/* Appearance Tab */}
+        <TabsContent value='appearance'>
+          <Card>
+            <CardHeader>
+              <CardTitle>{t('settings.appearance.title') as string}</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className='space-y-4'>
+                <div className='flex items-center justify-between'>
+                  <div>
+                    <h3 className='font-medium'>
+                      {t('settings.appearance.theme.title') as string}
+                    </h3>
+                    <p className='text-sm text-gray-500'>
+                      {t('settings.appearance.theme.description') as string}
+                    </p>
+                  </div>
+                  <ThemeSwitcher />
+                </div>
 
-            <div className='flex items-center justify-between'>
-              <div>
-                <h3 className='font-medium'>
-                  {t('settings.appearance.language.title') as string}
-                </h3>
-                <p className='text-sm text-gray-500'>
-                  {t('settings.appearance.language.description') as string}
-                </p>
+                <div className='flex items-center justify-between'>
+                  <div>
+                    <h3 className='font-medium'>
+                      {t('settings.appearance.colorMode.title') as string}
+                    </h3>
+                    <p className='text-sm text-gray-500'>
+                      {t('settings.appearance.colorMode.description') as string}
+                    </p>
+                  </div>
+                  <ColorModeSwitcher />
+                </div>
+
+                <div className='flex items-center justify-between'>
+                  <div>
+                    <h3 className='font-medium'>
+                      {t('settings.appearance.language.title') as string}
+                    </h3>
+                    <p className='text-sm text-gray-500'>
+                      {t('settings.appearance.language.description') as string}
+                    </p>
+                  </div>
+                  <LanguageSwitcher variant='dropdown' />
+                </div>
               </div>
-              <LanguageSwitcher variant='dropdown' />
-            </div>
-          </div>
-        </CardContent>
-      </Card>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        {/* Profile Tab */}
+        <TabsContent value='profile'>
+          <ProfileSettings />
+        </TabsContent>
+
+        {/* Notifications Tab */}
+        <TabsContent value='notifications'>
+          <NotificationSettings />
+        </TabsContent>
+
+        {/* Security Tab */}
+        <TabsContent value='security'>
+          <SecuritySettings />
+        </TabsContent>
+
+        {/* System Tab */}
+        <TabsContent value='system'>
+          <SystemSettings />
+        </TabsContent>
+      </Tabs>
     </div>
   );
 };

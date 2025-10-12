@@ -1,4 +1,4 @@
-import { Users } from '../../features';
+import { Users, UsersPage } from '../../features';
 import { DashboardLayout } from '../../layouts';
 
 export const usersRoutes = [
@@ -8,7 +8,7 @@ export const usersRoutes = [
     children: [
       {
         index: true,
-        element: <Users />,
+        element: <UsersPage />,
       },
     ],
   },
