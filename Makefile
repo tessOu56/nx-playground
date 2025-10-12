@@ -1,6 +1,6 @@
 # ==================== NX Playground 本地開發環境管理 Makefile ====================
 
-.PHONY: help dev dev-events dev-console setup stop restart logs clean build status prod test test-mock test-react test-i18n test-coverage test-watch test-affected
+.PHONY: help dev dev-event-portal dev-event-cms setup stop restart logs clean build status prod test test-mock test-react test-i18n test-coverage test-watch test-affected
 
 # 預設目標
 .DEFAULT_GOAL := help
@@ -17,12 +17,12 @@ help: ## 顯示此幫助信息
 	@echo "$(BLUE)NX Playground 本地開發環境管理工具$(NC)"
 	@echo ""
 	@echo "$(YELLOW)🚀 開發命令:$(NC)"
-	@echo "  dev          啟動所有服務 (Events + Console)"
-	@echo "  dev-events   僅啟動 Events 服務 (http://localhost:3000)"
-	@echo "  dev-console  僅啟動 Console 服務 (http://localhost:3002)"
-	@echo "  dev-profile  僅啟動 Profile 服務 (http://localhost:3003)"
-	@echo "  dev-vue      僅啟動 Vue Motion 服務 (http://localhost:8080)"
-	@echo "  dev-angular  僅啟動 Angular Dashboard 服務 (http://localhost:4200)"
+	@echo "  dev               啟動所有服務 (Event Portal + Event CMS)"
+	@echo "  dev-event-portal  僅啟動 Event Portal 服務 (http://localhost:3000)"
+	@echo "  dev-event-cms     僅啟動 Event CMS 服務 (http://localhost:3002)"
+	@echo "  dev-profile       僅啟動 Profile 服務 (http://localhost:3003)"
+	@echo "  dev-vue           僅啟動 Vue Motion 服務 (http://localhost:8080)"
+	@echo "  dev-angular       僅啟動 Angular Dashboard 服務 (http://localhost:4200)"
 	@echo "  setup        設置開發環境 (安裝依賴、環境變數)"
 	@echo "  stop         停止當前開發站台"
 	@echo "  restart      重啟所有開發服務"
@@ -61,7 +61,7 @@ help: ## 顯示此幫助信息
 	@echo "$(GREEN)💡 快速開始:$(NC)"
 	@echo "  本地開發:"
 	@echo "    1. 首次使用: make setup (設置環境)"
-	@echo "    2. 啟動開發: make dev (或 make dev-events / make dev-console)"
+	@echo "    2. 啟動開發: make dev (或 make dev-event-portal / make dev-event-cms)"
 	@echo "    3. 查看日誌: make logs"
 	@echo "    4. 停止服務: make stop"
 	@echo "  Docker 開發:"
@@ -72,31 +72,33 @@ help: ## 顯示此幫助信息
 	@echo "$(BLUE)📖 注意事項:$(NC)"
 	@echo "  - 本地開發: 需要 Node.js 18+ 和 pnpm"
 	@echo "  - Docker 開發: 需要 Docker 和 Docker Compose (使用優化版本)"
-	@echo "  - 服務網址: Events (http://localhost:3000), Console (http://localhost:3002)"
+	@echo "  - 服務網址: Event Portal (http://localhost:3000), Event CMS (http://localhost:3002)"
 	@echo "  - Docker 版本: 已優化建構流程，支援靜態導出和智能啟動"
 
 # ==================== 本地開發命令 ====================
 
-dev: ## 啟動所有服務 (Events + Console)
+dev: ## 啟動所有服務 (Event Portal + Event CMS + Profile)
 	@echo "$(BLUE)[INFO]$(NC) 啟動 NX Playground 開發環境..."
 	@$(MAKE) setup
-	@echo "$(BLUE)[INFO]$(NC) 啟動 Events 和 Console 服務..."
-	@$(MAKE) dev-events &
+	@echo "$(BLUE)[INFO]$(NC) 啟動 Event Portal, Event CMS 和 Profile 服務..."
+	@$(MAKE) dev-event-portal &
 	@sleep 3
-	@$(MAKE) dev-console &
+	@$(MAKE) dev-event-cms &
+	@sleep 3
+	@$(MAKE) dev-profile &
 	@echo "$(GREEN)[SUCCESS]$(NC) 所有服務已啟動！"
 	@echo "$(YELLOW)📱 服務網址:$(NC)"
-	@echo "  Events:  http://localhost:3000"
-	@echo "  Console: http://localhost:3002"
-	@echo "  Profile: http://localhost:3003"
+	@echo "  Event Portal: http://localhost:3000"
+	@echo "  Event CMS:    http://localhost:3002"
+	@echo "  Profile:      http://localhost:3003"
 
-dev-events: ## 僅啟動 Events 服務
-	@echo "$(BLUE)[INFO]$(NC) 啟動 Events 服務 (http://localhost:3000)..."
-	@pnpm exec nx serve @nx-playground/events --port 3000
+dev-event-portal: ## 僅啟動 Event Portal 服務
+	@echo "$(BLUE)[INFO]$(NC) 啟動 Event Portal 服務 (http://localhost:3000)..."
+	@pnpm exec nx serve @nx-playground/event-portal
 
-dev-console: ## 僅啟動 Console 服務
-	@echo "$(BLUE)[INFO]$(NC) 啟動 Console 服務 (http://localhost:3002)..."
-	@pnpm exec nx serve @nx-playground/console --port 3002
+dev-event-cms: ## 僅啟動 Event CMS 服務
+	@echo "$(BLUE)[INFO]$(NC) 啟動 Event CMS 服務 (http://localhost:3002)..."
+	@pnpm exec nx serve @nx-playground/event-cms
 
 dev-vue: ## 僅啟動 Vue Motion 服務
 	@echo "$(BLUE)[INFO]$(NC) 啟動 Vue Motion 服務 (http://localhost:8080)..."

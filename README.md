@@ -12,8 +12,8 @@
 
 NX Playground 是一個展示現代前端技術棧的實驗性 Monorepo 專案，包含：
 - 🔐 完整的認證系統
-- 📊 管理控制台
-- 🎫 活動管理平台
+- 📊 活動內容管理系統 (CMS)
+- 🎫 公開活動展示平台
 - 🎨 設計系統和 UI 組件庫
 - 🧩 跨框架整合 (React, Next.js, Angular, Vue)
 
@@ -29,69 +29,70 @@ make setup      # 安裝依賴並設置環境
 
 ```bash
 # 啟動單一服務
-make dev-events   # Events 服務
-make dev-console  # Console 服務
-make dev-profile  # Profile 技術展示
+make dev-event-portal  # Event Portal 服務
+make dev-event-cms     # Event CMS 服務
+make dev-profile       # Profile 技術展示
 
 # 或使用 pnpm
-pnpm dev:events
-pnpm dev:console
+pnpm dev:event-portal
+pnpm dev:event-cms
 pnpm dev:profile
 ```
 
 ## 📋 常用命令
 
-| 命令               | 說明                   |
-| ------------------ | ---------------------- |
-| `make setup`       | 首次設置開發環境       |
-| `make dev`         | 啟動所有服務           |
-| `make dev-events`  | 啟動 Events 服務       |
-| `make dev-console` | 啟動 Console 服務      |
-| `make dev-vue`     | 啟動 Vue Motion 服務   |
-| `make dev-angular` | 啟動 Angular Dashboard |
-| `make dev-profile` | 啟動 Profile 技術展示  |
-| `make stop`        | 停止所有服務           |
-| `make logs`        | 查看日誌               |
-| `make help`        | 查看所有命令           |
+| 命令                    | 說明                   |
+| ----------------------- | ---------------------- |
+| `make setup`            | 首次設置開發環境       |
+| `make dev`              | 啟動所有服務           |
+| `make dev-event-portal` | 啟動 Event Portal 服務 |
+| `make dev-event-cms`    | 啟動 Event CMS 服務    |
+| `make dev-profile`      | 啟動 Profile 技術展示  |
+| `make dev-vue`          | 啟動 Vue Motion 服務   |
+| `make dev-angular`      | 啟動 Enterprise Admin  |
+| `make stop`             | 停止所有服務           |
+| `make logs`             | 查看日誌               |
+| `make help`             | 查看所有命令           |
 
 ## 🌐 服務網址
 
-- **Events**: http://localhost:3000
-- **Console**: http://localhost:3002
-- **Profile**: http://localhost:3003
-- **Vue Motion**: http://localhost:8080
-- **Angular Dashboard**: http://localhost:4200
+- **Event Portal** (活動展示): http://localhost:3000
+- **Event CMS** (活動管理): http://localhost:3002
+- **Profile** (技術展示): http://localhost:3003
+- **Vue Motion** (動畫實驗): http://localhost:8080
+- **Enterprise Admin** (企業管理): http://localhost:4200
 
 ## 📦 專案結構
 
 ```
 nx-playground/
-├── apps/                   # 應用程式
-│   ├── auth/              # 🔐 認證服務 (React + Vite, Port 3000)
-│   ├── console/           # 📊 控制台 (React + Vite, Port 3002)
-│   ├── events/            # 🎫 活動管理 (Next.js 15, Port 3000)
-│   ├── profile/           # 🎯 技術展示 (React + Vite, Port 3003)
-│   └── angular-dashboard/ # 📈 Angular Dashboard (Angular 20, Port 4200)
-├── libs/                   # 共享函式庫
-│   ├── api-client/        # API 客戶端 (React Query + Orval)
-│   ├── auth-client/       # 認證客戶端 (SSO 整合)
-│   ├── design-system/     # 設計系統 (Style Dictionary)
-│   ├── hooks/             # React Hooks (usehooks-ts + custom)
-│   ├── i18n/              # 國際化 (i18next + next-intl)
-│   ├── ui-components/     # UI 組件庫 (Radix UI + Tailwind)
-│   └── vue-motion/        # Vue 動畫效果庫 (GSAP + Three.js)
-├── templates/              # 專案模板
-│   └── react-template/    # React 專案快速建立模板
-├── scripts/                # 自動化腳本
-└── docs/                   # 文檔
+├── apps/                    # 應用程式
+│   ├── auth/               # 🔐 認證服務 (React + Vite)
+│   ├── event-cms/          # 📊 活動 CMS (React + Vite, Port 3002)
+│   ├── event-portal/       # 🎫 活動展示 (Next.js 15, Port 3000)
+│   ├── profile/            # 🎯 技術展示 (React + Vite, Port 3003)
+│   ├── enterprise-admin/   # 📈 企業管理 (Angular 20, Port 4200)
+│   └── vue-motion/         # 🎨 動畫實驗 (Vue 3, Port 8080)
+├── libs/                    # 共享函式庫
+│   ├── api-client/         # API 客戶端 (React Query + Orval)
+│   ├── auth-client/        # 認證客戶端 (SSO 整合)
+│   ├── charts/             # 圖表庫 (Recharts + Chart.js)
+│   ├── design-system/      # 設計系統 (Style Dictionary)
+│   ├── hooks/              # React Hooks (usehooks-ts + custom)
+│   ├── i18n/               # 國際化 (i18next + next-intl)
+│   └── ui-components/      # UI 組件庫 (Radix UI + Tailwind)
+├── templates/               # 專案模板
+│   └── react-template/     # React 專案快速建立模板
+├── scripts/                 # 自動化腳本
+└── docs/                    # 文檔
 ```
 
 ## 🎯 技術棧
 
 ### 前端框架
-- **React 19** - auth, console, profile
-- **Next.js 15** - events (App Router + SSG)
-- **Angular 20** - angular-dashboard
+- **React 19** - auth, event-cms, profile
+- **Next.js 15** - event-portal (App Router + SSG)
+- **Angular 20** - enterprise-admin
 - **Vue 3** - vue-motion
 
 ### Monorepo 工具
