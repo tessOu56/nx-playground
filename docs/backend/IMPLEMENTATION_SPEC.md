@@ -5,6 +5,7 @@
 創建一個 NestJS 後端 API Server，支援 event-cms 和 event-portal 的業務需求。
 
 ### 定位
+
 - **用途**: Demo 和技術展示，不處理真實用戶數據
 - **範圍**: 完整的 CRUD API，無複雜業務邏輯
 - **資料庫**: SQLite (dev), PostgreSQL (prod)
@@ -264,6 +265,7 @@ model Session {
 ### Events Module
 
 #### events.entity.ts
+
 ```typescript
 import { ApiProperty } from '@nestjs/swagger';
 
@@ -304,9 +306,16 @@ export class Event {
 ```
 
 #### create-event.dto.ts
+
 ```typescript
 import { ApiProperty } from '@nestjs/swagger';
-import { IsString, IsDateString, IsOptional, IsNumber, IsEnum } from 'class-validator';
+import {
+  IsString,
+  IsDateString,
+  IsOptional,
+  IsNumber,
+  IsEnum,
+} from 'class-validator';
 
 export class CreateEventDto {
   @ApiProperty()
@@ -349,6 +358,7 @@ export class CreateEventDto {
 ```
 
 #### update-event.dto.ts
+
 ```typescript
 import { PartialType } from '@nestjs/swagger';
 import { CreateEventDto } from './create-event.dto';
@@ -357,6 +367,7 @@ export class UpdateEventDto extends PartialType(CreateEventDto) {}
 ```
 
 #### events.controller.ts
+
 ```typescript
 import {
   Controller,
@@ -394,7 +405,7 @@ export class EventsController {
   async findAll(
     @Query('status') status?: string,
     @Query('page') page?: number,
-    @Query('limit') limit?: number,
+    @Query('limit') limit?: number
   ) {
     return this.eventsService.findAll({ status, page, limit });
   }
@@ -423,7 +434,7 @@ export class EventsController {
   @ApiResponse({ status: 404, description: 'Event not found' })
   async update(
     @Param('id') id: string,
-    @Body() updateEventDto: UpdateEventDto,
+    @Body() updateEventDto: UpdateEventDto
   ) {
     return this.eventsService.update(id, updateEventDto);
   }
@@ -440,6 +451,7 @@ export class EventsController {
 ```
 
 #### events.service.ts
+
 ```typescript
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
@@ -514,6 +526,7 @@ export class EventsService {
 ```
 
 #### events.module.ts
+
 ```typescript
 import { Module } from '@nestjs/common';
 import { EventsController } from './events.controller';
@@ -533,6 +546,7 @@ export class EventsModule {}
 ## 🔧 自動化腳本
 
 ### scripts/sync-openapi.sh
+
 ```bash
 #!/bin/bash
 # 自動同步 OpenAPI 規格到前端
@@ -561,6 +575,7 @@ echo "✅ OpenAPI sync完成！"
 ```
 
 ### scripts/generate-openapi.js
+
 ```javascript
 const { NestFactory } = require('@nestjs/core');
 const { SwaggerModule, DocumentBuilder } = require('@nestjs/swagger');
@@ -577,9 +592,9 @@ async function generate() {
     .build();
 
   const document = SwaggerModule.createDocument(app, config);
-  
+
   writeFileSync('./openapi.json', JSON.stringify(document, null, 2));
-  
+
   console.log('✅ OpenAPI spec generated!');
   process.exit(0);
 }
@@ -592,6 +607,7 @@ generate();
 ## 🌍 環境變數
 
 ### .env (開發)
+
 ```env
 # Database
 DATABASE_URL="file:./dev.db"
@@ -608,6 +624,7 @@ PRISMA_SCHEMA_PATH=apps/api-server/prisma/schema.prisma
 ```
 
 ### .env.production
+
 ```env
 DATABASE_URL="postgresql://user:password@host:5432/nx_playground"
 PORT=3001
@@ -620,6 +637,7 @@ CORS_ORIGIN=https://cms.example.com,https://portal.example.com
 ## 🐳 Docker 配置
 
 ### Dockerfile
+
 ```dockerfile
 FROM node:20-alpine AS builder
 
@@ -655,6 +673,7 @@ CMD ["node", "main.js"]
 ## 🚀 開發流程
 
 ### 1. 初始設定
+
 ```bash
 # 安裝 NestJS CLI
 pnpm add -D @nestjs/cli
@@ -673,6 +692,7 @@ npx prisma init
 ```
 
 ### 2. 開發新 API
+
 ```bash
 # 1. 更新 Prisma schema
 # 2. 遷移資料庫
@@ -692,6 +712,7 @@ nx openapi:generate api-server
 ```
 
 ### 3. 測試
+
 ```bash
 # Unit tests
 nx test api-server
@@ -710,4 +731,3 @@ curl http://localhost:3001/events
 - [API 設計](./API_DESIGN.md)
 - [資料庫設計](./DATABASE_DESIGN.md)
 - [專案規格](../PROJECT_SPECIFICATION.md)
-

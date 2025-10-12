@@ -21,12 +21,12 @@ Nx 預設生成器創建的配置**不符合本專案的需求**：
 
 根據你要創建的 library 類型選擇：
 
-| 類型 | 參考專案 | 特點 |
-|------|---------|------|
-| **UI 組件庫** | `libs/ui-components` | Vite + dts + Radix UI |
-| **React Hooks** | `libs/hooks` | TypeScript + TSC |
-| **圖表組件** | `libs/charts` | Vite + 雙軌制 |
-| **工具函數** | `libs/i18n` | Vite + React |
+| 類型            | 參考專案             | 特點                  |
+| --------------- | -------------------- | --------------------- |
+| **UI 組件庫**   | `libs/ui-components` | Vite + dts + Radix UI |
+| **React Hooks** | `libs/hooks`         | TypeScript + TSC      |
+| **圖表組件**    | `libs/charts`        | Vite + 雙軌制         |
+| **工具函數**    | `libs/i18n`          | Vite + React          |
 
 ### Step 2: 複製結構
 
@@ -41,20 +41,21 @@ cd libs/your-new-lib
 ### Step 3: 更新配置文件
 
 #### 3.1 project.json
+
 ```json
 {
-  "name": "your-new-lib",  // 更新名稱
-  "sourceRoot": "libs/your-new-lib/src",  // 更新路徑
+  "name": "your-new-lib", // 更新名稱
+  "sourceRoot": "libs/your-new-lib/src", // 更新路徑
   "targets": {
     "build": {
       "options": {
-        "outputPath": "dist/libs/your-new-lib",  // 更新輸出路徑
-        "tsConfig": "libs/your-new-lib/tsconfig.lib.json"  // 更新 tsconfig 路徑
+        "outputPath": "dist/libs/your-new-lib", // 更新輸出路徑
+        "tsConfig": "libs/your-new-lib/tsconfig.lib.json" // 更新 tsconfig 路徑
       }
     },
     "lint": {
       "options": {
-        "lintFilePatterns": ["libs/your-new-lib/src/**/*.{ts,tsx}"]  // 更新 lint 路徑
+        "lintFilePatterns": ["libs/your-new-lib/src/**/*.{ts,tsx}"] // 更新 lint 路徑
       }
     },
     "typecheck": {
@@ -69,6 +70,7 @@ cd libs/your-new-lib
 ```
 
 #### 3.2 package.json
+
 ```json
 {
   "name": "@nx-playground/your-new-lib",
@@ -78,6 +80,7 @@ cd libs/your-new-lib
 ```
 
 #### 3.3 tsconfig.lib.json
+
 ```json
 {
   "extends": "../../tsconfig.base.json",
@@ -95,6 +98,7 @@ cd libs/your-new-lib
 ```
 
 #### 3.4 vite.config.ts
+
 ```typescript
 import * as path from 'path';
 import { nxCopyAssetsPlugin } from '@nx/vite/plugins/nx-copy-assets.plugin';
@@ -105,7 +109,7 @@ import dts from 'vite-plugin-dts';
 
 export default defineConfig(() => ({
   root: __dirname,
-  cacheDir: '../../node_modules/.vite/libs/your-new-lib',  // 更新
+  cacheDir: '../../node_modules/.vite/libs/your-new-lib', // 更新
   plugins: [
     react(),
     nxViteTsPaths(),
@@ -117,10 +121,10 @@ export default defineConfig(() => ({
     }),
   ],
   build: {
-    outDir: '../../dist/libs/your-new-lib',  // 更新
+    outDir: '../../dist/libs/your-new-lib', // 更新
     lib: {
       entry: 'src/index.ts',
-      name: '@nx-playground/your-new-lib',  // 更新
+      name: '@nx-playground/your-new-lib', // 更新
       fileName: 'index',
       formats: ['es' as const, 'cjs' as const],
     },
@@ -134,6 +138,7 @@ export default defineConfig(() => ({
 ### Step 4: 更新全局配置
 
 #### 4.1 tsconfig.base.json
+
 ```json
 {
   "paths": {
@@ -163,11 +168,11 @@ nx build your-new-lib
 
 ### Step 1: 選擇參考專案
 
-| App 類型 | 參考專案 | 說明 |
-|---------|---------|------|
-| **React + Vite** | `apps/profile` 或 `apps/event-cms` | 簡單清晰 |
-| **Next.js** | `apps/event-portal` | App Router |
-| **Angular** | `apps/enterprise-admin` | 企業級 |
+| App 類型         | 參考專案                           | 說明       |
+| ---------------- | ---------------------------------- | ---------- |
+| **React + Vite** | `apps/profile` 或 `apps/event-cms` | 簡單清晰   |
+| **Next.js**      | `apps/event-portal`                | App Router |
+| **Angular**      | `apps/enterprise-admin`            | 企業級     |
 
 ### Step 2: 複製並修改
 
@@ -218,7 +223,7 @@ function MyPage() {
         <CardTitle>標題</CardTitle>
       </CardHeader>
       <CardContent>
-        <Button variant="primary">按鈕</Button>
+        <Button variant='primary'>按鈕</Button>
       </CardContent>
     </Card>
   );
@@ -251,20 +256,20 @@ function MyComponent() {
   const modal = useModal();
   const [search, setSearch] = useState('');
   const debouncedSearch = useDebounce(search, 300);
-  
+
   return <div>...</div>;
 }
 ```
 
 ### 創建新 Hook
 
-```typescript
+````typescript
 // libs/hooks/src/useYourHook.ts
 import { useState, useCallback } from 'react';
 
 /**
  * useYourHook - 功能描述
- * 
+ *
  * @example
  * ```tsx
  * function MyComponent() {
@@ -275,14 +280,14 @@ import { useState, useCallback } from 'react';
  */
 export function useYourHook() {
   const [value, setValue] = useState('');
-  
+
   const handleChange = useCallback((newValue: string) => {
     setValue(newValue);
   }, []);
-  
+
   return { value, setValue: handleChange };
 }
-```
+````
 
 ---
 
@@ -294,7 +299,7 @@ export function useYourHook() {
 import { Recharts, ChartJS } from '@nx-playground/charts';
 
 // Recharts - 適合簡單圖表
-<Recharts.LineChart 
+<Recharts.LineChart
   data={data}
   height={300}
   showGrid={true}
@@ -317,6 +322,7 @@ import { Recharts, ChartJS } from '@nx-playground/charts';
 **原因**: tsconfig paths 配置錯誤
 
 **解決**:
+
 1. 檢查 `tsconfig.base.json` 是否有正確的 path
 2. 確認路徑指向 `dist/libs/...` 或 `apps/.../src`
 3. 重新構建依賴: `nx build dependency-lib`
@@ -326,6 +332,7 @@ import { Recharts, ChartJS } from '@nx-playground/charts';
 **原因**: tsconfig include 設定錯誤
 
 **解決**:
+
 1. 檢查 `tsconfig.lib.json` 的 include
 2. 確保包含所有 `src/**/*.ts` 和 `src/**/*.tsx`
 3. 檢查 exclude 沒有誤刪文件
@@ -335,6 +342,7 @@ import { Recharts, ChartJS } from '@nx-playground/charts';
 **原因**: 缺少 Nx plugins 或配置錯誤
 
 **解決**:
+
 1. 確認有 `nxViteTsPaths()` plugin
 2. 確認有 `dts()` plugin（如果需要類型定義）
 3. 檢查 external dependencies 設定
@@ -344,6 +352,7 @@ import { Recharts, ChartJS } from '@nx-playground/charts';
 **原因**: 循環依賴或路徑錯誤
 
 **解決**:
+
 1. 檢查是否有循環依賴
 2. 使用 `nx graph` 查看依賴圖
 3. 確認 import 路徑正確
@@ -353,12 +362,14 @@ import { Recharts, ChartJS } from '@nx-playground/charts';
 ## 🎯 編碼規範
 
 ### 文件命名
+
 - 組件: PascalCase `Button.tsx`
 - Hooks: camelCase `useModal.ts`
 - Utils: camelCase `formatDate.ts`
 - Types: PascalCase `User.ts` or camelCase `types.ts`
 
 ### Import 順序
+
 ```tsx
 // 1. React/框架
 import { useState } from 'react';
@@ -374,6 +385,7 @@ import { MyComponent } from './components';
 ```
 
 ### 組件結構
+
 ```tsx
 // 1. Imports
 import { ... } from '...';
@@ -387,10 +399,10 @@ interface MyComponentProps {
 export function MyComponent({ ... }: MyComponentProps) {
   // 3.1 Hooks
   const [state, setState] = useState();
-  
+
   // 3.2 Handlers
   const handleClick = () => { ... };
-  
+
   // 3.3 Render
   return ( ... );
 }
@@ -470,14 +482,14 @@ git commit -m "feat: add your feature"
 
 **最佳學習方式**: 閱讀現有代碼
 
-| 學習目標 | 參考專案 |
-|---------|---------|
-| UI 組件開發 | `libs/ui-components/src/components/core/Button/` |
-| Custom Hook | `libs/hooks/src/useModal.ts` |
-| 完整頁面 | `apps/event-cms/src/features/users/pages/UsersPage.tsx` |
+| 學習目標    | 參考專案                                                          |
+| ----------- | ----------------------------------------------------------------- |
+| UI 組件開發 | `libs/ui-components/src/components/core/Button/`                  |
+| Custom Hook | `libs/hooks/src/useModal.ts`                                      |
+| 完整頁面    | `apps/event-cms/src/features/users/pages/UsersPage.tsx`           |
 | Dialog 使用 | `apps/event-cms/src/features/users/components/UserEditDialog.tsx` |
-| 圖表使用 | `apps/event-cms/src/features/dashboard/components/charts/` |
-| Tabs 使用 | `apps/event-cms/src/features/settings/pages/SettingsPage.tsx` |
+| 圖表使用    | `apps/event-cms/src/features/dashboard/components/charts/`        |
+| Tabs 使用   | `apps/event-cms/src/features/settings/pages/SettingsPage.tsx`     |
 
 ---
 
@@ -525,4 +537,3 @@ cat tsconfig.base.json | grep your-lib
 - [當前狀態](./CURRENT_STATUS.md)
 - [快速參考](./QUICK_REFERENCE.md)
 - [後端規格](./backend/IMPLEMENTATION_SPEC.md)
-

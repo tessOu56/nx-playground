@@ -13,16 +13,17 @@ NX Playground 是一個實驗性 Monorepo，用於：
 
 ### 專案定位
 
-| 專案 | 角色 | 目標用戶 | 業務範圍 |
-|------|------|---------|---------|
-| event-cms | 後台管理 | 活動管理員 | 創建活動、管理用戶、表單設計 |
-| event-portal | 前台展示 | 一般用戶 | 瀏覽活動、報名、查看訂單 |
-| enterprise-admin | 企業管理 | 系統管理員 | RBAC、審計、系統監控 |
-| profile | 技術展示 | 開發者 | Nx/React 功能展示 |
-| auth | 認證服務 | 所有用戶 | 統一登入/註冊 |
-| vue-motion | 動畫實驗 | 學習者 | 動畫技術練習 |
+| 專案             | 角色     | 目標用戶   | 業務範圍                     |
+| ---------------- | -------- | ---------- | ---------------------------- |
+| event-cms        | 後台管理 | 活動管理員 | 創建活動、管理用戶、表單設計 |
+| event-portal     | 前台展示 | 一般用戶   | 瀏覽活動、報名、查看訂單     |
+| enterprise-admin | 企業管理 | 系統管理員 | RBAC、審計、系統監控         |
+| profile          | 技術展示 | 開發者     | Nx/React 功能展示            |
+| auth             | 認證服務 | 所有用戶   | 統一登入/註冊                |
+| vue-motion       | 動畫實驗 | 學習者     | 動畫技術練習                 |
 
 **關係**:
+
 - event-cms 和 event-portal 配合使用（前後台）
 - enterprise-admin 獨立運作（企業級管理）
 - 所有 apps 共享 libs（ui-components, hooks 等）
@@ -95,26 +96,31 @@ Nx 預設生成器會創建不兼容的配置。
 **正確做法**:
 
 #### 創建新 Lib
+
 1. 選擇參考專案:
+
    - Vite library: `libs/ui-components`, `libs/charts`
    - TypeScript library: `libs/hooks`
-   
+
 2. 複製整個目錄結構
 3. 複製這些文件並修改:
+
    - `project.json` (name, sourceRoot, outputPath)
    - `package.json` (name)
    - `tsconfig.json` (outDir, rootDir)
    - `tsconfig.lib.json` (paths, references)
    - `vite.config.ts` (cacheDir, outDir)
-   
+
 4. 更新 `tsconfig.base.json` paths
 5. 測試構建: `nx build your-lib`
 
 #### 創建新 App
+
 1. 選擇參考專案:
+
    - React app: `apps/profile`, `apps/event-cms`
    - Next.js app: `apps/event-portal`
-   
+
 2. 複製配置文件
 3. 更新所有路徑
 4. 立即測試
@@ -122,6 +128,7 @@ Nx 預設生成器會創建不兼容的配置。
 **關鍵配置** (以 Vite lib 為例):
 
 **project.json**:
+
 ```json
 {
   "name": "your-lib",
@@ -132,13 +139,14 @@ Nx 預設生成器會創建不兼容的配置。
         "outputPath": "dist/libs/your-lib",
         "tsConfig": "libs/your-lib/tsconfig.lib.json"
       },
-      "dependsOn": [{"target": "build", "projects": "dependencies"}]
+      "dependsOn": [{ "target": "build", "projects": "dependencies" }]
     }
   }
 }
 ```
 
 **tsconfig.lib.json**:
+
 ```json
 {
   "extends": "../../tsconfig.base.json",
@@ -156,6 +164,7 @@ Nx 預設生成器會創建不兼容的配置。
 ```
 
 **vite.config.ts**:
+
 ```typescript
 import { nxViteTsPaths } from '@nx/vite/plugins/nx-tsconfig-paths.plugin';
 import { nxCopyAssetsPlugin } from '@nx/vite/plugins/nx-copy-assets.plugin';
@@ -188,12 +197,14 @@ export default defineConfig({
 ### 代碼規範
 
 #### TypeScript
+
 - 使用嚴格模式
 - 所有組件必須有類型定義
 - Props 使用 interface
 - 避免 any 類型
 
 #### React 組件
+
 ```tsx
 // ✅ 好的範例
 import { forwardRef } from 'react';
@@ -223,6 +234,7 @@ Button.displayName = 'Button';
 ```
 
 #### 文件組織
+
 ```
 feature/
 ├── components/      # UI 組件
@@ -239,6 +251,7 @@ feature/
 ## 🔄 OpenAPI 工作流程
 
 ### 當前流程 (Spec-First)
+
 ```
 1. 手寫 OpenAPI spec
 2. 放到 libs/api-client/specs/
@@ -247,6 +260,7 @@ feature/
 ```
 
 ### 計劃流程 (Code-First with NestJS)
+
 ```
 1. 寫 NestJS Controller + DTOs
    ↓
@@ -262,6 +276,7 @@ feature/
 ### 使用範例
 
 **NestJS 端**:
+
 ```typescript
 @Controller('events')
 @ApiTags('events')
@@ -277,22 +292,23 @@ export class EventsController {
 export class EventDto {
   @ApiProperty()
   id: string;
-  
+
   @ApiProperty()
   name: string;
-  
+
   @ApiProperty({ required: false })
   description?: string;
 }
 ```
 
 **前端使用**:
+
 ```tsx
 import { useGetEvents } from '@nx-playground/api-client/server/dev';
 
 function EventsList() {
   const { data, isLoading, error } = useGetEvents();
-  
+
   // data 是 EventDto[]，完全類型安全！
   return (
     <div>
@@ -311,6 +327,7 @@ function EventsList() {
 ### 任務 1: 添加新的 API
 
 #### 後端 (NestJS)
+
 1. 創建 module: `src/modules/your-feature/`
 2. 寫 DTOs with `@ApiProperty` decorators
 3. 寫 Controller with `@ApiOperation` decorators
@@ -318,11 +335,13 @@ function EventsList() {
 5. 啟動 server
 
 #### 自動化
+
 6. OpenAPI 自動生成
 7. 運行 `pnpm api:sync`
 8. React Query hooks 自動生成
 
 #### 前端使用
+
 9. Import 生成的 hooks
 10. 在組件中使用
 11. TypeScript 自動檢查
@@ -365,6 +384,7 @@ function EventsList() {
 ## 🧪 測試策略
 
 ### 構建測試
+
 ```bash
 # 測試所有專案
 pnpm build:safe
@@ -374,6 +394,7 @@ nx build your-project
 ```
 
 ### 運行測試
+
 ```bash
 # 所有測試
 pnpm test
@@ -387,11 +408,13 @@ nx test your-project
 ## 🚀 部署
 
 ### 前端部署
+
 - event-cms: Cloudflare Pages
 - event-portal: Vercel / Cloudflare Pages
 - 其他: 靜態託管
 
 ### 後端部署 (計劃)
+
 - NestJS: Railway / Render
 - 資料庫: Railway PostgreSQL
 
@@ -434,6 +457,5 @@ nx test your-project
 
 ---
 
-*最後更新: 2025-10-12*
-*專案進度: 前端 85%, 後端 0%, 總體 42%*
-
+_最後更新: 2025-10-12_
+_專案進度: 前端 85%, 後端 0%, 總體 42%_

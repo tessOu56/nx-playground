@@ -45,7 +45,7 @@
       "plugin": "@nx/eslint/plugin",
       "options": {
         "targetName": "lint",
-        "exclude": ["auth", "@nx-playground/events"]
+        "exclude": ["auth", "@nx-playground/event-portal"]
       }
     },
     {

@@ -69,12 +69,14 @@ apps/event-portal/
 **類型**: SSG
 
 #### 功能
+
 - Hero Section (英雄區塊)
 - 用戶流程說明
 - LINE 登入按鈕
 - 活動亮點展示
 
 #### 關鍵文件
+
 ```
 app/[locale]/(home)/
 ├── page.tsx                    # 主頁面
@@ -92,12 +94,14 @@ app/[locale]/(home)/
 **類型**: SSG with ISR
 
 #### 功能
+
 - 所有活動列表
 - 分類篩選
 - 搜尋功能
 - 活動卡片展示
 
 #### 數據來源
+
 現階段使用 Mock 數據：`libs/mock/events/data/index.ts`
 
 ---
@@ -108,6 +112,7 @@ app/[locale]/(home)/
 **類型**: SSG
 
 #### 功能
+
 - 活動完整資訊
 - 場次選擇
 - 票券選擇
@@ -121,6 +126,7 @@ app/[locale]/(home)/
 **類型**: Client-side
 
 #### 功能
+
 - 訂單摘要
 - 報名表單填寫
 - 付款方式選擇
@@ -134,6 +140,7 @@ app/[locale]/(home)/
 **類型**: Client-side
 
 #### 功能
+
 - 現金付款說明
 - ATM 轉帳資訊
 - 付款狀態追蹤
@@ -146,6 +153,7 @@ app/[locale]/(home)/
 **類型**: Client-side (需登入)
 
 #### 功能
+
 - 用戶所有訂單
 - 訂單詳情
 - 訂單狀態
@@ -157,15 +165,15 @@ app/[locale]/(home)/
 
 ### 核心技術
 
-| 技術 | 版本 | 用途 |
-|------|------|------|
-| Next.js | 15 | React 框架 |
-| React | 19 | UI 庫 |
-| next-intl | 3.28 | 國際化 |
-| LINE LIFF | 2.24 | LINE 整合 |
-| React Query | 5 | 數據獲取 |
-| Tailwind CSS | 3 | 樣式 |
-| TypeScript | 5 | 類型安全 |
+| 技術         | 版本 | 用途       |
+| ------------ | ---- | ---------- |
+| Next.js      | 15   | React 框架 |
+| React        | 19   | UI 庫      |
+| next-intl    | 3.28 | 國際化     |
+| LINE LIFF    | 2.24 | LINE 整合  |
+| React Query  | 5    | 數據獲取   |
+| Tailwind CSS | 3    | 樣式       |
+| TypeScript   | 5    | 類型安全   |
 
 ### LINE LIFF 整合
 
@@ -175,11 +183,11 @@ import liff from '@line/liff';
 
 export async function initLiff(liffId: string) {
   await liff.init({ liffId });
-  
+
   if (!liff.isLoggedIn()) {
     liff.login();
   }
-  
+
   return liff.getProfile();
 }
 ```
@@ -192,7 +200,7 @@ import { useTranslations } from 'next-intl';
 
 export default function Page() {
   const t = useTranslations('HomePage');
-  
+
   return <h1>{t('title')}</h1>;
 }
 ```
@@ -305,22 +313,27 @@ NestJS API → OpenAPI → React Query Hooks → Components → UI
 ### 需改進的地方
 
 1. **架構分層**
+
    - 目前: 部分邏輯混雜在組件中
    - 目標: 清晰的 UI / Business / Data 分層
 
 2. **組件抽象**
+
    - 目前: 部分組件過大，職責不清
    - 目標: 小型、可復用、單一職責
 
 3. **類型定義**
+
    - 目前: 部分類型不夠嚴謹
    - 目標: 完整、精確的類型定義
 
 4. **測試覆蓋**
+
    - 目前: 缺乏測試
    - 目標: Unit tests + E2E tests
 
 5. **錯誤處理**
+
    - 目前: 基本錯誤處理
    - 目標: 完整的錯誤邊界和用戶反饋
 
@@ -393,9 +406,11 @@ NEXT_PUBLIC_STATIC_EXPORT=false
 ## 🔮 重寫計劃 (Phase 3)
 
 ### 目標
+
 以資深工程師標準重構，提升代碼品質。
 
 ### 重點
+
 1. 清晰的架構分層
 2. 小型、可復用組件
 3. 完整的類型定義
@@ -404,6 +419,7 @@ NEXT_PUBLIC_STATIC_EXPORT=false
 6. 錯誤處理
 
 ### 時程
+
 待 Phase 2 完成後開始。
 
 ---
@@ -413,4 +429,3 @@ NEXT_PUBLIC_STATIC_EXPORT=false
 - [專案規格](../PROJECT_SPECIFICATION.md)
 - [開發指南](../DEVELOPMENT_GUIDE.md)
 - [Event CMS 文檔](./EVENT_CMS.md)
-

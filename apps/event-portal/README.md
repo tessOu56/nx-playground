@@ -158,20 +158,20 @@ import { mockEvents, mockOrders } from '@/libs/mock';
 
 ```bash
 # 生產構建（SSG）
-nx build @nx-playground/events --configuration=production
+nx build @nx-playground/event-portal --configuration=production
 
 # 輸出目錄
-dist/apps/events/
+dist/apps/event-portal/
 ```
 
 ### 部署到 Cloudflare Pages
 
 ```bash
 # Build command
-pnpm exec nx build @nx-playground/events --configuration=production
+pnpm exec nx build @nx-playground/event-portal --configuration=production
 
 # Output directory
-dist/apps/events
+dist/apps/event-portal
 
 # Environment variables
 # 設置所有 NEXT_PUBLIC_* 環境變數

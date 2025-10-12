@@ -233,8 +233,8 @@ docker-clean: ## 清理 Docker 環境 (停止服務、清理映像檔、清理�
 
 docker-test: ## 在 Docker 環境中執行測試
 	@echo "$(BLUE)[INFO]$(NC) 在 Docker 環境中執行測試..."
-	@docker compose exec events pnpm exec nx test @nx-playground/events || true
-	@docker compose exec console pnpm exec nx test @nx-playground/console || true
+	@docker compose exec events pnpm exec nx test @nx-playground/event-portal || true
+	@docker compose exec console pnpm exec nx test @nx-playground/event-cms || true
 	@echo "$(GREEN)[SUCCESS]$(NC) Docker 測試完成"
 
 # ==================== 測試命令 ====================
