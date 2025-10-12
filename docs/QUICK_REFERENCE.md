@@ -68,14 +68,14 @@ make setup
 
 ### 開發環境
 
-| 服務 | URL | Port |
-|------|-----|------|
-| Event CMS | http://localhost:3002 | 3002 |
-| Event Portal | http://localhost:3000 | 3000 |
-| Profile | http://localhost:3003 | 3003 |
-| Enterprise Admin | http://localhost:4200 | 4200 |
-| Vue Motion | http://localhost:8080 | 8080 |
-| Auth | http://localhost:5173 | 5173 |
+| 服務              | URL                   | Port |
+| ----------------- | --------------------- | ---- |
+| Event CMS         | http://localhost:3002 | 3002 |
+| Event Portal      | http://localhost:3000 | 3000 |
+| Profile           | http://localhost:3003 | 3003 |
+| Enterprise Admin  | http://localhost:4200 | 4200 |
+| Vue Motion        | http://localhost:8080 | 8080 |
+| Auth              | http://localhost:5173 | 5173 |
 | API Server (計劃) | http://localhost:3001 | 3001 |
 
 ---
@@ -87,10 +87,22 @@ make setup
 ```tsx
 import {
   Button,
-  Card, CardHeader, CardTitle, CardContent, CardFooter,
-  Input, Textarea, Select,
-  Dialog, DialogContent, DialogHeader, DialogTitle,
-  Tabs, TabsList, TabsTrigger, TabsContent,
+  Card,
+  CardHeader,
+  CardTitle,
+  CardContent,
+  CardFooter,
+  Input,
+  Textarea,
+  Select,
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  Tabs,
+  TabsList,
+  TabsTrigger,
+  TabsContent,
   Alert,
   Switch,
   Checkbox,
@@ -109,7 +121,7 @@ import {
   useToast,
   useDebounce,
   useLocalStorage,
-  
+
   // 重新導出
   useState,
   useEffect,
@@ -152,7 +164,7 @@ import {
 function MyComponent() {
   const { data, isLoading } = useGetEvents();
   const createMutation = useCreateEvent();
-  
+
   return ...;
 }
 ```
@@ -206,7 +218,8 @@ docs/
 
 ### Q: 構建失敗 "Cannot find module"
 
-**A**: 
+**A**:
+
 ```bash
 # 1. 確認 tsconfig.base.json 有正確的 path
 # 2. 重新構建依賴
@@ -218,6 +231,7 @@ nx reset
 ### Q: TypeScript 錯誤
 
 **A**:
+
 ```bash
 # 運行類型檢查
 nx run-many --target=typecheck
@@ -229,6 +243,7 @@ nx build your-lib
 ### Q: Port 被占用
 
 **A**:
+
 ```bash
 # 查找占用的 process
 lsof -i :3002
@@ -240,6 +255,7 @@ kill -9 <PID>
 ### Q: pnpm-lock.yaml 過時
 
 **A**:
+
 ```bash
 # 更新 lockfile
 pnpm install --no-frozen-lockfile
@@ -357,12 +373,12 @@ pnpm outdated
 
 ```css
 /* 8px 基數 */
---space-1: 0.25rem;  /* 4px */
---space-2: 0.5rem;   /* 8px */
---space-3: 0.75rem;  /* 12px */
---space-4: 1rem;     /* 16px */
---space-6: 1.5rem;   /* 24px */
---space-8: 2rem;     /* 32px */
+--space-1: 0.25rem; /* 4px */
+--space-2: 0.5rem; /* 8px */
+--space-3: 0.75rem; /* 12px */
+--space-4: 1rem; /* 16px */
+--space-6: 1.5rem; /* 24px */
+--space-8: 2rem; /* 32px */
 ```
 
 ### Colors
@@ -381,11 +397,11 @@ pnpm outdated
 --font-sans: Inter, sans-serif;
 --font-mono: Fira Code, monospace;
 
---text-xs: 0.75rem;   /* 12px */
---text-sm: 0.875rem;  /* 14px */
---text-base: 1rem;    /* 16px */
---text-lg: 1.125rem;  /* 18px */
---text-xl: 1.25rem;   /* 20px */
+--text-xs: 0.75rem; /* 12px */
+--text-sm: 0.875rem; /* 14px */
+--text-base: 1rem; /* 16px */
+--text-lg: 1.125rem; /* 18px */
+--text-xl: 1.25rem; /* 20px */
 ```
 
 ---
@@ -424,5 +440,4 @@ Shift+F12 - 查找引用
 
 ---
 
-*最後更新: 2025-10-12*
-
+_最後更新: 2025-10-12_

@@ -30,18 +30,18 @@
       "executor": "@nx/next:server",
       "defaultConfiguration": "development",
       "options": {
-        "buildTarget": "@nx-playground/events:build",
+        "buildTarget": "@nx-playground/event-portal:build",
         "dev": true,
         "port": 3000
       },
       "configurations": {
         "development": {
-          "buildTarget": "@nx-playground/events:build:development",
+          "buildTarget": "@nx-playground/event-portal:build:development",
           "dev": true,
           "port": 3000
         },
         "production": {
-          "buildTarget": "@nx-playground/events:build:production",
+          "buildTarget": "@nx-playground/event-portal:build:production",
           "dev": false,
           "port": 3000
         }
@@ -50,7 +50,7 @@
     "export": {
       "executor": "@nx/next:export",
       "options": {
-        "buildTarget": "@nx-playground/events:build:production"
+        "buildTarget": "@nx-playground/event-portal:build:production"
       }
     },
     "test": {

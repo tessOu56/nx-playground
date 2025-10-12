@@ -62,6 +62,7 @@ apps/event-cms/
 **狀態**: ✅ 100%
 
 #### 功能
+
 - 統計卡片（活動數、用戶數、訂單數、營收）
 - 活動趨勢圖表 (Recharts LineChart)
 - 用戶參與統計 (Chart.js BarChart)
@@ -69,6 +70,7 @@ apps/event-cms/
 - 狀態分布 (Chart.js PieChart)
 
 #### 關鍵文件
+
 ```
 features/dashboard/
 ├── pages/
@@ -92,6 +94,7 @@ features/dashboard/
 **狀態**: 🔨 70% (創建完整，列表頁待開發)
 
 #### 功能
+
 - ✅ 創建活動（多步驟表單）
   - 基本資訊（封面、標題、描述、地點）
   - 活動內容（拖拽式區塊編輯）
@@ -105,6 +108,7 @@ features/dashboard/
 - ⏳ 活動編輯（待開發）
 
 #### 關鍵文件
+
 ```
 features/events/
 ├── pages/
@@ -132,6 +136,7 @@ features/events/
 ```
 
 #### 技術亮點
+
 - **React Hook Form** - 表單管理
 - **Zod** - Schema 驗證
 - **React DnD** - 拖拽編輯
@@ -145,6 +150,7 @@ features/events/
 **狀態**: ✅ 100%
 
 #### 功能
+
 - 用戶列表（DataTable + 分頁）
 - 用戶詳情（3 Tabs: 基本資訊、權限、活動記錄）
 - 創建/編輯用戶（Dialog）
@@ -152,6 +158,7 @@ features/events/
 - 批量操作
 
 #### 關鍵文件
+
 ```
 features/users/
 ├── pages/
@@ -174,6 +181,7 @@ features/users/
 **狀態**: ✅ 100%
 
 #### 功能
+
 - 表單模板列表
 - 創建表單模板
 - 編輯表單模板
@@ -181,6 +189,7 @@ features/users/
 - 表單字段拖拽排序
 
 #### 關鍵文件
+
 ```
 features/forms/
 ├── pages/
@@ -198,6 +207,7 @@ features/forms/
 **狀態**: ✅ 100%
 
 #### 功能
+
 - **個人資料** - 姓名、Email、頭像
 - **通知設定** - Email/推播通知偏好
 - **安全設定** - 修改密碼、2FA、會話管理
@@ -205,6 +215,7 @@ features/forms/
 - **外觀設定** - 主題、語言
 
 #### 關鍵文件
+
 ```
 features/settings/
 ├── pages/
@@ -231,18 +242,18 @@ features/settings/
 
 ### 核心技術
 
-| 技術 | 版本 | 用途 |
-|------|------|------|
-| React | 19 | UI 框架 |
-| Vite | 6 | 建構工具 |
-| React Router | 7 | 路由 |
-| React Hook Form | 7.54 | 表單管理 |
-| Zod | 3.24 | Schema 驗證 |
-| Zustand | 5 | 狀態管理 |
-| React Query | 5 | 服務端狀態 |
-| React DnD | 16.0.1 | 拖拽功能 |
-| Recharts | 3.2.1 | 圖表 (React 原生) |
-| Chart.js | 4.5.0 | 圖表 (高性能) |
+| 技術            | 版本   | 用途              |
+| --------------- | ------ | ----------------- |
+| React           | 19     | UI 框架           |
+| Vite            | 6      | 建構工具          |
+| React Router    | 7      | 路由              |
+| React Hook Form | 7.54   | 表單管理          |
+| Zod             | 3.24   | Schema 驗證       |
+| Zustand         | 5      | 狀態管理          |
+| React Query     | 5      | 服務端狀態        |
+| React DnD       | 16.0.1 | 拖拽功能          |
+| Recharts        | 3.2.1  | 圖表 (React 原生) |
+| Chart.js        | 4.5.0  | 圖表 (高性能)     |
 
 ### 共享庫依賴
 
@@ -267,19 +278,17 @@ import { useModal } from '@nx-playground/hooks';
 export function UsersPage() {
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
   const editModal = useModal();
-  
+
   return (
-    <div className="p-6">
+    <div className='p-6'>
       <Card>
         <CardHeader>
           <CardTitle>用戶管理</CardTitle>
           <Button onClick={editModal.open}>新增用戶</Button>
         </CardHeader>
-        <CardContent>
-          {/* DataTable */}
-        </CardContent>
+        <CardContent>{/* DataTable */}</CardContent>
       </Card>
-      
+
       <UserEditDialog
         isOpen={editModal.isOpen}
         onClose={editModal.close}
@@ -307,7 +316,7 @@ import {
 function EventsList() {
   const { data, isLoading } = useGetEvents({ status: 'published' });
   const createMutation = useCreateEvent();
-  
+
   const handleCreate = (eventData) => {
     createMutation.mutate(eventData, {
       onSuccess: () => {
@@ -315,7 +324,7 @@ function EventsList() {
       },
     });
   };
-  
+
   return ...;
 }
 ```
@@ -377,17 +386,20 @@ pnpm build:event-cms
 ## 🔮 未來計劃
 
 ### 短期
+
 - [ ] 完成活動列表頁
 - [ ] 活動編輯功能
 - [ ] 活動刪除和歸檔
 
 ### 中期
+
 - [ ] 整合真實 API
 - [ ] 添加搜尋和篩選
 - [ ] 批量操作
 - [ ] 數據匯出
 
 ### 長期
+
 - [ ] 權限控制 (RBAC)
 - [ ] 活動範本
 - [ ] 活動複製
@@ -400,4 +412,3 @@ pnpm build:event-cms
 - [專案規格](../PROJECT_SPECIFICATION.md)
 - [開發指南](../DEVELOPMENT_GUIDE.md)
 - [Event Portal 文檔](./EVENT_PORTAL.md)
-
