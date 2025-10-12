@@ -16,7 +16,7 @@
     "dev:auth": "NX_CLOUD_NO_TIMEOUTS=true nx serve @nx-playground/auth",
     "dev:event-portal": "nx serve @nx-playground/event-portal",
     "dev:vue-motion": "nx serve vue-motion",
-    "dev:angular": "nx serve angular-dashboard",
+    "dev:enterprise": "nx serve enterprise-admin",
     "dev:profile": "NX_CLOUD_NO_TIMEOUTS=true nx serve @nx-playground/profile",
     "build:safe": "NX_CLOUD_NO_TIMEOUTS=true nx run-many -t build",
     "build:affected": "nx affected --target=build",

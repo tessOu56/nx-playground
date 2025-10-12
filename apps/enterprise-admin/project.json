@@ -1,8 +1,8 @@
 {
-  "name": "angular-dashboard",
+  "name": "enterprise-admin",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "projectType": "application",
-  "sourceRoot": "apps/angular-dashboard/src",
+  "sourceRoot": "apps/enterprise-admin/src",
   "prefix": "app",
   "tags": ["type:app", "platform:angular"],
   "targets": {
@@ -10,18 +10,18 @@
       "executor": "@angular-devkit/build-angular:application",
       "outputs": ["{options.outputPath}"],
       "options": {
-        "outputPath": "dist/apps/angular-dashboard",
-        "index": "apps/angular-dashboard/src/index.html",
-        "browser": "apps/angular-dashboard/src/main.ts",
+        "outputPath": "dist/apps/enterprise-admin",
+        "index": "apps/enterprise-admin/src/index.html",
+        "browser": "apps/enterprise-admin/src/main.ts",
         "polyfills": ["zone.js"],
-        "tsConfig": "apps/angular-dashboard/tsconfig.app.json",
+        "tsConfig": "apps/enterprise-admin/tsconfig.app.json",
         "assets": [
           {
             "glob": "**/*",
-            "input": "apps/angular-dashboard/public"
+            "input": "apps/enterprise-admin/public"
           }
         ],
-        "styles": ["apps/angular-dashboard/src/styles.css"],
+        "styles": ["apps/enterprise-admin/src/styles.css"],
         "scripts": []
       },
       "configurations": {
@@ -52,10 +52,10 @@
       "executor": "@angular-devkit/build-angular:dev-server",
       "configurations": {
         "production": {
-          "buildTarget": "angular-dashboard:build:production"
+          "buildTarget": "enterprise-admin:build:production"
         },
         "development": {
-          "buildTarget": "angular-dashboard:build:development"
+          "buildTarget": "enterprise-admin:build:development"
         }
       },
       "defaultConfiguration": "development",
@@ -70,15 +70,15 @@
       "executor": "@angular-devkit/build-angular:karma",
       "options": {
         "polyfills": ["zone.js", "zone.js/testing"],
-        "tsConfig": "apps/angular-dashboard/tsconfig.spec.json",
-        "karmaConfig": "apps/angular-dashboard/karma.conf.js",
+        "tsConfig": "apps/enterprise-admin/tsconfig.spec.json",
+        "karmaConfig": "apps/enterprise-admin/karma.conf.js",
         "assets": [
           {
             "glob": "**/*",
-            "input": "apps/angular-dashboard/public"
+            "input": "apps/enterprise-admin/public"
           }
         ],
-        "styles": ["apps/angular-dashboard/src/styles.css"],
+        "styles": ["apps/enterprise-admin/src/styles.css"],
         "scripts": []
       }
     },
@@ -89,7 +89,7 @@
       "executor": "nx:run-commands",
       "options": {
         "command": "playwright test",
-        "cwd": "apps/angular-dashboard"
+        "cwd": "apps/enterprise-admin"
       }
     }
   }
