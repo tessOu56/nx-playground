@@ -1,5 +1,5 @@
 {
-  "name": "@nx-playground/events",
+  "name": "@nx-playground/event-portal",
   "version": "0.0.1",
   "private": true,
   "scripts": {
