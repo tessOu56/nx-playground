@@ -1,0 +1,103 @@
+// apps/api-server/prisma/schema.prisma
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../../../node_modules/.prisma/client"
+}
+
+datasource db {
+  provider = "sqlite" // 開發用 SQLite
+  // provider = "postgresql"  // 生產用 PostgreSQL
+  url      = env("DATABASE_URL")
+}
+
+// Note: Database file will be created at apps/api-server/prisma/dev.db
+
+// ==================== 用戶模組 ====================
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  name      String
+  avatar    String?
+  role      String   @default("user")
+  status    String   @default("active")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // 關聯
+  orders   Order[]
+  sessions Session[]
+
+  @@map("users")
+}
+
+// ==================== 活動模組 ====================
+
+model Event {
+  id           String   @id @default(cuid())
+  title        String
+  description  String?
+  location     String?
+  startDate    DateTime
+  endDate      DateTime
+  maxAttendees Int?
+  status       String   @default("draft")
+  formId       String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  // 關聯
+  form   Form?   @relation(fields: [formId], references: [id])
+  orders Order[]
+
+  @@map("events")
+}
+
+// ==================== 表單模組 ====================
+
+model Form {
+  id        String   @id @default(cuid())
+  name      String
+  schema    String // JSON string
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // 關聯
+  events Event[]
+
+  @@map("forms")
+}
+
+// ==================== 訂單模組 ====================
+
+model Order {
+  id        String   @id @default(cuid())
+  eventId   String
+  userId    String
+  status    String   @default("pending")
+  data      String // JSON string
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // 關聯
+  event Event @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  user  User  @relation(fields: [userId], references: [id])
+
+  @@map("orders")
+}
+
+// ==================== 會話模組 ====================
+
+model Session {
+  id        String   @id @default(cuid())
+  userId    String
+  token     String   @unique
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  // 關聯
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("sessions")
+}

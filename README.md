@@ -11,6 +11,7 @@
 ## 📋 專案簡介
 
 NX Playground 是一個展示現代前端技術棧的實驗性 Monorepo 專案，包含：
+
 - 🔐 完整的認證系統
 - 📊 活動內容管理系統 (CMS)
 - 🎫 公開活動展示平台
@@ -56,6 +57,8 @@ pnpm dev:profile
 
 ## 🌐 服務網址
 
+- **API Server** (後端 API): http://localhost:3001/api
+  - Swagger Docs: http://localhost:3001/api/docs
 - **Event Portal** (活動展示): http://localhost:3000
 - **Event CMS** (活動管理): http://localhost:3002
 - **Profile** (技術展示): http://localhost:3003
@@ -67,6 +70,7 @@ pnpm dev:profile
 ```
 nx-playground/
 ├── apps/                    # 應用程式
+│   ├── api-server/         # 🔧 API Server (NestJS 10, Port 3001)
 │   ├── auth/               # 🔐 認證服務 (React + Vite)
 │   ├── event-cms/          # 📊 活動 CMS (React + Vite, Port 3002)
 │   ├── event-portal/       # 🎫 活動展示 (Next.js 15, Port 3000)
@@ -89,28 +93,41 @@ nx-playground/
 
 ## 🎯 技術棧
 
-### 前端框架
+### 前後端框架
+
+- **NestJS 10** - api-server (後端 API)
 - **React 19** - auth, event-cms, profile
 - **Next.js 15** - event-portal (App Router + SSG)
 - **Angular 20** - enterprise-admin
 - **Vue 3** - vue-motion
 
 ### Monorepo 工具
+
 - **Nx 21.4** - Workspace 管理、依賴圖、快取
 - **pnpm** - 套件管理器
 
+### 後端技術
+
+- **Prisma 5** - ORM
+- **SQLite** - 開發資料庫
+- **PostgreSQL** - 生產資料庫（規劃中）
+- **Swagger** - API 文檔
+
 ### UI/樣式
+
 - **Tailwind CSS** - 工具類樣式系統
 - **Radix UI** - 無障礙 UI 組件
 - **Vanilla Extract** - CSS-in-TypeScript
 - **Style Dictionary** - Design Tokens 生成
 
 ### 狀態管理
+
 - **Zustand** - 全局狀態管理
 - **React Query** - 服務端狀態管理
 - **Context API** - 主題和認證
 
 ### 開發工具
+
 - **TypeScript 5.8** - 類型系統
 - **Vite 6** - 快速構建工具
 - **ESLint** - 程式碼檢查
@@ -141,6 +158,7 @@ pnpm dev:my-new-app
 - [MIGRATION.md](MIGRATION.md) - 專案遷移說明
 
 ### 應用文檔
+
 - [apps/auth/README.md](apps/auth/README.md) - 認證服務
 - [apps/console/README.md](apps/console/README.md) - 控制台
 - [apps/events/README.md](apps/events/README.md) - 活動管理
@@ -148,6 +166,7 @@ pnpm dev:my-new-app
 - [apps/angular-dashboard/README.md](apps/angular-dashboard/README.md) - Angular Dashboard
 
 ### 函式庫文檔
+
 - [libs/api-client/README.md](libs/api-client/README.md) - API 客戶端
 - [libs/ui-components/README.md](libs/ui-components/README.md) - UI 組件
 - [libs/design-system/README.md](libs/design-system/README.md) - 設計系統
@@ -157,6 +176,7 @@ pnpm dev:my-new-app
 ## 🛠️ 開發命令
 
 ### 構建
+
 ```bash
 pnpm build:safe           # 構建所有專案
 pnpm build:affected       # 只構建受影響的專案
@@ -164,6 +184,7 @@ nx build <project-name>   # 構建單一專案
 ```
 
 ### 測試
+
 ```bash
 pnpm test                 # 執行所有測試
 pnpm test:watch           # 監聽模式
@@ -172,6 +193,7 @@ pnpm test:affected        # 只測試受影響的專案
 ```
 
 ### Lint
+
 ```bash
 pnpm lint                 # 檢查所有專案
 pnpm lint:fix             # 自動修復
@@ -179,6 +201,7 @@ pnpm lint:affected        # 只檢查受影響的專案
 ```
 
 ### Nx 特性
+
 ```bash
 nx graph                  # 查看專案依賴圖
 nx affected:build         # 只構建受影響的專案

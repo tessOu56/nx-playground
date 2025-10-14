@@ -79,3 +79,9 @@ pnpm-outdated.json
 
 # Docker override 文件（個人開發配置）
 docker-compose.override.yml
+
+# SQLite Database files
+*.db
+*.db-journal
+apps/api-server/prisma/*.db
+apps/api-server/prisma/*.db-journal

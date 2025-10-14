@@ -1,0 +1,96 @@
+{
+  "name": "@nx-playground/api-server",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/api-server/src",
+  "projectType": "application",
+  "tags": ["type:app", "platform:nestjs"],
+  "targets": {
+    "build": {
+      "executor": "@nx/webpack:webpack",
+      "outputs": ["{options.outputPath}"],
+      "defaultConfiguration": "production",
+      "options": {
+        "target": "node",
+        "compiler": "tsc",
+        "outputPath": "dist/apps/api-server",
+        "main": "apps/api-server/src/main.ts",
+        "tsConfig": "apps/api-server/tsconfig.app.json",
+        "assets": ["apps/api-server/src/assets"],
+        "webpackConfig": "apps/api-server/webpack.config.js"
+      },
+      "configurations": {
+        "development": {
+          "optimization": false,
+          "extractLicenses": false,
+          "inspect": false,
+          "fileReplacements": [
+            {
+              "replace": "apps/api-server/src/environments/environment.ts",
+              "with": "apps/api-server/src/environments/environment.dev.ts"
+            }
+          ]
+        },
+        "production": {
+          "optimization": true,
+          "extractLicenses": true,
+          "inspect": false
+        }
+      }
+    },
+    "serve": {
+      "executor": "@nx/js:node",
+      "defaultConfiguration": "development",
+      "options": {
+        "buildTarget": "@nx-playground/api-server:build",
+        "port": 3001
+      },
+      "configurations": {
+        "development": {
+          "buildTarget": "@nx-playground/api-server:build:development"
+        },
+        "production": {
+          "buildTarget": "@nx-playground/api-server:build:production"
+        }
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["apps/api-server/src/**/*.ts"]
+      }
+    },
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "options": {
+        "jestConfig": "apps/api-server/jest.config.ts",
+        "passWithNoTests": true
+      }
+    },
+    "prisma-generate": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "prisma generate --schema=apps/api-server/prisma/schema.prisma"
+      }
+    },
+    "prisma-migrate": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "prisma migrate dev --schema=apps/api-server/prisma/schema.prisma"
+      }
+    },
+    "prisma-seed": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "tsx apps/api-server/prisma/seed.ts"
+      }
+    },
+    "openapi-generate": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "node apps/api-server/scripts/generate-openapi.js"
+      }
+    }
+  }
+}

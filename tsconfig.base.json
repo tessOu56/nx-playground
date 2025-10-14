@@ -40,7 +40,8 @@
       "@nx-playground/ui-components": ["dist/libs/ui-components"],
       "@nx-playground/vue-motion": ["apps/vue-motion/src"],
       "@nx-playground/enterprise-admin": ["apps/enterprise-admin/src"],
-      "@nx-playground/profile": ["apps/profile/src"]
+      "@nx-playground/profile": ["apps/profile/src"],
+      "@nx-playground/api-server": ["apps/api-server/src"]
     }
   },
   "plugins": [
