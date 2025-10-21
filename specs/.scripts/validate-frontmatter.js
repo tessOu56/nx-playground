@@ -61,6 +61,8 @@ function validateFiles(baseDir, requiredFields, type) {
       const stat = fs.statSync(itemPath);
 
       if (stat.isDirectory()) {
+        // 跳過 STANDARDS 和隱藏目錄
+        if (item === 'STANDARDS' || item.startsWith('.')) return;
         scanDir(itemPath);
       } else if (item.endsWith('.md') && item !== 'CHANGELOG.md' && item !== 'README.md') {
         try {
