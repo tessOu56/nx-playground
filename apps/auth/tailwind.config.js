@@ -1,44 +1,66 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: [
-    "./src/**/*.{js,jsx,ts,tsx}",
+    './src/**/*.{js,jsx,ts,tsx}',
+    // Include ui-components for proper class detection
+    '../../libs/ui-components/src/**/*.{js,jsx,ts,tsx}',
   ],
+
+  // Extend design-system configuration
+  presets: [
+    require('../../libs/design-system/src/tokens/generated/tailwind-config.js'),
+  ],
+
   theme: {
     extend: {
+      // Auth app specific brand colors (keep for Ory integration UI)
       colors: {
-        primary: '#B34438', // 磚紅色, 主色, 用於 button bg default or disabled 
-        primary_light: '#C26960', // 淡磚紅色, 用於 hover
-        primary_dark: '#A33E33', // 深磚紅色, 用於 active
-        primary_lighter: '#DCA9A3', // 淡紅色, 用於 secondary button disabled
-        primary_lightest: '#CC827A', // 最淡磚紅色, 用於 深色背景下 text disabled
+        // Primary brand color (brick red)
+        'auth-primary': '#B34438',
+        'auth-primary-light': '#C26960',
+        'auth-primary-dark': '#A33E33',
+        'auth-primary-lighter': '#DCA9A3',
+        'auth-primary-lightest': '#CC827A',
 
-        error: '#C81E1E', // 紅色, 用於 error text
+        // Keep old aliases for backward compatibility
+        primary: '#B34438',
+        primary_light: '#C26960',
+        primary_dark: '#A33E33',
+        primary_lighter: '#DCA9A3',
+        primary_lightest: '#CC827A',
 
-        text: '#847166', // 紅棕色, 文字主色
-        text_light: '#5B4233', // 淡紅棕色, 用於 hover
-        text_dark: '#331301', // 深紅棕色, 用於 active
-        text_lighter: '#ADA199', // 淡棕色, 用於 disabled
+        error: '#C81E1E',
 
-        base: '#FAF9F4', // 淡米色, 背景色
-        border: '#C8D8FF', // 淡藍色, 用於 border
+        // Text colors
+        text: '#847166',
+        text_light: '#5B4233',
+        text_dark: '#331301',
+        text_lighter: '#ADA199',
 
-        avatar_default: '#DBE4F7', // 淡藍色, 用於 avatar bg
+        // Base colors
+        base: '#FAF9F4',
+        border: '#C8D8FF',
 
-        line_default: '#06C755', // 綠色, 用於 line button
-        line_dark: '#05B44C', // 綠色灰階, 用於 line button hover, #06C755 opacity 90%
-        line_darker: '#028B3C', // 綠色灰階, 用於 line button focus, active, #06C755 opacity 70%
+        // Avatar
+        avatar_default: '#DBE4F7',
 
-        gary_default: '#1E1E1E33', // 灰色主色, 用於 disabled other button
-        gray_lightest: '#D9D9D9', // 最淡灰色
-        gray_light: '#E5E5E599', // 淡灰色
-        gray_lighter: '#BDBDBD', // 更淡灰色
-        gray_dark: '#747775', // 深灰色
-        gray_darker: '#9D9D9D', // 更深灰色
-        gray_darkest: '#1F1F1F', // 最深灰色, 用於 dark text 等
+        // LINE brand colors
+        line_default: '#06C755',
+        line_dark: '#05B44C',
+        line_darker: '#028B3C',
 
+        // Gray scale
+        gary_default: '#1E1E1E33',
+        gray_lightest: '#D9D9D9',
+        gray_light: '#E5E5E599',
+        gray_lighter: '#BDBDBD',
+        gray_dark: '#747775',
+        gray_darker: '#9D9D9D',
+        gray_darkest: '#1F1F1F',
       },
     },
   },
-  plugins: [],
-}
 
+  darkMode: 'class',
+  plugins: [],
+};
