@@ -1,7 +1,14 @@
+/* Import design system generated Tailwind variables first */
+@import '@nx-playground/design-system/tokens/generated/tailwind-variables.css';
+
+/* Import design system semantic CSS variables */
+@import '@nx-playground/design-system/index.css';
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+/* Custom styles for auth app */
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
@@ -16,6 +23,7 @@ code {
     monospace;
 }
 
+/* Auth-specific layout container */
 .content {
   max-width: 361px;
   margin: 0 auto;
@@ -25,6 +33,7 @@ code {
   text-align: center;
 }
 
+/* Typography - Auth app specific (keep original design) */
 .h1,
 h1 {
   @apply text-[28px] leading-[34px] tracking-[0.4px] text-inherit font-medium;
@@ -45,6 +54,7 @@ span {
   @apply text-[13px] leading-[18px] tracking-[0.8px] text-inherit font-normal;
 }
 
+/* Focus and interaction states */
 button,
 input,
 a {
@@ -54,7 +64,8 @@ a {
 * {
   @apply focus-visible:outline-0 data-[focus-visible]:outline-0 visited:outline-0 visited:text-inherit;
 }
-/* 讓通知 li 佔滿裝置寬度 */
+
+/* Toast notification styles */
 [data-sonner-toast][data-styled='true'] {
   width: 92vw !important;
   max-width: 100vw !important;

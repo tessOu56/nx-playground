@@ -16,9 +16,10 @@ export default defineConfig({
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),
+      // Point to src/ directory for CSS imports to work
       '@nx-playground/design-system': path.resolve(
         __dirname,
-        '../../libs/design-system/src/index.ts'
+        '../../libs/design-system/src'
       ),
       '@nx-playground/ui-components': path.resolve(
         __dirname,
