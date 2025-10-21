@@ -89,3 +89,4 @@ docker-compose.override.yml
 *.db-journal
 apps/api-server/prisma/*.db
 apps/api-server/prisma/*.db-journal
+.angular/
