@@ -1,0 +1,128 @@
+{
+  "page": {
+    "title": "Shared Libraries",
+    "subtitle": "Reusable libraries that power the entire monorepo ecosystem",
+    "intro": "These shared libraries demonstrate modern React development practices, enabling code reuse across multiple applications while maintaining type safety and consistency."
+  },
+  "categories": {
+    "ui": "UI & Design",
+    "data": "Data & State",
+    "utils": "Utilities & Tools"
+  },
+  "libs": {
+    "ui-components": {
+      "name": "UI Components",
+      "description": "Comprehensive UI component library built with React, TypeScript, and Radix UI primitives",
+      "purpose": "Provides consistent, accessible, and reusable UI components across all applications",
+      "highlights": [
+        "40+ production-ready components",
+        "Full TypeScript support",
+        "Accessibility-first design (WCAG 2.1)",
+        "Tailwind CSS integration",
+        "Radix UI primitives"
+      ]
+    },
+    "design-system": {
+      "name": "Design System",
+      "description": "Design tokens and theming system with Style Dictionary integration",
+      "purpose": "Ensures consistent design language across applications with token-based theming",
+      "highlights": [
+        "Design token management",
+        "Multiple theme support",
+        "CSS variables generation",
+        "Tailwind configuration",
+        "Type-safe tokens"
+      ]
+    },
+    "i18n": {
+      "name": "Internationalization",
+      "description": "i18next-based internationalization solution with feature-level translations",
+      "purpose": "Enables multi-language support with namespace isolation and SSR compatibility",
+      "highlights": [
+        "Feature-based namespaces",
+        "Language detection",
+        "SSR support (Next.js)",
+        "Type-safe translations",
+        "Language switcher components"
+      ]
+    },
+    "hooks": {
+      "name": "Custom Hooks",
+      "description": "Collection of reusable React hooks for common patterns",
+      "purpose": "Simplifies state management and side effects with well-tested hooks",
+      "highlights": [
+        "useDebounce & useThrottle",
+        "useLocalStorage & useSessionStorage",
+        "useAsync for data fetching",
+        "useModal & useToast",
+        "usePagination"
+      ]
+    },
+    "api-client": {
+      "name": "API Client",
+      "description": "Type-safe API client generated from OpenAPI specifications using Orval",
+      "purpose": "Provides fully typed API calls with automatic code generation",
+      "highlights": [
+        "OpenAPI/Swagger integration",
+        "Automatic type generation",
+        "React Query hooks",
+        "Error handling",
+        "Mock data support"
+      ]
+    },
+    "charts": {
+      "name": "Chart Components",
+      "description": "Chart component library with Chart.js and Recharts support",
+      "purpose": "Visualize data with responsive and customizable chart components",
+      "highlights": [
+        "Multiple chart types",
+        "Responsive design",
+        "Theme integration",
+        "TypeScript support",
+        "Dual library support"
+      ]
+    },
+    "auth-client": {
+      "name": "Auth Client",
+      "description": "Authentication utilities and context providers",
+      "purpose": "Simplifies authentication implementation across applications",
+      "highlights": [
+        "Auth context provider",
+        "Protected routes",
+        "Session management",
+        "Redirect utilities",
+        "Token handling"
+      ]
+    }
+  },
+  "benefits": {
+    "title": "Benefits of Shared Libraries",
+    "items": [
+      {
+        "title": "Code Reusability",
+        "description": "Write once, use everywhere. Reduce duplication and maintenance overhead"
+      },
+      {
+        "title": "Type Safety",
+        "description": "Full TypeScript support ensures compile-time error detection"
+      },
+      {
+        "title": "Consistency",
+        "description": "Maintain consistent UX and behavior across all applications"
+      },
+      {
+        "title": "Independent Updates",
+        "description": "Update libraries independently with proper versioning"
+      },
+      {
+        "title": "Tree Shaking",
+        "description": "Import only what you need, reducing bundle sizes"
+      },
+      {
+        "title": "Testability",
+        "description": "Test once at the library level, benefit across all apps"
+      }
+    ]
+  }
+}
+
