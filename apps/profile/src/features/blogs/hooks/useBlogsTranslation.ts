@@ -1,10 +1,10 @@
 /**
- * Blog feature translation hook
+ * Blogs feature translation hook
  */
 
 import { createFeatureTranslation } from '@nx-playground/i18n';
 
-export const useBlogTranslation = createFeatureTranslation('blog', [
+export const useBlogsTranslation = createFeatureTranslation('blogs', [
   'title',
   'subtitle',
   'searchPlaceholder',
@@ -30,3 +30,7 @@ export const useBlogTranslation = createFeatureTranslation('blog', [
   'fallbackNotice',
   'nav.title',
 ]);
+
+// Backward compatibility
+export const useBlogTranslation = useBlogsTranslation;
+

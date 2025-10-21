@@ -2,8 +2,9 @@ import { I18nProvider } from '@nx-playground/i18n';
 import { Navigate, Route, Routes } from 'react-router-dom';
 
 import { Layout } from './components/Layout';
-import { AppDetailPage, AppsPage } from './features/apps';
-import { BlogListPage, BlogPostPage } from './features/blog';
+import { AppsPage } from './features/apps';
+import { BlogListPage, BlogPostPage } from './features/blogs';
+import { AppDetailPage, LibDetailPage } from './features/detail';
 import { HomePage } from './features/home';
 import { LibsPage } from './features/libs';
 import { LocaleRouter } from './lib/i18n';
@@ -26,8 +27,9 @@ function App() {
                   <Route path='/apps' element={<AppsPage />} />
                   <Route path='/apps/:appId' element={<AppDetailPage />} />
                   <Route path='/libs' element={<LibsPage />} />
-                  <Route path='/blog' element={<BlogListPage />} />
-                  <Route path='/blog/:slug' element={<BlogPostPage />} />
+                  <Route path='/libs/:libId' element={<LibDetailPage />} />
+                  <Route path='/blogs' element={<BlogListPage />} />
+                  <Route path='/blogs/:slug' element={<BlogPostPage />} />
                 </Routes>
               </Layout>
             </LocaleRouter>

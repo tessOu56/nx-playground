@@ -1,6 +1,6 @@
 /**
  * 统一的技术标签组件
- * 用于 Home 技能、Apps 技术栈、Libs 技术栈、Blog 标签
+ * 用于 Home 技能、Apps 技术栈、Libs 技术栈、Blogs 标签
  * 点击后跳转到站内搜索页面
  */
 
@@ -47,8 +47,8 @@ export const TechTag: FC<TechTagProps> = ({
 
   // 点击处理：跳转到搜索页面并预填标签
   const handleClick = () => {
-    // 跳转到 blog 页面（搜索页面），通过 URL 参数传递标签
-    navigate(`${getLocalizedPath('/blog')}?tag=${encodeURIComponent(name)}`);
+    // 跳转到 blogs 页面（搜索页面），通过 URL 参数传递标签
+    navigate(`${getLocalizedPath('/blogs')}?tag=${encodeURIComponent(name)}`);
   };
 
   return (
