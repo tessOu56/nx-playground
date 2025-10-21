@@ -118,7 +118,7 @@ export function Layout({ children }: LayoutProps) {
             {/* About */}
             <div>
               <h3 className='text-lg font-semibold text-foreground mb-3'>
-                {profileConfig.name}
+                {siteConfig.siteName}
               </h3>
               <p className='text-sm text-muted-foreground'>
                 Full-Stack Developer specializing in modern web technologies and
@@ -191,7 +191,7 @@ export function Layout({ children }: LayoutProps) {
 
           <div className='mt-8 pt-8 border-t'>
             <p className='text-center text-sm text-muted-foreground'>
-              © {new Date().getFullYear()} {profileConfig.name}. Built with Nx,
+              © {new Date().getFullYear()} {siteConfig.siteName}. Built with Nx,
               React, and modern web technologies.
             </p>
           </div>
