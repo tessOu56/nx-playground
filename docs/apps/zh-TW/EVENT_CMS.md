@@ -1,3 +1,15 @@
+---
+title: 'Event CMS - 活動內容管理系統'
+slug: 'event-cms'
+category: 'apps'
+tags: ['React 19', 'Vite', 'Zustand', 'React Hook Form', 'RBAC', 'CMS', 'i18n']
+date: '2025-10-20'
+excerpt: '**定位**: 輕量級 CMS，用於創建和管理活動'
+author: 'NX Playground'
+lang: 'zh-TW'
+published: true
+---
+
 # Event CMS - 活動內容管理系統
 
 > **定位**: 輕量級 CMS，用於創建和管理活動

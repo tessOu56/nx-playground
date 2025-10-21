@@ -1,4 +1,8 @@
-# NX Playground 文檔導覽
+# NX Playground 文檔
+
+> 最後更新: 2025-10-20
+
+## 📖 文檔導覽
 
 > 歡迎來到 NX Playground 文檔中心
 
@@ -17,105 +21,52 @@
 
 ### ⭐ 必讀文檔
 
-| 文檔 | 說明 | 適合對象 |
-|------|------|---------|
-| [當前狀態](./CURRENT_STATUS.md) | 專案進度、已完成功能、技術決策 | 所有人 |
-| [專案規格](./PROJECT_SPECIFICATION.md) | 完整的專案規格和架構設計 | 開發者、AI |
-| [開發指南](./DEVELOPMENT_GUIDE.md) | 如何正確創建 libs/apps | 開發者、AI |
+| 文檔                                   | 說明                           | 適合對象   |
+| -------------------------------------- | ------------------------------ | ---------- |
+| [當前狀態](./CURRENT_STATUS.md)        | 專案進度、已完成功能、技術決策 | 所有人     |
+| [專案規格](./PROJECT_SPECIFICATION.md) | 完整的專案規格和架構設計       | 開發者、AI |
+| [開發指南](./DEVELOPMENT_GUIDE.md)     | 如何正確創建 libs/apps         | 開發者、AI |
 
 ### 📖 參考文檔
 
-| 文檔 | 說明 |
-|------|------|
+| 文檔                             | 說明                     |
+| -------------------------------- | ------------------------ |
 | [快速參考](./QUICK_REFERENCE.md) | 常用命令、網址、配置速查 |
+
+### 📁 詳細文檔
+
+| 目錄                   | 說明                              |
+| ---------------------- | --------------------------------- |
+| [apps/](./apps/)       | 所有應用程式的詳細技術文檔 (7 個) |
+| [libs/](./libs/)       | 所有共享函式庫的詳細文檔 (9 個)   |
+| [archive/](./archive/) | 歷史文檔和階段性完成報告          |
 
 ---
 
 ## 🖥️ 應用文檔
 
-### Event CMS
-[📄 完整文檔](./apps/EVENT_CMS.md)
+**總計**: 7 個應用
+**索引**: [apps/README.md](./apps/README.md)
 
-**定位**: 活動內容管理系統（輕量級 CMS）
+### 生產級應用 (4 個)
 
-**核心功能**:
-- ✅ 儀表板（圖表統計）
-- 🔨 活動管理（創建完整，列表待開發）
-- ✅ 用戶管理（完整 CRUD + 權限）
-- ✅ 表單管理（模板系統）
-- ✅ 系統設定（5 大分類）
-- ✅ UI 組件展示
+1. **[Profile](./apps/PROFILE.md)** ⭐ - 技術展示 Portfolio
+   - React 19 + Vite | Port 3003 | ✅ 100%
+2. **[Event CMS](./apps/EVENT_CMS.md)** - 活動管理系統
+   - React 19 + Vite | Port 3002 | ✅ 90%
+3. **[Event Portal](./apps/EVENT_PORTAL.md)** - 活動展示平台
+   - Next.js 15 | Port 3000 | ✅ 功能完整
+4. **[Auth](./apps/AUTH.md)** - 統一認證服務
+   - React 19 + Vite + Ory Kratos | Port 5173 | ✅ 核心完成
 
-**技術**: React 19 + Vite + React Router + React Hook Form + Zustand
+### 架構推演/實驗專案 (3 個)
 
-**Port**: 3002
-
----
-
-### Event Portal
-[📄 完整文檔](./apps/EVENT_PORTAL.md)
-
-**定位**: 公開活動展示和報名平台
-
-**核心功能**:
-- ✅ 活動展示（SSG）
-- ✅ LINE LIFF 整合
-- ✅ 多語言支援（繁中/英文）
-- ✅ 完整報名流程
-- ✅ 訂單管理
-
-**技術**: Next.js 15 (App Router) + LINE LIFF + next-intl
-
-**Port**: 3000
-
-**狀態**: ⚠️ 功能完整，待重寫（架構優化）
-
----
-
-### 其他應用
-
-| 應用 | 定位 | 技術 | Port | 文檔 |
-|------|------|------|------|------|
-| Profile | 技術展示平台 | React 19 + Vite | 3003 | - |
-| Enterprise Admin | 企業級管理平台 | Angular 20 | 4200 | - |
-| Auth | 統一認證服務 | React 19 + Vite | 5173 | - |
-| Vue Motion | 動畫效果實驗 | Vue 3 | 8080 | - |
-
----
-
-## 🏗️ 後端文檔
-
-### 實施規格
-[📄 完整文檔](./backend/IMPLEMENTATION_SPEC.md)
-
-完整的 NestJS 後端實施規格，包括：
-- 專案結構
-- Prisma schema
-- NestJS module 範例
-- 自動化腳本
-- 環境變數
-
-### API 設計
-[📄 完整文檔](./backend/API_DESIGN.md)
-
-所有 API endpoints 規格，包括：
-- Events API
-- Users API
-- Forms API
-- Orders API
-- Sessions API
-- 錯誤處理
-- 分頁規範
-
-### 資料庫設計
-[📄 完整文檔](./backend/DATABASE_DESIGN.md)
-
-完整的資料庫設計，包括：
-- 5 個資料模型
-- 關聯關係
-- 索引策略
-- 遷移策略
-- 種子數據
+5. **[Enterprise Admin](./apps/ENTERPRISE_ADMIN.md)** - Angular 架構推演
+   - Angular 20 | Port 4200 | ✅ 架構完成
+6. **[Vue Motion](./apps/VUE_MOTION.md)** - 動畫 Sandbox
+   - Vue 3 + GSAP | Port 8080 | ✅ 展示完成
+7. **[API Server](./apps/API_SERVER.md)** - NestJS 後端
+   - NestJS + Prisma | Port 3333 | 🔄 部分完成
 
 ---
 
@@ -185,11 +136,13 @@ docs/
 ### 給開發者
 
 1. **千萬不要用 `nx g` 指令創建新專案**
+
    - Nx 預設配置與本專案不兼容
    - 必須參考現有專案手動複製配置
    - 詳見 [開發指南](./DEVELOPMENT_GUIDE.md)
 
 2. **OpenAPI 是核心**
+
    - 所有 API 修改必須先更新 OpenAPI spec
    - 使用 Code-First 方式（NestJS decorators）
 
@@ -200,10 +153,12 @@ docs/
 ### 給 AI
 
 1. **先讀核心文檔**
+
    - [專案規格](./PROJECT_SPECIFICATION.md)
    - [開發指南](./DEVELOPMENT_GUIDE.md)
 
 2. **參考現有代碼**
+
    - 不要憑空創造，參考現有專案
    - 保持代碼風格一致
 
@@ -223,29 +178,38 @@ event-portal: ████████████████████ 100% 
 其他 apps:    ████████████████████ 100%
 後端:         ░░░░░░░░░░░░░░░░░░░░   0% (已規劃)
 
-總體進度:     █████████░░░░░░░░░░░  42%
+總體進度:     █████████░░░░░░░░░░░  45%
 ```
 
 ### 下一步
 
-1. **後端實施** (優先)
+1. **Profile 部署** (立即)
+
+   - 自定義個人資訊
+   - 部署到 Cloudflare Pages
+   - 作為技術展示和接案平台
+
+2. **後端實施** (優先)
+
    - 創建 NestJS 應用
    - 實施 Prisma schema
    - 生成 OpenAPI
    - 整合前端
 
-2. **event-cms Events 列表頁** (短期)
+3. **event-cms Events 列表頁** (短期)
 
-3. **event-portal 重寫** (中期)
+4. **event-portal 重寫** (中期)
 
 ---
 
 ## 🔗 相關資源
 
 ### 內部
+
 - [專案 README](../README.md) - 專案根目錄 README
 
 ### 外部
+
 - [Nx 官方文檔](https://nx.dev)
 - [React 官方文檔](https://react.dev)
 - [Next.js 官方文檔](https://nextjs.org)
@@ -255,16 +219,19 @@ event-portal: ████████████████████ 100% 
 
 ## 📝 文檔更新
 
-**最後更新**: 2025-10-12
-**版本**: 1.0
+**最後更新**: 2025-10-20
+**版本**: 1.1
 **維護者**: NX Playground Team
 
 ### 更新記錄
 
+- 2025-10-20: Profile App 完整重構文檔 + Cloudflare 部署準備
+- 2025-10-20: 添加 docs/apps/PROFILE.md 和 apps/README.md
+- 2025-10-20: 更新 CURRENT_STATUS.md 記錄重構成果
 - 2025-10-12: 完成文檔重組和整理
 - 2025-10-12: 添加後端規格文檔
 - 2025-10-12: 創建應用文檔
 
 ---
 
-*如有疑問，請參考相關文檔或查看代碼實現*
+_如有疑問，請參考相關文檔或查看代碼實現_

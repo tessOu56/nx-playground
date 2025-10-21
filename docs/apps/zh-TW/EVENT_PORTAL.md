@@ -1,3 +1,15 @@
+---
+title: 'Event Portal - 活動展示平台'
+slug: 'event-portal'
+category: 'apps'
+tags: ['Next.js 15', 'SSG', 'LINE LIFF', 'next-intl', 'QR Code']
+date: '2025-10-20'
+excerpt: '**定位**: 公開的活動展示和報名平台'
+author: 'NX Playground'
+lang: 'zh-TW'
+published: true
+---
+
 # Event Portal - 活動展示平台
 
 > **定位**: 公開的活動展示和報名平台
