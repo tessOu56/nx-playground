@@ -65,7 +65,9 @@ export const AppsPage: FC = () => {
             <div className='text-4xl font-bold text-blue-600 dark:text-blue-400 mb-2'>
               {apps.length}
             </div>
-            <div className='text-gray-600 dark:text-gray-400 font-medium'>Applications</div>
+            <div className='text-gray-600 dark:text-gray-400 font-medium'>
+              Applications
+            </div>
           </div>
           <div className='bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg text-center'>
             <div className='text-4xl font-bold text-green-600 dark:text-green-400 mb-2'>
