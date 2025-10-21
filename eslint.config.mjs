@@ -7,35 +7,20 @@ export default [
   ...nx.configs['flat/react'],
   {
     ignores: [
-      // Build outputs
       '**/dist/**',
       '**/build/**',
       '**/out/**',
       '**/.next/**',
-
-      // Dependencies
       '**/node_modules/**',
-
-      // Generated files
       '**/generated/**',
       '**/*.generated.*',
       '**/coverage/**',
-
-      // Config files
       '**/*.config.*',
       '**/vite.config.*.timestamp*',
       '**/vitest.config.*.timestamp*',
-
-      // Nx cache
       '**/.nx/**',
-
-      // Only check src directories (exclude non-src files)
       '!**/src/**',
-
-      // Specific app exclusions (if needed)
       'apps/auth/**',
-
-      // Generated API client files
       'libs/api-client/src/generated/**',
     ],
   },

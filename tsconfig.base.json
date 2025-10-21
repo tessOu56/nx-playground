@@ -26,22 +26,24 @@
     "noUnusedLocals": false,
     "noUnusedParameters": false,
     "paths": {
+      "@nx-playground/animation-data": ["libs/animation-data/src/index.ts"],
       "@nx-playground/api-client": ["dist/libs/api-client"],
-      "@nx-playground/auth-client": ["dist/libs/auth-client/src"],
+      "@nx-playground/api-server": ["apps/api-server/src"],
       "@nx-playground/auth": ["dist/libs/auth"],
+      "@nx-playground/auth-client": ["dist/libs/auth-client/src"],
       "@nx-playground/charts": ["dist/libs/charts"],
-      "@nx-playground/charts/recharts": ["dist/libs/charts/recharts"],
       "@nx-playground/charts/chartjs": ["dist/libs/charts/chartjs"],
+      "@nx-playground/charts/recharts": ["dist/libs/charts/recharts"],
       "@nx-playground/design-system": ["dist/libs/design-system/src"],
+      "@nx-playground/enterprise-admin": ["apps/enterprise-admin/src"],
+      "@nx-playground/enterprise-data": ["libs/enterprise-data/src/index.ts"],
       "@nx-playground/event-cms": ["apps/event-cms/src"],
       "@nx-playground/event-portal": ["apps/event-portal/src"],
       "@nx-playground/hooks": ["dist/libs/hooks/src"],
       "@nx-playground/i18n": ["dist/libs/i18n"],
-      "@nx-playground/ui-components": ["dist/libs/ui-components"],
-      "@nx-playground/vue-motion": ["apps/vue-motion/src"],
-      "@nx-playground/enterprise-admin": ["apps/enterprise-admin/src"],
       "@nx-playground/profile": ["apps/profile/src"],
-      "@nx-playground/api-server": ["apps/api-server/src"]
+      "@nx-playground/ui-components": ["dist/libs/ui-components"],
+      "@nx-playground/vue-motion": ["apps/vue-motion/src"]
     }
   },
   "plugins": [
