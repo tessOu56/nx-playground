@@ -7,7 +7,7 @@ import { type FC } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { useLocalizedNavigation } from '../../../lib/i18n/useLocalizedNavigation';
-import { useBlogTranslation } from '../hooks/useBlogTranslation';
+import { useBlogTranslation } from '../hooks/useBlogsTranslation';
 import type { BlogPost } from '../types';
 
 import { TagList } from './TagList';

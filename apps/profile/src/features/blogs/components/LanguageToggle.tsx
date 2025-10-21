@@ -6,7 +6,7 @@ import { Button } from '@nx-playground/ui-components';
 import { type FC } from 'react';
 
 import { useLocalizedNavigation } from '../../../lib/i18n/useLocalizedNavigation';
-import { useBlogTranslation } from '../hooks/useBlogTranslation';
+import { useBlogTranslation } from '../hooks/useBlogsTranslation';
 
 interface LanguageToggleProps {
   currentSlug: string;
