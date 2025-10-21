@@ -8,11 +8,16 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@nx-playground/api-client": "workspace:*",
     "@nx-playground/auth-client": "workspace:*",
     "@nx-playground/design-system": "workspace:*",
-    "@nx-playground/api-client": "workspace:*",
-    "@nx-playground/ui-components": "workspace:*",
+    "@nx-playground/hooks": "workspace:*",
     "@nx-playground/i18n": "workspace:*",
-    "@nx-playground/hooks": "workspace:*"
+    "@nx-playground/ui-components": "workspace:*",
+    "gray-matter": "^4.0.3",
+    "highlight.js": "^11.11.1",
+    "marked": "^16.4.1",
+    "reading-time": "^1.5.0",
+    "rss": "^1.2.2"
   }
 }

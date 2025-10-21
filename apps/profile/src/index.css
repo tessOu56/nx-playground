@@ -8,6 +8,22 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer base {
+  :root {
+    /* Custom badge colors for tech skill levels */
+    --badge-expert: 262.1 83.3% 57.8%; /* Purple - matches primary */
+    --badge-advanced: 270 95.2% 75.3%; /* Violet - lighter purple */
+    --badge-intermediate: 215.4 16.3% 46.9%; /* Gray - muted */
+  }
+
+  .dark {
+    /* Custom badge colors - dark mode */
+    --badge-expert: 263.4 70% 50.4%; /* Darker purple */
+    --badge-advanced: 270 95.2% 75.3%; /* Keep violet bright */
+    --badge-intermediate: 215 20.2% 65.1%; /* Lighter gray for dark mode */
+  }
+}
+
 /* Custom styles */
 body {
   margin: 0;

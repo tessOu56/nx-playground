@@ -1,0 +1,11 @@
+# Cloudflare Pages configuration for profile app
+name = "nx-playground-profile"
+compatibility_date = "2024-01-01"
+
+# Pages configuration
+[pages]
+# Build configuration is handled by Cloudflare Pages UI or CLI
+# This file is optional but can be used for additional configuration
+
+# Environment variables (set these in Cloudflare Pages dashboard)
+# NODE_VERSION = "20"
