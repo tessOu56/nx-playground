@@ -1,6 +1,10 @@
 import { useTranslation } from '@nx-playground/i18n';
-import { type FC, useMemo } from 'react';
+import { type FC, useEffect, useMemo, useState } from 'react';
+import { useParams } from 'react-router-dom';
 
+import type { SupportedLocale } from '../../../lib/i18n/LocaleRouter';
+import { loadAllLibs } from '../../../lib/projectLoader';
+import type { LibData } from '../../../types/projectData';
 import { appsConfig } from '../../../data/apps.config';
 import {
   libBenefits,
@@ -14,17 +18,54 @@ export const LibsPage: FC = () => {
   const { t } = useLibsTranslation();
   const { i18n } = useTranslation();
   const currentLang = i18n.language as 'zh-TW' | 'en';
+  const { locale } = useParams<{ locale: string }>();
+  const currentLocale = (locale ?? 'zh-TW') as SupportedLocale;
+
+  const [libs, setLibs] = useState<LibData[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  // 載入 Libs 資料
+  useEffect(() => {
+    const loadLibsData = async () => {
+      setLoading(true);
+      try {
+        const loadedLibs = await loadAllLibs(currentLocale);
+        
+        if (loadedLibs.length > 0) {
+          setLibs(loadedLibs);
+        } else {
+          // Fallback 到 config
+          setLibs(libsConfig as any);
+        }
+      } catch (error) {
+        console.error('Failed to load libs:', error);
+        setLibs(libsConfig as any);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadLibsData();
+  }, [currentLocale]);
 
   const groupedLibs = useMemo(() => {
-    const grouped: Record<string, typeof libsConfig> = {};
-    libsConfig.forEach(lib => {
+    const grouped: Record<string, typeof libs> = {};
+    libs.forEach(lib => {
       if (!grouped[lib.category]) {
         grouped[lib.category] = [];
       }
       grouped[lib.category].push(lib);
     });
     return grouped;
-  }, []);
+  }, [libs]);
+
+  if (loading) {
+    return (
+      <div className='min-h-screen flex items-center justify-center'>
+        <p className='text-lg text-muted-foreground'>載入中...</p>
+      </div>
+    );
+  }
 
   return (
     <div className='min-h-screen bg-gradient-to-b from-gray-50 to-white dark:from-gray-900 dark:to-gray-800 py-12 px-4'>
@@ -99,7 +140,7 @@ export const LibsPage: FC = () => {
           </p>
           <div className='grid grid-cols-2 md:grid-cols-4 gap-4 text-center'>
             <div className='bg-white/10 backdrop-blur-sm rounded-lg p-4'>
-              <div className='text-3xl font-bold mb-1'>{libsConfig.length}</div>
+              <div className='text-3xl font-bold mb-1'>{libs.length}</div>
               <div className='text-sm opacity-90'>
                 {currentLang === 'zh-TW' ? '函式庫' : 'Libraries'}
               </div>
