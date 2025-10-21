@@ -10,8 +10,8 @@ import { format, parseISO, setHours, setMinutes, setSeconds } from 'date-fns';
 import { useEffect, useMemo, useState } from 'react';
 import { Controller, useFormContext, useWatch } from 'react-hook-form';
 
+import { useSessionStore } from '../../stores';
 import { type EventFormValue } from '../../types';
-import { useSessionStore } from '../../useEventStore';
 import { Text } from '../core';
 
 export function SessionEditBlock() {

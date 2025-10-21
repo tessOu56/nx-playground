@@ -4,8 +4,8 @@ import { useFormContext, useWatch } from 'react-hook-form';
 
 import { formatDate } from '../../../../lib/utils';
 import { parseDate, useSortSessions } from '../../hooks';
+import { useSessionStore } from '../../stores';
 import { type EventFormValue, type SessionBlockType } from '../../types';
-import { useSessionStore } from '../../useEventStore';
 import { Text } from '../core';
 
 export function SessionMainBlock() {

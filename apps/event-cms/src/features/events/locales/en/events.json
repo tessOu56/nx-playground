@@ -1,0 +1,29 @@
+{
+  "title": "Event Management",
+  "create": {
+    "title": "Create Event",
+    "coverImage": "Cover Image",
+    "eventName": "Event Name",
+    "eventDescription": "Event Description",
+    "eventLocation": "Event Location",
+    "eventContent": "Event Content",
+    "faq": "FAQ",
+    "session": "Session",
+    "ticket": "Ticket",
+    "form": "Registration Form",
+    "visibility": "Visibility",
+    "payment": "Payment Method"
+  },
+  "actions": {
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "preview": "Preview",
+    "publish": "Publish"
+  },
+  "validation": {
+    "required": "This field is required",
+    "invalid": "Invalid format"
+  }
+}

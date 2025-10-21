@@ -2,8 +2,8 @@ import { Card, Input } from '@nx-playground/ui-components';
 import { useFormContext } from 'react-hook-form';
 
 import fakemap from '../../assets/fakemap.png';
+import { useEventStore } from '../../stores';
 import { EditingBlockEnum } from '../../types';
-import { useEventStore } from '../../useEventStore';
 import { Text } from '../core/index';
 
 export function EventIntroduction() {

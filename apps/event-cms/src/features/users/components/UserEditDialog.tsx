@@ -1,3 +1,4 @@
+import { useModal } from '@nx-playground/hooks';
 import {
   Dialog,
   DialogContent,
@@ -14,8 +15,8 @@ import {
   SelectValue,
   Textarea,
 } from '@nx-playground/ui-components';
-import { useModal } from '@nx-playground/hooks';
 import { useState, useEffect } from 'react';
+
 import type { User, UserFormData } from '../types';
 import { ROLES, STATUSES } from '../types';
 

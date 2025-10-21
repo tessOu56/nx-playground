@@ -173,7 +173,7 @@ export const formBlockSchema = z.object({
   }),
 });
 
-export type FormFieldType = {
+export type EventFormFieldType = {
   id: string;
   fieldType:
     | 'text'

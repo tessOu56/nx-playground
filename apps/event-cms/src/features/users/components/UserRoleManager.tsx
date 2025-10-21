@@ -1,5 +1,6 @@
 import { Card, CardContent, CardHeader, CardTitle, Badge, Button } from '@nx-playground/ui-components';
 import { Shield, CheckCircle, XCircle } from 'lucide-react';
+
 import type { User } from '../types';
 
 interface Permission {

@@ -1,6 +1,6 @@
 import { Input } from '@nx-playground/ui-components';
 
-import { useNavigateStore } from '../../useEventStore';
+import { useNavigateStore } from '../../stores';
 import { Text } from '../core';
 
 const navigationItems = [

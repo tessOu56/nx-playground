@@ -3,12 +3,12 @@ import React, { useEffect, useRef } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 
 import { MockDataManager } from '../../mock/mockAPI';
+import { useFormStore } from '../../stores';
 import {
-  type FormFieldType,
+  type EventFormFieldType as FormFieldType,
   type EventFormValue,
   type FormBlockType,
 } from '../../types';
-import { useFormStore } from '../../useEventStore';
 import { descriptionField, questionField } from '../../utils/fieldsList';
 import { Text } from '../core';
 

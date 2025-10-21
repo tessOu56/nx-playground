@@ -4,7 +4,7 @@ import { useDrag, useDrop } from 'react-dnd';
 import { useFormContext } from 'react-hook-form';
 
 import { useFileUpload } from '../../hooks';
-import { useEventStore } from '../../useEventStore';
+import { useEventStore } from '../../stores';
 import { Image, Text } from '../core/index';
 
 type Props = {

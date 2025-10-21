@@ -2,8 +2,8 @@ import { Button, Input, Textarea } from '@nx-playground/ui-components';
 import React, { useState, useRef } from 'react';
 import { useDrag, useDrop } from 'react-dnd';
 
-import { type FormFieldType } from '../../types';
-import { useFormStore } from '../../useEventStore';
+import { useFormStore } from '../../stores';
+import { type EventFormFieldType as FormFieldType } from '../../types';
 import { Text } from '../core';
 
 const ItemTypes = { BOX: 'box' };

@@ -12,8 +12,8 @@ import React, { useEffect, useState } from 'react';
 import { useFormContext } from 'react-hook-form';
 
 import { MockDataManager, type PreferPaymentItem } from '../../mock/mockAPI';
+import { usePreviewStore } from '../../stores';
 import { type EventFormValue } from '../../types';
-import { usePreviewStore } from '../../useEventStore';
 import { Text } from '../core';
 
 export function PreviewSideBar() {

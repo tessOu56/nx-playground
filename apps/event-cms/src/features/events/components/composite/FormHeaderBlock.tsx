@@ -1,8 +1,8 @@
 import { Button } from '@nx-playground/ui-components';
 import { useFormContext } from 'react-hook-form';
 
+import { useFormStore } from '../../stores';
 import { type EventFormValue } from '../../types';
-import { useFormStore } from '../../useEventStore';
 import { Text } from '../core';
 
 export function FormHeaderBlock() {

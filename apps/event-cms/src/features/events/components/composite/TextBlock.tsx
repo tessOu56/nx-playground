@@ -3,7 +3,7 @@ import { useRef, useState } from 'react';
 import { useDrag, useDrop } from 'react-dnd';
 import { Controller, useFormContext } from 'react-hook-form';
 
-import { useEventStore } from '../../useEventStore';
+import { useEventStore } from '../../stores';
 import { Text } from '../core/index';
 import { TextBlockToolbar } from '../index';
 

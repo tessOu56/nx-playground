@@ -3,8 +3,8 @@ import { useRef } from 'react';
 import { useFormContext } from 'react-hook-form';
 
 import { useFileUpload } from '../../hooks';
+import { useEventStore } from '../../stores';
 import { EditingBlockEnum } from '../../types';
-import { useEventStore } from '../../useEventStore';
 import { Image, Text } from '../core/index';
 
 export function EventsCoverImage() {

@@ -11,8 +11,8 @@ import {
 import { useEffect, useState } from 'react';
 import { Controller, useFormContext, useWatch } from 'react-hook-form';
 
+import { usePreviewStore } from '../../stores';
 import { type EventFormValue } from '../../types';
-import { usePreviewStore } from '../../useEventStore';
 import { Text } from '../core';
 
 export function PaymentBlock() {

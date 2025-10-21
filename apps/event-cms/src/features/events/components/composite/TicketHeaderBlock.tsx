@@ -9,8 +9,8 @@ import {
 } from 'date-fns';
 import { useFormContext, useWatch } from 'react-hook-form';
 
+import { useTicketStore } from '../../stores';
 import { type EventFormValue } from '../../types';
-import { useTicketStore } from '../../useEventStore';
 import { Text } from '../core';
 
 export function TicketHeaderBlock() {

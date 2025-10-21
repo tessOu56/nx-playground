@@ -1,0 +1,25 @@
+import { createFeatureTranslation } from '@nx-playground/i18n';
+
+export const useEventsTranslation = createFeatureTranslation('cms-events', [
+  'title',
+  'create.title',
+  'create.coverImage',
+  'create.eventName',
+  'create.eventDescription',
+  'create.eventLocation',
+  'create.eventContent',
+  'create.faq',
+  'create.session',
+  'create.ticket',
+  'create.form',
+  'create.visibility',
+  'create.payment',
+  'actions.save',
+  'actions.cancel',
+  'actions.delete',
+  'actions.edit',
+  'actions.preview',
+  'actions.publish',
+  'validation.required',
+  'validation.invalid',
+]);
