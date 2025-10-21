@@ -58,6 +58,9 @@
     },
     {
       "path": "../../libs/i18n/tsconfig.lib.json"
+    },
+    {
+      "path": "../../libs/tech-stack-data/tsconfig.lib.json"
     }
   ]
 }
