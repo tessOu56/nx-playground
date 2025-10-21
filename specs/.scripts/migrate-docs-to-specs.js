@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /**
  * 遷移 docs/ 到 specs/ 並重新組織結構
- * 
+ *
  * 舊結構: docs/apps/zh-TW/PROFILE.md
  * 新結構: specs/apps/profile/zh-TW.md
  */
@@ -18,10 +18,7 @@ const specsDir = path.join(rootDir, 'specs');
  * 轉換檔名：PROFILE.md → profile
  */
 function convertFileName(fileName) {
-  return fileName
-    .replace('.md', '')
-    .toLowerCase()
-    .replace(/_/g, '-');
+  return fileName.replace('.md', '').toLowerCase().replace(/_/g, '-');
 }
 
 /**
@@ -56,11 +53,11 @@ function determineCategoryFromTags(tags) {
   if (tags.includes('Angular 20') || tags.includes('Angular')) return 'angular';
   if (tags.includes('Vue 3') || tags.includes('Vue')) return 'vue';
   if (tags.includes('Next.js 15') || tags.includes('Next.js')) return 'nextjs';
-  
+
   // Libs
   if (tags.includes('UI') || tags.includes('Design')) return 'ui';
   if (tags.includes('Data Layer') || tags.includes('State')) return 'data';
-  
+
   return 'utils';
 }
 
@@ -72,7 +69,12 @@ function extractPurpose(content) {
   const lines = content.split('\n');
   for (let i = 0; i < lines.length; i++) {
     const line = lines[i].trim();
-    if (line && !line.startsWith('#') && !line.startsWith('>') && !line.startsWith('-')) {
+    if (
+      line &&
+      !line.startsWith('#') &&
+      !line.startsWith('>') &&
+      !line.startsWith('-')
+    ) {
       return line;
     }
   }
@@ -84,7 +86,7 @@ function extractPurpose(content) {
  */
 function migrateFile(type, locale, fileName) {
   const oldPath = path.join(docsDir, type, locale, fileName);
-  
+
   if (!fs.existsSync(oldPath)) {
     console.log(`⚠️  檔案不存在: ${path.relative(rootDir, oldPath)}`);
     return;
@@ -150,4 +152,3 @@ function main() {
 }
 
 main();
-
