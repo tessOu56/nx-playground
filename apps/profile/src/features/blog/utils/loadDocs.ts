@@ -10,10 +10,11 @@ import html from 'remark-html';
 import type { BlogPost, BlogCategory, SupportedLocale } from '../types';
 
 /**
- * Dynamically import all Markdown files from docs directory
+ * Dynamically import all Markdown files from docs and specs directories
  * Using Vite's import.meta.glob with ?raw query to get file contents
+ * Supports both old docs/ and new specs/ paths
  */
-const docsModules = import.meta.glob<string>('/docs/**/*.md', {
+const docsModules = import.meta.glob<string>(['/docs/**/*.md', '/specs/**/*.md'], {
   query: '?raw',
   import: 'default',
 });
@@ -35,16 +36,23 @@ async function parseMarkdownFile(
     }
 
     // Extract category and locale from file path
-    // Path format: /docs/apps/zh-TW/FILENAME.md or /docs/libs/en/FILENAME.md
-    const pathMatch = filePath.match(
-      /\/docs\/(apps|libs)\/(zh-TW|en)\/(.+)\.md$/
-    );
-    if (!pathMatch) {
-      console.warn(`Invalid file path format: ${filePath}`);
-      return null;
-    }
+    // Path format: /docs/apps/zh-TW/FILENAME.md 或 /specs/apps/appId/zh-TW.md
+    let pathMatch = filePath.match(/\/docs\/(apps|libs)\/(zh-TW|en)\/(.+)\.md$/);
+    let category, lang, filename;
 
-    const [, category, lang, filename] = pathMatch;
+    if (pathMatch) {
+      // 舊格式: /docs/apps/zh-TW/FILENAME.md
+      [, category, lang, filename] = pathMatch;
+    } else {
+      // 新格式: /specs/apps/appId/zh-TW.md
+      pathMatch = filePath.match(/\/specs\/(apps|libs)\/([^/]+)\/(zh-TW|en)\.md$/);
+      if (pathMatch) {
+        [, category, filename, lang] = pathMatch;
+      } else {
+        console.warn(`Invalid file path format: ${filePath}`);
+        return null;
+      }
+    }
 
     // Convert Markdown to HTML
     const processedContent = await remark().use(html).process(markdownContent);
