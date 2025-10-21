@@ -18,6 +18,7 @@ import {
   Shield,
   User as UserIcon,
 } from 'lucide-react';
+
 import type { User } from '../types';
 import { ROLES, STATUSES } from '../types';
 
@@ -176,7 +177,7 @@ export function UserDetailDialog({
               {/* Mock activity data */}
               <div className='space-y-3'>
                 <div className='flex items-start gap-3 p-3 bg-gray-50 rounded'>
-                  <div className='w-2 h-2 bg-green-500 rounded-full mt-2'></div>
+                  <div className='w-2 h-2 bg-green-500 rounded-full mt-2' />
                   <div>
                     <p className='text-sm font-medium text-gray-900'>
                       登入系統
@@ -188,7 +189,7 @@ export function UserDetailDialog({
                 </div>
 
                 <div className='flex items-start gap-3 p-3 bg-gray-50 rounded'>
-                  <div className='w-2 h-2 bg-blue-500 rounded-full mt-2'></div>
+                  <div className='w-2 h-2 bg-blue-500 rounded-full mt-2' />
                   <div>
                     <p className='text-sm font-medium text-gray-900'>
                       帳號創建
@@ -201,7 +202,7 @@ export function UserDetailDialog({
 
                 {user.status === 'active' && (
                   <div className='flex items-start gap-3 p-3 bg-gray-50 rounded'>
-                    <div className='w-2 h-2 bg-green-500 rounded-full mt-2'></div>
+                    <div className='w-2 h-2 bg-green-500 rounded-full mt-2' />
                     <div>
                       <p className='text-sm font-medium text-gray-900'>
                         帳號啟用

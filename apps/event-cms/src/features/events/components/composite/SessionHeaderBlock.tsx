@@ -2,8 +2,8 @@ import { Button } from '@nx-playground/ui-components';
 import { format, setHours, setMinutes, setSeconds } from 'date-fns';
 import { useFormContext, useWatch } from 'react-hook-form';
 
+import { useSessionStore } from '../../stores';
 import { type EventFormValue, type SessionBlockType } from '../../types';
-import { useSessionStore } from '../../useEventStore';
 import { Text } from '../core';
 
 export function SessionHeaderBlock() {

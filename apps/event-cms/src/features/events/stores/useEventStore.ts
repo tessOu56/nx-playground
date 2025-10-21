@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 
-import { type PreferPaymentItem } from './mock/mockAPI';
-import { EditingBlockEnum, type FormBlockType, NavigateEnum } from './types';
+import { type PreferPaymentItem } from '../mock/mockAPI';
+import { EditingBlockEnum, type FormBlockType, NavigateEnum } from '../types';
 
 type NavigateStore = {
   navigate: NavigateEnum;

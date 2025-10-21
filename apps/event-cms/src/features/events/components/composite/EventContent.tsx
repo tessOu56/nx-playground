@@ -3,8 +3,8 @@ import { useEffect, useRef } from 'react';
 import { useDrop } from 'react-dnd';
 import { useFieldArray, useFormContext, useWatch } from 'react-hook-form';
 
+import { useEventStore } from '../../stores';
 import { EditingBlockEnum, type EventFormValue } from '../../types';
-import { useEventStore } from '../../useEventStore';
 import { Text } from '../core/index';
 import { ImageBlock, TextBlock } from '../index';
 

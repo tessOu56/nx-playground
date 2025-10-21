@@ -10,8 +10,8 @@ import { Plus, Edit, Eye } from 'lucide-react';
 import { useState } from 'react';
 
 import { DataTable, type Column } from '../../../components/DataTable';
-import { UserEditDialog } from '../components/UserEditDialog';
 import { UserDetailDialog } from '../components/UserDetailDialog';
+import { UserEditDialog } from '../components/UserEditDialog';
 import { UserRoleManager } from '../components/UserRoleManager';
 import { mockUsers } from '../mock/userData';
 import type { User, UserFormData } from '../types';

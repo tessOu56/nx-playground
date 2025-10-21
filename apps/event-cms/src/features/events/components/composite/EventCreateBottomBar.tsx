@@ -2,16 +2,16 @@ import { Button, useToast } from '@nx-playground/ui-components';
 import { type SubmitHandler, useFormContext } from 'react-hook-form';
 
 import {
+  useEventStore,
+  useNavigateStore,
+  useSessionStore,
+} from '../../stores';
+import {
   EditingBlockEnum,
   type EventFormValue,
   NavigateEnum,
   type TicketBlockType,
 } from '../../types';
-import {
-  useEventStore,
-  useNavigateStore,
-  useSessionStore,
-} from '../../useEventStore';
 import { calculateOffsetSaleTime } from '../../utils/ticketoffsetCalculate';
 import { Text } from '../core';
 

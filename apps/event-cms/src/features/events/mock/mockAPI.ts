@@ -1,4 +1,4 @@
-import { type FormBlockType, type FormFieldType } from '../types';
+import { EventFormFieldType as FormFieldType } from '../types';
 
 import { mockPreferPayment } from './mockPreferPaymant';
 import { mockTemplates, mockTemplateDetails } from './mockTemplate';
@@ -6,7 +6,7 @@ import { mockTemplates, mockTemplateDetails } from './mockTemplate';
 export interface FormTemplate {
   id: string;
   name: string;
-  fields: FormFieldType[];
+  fields: EventFormFieldType[];
   submitText?: string;
   createdAt: string;
   updatedAt: string;
@@ -16,7 +16,7 @@ export interface FormTemplate {
 export interface FormTemplateListItem {
   id: string;
   name: string;
-  fields: FormFieldType[];
+  fields: EventFormFieldType[];
   createdAt: string;
   updatedAt: string;
 }

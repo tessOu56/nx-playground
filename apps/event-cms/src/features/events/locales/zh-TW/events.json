@@ -1,0 +1,29 @@
+{
+  "title": "活動管理",
+  "create": {
+    "title": "創建活動",
+    "coverImage": "封面圖片",
+    "eventName": "活動名稱",
+    "eventDescription": "活動描述",
+    "eventLocation": "活動地點",
+    "eventContent": "活動內容",
+    "faq": "常見問題",
+    "session": "場次",
+    "ticket": "票券",
+    "form": "報名表單",
+    "visibility": "可見性",
+    "payment": "付款方式"
+  },
+  "actions": {
+    "save": "儲存",
+    "cancel": "取消",
+    "delete": "刪除",
+    "edit": "編輯",
+    "preview": "預覽",
+    "publish": "發布"
+  },
+  "validation": {
+    "required": "此欄位為必填",
+    "invalid": "格式不正確"
+  }
+}

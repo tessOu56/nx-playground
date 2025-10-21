@@ -25,12 +25,12 @@ import {
   VisibilityBlock,
 } from '../components';
 import { FormModal } from '../components/composite/FormModal';
-import { type EventFormValue, eventFormSchema } from '../types';
 import {
   useFormStore,
   useNavigateStore,
   usePreviewStore,
-} from '../useEventStore';
+} from '../stores';
+import { type EventFormValue, eventFormSchema } from '../types';
 
 export function CreateEventsPage() {
   const { navigate } = useNavigateStore();

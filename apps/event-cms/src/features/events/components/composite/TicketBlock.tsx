@@ -3,12 +3,12 @@ import { parseISO, format } from 'date-fns';
 import { useEffect, useRef, useState } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 
+import { useTicketStore } from '../../stores';
 import {
   type EventFormValue,
   type SessionBlockType,
   type TicketBlockType,
 } from '../../types';
-import { useTicketStore } from '../../useEventStore';
 import { Text } from '../core';
 
 type Props = { item: TicketBlockType; sessionBlock: SessionBlockType[] };

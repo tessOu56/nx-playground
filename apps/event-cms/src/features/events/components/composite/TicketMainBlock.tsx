@@ -2,8 +2,8 @@ import { Button } from '@nx-playground/ui-components';
 import { addMonths, format, formatISO, isAfter, parseISO } from 'date-fns';
 import { useFormContext, useWatch } from 'react-hook-form';
 
+import { useTicketStore } from '../../stores';
 import { type EventFormValue, type TicketBlockType } from '../../types';
-import { useTicketStore } from '../../useEventStore';
 import { Text } from '../core';
 
 import { TicketBlock } from './TicketBlock';

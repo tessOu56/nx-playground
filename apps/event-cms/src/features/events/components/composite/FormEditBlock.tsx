@@ -18,8 +18,11 @@ import {
   useWatch,
 } from 'react-hook-form';
 
-import { type FormFieldType, type EventFormValue } from '../../types';
-import { useFormStore } from '../../useEventStore';
+import { useFormStore } from '../../stores';
+import {
+  type EventFormFieldType as FormFieldType,
+  type EventFormValue,
+} from '../../types';
 import { Text } from '../core';
 
 export function FormEditBlock() {

@@ -13,13 +13,13 @@ import * as React from 'react';
 
 import { ColorModeSwitcher } from '../../../components/ColorModeSwitcher';
 import { ThemeSwitcher } from '../../../components/ThemeSwitcher';
-import { useSettingsTranslation } from '../hooks/useSettingsTranslation';
 import {
   NotificationSettings,
   SecuritySettings,
   SystemSettings,
   ProfileSettings,
 } from '../components';
+import { useSettingsTranslation } from '../hooks/useSettingsTranslation';
 
 import '../i18n';
 

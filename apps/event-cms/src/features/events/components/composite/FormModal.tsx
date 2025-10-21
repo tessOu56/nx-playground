@@ -13,8 +13,11 @@ import { useState } from 'react';
 import { Controller, useFormContext, useWatch } from 'react-hook-form';
 
 import { MockDataManager } from '../../mock/mockAPI';
-import { type FormFieldType, type EventFormValue } from '../../types';
-import { useFormStore } from '../../useEventStore';
+import { useFormStore } from '../../stores';
+import {
+  type EventFormFieldType as FormFieldType,
+  type EventFormValue,
+} from '../../types';
 import { Text } from '../core';
 
 export function FormModal() {

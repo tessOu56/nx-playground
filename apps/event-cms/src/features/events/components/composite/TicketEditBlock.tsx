@@ -10,8 +10,8 @@ import { parseISO, format } from 'date-fns';
 import { useEffect, useState } from 'react';
 import { Controller, useFormContext, useWatch } from 'react-hook-form';
 
+import { useTicketStore } from '../../stores';
 import { type SessionBlockType, type EventFormValue } from '../../types';
-import { useTicketStore } from '../../useEventStore';
 import { calculateOffsetSaleTime } from '../../utils/ticketoffsetCalculate';
 import { Text } from '../core';
 
