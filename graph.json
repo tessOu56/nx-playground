@@ -1,0 +1,3809 @@
+{
+  "graph": {
+    "nodes": {
+      "enterprise-admin": {
+        "name": "enterprise-admin",
+        "type": "app",
+        "data": {
+          "root": "apps/enterprise-admin",
+          "projectType": "application",
+          "targets": {
+            "typecheck": {
+              "dependsOn": [
+                "^typecheck"
+              ],
+              "options": {
+                "cwd": "apps/enterprise-admin",
+                "command": "tsc --build --emitDeclarationOnly"
+              },
+              "cache": true,
+              "inputs": [
+                "{projectRoot}/package.json",
+                "{projectRoot}/tsconfig.json",
+                "{projectRoot}/tsconfig.app.json",
+                "{projectRoot}/tsconfig.spec.json",
+                "{projectRoot}/src/**/*.ts",
+                "^production",
+                {
+                  "externalDependencies": [
+                    "typescript"
+                  ]
+                }
+              ],
+              "outputs": [
+                "{projectRoot}/out-tsc/app/**/*.d.ts",
+                "{projectRoot}/out-tsc/app/tsconfig.tsbuildinfo",
+                "{projectRoot}/out-tsc/spec/**/*.d.ts",
+                "{projectRoot}/out-tsc/spec/tsconfig.tsbuildinfo"
+              ],
+              "syncGenerators": [
+                "@nx/js:typescript-sync"
+              ],
+              "metadata": {
+                "technologies": [
+                  "typescript"
+                ],
+                "description": "Runs type-checking for the project.",
+                "help": {
+                  "command": "pnpm exec tsc --build --help",
+                  "example": {
+                    "args": [
+                      "--force"
+                    ]
+                  }
+                }
+              },
+              "executor": "nx:run-commands",
+              "configurations": {},
+              "parallelism": true
+            },
+            "lint": {
+              "executor": "@nx/eslint:lint",
+              "options": {},
+              "configurations": {},
+              "parallelism": true
+            },
+            "ng": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "ng"
+              },
+              "metadata": {
+                "scriptContent": "ng",
+                "runCommand": "pnpm run ng"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "start": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "start"
+              },
+              "metadata": {
+                "scriptContent": "ng serve",
+                "runCommand": "pnpm run start"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "watch": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "watch"
+              },
+              "metadata": {
+                "scriptContent": "ng build --watch --configuration development",
+                "runCommand": "pnpm run watch"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "test:watch": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "test:watch"
+              },
+              "metadata": {
+                "scriptContent": "ng test --watch",
+                "runCommand": "pnpm run test:watch"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "test:coverage": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "test:coverage"
+              },
+              "metadata": {
+                "scriptContent": "ng test --code-coverage",
+                "runCommand": "pnpm run test:coverage"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "e2e:ui": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "e2e:ui"
+              },
+              "metadata": {
+                "scriptContent": "playwright test --ui",
+                "runCommand": "pnpm run e2e:ui"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "e2e:debug": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "e2e:debug"
+              },
+              "metadata": {
+                "scriptContent": "playwright test --debug",
+                "runCommand": "pnpm run e2e:debug"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "build": {
+              "executor": "@angular-devkit/build-angular:application",
+              "outputs": [
+                "{options.outputPath}"
+              ],
+              "options": {
+                "outputPath": "dist/apps/enterprise-admin",
+                "index": "apps/enterprise-admin/src/index.html",
+                "browser": "apps/enterprise-admin/src/main.ts",
+                "polyfills": [
+                  "zone.js"
+                ],
+                "tsConfig": "apps/enterprise-admin/tsconfig.app.json",
+                "assets": [
+                  {
+                    "glob": "**/*",
+                    "input": "apps/enterprise-admin/public"
+                  }
+                ],
+                "styles": [
+                  "apps/enterprise-admin/src/styles.css"
+                ],
+                "scripts": []
+              },
+              "configurations": {
+                "production": {
+                  "budgets": [
+                    {
+                      "type": "initial",
+                      "maximumWarning": "500kB",
+                      "maximumError": "1MB"
+                    },
+                    {
+                      "type": "anyComponentStyle",
+                      "maximumWarning": "2kB",
+                      "maximumError": "4kB"
+                    }
+                  ],
+                  "outputHashing": "all"
+                },
+                "development": {
+                  "optimization": false,
+                  "extractLicenses": false,
+                  "sourceMap": true
+                }
+              },
+              "defaultConfiguration": "production",
+              "parallelism": true
+            },
+            "serve": {
+              "executor": "@angular-devkit/build-angular:dev-server",
+              "configurations": {
+                "production": {
+                  "buildTarget": "enterprise-admin:build:production"
+                },
+                "development": {
+                  "buildTarget": "enterprise-admin:build:development"
+                }
+              },
+              "defaultConfiguration": "development",
+              "options": {
+                "port": 4200
+              },
+              "parallelism": true
+            },
+            "extract-i18n": {
+              "executor": "@angular-devkit/build-angular:extract-i18n",
+              "configurations": {},
+              "options": {},
+              "parallelism": true
+            },
+            "test": {
+              "executor": "@angular-devkit/build-angular:karma",
+              "options": {
+                "polyfills": [
+                  "zone.js",
+                  "zone.js/testing"
+                ],
+                "tsConfig": "apps/enterprise-admin/tsconfig.spec.json",
+                "karmaConfig": "apps/enterprise-admin/karma.conf.js",
+                "assets": [
+                  {
+                    "glob": "**/*",
+                    "input": "apps/enterprise-admin/public"
+                  }
+                ],
+                "styles": [
+                  "apps/enterprise-admin/src/styles.css"
+                ],
+                "scripts": []
+              },
+              "configurations": {},
+              "parallelism": true,
+              "dependsOn": [
+                "^build"
+              ]
+            },
+            "e2e": {
+              "executor": "nx:run-commands",
+              "options": {
+                "command": "playwright test",
+                "cwd": "apps/enterprise-admin"
+              },
+              "configurations": {},
+              "parallelism": true
+            }
+          },
+          "name": "enterprise-admin",
+          "tags": [
+            "npm:private",
+            "type:app",
+            "platform:angular"
+          ],
+          "metadata": {
+            "targetGroups": {
+              "NPM Scripts": [
+                "ng",
+                "start",
+                "watch",
+                "test:watch",
+                "test:coverage",
+                "e2e:ui",
+                "e2e:debug"
+              ]
+            },
+            "js": {
+              "packageName": "@nx-playground/enterprise-admin",
+              "isInPackageManagerWorkspaces": true
+            }
+          },
+          "$schema": "../../node_modules/nx/schemas/project-schema.json",
+          "sourceRoot": "apps/enterprise-admin/src",
+          "prefix": "app",
+          "implicitDependencies": []
+        }
+      },
+      "enterprise-data": {
+        "name": "enterprise-data",
+        "type": "lib",
+        "data": {
+          "root": "libs/enterprise-data",
+          "projectType": "library",
+          "targets": {
+            "typecheck": {
+              "cache": true,
+              "inputs": [
+                "production",
+                "^production",
+                {
+                  "externalDependencies": [
+                    "typescript"
+                  ]
+                }
+              ],
+              "options": {
+                "cwd": "libs/enterprise-data",
+                "command": "tsc --noEmit -p tsconfig.lib.json"
+              },
+              "metadata": {
+                "technologies": [
+                  "typescript",
+                  "typescript"
+                ],
+                "description": "Runs type-checking for the project.",
+                "help": {
+                  "command": "pnpm exec tsc -p tsconfig.lib.json --help",
+                  "example": {
+                    "options": {
+                      "noEmit": true
+                    }
+                  }
+                }
+              },
+              "executor": "nx:run-commands",
+              "configurations": {},
+              "parallelism": true
+            },
+            "build": {
+              "options": {
+                "cwd": "libs/enterprise-data",
+                "command": "vite build"
+              },
+              "cache": true,
+              "dependsOn": [
+                "^build"
+              ],
+              "inputs": [
+                "production",
+                "^production",
+                {
+                  "externalDependencies": [
+                    "vite"
+                  ]
+                }
+              ],
+              "outputs": [
+                "{workspaceRoot}/dist/libs/enterprise-data"
+              ],
+              "metadata": {
+                "technologies": [
+                  "typescript",
+                  "vite"
+                ],
+                "description": "Run Vite build",
+                "help": {
+                  "command": "pnpm exec vite build --help",
+                  "example": {
+                    "options": {
+                      "sourcemap": true,
+                      "manifest": "manifest.json"
+                    }
+                  }
+                }
+              },
+              "executor": "nx:run-commands",
+              "configurations": {},
+              "parallelism": true
+            },
+            "build-deps": {
+              "dependsOn": [
+                "^build"
+              ],
+              "configurations": {},
+              "options": {},
+              "parallelism": true,
+              "executor": "nx:noop"
+            },
+            "watch-deps": {
+              "continuous": true,
+              "dependsOn": [
+                "build-deps"
+              ],
+              "executor": "nx:run-commands",
+              "options": {
+                "command": "pnpm exec nx watch --projects enterprise-data --includeDependentProjects -- pnpm exec nx build-deps enterprise-data"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "lint": {
+              "cache": true,
+              "options": {
+                "cwd": "libs/enterprise-data",
+                "command": "eslint ."
+              },
+              "inputs": [
+                "default",
+                "^default",
+                "{workspaceRoot}/eslint.config.mjs",
+                "{workspaceRoot}/libs/enterprise-data/eslint.config.mjs",
+                "{workspaceRoot}/tools/eslint-rules/**/*",
+                {
+                  "externalDependencies": [
+                    "eslint"
+                  ]
+                }
+              ],
+              "outputs": [
+                "{options.outputFile}"
+              ],
+              "metadata": {
+                "technologies": [
+                  "eslint"
+                ],
+                "description": "Runs ESLint on project",
+                "help": {
+                  "command": "pnpm exec eslint --help",
+                  "example": {
+                    "options": {
+                      "max-warnings": 0
+                    }
+                  }
+                }
+              },
+              "executor": "nx:run-commands",
+              "configurations": {},
+              "parallelism": true
+            },
+            "test": {
+              "options": {
+                "cwd": "libs/enterprise-data",
+                "command": "vitest"
+              },
+              "cache": true,
+              "inputs": [
+                "default",
+                "^production",
+                {
+                  "externalDependencies": [
+                    "vitest"
+                  ]
+                },
+                {
+                  "env": "CI"
+                }
+              ],
+              "outputs": [
+                "{workspaceRoot}/coverage/libs/enterprise-data"
+              ],
+              "metadata": {
+                "technologies": [
+                  "vite"
+                ],
+                "description": "Run Vite tests",
+                "help": {
+                  "command": "pnpm exec vitest --help",
+                  "example": {
+                    "options": {
+                      "bail": 1,
+                      "coverage": true
+                    }
+                  }
+                }
+              },
+              "executor": "nx:run-commands",
+              "configurations": {},
+              "parallelism": true,
+              "dependsOn": [
+                "^build"
+              ]
+            },
+            "serve": {
+              "continuous": true,
+              "options": {
+                "cwd": "libs/enterprise-data",
+                "command": "vite"
+              },
+              "metadata": {
+                "technologies": [
+                  "vite"
+                ],
+                "description": "Starts Vite dev server",
+                "help": {
+                  "command": "pnpm exec vite --help",
+                  "example": {
+                    "options": {
+                      "port": 3000
+                    }
+                  }
+                },
+                "deprecated": "Use devTargetName instead. This option will be removed in Nx 22."
+              },
+              "executor": "nx:run-commands",
+              "configurations": {},
+              "parallelism": true
+            },
+            "dev": {
+              "continuous": true,
+              "options": {
+                "cwd": "libs/enterprise-data",
+                "command": "vite"
+              },
+              "metadata": {
+                "technologies": [
+                  "vite"
+                ],
+                "description": "Starts Vite dev server",
+                "help": {
+                  "command": "pnpm exec vite --help",
+                  "example": {
+                    "options": {
+                      "port": 3000
+                    }
+                  }
+                }
+              },
+              "executor": "nx:run-commands",
+              "configurations": {},
+              "parallelism": true
+            },
+            "preview": {
+              "continuous": true,
+              "dependsOn": [
+                "build"
+              ],
+              "options": {
+                "cwd": "libs/enterprise-data",
+                "command": "vite preview"
+              },
+              "metadata": {
+                "technologies": [
+                  "vite"
+                ],
+                "description": "Locally preview Vite production build",
+                "help": {
+                  "command": "pnpm exec vite preview --help",
+                  "example": {
+                    "options": {
+                      "port": 3000
+                    }
+                  }
+                }
+              },
+              "executor": "nx:run-commands",
+              "configurations": {},
+              "parallelism": true
+            },
+            "serve-static": {
+              "continuous": true,
+              "executor": "@nx/web:file-server",
+              "options": {
+                "buildTarget": "build",
+                "spa": true
+              },
+              "configurations": {},
+              "parallelism": true
+            }
+          },
+          "metadata": {
+            "targetGroups": {},
+            "js": {
+              "packageName": "@nx-playground/enterprise-data",
+              "packageMain": "./index.js",
+              "isInPackageManagerWorkspaces": true
+            }
+          },
+          "name": "enterprise-data",
+          "tags": [
+            "npm:private"
+          ],
+          "$schema": "../../node_modules/nx/schemas/project-schema.json",
+          "sourceRoot": "libs/enterprise-data/src",
+          "implicitDependencies": []
+        }
+      },
+      "animation-data": {
+        "name": "animation-data",
+        "type": "lib",
+        "data": {
+          "root": "libs/animation-data",
+          "projectType": "library",
+          "targets": {
+            "typecheck": {
+              "cache": true,
+              "inputs": [
+                "production",
+                "^production",
+                {
+                  "externalDependencies": [
+                    "typescript"
+                  ]
+                }
+              ],
+              "options": {
+                "cwd": "libs/animation-data",
+                "command": "tsc --noEmit -p tsconfig.lib.json"
+              },
+              "metadata": {
+                "technologies": [
+                  "typescript",
+                  "typescript"
+                ],
+                "description": "Runs type-checking for the project.",
+                "help": {
+                  "command": "pnpm exec tsc -p tsconfig.lib.json --help",
+                  "example": {
+                    "options": {
+                      "noEmit": true
+                    }
+                  }
+                }
+              },
+              "executor": "nx:run-commands",
+              "configurations": {},
+              "parallelism": true
+            },
+            "build": {
+              "options": {
+                "cwd": "libs/animation-data",
+                "command": "vite build"
+              },
+              "cache": true,
+              "dependsOn": [
+                "^build"
+              ],
+              "inputs": [
+                "production",
+                "^production",
+                {
+                  "externalDependencies": [
+                    "vite"
+                  ]
+                }
+              ],
+              "outputs": [
+                "{workspaceRoot}/dist/libs/animation-data"
+              ],
+              "metadata": {
+                "technologies": [
+                  "typescript",
+                  "vite"
+                ],
+                "description": "Run Vite build",
+                "help": {
+                  "command": "pnpm exec vite build --help",
+                  "example": {
+                    "options": {
+                      "sourcemap": true,
+                      "manifest": "manifest.json"
+                    }
+                  }
+                }
+              },
+              "executor": "nx:run-commands",
+              "configurations": {},
+              "parallelism": true
+            },
+            "build-deps": {
+              "dependsOn": [
+                "^build"
+              ],
+              "configurations": {},
+              "options": {},
+              "parallelism": true,
+              "executor": "nx:noop"
+            },
+            "watch-deps": {
+              "continuous": true,
+              "dependsOn": [
+                "build-deps"
+              ],
+              "executor": "nx:run-commands",
+              "options": {
+                "command": "pnpm exec nx watch --projects animation-data --includeDependentProjects -- pnpm exec nx build-deps animation-data"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "lint": {
+              "cache": true,
+              "options": {
+                "cwd": "libs/animation-data",
+                "command": "eslint ."
+              },
+              "inputs": [
+                "default",
+                "^default",
+                "{workspaceRoot}/eslint.config.mjs",
+                "{workspaceRoot}/libs/animation-data/eslint.config.mjs",
+                "{workspaceRoot}/tools/eslint-rules/**/*",
+                {
+                  "externalDependencies": [
+                    "eslint"
+                  ]
+                }
+              ],
+              "outputs": [
+                "{options.outputFile}"
+              ],
+              "metadata": {
+                "technologies": [
+                  "eslint"
+                ],
+                "description": "Runs ESLint on project",
+                "help": {
+                  "command": "pnpm exec eslint --help",
+                  "example": {
+                    "options": {
+                      "max-warnings": 0
+                    }
+                  }
+                }
+              },
+              "executor": "nx:run-commands",
+              "configurations": {},
+              "parallelism": true
+            },
+            "test": {
+              "options": {
+                "cwd": "libs/animation-data",
+                "command": "vitest"
+              },
+              "cache": true,
+              "inputs": [
+                "default",
+                "^production",
+                {
+                  "externalDependencies": [
+                    "vitest"
+                  ]
+                },
+                {
+                  "env": "CI"
+                }
+              ],
+              "outputs": [
+                "{workspaceRoot}/coverage/libs/animation-data"
+              ],
+              "metadata": {
+                "technologies": [
+                  "vite"
+                ],
+                "description": "Run Vite tests",
+                "help": {
+                  "command": "pnpm exec vitest --help",
+                  "example": {
+                    "options": {
+                      "bail": 1,
+                      "coverage": true
+                    }
+                  }
+                }
+              },
+              "executor": "nx:run-commands",
+              "configurations": {},
+              "parallelism": true,
+              "dependsOn": [
+                "^build"
+              ]
+            },
+            "serve": {
+              "continuous": true,
+              "options": {
+                "cwd": "libs/animation-data",
+                "command": "vite"
+              },
+              "metadata": {
+                "technologies": [
+                  "vite"
+                ],
+                "description": "Starts Vite dev server",
+                "help": {
+                  "command": "pnpm exec vite --help",
+                  "example": {
+                    "options": {
+                      "port": 3000
+                    }
+                  }
+                },
+                "deprecated": "Use devTargetName instead. This option will be removed in Nx 22."
+              },
+              "executor": "nx:run-commands",
+              "configurations": {},
+              "parallelism": true
+            },
+            "dev": {
+              "continuous": true,
+              "options": {
+                "cwd": "libs/animation-data",
+                "command": "vite"
+              },
+              "metadata": {
+                "technologies": [
+                  "vite"
+                ],
+                "description": "Starts Vite dev server",
+                "help": {
+                  "command": "pnpm exec vite --help",
+                  "example": {
+                    "options": {
+                      "port": 3000
+                    }
+                  }
+                }
+              },
+              "executor": "nx:run-commands",
+              "configurations": {},
+              "parallelism": true
+            },
+            "preview": {
+              "continuous": true,
+              "dependsOn": [
+                "build"
+              ],
+              "options": {
+                "cwd": "libs/animation-data",
+                "command": "vite preview"
+              },
+              "metadata": {
+                "technologies": [
+                  "vite"
+                ],
+                "description": "Locally preview Vite production build",
+                "help": {
+                  "command": "pnpm exec vite preview --help",
+                  "example": {
+                    "options": {
+                      "port": 3000
+                    }
+                  }
+                }
+              },
+              "executor": "nx:run-commands",
+              "configurations": {},
+              "parallelism": true
+            },
+            "serve-static": {
+              "continuous": true,
+              "executor": "@nx/web:file-server",
+              "options": {
+                "buildTarget": "build",
+                "spa": true
+              },
+              "configurations": {},
+              "parallelism": true
+            }
+          },
+          "metadata": {
+            "targetGroups": {},
+            "js": {
+              "packageName": "@nx-playground/animation-data",
+              "packageMain": "./index.js",
+              "isInPackageManagerWorkspaces": true
+            }
+          },
+          "name": "animation-data",
+          "tags": [
+            "npm:private"
+          ],
+          "$schema": "../../node_modules/nx/schemas/project-schema.json",
+          "sourceRoot": "libs/animation-data/src",
+          "implicitDependencies": []
+        }
+      },
+      "design-system": {
+        "name": "design-system",
+        "type": "lib",
+        "data": {
+          "root": "libs/design-system",
+          "projectType": "library",
+          "targets": {
+            "typecheck": {
+              "executor": "@nx/js:tsc",
+              "outputs": [
+                "{options.outputPath}"
+              ],
+              "options": {
+                "outputPath": "dist/libs/design-system/tsc",
+                "main": "libs/design-system/src/index.ts",
+                "tsConfig": "libs/design-system/tsconfig.typecheck.json"
+              },
+              "configurations": {},
+              "parallelism": true,
+              "cache": true,
+              "dependsOn": [
+                "^build"
+              ],
+              "inputs": [
+                "production",
+                "^production"
+              ]
+            },
+            "build": {
+              "executor": "@nx/js:tsc",
+              "outputs": [
+                "{options.outputPath}"
+              ],
+              "options": {
+                "outputPath": "dist/libs/design-system",
+                "main": "libs/design-system/src/index.ts",
+                "tsConfig": "libs/design-system/tsconfig.lib.json",
+                "assets": [
+                  "libs/design-system/*.md",
+                  "libs/design-system/src/index.css",
+                  "libs/design-system/src/tokens/generated/tailwind-variables.css",
+                  "libs/design-system/src/tokens/generated/tailwind-config.js"
+                ]
+              },
+              "dependsOn": [
+                {
+                  "target": "build",
+                  "projects": "dependencies"
+                },
+                {
+                  "target": "prebuild"
+                }
+              ],
+              "configurations": {},
+              "parallelism": true,
+              "cache": true,
+              "inputs": [
+                "production",
+                "^production"
+              ]
+            },
+            "build-deps": {
+              "dependsOn": [
+                "^build"
+              ],
+              "configurations": {},
+              "options": {},
+              "parallelism": true,
+              "executor": "nx:noop"
+            },
+            "watch-deps": {
+              "continuous": true,
+              "dependsOn": [
+                "build-deps"
+              ],
+              "executor": "nx:run-commands",
+              "options": {
+                "command": "pnpm exec nx watch --projects design-system --includeDependentProjects -- pnpm exec nx build-deps design-system"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "lint": {
+              "executor": "@nx/eslint:lint",
+              "outputs": [
+                "{options.outputFile}"
+              ],
+              "options": {
+                "lintFilePatterns": [
+                  "libs/design-system/src/**/*.{ts,tsx,js,jsx}"
+                ]
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "serve": {
+              "continuous": true,
+              "options": {
+                "cwd": "libs/design-system",
+                "command": "vite"
+              },
+              "metadata": {
+                "technologies": [
+                  "vite"
+                ],
+                "description": "Starts Vite dev server",
+                "help": {
+                  "command": "pnpm exec vite --help",
+                  "example": {
+                    "options": {
+                      "port": 3000
+                    }
+                  }
+                },
+                "deprecated": "Use devTargetName instead. This option will be removed in Nx 22."
+              },
+              "executor": "nx:run-commands",
+              "configurations": {},
+              "parallelism": true
+            },
+            "dev": {
+              "continuous": true,
+              "options": {
+                "cwd": "libs/design-system",
+                "command": "vite"
+              },
+              "metadata": {
+                "technologies": [
+                  "vite"
+                ],
+                "description": "Starts Vite dev server",
+                "help": {
+                  "command": "pnpm exec vite --help",
+                  "example": {
+                    "options": {
+                      "port": 3000
+                    }
+                  }
+                }
+              },
+              "executor": "nx:run-commands",
+              "configurations": {},
+              "parallelism": true
+            },
+            "preview": {
+              "continuous": true,
+              "dependsOn": [
+                "build"
+              ],
+              "options": {
+                "cwd": "libs/design-system",
+                "command": "vite preview"
+              },
+              "metadata": {
+                "technologies": [
+                  "vite"
+                ],
+                "description": "Locally preview Vite production build",
+                "help": {
+                  "command": "pnpm exec vite preview --help",
+                  "example": {
+                    "options": {
+                      "port": 3000
+                    }
+                  }
+                }
+              },
+              "executor": "nx:run-commands",
+              "configurations": {},
+              "parallelism": true
+            },
+            "serve-static": {
+              "continuous": true,
+              "executor": "@nx/web:file-server",
+              "options": {
+                "buildTarget": "build",
+                "spa": true
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "tokens:css-to-json": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "tokens:css-to-json"
+              },
+              "metadata": {
+                "scriptContent": "node scripts/css-to-json.js",
+                "runCommand": "pnpm run tokens:css-to-json"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "tokens:json-to-themes": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "tokens:json-to-themes"
+              },
+              "metadata": {
+                "scriptContent": "node scripts/build-tokens.js",
+                "runCommand": "pnpm run tokens:json-to-themes"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "tokens:build": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "tokens:build"
+              },
+              "metadata": {
+                "scriptContent": "npm run tokens:css-to-json && npm run tokens:json-to-themes",
+                "runCommand": "pnpm run tokens:build"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "tokens:generate": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "tokens:generate"
+              },
+              "metadata": {
+                "scriptContent": "npm run tokens:build",
+                "runCommand": "pnpm run tokens:generate"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "tokens:view": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "tokens:view"
+              },
+              "metadata": {
+                "scriptContent": "node scripts/tokens-viewer.js",
+                "runCommand": "pnpm run tokens:view"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "tokens:colors": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "tokens:colors"
+              },
+              "metadata": {
+                "scriptContent": "node scripts/color-preview.js",
+                "runCommand": "pnpm run tokens:colors"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "prebuild": {
+              "executor": "nx:run-commands",
+              "options": {
+                "command": "cd libs/design-system && npm run tokens:generate"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "build:tsc": {
+              "executor": "@nx/js:tsc",
+              "outputs": [
+                "{options.outputPath}"
+              ],
+              "options": {
+                "outputPath": "dist/libs/design-system",
+                "main": "libs/design-system/src/index.ts",
+                "tsConfig": "libs/design-system/tsconfig.lib.json",
+                "assets": [
+                  "libs/design-system/*.md",
+                  "libs/design-system/src/index.css",
+                  "libs/design-system/src/tokens/generated/tailwind-variables.css",
+                  "libs/design-system/src/tokens/generated/tailwind-config.js"
+                ]
+              },
+              "dependsOn": [
+                {
+                  "target": "build",
+                  "projects": "dependencies"
+                }
+              ],
+              "configurations": {},
+              "parallelism": true,
+              "cache": true,
+              "inputs": [
+                "production",
+                "^production"
+              ]
+            },
+            "test": {
+              "executor": "@nx/vite:test",
+              "outputs": [
+                "{options.reportsDirectory}"
+              ],
+              "options": {
+                "passWithNoTests": true,
+                "reportsDirectory": "../../coverage/libs/design-system"
+              },
+              "configurations": {},
+              "parallelism": true,
+              "dependsOn": [
+                "^build"
+              ]
+            }
+          },
+          "metadata": {
+            "targetGroups": {
+              "NPM Scripts": [
+                "tokens:css-to-json",
+                "tokens:json-to-themes",
+                "tokens:build",
+                "tokens:generate",
+                "tokens:view",
+                "tokens:colors"
+              ]
+            },
+            "js": {
+              "packageName": "@nx-playground/design-system",
+              "packageExports": {
+                ".": {
+                  "import": "./dist/libs/design-system/src/index.js",
+                  "types": "./dist/libs/design-system/src/index.d.ts"
+                },
+                "./index.css": "./dist/libs/design-system/src/index.css",
+                "./tokens/generated/tailwind-variables.css": "./dist/libs/design-system/src/tokens/generated/tailwind-variables.css",
+                "./tokens/generated/tailwind-config.js": "./dist/libs/design-system/src/tokens/generated/tailwind-config.js"
+              },
+              "packageMain": "./dist/libs/design-system/src/index.js",
+              "isInPackageManagerWorkspaces": true
+            }
+          },
+          "name": "design-system",
+          "tags": [
+            "npm:private"
+          ],
+          "$schema": "../../node_modules/nx/schemas/project-schema.json",
+          "sourceRoot": "libs/design-system/src",
+          "implicitDependencies": []
+        }
+      },
+      "ui-components": {
+        "name": "ui-components",
+        "type": "lib",
+        "data": {
+          "root": "libs/ui-components",
+          "projectType": "library",
+          "targets": {
+            "typecheck": {
+              "executor": "@nx/js:tsc",
+              "outputs": [
+                "{options.outputPath}"
+              ],
+              "options": {
+                "outputPath": "dist/libs/ui-components/tsc",
+                "main": "libs/ui-components/src/index.ts",
+                "tsConfig": "libs/ui-components/tsconfig.typecheck.json"
+              },
+              "configurations": {},
+              "parallelism": true,
+              "cache": true,
+              "dependsOn": [
+                "^build"
+              ],
+              "inputs": [
+                "production",
+                "^production"
+              ]
+            },
+            "build": {
+              "executor": "@nx/vite:build",
+              "outputs": [
+                "{options.outputPath}"
+              ],
+              "options": {
+                "outputPath": "dist/libs/ui-components",
+                "tsConfig": "libs/ui-components/tsconfig.lib.json"
+              },
+              "dependsOn": [
+                {
+                  "target": "build",
+                  "projects": "dependencies"
+                }
+              ],
+              "configurations": {},
+              "parallelism": true
+            },
+            "build-deps": {
+              "dependsOn": [
+                "^build"
+              ],
+              "configurations": {},
+              "options": {},
+              "parallelism": true,
+              "executor": "nx:noop"
+            },
+            "watch-deps": {
+              "continuous": true,
+              "dependsOn": [
+                "build-deps"
+              ],
+              "executor": "nx:run-commands",
+              "options": {
+                "command": "pnpm exec nx watch --projects ui-components --includeDependentProjects -- pnpm exec nx build-deps ui-components"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "lint": {
+              "executor": "@nx/eslint:lint",
+              "outputs": [
+                "{options.outputFile}"
+              ],
+              "options": {
+                "lintFilePatterns": [
+                  "libs/ui-components/src/**/*.{ts,tsx,js,jsx,css}"
+                ]
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "test": {
+              "executor": "@nx/vite:test",
+              "outputs": [
+                "{options.reportsDirectory}"
+              ],
+              "options": {
+                "passWithNoTests": true,
+                "reportsDirectory": "../../coverage/libs/ui-components"
+              },
+              "configurations": {},
+              "parallelism": true,
+              "dependsOn": [
+                "^build"
+              ]
+            },
+            "serve": {
+              "continuous": true,
+              "options": {
+                "cwd": "libs/ui-components",
+                "command": "vite"
+              },
+              "metadata": {
+                "technologies": [
+                  "vite"
+                ],
+                "description": "Starts Vite dev server",
+                "help": {
+                  "command": "pnpm exec vite --help",
+                  "example": {
+                    "options": {
+                      "port": 3000
+                    }
+                  }
+                },
+                "deprecated": "Use devTargetName instead. This option will be removed in Nx 22."
+              },
+              "executor": "nx:run-commands",
+              "configurations": {},
+              "parallelism": true
+            },
+            "dev": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "dev"
+              },
+              "metadata": {
+                "technologies": [
+                  "vite"
+                ],
+                "description": "Starts Vite dev server",
+                "help": {
+                  "command": "pnpm exec vite --help",
+                  "example": {
+                    "options": {
+                      "port": 3000
+                    }
+                  }
+                },
+                "scriptContent": "vite build --watch",
+                "runCommand": "pnpm run dev"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "preview": {
+              "continuous": true,
+              "dependsOn": [
+                "build"
+              ],
+              "options": {
+                "cwd": "libs/ui-components",
+                "command": "vite preview"
+              },
+              "metadata": {
+                "technologies": [
+                  "vite"
+                ],
+                "description": "Locally preview Vite production build",
+                "help": {
+                  "command": "pnpm exec vite preview --help",
+                  "example": {
+                    "options": {
+                      "port": 3000
+                    }
+                  }
+                }
+              },
+              "executor": "nx:run-commands",
+              "configurations": {},
+              "parallelism": true
+            },
+            "serve-static": {
+              "continuous": true,
+              "executor": "@nx/web:file-server",
+              "options": {
+                "buildTarget": "build",
+                "spa": true
+              },
+              "configurations": {},
+              "parallelism": true
+            }
+          },
+          "metadata": {
+            "targetGroups": {
+              "NPM Scripts": [
+                "dev"
+              ]
+            },
+            "js": {
+              "packageName": "@nx-playground/ui-components",
+              "packageExports": {
+                ".": {
+                  "import": "./dist/index.mjs",
+                  "types": "./dist/index.d.ts"
+                }
+              },
+              "packageMain": "./dist/index.mjs",
+              "isInPackageManagerWorkspaces": true
+            }
+          },
+          "name": "ui-components",
+          "tags": [
+            "npm:private"
+          ],
+          "$schema": "../../node_modules/nx/schemas/project-schema.json",
+          "sourceRoot": "libs/ui-components/src",
+          "implicitDependencies": []
+        }
+      },
+      "@nx-playground/event-portal": {
+        "name": "@nx-playground/event-portal",
+        "type": "app",
+        "data": {
+          "root": "apps/event-portal",
+          "targets": {
+            "lint": {
+              "executor": "nx:run-commands",
+              "options": {
+                "command": "echo 'Lint skipped for events project'"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "build": {
+              "executor": "@nx/next:build",
+              "outputs": [
+                "{options.outputPath}"
+              ],
+              "defaultConfiguration": "production",
+              "options": {
+                "outputPath": "dist/apps/event-portal"
+              },
+              "configurations": {
+                "development": {
+                  "outputPath": "apps/event-portal"
+                },
+                "production": {
+                  "outputPath": "apps/event-portal"
+                }
+              },
+              "dependsOn": [
+                {
+                  "target": "build",
+                  "projects": "dependencies"
+                }
+              ],
+              "parallelism": true
+            },
+            "dev": {
+              "continuous": true,
+              "options": {
+                "cwd": "apps/event-portal",
+                "command": "next dev"
+              },
+              "executor": "nx:run-commands",
+              "configurations": {},
+              "parallelism": true
+            },
+            "start": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "start"
+              },
+              "metadata": {
+                "scriptContent": "next start",
+                "runCommand": "pnpm run start"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "serve-static": {
+              "continuous": true,
+              "options": {
+                "cwd": "apps/event-portal",
+                "command": "next start"
+              },
+              "dependsOn": [
+                "build"
+              ],
+              "executor": "nx:run-commands",
+              "configurations": {},
+              "parallelism": true
+            },
+            "build-deps": {
+              "dependsOn": [
+                "^build"
+              ],
+              "configurations": {},
+              "options": {},
+              "parallelism": true,
+              "executor": "nx:noop"
+            },
+            "watch-deps": {
+              "continuous": true,
+              "dependsOn": [
+                "build-deps"
+              ],
+              "executor": "nx:run-commands",
+              "options": {
+                "command": "pnpm exec nx watch --projects @nx-playground/event-portal --includeDependentProjects -- pnpm exec nx build-deps @nx-playground/event-portal"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "serve": {
+              "executor": "@nx/next:server",
+              "defaultConfiguration": "development",
+              "options": {
+                "buildTarget": "@nx-playground/event-portal:build",
+                "dev": true,
+                "port": 3000
+              },
+              "configurations": {
+                "development": {
+                  "buildTarget": "@nx-playground/event-portal:build:development",
+                  "dev": true,
+                  "port": 3000
+                },
+                "production": {
+                  "buildTarget": "@nx-playground/event-portal:build:production",
+                  "dev": false,
+                  "port": 3000
+                }
+              },
+              "parallelism": true,
+              "continuous": true
+            },
+            "export": {
+              "executor": "@nx/next:export",
+              "options": {
+                "buildTarget": "@nx-playground/event-portal:build:production"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "test": {
+              "executor": "@nx/jest:jest",
+              "outputs": [
+                "{workspaceRoot}/coverage/{projectRoot}"
+              ],
+              "options": {
+                "jestConfig": "apps/event-portal/jest.config.ts",
+                "passWithNoTests": true
+              },
+              "configurations": {
+                "ci": {
+                  "ci": true,
+                  "codeCoverage": true
+                }
+              },
+              "parallelism": true,
+              "dependsOn": [
+                "^build"
+              ]
+            }
+          },
+          "name": "@nx-playground/event-portal",
+          "tags": [
+            "npm:private"
+          ],
+          "metadata": {
+            "targetGroups": {
+              "NPM Scripts": [
+                "start"
+              ]
+            },
+            "js": {
+              "packageName": "@nx-playground/event-portal",
+              "isInPackageManagerWorkspaces": true
+            }
+          },
+          "$schema": "../../node_modules/nx/schemas/project-schema.json",
+          "sourceRoot": "apps/event-portal/src",
+          "projectType": "application",
+          "implicitDependencies": []
+        }
+      },
+      "auth-client": {
+        "name": "auth-client",
+        "type": "lib",
+        "data": {
+          "root": "libs/auth-client",
+          "projectType": "library",
+          "targets": {
+            "typecheck": {
+              "executor": "@nx/js:tsc",
+              "outputs": [
+                "{options.outputPath}"
+              ],
+              "options": {
+                "outputPath": "dist/libs/auth-client/tsc",
+                "main": "libs/auth-client/src/index.ts",
+                "tsConfig": "libs/auth-client/tsconfig.json"
+              },
+              "configurations": {},
+              "parallelism": true,
+              "cache": true,
+              "dependsOn": [
+                "^build"
+              ],
+              "inputs": [
+                "production",
+                "^production"
+              ]
+            },
+            "lint": {
+              "executor": "@nx/eslint:lint",
+              "outputs": [
+                "{options.outputFile}"
+              ],
+              "options": {
+                "lintFilePatterns": [
+                  "libs/auth-client/src/**/*.{ts,tsx,js,jsx}"
+                ]
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "build": {
+              "executor": "@nx/js:tsc",
+              "outputs": [
+                "{options.outputPath}"
+              ],
+              "options": {
+                "outputPath": "dist/libs/auth-client",
+                "main": "libs/auth-client/src/index.ts",
+                "tsConfig": "libs/auth-client/tsconfig.json",
+                "assets": [
+                  "libs/auth-client/*.md"
+                ]
+              },
+              "configurations": {},
+              "parallelism": true,
+              "cache": true,
+              "dependsOn": [
+                "^build"
+              ],
+              "inputs": [
+                "production",
+                "^production"
+              ]
+            },
+            "test": {
+              "executor": "@nx/vite:test",
+              "outputs": [
+                "{options.reportsDirectory}"
+              ],
+              "options": {
+                "passWithNoTests": true,
+                "reportsDirectory": "../../coverage/libs/auth-client"
+              },
+              "configurations": {},
+              "parallelism": true,
+              "dependsOn": [
+                "^build"
+              ]
+            }
+          },
+          "name": "auth-client",
+          "tags": [
+            "npm:private"
+          ],
+          "metadata": {
+            "targetGroups": {},
+            "js": {
+              "packageName": "@nx-playground/auth-client",
+              "packageExports": {
+                ".": {
+                  "import": "./dist/index.js",
+                  "types": "./dist/index.d.ts"
+                }
+              },
+              "packageMain": "./dist/index.js",
+              "isInPackageManagerWorkspaces": true
+            }
+          },
+          "$schema": "../../node_modules/nx/schemas/project-schema.json",
+          "sourceRoot": "libs/auth-client/src",
+          "implicitDependencies": []
+        }
+      },
+      "@nx-playground/api-server": {
+        "name": "@nx-playground/api-server",
+        "type": "app",
+        "data": {
+          "root": "apps/api-server",
+          "projectType": "application",
+          "targets": {
+            "typecheck": {
+              "dependsOn": [
+                "^typecheck"
+              ],
+              "options": {
+                "cwd": "apps/api-server",
+                "command": "tsc --build --emitDeclarationOnly"
+              },
+              "cache": true,
+              "inputs": [
+                "{projectRoot}/package.json",
+                "{workspaceRoot}/tsconfig.base.json",
+                "{projectRoot}/tsconfig.json",
+                "{projectRoot}/tsconfig.app.json",
+                "{projectRoot}/tsconfig.spec.json",
+                "{projectRoot}/src/**/*.ts",
+                "{projectRoot}/jest.config.ts",
+                "{projectRoot}/src/**/*.test.ts",
+                "{projectRoot}/src/**/*.spec.ts",
+                "{projectRoot}/src/**/*.d.ts",
+                "!{workspaceRoot}/node_modules",
+                "!{workspaceRoot}/tmp",
+                "^production",
+                {
+                  "externalDependencies": [
+                    "typescript"
+                  ]
+                }
+              ],
+              "outputs": [
+                "{workspaceRoot}/dist/out-tsc/**/*.d.ts",
+                "{workspaceRoot}/dist/out-tsc/apps/api-server/*.tsbuildinfo"
+              ],
+              "syncGenerators": [
+                "@nx/js:typescript-sync"
+              ],
+              "metadata": {
+                "technologies": [
+                  "typescript"
+                ],
+                "description": "Runs type-checking for the project.",
+                "help": {
+                  "command": "pnpm exec tsc --build --help",
+                  "example": {
+                    "args": [
+                      "--force"
+                    ]
+                  }
+                }
+              },
+              "executor": "nx:run-commands",
+              "configurations": {},
+              "parallelism": true
+            },
+            "lint": {
+              "executor": "@nx/eslint:lint",
+              "outputs": [
+                "{options.outputFile}"
+              ],
+              "options": {
+                "lintFilePatterns": [
+                  "apps/api-server/src/**/*.ts"
+                ]
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "start": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "start"
+              },
+              "metadata": {
+                "scriptContent": "node dist/main.js",
+                "runCommand": "pnpm run start"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "start:dev": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "start:dev"
+              },
+              "metadata": {
+                "scriptContent": "nest start --watch",
+                "runCommand": "pnpm run start:dev"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "start:debug": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "start:debug"
+              },
+              "metadata": {
+                "scriptContent": "nest start --debug --watch",
+                "runCommand": "pnpm run start:debug"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "start:prod": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "start:prod"
+              },
+              "metadata": {
+                "scriptContent": "node dist/main.js",
+                "runCommand": "pnpm run start:prod"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "build": {
+              "executor": "@nx/webpack:webpack",
+              "outputs": [
+                "{options.outputPath}"
+              ],
+              "defaultConfiguration": "production",
+              "options": {
+                "target": "node",
+                "compiler": "tsc",
+                "outputPath": "dist/apps/api-server",
+                "main": "apps/api-server/src/main.ts",
+                "tsConfig": "apps/api-server/tsconfig.app.json",
+                "assets": [
+                  "apps/api-server/src/assets"
+                ],
+                "webpackConfig": "apps/api-server/webpack.config.js"
+              },
+              "configurations": {
+                "development": {
+                  "optimization": false,
+                  "extractLicenses": false,
+                  "inspect": false,
+                  "fileReplacements": [
+                    {
+                      "replace": "apps/api-server/src/environments/environment.ts",
+                      "with": "apps/api-server/src/environments/environment.dev.ts"
+                    }
+                  ]
+                },
+                "production": {
+                  "optimization": true,
+                  "extractLicenses": true,
+                  "inspect": false
+                }
+              },
+              "parallelism": true
+            },
+            "serve": {
+              "executor": "@nx/js:node",
+              "defaultConfiguration": "development",
+              "options": {
+                "buildTarget": "@nx-playground/api-server:build",
+                "port": 3001
+              },
+              "configurations": {
+                "development": {
+                  "buildTarget": "@nx-playground/api-server:build:development"
+                },
+                "production": {
+                  "buildTarget": "@nx-playground/api-server:build:production"
+                }
+              },
+              "parallelism": true
+            },
+            "test": {
+              "executor": "@nx/jest:jest",
+              "outputs": [
+                "{workspaceRoot}/coverage/{projectRoot}"
+              ],
+              "options": {
+                "jestConfig": "apps/api-server/jest.config.ts",
+                "passWithNoTests": true
+              },
+              "configurations": {},
+              "parallelism": true,
+              "dependsOn": [
+                "^build"
+              ]
+            },
+            "prisma-generate": {
+              "executor": "nx:run-commands",
+              "options": {
+                "command": "prisma generate --schema=apps/api-server/prisma/schema.prisma"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "prisma-migrate": {
+              "executor": "nx:run-commands",
+              "options": {
+                "command": "prisma migrate dev --schema=apps/api-server/prisma/schema.prisma"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "prisma-seed": {
+              "executor": "nx:run-commands",
+              "options": {
+                "command": "tsx apps/api-server/prisma/seed.ts"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "openapi-generate": {
+              "executor": "nx:run-commands",
+              "options": {
+                "command": "node apps/api-server/scripts/generate-openapi.js"
+              },
+              "configurations": {},
+              "parallelism": true
+            }
+          },
+          "name": "@nx-playground/api-server",
+          "tags": [
+            "npm:private",
+            "type:app",
+            "platform:nestjs"
+          ],
+          "metadata": {
+            "targetGroups": {
+              "NPM Scripts": [
+                "start",
+                "start:dev",
+                "start:debug",
+                "start:prod"
+              ]
+            },
+            "description": "NestJS API Server for NX Playground",
+            "js": {
+              "packageName": "@nx-playground/api-server",
+              "isInPackageManagerWorkspaces": true
+            }
+          },
+          "$schema": "../../node_modules/nx/schemas/project-schema.json",
+          "sourceRoot": "apps/api-server/src",
+          "implicitDependencies": []
+        }
+      },
+      "api-client": {
+        "name": "api-client",
+        "type": "lib",
+        "data": {
+          "root": "libs/api-client",
+          "projectType": "library",
+          "targets": {
+            "typecheck": {
+              "executor": "@nx/js:tsc",
+              "outputs": [
+                "{options.outputPath}"
+              ],
+              "options": {
+                "outputPath": "dist/libs/api-client/tsc",
+                "main": "libs/api-client/src/index.ts",
+                "tsConfig": "libs/api-client/tsconfig.lib.json"
+              },
+              "configurations": {},
+              "parallelism": true,
+              "cache": true,
+              "dependsOn": [
+                "^build"
+              ],
+              "inputs": [
+                "production",
+                "^production"
+              ]
+            },
+            "build": {
+              "executor": "@nx/vite:build",
+              "outputs": [
+                "{options.outputPath}"
+              ],
+              "options": {
+                "outputPath": "dist/libs/api-client",
+                "tsConfig": "libs/api-client/tsconfig.lib.json"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "build-deps": {
+              "dependsOn": [
+                "^build"
+              ],
+              "configurations": {},
+              "options": {},
+              "parallelism": true,
+              "executor": "nx:noop"
+            },
+            "watch-deps": {
+              "continuous": true,
+              "dependsOn": [
+                "build-deps"
+              ],
+              "executor": "nx:run-commands",
+              "options": {
+                "command": "pnpm exec nx watch --projects api-client --includeDependentProjects -- pnpm exec nx build-deps api-client"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "lint": {
+              "executor": "@nx/eslint:lint",
+              "outputs": [
+                "{options.outputFile}"
+              ],
+              "options": {
+                "lintFilePatterns": [
+                  "libs/api-client/src/**/*.{ts,tsx,js,jsx}"
+                ]
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "test": {
+              "executor": "@nx/vite:test",
+              "outputs": [
+                "{options.reportsDirectory}"
+              ],
+              "options": {
+                "passWithNoTests": true,
+                "reportsDirectory": "../../coverage/libs/api-client"
+              },
+              "configurations": {},
+              "parallelism": true,
+              "dependsOn": [
+                "^build"
+              ]
+            },
+            "serve": {
+              "continuous": true,
+              "options": {
+                "cwd": "libs/api-client",
+                "command": "vite"
+              },
+              "metadata": {
+                "technologies": [
+                  "vite"
+                ],
+                "description": "Starts Vite dev server",
+                "help": {
+                  "command": "pnpm exec vite --help",
+                  "example": {
+                    "options": {
+                      "port": 3000
+                    }
+                  }
+                },
+                "deprecated": "Use devTargetName instead. This option will be removed in Nx 22."
+              },
+              "executor": "nx:run-commands",
+              "configurations": {},
+              "parallelism": true
+            },
+            "dev": {
+              "continuous": true,
+              "options": {
+                "cwd": "libs/api-client",
+                "command": "vite"
+              },
+              "metadata": {
+                "technologies": [
+                  "vite"
+                ],
+                "description": "Starts Vite dev server",
+                "help": {
+                  "command": "pnpm exec vite --help",
+                  "example": {
+                    "options": {
+                      "port": 3000
+                    }
+                  }
+                }
+              },
+              "executor": "nx:run-commands",
+              "configurations": {},
+              "parallelism": true
+            },
+            "preview": {
+              "continuous": true,
+              "dependsOn": [
+                "build"
+              ],
+              "options": {
+                "cwd": "libs/api-client",
+                "command": "vite preview"
+              },
+              "metadata": {
+                "technologies": [
+                  "vite"
+                ],
+                "description": "Locally preview Vite production build",
+                "help": {
+                  "command": "pnpm exec vite preview --help",
+                  "example": {
+                    "options": {
+                      "port": 3000
+                    }
+                  }
+                }
+              },
+              "executor": "nx:run-commands",
+              "configurations": {},
+              "parallelism": true
+            },
+            "serve-static": {
+              "continuous": true,
+              "executor": "@nx/web:file-server",
+              "options": {
+                "buildTarget": "build",
+                "spa": true
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "generate:api": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "generate:api"
+              },
+              "metadata": {
+                "scriptContent": "orval --config orval.config.ts",
+                "runCommand": "pnpm run generate:api"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "generate:api:dev": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "generate:api:dev"
+              },
+              "metadata": {
+                "scriptContent": "API_ENV=dev orval --config orval.config.ts",
+                "runCommand": "pnpm run generate:api:dev"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "generate:api:prod": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "generate:api:prod"
+              },
+              "metadata": {
+                "scriptContent": "API_ENV=prod orval --config orval.config.ts",
+                "runCommand": "pnpm run generate:api:prod"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "generate:api:form:dev": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "generate:api:form:dev"
+              },
+              "metadata": {
+                "scriptContent": "API_MODULE=form API_ENV=dev orval --config orval.config.ts",
+                "runCommand": "pnpm run generate:api:form:dev"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "generate:api:form:v1": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "generate:api:form:v1"
+              },
+              "metadata": {
+                "scriptContent": "API_MODULE=form API_ENV=v1 orval --config orval.config.ts",
+                "runCommand": "pnpm run generate:api:form:v1"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "generate:api:identity:dev": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "generate:api:identity:dev"
+              },
+              "metadata": {
+                "scriptContent": "API_MODULE=identity API_ENV=dev orval --config orval.config.ts",
+                "runCommand": "pnpm run generate:api:identity:dev"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "generate:api:media:dev": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "generate:api:media:dev"
+              },
+              "metadata": {
+                "scriptContent": "API_MODULE=media API_ENV=dev orval --config orval.config.ts",
+                "runCommand": "pnpm run generate:api:media:dev"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "generate:api:community:dev": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "generate:api:community:dev"
+              },
+              "metadata": {
+                "scriptContent": "API_MODULE=community API_ENV=dev orval --config orval.config.ts",
+                "runCommand": "pnpm run generate:api:community:dev"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "generate:api:tickets:dev": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "generate:api:tickets:dev"
+              },
+              "metadata": {
+                "scriptContent": "API_MODULE=tickets API_ENV=dev orval --config orval.config.ts",
+                "runCommand": "pnpm run generate:api:tickets:dev"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "generate:api:event:dev": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "generate:api:event:dev"
+              },
+              "metadata": {
+                "scriptContent": "API_MODULE=event API_ENV=dev orval --config orval.config.ts",
+                "runCommand": "pnpm run generate:api:event:dev"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "generate:api:all": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "generate:api:all"
+              },
+              "metadata": {
+                "scriptContent": "npm run generate:api:form:dev && npm run generate:api:form:v1 && npm run generate:api:identity:dev && npm run generate:api:media:dev && npm run generate:api:community:dev && npm run generate:api:tickets:dev && npm run generate:api:event:dev",
+                "runCommand": "pnpm run generate:api:all"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "generate:types": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "generate:types"
+              },
+              "metadata": {
+                "scriptContent": "openapi-typescript ./specs/openapi.yaml -o ./src/generated/types.ts",
+                "runCommand": "pnpm run generate:types"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "prebuild": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "prebuild"
+              },
+              "metadata": {
+                "scriptContent": "npm run generate:api:all",
+                "runCommand": "pnpm run prebuild"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "nx-release-publish": {
+              "executor": "@nx/js:release-publish",
+              "dependsOn": [
+                "^nx-release-publish"
+              ],
+              "options": {},
+              "configurations": {},
+              "parallelism": true
+            }
+          },
+          "metadata": {
+            "targetGroups": {
+              "NPM Scripts": [
+                "generate:api",
+                "generate:api:dev",
+                "generate:api:prod",
+                "generate:api:form:dev",
+                "generate:api:form:v1",
+                "generate:api:identity:dev",
+                "generate:api:media:dev",
+                "generate:api:community:dev",
+                "generate:api:tickets:dev",
+                "generate:api:event:dev",
+                "generate:api:all",
+                "generate:types",
+                "prebuild"
+              ]
+            },
+            "description": "NX Playground API Client with auto-generated API client from OpenAPI spec",
+            "js": {
+              "packageName": "@nx-playground/api-client",
+              "packageExports": {
+                "./package.json": "./package.json",
+                ".": {
+                  "development": "./src/index.ts",
+                  "types": "./dist/index.d.ts",
+                  "import": "./dist/index.js",
+                  "default": "./dist/index.js"
+                },
+                "./form/dev": {
+                  "types": "./src/generated/form/dev/nx-playgroundAPI.ts",
+                  "import": "./src/generated/form/dev/nx-playgroundAPI.ts",
+                  "default": "./src/generated/form/dev/nx-playgroundAPI.ts"
+                },
+                "./form/v1": {
+                  "types": "./src/generated/form/v1/nx-playgroundAPI.ts",
+                  "import": "./src/generated/form/v1/nx-playgroundAPI.ts",
+                  "default": "./src/generated/form/v1/nx-playgroundAPI.ts"
+                },
+                "./identity/dev": {
+                  "types": "./src/generated/identity/dev/nx-playgroundAPI.ts",
+                  "import": "./src/generated/identity/dev/nx-playgroundAPI.ts",
+                  "default": "./src/generated/identity/dev/nx-playgroundAPI.ts"
+                },
+                "./media/dev": {
+                  "types": "./src/generated/media/dev/nx-playgroundAPI.ts",
+                  "import": "./src/generated/media/dev/nx-playgroundAPI.ts",
+                  "default": "./src/generated/media/dev/nx-playgroundAPI.ts"
+                },
+                "./community/dev": {
+                  "types": "./src/generated/community/dev/nx-playgroundAPI.ts",
+                  "import": "./src/generated/community/dev/nx-playgroundAPI.ts",
+                  "default": "./src/generated/community/dev/nx-playgroundAPI.ts"
+                },
+                "./tickets/dev": {
+                  "types": "./src/generated/tickets/dev/nx-playgroundAPI.ts",
+                  "import": "./src/generated/tickets/dev/nx-playgroundAPI.ts",
+                  "default": "./src/generated/tickets/dev/nx-playgroundAPI.ts"
+                },
+                "./event/dev": {
+                  "types": "./src/generated/event/dev/nx-playgroundAPI.ts",
+                  "import": "./src/generated/event/dev/nx-playgroundAPI.ts",
+                  "default": "./src/generated/event/dev/nx-playgroundAPI.ts"
+                }
+              },
+              "packageMain": "./dist/index.js",
+              "isInPackageManagerWorkspaces": true
+            }
+          },
+          "name": "api-client",
+          "tags": [
+            "npm:public",
+            "npm:react",
+            "npm:sdk",
+            "npm:api-client",
+            "npm:openapi",
+            "npm:typescript",
+            "npm:react-query"
+          ],
+          "$schema": "../../node_modules/nx/schemas/project-schema.json",
+          "sourceRoot": "libs/api-client/src",
+          "implicitDependencies": []
+        }
+      },
+      "vue-motion": {
+        "name": "vue-motion",
+        "type": "lib",
+        "data": {
+          "root": "apps/vue-motion",
+          "targets": {
+            "lint": {
+              "executor": "nx:run-commands",
+              "options": {
+                "command": "vue-cli-service lint",
+                "cwd": "libs/vue-motion"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "nx-release-publish": {
+              "executor": "@nx/js:release-publish",
+              "dependsOn": [
+                "^nx-release-publish"
+              ],
+              "options": {},
+              "configurations": {},
+              "parallelism": true
+            },
+            "build": {
+              "executor": "@nx/js:tsc",
+              "outputs": [
+                "{options.outputPath}"
+              ],
+              "options": {
+                "outputPath": "dist/libs/vue-motion",
+                "main": "libs/vue-motion/src/main.js",
+                "tsConfig": "libs/vue-motion/tsconfig.lib.json",
+                "assets": [
+                  "libs/vue-motion/*.md"
+                ]
+              },
+              "configurations": {},
+              "parallelism": true,
+              "cache": true,
+              "dependsOn": [
+                "^build"
+              ],
+              "inputs": [
+                "production",
+                "^production"
+              ]
+            },
+            "serve": {
+              "executor": "nx:run-commands",
+              "options": {
+                "command": "vue-cli-service serve",
+                "cwd": "libs/vue-motion"
+              },
+              "configurations": {},
+              "parallelism": true
+            }
+          },
+          "name": "vue-motion",
+          "tags": [
+            "npm:public",
+            "npm:vue3",
+            "npm:effects",
+            "npm:animations",
+            "npm:gsap",
+            "npm:threejs",
+            "npm:lottie",
+            "npm:interactive",
+            "npm:sandbox",
+            "type:lib",
+            "platform:vue"
+          ],
+          "metadata": {
+            "targetGroups": {},
+            "description": "A Vue 3 sandbox for experimenting with motion effects, animations, and interactive web experiences using modern libraries like GSAP, Three.js, Lottie, and more",
+            "js": {
+              "packageName": "@nx-playground/vue-motion",
+              "isInPackageManagerWorkspaces": true
+            }
+          },
+          "$schema": "../../node_modules/nx/schemas/project-schema.json",
+          "sourceRoot": "libs/vue-motion/src",
+          "projectType": "library",
+          "implicitDependencies": []
+        }
+      },
+      "@nx-playground/event-cms": {
+        "name": "@nx-playground/event-cms",
+        "type": "app",
+        "data": {
+          "root": "apps/event-cms",
+          "projectType": "application",
+          "targets": {
+            "typecheck": {
+              "executor": "@nx/js:tsc",
+              "outputs": [
+                "{options.outputPath}"
+              ],
+              "options": {
+                "outputPath": "dist/apps/event-cms/tsc",
+                "main": "apps/event-cms/src/main.tsx",
+                "tsConfig": "apps/event-cms/tsconfig.typecheck.json",
+                "assets": [
+                  "apps/event-cms/src/favicon.ico",
+                  "apps/event-cms/src/assets"
+                ]
+              },
+              "configurations": {},
+              "parallelism": true,
+              "cache": true,
+              "dependsOn": [
+                "^build"
+              ],
+              "inputs": [
+                "production",
+                "^production"
+              ]
+            },
+            "lint": {
+              "executor": "@nx/eslint:lint",
+              "outputs": [
+                "{options.outputFile}"
+              ],
+              "options": {
+                "lintFilePatterns": [
+                  "apps/event-cms/src/**/*.{ts,tsx,js,jsx}"
+                ]
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "test": {
+              "executor": "@nx/vite:test",
+              "outputs": [
+                "{options.reportsDirectory}"
+              ],
+              "options": {
+                "passWithNoTests": true,
+                "reportsDirectory": "../../coverage/apps/event-cms"
+              },
+              "configurations": {},
+              "parallelism": true,
+              "dependsOn": [
+                "^build"
+              ]
+            },
+            "build": {
+              "executor": "@nx/vite:build",
+              "outputs": [
+                "{options.outputPath}"
+              ],
+              "defaultConfiguration": "production",
+              "options": {
+                "outputPath": "dist/apps/event-cms",
+                "tsConfig": "apps/event-cms/tsconfig.app.json"
+              },
+              "configurations": {
+                "development": {
+                  "mode": "development"
+                },
+                "production": {
+                  "mode": "production"
+                }
+              },
+              "dependsOn": [
+                {
+                  "target": "build",
+                  "projects": "dependencies"
+                }
+              ],
+              "parallelism": true
+            },
+            "serve": {
+              "executor": "@nx/vite:dev-server",
+              "defaultConfiguration": "development",
+              "options": {
+                "buildTarget": "@nx-playground/event-cms:build"
+              },
+              "configurations": {
+                "development": {
+                  "buildTarget": "@nx-playground/event-cms:build:development",
+                  "hmr": true
+                },
+                "production": {
+                  "buildTarget": "@nx-playground/event-cms:build:production",
+                  "hmr": false
+                }
+              },
+              "parallelism": true,
+              "continuous": true
+            },
+            "dev": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "dev"
+              },
+              "metadata": {
+                "technologies": [
+                  "vite"
+                ],
+                "description": "Starts Vite dev server",
+                "help": {
+                  "command": "pnpm exec vite --help",
+                  "example": {
+                    "options": {
+                      "port": 3000
+                    }
+                  }
+                },
+                "scriptContent": "vite",
+                "runCommand": "pnpm run dev"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "preview": {
+              "executor": "@nx/vite:preview-server",
+              "defaultConfiguration": "development",
+              "options": {
+                "buildTarget": "@nx-playground/event-cms:build"
+              },
+              "configurations": {
+                "development": {
+                  "buildTarget": "@nx-playground/event-cms:build:development"
+                },
+                "production": {
+                  "buildTarget": "@nx-playground/event-cms:build:production"
+                }
+              },
+              "parallelism": true,
+              "continuous": true
+            },
+            "serve-static": {
+              "continuous": true,
+              "executor": "@nx/web:file-server",
+              "options": {
+                "buildTarget": "build",
+                "spa": true
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "build-deps": {
+              "dependsOn": [
+                "^build"
+              ],
+              "configurations": {},
+              "options": {},
+              "parallelism": true,
+              "executor": "nx:noop"
+            },
+            "watch-deps": {
+              "continuous": true,
+              "dependsOn": [
+                "build-deps"
+              ],
+              "executor": "nx:run-commands",
+              "options": {
+                "command": "pnpm exec nx watch --projects @nx-playground/event-cms --includeDependentProjects -- pnpm exec nx build-deps @nx-playground/event-cms"
+              },
+              "configurations": {},
+              "parallelism": true
+            }
+          },
+          "metadata": {
+            "targetGroups": {
+              "NPM Scripts": [
+                "dev"
+              ]
+            },
+            "js": {
+              "packageName": "@nx-playground/event-cms",
+              "isInPackageManagerWorkspaces": true
+            }
+          },
+          "name": "@nx-playground/event-cms",
+          "tags": [
+            "npm:private"
+          ],
+          "$schema": "../../node_modules/nx/schemas/project-schema.json",
+          "sourceRoot": "apps/event-cms/src",
+          "implicitDependencies": []
+        }
+      },
+      "@nx-playground/profile": {
+        "name": "@nx-playground/profile",
+        "type": "app",
+        "data": {
+          "root": "apps/profile",
+          "projectType": "application",
+          "targets": {
+            "typecheck": {
+              "executor": "@nx/js:tsc",
+              "outputs": [
+                "{options.outputPath}"
+              ],
+              "options": {
+                "outputPath": "dist/apps/profile/tsc",
+                "main": "apps/profile/src/main.tsx",
+                "tsConfig": "apps/profile/tsconfig.typecheck.json",
+                "assets": [
+                  "apps/profile/src/assets"
+                ]
+              },
+              "configurations": {},
+              "parallelism": true,
+              "cache": true,
+              "dependsOn": [
+                "^build"
+              ],
+              "inputs": [
+                "production",
+                "^production"
+              ]
+            },
+            "lint": {
+              "executor": "@nx/eslint:lint",
+              "outputs": [
+                "{options.outputFile}"
+              ],
+              "options": {
+                "lintFilePatterns": [
+                  "apps/profile/src/**/*.{ts,tsx,js,jsx}"
+                ]
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "test": {
+              "executor": "@nx/vite:test",
+              "outputs": [
+                "{options.reportsDirectory}"
+              ],
+              "options": {
+                "passWithNoTests": true,
+                "reportsDirectory": "../../coverage/apps/profile"
+              },
+              "configurations": {},
+              "parallelism": true,
+              "dependsOn": [
+                "^build"
+              ]
+            },
+            "build": {
+              "executor": "@nx/vite:build",
+              "outputs": [
+                "{options.outputPath}"
+              ],
+              "defaultConfiguration": "production",
+              "options": {
+                "outputPath": "dist/apps/profile",
+                "tsConfig": "apps/profile/tsconfig.app.json"
+              },
+              "configurations": {
+                "development": {
+                  "mode": "development"
+                },
+                "production": {
+                  "mode": "production"
+                }
+              },
+              "dependsOn": [
+                {
+                  "target": "build",
+                  "projects": "dependencies"
+                }
+              ],
+              "parallelism": true
+            },
+            "serve": {
+              "executor": "@nx/vite:dev-server",
+              "defaultConfiguration": "development",
+              "options": {
+                "buildTarget": "@nx-playground/profile:build",
+                "port": 3003
+              },
+              "configurations": {
+                "development": {
+                  "buildTarget": "@nx-playground/profile:build:development",
+                  "hmr": true
+                },
+                "production": {
+                  "buildTarget": "@nx-playground/profile:build:production",
+                  "hmr": false
+                }
+              },
+              "parallelism": true,
+              "continuous": true
+            },
+            "dev": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "dev"
+              },
+              "metadata": {
+                "technologies": [
+                  "vite"
+                ],
+                "description": "Starts Vite dev server",
+                "help": {
+                  "command": "pnpm exec vite --help",
+                  "example": {
+                    "options": {
+                      "port": 3000
+                    }
+                  }
+                },
+                "scriptContent": "vite",
+                "runCommand": "pnpm run dev"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "preview": {
+              "executor": "@nx/vite:preview-server",
+              "defaultConfiguration": "development",
+              "options": {
+                "buildTarget": "@nx-playground/profile:build"
+              },
+              "configurations": {
+                "development": {
+                  "buildTarget": "@nx-playground/profile:build:development"
+                },
+                "production": {
+                  "buildTarget": "@nx-playground/profile:build:production"
+                }
+              },
+              "parallelism": true,
+              "continuous": true
+            },
+            "serve-static": {
+              "continuous": true,
+              "executor": "@nx/web:file-server",
+              "options": {
+                "buildTarget": "build",
+                "spa": true
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "build-deps": {
+              "dependsOn": [
+                "^build"
+              ],
+              "configurations": {},
+              "options": {},
+              "parallelism": true,
+              "executor": "nx:noop"
+            },
+            "watch-deps": {
+              "continuous": true,
+              "dependsOn": [
+                "build-deps"
+              ],
+              "executor": "nx:run-commands",
+              "options": {
+                "command": "pnpm exec nx watch --projects @nx-playground/profile --includeDependentProjects -- pnpm exec nx build-deps @nx-playground/profile"
+              },
+              "configurations": {},
+              "parallelism": true
+            }
+          },
+          "metadata": {
+            "targetGroups": {
+              "NPM Scripts": [
+                "dev"
+              ]
+            },
+            "js": {
+              "packageName": "@nx-playground/profile",
+              "isInPackageManagerWorkspaces": true
+            }
+          },
+          "name": "@nx-playground/profile",
+          "tags": [
+            "npm:private",
+            "type:app",
+            "platform:react",
+            "tech:showcase"
+          ],
+          "$schema": "../../node_modules/nx/schemas/project-schema.json",
+          "sourceRoot": "apps/profile/src",
+          "implicitDependencies": []
+        }
+      },
+      "charts": {
+        "name": "charts",
+        "type": "lib",
+        "data": {
+          "root": "libs/charts",
+          "projectType": "library",
+          "targets": {
+            "typecheck": {
+              "executor": "@nx/js:tsc",
+              "outputs": [
+                "{options.outputPath}"
+              ],
+              "options": {
+                "outputPath": "dist/libs/charts/tsc",
+                "main": "libs/charts/src/index.ts",
+                "tsConfig": "libs/charts/tsconfig.typecheck.json"
+              },
+              "configurations": {},
+              "parallelism": true,
+              "cache": true,
+              "dependsOn": [
+                "^build"
+              ],
+              "inputs": [
+                "production",
+                "^production"
+              ]
+            },
+            "build": {
+              "executor": "@nx/vite:build",
+              "outputs": [
+                "{options.outputPath}"
+              ],
+              "options": {
+                "outputPath": "dist/libs/charts",
+                "tsConfig": "libs/charts/tsconfig.lib.json"
+              },
+              "dependsOn": [
+                {
+                  "target": "build",
+                  "projects": "dependencies"
+                }
+              ],
+              "configurations": {},
+              "parallelism": true
+            },
+            "build-deps": {
+              "dependsOn": [
+                "^build"
+              ],
+              "configurations": {},
+              "options": {},
+              "parallelism": true,
+              "executor": "nx:noop"
+            },
+            "watch-deps": {
+              "continuous": true,
+              "dependsOn": [
+                "build-deps"
+              ],
+              "executor": "nx:run-commands",
+              "options": {
+                "command": "pnpm exec nx watch --projects charts --includeDependentProjects -- pnpm exec nx build-deps charts"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "lint": {
+              "executor": "@nx/eslint:lint",
+              "outputs": [
+                "{options.outputFile}"
+              ],
+              "options": {
+                "lintFilePatterns": [
+                  "libs/charts/src/**/*.{ts,tsx,js,jsx}"
+                ]
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "test": {
+              "executor": "@nx/vite:test",
+              "outputs": [
+                "{options.reportsDirectory}"
+              ],
+              "options": {
+                "passWithNoTests": true,
+                "reportsDirectory": "../../coverage/libs/charts"
+              },
+              "configurations": {},
+              "parallelism": true,
+              "dependsOn": [
+                "^build"
+              ]
+            },
+            "serve": {
+              "continuous": true,
+              "options": {
+                "cwd": "libs/charts",
+                "command": "vite"
+              },
+              "metadata": {
+                "technologies": [
+                  "vite"
+                ],
+                "description": "Starts Vite dev server",
+                "help": {
+                  "command": "pnpm exec vite --help",
+                  "example": {
+                    "options": {
+                      "port": 3000
+                    }
+                  }
+                },
+                "deprecated": "Use devTargetName instead. This option will be removed in Nx 22."
+              },
+              "executor": "nx:run-commands",
+              "configurations": {},
+              "parallelism": true
+            },
+            "dev": {
+              "continuous": true,
+              "options": {
+                "cwd": "libs/charts",
+                "command": "vite"
+              },
+              "metadata": {
+                "technologies": [
+                  "vite"
+                ],
+                "description": "Starts Vite dev server",
+                "help": {
+                  "command": "pnpm exec vite --help",
+                  "example": {
+                    "options": {
+                      "port": 3000
+                    }
+                  }
+                }
+              },
+              "executor": "nx:run-commands",
+              "configurations": {},
+              "parallelism": true
+            },
+            "preview": {
+              "continuous": true,
+              "dependsOn": [
+                "build"
+              ],
+              "options": {
+                "cwd": "libs/charts",
+                "command": "vite preview"
+              },
+              "metadata": {
+                "technologies": [
+                  "vite"
+                ],
+                "description": "Locally preview Vite production build",
+                "help": {
+                  "command": "pnpm exec vite preview --help",
+                  "example": {
+                    "options": {
+                      "port": 3000
+                    }
+                  }
+                }
+              },
+              "executor": "nx:run-commands",
+              "configurations": {},
+              "parallelism": true
+            },
+            "serve-static": {
+              "continuous": true,
+              "executor": "@nx/web:file-server",
+              "options": {
+                "buildTarget": "build",
+                "spa": true
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "nx-release-publish": {
+              "executor": "@nx/js:release-publish",
+              "dependsOn": [
+                "^nx-release-publish"
+              ],
+              "options": {},
+              "configurations": {},
+              "parallelism": true
+            }
+          },
+          "metadata": {
+            "targetGroups": {},
+            "js": {
+              "packageName": "@nx-playground/charts",
+              "packageExports": {
+                ".": "./src/index.ts",
+                "./recharts": "./src/recharts/index.ts",
+                "./chartjs": "./src/chartjs/index.ts"
+              },
+              "packageMain": "./src/index.ts",
+              "isInPackageManagerWorkspaces": true
+            }
+          },
+          "name": "charts",
+          "tags": [
+            "npm:public",
+            "type:lib",
+            "scope:shared"
+          ],
+          "$schema": "../../node_modules/nx/schemas/project-schema.json",
+          "sourceRoot": "libs/charts/src",
+          "implicitDependencies": []
+        }
+      },
+      "hooks": {
+        "name": "hooks",
+        "type": "lib",
+        "data": {
+          "root": "libs/hooks",
+          "projectType": "library",
+          "targets": {
+            "typecheck": {
+              "cache": true,
+              "inputs": [
+                "production",
+                "^production",
+                {
+                  "externalDependencies": [
+                    "typescript"
+                  ]
+                }
+              ],
+              "options": {
+                "cwd": "libs/hooks",
+                "command": "tsc --noEmit -p tsconfig.lib.json"
+              },
+              "metadata": {
+                "technologies": [
+                  "typescript",
+                  "typescript"
+                ],
+                "description": "Runs type-checking for the project.",
+                "help": {
+                  "command": "pnpm exec tsc -p tsconfig.lib.json --help",
+                  "example": {
+                    "options": {
+                      "noEmit": true
+                    }
+                  }
+                }
+              },
+              "executor": "nx:run-commands",
+              "configurations": {},
+              "parallelism": true
+            },
+            "build": {
+              "executor": "@nx/js:tsc",
+              "outputs": [
+                "{options.outputPath}"
+              ],
+              "options": {
+                "outputPath": "dist/libs/hooks",
+                "main": "libs/hooks/src/index.ts",
+                "tsConfig": "libs/hooks/tsconfig.lib.json",
+                "assets": [
+                  "libs/hooks/*.md"
+                ]
+              },
+              "configurations": {},
+              "parallelism": true,
+              "cache": true,
+              "dependsOn": [
+                "^build"
+              ],
+              "inputs": [
+                "production",
+                "^production"
+              ]
+            },
+            "build-deps": {
+              "dependsOn": [
+                "^build"
+              ],
+              "configurations": {},
+              "options": {},
+              "parallelism": true,
+              "executor": "nx:noop"
+            },
+            "watch-deps": {
+              "continuous": true,
+              "dependsOn": [
+                "build-deps"
+              ],
+              "executor": "nx:run-commands",
+              "options": {
+                "command": "pnpm exec nx watch --projects hooks --includeDependentProjects -- pnpm exec nx build-deps hooks"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "lint": {
+              "executor": "@nx/eslint:lint",
+              "outputs": [
+                "{options.outputFile}"
+              ],
+              "options": {},
+              "configurations": {},
+              "parallelism": true
+            },
+            "test": {
+              "executor": "@nx/vite:test",
+              "outputs": [
+                "{options.reportsDirectory}"
+              ],
+              "options": {
+                "passWithNoTests": true,
+                "reportsDirectory": "../../coverage/libs/hooks"
+              },
+              "configurations": {},
+              "parallelism": true,
+              "dependsOn": [
+                "^build"
+              ]
+            },
+            "serve": {
+              "continuous": true,
+              "options": {
+                "cwd": "libs/hooks",
+                "command": "vite"
+              },
+              "metadata": {
+                "technologies": [
+                  "vite"
+                ],
+                "description": "Starts Vite dev server",
+                "help": {
+                  "command": "pnpm exec vite --help",
+                  "example": {
+                    "options": {
+                      "port": 3000
+                    }
+                  }
+                },
+                "deprecated": "Use devTargetName instead. This option will be removed in Nx 22."
+              },
+              "executor": "nx:run-commands",
+              "configurations": {},
+              "parallelism": true
+            },
+            "dev": {
+              "continuous": true,
+              "options": {
+                "cwd": "libs/hooks",
+                "command": "vite"
+              },
+              "metadata": {
+                "technologies": [
+                  "vite"
+                ],
+                "description": "Starts Vite dev server",
+                "help": {
+                  "command": "pnpm exec vite --help",
+                  "example": {
+                    "options": {
+                      "port": 3000
+                    }
+                  }
+                }
+              },
+              "executor": "nx:run-commands",
+              "configurations": {},
+              "parallelism": true
+            },
+            "preview": {
+              "continuous": true,
+              "dependsOn": [
+                "build"
+              ],
+              "options": {
+                "cwd": "libs/hooks",
+                "command": "vite preview"
+              },
+              "metadata": {
+                "technologies": [
+                  "vite"
+                ],
+                "description": "Locally preview Vite production build",
+                "help": {
+                  "command": "pnpm exec vite preview --help",
+                  "example": {
+                    "options": {
+                      "port": 3000
+                    }
+                  }
+                }
+              },
+              "executor": "nx:run-commands",
+              "configurations": {},
+              "parallelism": true
+            },
+            "serve-static": {
+              "continuous": true,
+              "executor": "@nx/web:file-server",
+              "options": {
+                "buildTarget": "build",
+                "spa": true
+              },
+              "configurations": {},
+              "parallelism": true
+            }
+          },
+          "metadata": {
+            "targetGroups": {},
+            "js": {
+              "packageName": "@nx-playground/hooks",
+              "packageExports": {
+                ".": {
+                  "import": "./dist/index.js",
+                  "types": "./dist/index.d.ts"
+                }
+              },
+              "packageMain": "./dist/index.js",
+              "isInPackageManagerWorkspaces": true
+            }
+          },
+          "name": "hooks",
+          "tags": [
+            "npm:private",
+            "npm:hooks",
+            "npm:react"
+          ],
+          "$schema": "../../node_modules/nx/schemas/project-schema.json",
+          "sourceRoot": "libs/hooks/src",
+          "implicitDependencies": []
+        }
+      },
+      "@nx-playground/auth": {
+        "name": "@nx-playground/auth",
+        "type": "app",
+        "data": {
+          "root": "apps/auth",
+          "projectType": "application",
+          "targets": {
+            "typecheck": {
+              "executor": "@nx/js:tsc",
+              "outputs": [
+                "{options.outputPath}"
+              ],
+              "options": {
+                "outputPath": "dist/apps/auth/tsc",
+                "main": "apps/auth/src/main.tsx",
+                "tsConfig": "apps/auth/tsconfig.json",
+                "assets": [
+                  "apps/auth/src/favicon.ico",
+                  "apps/auth/src/assets"
+                ]
+              },
+              "configurations": {},
+              "parallelism": true,
+              "cache": true,
+              "dependsOn": [
+                "^build"
+              ],
+              "inputs": [
+                "production",
+                "^production"
+              ]
+            },
+            "lint": {
+              "executor": "nx:run-commands",
+              "options": {
+                "command": "echo 'Lint skipped for auth project'"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "build": {
+              "executor": "@nx/vite:build",
+              "outputs": [
+                "{options.outputPath}"
+              ],
+              "defaultConfiguration": "production",
+              "options": {
+                "outputPath": "dist/apps/auth"
+              },
+              "configurations": {
+                "development": {
+                  "mode": "development"
+                },
+                "production": {
+                  "mode": "production"
+                }
+              },
+              "parallelism": true
+            },
+            "serve": {
+              "executor": "@nx/vite:dev-server",
+              "defaultConfiguration": "development",
+              "options": {
+                "buildTarget": "@nx-playground/auth:build"
+              },
+              "configurations": {
+                "development": {
+                  "buildTarget": "@nx-playground/auth:build:development",
+                  "hmr": true
+                },
+                "production": {
+                  "buildTarget": "@nx-playground/auth:build:production",
+                  "hmr": false
+                }
+              },
+              "parallelism": true,
+              "continuous": true
+            },
+            "dev": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "dev"
+              },
+              "metadata": {
+                "technologies": [
+                  "vite"
+                ],
+                "description": "Starts Vite dev server",
+                "help": {
+                  "command": "pnpm exec vite --help",
+                  "example": {
+                    "options": {
+                      "port": 3000
+                    }
+                  }
+                },
+                "scriptContent": "vite",
+                "runCommand": "pnpm run dev"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "preview": {
+              "executor": "@nx/vite:preview-server",
+              "defaultConfiguration": "development",
+              "options": {
+                "buildTarget": "@nx-playground/auth:build"
+              },
+              "configurations": {
+                "development": {
+                  "buildTarget": "@nx-playground/auth:build:development"
+                },
+                "production": {
+                  "buildTarget": "@nx-playground/auth:build:production"
+                }
+              },
+              "parallelism": true,
+              "continuous": true
+            },
+            "serve-static": {
+              "continuous": true,
+              "executor": "@nx/web:file-server",
+              "options": {
+                "buildTarget": "build",
+                "spa": true
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "build-deps": {
+              "dependsOn": [
+                "^build"
+              ],
+              "configurations": {},
+              "options": {},
+              "parallelism": true,
+              "executor": "nx:noop"
+            },
+            "watch-deps": {
+              "continuous": true,
+              "dependsOn": [
+                "build-deps"
+              ],
+              "executor": "nx:run-commands",
+              "options": {
+                "command": "pnpm exec nx watch --projects @nx-playground/auth --includeDependentProjects -- pnpm exec nx build-deps @nx-playground/auth"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "test": {
+              "executor": "@nx/vite:test",
+              "outputs": [
+                "{options.reportsDirectory}"
+              ],
+              "options": {
+                "passWithNoTests": true,
+                "reportsDirectory": "../../coverage/apps/auth"
+              },
+              "configurations": {},
+              "parallelism": true,
+              "dependsOn": [
+                "^build"
+              ]
+            }
+          },
+          "metadata": {
+            "targetGroups": {
+              "NPM Scripts": [
+                "dev"
+              ]
+            },
+            "js": {
+              "packageName": "auth",
+              "isInPackageManagerWorkspaces": true
+            }
+          },
+          "name": "@nx-playground/auth",
+          "tags": [
+            "npm:private"
+          ],
+          "$schema": "../../node_modules/nx/schemas/project-schema.json",
+          "sourceRoot": "apps/auth/src",
+          "implicitDependencies": []
+        }
+      },
+      "i18n": {
+        "name": "i18n",
+        "type": "lib",
+        "data": {
+          "root": "libs/i18n",
+          "projectType": "library",
+          "targets": {
+            "typecheck": {
+              "executor": "@nx/js:tsc",
+              "outputs": [
+                "{options.outputPath}"
+              ],
+              "options": {
+                "outputPath": "dist/libs/i18n/tsc",
+                "main": "libs/i18n/src/index.ts",
+                "tsConfig": "libs/i18n/tsconfig.typecheck.json",
+                "assets": []
+              },
+              "configurations": {},
+              "parallelism": true,
+              "cache": true,
+              "dependsOn": [
+                "^build"
+              ],
+              "inputs": [
+                "production",
+                "^production"
+              ]
+            },
+            "build": {
+              "executor": "@nx/vite:build",
+              "outputs": [
+                "{options.outputPath}"
+              ],
+              "defaultConfiguration": "production",
+              "options": {
+                "outputPath": "dist/libs/i18n",
+                "tsConfig": "libs/i18n/tsconfig.lib.json"
+              },
+              "configurations": {
+                "development": {
+                  "mode": "development"
+                },
+                "production": {
+                  "mode": "production"
+                }
+              },
+              "parallelism": true
+            },
+            "build-deps": {
+              "dependsOn": [
+                "^build"
+              ],
+              "configurations": {},
+              "options": {},
+              "parallelism": true,
+              "executor": "nx:noop"
+            },
+            "watch-deps": {
+              "continuous": true,
+              "dependsOn": [
+                "build-deps"
+              ],
+              "executor": "nx:run-commands",
+              "options": {
+                "command": "pnpm exec nx watch --projects i18n --includeDependentProjects -- pnpm exec nx build-deps i18n"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "lint": {
+              "executor": "@nx/eslint:lint",
+              "outputs": [
+                "{options.outputFile}"
+              ],
+              "options": {},
+              "configurations": {},
+              "parallelism": true
+            },
+            "test": {
+              "executor": "@nx/vite:test",
+              "outputs": [
+                "{options.reportsDirectory}"
+              ],
+              "options": {
+                "passWithNoTests": true,
+                "reportsDirectory": "../../coverage/libs/i18n"
+              },
+              "configurations": {},
+              "parallelism": true,
+              "dependsOn": [
+                "^build"
+              ]
+            },
+            "serve": {
+              "continuous": true,
+              "options": {
+                "cwd": "libs/i18n",
+                "command": "vite"
+              },
+              "metadata": {
+                "technologies": [
+                  "vite"
+                ],
+                "description": "Starts Vite dev server",
+                "help": {
+                  "command": "pnpm exec vite --help",
+                  "example": {
+                    "options": {
+                      "port": 3000
+                    }
+                  }
+                },
+                "deprecated": "Use devTargetName instead. This option will be removed in Nx 22."
+              },
+              "executor": "nx:run-commands",
+              "configurations": {},
+              "parallelism": true
+            },
+            "dev": {
+              "continuous": true,
+              "options": {
+                "cwd": "libs/i18n",
+                "command": "vite"
+              },
+              "metadata": {
+                "technologies": [
+                  "vite"
+                ],
+                "description": "Starts Vite dev server",
+                "help": {
+                  "command": "pnpm exec vite --help",
+                  "example": {
+                    "options": {
+                      "port": 3000
+                    }
+                  }
+                }
+              },
+              "executor": "nx:run-commands",
+              "configurations": {},
+              "parallelism": true
+            },
+            "preview": {
+              "continuous": true,
+              "dependsOn": [
+                "build"
+              ],
+              "options": {
+                "cwd": "libs/i18n",
+                "command": "vite preview"
+              },
+              "metadata": {
+                "technologies": [
+                  "vite"
+                ],
+                "description": "Locally preview Vite production build",
+                "help": {
+                  "command": "pnpm exec vite preview --help",
+                  "example": {
+                    "options": {
+                      "port": 3000
+                    }
+                  }
+                }
+              },
+              "executor": "nx:run-commands",
+              "configurations": {},
+              "parallelism": true
+            },
+            "serve-static": {
+              "continuous": true,
+              "executor": "@nx/web:file-server",
+              "options": {
+                "buildTarget": "build",
+                "spa": true
+              },
+              "configurations": {},
+              "parallelism": true
+            }
+          },
+          "metadata": {
+            "targetGroups": {},
+            "js": {
+              "packageName": "@nx-playground/i18n",
+              "packageExports": {
+                ".": {
+                  "types": "./dist/index.d.ts",
+                  "import": "./dist/index.mjs"
+                }
+              },
+              "packageMain": "./dist/index.mjs",
+              "isInPackageManagerWorkspaces": true
+            }
+          },
+          "name": "i18n",
+          "tags": [
+            "npm:private"
+          ],
+          "$schema": "../../node_modules/nx/schemas/project-schema.json",
+          "sourceRoot": "libs/i18n/src",
+          "implicitDependencies": []
+        }
+      }
+    },
+    "dependencies": {
+      "enterprise-admin": [],
+      "enterprise-data": [],
+      "animation-data": [],
+      "design-system": [],
+      "ui-components": [
+        {
+          "source": "ui-components",
+          "target": "design-system",
+          "type": "static"
+        },
+        {
+          "source": "ui-components",
+          "target": "i18n",
+          "type": "static"
+        }
+      ],
+      "@nx-playground/event-portal": [
+        {
+          "source": "@nx-playground/event-portal",
+          "target": "i18n",
+          "type": "dynamic"
+        },
+        {
+          "source": "@nx-playground/event-portal",
+          "target": "i18n",
+          "type": "static"
+        },
+        {
+          "source": "@nx-playground/event-portal",
+          "target": "api-client",
+          "type": "static"
+        },
+        {
+          "source": "@nx-playground/event-portal",
+          "target": "auth-client",
+          "type": "static"
+        },
+        {
+          "source": "@nx-playground/event-portal",
+          "target": "design-system",
+          "type": "static"
+        },
+        {
+          "source": "@nx-playground/event-portal",
+          "target": "ui-components",
+          "type": "static"
+        }
+      ],
+      "auth-client": [],
+      "@nx-playground/api-server": [],
+      "api-client": [],
+      "vue-motion": [],
+      "@nx-playground/event-cms": [
+        {
+          "source": "@nx-playground/event-cms",
+          "target": "auth-client",
+          "type": "static"
+        },
+        {
+          "source": "@nx-playground/event-cms",
+          "target": "design-system",
+          "type": "static"
+        },
+        {
+          "source": "@nx-playground/event-cms",
+          "target": "api-client",
+          "type": "static"
+        },
+        {
+          "source": "@nx-playground/event-cms",
+          "target": "ui-components",
+          "type": "static"
+        },
+        {
+          "source": "@nx-playground/event-cms",
+          "target": "i18n",
+          "type": "static"
+        },
+        {
+          "source": "@nx-playground/event-cms",
+          "target": "charts",
+          "type": "static"
+        },
+        {
+          "source": "@nx-playground/event-cms",
+          "target": "hooks",
+          "type": "static"
+        }
+      ],
+      "@nx-playground/profile": [
+        {
+          "source": "@nx-playground/profile",
+          "target": "auth-client",
+          "type": "static"
+        },
+        {
+          "source": "@nx-playground/profile",
+          "target": "design-system",
+          "type": "static"
+        },
+        {
+          "source": "@nx-playground/profile",
+          "target": "api-client",
+          "type": "static"
+        },
+        {
+          "source": "@nx-playground/profile",
+          "target": "ui-components",
+          "type": "static"
+        },
+        {
+          "source": "@nx-playground/profile",
+          "target": "i18n",
+          "type": "static"
+        },
+        {
+          "source": "@nx-playground/profile",
+          "target": "hooks",
+          "type": "static"
+        }
+      ],
+      "charts": [],
+      "hooks": [],
+      "@nx-playground/auth": [
+        {
+          "source": "@nx-playground/auth",
+          "target": "design-system",
+          "type": "static"
+        }
+      ],
+      "i18n": []
+    }
+  }
+}
