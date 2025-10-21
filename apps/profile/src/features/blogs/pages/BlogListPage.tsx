@@ -206,7 +206,9 @@ export const BlogListPage: FC = () => {
               d='M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z'
             />
           </svg>
-          <p className='text-lg text-muted-foreground mb-2'>{String(t('noResults'))}</p>
+          <p className='text-lg text-muted-foreground mb-2'>
+            {String(t('noResults'))}
+          </p>
           <p className='text-sm text-muted-foreground'>
             試試調整搜尋關鍵字或標籤篩選
           </p>
