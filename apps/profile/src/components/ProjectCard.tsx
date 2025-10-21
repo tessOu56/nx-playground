@@ -56,39 +56,43 @@ export const ProjectCard: FC<ProjectCardProps> = ({ project, type, onClick }) =>
       </p>
 
       {/* Tech Stack */}
-      <div className='mb-4'>
-        <div className='flex flex-wrap gap-2'>
-          {project.techStack.slice(0, 4).map(tech => (
-            <TechTag key={tech} name={tech} compact />
-          ))}
-          {project.techStack.length > 4 && (
-            <span className='px-2 py-1 bg-muted text-muted-foreground rounded text-xs font-medium'>
-              +{project.techStack.length - 4}
-            </span>
-          )}
+      {project.techStack && project.techStack.length > 0 && (
+        <div className='mb-4'>
+          <div className='flex flex-wrap gap-2'>
+            {project.techStack.slice(0, 4).map(tech => (
+              <TechTag key={tech} name={tech} compact />
+            ))}
+            {project.techStack.length > 4 && (
+              <span className='px-2 py-1 bg-muted text-muted-foreground rounded text-xs font-medium'>
+                +{project.techStack.length - 4}
+              </span>
+            )}
+          </div>
         </div>
-      </div>
+      )}
 
       {/* Stats（Libs 專用）*/}
       {type === 'lib' && project.stats && <StatsRow stats={project.stats} />}
 
       {/* Highlights */}
-      <div>
-        <h4 className='font-semibold text-gray-900 dark:text-white mb-2 text-sm'>
-          Highlights:
-        </h4>
-        <ul className='space-y-1'>
-          {project.highlights.slice(0, 4).map((highlight, index) => (
-            <li
-              key={index}
-              className='text-sm text-gray-600 dark:text-gray-400 flex items-start'
-            >
-              <span className='text-green-600 dark:text-green-400 mr-2'>✓</span>
-              {highlight}
-            </li>
-          ))}
-        </ul>
-      </div>
+      {project.highlights && project.highlights.length > 0 && (
+        <div>
+          <h4 className='font-semibold text-gray-900 dark:text-white mb-2 text-sm'>
+            Highlights:
+          </h4>
+          <ul className='space-y-1'>
+            {project.highlights.slice(0, 4).map((highlight, index) => (
+              <li
+                key={index}
+                className='text-sm text-gray-600 dark:text-gray-400 flex items-start'
+              >
+                <span className='text-green-600 dark:text-green-400 mr-2'>✓</span>
+                {highlight}
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
     </div>
   );
 };
