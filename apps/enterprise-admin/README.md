@@ -1,3 +1,18 @@
+---
+id: enterprise-admin
+name: enterprise-admin
+version: 0.0.0
+description: >-
+  [![Angular](https://img.shields.io/badge/Angular-20.3.0-red.svg)](https://angular.dev)
+techStack:
+  - Angular 20
+  - Signal Store
+  - RBAC
+  - Dual-control
+  - SSE
+features: []
+lastUpdated: '2025-10-21'
+---
 # Angular Dashboard - 企業級管理系統
 
 > 展示企業級 Angular 架構、RBAC 權限控制、Dual-control 審批流程、即時事件監控與完整稽核軌跡

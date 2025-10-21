@@ -1,3 +1,17 @@
+---
+id: profile
+name: profile
+version: 0.0.1
+description: 'This is a full-featured technical portfolio built to showcase:'
+techStack:
+  - React 19
+  - Vite
+  - i18n
+  - Cloudflare Pages
+  - Portfolio
+features: []
+lastUpdated: '2025-10-21'
+---
 # Profile - Technical Portfolio & Showcase
 
 > Professional portfolio website showcasing technical skills, projects, and shared libraries in a Nx monorepo architecture

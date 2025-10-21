@@ -1,3 +1,12 @@
+---
+id: i18n
+name: i18n
+version: 0.0.1
+description: 此函式庫已整合到 workspace，所有專案可直接使用：
+techStack: []
+features: []
+lastUpdated: '2025-10-21'
+---
 # @nx-playground/i18n
 
 > 統一的國際化解決方案，支援 React (i18next) 和 Next.js (next-intl)

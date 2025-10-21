@@ -1,3 +1,12 @@
+---
+id: design-system
+name: design-system
+version: 0.1.0
+description: 此函式庫已整合到 workspace，所有專案可直接使用：
+techStack: []
+features: []
+lastUpdated: '2025-10-21'
+---
 # @nx-playground/design-system
 
 > 自動化設計 Token 生成系統，將 CSS 設計檔案轉換為可用的變數和 Vanilla Extract 主題

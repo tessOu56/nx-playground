@@ -1,3 +1,17 @@
+---
+id: event-portal
+name: event-portal
+version: 0.0.1
+description: 使用 Next.js 15 App Router 構建的現代化活動平台，支援 LINE LIFF 整合、多語言、SSG 靜態生成。
+techStack:
+  - Next.js 15
+  - SSG
+  - LINE LIFF
+  - next-intl
+  - QR Code
+features: []
+lastUpdated: '2025-10-21'
+---
 # Events - 活動管理平台
 
 > 基於 LINE LIFF 的活動管理和報名平台，提供完整的活動瀏覽、報名、支付和票券管理功能

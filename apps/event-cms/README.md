@@ -1,3 +1,17 @@
+---
+id: event-cms
+name: event-cms
+version: 0.0.1
+description: 完整的管理控制台應用，展示了 Nx Monorepo 中如何構建大型 React 應用，並整合共享函式庫。
+techStack:
+  - React 19
+  - Vite
+  - Zustand
+  - React Hook Form
+  - RBAC
+features: []
+lastUpdated: '2025-10-21'
+---
 # Console - 管理控制台
 
 > 基於 React + Vite 的現代化管理後台，提供活動管理、表單模板、用戶管理等功能

@@ -1,3 +1,16 @@
+---
+id: enterprise-data
+name: enterprise-data
+version: 0.0.1
+description: 此函式庫為 enterprise-admin (Angular 架構推演專案) 提供所有資料處理邏輯。
+techStack:
+  - Angular
+  - Data Layer
+  - Architecture
+  - TypeScript
+features: []
+lastUpdated: '2025-10-21'
+---
 # @nx-playground/enterprise-data
 
 > 企業應用資料處理函式庫
