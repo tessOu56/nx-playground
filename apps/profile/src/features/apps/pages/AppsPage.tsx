@@ -1,15 +1,12 @@
 import { type FC, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
-import { appsConfig } from '../../../data/apps.config';
 import type { SupportedLocale } from '../../../lib/i18n/LocaleRouter';
 import { loadAllApps } from '../../../lib/projectLoader';
 import type { AppData } from '../../../types/projectData';
 import { AppCard } from '../components';
-import { useAppsTranslation } from '../hooks/useAppsTranslation';
 
 export const AppsPage: FC = () => {
-  const { t } = useAppsTranslation();
   const { locale } = useParams<{ locale: string }>();
   const currentLocale = (locale ?? 'en') as SupportedLocale;
 
@@ -22,18 +19,10 @@ export const AppsPage: FC = () => {
       setLoading(true);
       try {
         const loadedApps = await loadAllApps(currentLocale);
-
-        // 如果成功載入資料，使用新載入器的資料
-        if (loadedApps.length > 0) {
-          setApps(loadedApps);
-        } else {
-          // Fallback 到 config（向後相容）
-          setApps(appsConfig as any);
-        }
+        setApps(loadedApps);
       } catch (error) {
         console.error('Failed to load apps:', error);
-        // Fallback 到 config
-        setApps(appsConfig as any);
+        setApps([]);
       } finally {
         setLoading(false);
       }
@@ -45,7 +34,7 @@ export const AppsPage: FC = () => {
   if (loading) {
     return (
       <div className='min-h-screen flex items-center justify-center'>
-        <p className='text-lg text-muted-foreground'>載入中...</p>
+        <p className='text-lg text-muted-foreground'>Loading...</p>
       </div>
     );
   }
@@ -56,10 +45,10 @@ export const AppsPage: FC = () => {
         {/* Header */}
         <div className='text-center mb-12'>
           <h1 className='text-5xl font-bold text-gray-900 dark:text-white mb-4'>
-            {String(t('page.title'))}
+            Applications
           </h1>
           <p className='text-xl text-gray-600 dark:text-gray-400 max-w-3xl mx-auto'>
-            {String(t('page.subtitle'))}
+            Browse all applications built in the Nx monorepo
           </p>
         </div>
 
@@ -76,9 +65,7 @@ export const AppsPage: FC = () => {
             <div className='text-4xl font-bold text-blue-600 dark:text-blue-400 mb-2'>
               {apps.length}
             </div>
-            <div className='text-gray-600 dark:text-gray-400 font-medium'>
-              {String(t('page.title'))}
-            </div>
+            <div className='text-gray-600 dark:text-gray-400 font-medium'>Applications</div>
           </div>
           <div className='bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg text-center'>
             <div className='text-4xl font-bold text-green-600 dark:text-green-400 mb-2'>
