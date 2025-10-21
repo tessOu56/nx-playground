@@ -7,7 +7,10 @@
 import { type FC } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { getCategoryColorClasses, getTechCategory } from '../lib/techCategories';
+import {
+  getCategoryColorClasses,
+  getTechCategory,
+} from '../lib/techCategories';
 import { useLocalizedNavigation } from '../lib/i18n/useLocalizedNavigation';
 
 interface TechTagProps {
@@ -52,7 +55,7 @@ export const TechTag: FC<TechTagProps> = ({
     <button
       onClick={handleClick}
       className={`
-        inline-flex items-center rounded-md font-medium 
+        inline-flex items-center rounded-md font-medium
         border transition-all duration-200
         cursor-pointer select-none
         ${compact ? 'px-2 py-0.5 text-xs' : 'px-3 py-1.5 text-sm'}
@@ -67,10 +70,9 @@ export const TechTag: FC<TechTagProps> = ({
         ${className}
       `}
       title={`搜尋 ${name} 相關文件`}
-      type="button"
+      type='button'
     >
       {name}
     </button>
   );
 };
-
