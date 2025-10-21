@@ -1,11 +1,10 @@
-import { type FC, useEffect, useState } from 'react';
+import { type FC, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
 import { ProjectCard } from '../../../components/ProjectCard';
 import type { SupportedLocale } from '../../../lib/i18n/LocaleRouter';
 import { useLocalizedNavigation } from '../../../lib/i18n/useLocalizedNavigation';
-import { loadAllApps } from '../../../lib/projectLoader';
-import type { AppData } from '../../../types/projectData';
+import { useProjectsStore } from '../../../stores/useProjectsStore';
 
 export const AppsPage: FC = () => {
   const navigate = useNavigate();
@@ -13,26 +12,15 @@ export const AppsPage: FC = () => {
   const { getLocalizedPath } = useLocalizedNavigation();
   const currentLocale = (locale ?? 'en') as SupportedLocale;
 
-  const [apps, setApps] = useState<AppData[]>([]);
-  const [loading, setLoading] = useState(true);
+  // 從 Zustand store 取得資料
+  const apps = useProjectsStore(state => state.apps[currentLocale]);
+  const loading = useProjectsStore(state => state.loading);
+  const loadApps = useProjectsStore(state => state.loadApps);
 
   // 載入 Apps 資料
   useEffect(() => {
-    const loadApps = async () => {
-      setLoading(true);
-      try {
-        const loadedApps = await loadAllApps(currentLocale);
-        setApps(loadedApps);
-      } catch (error) {
-        console.error('Failed to load apps:', error);
-        setApps([]);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    loadApps();
-  }, [currentLocale]);
+    loadApps(currentLocale);
+  }, [currentLocale, loadApps]);
 
   if (loading) {
     return (

@@ -38,6 +38,7 @@
       "@nx-playground/enterprise-admin": ["apps/enterprise-admin/src"],
       "@nx-playground/enterprise-data": ["libs/enterprise-data/src/index.ts"],
       "@nx-playground/event-cms": ["apps/event-cms/src"],
+      "@nx-playground/tech-stack-data": ["libs/tech-stack-data/src/index.ts"],
       "@nx-playground/event-portal": ["apps/event-portal/src"],
       "@nx-playground/hooks": ["dist/libs/hooks/src"],
       "@nx-playground/i18n": ["dist/libs/i18n"],

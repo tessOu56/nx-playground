@@ -1,5 +1,9 @@
-export interface ProfileConfig {
-  name: string;
+/**
+ * Home 頁面專用配置
+ * 包含個人資料、技能、聯絡方式等
+ */
+
+export interface HomeConfig {
   title: {
     'zh-TW': string;
     en: string;
@@ -19,8 +23,7 @@ export interface ProfileConfig {
   };
 }
 
-export const profileConfig: ProfileConfig = {
-  name: 'NX Playground',
+export const homeConfig: HomeConfig = {
   title: {
     'zh-TW': '全端工程師 & Nx Monorepo 專家',
     en: 'Full-Stack Developer & Nx Monorepo Specialist',
@@ -38,3 +41,4 @@ export const profileConfig: ProfileConfig = {
     en: 'Available for freelance projects and full-time opportunities',
   },
 };
+

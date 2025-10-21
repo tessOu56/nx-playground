@@ -1,0 +1,20 @@
+{
+  "name": "@nx-playground/tech-stack-data",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "scripts": {
+    "collect": "tsx scripts/collect-tech-stack.ts"
+  },
+  "devDependencies": {
+    "tsx": "^4.7.0"
+  }
+}

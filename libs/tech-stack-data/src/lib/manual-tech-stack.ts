@@ -1,13 +1,11 @@
-export interface TechItem {
-  name: string;
-  category: 'frontend' | 'backend' | 'tools' | 'testing' | 'deployment';
-  level: 'expert' | 'advanced' | 'intermediate';
-  icon?: string;
-  color?: string;
-  url?: string; // Link to official website or GitHub
-}
+/**
+ * 手動維護的技術堆疊資料
+ * 用於補充自動收集無法獲取的細節資訊（level, icon, color, url 等）
+ */
 
-export const techStack: TechItem[] = [
+import type { TechItem } from './types';
+
+export const manualTechStack: TechItem[] = [
   // Frontend Frameworks
   {
     name: 'React 19',

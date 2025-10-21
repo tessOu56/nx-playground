@@ -1,10 +1,10 @@
-import { type FC, useEffect, useMemo, useState } from 'react';
+import { type FC, useEffect, useMemo } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
 import { ProjectCard } from '../../../components/ProjectCard';
 import type { SupportedLocale } from '../../../lib/i18n/LocaleRouter';
 import { useLocalizedNavigation } from '../../../lib/i18n/useLocalizedNavigation';
-import { loadAllLibs } from '../../../lib/projectLoader';
+import { useProjectsStore } from '../../../stores/useProjectsStore';
 import type { LibData } from '../../../types/projectData';
 
 export const LibsPage: FC = () => {
@@ -13,26 +13,15 @@ export const LibsPage: FC = () => {
   const { getLocalizedPath } = useLocalizedNavigation();
   const currentLocale = (locale ?? 'en') as SupportedLocale;
 
-  const [libs, setLibs] = useState<LibData[]>([]);
-  const [loading, setLoading] = useState(true);
+  // 從 Zustand store 取得資料
+  const libs = useProjectsStore(state => state.libs[currentLocale]);
+  const loading = useProjectsStore(state => state.loading);
+  const loadLibs = useProjectsStore(state => state.loadLibs);
 
   // 載入 Libs 資料
   useEffect(() => {
-    const loadLibsData = async () => {
-      setLoading(true);
-      try {
-        const loadedLibs = await loadAllLibs(currentLocale);
-        setLibs(loadedLibs);
-      } catch (error) {
-        console.error('Failed to load libs:', error);
-        setLibs([]);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    loadLibsData();
-  }, [currentLocale]);
+    loadLibs(currentLocale);
+  }, [currentLocale, loadLibs]);
 
   const groupedLibs = useMemo(() => {
     const grouped: Record<string, LibData[]> = {};

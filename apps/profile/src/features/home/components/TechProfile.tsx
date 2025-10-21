@@ -1,7 +1,8 @@
 import { useTranslation } from '@nx-playground/i18n';
 import { type FC } from 'react';
 
-import { profileConfig } from '../../../data/profile.config';
+import { siteConfig } from '../../../lib/siteConfig';
+import { homeConfig } from '../data/homeConfig';
 
 export const TechProfile: FC = () => {
   const { i18n } = useTranslation();
@@ -13,19 +14,19 @@ export const TechProfile: FC = () => {
         {/* Logo / Name - Responsive */}
         <div className='mb-10'>
           <h1 className='text-6xl md:text-7xl lg:text-8xl font-bold bg-gradient-to-r from-primary via-secondary to-primary bg-clip-text text-transparent mb-6'>
-            {profileConfig.name}
+            {siteConfig.siteName}
           </h1>
           <div className='h-[1px] w-32 bg-gradient-to-r from-primary to-secondary mx-auto' />
         </div>
 
         {/* Title */}
         <h2 className='text-3xl md:text-4xl font-semibold text-foreground mb-8'>
-          {profileConfig.title[currentLang]}
+          {homeConfig.title[currentLang]}
         </h2>
 
         {/* Bio */}
         <p className='text-lg md:text-xl text-muted-foreground leading-relaxed max-w-3xl mx-auto'>
-          {profileConfig.bio[currentLang]}
+          {homeConfig.bio[currentLang]}
         </p>
       </div>
     </section>
