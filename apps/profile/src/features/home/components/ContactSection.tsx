@@ -1,7 +1,7 @@
 import { Button, Card, CardContent, CardDescription, CardHeader, CardTitle } from '@nx-playground/ui-components';
 import { type FC } from 'react';
 
-import { profileConfig } from '../../../data/profile.config';
+import { homeConfig } from '../data/homeConfig';
 import { useHomeTranslation } from '../hooks/useHomeTranslation';
 
 export const ContactSection: FC = () => {
@@ -18,7 +18,7 @@ export const ContactSection: FC = () => {
         </div>
 
         {/* GitHub Card */}
-        {profileConfig.contact.github && (
+        {homeConfig.contact.github && (
           <Card className='hover:shadow-xl transition-shadow'>
             <CardHeader className='text-center'>
               <div className='w-20 h-20 mx-auto bg-gradient-to-br from-primary/10 to-secondary/10 rounded-full flex items-center justify-center mb-4'>
@@ -35,7 +35,7 @@ export const ContactSection: FC = () => {
             </CardHeader>
             <CardContent className='text-center'>
               <a
-                href={profileConfig.contact.github}
+                href={homeConfig.contact.github}
                 target='_blank'
                 rel='noopener noreferrer'
               >

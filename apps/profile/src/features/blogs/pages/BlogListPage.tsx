@@ -6,13 +6,14 @@ import { type FC, useEffect, useMemo, useState } from 'react';
 import { useParams, useSearchParams } from 'react-router-dom';
 
 import { type SupportedLocale } from '../../../lib/i18n/LocaleRouter';
+import { useBlogsStore } from '../../../stores/useBlogsStore';
 import { BlogCard } from '../components/BlogCard';
 import { CategoryFilter } from '../components/CategoryFilter';
 import { SearchBar } from '../components/SearchBar';
 import { TagFilter } from '../components/TagFilter';
 import { useBlogTranslation } from '../hooks/useBlogsTranslation';
-import type { BlogCategory, BlogPost } from '../types';
-import { getAllTags, loadAllPosts } from '../utils/loadDocs';
+import type { BlogCategory } from '../types';
+import { getAllTags } from '../utils/loadDocs';
 
 export const BlogListPage: FC = () => {
   const { locale } = useParams<{ locale: string }>();
@@ -21,14 +22,18 @@ export const BlogListPage: FC = () => {
 
   const { t } = useBlogTranslation();
 
-  const [posts, setPosts] = useState<BlogPost[]>([]);
+  // 從 Zustand store 取得資料
+  const posts = useBlogsStore(state => state.posts[currentLocale]);
+  const loading = useBlogsStore(state => state.loading);
+  const loadPosts = useBlogsStore(state => state.loadPosts);
+
+  // UI state（保持 useState）
   const [allTags, setAllTags] = useState<string[]>([]);
   const [selectedTag, setSelectedTag] = useState<string | null>(null);
   const [selectedCategory, setSelectedCategory] = useState<
     BlogCategory | 'all'
   >('all');
   const [searchQuery, setSearchQuery] = useState('');
-  const [loading, setLoading] = useState(true);
 
   // Read tag from URL params on mount
   useEffect(() => {
@@ -43,23 +48,13 @@ export const BlogListPage: FC = () => {
   // Load posts and tags
   useEffect(() => {
     const loadData = async () => {
-      setLoading(true);
-      try {
-        const [loadedPosts, loadedTags] = await Promise.all([
-          loadAllPosts(currentLocale),
-          getAllTags(currentLocale),
-        ]);
-        setPosts(loadedPosts);
-        setAllTags(loadedTags);
-      } catch (error) {
-        console.error('Failed to load blog posts:', error);
-      } finally {
-        setLoading(false);
-      }
+      await loadPosts(currentLocale);
+      const tags = await getAllTags(currentLocale);
+      setAllTags(tags);
     };
 
     loadData();
-  }, [currentLocale]);
+  }, [currentLocale, loadPosts]);
 
   // Filter posts
   const filteredPosts = useMemo(() => {

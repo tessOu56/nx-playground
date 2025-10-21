@@ -1,0 +1,39 @@
+{
+  "name": "tech-stack-data",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/tech-stack-data/src",
+  "projectType": "library",
+  "tags": ["npm:private", "npm:data"],
+  "targets": {
+    "collect": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "pnpm run collect",
+        "cwd": "libs/tech-stack-data"
+      }
+    },
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "dependsOn": ["collect"],
+      "options": {
+        "outputPath": "dist/libs/tech-stack-data",
+        "main": "libs/tech-stack-data/src/index.ts",
+        "tsConfig": "libs/tech-stack-data/tsconfig.lib.json",
+        "assets": ["libs/tech-stack-data/*.md"]
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint",
+      "outputs": ["{options.outputFile}"]
+    },
+    "test": {
+      "executor": "@nx/vite:test",
+      "outputs": ["{options.reportsDirectory}"],
+      "options": {
+        "passWithNoTests": true,
+        "reportsDirectory": "../../coverage/libs/tech-stack-data"
+      }
+    }
+  }
+}

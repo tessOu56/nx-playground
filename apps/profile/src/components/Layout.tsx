@@ -2,8 +2,8 @@ import { Button } from '@nx-playground/ui-components';
 import { type ReactNode } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 
-import { profileConfig } from '../data/profile.config';
 import { useLocalizedNavigation } from '../lib/i18n/useLocalizedNavigation';
+import { siteConfig } from '../lib/siteConfig';
 
 import { LanguageSwitcher } from './LanguageSwitcher';
 
@@ -35,7 +35,7 @@ export function Layout({ children }: LayoutProps) {
             <div className='flex items-center gap-8'>
               <Link to={getLocalizedPath('/')} className='flex-shrink-0'>
                 <h1 className='text-2xl font-bold bg-gradient-to-r from-primary via-secondary to-primary bg-clip-text text-transparent'>
-                  {profileConfig.name}
+                  {siteConfig.siteName}
                 </h1>
               </Link>
               <div className='hidden md:flex items-center gap-2'>
