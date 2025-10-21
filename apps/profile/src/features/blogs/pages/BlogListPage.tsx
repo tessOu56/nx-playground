@@ -10,7 +10,7 @@ import { BlogCard } from '../components/BlogCard';
 import { CategoryFilter } from '../components/CategoryFilter';
 import { SearchBar } from '../components/SearchBar';
 import { TagFilter } from '../components/TagFilter';
-import { useBlogTranslation } from '../hooks/useBlogTranslation';
+import { useBlogTranslation } from '../hooks/useBlogsTranslation';
 import type { BlogCategory, BlogPost } from '../types';
 import { getAllTags, loadAllPosts } from '../utils/loadDocs';
 

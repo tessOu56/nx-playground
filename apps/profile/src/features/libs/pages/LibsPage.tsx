@@ -2,8 +2,8 @@ import { type FC, useEffect, useMemo, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
 import { ProjectCard } from '../../../components/ProjectCard';
-import { useLocalizedNavigation } from '../../../lib/i18n/useLocalizedNavigation';
 import type { SupportedLocale } from '../../../lib/i18n/LocaleRouter';
+import { useLocalizedNavigation } from '../../../lib/i18n/useLocalizedNavigation';
 import { loadAllLibs } from '../../../lib/projectLoader';
 import type { LibData } from '../../../types/projectData';
 

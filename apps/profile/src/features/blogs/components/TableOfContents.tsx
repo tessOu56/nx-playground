@@ -5,7 +5,7 @@
 
 import { type FC, useEffect, useState } from 'react';
 
-import { useBlogTranslation } from '../hooks/useBlogTranslation';
+import { useBlogTranslation } from '../hooks/useBlogsTranslation';
 
 interface ToCItem {
   id: string;

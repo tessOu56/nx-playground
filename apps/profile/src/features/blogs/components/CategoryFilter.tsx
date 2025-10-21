@@ -5,7 +5,7 @@
 import { Button } from '@nx-playground/ui-components';
 import { type FC } from 'react';
 
-import { useBlogTranslation } from '../hooks/useBlogTranslation';
+import { useBlogTranslation } from '../hooks/useBlogsTranslation';
 import type { BlogCategory } from '../types';
 
 interface CategoryFilterProps {

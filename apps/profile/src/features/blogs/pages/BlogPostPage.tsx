@@ -11,7 +11,7 @@ import { LanguageToggle } from '../components/LanguageToggle';
 import { ShareButtons } from '../components/ShareButtons';
 import { TableOfContents } from '../components/TableOfContents';
 import { TagList } from '../components/TagList';
-import { useBlogTranslation } from '../hooks/useBlogTranslation';
+import { useBlogTranslation } from '../hooks/useBlogsTranslation';
 import type { BlogPost as BlogPostType } from '../types';
 import { loadPostBySlug } from '../utils/loadDocs';
 
