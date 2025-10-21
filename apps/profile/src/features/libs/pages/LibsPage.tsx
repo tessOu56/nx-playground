@@ -2,15 +2,15 @@ import { useTranslation } from '@nx-playground/i18n';
 import { type FC, useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
-import type { SupportedLocale } from '../../../lib/i18n/LocaleRouter';
-import { loadAllLibs } from '../../../lib/projectLoader';
-import type { LibData } from '../../../types/projectData';
 import { appsConfig } from '../../../data/apps.config';
 import {
   libBenefits,
   libCategories,
   libsConfig,
 } from '../../../data/libs.config';
+import type { SupportedLocale } from '../../../lib/i18n/LocaleRouter';
+import { loadAllLibs } from '../../../lib/projectLoader';
+import type { LibData } from '../../../types/projectData';
 import { LibCard } from '../components';
 import { useLibsTranslation } from '../hooks/useLibsTranslation';
 
@@ -19,7 +19,7 @@ export const LibsPage: FC = () => {
   const { i18n } = useTranslation();
   const currentLang = i18n.language as 'zh-TW' | 'en';
   const { locale } = useParams<{ locale: string }>();
-  const currentLocale = (locale ?? 'zh-TW') as SupportedLocale;
+  const currentLocale = (locale ?? 'en') as SupportedLocale;
 
   const [libs, setLibs] = useState<LibData[]>([]);
   const [loading, setLoading] = useState(true);

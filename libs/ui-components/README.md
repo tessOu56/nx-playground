@@ -1,10 +1,21 @@
 ---
 id: ui-components
-name: ui-components
+name: UI Components
 version: 0.1.0
-description: 基於 Shadcn/ui 模式的現代化 UI 組件庫，提供兩種類型的組件：
-techStack: []
-features: []
+description: >-
+  Comprehensive UI component library built with React, TypeScript, and Radix UI
+  primitives
+techStack:
+  - React 19
+  - Radix UI
+  - Tailwind CSS
+  - TypeScript
+features:
+  - 40+ components
+  - TypeScript support
+  - Accessibility-first
+  - Form components
+  - Navigation components
 lastUpdated: '2025-10-21'
 ---
 # NX Playground UI Components

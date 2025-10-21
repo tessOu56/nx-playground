@@ -1,13 +1,18 @@
 ---
 id: api-client
-name: api-client
+name: API Client
 version: 0.0.1
-description: >-
-  A comprehensive React SDK for the NX Playground event management platform,
-  featuring auto-generated API clients from OpenAPI specifications with full
-  TypeScript support.
-techStack: []
-features: []
+description: Type-safe API client generated from OpenAPI specifications using Orval
+techStack:
+  - OpenAPI
+  - Orval
+  - React Query
+  - TypeScript
+features:
+  - OpenAPI integration
+  - Auto type generation
+  - React Query hooks
+  - Mock data support
 lastUpdated: '2025-10-21'
 ---
 # @nx-playground/api-client

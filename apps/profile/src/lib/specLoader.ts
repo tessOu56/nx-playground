@@ -68,7 +68,7 @@ async function parseSpec(filePath: string, content: string): Promise<ProjectSpec
  */
 export async function loadAppSpec(
   appId: string,
-  locale: SupportedLocale = 'zh-TW'
+  locale: SupportedLocale = 'en'
 ): Promise<ProjectSpec | null> {
   const fileName = locale === 'zh-TW' ? 'zh-TW.md' : 'en.md';
   const filePath = `/specs/apps/${appId}/${fileName}`;
@@ -97,7 +97,7 @@ export async function loadAppSpec(
  */
 export async function loadLibSpec(
   libId: string,
-  locale: SupportedLocale = 'zh-TW'
+  locale: SupportedLocale = 'en'
 ): Promise<ProjectSpec | null> {
   const fileName = locale === 'zh-TW' ? 'zh-TW.md' : 'en.md';
   const filePath = `/specs/libs/${libId}/${fileName}`;
@@ -125,7 +125,7 @@ export async function loadLibSpec(
  * 載入所有 Apps 的 Spec
  */
 export async function loadAllAppsSpecs(
-  locale: SupportedLocale = 'zh-TW'
+  locale: SupportedLocale = 'en'
 ): Promise<ProjectSpec[]> {
   const specs: ProjectSpec[] = [];
   const fileName = locale === 'zh-TW' ? 'zh-TW.md' : 'en.md';
@@ -153,7 +153,7 @@ export async function loadAllAppsSpecs(
  * 載入所有 Libs 的 Spec
  */
 export async function loadAllLibsSpecs(
-  locale: SupportedLocale = 'zh-TW'
+  locale: SupportedLocale = 'en'
 ): Promise<ProjectSpec[]> {
   const specs: ProjectSpec[] = [];
   const fileName = locale === 'zh-TW' ? 'zh-TW.md' : 'en.md';

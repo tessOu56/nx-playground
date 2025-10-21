@@ -1,15 +1,15 @@
 ---
 id: animation-data
-name: animation-data
+name: Animation Data
 version: 0.0.1
-description: 此函式庫為 vue-motion (動畫 Sandbox 專案) 提供所有動畫數據處理邏輯。
+description: Animation data management for Vue motion applications
 techStack:
-  - Vue
-  - Animation
-  - Data Layer
-  - CSS
+  - Vue 3
   - TypeScript
-features: []
+features:
+  - Animation presets
+  - Data transformers
+  - Export utilities
 lastUpdated: '2025-10-21'
 ---
 # @nx-playground/animation-data

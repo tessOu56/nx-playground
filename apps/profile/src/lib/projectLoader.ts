@@ -64,7 +64,7 @@ function mergeProjectData(
  */
 export async function loadApp(
   appId: string,
-  locale: SupportedLocale = 'zh-TW'
+  locale: SupportedLocale = 'en'
 ): Promise<AppData | null> {
   try {
     const [readme, spec, changelog] = await Promise.all([
@@ -95,7 +95,7 @@ export async function loadApp(
  */
 export async function loadLib(
   libId: string,
-  locale: SupportedLocale = 'zh-TW'
+  locale: SupportedLocale = 'en'
 ): Promise<LibData | null> {
   try {
     const [readme, spec, changelog] = await Promise.all([
@@ -124,7 +124,7 @@ export async function loadLib(
 /**
  * 載入所有 Apps
  */
-export async function loadAllApps(locale: SupportedLocale = 'zh-TW'): Promise<AppData[]> {
+export async function loadAllApps(locale: SupportedLocale = 'en'): Promise<AppData[]> {
   try {
     const [readmes, specs] = await Promise.all([
       loadAllAppsReadmes(locale),
@@ -171,7 +171,7 @@ export async function loadAllApps(locale: SupportedLocale = 'zh-TW'): Promise<Ap
 /**
  * 載入所有 Libs
  */
-export async function loadAllLibs(locale: SupportedLocale = 'zh-TW'): Promise<LibData[]> {
+export async function loadAllLibs(locale: SupportedLocale = 'en'): Promise<LibData[]> {
   try {
     const [readmes, specs] = await Promise.all([
       loadAllLibsReadmes(locale),

@@ -1,10 +1,16 @@
 ---
 id: auth-client
-name: auth-client
+name: Auth Client
 version: 0.1.0
-description: 這個 library 專門處理前端驗證頁面跳轉邏輯，提供全域 auth 狀態管理和 SSO 整合。
-techStack: []
-features: []
+description: Authentication utilities and context providers
+techStack:
+  - React 19
+  - TypeScript
+features:
+  - Auth context
+  - Protected routes
+  - Session management
+  - Token handling
 lastUpdated: '2025-10-21'
 ---
 # @nx-playground/auth-client

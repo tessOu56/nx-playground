@@ -9,7 +9,6 @@ import { type FC } from 'react';
 import type { AppData, LibData } from '../types/projectData';
 
 import { CategoryBadge } from './CategoryBadge';
-import { StatsRow } from './StatsRow';
 import { StatusBadge } from './StatusBadge';
 import { TechTag } from './TechTag';
 
@@ -19,7 +18,11 @@ interface ProjectCardProps {
   onClick?: () => void;
 }
 
-export const ProjectCard: FC<ProjectCardProps> = ({ project, type, onClick }) => {
+export const ProjectCard: FC<ProjectCardProps> = ({
+  project,
+  type,
+  onClick,
+}) => {
   return (
     <div
       className='bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 hover:shadow-xl transition-all duration-300 hover:-translate-y-1 cursor-pointer'
@@ -40,8 +43,12 @@ export const ProjectCard: FC<ProjectCardProps> = ({ project, type, onClick }) =>
         </div>
         <div className='flex flex-col items-end gap-2'>
           <CategoryBadge category={project.category} type={type} />
-          {project.status === 'coming-soon' && <StatusBadge status={project.status} />}
-          {project.status === 'development' && <StatusBadge status={project.status} />}
+          {project.status === 'coming-soon' && (
+            <StatusBadge status={project.status} />
+          )}
+          {project.status === 'development' && (
+            <StatusBadge status={project.status} />
+          )}
           {project.version && (
             <span className='text-xs text-gray-500 dark:text-gray-400'>
               v{project.version}
@@ -71,9 +78,6 @@ export const ProjectCard: FC<ProjectCardProps> = ({ project, type, onClick }) =>
         </div>
       )}
 
-      {/* Stats（Libs 專用）*/}
-      {type === 'lib' && project.stats && <StatsRow stats={project.stats} />}
-
       {/* Highlights */}
       {project.highlights && project.highlights.length > 0 && (
         <div>
@@ -81,12 +85,14 @@ export const ProjectCard: FC<ProjectCardProps> = ({ project, type, onClick }) =>
             Highlights:
           </h4>
           <ul className='space-y-1'>
-            {project.highlights.slice(0, 4).map((highlight, index) => (
+            {project.highlights.slice(0, 4).map(highlight => (
               <li
-                key={index}
+                key={highlight}
                 className='text-sm text-gray-600 dark:text-gray-400 flex items-start'
               >
-                <span className='text-green-600 dark:text-green-400 mr-2'>✓</span>
+                <span className='text-green-600 dark:text-green-400 mr-2'>
+                  ✓
+                </span>
                 {highlight}
               </li>
             ))}
@@ -96,4 +102,3 @@ export const ProjectCard: FC<ProjectCardProps> = ({ project, type, onClick }) =>
     </div>
   );
 };
-

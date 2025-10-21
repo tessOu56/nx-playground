@@ -1,16 +1,22 @@
 ---
 id: enterprise-admin
-name: enterprise-admin
+name: Enterprise Admin
 version: 0.0.0
 description: >-
-  [![Angular](https://img.shields.io/badge/Angular-20.3.0-red.svg)](https://angular.dev)
+  Enterprise-level admin console built with Angular 20 Signals, featuring
+  dual-control approval and RBAC
 techStack:
   - Angular 20
   - Signal Store
+  - TypeScript
+  - Tailwind CSS
+  - RxJS
+features:
+  - User Management
   - RBAC
-  - Dual-control
-  - SSE
-features: []
+  - Dual-control Approval
+  - Audit Logs
+  - SSE Real-time Updates
 lastUpdated: '2025-10-21'
 ---
 # Angular Dashboard - 企業級管理系統

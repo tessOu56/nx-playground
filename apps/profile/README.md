@@ -1,15 +1,22 @@
 ---
 id: profile
-name: profile
+name: Profile
 version: 0.0.1
-description: 'This is a full-featured technical portfolio built to showcase:'
+description: >-
+  Professional portfolio website showcasing technical skills, projects, and
+  shared libraries in a Nx monorepo
 techStack:
   - React 19
   - Vite
   - i18n
-  - Cloudflare Pages
-  - Portfolio
-features: []
+  - Tailwind CSS
+  - React Router
+features:
+  - Multi-language Support
+  - Responsive Design
+  - Apps Showcase
+  - Libs Showcase
+  - Technical Documentation Search
 lastUpdated: '2025-10-21'
 ---
 # Profile - Technical Portfolio & Showcase

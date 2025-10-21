@@ -1,17 +1,17 @@
 import { type FC, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
+import { appsConfig } from '../../../data/apps.config';
 import type { SupportedLocale } from '../../../lib/i18n/LocaleRouter';
 import { loadAllApps } from '../../../lib/projectLoader';
 import type { AppData } from '../../../types/projectData';
-import { appsConfig } from '../../../data/apps.config';
 import { AppCard } from '../components';
 import { useAppsTranslation } from '../hooks/useAppsTranslation';
 
 export const AppsPage: FC = () => {
   const { t } = useAppsTranslation();
   const { locale } = useParams<{ locale: string }>();
-  const currentLocale = (locale ?? 'zh-TW') as SupportedLocale;
+  const currentLocale = (locale ?? 'en') as SupportedLocale;
 
   const [apps, setApps] = useState<AppData[]>([]);
   const [loading, setLoading] = useState(true);

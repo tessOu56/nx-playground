@@ -16,7 +16,7 @@ import { getAllTags, loadAllPosts } from '../utils/loadDocs';
 
 export const BlogListPage: FC = () => {
   const { locale } = useParams<{ locale: string }>();
-  const currentLocale = (locale || 'zh-TW') as SupportedLocale;
+  const currentLocale = (locale ?? 'en') as SupportedLocale;
   const [searchParams, setSearchParams] = useSearchParams();
 
   const { t } = useBlogTranslation();

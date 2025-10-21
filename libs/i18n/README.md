@@ -1,10 +1,19 @@
 ---
 id: i18n
-name: i18n
+name: Internationalization
 version: 0.0.1
-description: 此函式庫已整合到 workspace，所有專案可直接使用：
-techStack: []
-features: []
+description: i18next-based internationalization solution with feature-level translations
+techStack:
+  - i18next
+  - React
+  - TypeScript
+  - next-intl
+features:
+  - Feature-based namespaces
+  - Language detection
+  - SSR support
+  - Type-safe keys
+  - Dynamic loading
 lastUpdated: '2025-10-21'
 ---
 # @nx-playground/i18n

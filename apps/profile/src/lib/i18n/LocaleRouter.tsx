@@ -27,11 +27,11 @@ export const LocaleRouter: FC<LocaleRouterProps> = ({ children }) => {
     }
   }, [locale, i18n]);
 
-  // 如果 locale 無效，重定向到預設語言
+  // 如果 locale 無效，重定向到預設語言（en）
   if (locale && !isSupportedLocale(locale)) {
     return (
       <Navigate
-        to={`/zh-TW${location.pathname.replace(`/${locale}`, '')}`}
+        to={`/en${window.location.pathname.replace(`/${locale}`, '')}`}
         replace
       />
     );

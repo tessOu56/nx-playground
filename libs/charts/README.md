@@ -1,10 +1,18 @@
 ---
 id: charts
-name: charts
+name: Chart Components
 version: 0.1.0
-description: 提供統一的圖表介面，支援兩種流行的圖表庫：
-techStack: []
-features: []
+description: Chart component library with Chart.js and Recharts support
+techStack:
+  - Chart.js
+  - Recharts
+  - React 19
+  - TypeScript
+features:
+  - Multiple chart types
+  - Dual library support
+  - Responsive design
+  - Theme integration
 lastUpdated: '2025-10-21'
 ---
 # @nx-playground/charts
