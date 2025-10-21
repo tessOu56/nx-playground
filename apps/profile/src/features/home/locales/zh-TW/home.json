@@ -1,0 +1,24 @@
+{
+  "hero": {
+    "greeting": "你好，我是",
+    "name": "技術開發者",
+    "title": "全端工程師 & Nx Monorepo 專家",
+    "subtitle": "使用 React、Angular、Vue 和現代網頁技術構建可擴展的應用程式"
+  },
+  "about": {
+    "title": "關於我",
+    "description": "熱衷於使用 monorepo 架構構建可維護和可擴展的應用程式。在全端開發方面經驗豐富，專注於現代前端框架和企業級解決方案。"
+  },
+  "skills": {
+    "title": "技術技能",
+    "subtitle": "實際專案中使用的技術",
+    "viewProject": "查看專案",
+    "officialSite": "官方網站"
+  },
+  "contact": {
+    "title": "聯絡方式",
+    "github": "GitHub",
+    "githubProfile": "GitHub 個人檔案",
+    "viewGitHub": "在 GitHub 查看"
+  }
+}
