@@ -7,10 +7,5 @@
     "module": "esnext"
   },
   "include": ["src/**/*"],
-  "exclude": [
-    "jest.config.ts",
-    "src/**/*.spec.ts",
-    "src/**/*.test.ts",
-    "scripts/**/*"
-  ]
+  "exclude": ["jest.config.ts", "src/**/*.spec.ts", "src/**/*.test.ts"]
 }
