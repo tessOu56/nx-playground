@@ -3,7 +3,7 @@
  */
 
 import { type FC, useEffect, useMemo, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useSearchParams } from 'react-router-dom';
 
 import { type SupportedLocale } from '../../../lib/i18n/LocaleRouter';
 import { BlogCard } from '../components/BlogCard';
@@ -17,6 +17,7 @@ import { getAllTags, loadAllPosts } from '../utils/loadDocs';
 export const BlogListPage: FC = () => {
   const { locale } = useParams<{ locale: string }>();
   const currentLocale = (locale || 'zh-TW') as SupportedLocale;
+  const [searchParams, setSearchParams] = useSearchParams();
 
   const { t } = useBlogTranslation();
 
@@ -28,6 +29,16 @@ export const BlogListPage: FC = () => {
   >('all');
   const [searchQuery, setSearchQuery] = useState('');
   const [loading, setLoading] = useState(true);
+
+  // Read tag from URL params on mount
+  useEffect(() => {
+    const tagFromUrl = searchParams.get('tag');
+    if (tagFromUrl) {
+      setSelectedTag(tagFromUrl);
+      // Clear URL param after reading
+      setSearchParams({}, { replace: true });
+    }
+  }, [searchParams, setSearchParams]);
 
   // Load posts and tags
   useEffect(() => {

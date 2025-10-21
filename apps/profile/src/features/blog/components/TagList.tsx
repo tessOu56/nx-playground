@@ -1,8 +1,11 @@
 /**
  * Tag list component
+ * Uses unified TechTag component for consistent styling and behavior
  */
 
 import { type FC } from 'react';
+
+import { TechTag } from '../../../components/TechTag';
 
 interface TagListProps {
   tags: string[];
@@ -20,15 +23,7 @@ export const TagList: FC<TagListProps> = ({
   return (
     <div className='flex flex-wrap gap-2'>
       {tags.map(tag => (
-        <span
-          key={tag}
-          className={`inline-flex items-center px-2 py-1 rounded-md text-xs font-medium bg-muted text-muted-foreground transition-colors ${
-            onTagClick ? 'cursor-pointer hover:bg-muted/80' : ''
-          } ${compact ? 'px-2 py-0.5' : ''}`}
-          onClick={onTagClick ? () => onTagClick(tag) : undefined}
-        >
-          {tag}
-        </span>
+        <TechTag key={tag} name={tag} compact={compact} />
       ))}
     </div>
   );

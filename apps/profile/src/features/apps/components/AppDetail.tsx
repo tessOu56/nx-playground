@@ -1,6 +1,7 @@
 import { type FC } from 'react';
 import { Link } from 'react-router-dom';
 
+import { TechTag } from '../../../components/TechTag';
 import { type AppConfig } from '../../../data/apps.config';
 import { useLocalizedNavigation } from '../../../lib/i18n/useLocalizedNavigation';
 import { useAppsTranslation } from '../hooks/useAppsTranslation';
@@ -54,12 +55,7 @@ export const AppDetail: FC<AppDetailProps> = ({ app }) => {
           </h2>
           <div className='flex flex-wrap gap-3'>
             {app.techStack.map(tech => (
-              <span
-                key={tech}
-                className='px-4 py-2 bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200 rounded-lg font-medium'
-              >
-                {tech}
-              </span>
+              <TechTag key={tech} name={tech} />
             ))}
           </div>
         </section>
