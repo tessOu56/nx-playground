@@ -80,18 +80,18 @@ export const BlogPostPage: FC = () => {
             {/* Meta info */}
             <div className='flex flex-wrap items-center gap-3 text-sm text-muted-foreground mb-4'>
               <time>
-                {t('publishedOn')}:{' '}
+                {String(t('publishedOn'))}:{' '}
                 {new Date(post.date).toLocaleDateString(
                   post.lang === 'zh-TW' ? 'zh-TW' : 'en-US'
                 )}
               </time>
               <span>•</span>
               <span>
-                {t('readingTime')}: {post.readingTime}
+                {String(t('readingTime'))}: {post.readingTime}
               </span>
               <span>•</span>
               <span className='capitalize'>
-                {t(`categories.${post.category}`)}
+                {String(t(`categories.${post.category}`))}
               </span>
             </div>
 
@@ -101,7 +101,7 @@ export const BlogPostPage: FC = () => {
             {/* Fallback notice */}
             {isFallback && (
               <div className='mt-4 p-3 bg-muted border border-border rounded-lg text-sm text-muted-foreground'>
-                ⚠️ {t('fallbackNotice')}
+                ⚠️ {String(t('fallbackNotice'))}
               </div>
             )}
           </div>

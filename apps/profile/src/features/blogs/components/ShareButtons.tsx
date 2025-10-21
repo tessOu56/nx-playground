@@ -29,11 +29,11 @@ export const ShareButtons: FC<ShareButtonsProps> = ({ title, url }) => {
   return (
     <div className='space-y-4'>
       <h3 className='text-sm font-medium text-foreground'>
-        {t('share.title')}
+        {String(t('share.title'))}
       </h3>
       <div className='flex gap-2'>
         <Button variant='outline' size='sm' onClick={handleCopyLink}>
-          {copied ? t('share.linkCopied') : t('share.copyLink')}
+          {copied ? String(t('share.linkCopied')) : String(t('share.copyLink'))}
         </Button>
       </div>
     </div>

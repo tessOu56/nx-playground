@@ -23,7 +23,7 @@ export const TagFilter: FC<TagFilterProps> = ({
   return (
     <div className='space-y-2'>
       <h3 className='text-sm font-medium text-foreground'>
-        {t('filterByTag')}
+        {String(t('filterByTag'))}
       </h3>
       <div className='flex flex-wrap gap-2'>
         <Button
@@ -31,7 +31,7 @@ export const TagFilter: FC<TagFilterProps> = ({
           size='sm'
           onClick={() => onSelectTag(null)}
         >
-          {t('tags.all')}
+          {String(t('tags.all'))}
         </Button>
         {tags.map(tag => (
           <Button

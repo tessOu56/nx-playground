@@ -39,7 +39,7 @@ export const ProjectDetail: FC<ProjectDetailProps> = ({ project, type }) => {
               d='M15 19l-7-7 7-7'
             />
           </svg>
-          {backText}
+          {String(backText)}
         </Link>
 
         {/* Header */}
@@ -56,7 +56,7 @@ export const ProjectDetail: FC<ProjectDetailProps> = ({ project, type }) => {
         {project.techStack && project.techStack.length > 0 && (
           <section className='bg-white dark:bg-gray-800 rounded-xl shadow-lg p-8 mb-8'>
             <h2 className='text-3xl font-bold text-gray-900 dark:text-white mb-6'>
-              {t('techStack')}
+              {String(t('techStack'))}
             </h2>
             <div className='flex flex-wrap gap-3'>
               {project.techStack.map(tech => (
@@ -70,7 +70,7 @@ export const ProjectDetail: FC<ProjectDetailProps> = ({ project, type }) => {
         {project.features && project.features.length > 0 && (
           <section className='bg-white dark:bg-gray-800 rounded-xl shadow-lg p-8 mb-8'>
             <h2 className='text-3xl font-bold text-gray-900 dark:text-white mb-6'>
-              {t('keyFeatures')}
+              {String(t('keyFeatures'))}
             </h2>
             <ul className='space-y-3'>
               {project.features.map((feature, index) => (
@@ -101,7 +101,7 @@ export const ProjectDetail: FC<ProjectDetailProps> = ({ project, type }) => {
         {project.highlights && project.highlights.length > 0 && (
           <section className='bg-white dark:bg-gray-800 rounded-xl shadow-lg p-8 mb-8'>
             <h2 className='text-3xl font-bold text-gray-900 dark:text-white mb-6'>
-              {t('highlights')}
+              {String(t('highlights'))}
             </h2>
             <div className='space-y-4'>
               {project.highlights.map((highlight, index) => (
@@ -125,7 +125,7 @@ export const ProjectDetail: FC<ProjectDetailProps> = ({ project, type }) => {
         {project.readmeContent && (
           <section className='bg-white dark:bg-gray-800 rounded-xl shadow-lg p-8 mb-8'>
             <h2 className='text-3xl font-bold text-gray-900 dark:text-white mb-6'>
-              {t('readme')}
+              {String(t('readme'))}
             </h2>
             <div
               className='prose dark:prose-invert max-w-none'
@@ -137,7 +137,7 @@ export const ProjectDetail: FC<ProjectDetailProps> = ({ project, type }) => {
         {/* Links & Actions */}
         <section className='bg-white dark:bg-gray-800 rounded-xl shadow-lg p-8'>
           <h2 className='text-3xl font-bold text-gray-900 dark:text-white mb-6'>
-            {t('links')}
+            {String(t('links'))}
           </h2>
           <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
             {project.demoUrl ? (
@@ -160,7 +160,7 @@ export const ProjectDetail: FC<ProjectDetailProps> = ({ project, type }) => {
                     d='M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14'
                   />
                 </svg>
-                {t('viewDemo')}
+                {String(t('viewDemo'))}
               </a>
             ) : (
               <div className='flex items-center justify-center gap-2 bg-gray-200 dark:bg-gray-700 text-gray-500 dark:text-gray-400 px-6 py-4 rounded-lg font-medium cursor-not-allowed'>
@@ -177,7 +177,7 @@ export const ProjectDetail: FC<ProjectDetailProps> = ({ project, type }) => {
                     d='M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z'
                   />
                 </svg>
-                {t('comingSoon')}
+                {String(t('comingSoon'))}
               </div>
             )}
 
@@ -195,7 +195,7 @@ export const ProjectDetail: FC<ProjectDetailProps> = ({ project, type }) => {
                 >
                   <path d='M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z' />
                 </svg>
-                {t('viewGitHub')}
+                {String(t('viewGitHub'))}
               </a>
             )}
           </div>
