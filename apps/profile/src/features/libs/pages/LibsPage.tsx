@@ -1,13 +1,16 @@
 import { type FC, useEffect, useMemo, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
+import { ProjectCard } from '../../../components/ProjectCard';
+import { useLocalizedNavigation } from '../../../lib/i18n/useLocalizedNavigation';
 import type { SupportedLocale } from '../../../lib/i18n/LocaleRouter';
 import { loadAllLibs } from '../../../lib/projectLoader';
 import type { LibData } from '../../../types/projectData';
-import { LibCard } from '../components';
 
 export const LibsPage: FC = () => {
+  const navigate = useNavigate();
   const { locale } = useParams<{ locale: string }>();
+  const { getLocalizedPath } = useLocalizedNavigation();
   const currentLocale = (locale ?? 'en') as SupportedLocale;
 
   const [libs, setLibs] = useState<LibData[]>([]);
@@ -136,7 +139,12 @@ export const LibsPage: FC = () => {
             </h2>
             <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6'>
               {categoryLibs.map(lib => (
-                <LibCard key={lib.id} lib={lib} />
+                <ProjectCard
+                  key={lib.id}
+                  project={lib}
+                  type='lib'
+                  onClick={() => navigate(getLocalizedPath(`/libs/${lib.id}`))}
+                />
               ))}
             </div>
           </section>
