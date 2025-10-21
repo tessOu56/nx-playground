@@ -18,7 +18,10 @@ export { TagFilter } from './components/TagFilter';
 export { TagList } from './components/TagList';
 
 // Hooks
-export { useBlogTranslation } from './hooks/useBlogTranslation';
+export {
+  useBlogsTranslation,
+  useBlogTranslation,
+} from './hooks/useBlogsTranslation';
 
 // Utils
 export { loadAllPosts, loadPostBySlug, getAllTags } from './utils/loadDocs';
@@ -27,4 +30,4 @@ export { loadAllPosts, loadPostBySlug, getAllTags } from './utils/loadDocs';
 export type { BlogPost, BlogCategory, SupportedLocale } from './types';
 
 // i18n
-export { default as blogI18n } from './i18n';
+export { default as blogsI18n } from './i18n';

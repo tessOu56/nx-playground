@@ -1,0 +1,11 @@
+import { createFeatureI18n } from '@nx-playground/i18n';
+
+import enDetail from './locales/en/detail.json';
+import zhTWDetail from './locales/zh-TW/detail.json';
+
+export const detailI18n = createFeatureI18n('detail', {
+  en: { detail: enDetail },
+  'zh-TW': { detail: zhTWDetail },
+});
+
+export default detailI18n;

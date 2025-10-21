@@ -61,9 +61,9 @@ export function Layout({ children }: LayoutProps) {
                   Libs
                 </Button>
                 <Button
-                  variant={isActive('/blog') ? 'default' : 'ghost'}
+                  variant={isActive('/blogs') ? 'default' : 'ghost'}
                   size='sm'
-                  onClick={() => navigate(getLocalizedPath('/blog'))}
+                  onClick={() => navigate(getLocalizedPath('/blogs'))}
                 >
                   搜尋
                 </Button>
@@ -158,7 +158,7 @@ export function Layout({ children }: LayoutProps) {
                 </li>
                 <li>
                   <Link
-                    to={getLocalizedPath('/blog')}
+                    to={getLocalizedPath('/blogs')}
                     className='text-sm text-muted-foreground hover:text-foreground transition-colors'
                   >
                     文件搜尋
