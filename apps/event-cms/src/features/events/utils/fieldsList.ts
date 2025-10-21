@@ -1,6 +1,6 @@
-import { EventFormFieldType as FormFieldType } from '../types';
+import { type EventFormFieldType as FormFieldType } from '../types';
 
-export const questionField: EventFormFieldType[] = [
+export const questionField: FormFieldType[] = [
   {
     id: '1',
     fieldType: 'radio', // 單選
@@ -60,7 +60,7 @@ export const questionField: EventFormFieldType[] = [
   },
 ];
 
-export const descriptionField: EventFormFieldType[] = [
+export const descriptionField: FormFieldType[] = [
   {
     id: '7',
     fieldType: 'description',
