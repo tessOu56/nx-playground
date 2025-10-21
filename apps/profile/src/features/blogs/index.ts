@@ -8,7 +8,7 @@ export { BlogPostPage } from './pages/BlogPostPage';
 
 // Components
 export { BlogCard } from './components/BlogCard';
-export { BlogPost } from './components/BlogPost';
+export { BlogPost as BlogPostComponent } from './components/BlogPost';
 export { CategoryFilter } from './components/CategoryFilter';
 export { LanguageToggle } from './components/LanguageToggle';
 export { SearchBar } from './components/SearchBar';

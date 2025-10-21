@@ -24,7 +24,7 @@ export const CategoryFilter: FC<CategoryFilterProps> = ({
   return (
     <div className='flex items-center gap-2'>
       <span className='text-sm font-medium text-muted-foreground'>
-        {t('filterByCategory')}:
+        {String(t('filterByCategory'))}:
       </span>
       <div className='flex gap-2'>
         {categories.map(category => (
@@ -34,7 +34,7 @@ export const CategoryFilter: FC<CategoryFilterProps> = ({
             size='sm'
             onClick={() => onSelectCategory(category)}
           >
-            {t(`categories.${category}`)}
+            {String(t(`categories.${category}`))}
           </Button>
         ))}
       </div>

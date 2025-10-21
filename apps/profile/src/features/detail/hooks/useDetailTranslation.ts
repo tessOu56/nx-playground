@@ -1,8 +1,4 @@
-import { useTranslation } from '@nx-playground/i18n';
-
-import type enDetail from '../locales/en/detail.json';
-
-type DetailTranslationKey = keyof typeof enDetail;
+import { createFeatureTranslation } from '@nx-playground/i18n';
 
 /**
  * Detail feature translation hook
@@ -10,16 +6,23 @@ type DetailTranslationKey = keyof typeof enDetail;
  * @example
  * ```tsx
  * const { t } = useDetailTranslation();
- * <h1>{t('techStack')}</h1>
+ * <h1>{String(t('techStack'))}</h1>
  * ```
  */
-export function useDetailTranslation() {
-  const { t: translate, i18n } = useTranslation('detail');
-
-  const t = (key: DetailTranslationKey) => translate(key);
-
-  return {
-    t,
-    i18n,
-  };
-}
+export const useDetailTranslation = createFeatureTranslation('detail', [
+  'backToApps',
+  'backToLibs',
+  'techStack',
+  'keyFeatures',
+  'highlights',
+  'links',
+  'viewDemo',
+  'viewGitHub',
+  'localDev',
+  'comingSoon',
+  'readme',
+  'prd',
+  'changelog',
+  'latestRelease',
+  'allReleases',
+]);

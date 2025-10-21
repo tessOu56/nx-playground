@@ -27,7 +27,7 @@ export const LanguageToggle: FC<LanguageToggleProps> = ({ currentSlug }) => {
 
   return (
     <Button variant='outline' size='sm' onClick={handleToggle}>
-      {targetLangLabel}
+      {String(targetLangLabel)}
     </Button>
   );
 };

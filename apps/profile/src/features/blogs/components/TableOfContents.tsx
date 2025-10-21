@@ -75,7 +75,7 @@ export const TableOfContents: FC<TableOfContentsProps> = ({ content }) => {
   return (
     <nav className='space-y-2'>
       <h3 className='text-sm font-semibold text-foreground'>
-        {t('toc.title')}
+        {String(t('toc.title'))}
       </h3>
       <ul className='space-y-1 text-sm'>
         {headings.map(({ id, text, level }) => (
