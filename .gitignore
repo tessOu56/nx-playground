@@ -44,6 +44,10 @@ Thumbs.db
 .cursor/rules/nx-rules.mdc
 .github/instructions/nx.instructions.md
 
+# Cursor rules (auto-generated, project-specific)
+/.cursorrules
+/.cursorrules-*
+
 # CI/CD
 .woodpecker/
 
