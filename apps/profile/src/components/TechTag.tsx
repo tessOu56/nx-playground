@@ -7,11 +7,11 @@
 import { type FC } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+import { useLocalizedNavigation } from '../lib/i18n/useLocalizedNavigation';
 import {
   getCategoryColorClasses,
   getTechCategory,
 } from '../lib/techCategories';
-import { useLocalizedNavigation } from '../lib/i18n/useLocalizedNavigation';
 
 interface TechTagProps {
   /**

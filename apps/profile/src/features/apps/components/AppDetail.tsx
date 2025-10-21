@@ -1,13 +1,13 @@
+import { useTranslation } from '@nx-playground/i18n';
 import { type FC } from 'react';
 import { Link } from 'react-router-dom';
 
 import { TechTag } from '../../../components/TechTag';
-import { type AppConfig } from '../../../data/apps.config';
 import { useLocalizedNavigation } from '../../../lib/i18n/useLocalizedNavigation';
-import { useAppsTranslation } from '../hooks/useAppsTranslation';
+import { type AppData } from '../../../types/projectData';
 
 interface AppDetailProps {
-  app: AppConfig;
+  app: AppData;
 }
 
 export const AppDetail: FC<AppDetailProps> = ({ app }) => {
