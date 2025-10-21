@@ -1,15 +1,23 @@
 ---
 id: vue-motion
-name: vue-motion
+name: Vue Motion Sandbox
 version: 0.1.0
-description: 此為動畫實驗 Sandbox，用於快速 demo 和測試 CSS 動畫特效。
+description: >-
+  Animation sandbox built with Vue 3, featuring GSAP, Three.js, and Lottie
+  animations
 techStack:
   - Vue 3
+  - TypeScript
   - GSAP
   - Three.js
   - Lottie
-  - Animation
-features: []
+  - Tailwind CSS
+features:
+  - Animation Playground
+  - GSAP Animations
+  - 3D Scenes
+  - Lottie Player
+  - Export Presets
 lastUpdated: '2025-10-21'
 ---
 # @nx-playground/vue-motion

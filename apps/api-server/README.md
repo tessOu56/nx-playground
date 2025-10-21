@@ -1,15 +1,23 @@
 ---
 id: api-server
-name: api-server
+name: API Server
 version: 0.1.0
-description: NestJS 後端 API Server，提供完整的 CRUD API 支援 event-cms 和 event-portal。
+description: >-
+  RESTful API server built with NestJS and Prisma, providing OpenAPI
+  documentation
 techStack:
   - NestJS
   - Prisma
-  - OpenAPI
-  - REST API
+  - PostgreSQL
   - TypeScript
-features: []
+  - OpenAPI
+  - Swagger
+features:
+  - REST API
+  - Database ORM
+  - OpenAPI Docs
+  - Authentication
+  - Authorization
 lastUpdated: '2025-10-21'
 ---
 # API Server - NestJS Backend

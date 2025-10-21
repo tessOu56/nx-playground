@@ -17,7 +17,7 @@ import { loadPostBySlug } from '../utils/loadDocs';
 
 export const BlogPostPage: FC = () => {
   const { slug, locale } = useParams<{ slug: string; locale: string }>();
-  const currentLocale = (locale || 'zh-TW') as SupportedLocale;
+  const currentLocale = (locale ?? 'en') as SupportedLocale;
 
   const { t } = useBlogTranslation();
 

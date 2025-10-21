@@ -12,8 +12,8 @@ function App() {
   return (
     <I18nProvider>
       <Routes>
-        {/* Redirect root to default locale */}
-        <Route path='/' element={<Navigate to='/zh-TW' replace />} />
+        {/* Redirect root to default locale (en) */}
+        <Route path='/' element={<Navigate to='/en' replace />} />
 
         {/* Locale-based routes */}
         <Route
@@ -34,8 +34,8 @@ function App() {
           }
         />
 
-        {/* Fallback to default locale */}
-        <Route path='*' element={<Navigate to='/zh-TW' replace />} />
+        {/* Fallback to default locale (en) */}
+        <Route path='*' element={<Navigate to='/en' replace />} />
       </Routes>
     </I18nProvider>
   );

@@ -1,15 +1,24 @@
 ---
 id: event-cms
-name: event-cms
+name: Event Management Console
 version: 0.0.1
-description: 完整的管理控制台應用，展示了 Nx Monorepo 中如何構建大型 React 應用，並整合共享函式庫。
+description: >-
+  Complete event management admin console with drag-and-drop form builder, user
+  management, and role-based access control
 techStack:
   - React 19
-  - Vite
+  - TypeScript
+  - Vite 6
   - Zustand
+  - React Query
   - React Hook Form
-  - RBAC
-features: []
+  - Tailwind CSS
+features:
+  - Event Management
+  - Form Template Editor
+  - User Management
+  - Role Management
+  - i18n Support
 lastUpdated: '2025-10-21'
 ---
 # Console - 管理控制台

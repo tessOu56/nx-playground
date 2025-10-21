@@ -11,7 +11,11 @@ export default defineConfig(() => ({
   server: {
     port: 3003,
     host: '0.0.0.0',
+    fs: {
+      allow: ['..', '../..'], // 允許訪問上層目錄（讀取 specs/ 和各專案 README）
+    },
   },
+  assetsInclude: ['**/*.md'], // 包含 .md 檔案作為資源
   preview: {
     port: 3003,
     host: '0.0.0.0',
@@ -41,7 +45,10 @@ export default defineConfig(() => ({
         '../../libs/ui-components/src/index.ts'
       ),
       '@nx-playground/i18n': resolve(__dirname, '../../libs/i18n/src/index.ts'),
-      '@nx-playground/hooks': resolve(__dirname, '../../libs/hooks/src/index.ts'),
+      '@nx-playground/hooks': resolve(
+        __dirname,
+        '../../libs/hooks/src/index.ts'
+      ),
     },
   },
   build: {

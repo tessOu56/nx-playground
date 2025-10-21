@@ -7,8 +7,9 @@ import matter from 'gray-matter';
 import { remark } from 'remark';
 import html from 'remark-html';
 
-import type { SupportedLocale } from './i18n/LocaleRouter';
 import type { ProjectReadme } from '../types/projectData';
+
+import type { SupportedLocale } from './i18n/LocaleRouter';
 
 /**
  * 動態載入所有 README 檔案
@@ -26,7 +27,10 @@ const libsReadmeModules = import.meta.glob<string>(
 /**
  * 解析 README 檔案
  */
-async function parseReadme(filePath: string, content: string): Promise<ProjectReadme | null> {
+async function parseReadme(
+  filePath: string,
+  content: string
+): Promise<ProjectReadme | null> {
   try {
     const { data, content: markdownContent } = matter(content);
 
@@ -59,7 +63,7 @@ async function parseReadme(filePath: string, content: string): Promise<ProjectRe
  */
 export async function loadAppReadme(
   appId: string,
-  locale: SupportedLocale = 'zh-TW'
+  locale: SupportedLocale = 'en'
 ): Promise<ProjectReadme | null> {
   const fileName = locale === 'zh-TW' ? 'README.zh-TW.md' : 'README.md';
   const filePath = `/apps/${appId}/${fileName}`;
@@ -89,7 +93,7 @@ export async function loadAppReadme(
  */
 export async function loadLibReadme(
   libId: string,
-  locale: SupportedLocale = 'zh-TW'
+  locale: SupportedLocale = 'en'
 ): Promise<ProjectReadme | null> {
   const fileName = locale === 'zh-TW' ? 'README.zh-TW.md' : 'README.md';
   const filePath = `/libs/${libId}/${fileName}`;
@@ -118,7 +122,7 @@ export async function loadLibReadme(
  * 載入所有 Apps 的 README
  */
 export async function loadAllAppsReadmes(
-  locale: SupportedLocale = 'zh-TW'
+  locale: SupportedLocale = 'en'
 ): Promise<ProjectReadme[]> {
   const readmes: ProjectReadme[] = [];
   const fileName = locale === 'zh-TW' ? 'README.zh-TW.md' : 'README.md';
@@ -129,7 +133,7 @@ export async function loadAllAppsReadmes(
     try {
       const content = await loader();
       const readme = await parseReadme(path, content);
-      if (readme && readme.id) {
+      if (readme?.id) {
         readmes.push(readme);
       }
     } catch (error) {
@@ -144,7 +148,7 @@ export async function loadAllAppsReadmes(
  * 載入所有 Libs 的 README
  */
 export async function loadAllLibsReadmes(
-  locale: SupportedLocale = 'zh-TW'
+  locale: SupportedLocale = 'en'
 ): Promise<ProjectReadme[]> {
   const readmes: ProjectReadme[] = [];
   const fileName = locale === 'zh-TW' ? 'README.zh-TW.md' : 'README.md';
@@ -155,7 +159,7 @@ export async function loadAllLibsReadmes(
     try {
       const content = await loader();
       const readme = await parseReadme(path, content);
-      if (readme && readme.id) {
+      if (readme?.id) {
         readmes.push(readme);
       }
     } catch (error) {
@@ -165,4 +169,3 @@ export async function loadAllLibsReadmes(
 
   return readmes.sort((a, b) => a.name.localeCompare(b.name));
 }
-

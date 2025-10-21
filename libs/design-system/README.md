@@ -1,10 +1,19 @@
 ---
 id: design-system
-name: design-system
+name: Design System
 version: 0.1.0
-description: 此函式庫已整合到 workspace，所有專案可直接使用：
-techStack: []
-features: []
+description: Design tokens and theming system with Style Dictionary integration
+techStack:
+  - Style Dictionary
+  - CSS Variables
+  - Tailwind CSS
+  - TypeScript
+features:
+  - Design tokens
+  - Multiple themes
+  - CSS variables
+  - Tailwind integration
+  - Token visualization
 lastUpdated: '2025-10-21'
 ---
 # @nx-playground/design-system

@@ -1,14 +1,17 @@
 ---
 id: enterprise-data
-name: enterprise-data
+name: Enterprise Data
 version: 0.0.1
-description: 此函式庫為 enterprise-admin (Angular 架構推演專案) 提供所有資料處理邏輯。
+description: Data handling layer for Angular enterprise applications
 techStack:
-  - Angular
-  - Data Layer
-  - Architecture
+  - Angular 20
+  - RxJS
   - TypeScript
-features: []
+features:
+  - Data models
+  - Service layer
+  - Validators
+  - Transformers
 lastUpdated: '2025-10-21'
 ---
 # @nx-playground/enterprise-data

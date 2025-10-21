@@ -1,10 +1,17 @@
 ---
 id: hooks
-name: hooks
+name: Custom Hooks
 version: 0.0.1
-description: 此函式庫已整合到 workspace，所有 React 專案可直接使用：
-techStack: []
-features: []
+description: Collection of reusable React hooks for common patterns
+techStack:
+  - React 19
+  - TypeScript
+features:
+  - useDebounce
+  - useLocalStorage
+  - useAsync
+  - useModal
+  - usePagination
 lastUpdated: '2025-10-21'
 ---
 # @nx-playground/hooks

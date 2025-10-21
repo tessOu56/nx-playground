@@ -1,15 +1,23 @@
 ---
 id: event-portal
-name: event-portal
+name: Event Platform
 version: 0.0.1
-description: 使用 Next.js 15 App Router 構建的現代化活動平台，支援 LINE LIFF 整合、多語言、SSG 靜態生成。
+description: >-
+  Event browsing and registration platform with LINE LIFF integration and QR
+  code ticketing
 techStack:
   - Next.js 15
-  - SSG
-  - LINE LIFF
+  - React 19
+  - TypeScript
+  - Tailwind CSS
+  - LINE LIFF SDK
   - next-intl
-  - QR Code
-features: []
+features:
+  - Event Browsing
+  - Event Registration
+  - QR Code Tickets
+  - LINE LIFF Integration
+  - Multi-language Support
 lastUpdated: '2025-10-21'
 ---
 # Events - 活動管理平台
