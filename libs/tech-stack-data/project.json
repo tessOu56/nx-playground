@@ -15,7 +15,6 @@
     "build": {
       "executor": "@nx/js:tsc",
       "outputs": ["{options.outputPath}"],
-      "dependsOn": ["collect"],
       "options": {
         "outputPath": "dist/libs/tech-stack-data",
         "main": "libs/tech-stack-data/src/index.ts",
