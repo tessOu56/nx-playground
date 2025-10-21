@@ -2,8 +2,8 @@ import { type FC } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { ProjectCard } from '../../../components/ProjectCard';
-import type { AppData } from '../../../types/projectData';
 import { useLocalizedNavigation } from '../../../lib/i18n/useLocalizedNavigation';
+import type { AppData } from '../../../types/projectData';
 
 interface AppCardProps {
   app: AppData;

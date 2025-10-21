@@ -3,11 +3,22 @@
  * 合併 README、Spec 和 CHANGELOG 的資料
  */
 
-import type { SupportedLocale } from './i18n/LocaleRouter';
 import type { AppData, LibData, ProjectData } from '../types/projectData';
-import { loadAppReadme, loadLibReadme, loadAllAppsReadmes, loadAllLibsReadmes } from './readmeLoader';
-import { loadAppSpec, loadLibSpec, loadAllAppsSpecs, loadAllLibsSpecs } from './specLoader';
+
 import { loadProjectChangelog } from './changelogLoader';
+import type { SupportedLocale } from './i18n/LocaleRouter';
+import {
+  loadAppReadme,
+  loadLibReadme,
+  loadAllAppsReadmes,
+  loadAllLibsReadmes,
+} from './readmeLoader';
+import {
+  loadAppSpec,
+  loadLibSpec,
+  loadAllAppsSpecs,
+  loadAllLibsSpecs,
+} from './specLoader';
 
 /**
  * 合併 README 和 Spec 資料
@@ -124,7 +135,9 @@ export async function loadLib(
 /**
  * 載入所有 Apps
  */
-export async function loadAllApps(locale: SupportedLocale = 'en'): Promise<AppData[]> {
+export async function loadAllApps(
+  locale: SupportedLocale = 'en'
+): Promise<AppData[]> {
   try {
     const [readmes, specs] = await Promise.all([
       loadAllAppsReadmes(locale),
@@ -154,7 +167,7 @@ export async function loadAllApps(locale: SupportedLocale = 'en'): Promise<AppDa
         if (changelog.releases.length > 0) {
           (projectData as any).changelog = changelog;
         }
-      } catch (error) {
+      } catch (_error) {
         console.warn(`No changelog for ${id}`);
       }
 
@@ -171,7 +184,9 @@ export async function loadAllApps(locale: SupportedLocale = 'en'): Promise<AppDa
 /**
  * 載入所有 Libs
  */
-export async function loadAllLibs(locale: SupportedLocale = 'en'): Promise<LibData[]> {
+export async function loadAllLibs(
+  locale: SupportedLocale = 'en'
+): Promise<LibData[]> {
   try {
     const [readmes, specs] = await Promise.all([
       loadAllLibsReadmes(locale),
@@ -201,7 +216,7 @@ export async function loadAllLibs(locale: SupportedLocale = 'en'): Promise<LibDa
         if (changelog.releases.length > 0) {
           (projectData as any).changelog = changelog;
         }
-      } catch (error) {
+      } catch (_error) {
         console.warn(`No changelog for ${id}`);
       }
 
@@ -214,4 +229,3 @@ export async function loadAllLibs(locale: SupportedLocale = 'en'): Promise<LibDa
     return [];
   }
 }
-
