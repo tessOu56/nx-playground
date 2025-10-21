@@ -62,11 +62,18 @@ function parseChangelog(content: string, appId: string): ProjectChangelog {
     const sectionMatch = line.match(/^###\s+(.+)/);
     if (sectionMatch && currentRelease) {
       const section = sectionMatch[1].toLowerCase().replace(/\s+/g, '');
-      
+
       if (section === 'breakingchanges' || section === 'breaking') {
         currentSection = 'breaking';
       } else if (
-        ['added', 'changed', 'fixed', 'removed', 'deprecated', 'security'].includes(section)
+        [
+          'added',
+          'changed',
+          'fixed',
+          'removed',
+          'deprecated',
+          'security',
+        ].includes(section)
       ) {
         currentSection = section as keyof Release['changes'];
       }
@@ -164,4 +171,3 @@ export async function loadAllChangelogs(): Promise<ProjectChangelog[]> {
     return bDate.localeCompare(aDate);
   });
 }
-
