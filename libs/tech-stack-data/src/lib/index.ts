@@ -3,9 +3,9 @@
  * 合併自動生成和手動維護的技術堆疊資料
  */
 
-import type { TechItem } from './types';
 import { generatedTechStack } from './generated-tech-stack';
 import { manualTechStack } from './manual-tech-stack';
+import type { TechItem } from './types';
 
 /**
  * 合併技術堆疊資料
