@@ -1,11 +1,54 @@
-import { type FC } from 'react';
+import { type FC, useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
 
+import type { SupportedLocale } from '../../../lib/i18n/LocaleRouter';
+import { loadAllApps } from '../../../lib/projectLoader';
+import type { AppData } from '../../../types/projectData';
 import { appsConfig } from '../../../data/apps.config';
 import { AppCard } from '../components';
 import { useAppsTranslation } from '../hooks/useAppsTranslation';
 
 export const AppsPage: FC = () => {
   const { t } = useAppsTranslation();
+  const { locale } = useParams<{ locale: string }>();
+  const currentLocale = (locale ?? 'zh-TW') as SupportedLocale;
+
+  const [apps, setApps] = useState<AppData[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  // 載入 Apps 資料
+  useEffect(() => {
+    const loadApps = async () => {
+      setLoading(true);
+      try {
+        const loadedApps = await loadAllApps(currentLocale);
+        
+        // 如果成功載入資料，使用新載入器的資料
+        if (loadedApps.length > 0) {
+          setApps(loadedApps);
+        } else {
+          // Fallback 到 config（向後相容）
+          setApps(appsConfig as any);
+        }
+      } catch (error) {
+        console.error('Failed to load apps:', error);
+        // Fallback 到 config
+        setApps(appsConfig as any);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadApps();
+  }, [currentLocale]);
+
+  if (loading) {
+    return (
+      <div className='min-h-screen flex items-center justify-center'>
+        <p className='text-lg text-muted-foreground'>載入中...</p>
+      </div>
+    );
+  }
 
   return (
     <div className='min-h-screen bg-gradient-to-b from-gray-50 to-white dark:from-gray-900 dark:to-gray-800 py-12 px-4'>
@@ -22,7 +65,7 @@ export const AppsPage: FC = () => {
 
         {/* Apps Grid */}
         <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8'>
-          {appsConfig.map(app => (
+          {apps.map(app => (
             <AppCard key={app.id} app={app} />
           ))}
         </div>
@@ -31,7 +74,7 @@ export const AppsPage: FC = () => {
         <div className='mt-16 grid grid-cols-2 md:grid-cols-4 gap-6'>
           <div className='bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg text-center'>
             <div className='text-4xl font-bold text-blue-600 dark:text-blue-400 mb-2'>
-              {appsConfig.length}
+              {apps.length}
             </div>
             <div className='text-gray-600 dark:text-gray-400 font-medium'>
               {String(t('page.title'))}
