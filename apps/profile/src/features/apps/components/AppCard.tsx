@@ -1,6 +1,7 @@
 import { type FC } from 'react';
 import { Link } from 'react-router-dom';
 
+import { TechTag } from '../../../components/TechTag';
 import { type AppConfig } from '../../../data/apps.config';
 import { useLocalizedNavigation } from '../../../lib/i18n/useLocalizedNavigation';
 import { useAppsTranslation } from '../hooks/useAppsTranslation';
@@ -53,15 +54,10 @@ export const AppCard: FC<AppCardProps> = ({ app }) => {
         <div className='mb-4'>
           <div className='flex flex-wrap gap-2'>
             {app.techStack.slice(0, 4).map(tech => (
-              <span
-                key={tech}
-                className='px-2 py-1 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded text-xs font-medium'
-              >
-                {tech}
-              </span>
+              <TechTag key={tech} name={tech} compact />
             ))}
             {app.techStack.length > 4 && (
-              <span className='px-2 py-1 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded text-xs font-medium'>
+              <span className='px-2 py-1 bg-muted text-muted-foreground rounded text-xs font-medium'>
                 +{app.techStack.length - 4}
               </span>
             )}

@@ -1,8 +1,8 @@
 import { useTranslation } from '@nx-playground/i18n';
 import { type FC, useMemo } from 'react';
 
-import { TechBadge } from '../../../components/TechBadge';
-import { techCategories, techLevels, techStack } from '../../../data/techStack';
+import { TechTag } from '../../../components/TechTag';
+import { techCategories, techStack } from '../../../data/techStack';
 import { useHomeTranslation } from '../hooks/useHomeTranslation';
 
 export const SkillCloud: FC = () => {
@@ -47,37 +47,18 @@ export const SkillCloud: FC = () => {
               </h3>
               <div className='flex flex-wrap gap-3'>
                 {items.map(tech => (
-                  <TechBadge
-                    key={tech.name}
-                    tech={tech}
-                    levelLabel={techLevels[tech.level][currentLang]}
-                  />
+                  <TechTag key={tech.name} name={tech.name} />
                 ))}
               </div>
             </div>
           ))}
         </div>
 
-        {/* Legend */}
-        <div className='mt-12 flex justify-center gap-6 flex-wrap'>
-          <div className='flex items-center gap-2'>
-            <div className='w-4 h-4 rounded bg-[hsl(var(--badge-expert))]' />
-            <span className='text-sm text-muted-foreground'>
-              {techLevels.expert[currentLang]}
-            </span>
-          </div>
-          <div className='flex items-center gap-2'>
-            <div className='w-4 h-4 rounded bg-secondary' />
-            <span className='text-sm text-muted-foreground'>
-              {techLevels.advanced[currentLang]}
-            </span>
-          </div>
-          <div className='flex items-center gap-2'>
-            <div className='w-4 h-4 rounded bg-muted' />
-            <span className='text-sm text-muted-foreground'>
-              {techLevels.intermediate[currentLang]}
-            </span>
-          </div>
+        {/* Info text */}
+        <div className='mt-12 text-center'>
+          <p className='text-sm text-muted-foreground'>
+            💡 點擊任一技術標籤，即可搜尋相關專案文件
+          </p>
         </div>
       </div>
     </section>
