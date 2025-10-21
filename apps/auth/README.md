@@ -1,3 +1,17 @@
+---
+id: auth
+name: auth
+version: 0.2.19
+description: 提供可重用、樣式化的 UI，用於管理用戶身份認證流程，與 Ory Kratos 後端整合。
+techStack:
+  - React 19
+  - Vite
+  - Ory Kratos
+  - Authentication
+  - SSO
+features: []
+lastUpdated: '2025-10-21'
+---
 # Auth - 認證服務
 
 > 基於 Ory Kratos 的自定義認證 UI，處理登入、註冊、郵箱驗證和帳戶恢復流程

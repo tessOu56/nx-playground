@@ -1,3 +1,12 @@
+---
+id: ui-components
+name: ui-components
+version: 0.1.0
+description: 基於 Shadcn/ui 模式的現代化 UI 組件庫，提供兩種類型的組件：
+techStack: []
+features: []
+lastUpdated: '2025-10-21'
+---
 # NX Playground UI Components
 
 基於 Shadcn/ui 模式的現代化 UI 組件庫，提供兩種類型的組件：

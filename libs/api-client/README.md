@@ -1,3 +1,15 @@
+---
+id: api-client
+name: api-client
+version: 0.0.1
+description: >-
+  A comprehensive React SDK for the NX Playground event management platform,
+  featuring auto-generated API clients from OpenAPI specifications with full
+  TypeScript support.
+techStack: []
+features: []
+lastUpdated: '2025-10-21'
+---
 # @nx-playground/api-client
 
 A comprehensive React SDK for the NX Playground event management platform, featuring auto-generated API clients from OpenAPI specifications with full TypeScript support.

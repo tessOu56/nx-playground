@@ -1,3 +1,12 @@
+---
+id: auth-client
+name: auth-client
+version: 0.1.0
+description: 這個 library 專門處理前端驗證頁面跳轉邏輯，提供全域 auth 狀態管理和 SSO 整合。
+techStack: []
+features: []
+lastUpdated: '2025-10-21'
+---
 # @nx-playground/auth-client
 
 這個 library 專門處理前端驗證頁面跳轉邏輯，提供全域 auth 狀態管理和 SSO 整合。

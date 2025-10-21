@@ -1,3 +1,17 @@
+---
+id: api-server
+name: api-server
+version: 0.1.0
+description: NestJS 後端 API Server，提供完整的 CRUD API 支援 event-cms 和 event-portal。
+techStack:
+  - NestJS
+  - Prisma
+  - OpenAPI
+  - REST API
+  - TypeScript
+features: []
+lastUpdated: '2025-10-21'
+---
 # API Server - NestJS Backend
 
 > **定位**: Demo API Server for NX Playground

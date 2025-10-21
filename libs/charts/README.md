@@ -1,3 +1,12 @@
+---
+id: charts
+name: charts
+version: 0.1.0
+description: 提供統一的圖表介面，支援兩種流行的圖表庫：
+techStack: []
+features: []
+lastUpdated: '2025-10-21'
+---
 # @nx-playground/charts
 
 > React 圖表庫 - 雙軌制支援 Recharts 和 Chart.js

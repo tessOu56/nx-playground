@@ -1,3 +1,12 @@
+---
+id: hooks
+name: hooks
+version: 0.0.1
+description: 此函式庫已整合到 workspace，所有 React 專案可直接使用：
+techStack: []
+features: []
+lastUpdated: '2025-10-21'
+---
 # @nx-playground/hooks
 
 > React Hooks 集合，基於 usehooks-ts 並添加自定義 hooks
