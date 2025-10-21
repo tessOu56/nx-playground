@@ -92,8 +92,8 @@ export const LibsPage: FC = () => {
             Nx Monorepo Architecture
           </h2>
           <p className='text-center text-lg mb-6 opacity-90'>
-            All libraries are managed in an Nx monorepo, ensuring consistency and
-            maintainability
+            All libraries are managed in an Nx monorepo, ensuring consistency
+            and maintainability
           </p>
           <div className='grid grid-cols-2 md:grid-cols-4 gap-4 text-center'>
             <div className='bg-white/10 backdrop-blur-sm rounded-lg p-4'>
