@@ -2,7 +2,7 @@
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
     "composite": true,
-    "outDir": "../../dist/libs/hooks",
+    "outDir": "../../dist/libs/tech-stack-data",
     "declaration": true,
     "declarationMap": true,
     "emitDeclarationOnly": false,

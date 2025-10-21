@@ -1,6 +1,5 @@
+import { useTranslation } from '@nx-playground/i18n';
 import { techCategories, techStack } from '@nx-playground/tech-stack-data';
-import { useTransla
-tion } from '@nx-playground/i18n';
 import { type FC, useMemo } from 'react';
 
 import { TechTag } from '../../../components/TechTag';
