@@ -30,7 +30,7 @@ export const LibsPage: FC = () => {
       setLoading(true);
       try {
         const loadedLibs = await loadAllLibs(currentLocale);
-        
+
         if (loadedLibs.length > 0) {
           setLibs(loadedLibs);
         } else {

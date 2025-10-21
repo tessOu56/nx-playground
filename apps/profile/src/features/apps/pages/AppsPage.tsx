@@ -22,7 +22,7 @@ export const AppsPage: FC = () => {
       setLoading(true);
       try {
         const loadedApps = await loadAllApps(currentLocale);
-        
+
         // 如果成功載入資料，使用新載入器的資料
         if (loadedApps.length > 0) {
           setApps(loadedApps);
