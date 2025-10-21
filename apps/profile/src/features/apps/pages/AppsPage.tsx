@@ -1,13 +1,16 @@
 import { type FC, useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
+import { ProjectCard } from '../../../components/ProjectCard';
 import type { SupportedLocale } from '../../../lib/i18n/LocaleRouter';
+import { useLocalizedNavigation } from '../../../lib/i18n/useLocalizedNavigation';
 import { loadAllApps } from '../../../lib/projectLoader';
 import type { AppData } from '../../../types/projectData';
-import { AppCard } from '../components';
 
 export const AppsPage: FC = () => {
+  const navigate = useNavigate();
   const { locale } = useParams<{ locale: string }>();
+  const { getLocalizedPath } = useLocalizedNavigation();
   const currentLocale = (locale ?? 'en') as SupportedLocale;
 
   const [apps, setApps] = useState<AppData[]>([]);
@@ -71,7 +74,12 @@ export const AppsPage: FC = () => {
         {/* Apps Grid */}
         <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8'>
           {apps.map(app => (
-            <AppCard key={app.id} app={app} />
+            <ProjectCard
+              key={app.id}
+              project={app}
+              type='app'
+              onClick={() => navigate(getLocalizedPath(`/apps/${app.id}`))}
+            />
           ))}
         </div>
 

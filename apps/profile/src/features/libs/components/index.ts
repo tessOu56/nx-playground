@@ -1,2 +1,0 @@
-export { LibCard } from './LibCard';
-
