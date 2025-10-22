@@ -15,14 +15,19 @@ import type { SupportedLocale } from './i18n/LocaleRouter';
  * 動態載入所有 README 檔案
  */
 const appsReadmeModules = import.meta.glob<string>(
-  ['/apps/*/README.md', '/apps/*/README.zh-TW.md'],
-  { query: '?raw', import: 'default' }
+  ['../../apps/*/README.md', '../../apps/*/README.zh-TW.md'],
+  { query: '?raw', import: 'default', eager: false }
 );
 
 const libsReadmeModules = import.meta.glob<string>(
-  ['/libs/*/README.md', '/libs/*/README.zh-TW.md'],
-  { query: '?raw', import: 'default' }
+  ['../../libs/*/README.md', '../../libs/*/README.zh-TW.md'],
+  { query: '?raw', import: 'default', eager: false }
 );
+
+console.log('[README Loader] Found apps readmes:', Object.keys(appsReadmeModules).length);
+console.log('[README Loader] Apps paths:', Object.keys(appsReadmeModules));
+console.log('[README Loader] Found libs readmes:', Object.keys(libsReadmeModules).length);
+console.log('[README Loader] Libs paths:', Object.keys(libsReadmeModules));
 
 /**
  * 解析 README 檔案
@@ -66,17 +71,18 @@ export async function loadAppReadme(
   locale: SupportedLocale = 'en'
 ): Promise<ProjectReadme | null> {
   const fileName = locale === 'zh-TW' ? 'README.zh-TW.md' : 'README.md';
-  const filePath = `/apps/${appId}/${fileName}`;
+  const filePath = `../../apps/${appId}/${fileName}`;
 
+  console.log(`[README Loader] Loading app README: ${filePath}`);
+  
   const loader = appsReadmeModules[filePath];
   if (!loader) {
-    // Fallback 到另一個語言
     const fallbackFile = locale === 'zh-TW' ? 'README.md' : 'README.zh-TW.md';
-    const fallbackPath = `/apps/${appId}/${fallbackFile}`;
+    const fallbackPath = `../../apps/${appId}/${fallbackFile}`;
     const fallbackLoader = appsReadmeModules[fallbackPath];
 
     if (!fallbackLoader) {
-      console.warn(`README not found for app: ${appId}`);
+      console.warn(`README not found for app: ${appId}, tried: ${filePath}, ${fallbackPath}`);
       return null;
     }
 
@@ -96,17 +102,18 @@ export async function loadLibReadme(
   locale: SupportedLocale = 'en'
 ): Promise<ProjectReadme | null> {
   const fileName = locale === 'zh-TW' ? 'README.zh-TW.md' : 'README.md';
-  const filePath = `/libs/${libId}/${fileName}`;
+  const filePath = `../../libs/${libId}/${fileName}`;
+
+  console.log(`[README Loader] Loading lib README: ${filePath}`);
 
   const loader = libsReadmeModules[filePath];
   if (!loader) {
-    // Fallback
     const fallbackFile = locale === 'zh-TW' ? 'README.md' : 'README.zh-TW.md';
-    const fallbackPath = `/libs/${libId}/${fallbackFile}`;
+    const fallbackPath = `../../libs/${libId}/${fallbackFile}`;
     const fallbackLoader = libsReadmeModules[fallbackPath];
 
     if (!fallbackLoader) {
-      console.warn(`README not found for lib: ${libId}`);
+      console.warn(`README not found for lib: ${libId}, tried: ${filePath}, ${fallbackPath}`);
       return null;
     }
 

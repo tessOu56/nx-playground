@@ -1,0 +1,48 @@
+{
+  "name": "LIB_NAME",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/LIB_NAME/src",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "@nx/vite:build",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/libs/LIB_NAME",
+        "tsConfig": "libs/LIB_NAME/tsconfig.lib.json"
+      },
+      "dependsOn": [
+        {
+          "target": "build",
+          "projects": "dependencies"
+        }
+      ]
+    },
+    "test": {
+      "executor": "@nx/vite:test",
+      "outputs": ["{options.reportsDirectory}"],
+      "options": {
+        "passWithNoTests": true,
+        "reportsDirectory": "../../coverage/libs/LIB_NAME"
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["libs/LIB_NAME/src/**/*.{ts,tsx,js,jsx,css}"]
+      }
+    },
+    "typecheck": {
+      "executor": "@nx/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/libs/LIB_NAME/tsc",
+        "main": "libs/LIB_NAME/src/index.ts",
+        "tsConfig": "libs/LIB_NAME/tsconfig.typecheck.json"
+      }
+    }
+  },
+  "tags": []
+}
+

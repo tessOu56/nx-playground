@@ -1,0 +1,34 @@
+---
+id: LIB_NAME
+name: LIB_NAME
+version: 0.0.1
+description: Description of LIB_NAME
+techStack:
+  - React
+  - TypeScript
+  - Vite
+lastUpdated: CURRENT_DATE
+---
+
+# @nx-playground/LIB_NAME
+
+Description of LIB_NAME
+
+## Installation
+
+```bash
+pnpm add @nx-playground/LIB_NAME
+```
+
+## Usage
+
+```typescript
+import { example } from '@nx-playground/LIB_NAME';
+```
+
+## Development
+
+```bash
+pnpm nx build LIB_NAME
+```
+

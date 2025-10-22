@@ -1,0 +1,41 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "outDir": "../../dist/libs/LIB_NAME",
+    "rootDir": "./src",
+    "tsBuildInfoFile": "../../dist/libs/LIB_NAME/tsconfig.lib.tsbuildinfo",
+    "declaration": true,
+    "composite": true,
+    "emitDeclarationOnly": false,
+    "module": "ESNext",
+    "moduleResolution": "node",
+    "forceConsistentCasingInFileNames": true,
+    "jsx": "react-jsx",
+    "types": ["node", "vite/client"]
+  },
+  "references": [],
+  "include": [
+    "src/**/*.ts",
+    "src/**/*.tsx",
+    "src/**/*.js",
+    "src/**/*.jsx",
+    "src/**/*.css.ts",
+    "src/**/*.css",
+    "src/**/*.json"
+  ],
+  "exclude": [
+    "vite.config.ts",
+    "vite.config.mts",
+    "vitest.config.ts",
+    "vitest.config.mts",
+    "src/**/*.test.ts",
+    "src/**/*.spec.ts",
+    "src/**/*.test.tsx",
+    "src/**/*.spec.tsx",
+    "src/**/*.test.js",
+    "src/**/*.spec.js",
+    "src/**/*.test.jsx",
+    "src/**/*.spec.jsx"
+  ]
+}
+
