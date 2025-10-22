@@ -76,18 +76,18 @@ export const TechTimeline: FC = () => {
   }, []);
 
   // Scroll to next section
-  const scrollToNext = () => {
+  const scrollToNext = (fromIndex: number) => {
     const timeline = timelineRef.current;
     if (!timeline) return;
 
     const sectionHeight = window.innerHeight;
-    const nextSection = currentSection + 1;
+    const nextSection = fromIndex + 1;
     const maxSections = featured.length + (others.length > 0 ? 1 : 0);
-    
+
     if (nextSection < maxSections) {
       timeline.scrollTo({
         top: nextSection * sectionHeight,
-        behavior: 'smooth'
+        behavior: 'smooth',
       });
     }
   };
@@ -113,9 +113,7 @@ export const TechTimeline: FC = () => {
       ref={timelineRef}
       className='timeline-container overflow-y-scroll snap-y snap-mandatory'
       style={{
-        height: `${
-          (featured.length + (others.length > 0 ? 1 : 0)) * 100
-        }vh`,
+        height: `${(featured.length + (others.length > 0 ? 1 : 0)) * 100}vh`,
       }}
       role='region'
       aria-label='Tech Journey Timeline'
@@ -213,19 +211,21 @@ export const TechTimeline: FC = () => {
             {/* Down Arrow Button */}
             {(index < featured.length - 1 || others.length > 0) && (
               <button
-                onClick={scrollToNext}
+                onClick={() => scrollToNext(index)}
                 className='absolute bottom-8 left-1/2 transform -translate-x-1/2 motion-safe:animate-bounce hover:scale-110 transition-transform duration-300'
                 aria-label='Scroll to next section'
               >
                 <div
                   className='w-12 h-12 rounded-full flex items-center justify-center backdrop-blur-sm border-2 transition-all duration-300'
                   style={{
-                    background: index % 2 === 0 
-                      ? 'rgba(99, 102, 241, 0.2)' 
-                      : 'rgba(255, 255, 255, 0.2)',
-                    borderColor: index % 2 === 0 
-                      ? 'rgba(99, 102, 241, 0.5)' 
-                      : 'rgba(255, 255, 255, 0.5)',
+                    background:
+                      index % 2 === 0
+                        ? 'rgba(99, 102, 241, 0.2)'
+                        : 'rgba(255, 255, 255, 0.2)',
+                    borderColor:
+                      index % 2 === 0
+                        ? 'rgba(99, 102, 241, 0.5)'
+                        : 'rgba(255, 255, 255, 0.5)',
                   }}
                 >
                   <svg
@@ -330,7 +330,6 @@ export const TechTimeline: FC = () => {
           </div>
         </article>
       )}
-
     </div>
   );
 };
