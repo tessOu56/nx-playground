@@ -1,133 +1,83 @@
-import { type FC, useState, type FormEvent } from 'react';
+import { type FC, useState, useEffect } from 'react';
 
 import { homeConfig } from '../data/homeConfig';
+import './ContactSection.css';
+
+interface Snowflake {
+  id: number;
+  left: number;
+  delay: number;
+  duration: number;
+}
 
 export const ContactSection: FC = () => {
-  const [email, setEmail] = useState('');
-  const [message, setMessage] = useState('');
-  const [submitted, setSubmitted] = useState(false);
+  const [snowflakes, setSnowflakes] = useState<Snowflake[]>([]);
 
-  const handleSubmit = (e: FormEvent) => {
-    e.preventDefault();
-
-    // Construct mailto link
-    const subject = encodeURIComponent('Contact from Portfolio');
-    const body = encodeURIComponent(`From: ${email}\n\n${message}`);
-    window.location.href = `mailto:${homeConfig.contact.email}?subject=${subject}&body=${body}`;
-
-    setSubmitted(true);
-    setTimeout(() => {
-      setEmail('');
-      setMessage('');
-      setSubmitted(false);
-    }, 3000);
-  };
+  useEffect(() => {
+    // Generate snowflakes on client-side only (avoid SSR/CSR mismatch)
+    const flakes = Array.from({ length: 50 }, (_, i) => ({
+      id: i,
+      left: Math.random() * 100,
+      delay: Math.random() * 10,
+      duration: 5 + Math.random() * 10,
+    }));
+    setSnowflakes(flakes);
+  }, []);
 
   return (
-    <section
-      id='contact-section'
-      className='min-h-[50vh] flex items-center bg-gray-50 dark:bg-gray-900 py-16'
+    <section 
+      id='contact-section' 
+      className='min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-600 via-purple-600 to-blue-600 dark:from-blue-900 dark:via-purple-900 dark:to-blue-900 relative overflow-hidden'
     >
-      <div className='max-w-2xl mx-auto px-4 w-full'>
-        {/* Header */}
-        <div className='text-center mb-8'>
-          <h2 className='text-4xl font-bold text-gray-900 dark:text-white mb-4'>
-            Get In Touch
-          </h2>
-          <p className='text-lg text-gray-600 dark:text-gray-400'>
-            Have a project in mind? Let's work together.
-          </p>
-        </div>
+      {/* Snowfall Effect */}
+      <div className='absolute inset-0 snowfall-container' aria-hidden='true'>
+        {snowflakes.map(flake => (
+          <div
+            key={flake.id}
+            className='snowflake'
+            style={{
+              left: `${flake.left}%`,
+              animationDelay: `${flake.delay}s`,
+              animationDuration: `${flake.duration}s`,
+            }}
+          />
+        ))}
+      </div>
 
-        {/* Email Form */}
-        {submitted ? (
-          <div className='bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg p-8 text-center'>
-            <svg
-              className='w-16 h-16 text-green-600 dark:text-green-400 mx-auto mb-4'
-              fill='none'
-              stroke='currentColor'
-              viewBox='0 0 24 24'
-            >
-              <path
-                strokeLinecap='round'
-                strokeLinejoin='round'
-                strokeWidth={2}
-                d='M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z'
-              />
-            </svg>
-            <h3 className='text-xl font-semibold text-green-900 dark:text-green-100 mb-2'>
-              Message Sent!
-            </h3>
-            <p className='text-green-700 dark:text-green-300'>
-              Your email client will open shortly.
-            </p>
-          </div>
-        ) : (
-          <form onSubmit={handleSubmit} className='space-y-6'>
-            <div>
-              <label
-                htmlFor='email'
-                className='block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2'
-              >
-                Your Email
-              </label>
-              <input
-                type='email'
-                id='email'
-                required
-                value={email}
-                onChange={e => setEmail(e.target.value)}
-                className='w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500'
-                placeholder='your.email@example.com'
-                aria-label='Your email address'
-              />
-            </div>
+      {/* Content */}
+      <div className='relative z-10 text-center px-4 max-w-2xl mx-auto'>
+        <h2 className='text-5xl md:text-7xl font-bold text-white mb-8 drop-shadow-2xl'>
+          Get In Touch
+        </h2>
+        <p className='text-xl md:text-2xl text-white/90 mb-12 drop-shadow-lg'>
+          Have a project in mind? Let's work together.
+        </p>
 
-            <div>
-              <label
-                htmlFor='message'
-                className='block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2'
-              >
-                Message
-              </label>
-              <textarea
-                id='message'
-                required
-                value={message}
-                onChange={e => setMessage(e.target.value)}
-                rows={6}
-                className='w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500'
-                placeholder='Tell me about your project...'
-                aria-label='Your message'
-                aria-describedby='message-help'
-              />
-              <p
-                id='message-help'
-                className='text-sm text-gray-500 dark:text-gray-400 mt-2'
-              >
-                Describe your project or what you'd like to discuss
-              </p>
-            </div>
-
-            <button
-              type='submit'
-              className='w-full bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 rounded-lg font-medium transition-all shadow-lg hover:shadow-xl'
-            >
-              Send Message
-            </button>
-          </form>
-        )}
-
-        {/* Alternative Contact */}
-        <div className='mt-8 text-center text-sm text-gray-600 dark:text-gray-400'>
-          Or email me directly at{' '}
-          <a
-            href={`mailto:${homeConfig.contact.email}`}
-            className='text-blue-600 dark:text-blue-400 hover:underline'
+        {/* Email Button */}
+        <a
+          href={`mailto:${homeConfig.contact.email}`}
+          className='inline-flex items-center gap-4 px-12 py-6 bg-white text-blue-600 rounded-2xl text-xl font-semibold hover:bg-gray-100 motion-safe:transition-all shadow-2xl motion-safe:hover:shadow-3xl motion-safe:hover:scale-105'
+          aria-label={`Send email to ${homeConfig.contact.email}`}
+        >
+          <svg
+            className='w-8 h-8'
+            fill='none'
+            stroke='currentColor'
+            viewBox='0 0 24 24'
           >
-            {homeConfig.contact.email}
-          </a>
-        </div>
+            <path
+              strokeLinecap='round'
+              strokeLinejoin='round'
+              strokeWidth={2}
+              d='M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z'
+            />
+          </svg>
+          Send Email
+        </a>
+
+        <p className='mt-8 text-white/80 text-lg drop-shadow'>
+          {homeConfig.contact.email}
+        </p>
       </div>
     </section>
   );

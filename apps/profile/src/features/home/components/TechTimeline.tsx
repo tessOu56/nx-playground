@@ -70,7 +70,7 @@ export const TechTimeline: FC = () => {
   }
 
   return (
-    <div 
+    <div
       className='overflow-y-scroll snap-y snap-mandatory'
       style={{ height: `${timeline.length * 100}vh` }}
       role='region'
@@ -89,25 +89,27 @@ export const TechTimeline: FC = () => {
           }}
           role='button'
           style={{
-            background: index % 2 === 0
-              ? 'linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%)'
-              : 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+            background:
+              index % 2 === 0
+                ? 'linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%)'
+                : 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
           }}
         >
           <div className='container mx-auto px-4 text-center'>
             {/* Year */}
-            <h2 
+            <h2
               className='text-8xl md:text-9xl font-bold mb-6 motion-safe:transition-transform motion-safe:hover:scale-110'
               style={{
                 color: index % 2 === 0 ? '#1a202c' : '#ffffff',
-                textShadow: index % 2 === 0 ? 'none' : '0 4px 8px rgba(0,0,0,0.3)',
+                textShadow:
+                  index % 2 === 0 ? 'none' : '0 4px 8px rgba(0,0,0,0.3)',
               }}
             >
               {item.year}
             </h2>
 
             {/* Title */}
-            <h3 
+            <h3
               className='text-2xl md:text-4xl font-semibold mb-6 max-w-3xl mx-auto'
               style={{ color: index % 2 === 0 ? '#2d3748' : '#ffffff' }}
             >
@@ -121,9 +123,10 @@ export const TechTimeline: FC = () => {
                   key={tech}
                   className='px-4 py-2 rounded-lg font-medium text-sm motion-safe:transition-transform motion-safe:hover:scale-105'
                   style={{
-                    background: index % 2 === 0 
-                      ? 'rgba(99, 102, 241, 0.1)' 
-                      : 'rgba(255, 255, 255, 0.2)',
+                    background:
+                      index % 2 === 0
+                        ? 'rgba(99, 102, 241, 0.1)'
+                        : 'rgba(255, 255, 255, 0.2)',
                     color: index % 2 === 0 ? '#4f46e5' : '#ffffff',
                     backdropFilter: 'blur(10px)',
                   }}
@@ -134,21 +137,26 @@ export const TechTimeline: FC = () => {
             </div>
 
             {/* Milestone */}
-            <p 
+            <p
               className='text-lg md:text-xl max-w-2xl mx-auto mb-10 leading-relaxed'
-              style={{ color: index % 2 === 0 ? '#4a5568' : 'rgba(255,255,255,0.9)' }}
+              style={{
+                color: index % 2 === 0 ? '#4a5568' : 'rgba(255,255,255,0.9)',
+              }}
             >
               {item.milestone}
             </p>
 
             {/* Read More Button */}
             <button
-              onClick={() => navigate(getLocalizedPath(`/blogs/${item.blogSlug}`))}
+              onClick={() =>
+                navigate(getLocalizedPath(`/blogs/${item.blogSlug}`))
+              }
               className='px-8 py-4 rounded-lg font-medium text-lg shadow-lg motion-safe:transition-all motion-safe:hover:shadow-xl motion-safe:hover:-translate-y-1'
               style={{
-                background: index % 2 === 0 
-                  ? 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)' 
-                  : '#ffffff',
+                background:
+                  index % 2 === 0
+                    ? 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)'
+                    : '#ffffff',
                 color: index % 2 === 0 ? '#ffffff' : '#1a202c',
               }}
               aria-label={`Read full blog post: ${item.title}`}
