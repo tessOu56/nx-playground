@@ -37,8 +37,10 @@ export function Layout({ children }: LayoutProps) {
             {/* Logo and Navigation */}
             <div className='flex items-center gap-8'>
               <Link to={getLocalizedPath('/')} className='flex-shrink-0'>
-                <h1 className='text-2xl font-bold bg-gradient-to-r from-primary via-secondary to-primary bg-clip-text text-transparent'>
-                  {siteConfig.siteName}
+                <h1 className='text-2xl font-bold'>
+                  <span className='bg-gradient-to-r from-blue-600 via-purple-600 to-blue-600 dark:from-blue-400 dark:via-purple-400 dark:to-blue-400 bg-clip-text text-transparent'>
+                    {siteConfig.siteName}
+                  </span>
                 </h1>
               </Link>
               <div className='hidden md:flex items-center gap-2'>
