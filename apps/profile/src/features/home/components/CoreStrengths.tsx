@@ -87,30 +87,56 @@ export const CoreStrengths: FC = () => {
       role='region'
       aria-label='Tech Stack Showcase'
     >
-      {/* Parallax Background Layers */}
+      {/* Dynamic Parallax Background Layers */}
       <div className='absolute inset-0 pointer-events-none' aria-hidden='true'>
+        {/* Frontend row background - Blue */}
         <div
-          className='absolute w-96 h-96 bg-blue-500/10 rounded-full blur-3xl'
+          className='absolute w-96 h-96 bg-blue-500/10 rounded-full blur-3xl transition-all duration-1000'
           style={{
-            top: '10%',
+            top: '15%',
             left: '10%',
-            transform: `translateY(${scrollY * 0.2}px)`,
+            transform: `translateY(${scrollY * 0.2}px) translateX(${hoveredRow === 0 ? '20px' : '0px'})`,
+            opacity: hoveredRow === 0 ? 0.3 : 0.1,
           }}
         />
+        
+        {/* Backend row background - Green */}
         <div
-          className='absolute w-96 h-96 bg-purple-500/10 rounded-full blur-3xl'
+          className='absolute w-96 h-96 bg-green-500/10 rounded-full blur-3xl transition-all duration-1000'
           style={{
             top: '50%',
             right: '10%',
-            transform: `translateY(${scrollY * 0.3}px)`,
+            transform: `translateY(${scrollY * 0.3}px) translateX(${hoveredRow === 1 ? '-20px' : '0px'})`,
+            opacity: hoveredRow === 1 ? 0.3 : 0.1,
+          }}
+        />
+        
+        {/* DevOps row background - Purple */}
+        <div
+          className='absolute w-80 h-80 bg-purple-500/10 rounded-full blur-3xl transition-all duration-1000'
+          style={{
+            bottom: '15%',
+            left: '30%',
+            transform: `translateY(${scrollY * 0.15}px) translateX(${hoveredRow === 2 ? '20px' : '0px'})`,
+            opacity: hoveredRow === 2 ? 0.3 : 0.1,
+          }}
+        />
+        
+        {/* Additional floating elements */}
+        <div
+          className='absolute w-64 h-64 bg-cyan-500/5 rounded-full blur-2xl transition-all duration-2000'
+          style={{
+            top: '25%',
+            right: '30%',
+            transform: `translateY(${scrollY * 0.1}px) rotate(${scrollY * 0.05}deg)`,
           }}
         />
         <div
-          className='absolute w-80 h-80 bg-green-500/10 rounded-full blur-3xl'
+          className='absolute w-48 h-48 bg-pink-500/5 rounded-full blur-2xl transition-all duration-2000'
           style={{
-            bottom: '10%',
-            left: '30%',
-            transform: `translateY(${scrollY * 0.15}px)`,
+            bottom: '25%',
+            right: '20%',
+            transform: `translateY(${scrollY * 0.25}px) rotate(${-scrollY * 0.03}deg)`,
           }}
         />
       </div>
@@ -128,7 +154,7 @@ export const CoreStrengths: FC = () => {
 
       {/* Row 1: Frontend - Widest (90vw) */}
       <div
-        className='carousel-row mb-12'
+        className='carousel-row'
         style={{ maxWidth: '90vw', margin: '0 auto' }}
       >
         <div
@@ -152,7 +178,7 @@ export const CoreStrengths: FC = () => {
 
       {/* Row 2: Backend - Medium (80vw) */}
       <div
-        className='carousel-row mb-12'
+        className='carousel-row'
         style={{ maxWidth: '80vw', margin: '0 auto' }}
       >
         <div
