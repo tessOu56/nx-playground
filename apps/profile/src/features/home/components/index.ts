@@ -4,3 +4,4 @@ export { FeaturedProjects } from './FeaturedProjects';
 export { ExperienceTimeline } from './ExperienceTimeline';
 export { SkillCloud } from './SkillCloud';
 export { ContactSection } from './ContactSection';
+export { TechTimeline } from './TechTimeline';
