@@ -70,16 +70,25 @@ export const ProjectsPage: FC = () => {
     });
   }, [libs, searchTerm, t]);
 
-  // Group filtered libs by category
-  const groupedLibs = useMemo(() => {
-    const grouped: Record<string, LibData[]> = {};
-    filteredLibs.forEach(lib => {
-      if (!grouped[lib.category]) {
-        grouped[lib.category] = [];
-      }
-      grouped[lib.category].push(lib);
-    });
-    return grouped;
+  // Filter React apps and other framework apps
+  const reactApps = useMemo(() => {
+    return filteredApps.filter(app => 
+      app.techStack?.some(tech => tech.toLowerCase().includes('react'))
+    );
+  }, [filteredApps]);
+
+  const otherFrameworkApps = useMemo(() => {
+    return filteredApps.filter(app => 
+      app.techStack?.some(tech => 
+        tech.toLowerCase().includes('angular') || 
+        tech.toLowerCase().includes('vue')
+      ) && !app.techStack?.some(tech => tech.toLowerCase().includes('react'))
+    );
+  }, [filteredApps]);
+
+  // Filter React libs only (ui category)
+  const reactLibs = useMemo(() => {
+    return filteredLibs.filter(lib => lib.category === 'ui');
   }, [filteredLibs]);
 
   const handleSearchChange = (value: string) => {
@@ -158,20 +167,20 @@ export const ProjectsPage: FC = () => {
           </div>
         )}
 
-        {/* Apps Section */}
-        <section id='apps' className='mb-16'>
+        {/* React Apps Section */}
+        <section id='react-apps' className='mb-16'>
           <div className='mb-8'>
             <h2 className='text-4xl font-bold text-gray-900 dark:text-white mb-2'>
-              {ts(t, 'sections.apps')}
+              React Applications
             </h2>
             <p className='text-lg text-gray-600 dark:text-gray-400'>
-              {ts(t, 'sections.appsDesc')}
+              Production-ready React applications
             </p>
           </div>
 
-          {filteredApps.length > 0 ? (
+          {reactApps.length > 0 ? (
             <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8'>
-              {filteredApps.map(app => (
+              {reactApps.map(app => (
                 <ProjectCard
                   key={app.id}
                   project={app}
@@ -180,50 +189,66 @@ export const ProjectsPage: FC = () => {
                 />
               ))}
             </div>
-          ) : (
+          ) : !searchTerm ? null : (
             <p className='text-center text-gray-600 dark:text-gray-400 py-8'>
               {ts(t, 'noResults')}
             </p>
           )}
         </section>
 
-        {/* Libs Section */}
-        <section id='libs'>
+        {/* React Libs Section */}
+        <section id='react-libs' className='mb-16'>
           <div className='mb-8'>
             <h2 className='text-4xl font-bold text-gray-900 dark:text-white mb-2'>
-              {ts(t, 'sections.libs')}
+              React Libraries
             </h2>
             <p className='text-lg text-gray-600 dark:text-gray-400'>
-              {ts(t, 'sections.libsDesc')}
+              Reusable React components and utilities
             </p>
           </div>
 
-          {filteredLibs.length > 0 ? (
-            Object.entries(groupedLibs).map(([category, categoryLibs]) => (
-              <div key={category} className='mb-12'>
-                <h3 className='text-2xl font-bold text-gray-900 dark:text-white mb-6'>
-                  {ts(t, `categories.${category}`) !== `categories.${category}`
-                    ? ts(t, `categories.${category}`)
-                    : category.charAt(0).toUpperCase() + category.slice(1)}
-                </h3>
-                <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6'>
-                  {categoryLibs.map(lib => (
-                    <ProjectCard
-                      key={lib.id}
-                      project={lib}
-                      type='lib'
-                      onClick={() => navigate(getLocalizedPath(`/projects/${lib.id}`))}
-                    />
-                  ))}
-                </div>
-              </div>
-            ))
-          ) : (
+          {reactLibs.length > 0 ? (
+            <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6'>
+              {reactLibs.map(lib => (
+                <ProjectCard
+                  key={lib.id}
+                  project={lib}
+                  type='lib'
+                  onClick={() => navigate(getLocalizedPath(`/projects/${lib.id}`))}
+                />
+              ))}
+            </div>
+          ) : !searchTerm ? null : (
             <p className='text-center text-gray-600 dark:text-gray-400 py-8'>
               {ts(t, 'noResults')}
             </p>
           )}
         </section>
+
+        {/* Other Framework Practice Section */}
+        {!searchTerm && otherFrameworkApps.length > 0 && (
+          <section id='other-frameworks' className='mb-16'>
+            <div className='mb-8'>
+              <h2 className='text-4xl font-bold text-gray-900 dark:text-white mb-2'>
+                Other Framework Practice
+              </h2>
+              <p className='text-lg text-gray-600 dark:text-gray-400'>
+                Angular and Vue exploration projects
+              </p>
+            </div>
+
+            <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8'>
+              {otherFrameworkApps.map(app => (
+                <ProjectCard
+                  key={app.id}
+                  project={app}
+                  type='app'
+                  onClick={() => navigate(getLocalizedPath(`/projects/${app.id}`))}
+                />
+              ))}
+            </div>
+          </section>
+        )}
       </div>
     </div>
   );
