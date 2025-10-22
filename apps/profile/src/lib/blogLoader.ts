@@ -10,37 +10,16 @@ async function fetchBlog(
   slug: string,
   locale: SupportedLocale
 ): Promise<string | null> {
-  const fileName = locale === 'zh-TW' ? `${slug}.zh-TW.md` : `${slug}.md`;
-  const url = `/specs/blogs/${fileName}`;
+  // Always use English version (only en maintained)
+  const url = `/specs/blogs/${slug}.md`;
 
   try {
     const response = await fetch(url);
     if (!response.ok) {
-      // If locale-specific blog not found, fallback to default (en)
-      if (locale === 'zh-TW') {
-        const fallbackUrl = `/specs/blogs/${slug}.md`;
-        const fallbackResponse = await fetch(fallbackUrl);
-        if (!fallbackResponse.ok) {
-          console.warn(`Blog not found: ${slug}`);
-          return null;
-        }
-        const content = await fallbackResponse.text();
-        console.log(
-          `[BlogLoader] Loaded fallback blog ${slug}, length:`,
-          content.length
-        );
-        console.log(`[BlogLoader] Content preview:`, content.substring(0, 200));
-        return content;
-      }
       console.warn(`Blog not found: ${slug}`);
       return null;
     }
     const content = await response.text();
-    console.log(
-      `[BlogLoader] Loaded blog ${slug} (${locale}), length:`,
-      content.length
-    );
-    console.log(`[BlogLoader] Content preview:`, content.substring(0, 200));
     return content;
   } catch (error) {
     console.error(`Error fetching blog ${slug}:`, error);
@@ -54,12 +33,6 @@ async function fetchBlog(
 function parseBlog(content: string, slug: string): BlogPost | null {
   try {
     const { data, content: markdown } = matter(content);
-
-    console.log(
-      `[BlogLoader] Parsing ${slug}, front matter keys:`,
-      Object.keys(data)
-    );
-    console.log(`[BlogLoader] Front matter data:`, data);
 
     if (!data.title) {
       console.warn(`No title in front matter for blog: ${slug}`);

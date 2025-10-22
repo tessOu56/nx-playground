@@ -21,21 +21,12 @@ async function fetchSpec(
   id: string,
   locale: SupportedLocale
 ): Promise<string | null> {
-  const fileName = locale === 'zh-TW' ? 'zh-TW.md' : 'en.md';
-  const url = `/specs/${type}/${id}/${fileName}`;
+  // Always use English version (only en maintained)
+  const url = `/specs/${type}/${id}/en.md`;
 
   try {
     const response = await fetch(url);
     if (!response.ok) {
-      // If locale-specific spec not found, fallback to en.md
-      if (locale === 'zh-TW') {
-        const fallbackUrl = `/specs/${type}/${id}/en.md`;
-        const fallbackResponse = await fetch(fallbackUrl);
-        if (!fallbackResponse.ok) {
-          return null;
-        }
-        return await fallbackResponse.text();
-      }
       return null;
     }
     return await response.text();
