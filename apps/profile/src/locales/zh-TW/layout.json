@@ -1,8 +1,7 @@
 {
   "nav": {
     "home": "首頁",
-    "apps": "應用",
-    "libs": "函式庫",
+    "projects": "專案",
     "blogs": "部落格"
   },
   "footer": {

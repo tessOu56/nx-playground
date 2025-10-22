@@ -77,18 +77,11 @@ export function Layout({ children }: LayoutProps) {
                   {String(t('nav.home'))}
                 </Button>
                 <Button
-                  variant={isActive('/apps') ? 'default' : 'ghost'}
+                  variant={isActive('/projects') ? 'default' : 'ghost'}
                   size='sm'
-                  onClick={() => navigate(getLocalizedPath('/apps'))}
+                  onClick={() => navigate(getLocalizedPath('/projects'))}
                 >
-                  {String(t('nav.apps'))}
-                </Button>
-                <Button
-                  variant={isActive('/libs') ? 'default' : 'ghost'}
-                  size='sm'
-                  onClick={() => navigate(getLocalizedPath('/libs'))}
-                >
-                  {String(t('nav.libs'))}
+                  {String(t('nav.projects'))}
                 </Button>
                 <Button
                   variant={isActive('/blogs') ? 'default' : 'ghost'}
@@ -139,18 +132,11 @@ export function Layout({ children }: LayoutProps) {
               {String(t('nav.home'))}
             </Button>
             <Button
-              variant={isActive('/apps') ? 'default' : 'ghost'}
+              variant={isActive('/projects') ? 'default' : 'ghost'}
               size='sm'
-              onClick={() => navigate(getLocalizedPath('/apps'))}
+              onClick={() => navigate(getLocalizedPath('/projects'))}
             >
-              {String(t('nav.apps'))}
-            </Button>
-            <Button
-              variant={isActive('/libs') ? 'default' : 'ghost'}
-              size='sm'
-              onClick={() => navigate(getLocalizedPath('/libs'))}
-            >
-              {String(t('nav.libs'))}
+              {String(t('nav.projects'))}
             </Button>
             <Button
               variant={isActive('/blogs') ? 'default' : 'ghost'}
