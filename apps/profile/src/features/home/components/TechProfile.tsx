@@ -1,4 +1,4 @@
-import { type FC } from 'react';
+import { type FC, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { useLocalizedNavigation } from '../../../lib/i18n/useLocalizedNavigation';
@@ -12,6 +12,34 @@ export const TechProfile: FC = () => {
   const { getLocalizedPath } = useLocalizedNavigation();
   const navigate = useNavigate();
   const currentLang = i18n.language as 'zh-TW' | 'en';
+  const [headerDark, setHeaderDark] = useState(false);
+
+  // Monitor header dark mode state
+  useEffect(() => {
+    const checkHeaderDark = () => {
+      const nav = document.querySelector('nav');
+      if (nav) {
+        const isDark = nav.classList.contains('bg-gray-900') || 
+                      nav.style.backgroundColor?.includes('gray-900');
+        setHeaderDark(isDark);
+      }
+    };
+
+    // Check initially
+    checkHeaderDark();
+
+    // Monitor for changes
+    const observer = new MutationObserver(checkHeaderDark);
+    const nav = document.querySelector('nav');
+    if (nav) {
+      observer.observe(nav, { 
+        attributes: true, 
+        attributeFilter: ['class', 'style'] 
+      });
+    }
+
+    return () => observer.disconnect();
+  }, []);
 
   const scrollToContact = () => {
     document.getElementById('contact-section')?.scrollIntoView({
@@ -24,6 +52,10 @@ export const TechProfile: FC = () => {
     <section
       className='relative overflow-hidden min-h-screen flex items-center'
       data-header-dark='true'
+      style={{
+        paddingTop: headerDark ? '50px' : '0px',
+        minHeight: headerDark ? '100vh' : 'calc(100vh - 50px)'
+      }}
     >
       {/* Background with CSS gradient placeholder */}
       <div className='absolute inset-0 bg-gradient-to-br from-blue-600 via-purple-600 to-blue-600 dark:from-blue-800 dark:via-purple-800 dark:to-blue-800' />
@@ -32,7 +64,6 @@ export const TechProfile: FC = () => {
       <img
         src='https://picsum.photos/1920/1080?random=1'
         loading='lazy'
-        decode='async'
         alt=''
         className='absolute inset-0 w-full h-full object-cover opacity-20'
         style={{ zIndex: 1 }}
