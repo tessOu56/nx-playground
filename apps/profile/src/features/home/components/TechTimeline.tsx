@@ -78,7 +78,7 @@ export const TechTimeline: FC = () => {
       className='overflow-y-scroll snap-y snap-mandatory'
       style={{
         height: `${
-          (featured.length + (others.length > 0 ? 1 : 0) + 1) * 100
+          (featured.length + (others.length > 0 ? 1 : 0)) * 100
         }vh`,
       }}
       role='region'
