@@ -16,17 +16,18 @@ async function fetchBlog(
   try {
     const response = await fetch(url);
     if (!response.ok) {
-      // Try fallback locale
-      const fallbackFile =
-        locale === 'zh-TW' ? `${slug}.md` : `${slug}.zh-TW.md`;
-      const fallbackUrl = `/specs/blogs/${fallbackFile}`;
-
-      const fallbackResponse = await fetch(fallbackUrl);
-      if (!fallbackResponse.ok) {
-        console.warn(`Blog not found: ${slug}`);
-        return null;
+      // If locale-specific blog not found, fallback to default (en)
+      if (locale === 'zh-TW') {
+        const fallbackUrl = `/specs/blogs/${slug}.md`;
+        const fallbackResponse = await fetch(fallbackUrl);
+        if (!fallbackResponse.ok) {
+          console.warn(`Blog not found: ${slug}`);
+          return null;
+        }
+        return await fallbackResponse.text();
       }
-      return await fallbackResponse.text();
+      console.warn(`Blog not found: ${slug}`);
+      return null;
     }
     return await response.text();
   } catch (error) {
