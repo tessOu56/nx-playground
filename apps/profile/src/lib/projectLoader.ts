@@ -156,8 +156,9 @@ export async function loadAllApps(
       const readme = readmeMap.get(id);
       const spec = specMap.get(id);
 
-      // 只顯示已發布的專案
-      if (spec && !spec.published) continue;
+      // 如果有 spec，只顯示已發布的專案
+      // 如果沒有 spec，但有 README，就顯示（預設為發布）
+      if (spec && spec.published === false) continue;
 
       const projectData = mergeProjectData(readme, spec, locale);
 
@@ -205,8 +206,9 @@ export async function loadAllLibs(
       const readme = readmeMap.get(id);
       const spec = specMap.get(id);
 
-      // 只顯示已發布的專案
-      if (spec && !spec.published) continue;
+      // 如果有 spec，只顯示已發布的專案
+      // 如果沒有 spec，但有 README，就顯示（預設為發布）
+      if (spec && spec.published === false) continue;
 
       const projectData = mergeProjectData(readme, spec, locale);
 

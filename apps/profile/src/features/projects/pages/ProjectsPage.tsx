@@ -17,7 +17,6 @@ export const ProjectsPage: FC = () => {
   const currentLocale = (locale ?? 'en') as SupportedLocale;
   const { t } = useProjectsTranslation();
 
-  const [filter, setFilter] = useState<'all' | 'react-apps' | 'react-libs' | 'others'>('all');
 
   // Get data from Zustand store
   const apps = useProjectsStore(state => state.apps[currentLocale]);
@@ -59,12 +58,6 @@ export const ProjectsPage: FC = () => {
     return filteredLibs.filter(lib => lib.category === 'ui');
   }, [filteredLibs]);
 
-  // Filter based on dropdown selection
-  const shouldShowSection = (section: string) => {
-    if (filter === 'all') return true;
-    return filter === section;
-  };
-
   const totalProjects = apps.length + libs.length;
 
   if (loading) {
@@ -90,23 +83,8 @@ export const ProjectsPage: FC = () => {
           </p>
         </div>
 
-        {/* Quick Filter */}
-        <div className='max-w-md mx-auto mb-12'>
-          <select
-            value={filter}
-            onChange={e => setFilter(e.target.value as typeof filter)}
-            className='w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500'
-            aria-label='Filter projects'
-          >
-            <option value='all'>All Projects</option>
-            <option value='react-apps'>React Applications</option>
-            <option value='react-libs'>React Libraries</option>
-            <option value='others'>Other Frameworks</option>
-          </select>
-        </div>
-
         {/* Stats */}
-        {filter === 'all' && (
+        {(
           <div className='grid grid-cols-2 md:grid-cols-4 gap-4 mb-12'>
             <div className='bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg text-center'>
               <div className='text-4xl font-bold text-blue-600 dark:text-blue-400 mb-2'>
@@ -144,8 +122,7 @@ export const ProjectsPage: FC = () => {
         )}
 
         {/* React Apps Section */}
-        {shouldShowSection('react-apps') && (
-          <section id='react-apps' className='mb-16'>
+        <section id='react-apps' className='mb-16'>
             <div className='mb-8'>
               <h2 className='text-4xl font-bold text-gray-900 dark:text-white mb-2'>
                 React Applications
@@ -174,11 +151,9 @@ export const ProjectsPage: FC = () => {
               </p>
             )}
           </section>
-        )}
 
         {/* React Libs Section */}
-        {shouldShowSection('react-libs') && (
-          <section id='react-libs' className='mb-16'>
+        <section id='react-libs' className='mb-16'>
             <div className='mb-8'>
               <h2 className='text-4xl font-bold text-gray-900 dark:text-white mb-2'>
                 React Libraries
@@ -207,10 +182,9 @@ export const ProjectsPage: FC = () => {
               </p>
             )}
           </section>
-        )}
 
         {/* Other Framework Practice Section */}
-        {shouldShowSection('others') && otherFrameworkApps.length > 0 && (
+        {otherFrameworkApps.length > 0 && (
           <section id='other-frameworks' className='mb-16'>
             <div className='mb-8'>
               <h2 className='text-4xl font-bold text-gray-900 dark:text-white mb-2'>
