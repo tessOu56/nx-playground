@@ -1,9 +1,9 @@
 /**
- * Blog list page - displays blog posts with filtering by year and tags
+ * Blog list page - displays all blog posts sorted by year
  */
 
-import { type FC, useEffect, useMemo, useState } from 'react';
-import { useParams, useSearchParams } from 'react-router-dom';
+import { type FC, useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
 
 import { BlogCard } from '../../../components/BlogCard';
 import { loadAllBlogMetadata } from '../../../lib/blogLoader';
@@ -13,21 +13,9 @@ import type { BlogMetadata } from '../../../types/blogData';
 export const BlogListPage: FC = () => {
   const { locale } = useParams<{ locale: string }>();
   const currentLocale = (locale ?? 'en') as SupportedLocale;
-  const [searchParams] = useSearchParams();
 
   const [blogs, setBlogs] = useState<BlogMetadata[]>([]);
   const [loading, setLoading] = useState(true);
-  const [selectedYear, setSelectedYear] = useState<number | 'all'>('all');
-  const [selectedTag, setSelectedTag] = useState<string | 'all'>('all');
-
-  // Read URL params
-  useEffect(() => {
-    const yearParam = searchParams.get('year');
-    const tagParam = searchParams.get('tag');
-
-    if (yearParam) setSelectedYear(parseInt(yearParam));
-    if (tagParam) setSelectedTag(tagParam);
-  }, [searchParams]);
 
   // Load blogs
   useEffect(() => {
@@ -35,7 +23,9 @@ export const BlogListPage: FC = () => {
       setLoading(true);
       try {
         const blogData = await loadAllBlogMetadata(currentLocale);
-        setBlogs(blogData);
+        // Sort by year (newest first)
+        const sortedBlogs = blogData.sort((a, b) => (b.year || 0) - (a.year || 0));
+        setBlogs(sortedBlogs);
       } catch (error) {
         console.error('Error loading blogs:', error);
       } finally {
@@ -45,37 +35,6 @@ export const BlogListPage: FC = () => {
 
     loadData();
   }, [currentLocale]);
-
-  // Extract unique years and tags
-  const years = useMemo(() => {
-    const uniqueYears = Array.from(
-      new Set(blogs.filter(b => b.year).map(b => b.year!))
-    ).sort((a, b) => b - a); // Newest first
-    return uniqueYears;
-  }, [blogs]);
-
-  const allTags = useMemo(() => {
-    const tagSet = new Set<string>();
-    blogs.forEach(blog => blog.tags.forEach(tag => tagSet.add(tag)));
-    return Array.from(tagSet).sort();
-  }, [blogs]);
-
-  // Filter blogs
-  const filteredBlogs = useMemo(() => {
-    return blogs.filter(blog => {
-      // Year filter
-      if (selectedYear !== 'all' && blog.year !== selectedYear) {
-        return false;
-      }
-
-      // Tag filter
-      if (selectedTag !== 'all' && !blog.tags.includes(selectedTag)) {
-        return false;
-      }
-
-      return true;
-    });
-  }, [blogs, selectedYear, selectedTag]);
 
   if (loading) {
     return (
@@ -101,78 +60,17 @@ export const BlogListPage: FC = () => {
           </p>
         </div>
 
-        {/* Quick Filters */}
-        <div className='flex flex-wrap gap-4 mb-8 justify-center max-w-2xl mx-auto'>
-          {/* Year Filter */}
-          <div className='flex items-center gap-2'>
-            <span className='text-sm font-medium text-gray-700 dark:text-gray-300'>
-              Year:
-            </span>
-            <button
-              onClick={() => setSelectedYear('all')}
-              className={`px-4 py-2 rounded-lg transition-colors ${
-                selectedYear === 'all'
-                  ? 'bg-blue-600 text-white'
-                  : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600'
-              }`}
-            >
-              All
-            </button>
-            {years.map(year => (
-              <button
-                key={year}
-                onClick={() => setSelectedYear(year)}
-                className={`px-4 py-2 rounded-lg transition-colors ${
-                  selectedYear === year
-                    ? 'bg-blue-600 text-white'
-                    : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600'
-                }`}
-              >
-                {year}
-              </button>
-            ))}
-          </div>
-
-          {/* Tag Filter */}
-          <div className='flex items-center gap-2'>
-            <span className='text-sm font-medium text-gray-700 dark:text-gray-300'>
-              Tag:
-            </span>
-            <select
-              value={selectedTag}
-              onChange={e => setSelectedTag(e.target.value as typeof selectedTag)}
-              className='px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500'
-            >
-              <option value='all'>All Tags</option>
-              {allTags.map(tag => (
-                <option key={tag} value={tag}>
-                  {tag}
-                </option>
-              ))}
-            </select>
-          </div>
-        </div>
-
-        {/* Results Count */}
-        <div className='text-center mb-8 text-gray-600 dark:text-gray-400'>
-          Found {filteredBlogs.length} blog
-          {filteredBlogs.length !== 1 ? 's' : ''}
-        </div>
-
         {/* Blogs Grid */}
-        {filteredBlogs.length > 0 ? (
+        {blogs.length > 0 ? (
           <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8'>
-            {filteredBlogs.map(blog => (
+            {blogs.map(blog => (
               <BlogCard key={blog.slug} blog={blog} />
             ))}
           </div>
         ) : (
           <div className='text-center py-16'>
-            <p className='text-lg text-gray-600 dark:text-gray-400 mb-2'>
+            <p className='text-lg text-gray-600 dark:text-gray-400'>
               No blogs found
-            </p>
-            <p className='text-sm text-gray-500 dark:text-gray-500'>
-              Try adjusting your filters or search query
             </p>
           </div>
         )}
