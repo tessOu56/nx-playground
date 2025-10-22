@@ -55,15 +55,24 @@ async function parseReadme(
   content: string
 ): Promise<ProjectReadme | null> {
   try {
+    console.log(`[README Loader] Parsing ${filePath}, content length: ${content.length}`);
+    
     const { data, content: markdownContent } = matter(content);
+    
+    console.log(`[README Loader] Front matter data:`, data);
+    console.log(`[README Loader] Extracted id: ${data.id}`);
 
-    // 轉換 Markdown 為 HTML
+    if (!data.id) {
+      console.warn(`[README Loader] No ID in front matter for ${filePath}`);
+      return null;
+    }
+
     const processedContent = await remark().use(html).process(markdownContent);
     const htmlContent = processedContent.toString();
 
-    return {
-      id: data.id ?? '',
-      name: data.name ?? '',
+    const result = {
+      id: data.id,
+      name: data.name ?? data.id,
       version: data.version ?? '0.0.0',
       description: data.description ?? '',
       techStack: data.techStack ?? [],
@@ -75,6 +84,9 @@ async function parseReadme(
       author: data.author,
       license: data.license,
     };
+    
+    console.log(`[README Loader] Successfully parsed ${filePath}:`, result.id, result.name);
+    return result;
   } catch (error) {
     console.error(`Error parsing README ${filePath}:`, error);
     return null;
