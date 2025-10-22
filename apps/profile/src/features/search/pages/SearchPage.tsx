@@ -17,7 +17,7 @@ interface Message {
 export const SearchPage: FC = () => {
   const [searchParams] = useSearchParams();
   const initialQuery = searchParams.get('q') || '';
-  
+
   const [messages, setMessages] = useState<Message[]>([]);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -39,7 +39,8 @@ export const SearchPage: FC = () => {
       const aiMessage: Message = {
         id: (Date.now() + 1).toString(),
         role: 'assistant',
-        content: "I'm currently being set up! Soon I'll be able to answer questions about projects, tech stack, and experience. Stay tuned! 🤖",
+        content:
+          "I'm currently being set up! Soon I'll be able to answer questions about projects, tech stack, and experience. Stay tuned! 🤖",
         timestamp: new Date(),
       };
       setMessages(prev => [...prev, aiMessage]);
@@ -61,7 +62,7 @@ export const SearchPage: FC = () => {
         <InfoBanner />
 
         {/* Messages Area */}
-        <div 
+        <div
           className='bg-white dark:bg-gray-800 rounded-lg shadow-lg min-h-[60vh] max-h-[70vh] overflow-y-auto mb-4 p-6'
           role='log'
           aria-live='polite'
@@ -90,4 +91,3 @@ export const SearchPage: FC = () => {
     </div>
   );
 };
-
