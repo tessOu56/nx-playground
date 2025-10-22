@@ -66,7 +66,8 @@ export function Layout({ children }: LayoutProps) {
       entries => {
         let anyDarkVisible = false;
         entries.forEach(entry => {
-          if (entry.isIntersecting) {
+          // Only trigger if the section is significantly visible (not just touching the edge)
+          if (entry.isIntersecting && entry.intersectionRatio > 0.3) {
             anyDarkVisible = true;
           }
         });
@@ -74,8 +75,8 @@ export function Layout({ children }: LayoutProps) {
         setHeaderDark(anyDarkVisible);
       },
       {
-        rootMargin: '-80px 0px 0px 0px',
-        threshold: 0,
+        rootMargin: '-100px 0px -100px 0px', // More conservative margins
+        threshold: [0, 0.3, 0.5, 0.7, 1.0], // Multiple thresholds for better detection
       }
     );
 
