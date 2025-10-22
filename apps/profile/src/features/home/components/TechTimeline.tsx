@@ -1,5 +1,5 @@
 import type { FC } from 'react';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
 import { loadAllBlogs } from '../../../lib/blogLoader';
@@ -24,8 +24,6 @@ export const TechTimeline: FC = () => {
   const [featured, setFeatured] = useState<TimelineItem[]>([]);
   const [others, setOthers] = useState<TimelineItem[]>([]);
   const [loading, setLoading] = useState(true);
-  const [currentSection, setCurrentSection] = useState(0);
-  const timelineRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const loadTimeline = async () => {
@@ -59,37 +57,12 @@ export const TechTimeline: FC = () => {
     loadTimeline();
   }, [currentLocale]);
 
-  // Auto-snap to sections when scrolling
-  useEffect(() => {
-    const timeline = timelineRef.current;
-    if (!timeline) return;
-
-    const handleScroll = () => {
-      const scrollTop = timeline.scrollTop;
-      const sectionHeight = window.innerHeight;
-      const currentIndex = Math.round(scrollTop / sectionHeight);
-      setCurrentSection(currentIndex);
-    };
-
-    timeline.addEventListener('scroll', handleScroll, { passive: true });
-    return () => timeline.removeEventListener('scroll', handleScroll);
-  }, []);
-
-  // Scroll to next section
-  const scrollToNext = (fromIndex: number) => {
-    const timeline = timelineRef.current;
-    if (!timeline) return;
-
-    const sectionHeight = window.innerHeight;
-    const nextSection = fromIndex + 1;
-    const maxSections = featured.length + (others.length > 0 ? 1 : 0);
-
-    if (nextSection < maxSections) {
-      timeline.scrollTo({
-        top: nextSection * sectionHeight,
-        behavior: 'smooth',
-      });
-    }
+  // Scroll to next section (scroll the entire page)
+  const scrollToNext = () => {
+    window.scrollBy({
+      top: window.innerHeight,
+      behavior: 'smooth',
+    });
   };
 
   if (loading) {
@@ -109,20 +82,12 @@ export const TechTimeline: FC = () => {
   }
 
   return (
-    <div
-      ref={timelineRef}
-      className='timeline-container overflow-y-auto snap-y snap-mandatory'
-      style={{
-        height: '100vh',
-      }}
-      role='region'
-      aria-label='Tech Journey Timeline'
-    >
+    <>
       {/* Featured years: full screens */}
       {featured.map((item, index) => (
         <article
           key={item.year}
-          className='timeline-section snap-start snap-always min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-50 to-white dark:from-gray-900 dark:to-gray-800 relative'
+          className='snap-start snap-always h-screen flex items-center justify-center bg-gradient-to-br from-gray-50 to-white dark:from-gray-900 dark:to-gray-800 relative'
           aria-label={`Tech journey in ${item.year}: ${item.title}`}
           tabIndex={0}
           onKeyDown={e => {
@@ -211,7 +176,7 @@ export const TechTimeline: FC = () => {
             {/* Down Arrow Button */}
             {(index < featured.length - 1 || others.length > 0) && (
               <button
-                onClick={() => scrollToNext(index)}
+                onClick={scrollToNext}
                 className='absolute bottom-8 left-1/2 transform -translate-x-1/2 motion-safe:animate-bounce hover:scale-110 transition-transform duration-300'
                 aria-label='Scroll to next section'
               >
@@ -330,6 +295,6 @@ export const TechTimeline: FC = () => {
           </div>
         </article>
       )}
-    </div>
+    </>
   );
 };
