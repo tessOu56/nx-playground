@@ -12,22 +12,25 @@
 ## ⏳ Remaining Tasks (3/9)
 
 ### 1. Dynamic Blog Sections
-**Status**: Partially implemented  
+
+**Status**: Partially implemented
 **Needs**: Update TechTimeline to show latest 3 years full-screen + others in summary
 
 ### 2. Core Strengths Auto-Carousel
-**Status**: Not started  
+
+**Status**: Not started
 **Needs**: Full-screen carousel with 3 rows (frontend, backend, devops)
 
 ### 3. Adaptive Header Theme
-**Status**: Not started  
+
+**Status**: Not started
 **Needs**: IntersectionObserver with sentinel elements for dark section detection
 
 ## Latest Commits
 
 ```
 42e3495 feat: filter projects by framework type
-062e6c7 refactor: improve ProjectCard with rem-based heights  
+062e6c7 refactor: improve ProjectCard with rem-based heights
 2d05816 fix: support projectId param in detail pages
 5b5e1ac feat: merge Apps + Libs into unified Projects page
 7f26dd3 feat: add full-screen contact with snowfall effect
@@ -39,6 +42,7 @@ eeff5b9 feat: implement scroll-to-top, stacked footer, nav updates
 ## Implementation Notes
 
 ### ProjectCard
+
 - Uses rem for stable heights across font settings
 - Header: 4rem (title + category + version)
 - Description: 3rem (2 lines with placeholder)
@@ -47,12 +51,14 @@ eeff5b9 feat: implement scroll-to-top, stacked footer, nav updates
 - flex-col with mt-auto for proper spacing
 
 ### Project Filtering
+
 - React Apps: main section
 - React Libs: UI category only (data libs hidden)
 - Other Frameworks: Angular/Vue (practice section)
 - Uses `techStack.includes()` for detection
 
 ### Navigation Fixed
+
 - /projects/:projectId works for both apps and libs
 - AppDetailPage and LibDetailPage support projectId param
 - Legacy routes redirect properly
@@ -73,22 +79,24 @@ useEffect(() => {
     .sort((a, b) => b.year! - a.year!);
 
   setFeatured(sorted.slice(0, 3)); // Latest 3
-  setOthers(sorted.slice(3));       // Rest
+  setOthers(sorted.slice(3)); // Rest
 }, [currentLocale]);
 
 return (
   <>
     {/* Featured: full screens */}
-    {featured.map(item => <article className="snap-start min-h-screen">...</article>)}
-    
+    {featured.map(item => (
+      <article className='snap-start min-h-screen'>...</article>
+    ))}
+
     {/* Others: summary screen */}
-    <article className="snap-start min-h-screen">
+    <article className='snap-start min-h-screen'>
       <h2>Explore More</h2>
-      <div className="grid grid-cols-2 gap-6">
+      <div className='grid grid-cols-2 gap-6'>
         {others.map(item => (
           <div key={item.year}>
             <h3>{item.year}</h3>
-            <p className="line-clamp-2">{item.title}</p>
+            <p className='line-clamp-2'>{item.title}</p>
             <button onClick={() => navigate(`/blogs/${item.blogSlug}`)}>
               Read More
             </button>
@@ -113,7 +121,7 @@ const techStacks = {
 return (
   <section className="min-h-screen flex flex-col justify-center overflow-hidden py-16">
     <h2 className="text-center text-4xl font-bold mb-12">Tech Stack</h2>
-    
+
     {/* Row 1: Frontend - widest */}
     <div className="carousel-row mb-8" style={{ maxWidth: '90vw' }}>
       <div className="carousel-track animate-scroll-left">
@@ -145,13 +153,18 @@ return (
 ```
 
 CSS with IntersectionObserver optimization:
+
 ```css
 @keyframes scroll-left {
-  to { transform: translateX(-50%); }
+  to {
+    transform: translateX(-50%);
+  }
 }
 
 @keyframes scroll-right {
-  to { transform: translateX(50%); }
+  to {
+    transform: translateX(50%);
+  }
 }
 
 .carousel-row {
@@ -185,19 +198,23 @@ CSS with IntersectionObserver optimization:
 ```
 
 IntersectionObserver:
+
 ```tsx
 useEffect(() => {
   const rows = document.querySelectorAll('.carousel-track');
-  
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.classList.remove('paused');
-      } else {
-        entry.target.classList.add('paused');
-      }
-    });
-  }, { threshold: 0.1 });
+
+  const observer = new IntersectionObserver(
+    entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.remove('paused');
+        } else {
+          entry.target.classList.add('paused');
+        }
+      });
+    },
+    { threshold: 0.1 }
+  );
 
   rows.forEach(row => observer.observe(row));
 
@@ -214,18 +231,24 @@ const [headerDark, setHeaderDark] = useState(false);
 useEffect(() => {
   // Add sentinels to dark sections
   const darkSections = document.querySelectorAll('[data-header-dark="true"]');
-  
-  const observer = new IntersectionObserver((entries) => {
-    let anyDarkVisible = false;
-    entries.forEach(entry => {
-      if (entry.isIntersecting && entry.target.hasAttribute('data-header-dark')) {
-        anyDarkVisible = true;
-      }
-    });
-    setHeaderDark(anyDarkVisible);
-  }, {
-    rootMargin: '-64px 0px 0px 0px' // Header height offset
-  });
+
+  const observer = new IntersectionObserver(
+    entries => {
+      let anyDarkVisible = false;
+      entries.forEach(entry => {
+        if (
+          entry.isIntersecting &&
+          entry.target.hasAttribute('data-header-dark')
+        ) {
+          anyDarkVisible = true;
+        }
+      });
+      setHeaderDark(anyDarkVisible);
+    },
+    {
+      rootMargin: '-64px 0px 0px 0px', // Header height offset
+    }
+  );
 
   darkSections.forEach(section => {
     const sentinel = document.createElement('div');
@@ -238,9 +261,7 @@ useEffect(() => {
 }, []);
 
 // In timeline dark sections:
-<article data-header-dark="true">
-  ...
-</article>
+<article data-header-dark='true'>...</article>;
 ```
 
 ## Testing Commands
@@ -277,4 +298,3 @@ http://localhost:3004/en/search
 5. **Reduced motion support**
 6. **Semantic HTML** (article, section, nav)
 7. **Progress bar** with ARIA progressbar role
-
