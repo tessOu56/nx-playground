@@ -60,12 +60,13 @@ export const ProjectCard: FC<ProjectCardProps> = ({
       <div style={{ minHeight: '3.5rem' }} className='mt-auto'>
         {project.techStack && project.techStack.length > 0 && (
           <div className='flex flex-wrap gap-1.5'>
-            {project.techStack.slice(0, 4).map(tech => (
+            {/* Show up to 6 tags (approx 2 rows), then +N for overflow */}
+            {project.techStack.slice(0, 6).map(tech => (
               <TechTag key={tech} name={tech} compact />
             ))}
-            {project.techStack.length > 4 && (
+            {project.techStack.length > 6 && (
               <span className='px-2 py-1 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded text-xs font-medium'>
-                +{project.techStack.length - 4}
+                +{project.techStack.length - 6}
               </span>
             )}
           </div>
