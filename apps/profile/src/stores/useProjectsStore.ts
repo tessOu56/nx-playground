@@ -44,15 +44,11 @@ export const useProjectsStore = create<ProjectsState>((set, get) => ({
 
   loadLibs: async (locale: SupportedLocale) => {
     // 防止重複載入
-    if (get().libs[locale].length > 0) {
-      console.log(`[Store] Libs already loaded for ${locale}`);
-      return;
-    }
+    if (get().libs[locale].length > 0) return;
 
     set({ loading: true });
     try {
       const libs = await loadAllLibs(locale);
-      console.log(`[Store] Loaded ${libs.length} libs for ${locale}:`, libs);
       set(state => ({
         libs: { ...state.libs, [locale]: libs },
         loading: false,
