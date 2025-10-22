@@ -1,9 +1,25 @@
-import { type FC, useEffect } from 'react';
+import { type FC, useEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import { techStack } from '@nx-playground/tech-stack-data';
 
+import { useLocalizedNavigation } from '../../../lib/i18n/useLocalizedNavigation';
 import './CoreStrengths.css';
 
 export const CoreStrengths: FC = () => {
+  const navigate = useNavigate();
+  const { getLocalizedPath } = useLocalizedNavigation();
+  const [hoveredRow, setHoveredRow] = useState<number | null>(null);
+  const [scrollY, setScrollY] = useState(0);
+
+  // Track scroll for parallax effect
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrollY(window.scrollY);
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
   // Categorize tech stack
   const frontendTech = techStack.filter(
     t =>
@@ -67,10 +83,40 @@ export const CoreStrengths: FC = () => {
 
   return (
     <section
-      className='min-h-screen flex flex-col justify-center overflow-hidden bg-white dark:bg-gray-900 py-16'
+      className='relative min-h-screen flex flex-col justify-center overflow-hidden bg-white dark:bg-gray-900 py-16'
       role='region'
       aria-label='Tech Stack Showcase'
     >
+      {/* Parallax Background Layers */}
+      <div className='absolute inset-0 pointer-events-none' aria-hidden='true'>
+        <div
+          className='absolute w-96 h-96 bg-blue-500/10 rounded-full blur-3xl'
+          style={{
+            top: '10%',
+            left: '10%',
+            transform: `translateY(${scrollY * 0.2}px)`,
+          }}
+        />
+        <div
+          className='absolute w-96 h-96 bg-purple-500/10 rounded-full blur-3xl'
+          style={{
+            top: '50%',
+            right: '10%',
+            transform: `translateY(${scrollY * 0.3}px)`,
+          }}
+        />
+        <div
+          className='absolute w-80 h-80 bg-green-500/10 rounded-full blur-3xl'
+          style={{
+            bottom: '10%',
+            left: '30%',
+            transform: `translateY(${scrollY * 0.15}px)`,
+          }}
+        />
+      </div>
+
+      {/* Content */}
+      <div className='relative z-10'>
       <div className='text-center mb-16'>
         <h2 className='text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-4'>
           Tech Stack
@@ -86,16 +132,20 @@ export const CoreStrengths: FC = () => {
         style={{ maxWidth: '90vw', margin: '0 auto' }}
       >
         <div
-          className='carousel-track animate-scroll-left'
+          className={`carousel-track animate-scroll-left ${hoveredRow === 0 ? 'paused' : ''}`}
           aria-label='Frontend technologies'
+          onMouseEnter={() => setHoveredRow(0)}
+          onMouseLeave={() => setHoveredRow(null)}
         >
           {[...frontendTech, ...frontendTech].map((tech, i) => (
-            <span
+            <button
               key={i}
-              className='tech-badge px-6 py-3 bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 rounded-lg font-medium text-lg whitespace-nowrap'
+              onClick={() => navigate(getLocalizedPath(`/search?q=${encodeURIComponent(tech.name)}`))}
+              className='tech-badge px-6 py-3 bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 rounded-lg font-medium text-lg whitespace-nowrap motion-safe:hover:scale-110 motion-safe:transition-transform cursor-pointer'
+              aria-label={`Search for ${tech.name}`}
             >
               {tech.name}
-            </span>
+            </button>
           ))}
         </div>
       </div>
@@ -106,16 +156,20 @@ export const CoreStrengths: FC = () => {
         style={{ maxWidth: '80vw', margin: '0 auto' }}
       >
         <div
-          className='carousel-track animate-scroll-right'
+          className={`carousel-track animate-scroll-right ${hoveredRow === 1 ? 'paused' : ''}`}
           aria-label='Backend technologies'
+          onMouseEnter={() => setHoveredRow(1)}
+          onMouseLeave={() => setHoveredRow(null)}
         >
           {[...backendTech, ...backendTech].map((tech, i) => (
-            <span
+            <button
               key={i}
-              className='tech-badge px-6 py-3 bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300 rounded-lg font-medium text-lg whitespace-nowrap'
+              onClick={() => navigate(getLocalizedPath(`/search?q=${encodeURIComponent(tech.name)}`))}
+              className='tech-badge px-6 py-3 bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300 rounded-lg font-medium text-lg whitespace-nowrap motion-safe:hover:scale-110 motion-safe:transition-transform cursor-pointer'
+              aria-label={`Search for ${tech.name}`}
             >
               {tech.name}
-            </span>
+            </button>
           ))}
         </div>
       </div>
@@ -126,18 +180,23 @@ export const CoreStrengths: FC = () => {
         style={{ maxWidth: '70vw', margin: '0 auto' }}
       >
         <div
-          className='carousel-track animate-scroll-left'
+          className={`carousel-track animate-scroll-left ${hoveredRow === 2 ? 'paused' : ''}`}
           aria-label='DevOps and tooling'
+          onMouseEnter={() => setHoveredRow(2)}
+          onMouseLeave={() => setHoveredRow(null)}
         >
           {[...devopsTech, ...devopsTech].map((tech, i) => (
-            <span
+            <button
               key={i}
-              className='tech-badge px-6 py-3 bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300 rounded-lg font-medium text-lg whitespace-nowrap'
+              onClick={() => navigate(getLocalizedPath(`/search?q=${encodeURIComponent(tech.name)}`))}
+              className='tech-badge px-6 py-3 bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300 rounded-lg font-medium text-lg whitespace-nowrap motion-safe:hover:scale-110 motion-safe:transition-transform cursor-pointer'
+              aria-label={`Search for ${tech.name}`}
             >
               {tech.name}
-            </span>
+            </button>
           ))}
         </div>
+      </div>
       </div>
     </section>
   );
