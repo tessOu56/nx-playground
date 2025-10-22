@@ -19,8 +19,9 @@ export const TechProfile: FC = () => {
     const checkHeaderDark = () => {
       const nav = document.querySelector('nav');
       if (nav) {
-        const isDark = nav.classList.contains('bg-gray-900') || 
-                      nav.style.backgroundColor?.includes('gray-900');
+        const isDark =
+          nav.classList.contains('bg-gray-900') ||
+          nav.style.backgroundColor?.includes('gray-900');
         setHeaderDark(isDark);
       }
     };
@@ -32,9 +33,9 @@ export const TechProfile: FC = () => {
     const observer = new MutationObserver(checkHeaderDark);
     const nav = document.querySelector('nav');
     if (nav) {
-      observer.observe(nav, { 
-        attributes: true, 
-        attributeFilter: ['class', 'style'] 
+      observer.observe(nav, {
+        attributes: true,
+        attributeFilter: ['class', 'style'],
       });
     }
 
@@ -54,11 +55,19 @@ export const TechProfile: FC = () => {
       data-header-dark='true'
       style={{
         paddingTop: headerDark ? '50px' : '0px',
-        minHeight: headerDark ? '100vh' : 'calc(100vh - 50px)'
+        minHeight: headerDark ? '100vh' : 'calc(100vh - 50px)',
       }}
     >
       {/* Background with CSS gradient placeholder */}
-      <div className='absolute inset-0 bg-gradient-to-br from-blue-600 via-purple-600 to-blue-600 dark:from-blue-800 dark:via-purple-800 dark:to-blue-800' />
+      <div 
+        className='absolute inset-0 bg-gradient-to-br from-blue-600 via-purple-600 to-blue-600 dark:from-blue-800 dark:via-purple-800 dark:to-blue-800' 
+        style={{
+          // Ensure dark background when header is in dark mode
+          background: headerDark 
+            ? 'linear-gradient(135deg, #1e3a8a 0%, #7c3aed 50%, #1e3a8a 100%)' 
+            : undefined
+        }}
+      />
 
       {/* Lorem-picsum background image - lazy loaded */}
       <img
@@ -70,7 +79,14 @@ export const TechProfile: FC = () => {
       />
 
       {/* Overlay for text readability */}
-      <div className='absolute inset-0 bg-black/30' style={{ zIndex: 2 }} />
+      <div 
+        className='absolute inset-0 bg-black/30' 
+        style={{ 
+          zIndex: 2,
+          // Adjust overlay opacity based on header state
+          backgroundColor: headerDark ? 'rgba(0, 0, 0, 0.5)' : 'rgba(0, 0, 0, 0.3)'
+        }} 
+      />
 
       <div
         className='relative container mx-auto px-4 py-20 md:py-32'
