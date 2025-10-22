@@ -24,9 +24,15 @@ const libsReadmeModules = import.meta.glob<string>(
   { query: '?raw', import: 'default', eager: false }
 );
 
-console.log('[README Loader] Found apps readmes:', Object.keys(appsReadmeModules).length);
+console.log(
+  '[README Loader] Found apps readmes:',
+  Object.keys(appsReadmeModules).length
+);
 console.log('[README Loader] Apps paths:', Object.keys(appsReadmeModules));
-console.log('[README Loader] Found libs readmes:', Object.keys(libsReadmeModules).length);
+console.log(
+  '[README Loader] Found libs readmes:',
+  Object.keys(libsReadmeModules).length
+);
 console.log('[README Loader] Libs paths:', Object.keys(libsReadmeModules));
 
 /**
@@ -74,7 +80,7 @@ export async function loadAppReadme(
   const filePath = `../../apps/${appId}/${fileName}`;
 
   console.log(`[README Loader] Loading app README: ${filePath}`);
-  
+
   const loader = appsReadmeModules[filePath];
   if (!loader) {
     const fallbackFile = locale === 'zh-TW' ? 'README.md' : 'README.zh-TW.md';
@@ -82,7 +88,9 @@ export async function loadAppReadme(
     const fallbackLoader = appsReadmeModules[fallbackPath];
 
     if (!fallbackLoader) {
-      console.warn(`README not found for app: ${appId}, tried: ${filePath}, ${fallbackPath}`);
+      console.warn(
+        `README not found for app: ${appId}, tried: ${filePath}, ${fallbackPath}`
+      );
       return null;
     }
 
@@ -113,7 +121,9 @@ export async function loadLibReadme(
     const fallbackLoader = libsReadmeModules[fallbackPath];
 
     if (!fallbackLoader) {
-      console.warn(`README not found for lib: ${libId}, tried: ${filePath}, ${fallbackPath}`);
+      console.warn(
+        `README not found for lib: ${libId}, tried: ${filePath}, ${fallbackPath}`
+      );
       return null;
     }
 

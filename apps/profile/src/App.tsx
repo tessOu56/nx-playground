@@ -1,7 +1,7 @@
 import { I18nProvider } from '@nx-playground/i18n';
 import { Navigate, Route, Routes } from 'react-router-dom';
 
-import { Layout } from './components/Layout';
+import { Layout } from './components/layout';
 import { AppsPage } from './features/apps';
 import { BlogListPage, BlogPostPage } from './features/blogs';
 import { AppDetailPage, LibDetailPage } from './features/detail';

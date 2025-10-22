@@ -2,9 +2,11 @@ import { Button } from '@nx-playground/ui-components';
 import { type ReactNode } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 
-import { useLocalizedNavigation } from '../lib/i18n/useLocalizedNavigation';
-import { siteConfig } from '../lib/siteConfig';
+import { useLocalizedNavigation } from '../../lib/i18n/useLocalizedNavigation';
+import { siteConfig } from '../../lib/siteConfig';
 
+import { useLayoutTranslation } from './hooks/useLayoutTranslation';
+import './i18n';
 import { LanguageSwitcher } from './LanguageSwitcher';
 
 interface LayoutProps {
@@ -15,6 +17,7 @@ export function Layout({ children }: LayoutProps) {
   const location = useLocation();
   const navigate = useNavigate();
   const { getLocalizedPath } = useLocalizedNavigation();
+  const { t } = useLayoutTranslation();
 
   const isActive = (path: string) => {
     const pathWithoutLocale = location.pathname.replace(/^\/(zh-TW|en)/, '');
@@ -44,28 +47,28 @@ export function Layout({ children }: LayoutProps) {
                   size='sm'
                   onClick={() => navigate(getLocalizedPath('/'))}
                 >
-                  Home
+                  {t('nav.home')}
                 </Button>
                 <Button
                   variant={isActive('/apps') ? 'default' : 'ghost'}
                   size='sm'
                   onClick={() => navigate(getLocalizedPath('/apps'))}
                 >
-                  Apps
+                  {t('nav.apps')}
                 </Button>
                 <Button
                   variant={isActive('/libs') ? 'default' : 'ghost'}
                   size='sm'
                   onClick={() => navigate(getLocalizedPath('/libs'))}
                 >
-                  Libs
+                  {t('nav.libs')}
                 </Button>
                 <Button
                   variant={isActive('/blogs') ? 'default' : 'ghost'}
                   size='sm'
                   onClick={() => navigate(getLocalizedPath('/blogs'))}
                 >
-                  搜尋
+                  {t('nav.search')}
                 </Button>
               </div>
             </div>
@@ -83,28 +86,28 @@ export function Layout({ children }: LayoutProps) {
               size='sm'
               onClick={() => navigate(getLocalizedPath('/'))}
             >
-              Home
+              {t('nav.home')}
             </Button>
             <Button
               variant={isActive('/apps') ? 'default' : 'ghost'}
               size='sm'
               onClick={() => navigate(getLocalizedPath('/apps'))}
             >
-              Apps
+              {t('nav.apps')}
             </Button>
             <Button
               variant={isActive('/libs') ? 'default' : 'ghost'}
               size='sm'
               onClick={() => navigate(getLocalizedPath('/libs'))}
             >
-              Libs
+              {t('nav.libs')}
             </Button>
             <Button
-              variant={isActive('/blog') ? 'default' : 'ghost'}
+              variant={isActive('/blogs') ? 'default' : 'ghost'}
               size='sm'
-              onClick={() => navigate(getLocalizedPath('/blog'))}
+              onClick={() => navigate(getLocalizedPath('/blogs'))}
             >
-              搜尋
+              {t('nav.search')}
             </Button>
           </div>
         </div>
