@@ -78,11 +78,22 @@ export const TechTimeline: FC = () => {
   // Scroll to next section
   const scrollToNext = (fromIndex: number) => {
     const timeline = timelineRef.current;
-    if (!timeline) return;
+    if (!timeline) {
+      console.log('Timeline ref is null');
+      return;
+    }
 
     const sectionHeight = window.innerHeight;
     const nextSection = fromIndex + 1;
     const maxSections = featured.length + (others.length > 0 ? 1 : 0);
+
+    console.log('Scroll to next:', {
+      fromIndex,
+      nextSection,
+      maxSections,
+      scrollTo: nextSection * sectionHeight,
+      currentScrollTop: timeline.scrollTop,
+    });
 
     if (nextSection < maxSections) {
       timeline.scrollTo({
@@ -111,9 +122,9 @@ export const TechTimeline: FC = () => {
   return (
     <div
       ref={timelineRef}
-      className='timeline-container overflow-y-scroll snap-y snap-mandatory'
+      className='timeline-container overflow-y-auto snap-y snap-mandatory'
       style={{
-        height: `${(featured.length + (others.length > 0 ? 1 : 0)) * 100}vh`,
+        height: '100vh',
       }}
       role='region'
       aria-label='Tech Journey Timeline'
