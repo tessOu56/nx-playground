@@ -10,31 +10,58 @@ import html from 'remark-html';
 import type { ProjectSpec } from '../types/projectData';
 
 import type { SupportedLocale } from './i18n/LocaleRouter';
+import { APP_IDS, LIB_IDS } from './projectList';
 
 /**
- * 動態載入所有 Spec 檔案
- * Vite glob 從 project root 開始，所以 ../../ 會到 workspace root
+ * Fetch Spec 檔案
+ * 由於 Vite glob 無法跨越專案 root，改用 fetch API
  */
-const specsModules = import.meta.glob('../../specs/**/*.md', {
-  query: '?raw',
-  import: 'default',
-  eager: true,
-});
+async function fetchSpec(
+  type: 'apps' | 'libs',
+  id: string,
+  locale: SupportedLocale
+): Promise<string | null> {
+  const fileName = locale === 'zh-TW' ? 'zh-TW.md' : 'en.md';
+  const url = `/specs/${type}/${id}/${fileName}`;
 
-console.log('[Spec Loader] Found specs:', Object.keys(specsModules).length);
-console.log('[Spec Loader] Spec paths:', Object.keys(specsModules));
+  console.log(`[Spec Loader] Fetching: ${url}`);
+
+  try {
+    const response = await fetch(url);
+    if (!response.ok) {
+      const fallbackFile = locale === 'zh-TW' ? 'en.md' : 'zh-TW.md';
+      const fallbackUrl = `/specs/${type}/${id}/${fallbackFile}`;
+      console.log(`[Spec Loader] Trying fallback: ${fallbackUrl}`);
+
+      const fallbackResponse = await fetch(fallbackUrl);
+      if (!fallbackResponse.ok) {
+        return null;
+      }
+      return await fallbackResponse.text();
+    }
+    return await response.text();
+  } catch (error) {
+    console.error(`Error fetching spec for ${type}/${id}:`, error);
+    return null;
+  }
+}
 
 /**
  * 解析 Spec 檔案
  */
-async function parseSpec(filePath: string, content: string): Promise<ProjectSpec | null> {
+async function parseSpec(
+  filePath: string,
+  content: string
+): Promise<ProjectSpec | null> {
   try {
     const { data, content: markdownContent } = matter(content);
 
     // 轉換 Markdown 為 HTML（可選）
     let htmlContent: string | undefined;
     if (markdownContent.trim()) {
-      const processedContent = await remark().use(html).process(markdownContent);
+      const processedContent = await remark()
+        .use(html)
+        .process(markdownContent);
       htmlContent = processedContent.toString();
     }
 
@@ -49,7 +76,8 @@ async function parseSpec(filePath: string, content: string): Promise<ProjectSpec
       highlights: data.highlights ?? [],
       useCases: data.useCases,
       targetAudience: data.targetAudience,
-      specLastUpdated: data.lastUpdated ?? new Date().toISOString().split('T')[0],
+      specLastUpdated:
+        data.lastUpdated ?? new Date().toISOString().split('T')[0],
       lastSync: data.lastSync,
       reviewer: data.reviewer,
       reviewedAt: data.reviewedAt,
@@ -75,28 +103,11 @@ export async function loadAppSpec(
   appId: string,
   locale: SupportedLocale = 'en'
 ): Promise<ProjectSpec | null> {
+  const content = await fetchSpec('apps', appId, locale);
+  if (!content) return null;
+
   const fileName = locale === 'zh-TW' ? 'zh-TW.md' : 'en.md';
-  const filePath = `../../specs/apps/${appId}/${fileName}`;
-
-  console.log(`[Spec Loader] Loading app spec: ${filePath}`);
-
-  const loader = specsModules[filePath];
-  if (!loader) {
-    const fallbackFile = locale === 'zh-TW' ? 'en.md' : 'zh-TW.md';
-    const fallbackPath = `../../specs/apps/${appId}/${fallbackFile}`;
-    const fallbackLoader = specsModules[fallbackPath];
-
-    if (!fallbackLoader) {
-      console.log(`Spec not found for app: ${appId}, tried: ${filePath}, ${fallbackPath}`);
-      return null;
-    }
-
-    const content = await fallbackLoader();
-    return parseSpec(fallbackPath, content);
-  }
-
-  const content = await loader();
-  return parseSpec(filePath, content);
+  return parseSpec(`/specs/apps/${appId}/${fileName}`, content);
 }
 
 /**
@@ -106,28 +117,11 @@ export async function loadLibSpec(
   libId: string,
   locale: SupportedLocale = 'en'
 ): Promise<ProjectSpec | null> {
+  const content = await fetchSpec('libs', libId, locale);
+  if (!content) return null;
+
   const fileName = locale === 'zh-TW' ? 'zh-TW.md' : 'en.md';
-  const filePath = `../../specs/libs/${libId}/${fileName}`;
-
-  console.log(`[Spec Loader] Loading lib spec: ${filePath}`);
-
-  const loader = specsModules[filePath];
-  if (!loader) {
-    const fallbackFile = locale === 'zh-TW' ? 'en.md' : 'zh-TW.md';
-    const fallbackPath = `../../specs/libs/${libId}/${fallbackFile}`;
-    const fallbackLoader = specsModules[fallbackPath];
-
-    if (!fallbackLoader) {
-      console.log(`Spec not found for lib: ${libId}, tried: ${filePath}, ${fallbackPath}`);
-      return null;
-    }
-
-    const content = await fallbackLoader();
-    return parseSpec(fallbackPath, content);
-  }
-
-  const content = await loader();
-  return parseSpec(filePath, content);
+  return parseSpec(`/specs/libs/${libId}/${fileName}`, content);
 }
 
 /**
@@ -165,24 +159,17 @@ export async function loadAllLibsSpecs(
   locale: SupportedLocale = 'en'
 ): Promise<ProjectSpec[]> {
   const specs: ProjectSpec[] = [];
-  const fileName = locale === 'zh-TW' ? 'zh-TW.md' : 'en.md';
 
-  for (const [path, loader] of Object.entries(specsModules)) {
-    // 只載入 libs/ 下的檔案
-    if (!path.includes('/specs/libs/')) continue;
-    if (!path.endsWith(fileName)) continue;
-
+  for (const libId of LIB_IDS) {
     try {
-      const content = await loader();
-      const spec = await parseSpec(path, content);
+      const spec = await loadLibSpec(libId, locale);
       if (spec?.id && spec.published) {
         specs.push(spec);
       }
-    } catch (_error) {
-      // Silent fail
+    } catch (error) {
+      console.warn(`Error loading spec for lib ${libId}:`, error);
     }
   }
 
   return specs.sort((a, b) => a.id.localeCompare(b.id));
 }
-
