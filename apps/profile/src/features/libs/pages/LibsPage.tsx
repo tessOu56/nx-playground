@@ -49,12 +49,14 @@ export const LibsPage: FC = () => {
       );
       // Also search by category (both original and translated)
       const categoryTranslated = ts(t, `categories.${lib.category}`);
-      const matchCategory = 
+      const matchCategory =
         lib.category.toLowerCase().includes(lowerSearch) ||
-        (categoryTranslated !== `categories.${lib.category}` && 
-         categoryTranslated.toLowerCase().includes(lowerSearch));
+        (categoryTranslated !== `categories.${lib.category}` &&
+          categoryTranslated.toLowerCase().includes(lowerSearch));
 
-      return matchName || matchDesc || matchShortDesc || matchTech || matchCategory;
+      return (
+        matchName || matchDesc || matchShortDesc || matchTech || matchCategory
+      );
     });
   }, [libs, searchTerm, t]);
 
