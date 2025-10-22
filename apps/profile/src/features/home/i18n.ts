@@ -4,7 +4,7 @@ import enHome from './locales/en/home.json';
 import zhTWHome from './locales/zh-TW/home.json';
 
 const i18n = createFeatureI18n({
-  namespace: 'profile-home',
+  namespace: 'home',
   resources: {
     'zh-TW': zhTWHome,
     en: enHome,
@@ -12,4 +12,3 @@ const i18n = createFeatureI18n({
 });
 
 export default i18n;
-

@@ -1,24 +1,31 @@
 {
   "hero": {
     "greeting": "Hi, I'm",
-    "name": "Tech Developer",
-    "title": "Full-Stack Developer & Nx Monorepo Specialist",
-    "subtitle": "Building scalable applications with React, Angular, Vue, and modern web technologies"
-  },
-  "about": {
-    "title": "About Me",
-    "description": "Passionate about building maintainable and scalable applications using monorepo architecture. Experienced in full-stack development with focus on modern frontend frameworks and enterprise-grade solutions."
+    "title": "Full-Stack Developer",
+    "subtitle": "Building Modern Web Applications",
+    "bio": "Passionate about clean code, scalable architecture, and innovative solutions",
+    "viewProjects": "View Projects",
+    "contactMe": "Contact Me"
   },
   "skills": {
-    "title": "Technical Skills",
-    "subtitle": "Technologies I work with in real projects",
-    "viewProject": "View Project",
-    "officialSite": "Official Website"
+    "title": "Tech Stack",
+    "subtitle": "Technologies and tools I work with",
+    "searchHint": "💡 Click any tech tag to search related documentation",
+    "categories": {
+      "frontend": "Frontend",
+      "backend": "Backend",
+      "devops": "DevOps",
+      "tools": "Tools"
+    }
   },
   "contact": {
     "title": "Get In Touch",
+    "subtitle": "Feel free to reach out for collaborations or just a friendly chat",
+    "email": "Email",
     "github": "GitHub",
-    "githubProfile": "GitHub Profile",
-    "viewGitHub": "View on GitHub"
+    "githubProfile": "Check out my open source projects",
+    "viewGitHub": "View on GitHub",
+    "linkedin": "LinkedIn",
+    "availability": "Availability"
   }
 }

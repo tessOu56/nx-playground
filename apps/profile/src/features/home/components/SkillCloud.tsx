@@ -1,13 +1,12 @@
-import { useTranslation } from '@nx-playground/i18n';
 import { techCategories, techStack } from '@nx-playground/tech-stack-data';
 import { type FC, useMemo } from 'react';
 
 import { TechTag } from '../../../components/TechTag';
 import { useHomeTranslation } from '../hooks/useHomeTranslation';
+import '../i18n';
 
 export const SkillCloud: FC = () => {
-  const { t } = useHomeTranslation();
-  const { i18n } = useTranslation();
+  const { t, i18n } = useHomeTranslation();
   const currentLang = i18n.language as 'zh-TW' | 'en';
 
   const groupedTech = useMemo(() => {
@@ -27,10 +26,10 @@ export const SkillCloud: FC = () => {
         {/* Header */}
         <div className='text-center mb-12'>
           <h2 className='text-4xl font-bold text-foreground mb-4'>
-            {String(t('skills.title'))}
+            {t('skills.title')}
           </h2>
           <p className='text-lg text-muted-foreground'>
-            {String(t('skills.subtitle'))}
+            {t('skills.subtitle')}
           </p>
         </div>
 
@@ -57,7 +56,7 @@ export const SkillCloud: FC = () => {
         {/* Info text */}
         <div className='mt-12 text-center'>
           <p className='text-sm text-muted-foreground'>
-            💡 點擊任一技術標籤，即可搜尋相關專案文件
+            {t('skills.searchHint')}
           </p>
         </div>
       </div>

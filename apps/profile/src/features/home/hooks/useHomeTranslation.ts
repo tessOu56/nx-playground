@@ -1,18 +1,25 @@
 import { createFeatureTranslation } from '@nx-playground/i18n';
 
-export const useHomeTranslation = createFeatureTranslation('profile-home', [
+export const useHomeTranslation = createFeatureTranslation('home', [
   'hero.greeting',
-  'hero.name',
   'hero.title',
   'hero.subtitle',
-  'about.title',
-  'about.description',
+  'hero.bio',
+  'hero.viewProjects',
+  'hero.contactMe',
   'skills.title',
   'skills.subtitle',
-  'skills.viewProject',
-  'skills.officialSite',
+  'skills.searchHint',
+  'skills.categories.frontend',
+  'skills.categories.backend',
+  'skills.categories.devops',
+  'skills.categories.tools',
   'contact.title',
+  'contact.subtitle',
+  'contact.email',
   'contact.github',
   'contact.githubProfile',
   'contact.viewGitHub',
+  'contact.linkedin',
+  'contact.availability',
 ]);
