@@ -145,69 +145,72 @@ export const ProjectsPage: FC = () => {
 
         {/* React Apps Section */}
         {shouldShowSection('react-apps') && (
-        <section id='react-apps' className='mb-16'>
-          <div className='mb-8'>
-            <h2 className='text-4xl font-bold text-gray-900 dark:text-white mb-2'>
-              React Applications
-            </h2>
-            <p className='text-lg text-gray-600 dark:text-gray-400'>
-              Production-ready React applications
-            </p>
-          </div>
-
-          {reactApps.length > 0 ? (
-            <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8'>
-              {reactApps.map(app => (
-                <ProjectCard
-                  key={app.id}
-                  project={app}
-                  type='app'
-                  onClick={() =>
-                    navigate(getLocalizedPath(`/projects/${app.id}`))
-                  }
-                />
-              ))}
+          <section id='react-apps' className='mb-16'>
+            <div className='mb-8'>
+              <h2 className='text-4xl font-bold text-gray-900 dark:text-white mb-2'>
+                React Applications
+              </h2>
+              <p className='text-lg text-gray-600 dark:text-gray-400'>
+                Production-ready React applications
+              </p>
             </div>
-          ) : !searchTerm ? null : (
-            <p className='text-center text-gray-600 dark:text-gray-400 py-8'>
-              {ts(t, 'noResults')}
-            </p>
-          )}
-        </section>
+
+            {reactApps.length > 0 ? (
+              <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8'>
+                {reactApps.map(app => (
+                  <ProjectCard
+                    key={app.id}
+                    project={app}
+                    type='app'
+                    onClick={() =>
+                      navigate(getLocalizedPath(`/projects/${app.id}`))
+                    }
+                  />
+                ))}
+              </div>
+            ) : (
+              <p className='text-center text-gray-600 dark:text-gray-400 py-8'>
+                No React applications found
+              </p>
+            )}
+          </section>
+        )}
 
         {/* React Libs Section */}
-        <section id='react-libs' className='mb-16'>
-          <div className='mb-8'>
-            <h2 className='text-4xl font-bold text-gray-900 dark:text-white mb-2'>
-              React Libraries
-            </h2>
-            <p className='text-lg text-gray-600 dark:text-gray-400'>
-              Reusable React components and utilities
-            </p>
-          </div>
-
-          {reactLibs.length > 0 ? (
-            <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6'>
-              {reactLibs.map(lib => (
-                <ProjectCard
-                  key={lib.id}
-                  project={lib}
-                  type='lib'
-                  onClick={() =>
-                    navigate(getLocalizedPath(`/projects/${lib.id}`))
-                  }
-                />
-              ))}
+        {shouldShowSection('react-libs') && (
+          <section id='react-libs' className='mb-16'>
+            <div className='mb-8'>
+              <h2 className='text-4xl font-bold text-gray-900 dark:text-white mb-2'>
+                React Libraries
+              </h2>
+              <p className='text-lg text-gray-600 dark:text-gray-400'>
+                Reusable React components and utilities
+              </p>
             </div>
-          ) : !searchTerm ? null : (
-            <p className='text-center text-gray-600 dark:text-gray-400 py-8'>
-              {ts(t, 'noResults')}
-            </p>
-          )}
-        </section>
+
+            {reactLibs.length > 0 ? (
+              <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6'>
+                {reactLibs.map(lib => (
+                  <ProjectCard
+                    key={lib.id}
+                    project={lib}
+                    type='lib'
+                    onClick={() =>
+                      navigate(getLocalizedPath(`/projects/${lib.id}`))
+                    }
+                  />
+                ))}
+              </div>
+            ) : (
+              <p className='text-center text-gray-600 dark:text-gray-400 py-8'>
+                No React libraries found
+              </p>
+            )}
+          </section>
+        )}
 
         {/* Other Framework Practice Section */}
-        {!searchTerm && otherFrameworkApps.length > 0 && (
+        {shouldShowSection('others') && otherFrameworkApps.length > 0 && (
           <section id='other-frameworks' className='mb-16'>
             <div className='mb-8'>
               <h2 className='text-4xl font-bold text-gray-900 dark:text-white mb-2'>
