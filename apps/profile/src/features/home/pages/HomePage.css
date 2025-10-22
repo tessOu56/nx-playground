@@ -1,0 +1,19 @@
+/* Home page snap scroll styles */
+
+/* Ensure sections snap correctly */
+.snap-start {
+  scroll-snap-align: start;
+}
+
+.snap-always {
+  scroll-snap-stop: always;
+}
+
+/* Respect reduced motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-snap-type: none !important;
+    scroll-behavior: auto !important;
+  }
+}
+

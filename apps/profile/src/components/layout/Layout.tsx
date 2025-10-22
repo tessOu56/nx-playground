@@ -240,9 +240,7 @@ export function Layout({ children }: LayoutProps) {
         </div>
       </nav>
 
-      <main className='flex-1'>
-        {children}
-      </main>
+      <main className='flex-1'>{children}</main>
 
       {/* Footer should be at the end of scroll, not sticky */}
       {!isHomePage && <Footer />}
