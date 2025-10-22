@@ -14,9 +14,9 @@ export const TechProfile: FC = () => {
   const currentLang = i18n.language as 'zh-TW' | 'en';
 
   const scrollToContact = () => {
-    document.getElementById('contact-section')?.scrollIntoView({ 
+    document.getElementById('contact-section')?.scrollIntoView({
       behavior: 'smooth',
-      block: 'start'
+      block: 'start',
     });
   };
 
@@ -24,9 +24,9 @@ export const TechProfile: FC = () => {
     <section className='relative overflow-hidden min-h-screen flex items-center'>
       {/* Background with CSS gradient placeholder */}
       <div className='absolute inset-0 bg-gradient-to-br from-blue-600 via-purple-600 to-blue-600 dark:from-blue-800 dark:via-purple-800 dark:to-blue-800' />
-      
+
       {/* Lorem-picsum background image - lazy loaded */}
-      <img 
+      <img
         src='https://picsum.photos/1920/1080?random=1'
         loading='lazy'
         decode='async'
@@ -34,11 +34,14 @@ export const TechProfile: FC = () => {
         className='absolute inset-0 w-full h-full object-cover opacity-20'
         style={{ zIndex: 1 }}
       />
-      
+
       {/* Overlay for text readability */}
       <div className='absolute inset-0 bg-black/30' style={{ zIndex: 2 }} />
 
-      <div className='relative container mx-auto px-4 py-20 md:py-32' style={{ zIndex: 3 }}>
+      <div
+        className='relative container mx-auto px-4 py-20 md:py-32'
+        style={{ zIndex: 3 }}
+      >
         <div className='max-w-4xl mx-auto text-center'>
           {/* Logo / Name */}
           <div className='mb-8'>
