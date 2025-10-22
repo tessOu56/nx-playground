@@ -24,19 +24,21 @@ async function fetchReadme(
   const fileName = locale === 'zh-TW' ? 'README.zh-TW.md' : 'README.md';
   const url = `/${type}/${id}/${fileName}`;
 
-
   try {
     const response = await fetch(url);
     if (!response.ok) {
-      const fallbackFile = locale === 'zh-TW' ? 'README.md' : 'README.zh-TW.md';
-      const fallbackUrl = `/${type}/${id}/${fallbackFile}`;
-
-      const fallbackResponse = await fetch(fallbackUrl);
-      if (!fallbackResponse.ok) {
-        console.warn(`README not found for ${type}/${id}`);
-        return null;
+      // If locale-specific README not found, fallback to default README.md
+      if (locale === 'zh-TW') {
+        const fallbackUrl = `/${type}/${id}/README.md`;
+        const fallbackResponse = await fetch(fallbackUrl);
+        if (!fallbackResponse.ok) {
+          console.warn(`README not found for ${type}/${id}`);
+          return null;
+        }
+        return await fallbackResponse.text();
       }
-      return await fallbackResponse.text();
+      console.warn(`README not found for ${type}/${id}`);
+      return null;
     }
     return await response.text();
   } catch (error) {

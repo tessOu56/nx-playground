@@ -24,18 +24,19 @@ async function fetchSpec(
   const fileName = locale === 'zh-TW' ? 'zh-TW.md' : 'en.md';
   const url = `/specs/${type}/${id}/${fileName}`;
 
-
   try {
     const response = await fetch(url);
     if (!response.ok) {
-      const fallbackFile = locale === 'zh-TW' ? 'en.md' : 'zh-TW.md';
-      const fallbackUrl = `/specs/${type}/${id}/${fallbackFile}`;
-
-      const fallbackResponse = await fetch(fallbackUrl);
-      if (!fallbackResponse.ok) {
-        return null;
+      // If locale-specific spec not found, fallback to en.md
+      if (locale === 'zh-TW') {
+        const fallbackUrl = `/specs/${type}/${id}/en.md`;
+        const fallbackResponse = await fetch(fallbackUrl);
+        if (!fallbackResponse.ok) {
+          return null;
+        }
+        return await fallbackResponse.text();
       }
-      return await fallbackResponse.text();
+      return null;
     }
     return await response.text();
   } catch (error) {
