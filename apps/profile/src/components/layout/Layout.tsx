@@ -75,8 +75,27 @@ export function Layout({ children }: LayoutProps) {
               </div>
             </div>
 
-            {/* Language Switcher */}
-            <div className='flex items-center'>
+            {/* Search Input & Controls */}
+            <div className='flex items-center gap-3'>
+              {/* Search Input */}
+              <div className='hidden md:block'>
+                <input
+                  type='search'
+                  placeholder='Ask AI about...'
+                  className='w-64 px-3 py-1.5 text-sm rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500'
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter') {
+                      const query = e.currentTarget.value;
+                      if (query.trim()) {
+                        navigate(getLocalizedPath(`/search?q=${encodeURIComponent(query)}`));
+                        e.currentTarget.value = '';
+                      }
+                    }
+                  }}
+                  aria-label='AI search'
+                />
+              </div>
+              
               <LanguageSwitcher />
             </div>
           </div>
