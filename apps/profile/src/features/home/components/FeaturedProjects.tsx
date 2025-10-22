@@ -12,7 +12,7 @@ export const FeaturedProjects: FC = () => {
   const { t, i18n } = useHomeTranslation();
   const { getLocalizedPath } = useLocalizedNavigation();
   const currentLocale = i18n.language as 'zh-TW' | 'en';
-  
+
   const { apps, loadApps } = useProjectsStore();
   const currentApps = apps[currentLocale];
 
@@ -141,4 +141,3 @@ export const FeaturedProjects: FC = () => {
     </section>
   );
 };
-
