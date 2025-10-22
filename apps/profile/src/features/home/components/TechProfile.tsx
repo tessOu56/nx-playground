@@ -1,11 +1,12 @@
-import { useTranslation } from '@nx-playground/i18n';
 import { type FC } from 'react';
 
 import { siteConfig } from '../../../lib/siteConfig';
 import { homeConfig } from '../data/homeConfig';
+import { useHomeTranslation } from '../hooks/useHomeTranslation';
+import '../i18n';
 
 export const TechProfile: FC = () => {
-  const { i18n } = useTranslation();
+  const { t, i18n } = useHomeTranslation();
   const currentLang = i18n.language as 'zh-TW' | 'en';
 
   return (

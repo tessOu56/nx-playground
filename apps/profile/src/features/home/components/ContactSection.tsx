@@ -3,6 +3,7 @@ import { type FC } from 'react';
 
 import { homeConfig } from '../data/homeConfig';
 import { useHomeTranslation } from '../hooks/useHomeTranslation';
+import '../i18n';
 
 export const ContactSection: FC = () => {
   const { t } = useHomeTranslation();
