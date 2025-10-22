@@ -16,19 +16,23 @@ import { APP_IDS, LIB_IDS } from './projectList';
  * Fetch README 檔案
  * 由於 Vite glob 無法跨越專案 root，改用 fetch API
  */
-async function fetchReadme(type: 'apps' | 'libs', id: string, locale: SupportedLocale): Promise<string | null> {
+async function fetchReadme(
+  type: 'apps' | 'libs',
+  id: string,
+  locale: SupportedLocale
+): Promise<string | null> {
   const fileName = locale === 'zh-TW' ? 'README.zh-TW.md' : 'README.md';
   const url = `/${type}/${id}/${fileName}`;
-  
+
   console.log(`[README Loader] Fetching: ${url}`);
-  
+
   try {
     const response = await fetch(url);
     if (!response.ok) {
       const fallbackFile = locale === 'zh-TW' ? 'README.md' : 'README.zh-TW.md';
       const fallbackUrl = `/${type}/${id}/${fallbackFile}`;
       console.log(`[README Loader] Trying fallback: ${fallbackUrl}`);
-      
+
       const fallbackResponse = await fetch(fallbackUrl);
       if (!fallbackResponse.ok) {
         console.warn(`README not found for ${type}/${id}`);
@@ -86,7 +90,7 @@ export async function loadAppReadme(
 ): Promise<ProjectReadme | null> {
   const content = await fetchReadme('apps', appId, locale);
   if (!content) return null;
-  
+
   const fileName = locale === 'zh-TW' ? 'README.zh-TW.md' : 'README.md';
   return parseReadme(`/apps/${appId}/${fileName}`, content);
 }
@@ -100,7 +104,7 @@ export async function loadLibReadme(
 ): Promise<ProjectReadme | null> {
   const content = await fetchReadme('libs', libId, locale);
   if (!content) return null;
-  
+
   const fileName = locale === 'zh-TW' ? 'README.zh-TW.md' : 'README.md';
   return parseReadme(`/libs/${libId}/${fileName}`, content);
 }
@@ -113,14 +117,16 @@ export async function loadAllAppsReadmes(
 ): Promise<ProjectReadme[]> {
   console.log(`[README Loader] loadAllAppsReadmes for locale: ${locale}`);
   console.log(`[README Loader] Loading ${APP_IDS.length} apps`);
-  
+
   const readmes: ProjectReadme[] = [];
 
   for (const appId of APP_IDS) {
     try {
       const readme = await loadAppReadme(appId, locale);
       if (readme?.id) {
-        console.log(`[README Loader] Loaded app: ${readme.id} - ${readme.name}`);
+        console.log(
+          `[README Loader] Loaded app: ${readme.id} - ${readme.name}`
+        );
         readmes.push(readme);
       }
     } catch (error) {
@@ -140,14 +146,16 @@ export async function loadAllLibsReadmes(
 ): Promise<ProjectReadme[]> {
   console.log(`[README Loader] loadAllLibsReadmes for locale: ${locale}`);
   console.log(`[README Loader] Loading ${LIB_IDS.length} libs`);
-  
+
   const readmes: ProjectReadme[] = [];
 
   for (const libId of LIB_IDS) {
     try {
       const readme = await loadLibReadme(libId, locale);
       if (readme?.id) {
-        console.log(`[README Loader] Loaded lib: ${readme.id} - ${readme.name}`);
+        console.log(
+          `[README Loader] Loaded lib: ${readme.id} - ${readme.name}`
+        );
         readmes.push(readme);
       }
     } catch (error) {
