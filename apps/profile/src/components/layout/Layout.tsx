@@ -34,10 +34,10 @@ export function Layout({ children }: LayoutProps) {
   // Scroll progress indicator with RAF throttling
   useEffect(() => {
     let rafId = 0;
-    
+
     const handleScroll = () => {
       if (rafId) return;
-      
+
       rafId = requestAnimationFrame(() => {
         const windowHeight =
           document.documentElement.scrollHeight - window.innerHeight;
@@ -101,12 +101,12 @@ export function Layout({ children }: LayoutProps) {
           aria-label='Page scroll progress'
         />
         <div className='container mx-auto px-4 sm:px-6 lg:px-8'>
-          <div className='flex h-16 items-center justify-between'>
+          <div className='flex items-center justify-between' style={{ height: '50px' }}>
             {/* Logo and Navigation */}
             <div className='flex items-center gap-8'>
               <Link to={getLocalizedPath('/')} className='flex-shrink-0'>
-                <h1 className='text-2xl font-bold'>
-                  <span className='bg-gradient-to-r from-blue-600 via-purple-600 to-blue-600 dark:from-blue-400 dark:via-purple-400 dark:to-blue-400 bg-clip-text text-transparent'>
+                <h1 className='text-xl font-bold'>
+                  <span className={headerDark ? 'text-white' : 'bg-gradient-to-r from-blue-600 via-purple-600 to-blue-600 dark:from-blue-400 dark:via-purple-400 dark:to-blue-400 bg-clip-text text-transparent'}>
                     {siteConfig.siteName}
                   </span>
                 </h1>
@@ -116,6 +116,7 @@ export function Layout({ children }: LayoutProps) {
                   variant={isActive('/') ? 'default' : 'ghost'}
                   size='sm'
                   onClick={() => navigate(getLocalizedPath('/'))}
+                  className={headerDark ? 'text-white hover:bg-white/20' : ''}
                 >
                   {String(t('nav.home'))}
                 </Button>
@@ -123,6 +124,7 @@ export function Layout({ children }: LayoutProps) {
                   variant={isActive('/projects') ? 'default' : 'ghost'}
                   size='sm'
                   onClick={() => navigate(getLocalizedPath('/projects'))}
+                  className={headerDark ? 'text-white hover:bg-white/20' : ''}
                 >
                   {String(t('nav.projects'))}
                 </Button>
@@ -130,6 +132,7 @@ export function Layout({ children }: LayoutProps) {
                   variant={isActive('/blogs') ? 'default' : 'ghost'}
                   size='sm'
                   onClick={() => navigate(getLocalizedPath('/blogs'))}
+                  className={headerDark ? 'text-white hover:bg-white/20' : ''}
                 >
                   {String(t('nav.blogs'))}
                 </Button>
@@ -143,7 +146,11 @@ export function Layout({ children }: LayoutProps) {
                 <input
                   type='search'
                   placeholder='Ask AI about...'
-                  className='w-64 px-3 py-1.5 text-sm rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500'
+                  className={`w-64 px-3 py-1.5 text-sm rounded-lg border focus:outline-none focus:ring-1 focus:ring-blue-500 ${
+                    headerDark
+                      ? 'bg-white/20 border-white/30 text-white placeholder-white/70'
+                      : 'border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400'
+                  }`}
                   onKeyDown={e => {
                     if (e.key === 'Enter') {
                       const query = e.currentTarget.value;
