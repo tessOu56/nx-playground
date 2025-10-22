@@ -5,25 +5,48 @@ import './CoreStrengths.css';
 
 export const CoreStrengths: FC = () => {
   // Categorize tech stack
-  const frontendTech = techStack.filter(t => 
-    t.category === 'frontend' || 
-    ['React', 'Vue', 'Angular', 'TypeScript', 'Vite', 'Next.js', 'Tailwind', 'CSS'].some(name => t.name.includes(name))
+  const frontendTech = techStack.filter(
+    t =>
+      t.category === 'frontend' ||
+      [
+        'React',
+        'Vue',
+        'Angular',
+        'TypeScript',
+        'Vite',
+        'Next.js',
+        'Tailwind',
+        'CSS',
+      ].some(name => t.name.includes(name))
   );
 
-  const backendTech = techStack.filter(t => 
-    t.category === 'backend' ||
-    ['Node', 'Express', 'NestJS', 'PostgreSQL', 'MongoDB', 'GraphQL', 'Prisma'].some(name => t.name.includes(name))
+  const backendTech = techStack.filter(
+    t =>
+      t.category === 'backend' ||
+      [
+        'Node',
+        'Express',
+        'NestJS',
+        'PostgreSQL',
+        'MongoDB',
+        'GraphQL',
+        'Prisma',
+      ].some(name => t.name.includes(name))
   );
 
-  const devopsTech = techStack.filter(t => 
-    t.category === 'tools' || t.category === 'deployment' ||
-    ['Docker', 'Nx', 'GitHub', 'Vercel', 'Cloudflare', 'CI', 'pnpm'].some(name => t.name.includes(name))
+  const devopsTech = techStack.filter(
+    t =>
+      t.category === 'tools' ||
+      t.category === 'deployment' ||
+      ['Docker', 'Nx', 'GitHub', 'Vercel', 'Cloudflare', 'CI', 'pnpm'].some(
+        name => t.name.includes(name)
+      )
   );
 
   // Pause animations when not in viewport (performance optimization)
   useEffect(() => {
     const rows = document.querySelectorAll('.carousel-track');
-    
+
     const observer = new IntersectionObserver(
       entries => {
         entries.forEach(entry => {
@@ -43,7 +66,7 @@ export const CoreStrengths: FC = () => {
   }, []);
 
   return (
-    <section 
+    <section
       className='min-h-screen flex flex-col justify-center overflow-hidden bg-white dark:bg-gray-900 py-16'
       role='region'
       aria-label='Tech Stack Showcase'
@@ -58,8 +81,14 @@ export const CoreStrengths: FC = () => {
       </div>
 
       {/* Row 1: Frontend - Widest (90vw) */}
-      <div className='carousel-row mb-8' style={{ maxWidth: '90vw', margin: '0 auto' }}>
-        <div className='carousel-track animate-scroll-left' aria-label='Frontend technologies'>
+      <div
+        className='carousel-row mb-8'
+        style={{ maxWidth: '90vw', margin: '0 auto' }}
+      >
+        <div
+          className='carousel-track animate-scroll-left'
+          aria-label='Frontend technologies'
+        >
           {[...frontendTech, ...frontendTech].map((tech, i) => (
             <span
               key={i}
@@ -72,8 +101,14 @@ export const CoreStrengths: FC = () => {
       </div>
 
       {/* Row 2: Backend - Medium (80vw) */}
-      <div className='carousel-row mb-8' style={{ maxWidth: '80vw', margin: '0 auto' }}>
-        <div className='carousel-track animate-scroll-right' aria-label='Backend technologies'>
+      <div
+        className='carousel-row mb-8'
+        style={{ maxWidth: '80vw', margin: '0 auto' }}
+      >
+        <div
+          className='carousel-track animate-scroll-right'
+          aria-label='Backend technologies'
+        >
           {[...backendTech, ...backendTech].map((tech, i) => (
             <span
               key={i}
@@ -86,8 +121,14 @@ export const CoreStrengths: FC = () => {
       </div>
 
       {/* Row 3: DevOps - Narrowest (70vw) */}
-      <div className='carousel-row' style={{ maxWidth: '70vw', margin: '0 auto' }}>
-        <div className='carousel-track animate-scroll-left' aria-label='DevOps and tooling'>
+      <div
+        className='carousel-row'
+        style={{ maxWidth: '70vw', margin: '0 auto' }}
+      >
+        <div
+          className='carousel-track animate-scroll-left'
+          aria-label='DevOps and tooling'
+        >
           {[...devopsTech, ...devopsTech].map((tech, i) => (
             <span
               key={i}

@@ -45,10 +45,9 @@
   .carousel-track {
     animation: none !important;
   }
-  
+
   .carousel-track.animate-scroll-left,
   .carousel-track.animate-scroll-right {
     animation: none !important;
   }
 }
-

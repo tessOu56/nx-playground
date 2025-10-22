@@ -20,6 +20,7 @@ export function Layout({ children }: LayoutProps) {
   const { getLocalizedPath } = useLocalizedNavigation();
   const { t } = useLayoutTranslation();
   const [scrollProgress, setScrollProgress] = useState(0);
+  const [headerDark, setHeaderDark] = useState(false);
 
   const isActive = (path: string) => {
     const pathWithoutLocale = location.pathname.replace(/^\/(zh-TW|en)/, '');
@@ -30,6 +31,7 @@ export function Layout({ children }: LayoutProps) {
     return pathWithoutLocale.startsWith(path);
   };
 
+  // Scroll progress indicator
   useEffect(() => {
     const handleScroll = () => {
       const windowHeight =
@@ -43,10 +45,39 @@ export function Layout({ children }: LayoutProps) {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  // Adaptive header theme using sentinel pattern
+  useEffect(() => {
+    const darkSections = document.querySelectorAll('[data-header-dark="true"]');
+    
+    const observer = new IntersectionObserver(
+      entries => {
+        let anyDarkVisible = false;
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            anyDarkVisible = true;
+          }
+        });
+        setHeaderDark(anyDarkVisible);
+      },
+      {
+        rootMargin: '-80px 0px 0px 0px',
+        threshold: 0
+      }
+    );
+
+    darkSections.forEach(section => observer.observe(section));
+
+    return () => observer.disconnect();
+  }, [location.pathname]);
+
   return (
     <div className='min-h-screen flex flex-col bg-background'>
-      {/* Navigation with backdrop blur */}
-      <nav className='sticky top-0 z-50 w-full border-b bg-background/80 backdrop-blur-sm'>
+      {/* Navigation with backdrop blur - adaptive theme */}
+      <nav className={`sticky top-0 z-50 w-full border-b backdrop-blur-sm transition-colors duration-300 ${
+        headerDark 
+          ? 'bg-gray-900/80 border-gray-700 text-white' 
+          : 'bg-background/80 border-border'
+      }`}>
         {/* Progress Indicator */}
         <div
           className='absolute top-0 left-0 h-1 bg-gradient-to-r from-blue-600 to-purple-600 transition-all duration-300 ease-out'

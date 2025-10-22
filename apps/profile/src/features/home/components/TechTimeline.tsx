@@ -93,6 +93,7 @@ export const TechTimeline: FC = () => {
             }
           }}
           role='button'
+          data-header-dark={index % 2 !== 0 ? 'true' : undefined}
           style={{
             background:
               index % 2 === 0
@@ -193,7 +194,10 @@ export const TechTimeline: FC = () => {
 
       {/* Others: Summary screen */}
       {others.length > 0 && (
-        <article className='snap-start snap-always min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-900 to-gray-800 relative'>
+        <article 
+          className='snap-start snap-always min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-900 to-gray-800 relative'
+          data-header-dark='true'
+        >
           <div className='container mx-auto px-4 text-center'>
             <h2 className='text-5xl font-bold text-white mb-12'>Earlier Years</h2>
             <div className='grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto'>
@@ -237,7 +241,10 @@ export const TechTimeline: FC = () => {
       )}
 
       {/* Final CTA */}
-      <div className='snap-start snap-always min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-600 to-purple-600'>
+      <div 
+        className='snap-start snap-always min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-600 to-purple-600'
+        data-header-dark='true'
+      >
         <div className='text-center text-white'>
           <h2 className='text-5xl font-bold mb-6'>Explore All Blog Posts</h2>
           <p className='text-xl mb-10 opacity-90'>
