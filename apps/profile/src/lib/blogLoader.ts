@@ -95,13 +95,13 @@ export async function loadAllBlogs(
   // Hardcoded blog slugs for now
   // TODO: Generate this list dynamically or from a manifest file
   const blogSlugs = [
-    '2019-tech-review',
-    '2020-react-journey',
-    '2021-fullstack-evolution',
-    '2022-typescript-mastery',
-    '2023-monorepo-adventure',
-    '2024-architecture-patterns',
     '2025-nx-deep-dive',
+    '2024-architecture-patterns',
+    '2023-monorepo-adventure',
+    '2022-typescript-mastery',
+    '2021-fullstack-evolution',
+    '2020-react-journey',
+    '2019-tech-review',
   ];
 
   const blogs: BlogPost[] = [];
