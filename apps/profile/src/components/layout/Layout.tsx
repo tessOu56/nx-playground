@@ -116,7 +116,7 @@ export function Layout({ children }: LayoutProps) {
                   variant={isActive('/') ? 'default' : 'ghost'}
                   size='sm'
                   onClick={() => navigate(getLocalizedPath('/'))}
-                  className={headerDark ? 'text-white hover:bg-white/20' : ''}
+                  style={headerDark ? { color: 'white', background: 'rgba(255,255,255,0.1)' } : undefined}
                 >
                   {String(t('nav.home'))}
                 </Button>
@@ -124,7 +124,7 @@ export function Layout({ children }: LayoutProps) {
                   variant={isActive('/projects') ? 'default' : 'ghost'}
                   size='sm'
                   onClick={() => navigate(getLocalizedPath('/projects'))}
-                  className={headerDark ? 'text-white hover:bg-white/20' : ''}
+                  style={headerDark ? { color: 'white', background: 'rgba(255,255,255,0.1)' } : undefined}
                 >
                   {String(t('nav.projects'))}
                 </Button>
@@ -132,7 +132,7 @@ export function Layout({ children }: LayoutProps) {
                   variant={isActive('/blogs') ? 'default' : 'ghost'}
                   size='sm'
                   onClick={() => navigate(getLocalizedPath('/blogs'))}
-                  className={headerDark ? 'text-white hover:bg-white/20' : ''}
+                  style={headerDark ? { color: 'white', background: 'rgba(255,255,255,0.1)' } : undefined}
                 >
                   {String(t('nav.blogs'))}
                 </Button>
@@ -178,6 +178,7 @@ export function Layout({ children }: LayoutProps) {
               variant={isActive('/') ? 'default' : 'ghost'}
               size='sm'
               onClick={() => navigate(getLocalizedPath('/'))}
+              style={headerDark ? { color: 'white', background: 'rgba(255,255,255,0.1)' } : undefined}
             >
               {String(t('nav.home'))}
             </Button>
@@ -185,6 +186,7 @@ export function Layout({ children }: LayoutProps) {
               variant={isActive('/projects') ? 'default' : 'ghost'}
               size='sm'
               onClick={() => navigate(getLocalizedPath('/projects'))}
+              style={headerDark ? { color: 'white', background: 'rgba(255,255,255,0.1)' } : undefined}
             >
               {String(t('nav.projects'))}
             </Button>
@@ -192,6 +194,7 @@ export function Layout({ children }: LayoutProps) {
               variant={isActive('/blogs') ? 'default' : 'ghost'}
               size='sm'
               onClick={() => navigate(getLocalizedPath('/blogs'))}
+              style={headerDark ? { color: 'white', background: 'rgba(255,255,255,0.1)' } : undefined}
             >
               {String(t('nav.blogs'))}
             </Button>
