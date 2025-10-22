@@ -1,0 +1,43 @@
+---
+id: 2023-monorepo-adventure
+slug: 2023-monorepo-adventure
+title: Monorepo Adventure with Nx in 2023
+year: 2023
+publishDate: 2023-08-20
+excerpt: Diving into Nx monorepo architecture and managing multiple projects efficiently
+techStack:
+  - Nx
+  - TypeScript
+  - pnpm
+  - Monorepo
+tags:
+  - nx
+  - monorepo
+  - architecture
+coverImage: https://picsum.photos/seed/2023-nx/800/400
+---
+
+# Monorepo Adventure with Nx in 2023
+
+## Introduction
+
+2023 was the year I fully embraced monorepo architecture using Nx. This powerful tool transformed how I manage multiple projects.
+
+## Key Learnings
+
+### Nx Workspace Structure
+- Applications in `apps/`
+- Shared libraries in `libs/`
+- Centralized configuration
+- Dependency graph visualization
+
+### Benefits
+- Code sharing across projects
+- Consistent tooling and standards
+- Efficient caching and builds
+- Easier refactoring
+
+## Conclusion
+
+Nx monorepo has become an essential part of my development workflow.
+

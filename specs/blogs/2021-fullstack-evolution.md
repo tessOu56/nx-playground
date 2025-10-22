@@ -1,0 +1,23 @@
+---
+id: 2021-fullstack-evolution
+slug: 2021-fullstack-evolution
+title: Full-Stack Evolution in 2021
+year: 2021
+publishDate: 2021-07-10
+excerpt: Expanding from frontend to full-stack development with Node.js and databases
+techStack:
+  - React
+  - Node.js
+  - PostgreSQL
+  - REST API
+tags:
+  - fullstack
+  - backend
+  - database
+coverImage: https://picsum.photos/seed/2021-fullstack/800/400
+---
+
+# Full-Stack Evolution in 2021
+
+My journey from frontend specialist to full-stack developer.
+
