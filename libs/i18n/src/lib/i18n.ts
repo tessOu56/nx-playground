@@ -20,13 +20,13 @@ export type SupportedLanguage = keyof typeof SUPPORTED_LANGUAGES;
 export const DEFAULT_LANGUAGE: SupportedLanguage =
   (typeof process !== 'undefined' &&
     (process.env.NEXT_PUBLIC_DEFAULT_LANGUAGE as SupportedLanguage)) ||
-  'zh-TW';
+  'en';
 
 // Define fallback language (支援環境變數)
 export const FALLBACK_LANGUAGE: SupportedLanguage =
   (typeof process !== 'undefined' &&
     (process.env.NEXT_PUBLIC_FALLBACK_LANGUAGE as SupportedLanguage)) ||
-  'en';
+  'zh-TW';
 
 // Configure i18next
 i18n
