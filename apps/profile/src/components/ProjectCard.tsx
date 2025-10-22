@@ -37,13 +37,13 @@ export const ProjectCard: FC<ProjectCardProps> = ({
       role={onClick ? 'button' : undefined}
       aria-label={`View ${project.name} details`}
     >
-      {/* Header - simplified (name + version only) */}
-      <div className='flex items-center justify-between mb-3'>
-        <h3 className='text-xl font-bold text-gray-900 dark:text-white line-clamp-1 flex-1 min-w-0'>
+      {/* Header - name with inline version badge */}
+      <div className='flex items-center gap-2 mb-3'>
+        <h3 className='text-xl font-bold text-gray-900 dark:text-white truncate flex-1 min-w-0'>
           {project.name}
         </h3>
         {project.version && (
-          <span className='text-xs text-gray-500 dark:text-gray-400 ml-2 whitespace-nowrap'>
+          <span className='px-2 py-0.5 bg-gray-200 dark:bg-gray-700 text-gray-600 dark:text-gray-400 rounded text-xs font-medium whitespace-nowrap flex-shrink-0'>
             v{project.version}
           </span>
         )}
