@@ -1,38 +1,16 @@
 {
-  "title": "技術文件搜尋",
-  "subtitle": "探索 NX Playground 的專案架構與技術細節",
-  "searchPlaceholder": "搜尋專案、技術或關鍵字...",
-  "noResults": "找不到相關文件",
-  "readMore": "查看詳情",
-  "readingTime": "閱讀時間",
+  "title": "部落格",
+  "subtitle": "每年的技術旅程與反思：我的工作經驗、學習與成長",
+  "searchPlaceholder": "搜尋部落格...",
+  "noResults": "找不到部落格",
+  "backToBlogs": "返回部落格",
+  "moreFrom": "更多來自",
+  "readingTime": "分鐘閱讀",
   "publishedOn": "發布於",
-  "updatedOn": "更新於",
-  "allTags": "所有標籤",
-  "filterByTag": "按標籤篩選",
-  "filterByCategory": "按分類篩選",
-  "categories": {
-    "apps": "應用程式",
-    "libs": "共享函式庫",
-    "all": "全部"
-  },
-  "tags": {
-    "all": "全部標籤"
-  },
-  "share": {
-    "title": "分享文件",
-    "copyLink": "複製連結",
-    "linkCopied": "連結已複製"
-  },
-  "toc": {
-    "title": "目錄"
-  },
-  "language": {
-    "switchTo": "切換到",
-    "zh-TW": "繁體中文",
-    "en": "English"
-  },
-  "fallbackNotice": "此文件暫無英文版本，正在顯示中文版本。",
-  "nav": {
-    "title": "搜尋"
-  }
+  "tags": "標籤",
+  "year": "年份",
+  "allYears": "全部",
+  "foundBlogs": "找到 {count} 篇部落格",
+  "tryAdjusting": "試試調整篩選條件或搜尋關鍵字",
+  "viewAllBlogs": "查看所有部落格文章"
 }

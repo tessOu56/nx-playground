@@ -1,38 +1,16 @@
 {
-  "title": "Documentation Search",
-  "subtitle": "Explore NX Playground's project architecture and technical details",
-  "searchPlaceholder": "Search projects, technologies, or keywords...",
-  "noResults": "No documents found",
-  "readMore": "View Details",
-  "readingTime": "Reading time",
+  "title": "Blog",
+  "subtitle": "Annual tech journey and reflections: My work experience, learning, and growth",
+  "searchPlaceholder": "Search blogs...",
+  "noResults": "No blogs found",
+  "backToBlogs": "Back to Blogs",
+  "moreFrom": "More from",
+  "readingTime": "min read",
   "publishedOn": "Published on",
-  "updatedOn": "Updated on",
-  "allTags": "All Tags",
-  "filterByTag": "Filter by tag",
-  "filterByCategory": "Filter by category",
-  "categories": {
-    "apps": "Applications",
-    "libs": "Shared Libraries",
-    "all": "All"
-  },
-  "tags": {
-    "all": "All Tags"
-  },
-  "share": {
-    "title": "Share Document",
-    "copyLink": "Copy Link",
-    "linkCopied": "Link Copied"
-  },
-  "toc": {
-    "title": "Table of Contents"
-  },
-  "language": {
-    "switchTo": "Switch to",
-    "zh-TW": "繁體中文",
-    "en": "English"
-  },
-  "fallbackNotice": "This document is not yet available in English. Showing Chinese version.",
-  "nav": {
-    "title": "Search"
-  }
+  "tags": "Tags",
+  "year": "Year",
+  "allYears": "All",
+  "foundBlogs": "Found {count} blog{plural}",
+  "tryAdjusting": "Try adjusting your filters or search query",
+  "viewAllBlogs": "View All Blog Posts"
 }
