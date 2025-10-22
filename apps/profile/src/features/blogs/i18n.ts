@@ -1,8 +1,9 @@
 import { createFeatureI18n } from '@nx-playground/i18n';
-import commonEn from '../../locales/en/common.json';
+
 import blogsEn from '../../locales/en/blogs.json';
-import commonZhTW from '../../locales/zh-TW/common.json';
+import commonEn from '../../locales/en/common.json';
 import blogsZhTW from '../../locales/zh-TW/blogs.json';
+import commonZhTW from '../../locales/zh-TW/common.json';
 
 const i18n = createFeatureI18n({
   namespace: 'blogs',
