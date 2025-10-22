@@ -38,7 +38,7 @@ export const ProjectCard: FC<ProjectCardProps> = ({
       aria-label={`View ${project.name} details`}
     >
       {/* Header - simplified (name + version only) */}
-      <div className='flex items-end justify-between mb-3'>
+      <div className='flex items-center justify-between mb-3'>
         <h3 className='text-xl font-bold text-gray-900 dark:text-white line-clamp-1 flex-1 min-w-0'>
           {project.name}
         </h3>
