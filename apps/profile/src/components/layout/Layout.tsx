@@ -31,18 +31,28 @@ export function Layout({ children }: LayoutProps) {
     return pathWithoutLocale.startsWith(path);
   };
 
-  // Scroll progress indicator
+  // Scroll progress indicator with RAF throttling
   useEffect(() => {
+    let rafId = 0;
+    
     const handleScroll = () => {
-      const windowHeight =
-        document.documentElement.scrollHeight - window.innerHeight;
-      const scrolled =
-        windowHeight > 0 ? (window.scrollY / windowHeight) * 100 : 0;
-      setScrollProgress(scrolled);
+      if (rafId) return;
+      
+      rafId = requestAnimationFrame(() => {
+        const windowHeight =
+          document.documentElement.scrollHeight - window.innerHeight;
+        const scrolled =
+          windowHeight > 0 ? (window.scrollY / windowHeight) * 100 : 0;
+        setScrollProgress(scrolled);
+        rafId = 0;
+      });
     };
 
     window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      if (rafId) cancelAnimationFrame(rafId);
+    };
   }, []);
 
   // Adaptive header theme using sentinel pattern

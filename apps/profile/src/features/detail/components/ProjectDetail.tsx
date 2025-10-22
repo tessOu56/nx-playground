@@ -16,7 +16,7 @@ export const ProjectDetail: FC<ProjectDetailProps> = ({ project, type }) => {
   const { getLocalizedPath } = useLocalizedNavigation();
   const [showAllVersions, setShowAllVersions] = useState(false);
 
-  const backPath = type === 'app' ? '/apps' : '/libs';
+  const backPath = '/projects';
   const backText = type === 'app' ? t('backToApps') : t('backToLibs');
 
   const displayedReleases = showAllVersions
