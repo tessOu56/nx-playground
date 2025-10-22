@@ -1,10 +1,8 @@
 import { type FC, useState, type FormEvent } from 'react';
 
 import { homeConfig } from '../data/homeConfig';
-import { useHomeTranslation } from '../hooks/useHomeTranslation';
 
 export const ContactSection: FC = () => {
-  const { t } = useHomeTranslation();
   const [email, setEmail] = useState('');
   const [message, setMessage] = useState('');
   const [submitted, setSubmitted] = useState(false);
