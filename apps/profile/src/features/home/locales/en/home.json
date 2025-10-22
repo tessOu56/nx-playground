@@ -1,31 +1,42 @@
 {
   "hero": {
-    "greeting": "Hi, I'm",
-    "title": "Full-Stack Developer",
-    "subtitle": "Building Modern Web Applications",
-    "bio": "Passionate about clean code, scalable architecture, and innovative solutions",
     "viewProjects": "View Projects",
     "contactMe": "Contact Me"
+  },
+  "strengths": {
+    "title": "Core Strengths",
+    "reactSpecialist": "React Specialist",
+    "reactSpecialistDesc": "React specialist with multi-framework experience",
+    "frontendArchitecture": "Frontend Architecture",
+    "frontendArchitectureDesc": "Frontend architecture design and tech trend research",
+    "modernTooling": "Modern Tooling",
+    "modernToolingDesc": "Hands-on with Monorepo, Design Systems, and modern toolchains",
+    "apiIntegration": "API Integration & Testing",
+    "apiIntegrationDesc": "API integration design with Mock testing practices"
+  },
+  "featured": {
+    "title": "Featured Projects",
+    "viewAll": "View All Projects",
+    "viewDetail": "View Details"
+  },
+  "experience": {
+    "title": "Experience & Milestones"
   },
   "skills": {
     "title": "Tech Stack",
     "subtitle": "Technologies and tools I work with",
-    "searchHint": "💡 Click any tech tag to search related documentation",
-    "categories": {
-      "frontend": "Frontend",
-      "backend": "Backend",
-      "devops": "DevOps",
-      "tools": "Tools"
-    }
+    "searchHint": "💡 Click any tech tag to search related documentation"
   },
   "contact": {
     "title": "Get In Touch",
     "subtitle": "Feel free to reach out for collaborations or just a friendly chat",
     "email": "Email",
+    "sendEmail": "Send Email",
     "github": "GitHub",
     "githubProfile": "Check out my open source projects",
     "viewGitHub": "View on GitHub",
     "linkedin": "LinkedIn",
+    "viewLinkedIn": "View on LinkedIn",
     "availability": "Availability"
   }
 }

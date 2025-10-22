@@ -1,31 +1,42 @@
 {
   "hero": {
-    "greeting": "嗨，我是",
-    "title": "全端工程師",
-    "subtitle": "打造現代化網頁應用",
-    "bio": "熱衷於乾淨的程式碼、可擴展的架構與創新的解決方案",
     "viewProjects": "查看專案",
     "contactMe": "聯絡我"
+  },
+  "strengths": {
+    "title": "核心優勢",
+    "reactSpecialist": "React 專精",
+    "reactSpecialistDesc": "React 專精，多框架實踐經驗",
+    "frontendArchitecture": "前端架構",
+    "frontendArchitectureDesc": "前端架構規劃與技術趨勢研究",
+    "modernTooling": "現代工具鏈",
+    "modernToolingDesc": "Monorepo、設計系統等現代工具鏈實踐",
+    "apiIntegration": "API 整合與測試",
+    "apiIntegrationDesc": "API 整合設計與 Mock 測試實踐"
+  },
+  "featured": {
+    "title": "精選專案",
+    "viewAll": "查看所有專案",
+    "viewDetail": "查看詳情"
+  },
+  "experience": {
+    "title": "經驗與里程碑"
   },
   "skills": {
     "title": "技術堆疊",
     "subtitle": "我使用的技術與工具",
-    "searchHint": "💡 點擊任一技術標籤，即可搜尋相關專案文件",
-    "categories": {
-      "frontend": "前端",
-      "backend": "後端",
-      "devops": "DevOps",
-      "tools": "工具"
-    }
+    "searchHint": "💡 點擊任一技術標籤，即可搜尋相關專案文件"
   },
   "contact": {
     "title": "聯絡方式",
     "subtitle": "歡迎與我聯繫，無論是合作機會或友好交流",
     "email": "電子郵件",
+    "sendEmail": "發送郵件",
     "github": "GitHub",
     "githubProfile": "查看我的開源專案",
     "viewGitHub": "前往 GitHub",
     "linkedin": "LinkedIn",
+    "viewLinkedIn": "前往 LinkedIn",
     "availability": "可聯絡時間"
   }
 }

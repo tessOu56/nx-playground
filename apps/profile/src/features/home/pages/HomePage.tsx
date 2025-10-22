@@ -1,23 +1,36 @@
 import { type FC } from 'react';
 
-import { ContactSection, SkillCloud, TechProfile } from '../components';
+import {
+  ContactSection,
+  CoreStrengths,
+  ExperienceTimeline,
+  FeaturedProjects,
+  SkillCloud,
+  TechProfile,
+} from '../components';
 
 export const HomePage: FC = () => {
   return (
     <div className='min-h-screen'>
-      {/* Hero Section */}
+      {/* 1. Hero Section */}
       <TechProfile />
-      
-      {/* Tech Skills Section */}
+
+      {/* 2. Core Strengths */}
+      <CoreStrengths />
+
+      {/* 3. Featured Projects */}
+      <FeaturedProjects />
+
+      {/* 4. Experience Timeline */}
+      <ExperienceTimeline />
+
+      {/* 5. Tech Stack */}
       <div className='border-t'>
         <SkillCloud />
       </div>
-      
-      {/* Contact Section */}
-      <div className='border-t bg-muted/30'>
-        <ContactSection />
-      </div>
+
+      {/* 6. Contact Section */}
+      <ContactSection />
     </div>
   );
 };
-
