@@ -170,7 +170,7 @@ export const TechTimeline: FC = () => {
             </button>
 
             {/* Scroll Hint */}
-            {index < timeline.length - 1 && (
+            {index < featured.length - 1 && (
               <div className='absolute bottom-8 left-1/2 -translate-x-1/2 motion-safe:animate-bounce'>
                 <svg
                   className='w-6 h-6'
