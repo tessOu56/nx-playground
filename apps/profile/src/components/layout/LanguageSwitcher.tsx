@@ -1,11 +1,29 @@
 import { Button } from '@nx-playground/ui-components';
 import { type FC } from 'react';
 
-import { type SupportedLocale } from '../lib/i18n';
-import { useLocalizedNavigation } from '../lib/i18n/useLocalizedNavigation';
+import { useLocation, useNavigate } from 'react-router-dom';
+
+import { type SupportedLocale } from '../../lib/i18n';
 
 export const LanguageSwitcher: FC = () => {
-  const { locale, changeLanguage } = useLocalizedNavigation();
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  const getCurrentLocale = (): SupportedLocale => {
+    const match = location.pathname.match(/^\/(zh-TW|en)/);
+    return (match?.[1] as SupportedLocale) ?? 'en';
+  };
+
+  const switchLanguage = (newLocale: SupportedLocale) => {
+    const currentLocale = getCurrentLocale();
+    const newPath = location.pathname.replace(
+      new RegExp(`^/${currentLocale}`),
+      `/${newLocale}`
+    );
+    navigate(newPath);
+  };
+
+  const locale = getCurrentLocale();
 
   const languages: { code: SupportedLocale; label: string }[] = [
     { code: 'zh-TW', label: '繁中' },
@@ -19,7 +37,7 @@ export const LanguageSwitcher: FC = () => {
           key={lang.code}
           variant={locale === lang.code ? 'default' : 'ghost'}
           size='sm'
-          onClick={() => changeLanguage(lang.code)}
+          onClick={() => switchLanguage(lang.code)}
         >
           {lang.label}
         </Button>
