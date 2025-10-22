@@ -71,7 +71,7 @@ export const CoreStrengths: FC = () => {
       role='region'
       aria-label='Tech Stack Showcase'
     >
-      <div className='text-center mb-12'>
+      <div className='text-center mb-16'>
         <h2 className='text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-4'>
           Tech Stack
         </h2>
@@ -82,7 +82,7 @@ export const CoreStrengths: FC = () => {
 
       {/* Row 1: Frontend - Widest (90vw) */}
       <div
-        className='carousel-row mb-8'
+        className='carousel-row mb-12'
         style={{ maxWidth: '90vw', margin: '0 auto' }}
       >
         <div
@@ -102,7 +102,7 @@ export const CoreStrengths: FC = () => {
 
       {/* Row 2: Backend - Medium (80vw) */}
       <div
-        className='carousel-row mb-8'
+        className='carousel-row mb-12'
         style={{ maxWidth: '80vw', margin: '0 auto' }}
       >
         <div
