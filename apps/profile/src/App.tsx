@@ -14,7 +14,7 @@ import { LocaleRouter } from './lib/i18n';
 
 function AppContent() {
   useScrollToTop();
-  
+
   return (
     <Routes>
       {/* Redirect root to default locale (en) */}
