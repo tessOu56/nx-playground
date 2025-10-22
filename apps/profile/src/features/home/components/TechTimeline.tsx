@@ -21,7 +21,8 @@ export const TechTimeline: FC = () => {
   const navigate = useNavigate();
   const { getLocalizedPath } = useLocalizedNavigation();
 
-  const [timeline, setTimeline] = useState<TimelineItem[]>([]);
+  const [featured, setFeatured] = useState<TimelineItem[]>([]);
+  const [others, setOthers] = useState<TimelineItem[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -42,7 +43,10 @@ export const TechTimeline: FC = () => {
             title: blog.title,
           }));
 
-        setTimeline(timelineData);
+        // Latest 3 years get full screens
+        setFeatured(timelineData.slice(0, 3));
+        // Remaining years in summary screen
+        setOthers(timelineData.slice(3));
       } catch (error) {
         console.error('Error loading timeline:', error);
       } finally {
@@ -65,18 +69,19 @@ export const TechTimeline: FC = () => {
     );
   }
 
-  if (timeline.length === 0) {
+  if (featured.length === 0 && others.length === 0) {
     return null;
   }
 
   return (
     <div
       className='overflow-y-scroll snap-y snap-mandatory'
-      style={{ height: `${timeline.length * 100}vh` }}
+      style={{ height: `${(featured.length + (others.length > 0 ? 1 : 0) + 1) * 100}vh` }}
       role='region'
       aria-label='Tech Journey Timeline'
     >
-      {timeline.map((item, index) => (
+      {/* Featured years: full screens */}
+      {featured.map((item, index) => (
         <article
           key={item.year}
           className='snap-start snap-always min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-50 to-white dark:from-gray-900 dark:to-gray-800 relative'
@@ -186,8 +191,53 @@ export const TechTimeline: FC = () => {
         </article>
       ))}
 
+      {/* Others: Summary screen */}
+      {others.length > 0 && (
+        <article className='snap-start snap-always min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-900 to-gray-800 relative'>
+          <div className='container mx-auto px-4 text-center'>
+            <h2 className='text-5xl font-bold text-white mb-12'>Earlier Years</h2>
+            <div className='grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto'>
+              {others.map(item => (
+                <button
+                  key={item.year}
+                  onClick={() => navigate(getLocalizedPath(`/blogs/${item.blogSlug}`))}
+                  className='bg-white/10 backdrop-blur-sm rounded-xl p-6 hover:bg-white/20 transition-all text-left'
+                  aria-label={`View ${item.year} blog: ${item.title}`}
+                >
+                  <div className='flex items-center gap-4 mb-3'>
+                    <span className='text-3xl font-bold text-white'>{item.year}</span>
+                    <div className='h-px flex-1 bg-white/30' />
+                  </div>
+                  <h3 className='text-xl font-semibold text-white mb-2 line-clamp-1'>
+                    {item.title}
+                  </h3>
+                  <p className='text-white/80 text-sm line-clamp-2 mb-3'>
+                    {item.milestone}
+                  </p>
+                  <div className='flex flex-wrap gap-2'>
+                    {item.tech.slice(0, 3).map(tech => (
+                      <span
+                        key={tech}
+                        className='px-2 py-1 bg-white/20 text-white text-xs rounded'
+                      >
+                        {tech}
+                      </span>
+                    ))}
+                    {item.tech.length > 3 && (
+                      <span className='px-2 py-1 bg-white/20 text-white text-xs rounded'>
+                        +{item.tech.length - 3}
+                      </span>
+                    )}
+                  </div>
+                </button>
+              ))}
+            </div>
+          </div>
+        </article>
+      )}
+
       {/* Final CTA */}
-      <div className='snap-start min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-600 to-purple-600'>
+      <div className='snap-start snap-always min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-600 to-purple-600'>
         <div className='text-center text-white'>
           <h2 className='text-5xl font-bold mb-6'>Explore All Blog Posts</h2>
           <p className='text-xl mb-10 opacity-90'>
