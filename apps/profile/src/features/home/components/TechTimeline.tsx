@@ -78,22 +78,11 @@ export const TechTimeline: FC = () => {
   // Scroll to next section
   const scrollToNext = (fromIndex: number) => {
     const timeline = timelineRef.current;
-    if (!timeline) {
-      console.log('Timeline ref is null');
-      return;
-    }
+    if (!timeline) return;
 
     const sectionHeight = window.innerHeight;
     const nextSection = fromIndex + 1;
     const maxSections = featured.length + (others.length > 0 ? 1 : 0);
-
-    console.log('Scroll to next:', {
-      fromIndex,
-      nextSection,
-      maxSections,
-      scrollTo: nextSection * sectionHeight,
-      currentScrollTop: timeline.scrollTop,
-    });
 
     if (nextSection < maxSections) {
       timeline.scrollTo({
