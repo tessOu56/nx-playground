@@ -1,0 +1,23 @@
+{
+  "title": "專案",
+  "subtitle": "使用現代框架建構的生產級應用程式和可重用函式庫",
+  "searchPlaceholder": "搜尋所有專案...",
+  "noResults": "找不到符合搜尋條件的專案",
+  "sections": {
+    "apps": "應用程式",
+    "appsDesc": "使用 React、Angular 和 Vue 建構的生產級應用程式",
+    "libs": "共用函式庫",
+    "libsDesc": "跨 monorepo 的可重用元件、hooks 和工具"
+  },
+  "stats": {
+    "totalProjects": "總專案數",
+    "applications": "應用程式",
+    "libraries": "函式庫",
+    "typescript": "TypeScript 覆蓋率"
+  },
+  "categories": {
+    "ui": "UI 與設計",
+    "data": "資料與狀態",
+    "utils": "工具與輔助"
+  }
+}

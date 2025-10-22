@@ -25,8 +25,8 @@ export const ContactSection: FC = () => {
   }, []);
 
   return (
-    <section 
-      id='contact-section' 
+    <section
+      id='contact-section'
       className='min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-600 via-purple-600 to-blue-600 dark:from-blue-900 dark:via-purple-900 dark:to-blue-900 relative overflow-hidden'
     >
       {/* Snowfall Effect */}

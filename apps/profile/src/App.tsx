@@ -3,11 +3,10 @@ import { Navigate, Route, Routes } from 'react-router-dom';
 
 import { Layout } from './components/layout';
 import { NotFoundPage } from './features/404';
-import { AppsPage } from './features/apps';
 import { BlogListPage, BlogPostPage } from './features/blogs';
 import { AppDetailPage, LibDetailPage } from './features/detail';
 import { HomePage } from './features/home';
-import { LibsPage } from './features/libs';
+import { ProjectsPage } from './features/projects';
 import { SearchPage } from './features/search';
 import { useScrollToTop } from './hooks/useScrollToTop';
 import { LocaleRouter } from './lib/i18n';
@@ -28,13 +27,16 @@ function AppContent() {
             <Layout>
               <Routes>
                 <Route path='/' element={<HomePage />} />
-                <Route path='/apps' element={<AppsPage />} />
-                <Route path='/apps/:appId' element={<AppDetailPage />} />
-                <Route path='/libs' element={<LibsPage />} />
-                <Route path='/libs/:libId' element={<LibDetailPage />} />
+                <Route path='/projects' element={<ProjectsPage />} />
+                <Route path='/projects/:projectId' element={<AppDetailPage />} />
                 <Route path='/blogs' element={<BlogListPage />} />
                 <Route path='/blogs/:slug' element={<BlogPostPage />} />
                 <Route path='/search' element={<SearchPage />} />
+                {/* Legacy redirects */}
+                <Route path='/apps' element={<Navigate to='/projects' replace />} />
+                <Route path='/libs' element={<Navigate to='/projects' replace />} />
+                <Route path='/apps/:appId' element={<Navigate to='/projects/:appId' replace />} />
+                <Route path='/libs/:libId' element={<Navigate to='/projects/:libId' replace />} />
                 <Route path='*' element={<NotFoundPage />} />
               </Routes>
             </Layout>

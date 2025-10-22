@@ -1,8 +1,7 @@
 {
   "nav": {
     "home": "Home",
-    "apps": "Apps",
-    "libs": "Libs",
+    "projects": "Projects",
     "blogs": "Blog"
   },
   "footer": {
