@@ -7,18 +7,19 @@ import type { LibData } from '../../../types/projectData';
 import { ProjectDetail } from '../components/ProjectDetail';
 
 export const LibDetailPage: FC = () => {
-  const { libId, locale } = useParams<{ libId: string; locale: string }>();
+  const { libId, projectId, locale } = useParams<{ libId?: string; projectId?: string; locale: string }>();
+  const id = projectId || libId;
   const currentLocale = (locale ?? 'en') as SupportedLocale;
   const [lib, setLib] = useState<LibData | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (!libId) return;
+    if (!id) return;
 
     const loadData = async () => {
       setLoading(true);
       try {
-        const data = await loadLib(libId, currentLocale);
+        const data = await loadLib(id, currentLocale);
         setLib(data);
       } catch (error) {
         console.error('Failed to load lib:', error);
@@ -29,7 +30,7 @@ export const LibDetailPage: FC = () => {
     };
 
     loadData();
-  }, [libId, currentLocale]);
+  }, [id, currentLocale]);
 
   if (loading) {
     return (
