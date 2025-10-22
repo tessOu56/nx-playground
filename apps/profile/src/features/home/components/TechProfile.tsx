@@ -1,4 +1,4 @@
-import { type FC, useEffect, useState } from 'react';
+import { type FC } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { useLocalizedNavigation } from '../../../lib/i18n/useLocalizedNavigation';
@@ -12,35 +12,6 @@ export const TechProfile: FC = () => {
   const { getLocalizedPath } = useLocalizedNavigation();
   const navigate = useNavigate();
   const currentLang = i18n.language as 'zh-TW' | 'en';
-  const [headerDark, setHeaderDark] = useState(false);
-
-  // Monitor header dark mode state
-  useEffect(() => {
-    const checkHeaderDark = () => {
-      const nav = document.querySelector('nav');
-      if (nav) {
-        const isDark =
-          nav.classList.contains('bg-gray-900') ||
-          nav.style.backgroundColor?.includes('gray-900');
-        setHeaderDark(isDark);
-      }
-    };
-
-    // Check initially
-    checkHeaderDark();
-
-    // Monitor for changes
-    const observer = new MutationObserver(checkHeaderDark);
-    const nav = document.querySelector('nav');
-    if (nav) {
-      observer.observe(nav, {
-        attributes: true,
-        attributeFilter: ['class', 'style'],
-      });
-    }
-
-    return () => observer.disconnect();
-  }, []);
 
   const scrollToContact = () => {
     document.getElementById('contact-section')?.scrollIntoView({

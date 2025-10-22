@@ -31,6 +31,9 @@ export function Layout({ children }: LayoutProps) {
     return pathWithoutLocale.startsWith(path);
   };
 
+  // Check if we're on home page
+  const isHomePage = isActive('/');
+
   // Scroll progress indicator with RAF throttling
   useEffect(() => {
     let rafId = 0;
@@ -85,7 +88,7 @@ export function Layout({ children }: LayoutProps) {
       {/* Navigation with backdrop blur - adaptive theme */}
       <nav
         className={`sticky top-0 z-50 w-full border-b backdrop-blur-sm transition-colors duration-300 ${
-          headerDark
+          headerDark && !isHomePage
             ? 'bg-gray-900/80 border-gray-700 text-white'
             : 'bg-background/80 border-border'
         }`}
@@ -106,7 +109,7 @@ export function Layout({ children }: LayoutProps) {
             <div className='flex items-center gap-8'>
               <Link to={getLocalizedPath('/')} className='flex-shrink-0'>
                 <h1 className='text-xl font-bold'>
-                  <span className={headerDark ? 'text-white' : 'bg-gradient-to-r from-blue-600 via-purple-600 to-blue-600 dark:from-blue-400 dark:via-purple-400 dark:to-blue-400 bg-clip-text text-transparent'}>
+                  <span className={headerDark && !isHomePage ? 'text-white' : 'bg-gradient-to-r from-blue-600 via-purple-600 to-blue-600 dark:from-blue-400 dark:via-purple-400 dark:to-blue-400 bg-clip-text text-transparent'}>
                     {siteConfig.siteName}
                   </span>
                 </h1>
@@ -116,7 +119,7 @@ export function Layout({ children }: LayoutProps) {
                   variant={isActive('/') ? 'default' : 'ghost'}
                   size='sm'
                   onClick={() => navigate(getLocalizedPath('/'))}
-                  style={headerDark ? { color: 'white', background: 'rgba(255,255,255,0.1)' } : undefined}
+                  style={headerDark && !isHomePage ? { color: 'white', background: 'rgba(255,255,255,0.1)' } : undefined}
                 >
                   {String(t('nav.home'))}
                 </Button>
@@ -124,7 +127,7 @@ export function Layout({ children }: LayoutProps) {
                   variant={isActive('/projects') ? 'default' : 'ghost'}
                   size='sm'
                   onClick={() => navigate(getLocalizedPath('/projects'))}
-                  style={headerDark ? { color: 'white', background: 'rgba(255,255,255,0.1)' } : undefined}
+                  style={headerDark && !isHomePage ? { color: 'white', background: 'rgba(255,255,255,0.1)' } : undefined}
                 >
                   {String(t('nav.projects'))}
                 </Button>
@@ -132,7 +135,7 @@ export function Layout({ children }: LayoutProps) {
                   variant={isActive('/blogs') ? 'default' : 'ghost'}
                   size='sm'
                   onClick={() => navigate(getLocalizedPath('/blogs'))}
-                  style={headerDark ? { color: 'white', background: 'rgba(255,255,255,0.1)' } : undefined}
+                  style={headerDark && !isHomePage ? { color: 'white', background: 'rgba(255,255,255,0.1)' } : undefined}
                 >
                   {String(t('nav.blogs'))}
                 </Button>
