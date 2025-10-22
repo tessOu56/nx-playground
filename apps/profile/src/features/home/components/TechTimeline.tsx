@@ -76,7 +76,11 @@ export const TechTimeline: FC = () => {
   return (
     <div
       className='overflow-y-scroll snap-y snap-mandatory'
-      style={{ height: `${(featured.length + (others.length > 0 ? 1 : 0) + 1) * 100}vh` }}
+      style={{
+        height: `${
+          (featured.length + (others.length > 0 ? 1 : 0) + 1) * 100
+        }vh`,
+      }}
       role='region'
       aria-label='Tech Journey Timeline'
     >
@@ -194,22 +198,28 @@ export const TechTimeline: FC = () => {
 
       {/* Others: Summary screen */}
       {others.length > 0 && (
-        <article 
+        <article
           className='snap-start snap-always min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-900 to-gray-800 relative'
           data-header-dark='true'
         >
           <div className='container mx-auto px-4 text-center'>
-            <h2 className='text-5xl font-bold text-white mb-12'>Earlier Years</h2>
+            <h2 className='text-5xl font-bold text-white mb-12'>
+              Earlier Years
+            </h2>
             <div className='grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto'>
               {others.map(item => (
                 <button
                   key={item.year}
-                  onClick={() => navigate(getLocalizedPath(`/blogs/${item.blogSlug}`))}
+                  onClick={() =>
+                    navigate(getLocalizedPath(`/blogs/${item.blogSlug}`))
+                  }
                   className='bg-white/10 backdrop-blur-sm rounded-xl p-6 hover:bg-white/20 transition-all text-left'
                   aria-label={`View ${item.year} blog: ${item.title}`}
                 >
                   <div className='flex items-center gap-4 mb-3'>
-                    <span className='text-3xl font-bold text-white'>{item.year}</span>
+                    <span className='text-3xl font-bold text-white'>
+                      {item.year}
+                    </span>
                     <div className='h-px flex-1 bg-white/30' />
                   </div>
                   <h3 className='text-xl font-semibold text-white mb-2 line-clamp-1'>
@@ -241,7 +251,7 @@ export const TechTimeline: FC = () => {
       )}
 
       {/* Final CTA */}
-      <div 
+      <div
         className='snap-start snap-always min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-600 to-purple-600'
         data-header-dark='true'
       >

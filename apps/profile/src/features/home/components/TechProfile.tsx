@@ -21,7 +21,7 @@ export const TechProfile: FC = () => {
   };
 
   return (
-    <section 
+    <section
       className='relative overflow-hidden min-h-screen flex items-center'
       data-header-dark='true'
     >
