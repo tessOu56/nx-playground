@@ -1,8 +1,8 @@
 import { type FC } from 'react';
 import { Link } from 'react-router-dom';
 
-import { siteConfig } from '../../../lib/siteConfig';
 import { useLocalizedNavigation } from '../../../lib/i18n/useLocalizedNavigation';
+import { siteConfig } from '../../../lib/siteConfig';
 import { homeConfig } from '../data/homeConfig';
 import { useHomeTranslation } from '../hooks/useHomeTranslation';
 import '../i18n';
