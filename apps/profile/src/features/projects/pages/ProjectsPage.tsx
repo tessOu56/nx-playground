@@ -41,7 +41,9 @@ export const ProjectsPage: FC = () => {
     const lowerSearch = searchTerm.toLowerCase();
     return apps.filter(app => {
       const matchName = app.name.toLowerCase().includes(lowerSearch);
-      const matchDesc = (app.description || '').toLowerCase().includes(lowerSearch);
+      const matchDesc = (app.description || '')
+        .toLowerCase()
+        .includes(lowerSearch);
       const matchTech = app.techStack?.some(tech =>
         tech.toLowerCase().includes(lowerSearch)
       );
@@ -56,7 +58,9 @@ export const ProjectsPage: FC = () => {
     const lowerSearch = searchTerm.toLowerCase();
     return libs.filter(lib => {
       const matchName = lib.name.toLowerCase().includes(lowerSearch);
-      const matchDesc = (lib.description || '').toLowerCase().includes(lowerSearch);
+      const matchDesc = (lib.description || '')
+        .toLowerCase()
+        .includes(lowerSearch);
       const matchTech = lib.techStack?.some(tech =>
         tech.toLowerCase().includes(lowerSearch)
       );
@@ -72,17 +76,19 @@ export const ProjectsPage: FC = () => {
 
   // Filter React apps and other framework apps
   const reactApps = useMemo(() => {
-    return filteredApps.filter(app => 
+    return filteredApps.filter(app =>
       app.techStack?.some(tech => tech.toLowerCase().includes('react'))
     );
   }, [filteredApps]);
 
   const otherFrameworkApps = useMemo(() => {
-    return filteredApps.filter(app => 
-      app.techStack?.some(tech => 
-        tech.toLowerCase().includes('angular') || 
-        tech.toLowerCase().includes('vue')
-      ) && !app.techStack?.some(tech => tech.toLowerCase().includes('react'))
+    return filteredApps.filter(
+      app =>
+        app.techStack?.some(
+          tech =>
+            tech.toLowerCase().includes('angular') ||
+            tech.toLowerCase().includes('vue')
+        ) && !app.techStack?.some(tech => tech.toLowerCase().includes('react'))
     );
   }, [filteredApps]);
 
@@ -104,7 +110,9 @@ export const ProjectsPage: FC = () => {
   if (loading) {
     return (
       <div className='min-h-screen flex items-center justify-center'>
-        <p className='text-lg text-gray-600 dark:text-gray-400'>Loading projects...</p>
+        <p className='text-lg text-gray-600 dark:text-gray-400'>
+          Loading projects...
+        </p>
       </div>
     );
   }
@@ -185,7 +193,9 @@ export const ProjectsPage: FC = () => {
                   key={app.id}
                   project={app}
                   type='app'
-                  onClick={() => navigate(getLocalizedPath(`/projects/${app.id}`))}
+                  onClick={() =>
+                    navigate(getLocalizedPath(`/projects/${app.id}`))
+                  }
                 />
               ))}
             </div>
@@ -214,7 +224,9 @@ export const ProjectsPage: FC = () => {
                   key={lib.id}
                   project={lib}
                   type='lib'
-                  onClick={() => navigate(getLocalizedPath(`/projects/${lib.id}`))}
+                  onClick={() =>
+                    navigate(getLocalizedPath(`/projects/${lib.id}`))
+                  }
                 />
               ))}
             </div>
@@ -243,7 +255,9 @@ export const ProjectsPage: FC = () => {
                   key={app.id}
                   project={app}
                   type='app'
-                  onClick={() => navigate(getLocalizedPath(`/projects/${app.id}`))}
+                  onClick={() =>
+                    navigate(getLocalizedPath(`/projects/${app.id}`))
+                  }
                 />
               ))}
             </div>
@@ -253,4 +267,3 @@ export const ProjectsPage: FC = () => {
     </div>
   );
 };
-
