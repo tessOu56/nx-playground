@@ -1,5 +1,5 @@
 import { Button } from '@nx-playground/ui-components';
-import { type ReactNode } from 'react';
+import { type ReactNode, useEffect, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 
 import { useLocalizedNavigation } from '../../lib/i18n/useLocalizedNavigation';
@@ -19,6 +19,7 @@ export function Layout({ children }: LayoutProps) {
   const navigate = useNavigate();
   const { getLocalizedPath } = useLocalizedNavigation();
   const { t } = useLayoutTranslation();
+  const [scrollProgress, setScrollProgress] = useState(0);
 
   const isActive = (path: string) => {
     const pathWithoutLocale = location.pathname.replace(/^\/(zh-TW|en)/, '');
@@ -29,10 +30,31 @@ export function Layout({ children }: LayoutProps) {
     return pathWithoutLocale.startsWith(path);
   };
 
+  useEffect(() => {
+    const handleScroll = () => {
+      const windowHeight = document.documentElement.scrollHeight - window.innerHeight;
+      const scrolled = windowHeight > 0 ? (window.scrollY / windowHeight) * 100 : 0;
+      setScrollProgress(scrolled);
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
   return (
     <div className='min-h-screen flex flex-col bg-background'>
       {/* Navigation with backdrop blur */}
       <nav className='sticky top-0 z-50 w-full border-b bg-background/80 backdrop-blur-sm'>
+        {/* Progress Indicator */}
+        <div 
+          className='absolute top-0 left-0 h-1 bg-gradient-to-r from-blue-600 to-purple-600 transition-all duration-300 ease-out'
+          style={{ width: `${scrollProgress}%` }}
+          role='progressbar'
+          aria-valuenow={Math.round(scrollProgress)}
+          aria-valuemin={0}
+          aria-valuemax={100}
+          aria-label='Page scroll progress'
+        />
         <div className='container mx-auto px-4 sm:px-6 lg:px-8'>
           <div className='flex h-16 items-center justify-between'>
             {/* Logo and Navigation */}
