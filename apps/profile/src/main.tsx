@@ -8,11 +8,11 @@ import { BrowserRouter } from 'react-router-dom';
 globalThis.Buffer = Buffer;
 
 import App from './App';
-import { appsI18n } from './features/apps/i18n';
+import appsI18n from './features/apps/i18n';
 import { blogsI18n } from './features/blogs';
 import { detailI18n } from './features/detail';
 import { homeI18n } from './features/home';
-import { libsI18n } from './features/libs/i18n';
+import libsI18n from './features/libs/i18n';
 import layoutI18n from './components/layout/i18n';
 import './index.css';
 
@@ -32,12 +32,11 @@ if (i18n.language !== initialLocale) {
 }
 
 // Initialize feature i18n instances
+// The createFeatureI18n already registers resources, no need for .init() calls
 layoutI18n.init();
 homeI18n.init();
 detailI18n.init();
 blogsI18n.init();
-appsI18n.init();
-libsI18n.init();
 
 const rootElement = document.getElementById('root');
 if (!rootElement) {

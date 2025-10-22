@@ -1,0 +1,30 @@
+{
+  "actions": {
+    "search": "Search",
+    "cancel": "Cancel",
+    "save": "Save",
+    "delete": "Delete",
+    "edit": "Edit",
+    "view": "View",
+    "back": "Back",
+    "next": "Next",
+    "previous": "Previous"
+  },
+  "status": {
+    "loading": "Loading...",
+    "error": "Error occurred",
+    "success": "Success",
+    "noResults": "No results found"
+  },
+  "validation": {
+    "required": "This field is required",
+    "invalid": "Invalid input"
+  },
+  "navigation": {
+    "home": "Home",
+    "apps": "Applications",
+    "libs": "Libraries",
+    "blogs": "Blog",
+    "about": "About"
+  }
+}

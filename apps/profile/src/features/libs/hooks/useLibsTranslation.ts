@@ -14,4 +14,4 @@ export const useLibsTranslation = createFeatureTranslation('libs', [
   'stats.applications',
   'stats.typescript',
   'stats.reusable',
-] as const);
+]);
