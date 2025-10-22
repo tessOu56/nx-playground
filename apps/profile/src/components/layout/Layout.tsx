@@ -105,12 +105,21 @@ export function Layout({ children }: LayoutProps) {
           aria-label='Page scroll progress'
         />
         <div className='container mx-auto px-4 sm:px-6 lg:px-8'>
-          <div className='flex items-center justify-between' style={{ height: '50px' }}>
+          <div
+            className='flex items-center justify-between'
+            style={{ height: '50px' }}
+          >
             {/* Logo and Navigation */}
             <div className='flex items-center gap-8'>
               <Link to={getLocalizedPath('/')} className='flex-shrink-0'>
                 <h1 className='text-xl font-bold'>
-                  <span className={headerDark ? 'text-white' : 'bg-gradient-to-r from-blue-600 via-purple-600 to-blue-600 dark:from-blue-400 dark:via-purple-400 dark:to-blue-400 bg-clip-text text-transparent'}>
+                  <span
+                    className={
+                      headerDark
+                        ? 'text-white'
+                        : 'bg-gradient-to-r from-blue-600 via-purple-600 to-blue-600 dark:from-blue-400 dark:via-purple-400 dark:to-blue-400 bg-clip-text text-transparent'
+                    }
+                  >
                     {siteConfig.siteName}
                   </span>
                 </h1>
@@ -120,7 +129,11 @@ export function Layout({ children }: LayoutProps) {
                   variant={isActive('/') ? 'default' : 'ghost'}
                   size='sm'
                   onClick={() => navigate(getLocalizedPath('/'))}
-                  style={headerDark ? { color: 'white', background: 'rgba(255,255,255,0.1)' } : undefined}
+                  style={
+                    headerDark
+                      ? { color: 'white', background: 'rgba(255,255,255,0.1)' }
+                      : undefined
+                  }
                 >
                   {String(t('nav.home'))}
                 </Button>
@@ -128,7 +141,11 @@ export function Layout({ children }: LayoutProps) {
                   variant={isActive('/projects') ? 'default' : 'ghost'}
                   size='sm'
                   onClick={() => navigate(getLocalizedPath('/projects'))}
-                  style={headerDark ? { color: 'white', background: 'rgba(255,255,255,0.1)' } : undefined}
+                  style={
+                    headerDark
+                      ? { color: 'white', background: 'rgba(255,255,255,0.1)' }
+                      : undefined
+                  }
                 >
                   {String(t('nav.projects'))}
                 </Button>
@@ -136,7 +153,11 @@ export function Layout({ children }: LayoutProps) {
                   variant={isActive('/blogs') ? 'default' : 'ghost'}
                   size='sm'
                   onClick={() => navigate(getLocalizedPath('/blogs'))}
-                  style={headerDark ? { color: 'white', background: 'rgba(255,255,255,0.1)' } : undefined}
+                  style={
+                    headerDark
+                      ? { color: 'white', background: 'rgba(255,255,255,0.1)' }
+                      : undefined
+                  }
                 >
                   {String(t('nav.blogs'))}
                 </Button>
@@ -150,10 +171,10 @@ export function Layout({ children }: LayoutProps) {
                 <input
                   type='search'
                   placeholder='Ask AI about...'
-                  className={`w-64 px-3 py-1.5 text-sm rounded-lg border focus:outline-none focus:ring-1 focus:ring-blue-500 ${
+                  className={`w-64 px-3 py-1.5 text-sm rounded-lg border focus:outline-none focus:ring-1 focus:ring-blue-500 backdrop-blur-sm ${
                     headerDark
-                      ? 'bg-white/20 border-white/30 text-white placeholder-white/70'
-                      : 'border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400'
+                      ? 'bg-white/10 border-white/20 text-white placeholder-white/60'
+                      : 'border-gray-300 dark:border-gray-600 bg-white/80 dark:bg-gray-800/80 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400'
                   }`}
                   onKeyDown={e => {
                     if (e.key === 'Enter') {
@@ -182,7 +203,11 @@ export function Layout({ children }: LayoutProps) {
               variant={isActive('/') ? 'default' : 'ghost'}
               size='sm'
               onClick={() => navigate(getLocalizedPath('/'))}
-              style={headerDark ? { color: 'white', background: 'rgba(255,255,255,0.1)' } : undefined}
+              style={
+                headerDark
+                  ? { color: 'white', background: 'rgba(255,255,255,0.1)' }
+                  : undefined
+              }
             >
               {String(t('nav.home'))}
             </Button>
@@ -190,7 +215,11 @@ export function Layout({ children }: LayoutProps) {
               variant={isActive('/projects') ? 'default' : 'ghost'}
               size='sm'
               onClick={() => navigate(getLocalizedPath('/projects'))}
-              style={headerDark ? { color: 'white', background: 'rgba(255,255,255,0.1)' } : undefined}
+              style={
+                headerDark
+                  ? { color: 'white', background: 'rgba(255,255,255,0.1)' }
+                  : undefined
+              }
             >
               {String(t('nav.projects'))}
             </Button>
@@ -198,7 +227,11 @@ export function Layout({ children }: LayoutProps) {
               variant={isActive('/blogs') ? 'default' : 'ghost'}
               size='sm'
               onClick={() => navigate(getLocalizedPath('/blogs'))}
-              style={headerDark ? { color: 'white', background: 'rgba(255,255,255,0.1)' } : undefined}
+              style={
+                headerDark
+                  ? { color: 'white', background: 'rgba(255,255,255,0.1)' }
+                  : undefined
+              }
             >
               {String(t('nav.blogs'))}
             </Button>
