@@ -1,0 +1,14 @@
+{
+  "nav": {
+    "home": "首頁",
+    "apps": "應用",
+    "libs": "函式庫",
+    "search": "搜尋"
+  },
+  "footer": {
+    "allRightsReserved": "版權所有",
+    "builtWith": "使用",
+    "sourceCode": "原始碼"
+  }
+}
+

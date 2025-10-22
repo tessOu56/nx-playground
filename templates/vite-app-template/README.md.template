@@ -1,0 +1,35 @@
+---
+id: APP_NAME
+name: APP_NAME
+version: 0.0.1
+description: Description of APP_NAME
+techStack:
+  - React
+  - TypeScript
+  - Vite
+  - Tailwind CSS
+lastUpdated: CURRENT_DATE
+---
+
+# APP_NAME
+
+Description of APP_NAME
+
+## Features
+
+- Feature 1
+- Feature 2
+- Feature 3
+
+## Development
+
+```bash
+pnpm nx serve APP_NAME
+```
+
+## Build
+
+```bash
+pnpm nx build APP_NAME
+```
+

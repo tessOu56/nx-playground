@@ -1,0 +1,14 @@
+{
+  "name": "@nx-playground/LIB_NAME",
+  "version": "0.0.1",
+  "private": true,
+  "main": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.mjs",
+      "types": "./dist/index.d.ts"
+    }
+  }
+}
+

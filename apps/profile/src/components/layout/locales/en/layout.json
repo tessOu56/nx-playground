@@ -1,0 +1,14 @@
+{
+  "nav": {
+    "home": "Home",
+    "apps": "Apps",
+    "libs": "Libs",
+    "search": "Search"
+  },
+  "footer": {
+    "allRightsReserved": "All rights reserved",
+    "builtWith": "Built with",
+    "sourceCode": "Source Code"
+  }
+}
+
