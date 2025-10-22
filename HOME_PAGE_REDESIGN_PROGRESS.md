@@ -3,11 +3,13 @@
 ## ✅ Completed (Phase 1-3)
 
 ### Routing & Infrastructure
+
 - ✅ Complete routing system (`/search`, `/blogs`, `/blogs/:slug`, 404)
 - ✅ Locale fallback protection
 - ✅ NotFoundPage with navigation options
 
 ### Blog Feature (COMPLETE)
+
 - ✅ Blog data types (`BlogPost`, `BlogMetadata`)
 - ✅ Blog loader from `specs/blogs/` with i18n
 - ✅ BlogCard component (distinct from ProjectCard)
@@ -16,6 +18,7 @@
 - ✅ 2 sample blog posts (2025, 2024)
 
 ### Search Feature (COMPLETE)
+
 - ✅ ChatGPT-style search page UI
 - ✅ Chat components (ChatMessage, MessageInput, ExampleQueries, InfoBanner)
 - ✅ AI conversation interface (UI shell only)
@@ -34,34 +37,40 @@ df2da15 feat(profile): implement blog loader and sample content
 ## ⏳ Remaining Tasks (Phase 4-6)
 
 ### 1. Header Search Input
+
 **File**: `apps/profile/src/components/layout/Layout.tsx`
+
 - Replace search icon with input field
 - OnEnter → navigate to `/search?q=...`
 - Placeholder: "Ask AI about..."
 
 ### 2. Hero Section Updates
+
 **File**: `apps/profile/src/features/home/components/HeroSection.tsx` or create new
 
 **Tasks**:
+
 - Add lorem-picsum background with CSS filter
+
   ```tsx
-  <div className="relative">
-    <div className="absolute inset-0 bg-gradient-to-br from-blue-600 to-purple-600" />
-    <img 
-      src="https://picsum.photos/1920/1080" 
-      loading="lazy"
-      decode="async"
-      className="absolute inset-0 w-full h-full object-cover -z-10 opacity-30"
+  <div className='relative'>
+    <div className='absolute inset-0 bg-gradient-to-br from-blue-600 to-purple-600' />
+    <img
+      src='https://picsum.photos/1920/1080'
+      loading='lazy'
+      decode='async'
+      className='absolute inset-0 w-full h-full object-cover -z-10 opacity-30'
     />
-    <div className="absolute inset-0 bg-black/30" />
+    <div className='absolute inset-0 bg-black/30' />
   </div>
   ```
 
 - Smooth scroll to contact
+
   ```tsx
   const scrollToContact = () => {
-    document.getElementById('contact-section')?.scrollIntoView({ 
-      behavior: 'smooth' 
+    document.getElementById('contact-section')?.scrollIntoView({
+      behavior: 'smooth',
     });
   };
   ```
@@ -72,13 +81,15 @@ df2da15 feat(profile): implement blog loader and sample content
   ```
 
 ### 3. Tech Timeline Component
+
 **File**: `apps/profile/src/features/home/components/TechTimeline.tsx`
 
 **Data Source**: Blog front matter (single source of truth)
+
 ```typescript
 export async function getTechTimeline(locale: SupportedLocale) {
   const blogs = await loadAllBlogs(locale);
-  
+
   return blogs
     .filter(blog => blog.year && blog.techStack)
     .sort((a, b) => b.year! - a.year!) // 2025 → 2019
@@ -92,6 +103,7 @@ export async function getTechTimeline(locale: SupportedLocale) {
 ```
 
 **UI**:
+
 - Horizontal timeline (newest first: 2025 → 2019)
 - Year markers with tech badges
 - Click year → navigate to blog
@@ -99,9 +111,11 @@ export async function getTechTimeline(locale: SupportedLocale) {
 - ARIA labels
 
 ### 4. Contact Section Simplification
+
 **File**: `apps/profile/src/features/home/components/ContactSection.tsx`
 
 **Requirements**:
+
 - Half-screen height (`min-h-[50vh]`)
 - Email form only
 - Minimal, clean design
@@ -109,13 +123,16 @@ export async function getTechTimeline(locale: SupportedLocale) {
 - ARIA labels for form fields
 
 ### 5. Footer Redesign
+
 **File**: `apps/profile/src/components/layout/Footer.tsx`
 
 **Keep**:
+
 - GitHub link
 - Copyright © 2025
 
 **Remove**:
+
 - All other links (Projects, Tech Stack, Contact, etc.)
 
 ### 6. i18n Updates
@@ -123,6 +140,7 @@ export async function getTechTimeline(locale: SupportedLocale) {
 **New Files Needed**:
 
 `apps/profile/src/locales/en/search.json`:
+
 ```json
 {
   "title": "AI Search",
@@ -143,6 +161,7 @@ export async function getTechTimeline(locale: SupportedLocale) {
 ```
 
 `apps/profile/src/locales/zh-TW/search.json`:
+
 ```json
 {
   "title": "AI 搜尋",
@@ -163,6 +182,7 @@ export async function getTechTimeline(locale: SupportedLocale) {
 ```
 
 Update `apps/profile/src/locales/en/blogs.json`:
+
 ```json
 {
   "title": "Blog",
@@ -176,6 +196,7 @@ Update `apps/profile/src/locales/en/blogs.json`:
 ```
 
 Update `apps/profile/src/locales/zh-TW/blogs.json`:
+
 ```json
 {
   "title": "部落格",
@@ -193,27 +214,32 @@ Update `apps/profile/src/locales/zh-TW/blogs.json`:
 ### To complete remaining tasks:
 
 1. **Header Search** (5 min)
+
    - Edit `Layout.tsx`
    - Add search input
    - Handle Enter key
 
 2. **Hero Updates** (15 min)
+
    - Edit `HeroSection.tsx` or create new
    - Add background image
    - Add smooth scroll
    - Update button actions
 
 3. **Tech Timeline** (20 min)
+
    - Create `TechTimeline.tsx`
    - Create `getTechTimeline()` helper
    - Add to HomePage
 
 4. **Contact** (10 min)
+
    - Simplify `ContactSection.tsx`
    - Make it half-screen
    - Add id for scroll
 
 5. **Footer** (5 min)
+
    - Edit `Footer.tsx`
    - Remove unnecessary links
 
@@ -246,4 +272,3 @@ Update `apps/profile/src/locales/zh-TW/blogs.json`:
 - AI functionality is UI shell only. Backend integration pending
 - Blog slugs are hardcoded in loader. Consider generating dynamically
 - Lorem-picsum for random background. Can be replaced with specific images
-

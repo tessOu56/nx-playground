@@ -75,8 +75,18 @@ export const BlogPostPage: FC = () => {
             onClick={() => navigate(getLocalizedPath('/blogs'))}
             className='text-blue-600 dark:text-blue-400 hover:underline flex items-center gap-2'
           >
-            <svg className='w-4 h-4' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
-              <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M15 19l-7-7 7-7' />
+            <svg
+              className='w-4 h-4'
+              fill='none'
+              stroke='currentColor'
+              viewBox='0 0 24 24'
+            >
+              <path
+                strokeLinecap='round'
+                strokeLinejoin='round'
+                strokeWidth={2}
+                d='M15 19l-7-7 7-7'
+              />
             </svg>
             Back to Blogs
           </button>
@@ -142,7 +152,7 @@ export const BlogPostPage: FC = () => {
         </header>
 
         {/* Content */}
-        <div 
+        <div
           className='prose prose-lg dark:prose-invert max-w-none mb-12'
           dangerouslySetInnerHTML={{ __html: renderMarkdown(blog.content) }}
         />
@@ -156,10 +166,12 @@ export const BlogPostPage: FC = () => {
             >
               ← All Blogs
             </button>
-            
+
             {blog.year && (
               <button
-                onClick={() => navigate(getLocalizedPath(`/blogs?year=${blog.year}`))}
+                onClick={() =>
+                  navigate(getLocalizedPath(`/blogs?year=${blog.year}`))
+                }
                 className='px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700'
               >
                 More from {blog.year} →
@@ -189,13 +201,22 @@ function renderMarkdown(markdown: string): string {
   html = html.replace(/\*(.*?)\*/g, '<em>$1</em>');
 
   // Links
-  html = html.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" class="text-blue-600 hover:underline">$1</a>');
+  html = html.replace(
+    /\[([^\]]+)\]\(([^)]+)\)/g,
+    '<a href="$2" class="text-blue-600 hover:underline">$1</a>'
+  );
 
   // Code blocks
-  html = html.replace(/```(\w+)?\n([\s\S]*?)```/g, '<pre><code class="language-$1">$2</code></pre>');
+  html = html.replace(
+    /```(\w+)?\n([\s\S]*?)```/g,
+    '<pre><code class="language-$1">$2</code></pre>'
+  );
 
   // Inline code
-  html = html.replace(/`([^`]+)`/g, '<code class="bg-gray-100 dark:bg-gray-800 px-1 py-0.5 rounded">$1</code>');
+  html = html.replace(
+    /`([^`]+)`/g,
+    '<code class="bg-gray-100 dark:bg-gray-800 px-1 py-0.5 rounded">$1</code>'
+  );
 
   // Line breaks
   html = html.replace(/\n\n/g, '</p><p>');
