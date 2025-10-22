@@ -49,28 +49,28 @@ export function Layout({ children }: LayoutProps) {
                   size='sm'
                   onClick={() => navigate(getLocalizedPath('/'))}
                 >
-                  {t('nav.home')}
+                  {String(t('nav.home'))}
                 </Button>
                 <Button
                   variant={isActive('/apps') ? 'default' : 'ghost'}
                   size='sm'
                   onClick={() => navigate(getLocalizedPath('/apps'))}
                 >
-                  {t('nav.apps')}
+                  {String(t('nav.apps'))}
                 </Button>
                 <Button
                   variant={isActive('/libs') ? 'default' : 'ghost'}
                   size='sm'
                   onClick={() => navigate(getLocalizedPath('/libs'))}
                 >
-                  {t('nav.libs')}
+                  {String(t('nav.libs'))}
                 </Button>
                 <Button
                   variant={isActive('/blogs') ? 'default' : 'ghost'}
                   size='sm'
                   onClick={() => navigate(getLocalizedPath('/blogs'))}
                 >
-                  {t('nav.search')}
+                  {String(t('nav.search'))}
                 </Button>
               </div>
             </div>
@@ -88,28 +88,28 @@ export function Layout({ children }: LayoutProps) {
               size='sm'
               onClick={() => navigate(getLocalizedPath('/'))}
             >
-              {t('nav.home')}
+              {String(t('nav.home'))}
             </Button>
             <Button
               variant={isActive('/apps') ? 'default' : 'ghost'}
               size='sm'
               onClick={() => navigate(getLocalizedPath('/apps'))}
             >
-              {t('nav.apps')}
+              {String(t('nav.apps'))}
             </Button>
             <Button
               variant={isActive('/libs') ? 'default' : 'ghost'}
               size='sm'
               onClick={() => navigate(getLocalizedPath('/libs'))}
             >
-              {t('nav.libs')}
+              {String(t('nav.libs'))}
             </Button>
             <Button
               variant={isActive('/blogs') ? 'default' : 'ghost'}
               size='sm'
               onClick={() => navigate(getLocalizedPath('/blogs'))}
             >
-              {t('nav.search')}
+              {String(t('nav.search'))}
             </Button>
           </div>
         </div>
@@ -142,7 +142,7 @@ export function Layout({ children }: LayoutProps) {
                     to={getLocalizedPath('/')}
                     className='text-sm text-muted-foreground hover:text-foreground transition-colors'
                   >
-                    Home
+                    {String(t('nav.home'))}
                   </Link>
                 </li>
                 <li>
@@ -150,7 +150,7 @@ export function Layout({ children }: LayoutProps) {
                     to={getLocalizedPath('/apps')}
                     className='text-sm text-muted-foreground hover:text-foreground transition-colors'
                   >
-                    Applications
+                    {String(t('nav.apps'))}
                   </Link>
                 </li>
                 <li>
@@ -158,7 +158,7 @@ export function Layout({ children }: LayoutProps) {
                     to={getLocalizedPath('/libs')}
                     className='text-sm text-muted-foreground hover:text-foreground transition-colors'
                   >
-                    Libraries
+                    {String(t('nav.libs'))}
                   </Link>
                 </li>
                 <li>
@@ -166,7 +166,7 @@ export function Layout({ children }: LayoutProps) {
                     to={getLocalizedPath('/blogs')}
                     className='text-sm text-muted-foreground hover:text-foreground transition-colors'
                   >
-                    文件搜尋
+                    {String(t('nav.search'))}
                   </Link>
                 </li>
               </ul>

@@ -1,0 +1,12 @@
+{
+  "title": "Applications",
+  "subtitle": "Production-ready applications built with modern frameworks and best practices",
+  "searchPlaceholder": "Search applications...",
+  "noResults": "No applications found matching your search.",
+  "stats": {
+    "applications": "Applications",
+    "frameworks": "Frameworks",
+    "technologies": "Technologies",
+    "typescript": "TypeScript"
+  }
+}
