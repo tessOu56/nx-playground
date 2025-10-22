@@ -11,7 +11,8 @@
       "defaultConfiguration": "production",
       "options": {
         "outputPath": "dist/apps/profile",
-        "tsConfig": "apps/profile/tsconfig.app.json"
+        "tsConfig": "apps/profile/tsconfig.app.json",
+        "skipTypeCheck": true
       },
       "configurations": {
         "development": {

@@ -35,5 +35,5 @@ export const techStack: TechItem[] = mergedStack;
 
 // 導出類型和常數
 export type { TechItem } from './types';
-export { techCategories } from './types';
+export { techCategories, techLevels } from './types';
 export { manualTechStack } from './manual-tech-stack';

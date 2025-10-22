@@ -6,7 +6,7 @@
     "outDir": "dist",
     "tsBuildInfoFile": "dist/tsconfig.app.tsbuildinfo",
     "jsx": "react-jsx",
-    "lib": ["dom", "ES2020"],
+    "lib": ["dom"],
     "resolveJsonModule": true,
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
