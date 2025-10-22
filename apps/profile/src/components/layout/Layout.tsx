@@ -71,7 +71,7 @@ export function Layout({ children }: LayoutProps) {
                   size='sm'
                   onClick={() => navigate(getLocalizedPath('/blogs'))}
                 >
-                  {String(t('nav.search'))}
+                  {String(t('nav.blogs'))}
                 </Button>
               </div>
             </div>
@@ -133,7 +133,7 @@ export function Layout({ children }: LayoutProps) {
               size='sm'
               onClick={() => navigate(getLocalizedPath('/blogs'))}
             >
-              {String(t('nav.search'))}
+              {String(t('nav.blogs'))}
             </Button>
           </div>
         </div>
