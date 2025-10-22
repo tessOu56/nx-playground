@@ -1,8 +1,7 @@
-import { type FC, useEffect, useMemo } from 'react';
-import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
+import { type FC, useEffect, useMemo, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 
 import { ProjectCard } from '../../../components/ProjectCard';
-import { SearchBar } from '../../../components/SearchBar';
 import type { SupportedLocale } from '../../../lib/i18n/LocaleRouter';
 import { useLocalizedNavigation } from '../../../lib/i18n/useLocalizedNavigation';
 import { ts } from '../../../lib/i18n/helpers';
@@ -18,8 +17,7 @@ export const ProjectsPage: FC = () => {
   const currentLocale = (locale ?? 'en') as SupportedLocale;
   const { t } = useProjectsTranslation();
 
-  const [searchParams, setSearchParams] = useSearchParams();
-  const searchTerm = searchParams.get('search') ?? '';
+  const [filter, setFilter] = useState<'all' | 'react-apps' | 'react-libs' | 'others'>('all');
 
   // Get data from Zustand store
   const apps = useProjectsStore(state => state.apps[currentLocale]);
@@ -34,45 +32,9 @@ export const ProjectsPage: FC = () => {
     loadLibs(currentLocale);
   }, [currentLocale, loadApps, loadLibs]);
 
-  // Filter apps and libs by search term
-  const filteredApps = useMemo(() => {
-    if (!searchTerm.trim()) return apps;
-
-    const lowerSearch = searchTerm.toLowerCase();
-    return apps.filter(app => {
-      const matchName = app.name.toLowerCase().includes(lowerSearch);
-      const matchDesc = (app.description || '')
-        .toLowerCase()
-        .includes(lowerSearch);
-      const matchTech = app.techStack?.some(tech =>
-        tech.toLowerCase().includes(lowerSearch)
-      );
-
-      return matchName || matchDesc || matchTech;
-    });
-  }, [apps, searchTerm]);
-
-  const filteredLibs = useMemo(() => {
-    if (!searchTerm.trim()) return libs;
-
-    const lowerSearch = searchTerm.toLowerCase();
-    return libs.filter(lib => {
-      const matchName = lib.name.toLowerCase().includes(lowerSearch);
-      const matchDesc = (lib.description || '')
-        .toLowerCase()
-        .includes(lowerSearch);
-      const matchTech = lib.techStack?.some(tech =>
-        tech.toLowerCase().includes(lowerSearch)
-      );
-      const categoryTranslated = ts(t, `categories.${lib.category}`);
-      const matchCategory =
-        lib.category.toLowerCase().includes(lowerSearch) ||
-        (categoryTranslated !== `categories.${lib.category}` &&
-          categoryTranslated.toLowerCase().includes(lowerSearch));
-
-      return matchName || matchDesc || matchTech || matchCategory;
-    });
-  }, [libs, searchTerm, t]);
+  // No search filtering, show all projects
+  const filteredApps = apps;
+  const filteredLibs = libs;
 
   // Filter React apps and other framework apps
   const reactApps = useMemo(() => {
@@ -97,12 +59,10 @@ export const ProjectsPage: FC = () => {
     return filteredLibs.filter(lib => lib.category === 'ui');
   }, [filteredLibs]);
 
-  const handleSearchChange = (value: string) => {
-    if (value) {
-      setSearchParams({ search: value });
-    } else {
-      setSearchParams({});
-    }
+  // Filter based on dropdown selection
+  const shouldShowSection = (section: string) => {
+    if (filter === 'all') return true;
+    return filter === section;
   };
 
   const totalProjects = apps.length + libs.length;
@@ -130,15 +90,23 @@ export const ProjectsPage: FC = () => {
           </p>
         </div>
 
-        {/* Search Bar */}
-        <SearchBar
-          value={searchTerm}
-          onChange={handleSearchChange}
-          placeholder={ts(t, 'searchPlaceholder')}
-        />
+        {/* Quick Filter */}
+        <div className='max-w-md mx-auto mb-12'>
+          <select
+            value={filter}
+            onChange={e => setFilter(e.target.value as typeof filter)}
+            className='w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500'
+            aria-label='Filter projects'
+          >
+            <option value='all'>All Projects</option>
+            <option value='react-apps'>React Applications</option>
+            <option value='react-libs'>React Libraries</option>
+            <option value='others'>Other Frameworks</option>
+          </select>
+        </div>
 
         {/* Stats */}
-        {!searchTerm && (
+        {filter === 'all' && (
           <div className='grid grid-cols-2 md:grid-cols-4 gap-4 mb-12'>
             <div className='bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg text-center'>
               <div className='text-4xl font-bold text-blue-600 dark:text-blue-400 mb-2'>
@@ -176,6 +144,7 @@ export const ProjectsPage: FC = () => {
         )}
 
         {/* React Apps Section */}
+        {shouldShowSection('react-apps') && (
         <section id='react-apps' className='mb-16'>
           <div className='mb-8'>
             <h2 className='text-4xl font-bold text-gray-900 dark:text-white mb-2'>
