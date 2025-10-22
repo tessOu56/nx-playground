@@ -1,16 +1,23 @@
-import { type FC, useEffect } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { type FC, useEffect, useMemo } from 'react';
+import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 
 import { ProjectCard } from '../../../components/ProjectCard';
+import { SearchBar } from '../../../components/SearchBar';
 import type { SupportedLocale } from '../../../lib/i18n/LocaleRouter';
 import { useLocalizedNavigation } from '../../../lib/i18n/useLocalizedNavigation';
 import { useProjectsStore } from '../../../stores/useProjectsStore';
+import { useAppsTranslation } from '../hooks/useAppsTranslation';
+import '../i18n';
 
 export const AppsPage: FC = () => {
   const navigate = useNavigate();
   const { locale } = useParams<{ locale: string }>();
   const { getLocalizedPath } = useLocalizedNavigation();
   const currentLocale = (locale ?? 'en') as SupportedLocale;
+  const { t } = useAppsTranslation();
+
+  const [searchParams, setSearchParams] = useSearchParams();
+  const searchTerm = searchParams.get('search') || '';
 
   // 從 Zustand store 取得資料
   const apps = useProjectsStore(state => state.apps[currentLocale]);
@@ -21,6 +28,31 @@ export const AppsPage: FC = () => {
   useEffect(() => {
     loadApps(currentLocale);
   }, [currentLocale, loadApps]);
+
+  // Filter apps by search term
+  const filteredApps = useMemo(() => {
+    if (!searchTerm.trim()) return apps;
+
+    const lowerSearch = searchTerm.toLowerCase();
+    return apps.filter((app) => {
+      const matchName = app.name.toLowerCase().includes(lowerSearch);
+      const matchDesc = (app.description || '').toLowerCase().includes(lowerSearch);
+      const matchShortDesc = (app.shortDesc || '').toLowerCase().includes(lowerSearch);
+      const matchTech = app.techStack?.some((tech) =>
+        tech.toLowerCase().includes(lowerSearch)
+      );
+
+      return matchName || matchDesc || matchShortDesc || matchTech;
+    });
+  }, [apps, searchTerm]);
+
+  const handleSearchChange = (value: string) => {
+    if (value) {
+      setSearchParams({ search: value });
+    } else {
+      setSearchParams({});
+    }
+  };
 
   if (loading) {
     return (
@@ -51,61 +83,77 @@ export const AppsPage: FC = () => {
             </svg>
           </div>
           <h1 className='text-5xl font-bold text-gray-900 dark:text-white mb-4'>
-            Applications
+            {String(t('title'))}
           </h1>
           <p className='text-xl text-gray-600 dark:text-gray-400 max-w-3xl mx-auto'>
-            Production-ready applications built with modern frameworks and best
-            practices
+            {String(t('subtitle'))}
           </p>
         </div>
 
-        {/* Apps Grid */}
-        <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8'>
-          {apps.map(app => (
-            <ProjectCard
-              key={app.id}
-              project={app}
-              type='app'
-              onClick={() => navigate(getLocalizedPath(`/apps/${app.id}`))}
-            />
-          ))}
-        </div>
+        {/* Search Bar */}
+        <SearchBar
+          value={searchTerm}
+          onChange={handleSearchChange}
+          placeholder={String(t('searchPlaceholder'))}
+        />
 
-        {/* Stats Section */}
-        <div className='mt-16 grid grid-cols-2 md:grid-cols-4 gap-6'>
-          <div className='bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg text-center'>
-            <div className='text-4xl font-bold text-blue-600 dark:text-blue-400 mb-2'>
-              {apps.length}
+        {/* Apps Grid */}
+        {filteredApps.length > 0 ? (
+          <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8'>
+            {filteredApps.map(app => (
+              <ProjectCard
+                key={app.id}
+                project={app}
+                type='app'
+                onClick={() => navigate(getLocalizedPath(`/apps/${app.id}`))}
+              />
+            ))}
+          </div>
+        ) : (
+          <div className='text-center py-16'>
+            <p className='text-lg text-gray-600 dark:text-gray-400'>
+              {String(t('noResults'))}
+            </p>
+          </div>
+        )}
+
+        {/* Stats Section - only show when no search */}
+        {!searchTerm && (
+          <div className='mt-16 grid grid-cols-2 md:grid-cols-4 gap-6'>
+            <div className='bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg text-center'>
+              <div className='text-4xl font-bold text-blue-600 dark:text-blue-400 mb-2'>
+                {apps.length}
+              </div>
+              <div className='text-gray-600 dark:text-gray-400 font-medium'>
+                {String(t('stats.applications'))}
+              </div>
             </div>
-            <div className='text-gray-600 dark:text-gray-400 font-medium'>
-              Applications
+            <div className='bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg text-center'>
+              <div className='text-4xl font-bold text-green-600 dark:text-green-400 mb-2'>
+                3
+              </div>
+              <div className='text-gray-600 dark:text-gray-400 font-medium'>
+                {String(t('stats.frameworks'))}
+              </div>
+            </div>
+            <div className='bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg text-center'>
+              <div className='text-4xl font-bold text-purple-600 dark:text-purple-400 mb-2'>
+                30+
+              </div>
+              <div className='text-gray-600 dark:text-gray-400 font-medium'>
+                {String(t('stats.technologies'))}
+              </div>
+            </div>
+            <div className='bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg text-center'>
+              <div className='text-4xl font-bold text-orange-600 dark:text-orange-400 mb-2'>
+                100%
+              </div>
+              <div className='text-gray-600 dark:text-gray-400 font-medium'>
+                {String(t('stats.typescript'))}
+              </div>
             </div>
           </div>
-          <div className='bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg text-center'>
-            <div className='text-4xl font-bold text-green-600 dark:text-green-400 mb-2'>
-              3
-            </div>
-            <div className='text-gray-600 dark:text-gray-400 font-medium'>
-              Frameworks
-            </div>
-          </div>
-          <div className='bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg text-center'>
-            <div className='text-4xl font-bold text-purple-600 dark:text-purple-400 mb-2'>
-              30+
-            </div>
-            <div className='text-gray-600 dark:text-gray-400 font-medium'>
-              Technologies
-            </div>
-          </div>
-          <div className='bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg text-center'>
-            <div className='text-4xl font-bold text-orange-600 dark:text-orange-400 mb-2'>
-              100%
-            </div>
-            <div className='text-gray-600 dark:text-gray-400 font-medium'>
-              TypeScript
-            </div>
-          </div>
-        </div>
+        )}
       </div>
     </div>
   );

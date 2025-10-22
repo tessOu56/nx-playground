@@ -1,0 +1,19 @@
+{
+  "title": "Shared Libraries",
+  "subtitle": "Reusable components, hooks, and utilities across the monorepo",
+  "searchPlaceholder": "Search libraries...",
+  "noResults": "No libraries found matching your search.",
+  "categories": {
+    "ui": "UI & Design",
+    "data": "Data & State",
+    "utils": "Utilities & Tools"
+  },
+  "monorepoTitle": "Nx Monorepo Architecture",
+  "monorepoSubtitle": "All libraries are managed in an Nx monorepo, ensuring consistency and maintainability",
+  "stats": {
+    "libraries": "Libraries",
+    "applications": "Applications",
+    "typescript": "TypeScript",
+    "reusable": "Reusable"
+  }
+}

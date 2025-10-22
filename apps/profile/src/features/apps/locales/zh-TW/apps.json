@@ -1,0 +1,12 @@
+{
+  "title": "應用程式",
+  "subtitle": "使用現代框架和最佳實踐構建的生產就緒應用程式",
+  "searchPlaceholder": "搜尋應用程式...",
+  "noResults": "找不到符合搜尋條件的應用程式。",
+  "stats": {
+    "applications": "應用程式",
+    "frameworks": "框架",
+    "technologies": "技術",
+    "typescript": "TypeScript"
+  }
+}
