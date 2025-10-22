@@ -4,7 +4,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 export const LanguageToggle: FC = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  
+
   // Extract current locale from path
   const currentLocale = location.pathname.match(/^\/(zh-TW|en)/)?.[1] || 'en';
 
@@ -42,4 +42,3 @@ export const LanguageToggle: FC = () => {
     </div>
   );
 };
-
