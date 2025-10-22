@@ -1,5 +1,5 @@
 import type { FC } from 'react';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
 import { loadAllBlogs } from '../../../lib/blogLoader';
@@ -24,6 +24,8 @@ export const TechTimeline: FC = () => {
   const [featured, setFeatured] = useState<TimelineItem[]>([]);
   const [others, setOthers] = useState<TimelineItem[]>([]);
   const [loading, setLoading] = useState(true);
+  const [currentSection, setCurrentSection] = useState(0);
+  const timelineRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const loadTimeline = async () => {
@@ -57,6 +59,39 @@ export const TechTimeline: FC = () => {
     loadTimeline();
   }, [currentLocale]);
 
+  // Auto-snap to sections when scrolling
+  useEffect(() => {
+    const timeline = timelineRef.current;
+    if (!timeline) return;
+
+    const handleScroll = () => {
+      const scrollTop = timeline.scrollTop;
+      const sectionHeight = window.innerHeight;
+      const currentIndex = Math.round(scrollTop / sectionHeight);
+      setCurrentSection(currentIndex);
+    };
+
+    timeline.addEventListener('scroll', handleScroll, { passive: true });
+    return () => timeline.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  // Scroll to next section
+  const scrollToNext = () => {
+    const timeline = timelineRef.current;
+    if (!timeline) return;
+
+    const sectionHeight = window.innerHeight;
+    const nextSection = currentSection + 1;
+    const maxSections = featured.length + (others.length > 0 ? 1 : 0);
+    
+    if (nextSection < maxSections) {
+      timeline.scrollTo({
+        top: nextSection * sectionHeight,
+        behavior: 'smooth'
+      });
+    }
+  };
+
   if (loading) {
     return (
       <section className='py-16 bg-white dark:bg-gray-800'>
@@ -75,7 +110,8 @@ export const TechTimeline: FC = () => {
 
   return (
     <div
-      className='overflow-y-scroll snap-y snap-mandatory'
+      ref={timelineRef}
+      className='timeline-container overflow-y-scroll snap-y snap-mandatory'
       style={{
         height: `${
           (featured.length + (others.length > 0 ? 1 : 0)) * 100
@@ -88,7 +124,7 @@ export const TechTimeline: FC = () => {
       {featured.map((item, index) => (
         <article
           key={item.year}
-          className='snap-start snap-always min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-50 to-white dark:from-gray-900 dark:to-gray-800 relative'
+          className='timeline-section snap-start snap-always min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-50 to-white dark:from-gray-900 dark:to-gray-800 relative'
           aria-label={`Tech journey in ${item.year}: ${item.title}`}
           tabIndex={0}
           onKeyDown={e => {
@@ -174,23 +210,42 @@ export const TechTimeline: FC = () => {
               Read More →
             </button>
 
-            {/* Scroll Hint */}
-            {index < featured.length - 1 && (
-              <div className='absolute bottom-8 left-1/2 -translate-x-1/2 motion-safe:animate-bounce'>
-                <svg
-                  className='w-6 h-6'
-                  fill='none'
-                  stroke={index % 2 === 0 ? '#4a5568' : '#ffffff'}
-                  viewBox='0 0 24 24'
+            {/* Down Arrow Button */}
+            {(index < featured.length - 1 || others.length > 0) && (
+              <button
+                onClick={scrollToNext}
+                className='absolute bottom-8 left-1/2 transform -translate-x-1/2 motion-safe:animate-bounce hover:scale-110 transition-transform duration-300'
+                aria-label='Scroll to next section'
+              >
+                <div
+                  className='w-12 h-12 rounded-full flex items-center justify-center backdrop-blur-sm border-2 transition-all duration-300'
+                  style={{
+                    background: index % 2 === 0 
+                      ? 'rgba(99, 102, 241, 0.2)' 
+                      : 'rgba(255, 255, 255, 0.2)',
+                    borderColor: index % 2 === 0 
+                      ? 'rgba(99, 102, 241, 0.5)' 
+                      : 'rgba(255, 255, 255, 0.5)',
+                  }}
                 >
-                  <path
-                    strokeLinecap='round'
-                    strokeLinejoin='round'
-                    strokeWidth={2}
-                    d='M19 14l-7 7m0 0l-7-7m7 7V3'
-                  />
-                </svg>
-              </div>
+                  <svg
+                    className='w-6 h-6'
+                    fill='none'
+                    stroke='currentColor'
+                    viewBox='0 0 24 24'
+                    style={{
+                      color: index % 2 === 0 ? '#4f46e5' : '#ffffff',
+                    }}
+                  >
+                    <path
+                      strokeLinecap='round'
+                      strokeLinejoin='round'
+                      strokeWidth={2}
+                      d='M19 14l-7 7m0 0l-7-7m7 7V3'
+                    />
+                  </svg>
+                </div>
+              </button>
             )}
           </div>
         </article>
@@ -199,7 +254,7 @@ export const TechTimeline: FC = () => {
       {/* Others: Summary screen */}
       {others.length > 0 && (
         <article
-          className='snap-start snap-always min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-900 to-gray-800 relative'
+          className='timeline-section snap-start snap-always min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-900 to-gray-800 relative'
           data-header-dark='true'
         >
           <div className='container mx-auto px-4 text-center'>

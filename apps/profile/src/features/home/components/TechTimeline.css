@@ -13,6 +13,17 @@
   scroll-snap-stop: always;
 }
 
+/* Enhanced scroll behavior for better section alignment */
+.timeline-container {
+  scroll-snap-type: y mandatory;
+  scroll-behavior: smooth;
+}
+
+.timeline-section {
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+}
+
 /* Respect reduced motion preferences */
 @media (prefers-reduced-motion: reduce) {
   .snap-y {
