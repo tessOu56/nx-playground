@@ -25,7 +25,7 @@ export const BlogListPage: FC = () => {
   useEffect(() => {
     const yearParam = searchParams.get('year');
     const tagParam = searchParams.get('tag');
-    
+
     if (yearParam) setSelectedYear(parseInt(yearParam));
     if (tagParam) setSelectedTag(tagParam);
   }, [searchParams]);
@@ -91,7 +91,9 @@ export const BlogListPage: FC = () => {
   if (loading) {
     return (
       <div className='min-h-screen flex items-center justify-center'>
-        <p className='text-lg text-gray-600 dark:text-gray-400'>Loading blogs...</p>
+        <p className='text-lg text-gray-600 dark:text-gray-400'>
+          Loading blogs...
+        </p>
       </div>
     );
   }
@@ -105,7 +107,8 @@ export const BlogListPage: FC = () => {
             Blog
           </h1>
           <p className='text-xl text-gray-600 dark:text-gray-400 max-w-3xl mx-auto'>
-            Annual tech journey and reflections: My work experience, learning, and growth
+            Annual tech journey and reflections: My work experience, learning,
+            and growth
           </p>
         </div>
 
@@ -124,7 +127,9 @@ export const BlogListPage: FC = () => {
         <div className='flex flex-wrap gap-4 mb-8 justify-center'>
           {/* Year Filter */}
           <div className='flex items-center gap-2'>
-            <span className='text-sm font-medium text-gray-700 dark:text-gray-300'>Year:</span>
+            <span className='text-sm font-medium text-gray-700 dark:text-gray-300'>
+              Year:
+            </span>
             <button
               onClick={() => setSelectedYear('all')}
               className={`px-4 py-2 rounded-lg transition-colors ${
@@ -168,7 +173,8 @@ export const BlogListPage: FC = () => {
 
         {/* Results Count */}
         <div className='text-center mb-8 text-gray-600 dark:text-gray-400'>
-          Found {filteredBlogs.length} blog{filteredBlogs.length !== 1 ? 's' : ''}
+          Found {filteredBlogs.length} blog
+          {filteredBlogs.length !== 1 ? 's' : ''}
         </div>
 
         {/* Blogs Grid */}
