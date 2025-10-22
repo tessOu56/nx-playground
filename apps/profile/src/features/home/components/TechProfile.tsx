@@ -24,10 +24,6 @@ export const TechProfile: FC = () => {
     <section
       className='relative overflow-hidden min-h-screen flex items-center'
       data-header-dark='true'
-      style={{
-        paddingTop: headerDark ? '50px' : '0px',
-        minHeight: headerDark ? '100vh' : 'calc(100vh - 50px)',
-      }}
     >
       {/* Background with CSS gradient placeholder */}
       <div className='absolute inset-0 bg-gradient-to-br from-blue-600 via-purple-600 to-blue-600 dark:from-blue-800 dark:via-purple-800 dark:to-blue-800' />
