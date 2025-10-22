@@ -70,8 +70,8 @@ export function Layout({ children }: LayoutProps) {
             anyDarkVisible = true;
           }
         });
-        // Only apply dark header if not on home page
-        setHeaderDark(anyDarkVisible && !isHomePage);
+        // Apply dark header when dark sections are visible
+        setHeaderDark(anyDarkVisible);
       },
       {
         rootMargin: '-80px 0px 0px 0px',

@@ -23,7 +23,6 @@ export const TechProfile: FC = () => {
   return (
     <section
       className='relative overflow-hidden min-h-screen flex items-center'
-      data-header-dark='true'
     >
       {/* Background with CSS gradient placeholder */}
       <div className='absolute inset-0 bg-gradient-to-br from-blue-600 via-purple-600 to-blue-600 dark:from-blue-800 dark:via-purple-800 dark:to-blue-800' />
