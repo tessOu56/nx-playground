@@ -8,6 +8,7 @@ import { siteConfig } from '../../lib/siteConfig';
 import { useLayoutTranslation } from './hooks/useLayoutTranslation';
 import './i18n';
 import { LanguageSwitcher } from './LanguageSwitcher';
+import { Footer } from './Footer';
 
 interface LayoutProps {
   children: ReactNode;
@@ -140,91 +141,7 @@ export function Layout({ children }: LayoutProps) {
 
       <main className='flex-1'>{children}</main>
 
-      <footer className='border-t bg-background'>
-        <div className='container mx-auto py-12 px-4 sm:px-6 lg:px-8'>
-          <div className='grid grid-cols-1 md:grid-cols-3 gap-8'>
-            {/* About */}
-            <div>
-              <h3 className='text-lg font-semibold text-foreground mb-3'>
-                {siteConfig.siteName}
-              </h3>
-              <p className='text-sm text-muted-foreground'>
-                Full-Stack Developer specializing in modern web technologies and
-                monorepo architecture.
-              </p>
-            </div>
-
-            {/* Quick Links */}
-            <div>
-              <h3 className='text-lg font-semibold text-foreground mb-3'>
-                Quick Links
-              </h3>
-              <ul className='space-y-2'>
-                <li>
-                  <Link
-                    to={getLocalizedPath('/')}
-                    className='text-sm text-muted-foreground hover:text-foreground transition-colors'
-                  >
-                    {String(t('nav.home'))}
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    to={getLocalizedPath('/apps')}
-                    className='text-sm text-muted-foreground hover:text-foreground transition-colors'
-                  >
-                    {String(t('nav.apps'))}
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    to={getLocalizedPath('/libs')}
-                    className='text-sm text-muted-foreground hover:text-foreground transition-colors'
-                  >
-                    {String(t('nav.libs'))}
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    to={getLocalizedPath('/blogs')}
-                    className='text-sm text-muted-foreground hover:text-foreground transition-colors'
-                  >
-                    {String(t('nav.search'))}
-                  </Link>
-                </li>
-              </ul>
-            </div>
-
-            {/* Tech Stack */}
-            <div>
-              <h3 className='text-lg font-semibold text-foreground mb-3'>
-                Tech Stack
-              </h3>
-              <div className='flex flex-wrap gap-2'>
-                <span className='px-2 py-1 bg-secondary text-secondary-foreground text-xs rounded-md hover:bg-secondary/80 transition-colors'>
-                  React 19
-                </span>
-                <span className='px-2 py-1 bg-secondary text-secondary-foreground text-xs rounded-md hover:bg-secondary/80 transition-colors'>
-                  TypeScript
-                </span>
-                <span className='px-2 py-1 bg-secondary text-secondary-foreground text-xs rounded-md hover:bg-secondary/80 transition-colors'>
-                  Nx Monorepo
-                </span>
-                <span className='px-2 py-1 bg-secondary text-secondary-foreground text-xs rounded-md hover:bg-secondary/80 transition-colors'>
-                  Tailwind CSS
-                </span>
-              </div>
-            </div>
-          </div>
-
-          <div className='mt-8 pt-8 border-t'>
-            <p className='text-center text-sm text-muted-foreground'>
-              © {new Date().getFullYear()} {siteConfig.siteName}. Built with Nx,
-              React, and modern web technologies.
-            </p>
-          </div>
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 }

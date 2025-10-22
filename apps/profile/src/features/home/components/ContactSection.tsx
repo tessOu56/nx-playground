@@ -11,12 +11,12 @@ export const ContactSection: FC = () => {
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
-    
+
     // Construct mailto link
     const subject = encodeURIComponent('Contact from Portfolio');
     const body = encodeURIComponent(`From: ${email}\n\n${message}`);
     window.location.href = `mailto:${homeConfig.contact.email}?subject=${subject}&body=${body}`;
-    
+
     setSubmitted(true);
     setTimeout(() => {
       setEmail('');
@@ -26,8 +26,8 @@ export const ContactSection: FC = () => {
   };
 
   return (
-    <section 
-      id='contact-section' 
+    <section
+      id='contact-section'
       className='min-h-[50vh] flex items-center bg-gray-50 dark:bg-gray-900 py-16'
     >
       <div className='max-w-2xl mx-auto px-4 w-full'>
@@ -67,8 +67,8 @@ export const ContactSection: FC = () => {
         ) : (
           <form onSubmit={handleSubmit} className='space-y-6'>
             <div>
-              <label 
-                htmlFor='email' 
+              <label
+                htmlFor='email'
                 className='block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2'
               >
                 Your Email
@@ -86,8 +86,8 @@ export const ContactSection: FC = () => {
             </div>
 
             <div>
-              <label 
-                htmlFor='message' 
+              <label
+                htmlFor='message'
                 className='block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2'
               >
                 Message
@@ -103,7 +103,10 @@ export const ContactSection: FC = () => {
                 aria-label='Your message'
                 aria-describedby='message-help'
               />
-              <p id='message-help' className='text-sm text-gray-500 dark:text-gray-400 mt-2'>
+              <p
+                id='message-help'
+                className='text-sm text-gray-500 dark:text-gray-400 mt-2'
+              >
                 Describe your project or what you'd like to discuss
               </p>
             </div>
@@ -120,7 +123,7 @@ export const ContactSection: FC = () => {
         {/* Alternative Contact */}
         <div className='mt-8 text-center text-sm text-gray-600 dark:text-gray-400'>
           Or email me directly at{' '}
-          <a 
+          <a
             href={`mailto:${homeConfig.contact.email}`}
             className='text-blue-600 dark:text-blue-400 hover:underline'
           >
