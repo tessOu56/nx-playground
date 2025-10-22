@@ -56,10 +56,10 @@ export const ProjectCard: FC<ProjectCardProps> = ({
         </p>
       </div>
 
-      {/* Tech Stack - 5rem fixed height */}
-      <div style={{ minHeight: '5rem' }} className='mt-auto'>
+      {/* Tech Stack - 3.5rem fixed height (more compact) */}
+      <div style={{ minHeight: '3.5rem' }} className='mt-auto'>
         {project.techStack && project.techStack.length > 0 && (
-          <div className='flex flex-wrap gap-2'>
+          <div className='flex flex-wrap gap-1.5'>
             {project.techStack.slice(0, 4).map(tech => (
               <TechTag key={tech} name={tech} compact />
             ))}
