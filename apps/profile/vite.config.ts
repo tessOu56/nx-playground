@@ -1,9 +1,65 @@
 /// <reference types='vitest' />
-import { resolve } from 'path';
+import { readFile } from 'fs/promises';
+import { join, resolve } from 'path';
 
 import { vanillaExtractPlugin } from '@vanilla-extract/vite-plugin';
 import react from '@vitejs/plugin-react';
 import { defineConfig } from 'vite';
+import type { Plugin } from 'vite';
+
+/**
+ * Vite plugin to serve README and Spec markdown files
+ */
+function markdownLoaderPlugin(): Plugin {
+  const workspaceRoot = resolve(__dirname, '../..');
+
+  return {
+    name: 'markdown-loader',
+    configureServer(server) {
+      server.middlewares.use(async (req, res, next) => {
+        const url = req.url || '';
+
+        // Match /apps/{id}/README*.md or /libs/{id}/README*.md
+        const readmeMatch = url.match(
+          /^\/(apps|libs)\/([^/]+)\/(README(?:\.zh-TW)?\.md)$/
+        );
+        if (readmeMatch) {
+          const [, type, id, fileName] = readmeMatch;
+          const filePath = join(workspaceRoot, type, id, fileName);
+
+          try {
+            const content = await readFile(filePath, 'utf-8');
+            res.setHeader('Content-Type', 'text/markdown; charset=utf-8');
+            res.setHeader('Access-Control-Allow-Origin', '*');
+            res.end(content);
+            return;
+          } catch (error) {
+            // File not found, continue
+          }
+        }
+
+        // Match /specs/**/*.md
+        const specMatch = url.match(/^\/specs\/(.+\.md)$/);
+        if (specMatch) {
+          const [, specPath] = specMatch;
+          const filePath = join(workspaceRoot, 'specs', specPath);
+
+          try {
+            const content = await readFile(filePath, 'utf-8');
+            res.setHeader('Content-Type', 'text/markdown; charset=utf-8');
+            res.setHeader('Access-Control-Allow-Origin', '*');
+            res.end(content);
+            return;
+          } catch (error) {
+            // File not found, continue
+          }
+        }
+
+        next();
+      });
+    },
+  };
+}
 
 export default defineConfig(() => ({
   root: __dirname,
@@ -20,7 +76,7 @@ export default defineConfig(() => ({
     port: 3003,
     host: '0.0.0.0',
   },
-  plugins: [react(), vanillaExtractPlugin()],
+  plugins: [markdownLoaderPlugin(), react(), vanillaExtractPlugin()],
   define: {
     'process.env': process.env,
     global: 'globalThis',
