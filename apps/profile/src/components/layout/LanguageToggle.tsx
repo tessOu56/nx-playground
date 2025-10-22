@@ -1,14 +1,20 @@
 import type { FC } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 export const LanguageToggle: FC = () => {
   const location = useLocation();
   const navigate = useNavigate();
+  const { i18n } = useTranslation();
 
   // Extract current locale from path
   const currentLocale = location.pathname.match(/^\/(zh-TW|en)/)?.[1] || 'en';
 
   const switchLanguage = (newLocale: string) => {
+    // Update i18n language
+    i18n.changeLanguage(newLocale);
+    
+    // Update URL
     const newPath = location.pathname.replace(/^\/(zh-TW|en)/, `/${newLocale}`);
     navigate(newPath + location.search);
   };
