@@ -19,7 +19,7 @@ export const TechTimeline: FC = () => {
   const currentLocale = (locale ?? 'en') as SupportedLocale;
   const navigate = useNavigate();
   const { getLocalizedPath } = useLocalizedNavigation();
-  
+
   const [timeline, setTimeline] = useState<TimelineItem[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -27,9 +27,11 @@ export const TechTimeline: FC = () => {
     const loadTimeline = async () => {
       try {
         const blogs = await loadAllBlogs(currentLocale);
-        
+
         const timelineData = blogs
-          .filter(blog => blog.year && blog.techStack && blog.techStack.length > 0)
+          .filter(
+            blog => blog.year && blog.techStack && blog.techStack.length > 0
+          )
           .sort((a, b) => b.year! - a.year!) // 2025 → 2019 (newest first)
           .map(blog => ({
             year: blog.year!,
@@ -38,7 +40,7 @@ export const TechTimeline: FC = () => {
             blogSlug: blog.slug,
             title: blog.title,
           }));
-        
+
         setTimeline(timelineData);
       } catch (error) {
         console.error('Error loading timeline:', error);
@@ -54,7 +56,9 @@ export const TechTimeline: FC = () => {
     return (
       <section className='py-16 bg-white dark:bg-gray-800'>
         <div className='container mx-auto px-4'>
-          <p className='text-center text-gray-600 dark:text-gray-400'>Loading timeline...</p>
+          <p className='text-center text-gray-600 dark:text-gray-400'>
+            Loading timeline...
+          </p>
         </div>
       </section>
     );
@@ -65,7 +69,7 @@ export const TechTimeline: FC = () => {
   }
 
   return (
-    <section 
+    <section
       className='py-16 bg-white dark:bg-gray-800'
       role='region'
       aria-label='Tech Journey Timeline'
@@ -90,11 +94,13 @@ export const TechTimeline: FC = () => {
             {timeline.map((item, index) => (
               <button
                 key={item.year}
-                onClick={() => navigate(getLocalizedPath(`/blogs/${item.blogSlug}`))}
+                onClick={() =>
+                  navigate(getLocalizedPath(`/blogs/${item.blogSlug}`))
+                }
                 className='relative group cursor-pointer'
                 aria-label={`View ${item.year} blog post: ${item.title}`}
                 tabIndex={0}
-                onKeyDown={(e) => {
+                onKeyDown={e => {
                   if (e.key === 'Enter' || e.key === ' ') {
                     e.preventDefault();
                     navigate(getLocalizedPath(`/blogs/${item.blogSlug}`));
@@ -111,7 +117,7 @@ export const TechTimeline: FC = () => {
                   <h3 className='font-semibold text-gray-900 dark:text-white mb-2 text-sm'>
                     {item.title}
                   </h3>
-                  
+
                   {/* Tech Stack */}
                   <div className='flex flex-wrap gap-1 mb-2'>
                     {item.tech.slice(0, 3).map(tech => (
@@ -159,4 +165,3 @@ export const TechTimeline: FC = () => {
     </section>
   );
 };
-

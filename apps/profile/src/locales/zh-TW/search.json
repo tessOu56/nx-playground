@@ -1,0 +1,21 @@
+{
+  "title": "AI 搜尋",
+  "placeholder": "詢問我關於專案、技術或經驗的任何問題...",
+  "thinking": "思考中...",
+  "send": "傳送",
+  "pressEnter": "按 Enter 傳送，Shift+Enter 換行",
+  "exampleQueries": {
+    "title": "歡迎提問",
+    "subtitle": "試試這些範例問題開始對話",
+    "projects": "你用 React 建立了哪些專案？",
+    "monorepo": "告訴我關於你的 monorepo 架構",
+    "tech": "你使用哪些技術？",
+    "blog": "顯示你最新的部落格文章",
+    "nx": "你在 Nx 方面有什麼經驗？"
+  },
+  "info": {
+    "title": "AI 知識助理",
+    "description": "此 AI 助理由我所有專案、部落格文章和技術棧的知識驅動。詢問任何關於我的工作、經驗或技術能力的問題！"
+  },
+  "placeholder_response": "我目前正在設置中！很快就能回答關於專案、技術棧和經驗的問題。敬請期待！🤖"
+}

@@ -1,0 +1,21 @@
+{
+  "title": "AI Search",
+  "placeholder": "Ask me anything about my projects, tech, or experience...",
+  "thinking": "Thinking...",
+  "send": "Send",
+  "pressEnter": "Press Enter to send, Shift+Enter for new line",
+  "exampleQueries": {
+    "title": "Ask Me Anything",
+    "subtitle": "Try one of these example questions to get started",
+    "projects": "What projects have you built with React?",
+    "monorepo": "Tell me about your monorepo architecture",
+    "tech": "What technologies do you use?",
+    "blog": "Show me your latest blog posts",
+    "nx": "What experience do you have with Nx?"
+  },
+  "info": {
+    "title": "AI-Powered Knowledge Assistant",
+    "description": "This AI assistant is powered by knowledge of all my projects, blog posts, and tech stack. Ask anything about my work, experience, or technical capabilities!"
+  },
+  "placeholder_response": "I'm currently being set up! Soon I'll be able to answer questions about projects, tech stack, and experience. Stay tuned! 🤖"
+}
