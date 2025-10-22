@@ -9,9 +9,9 @@ globalThis.Buffer = Buffer;
 
 import App from './App';
 import appsI18n from './features/apps/i18n';
-import { blogsI18n } from './features/blogs';
-import { detailI18n } from './features/detail';
-import { homeI18n } from './features/home';
+import blogsI18n from './features/blogs/i18n';
+import detailI18n from './features/detail/i18n';
+import homeI18n from './features/home/i18n';
 import libsI18n from './features/libs/i18n';
 import layoutI18n from './components/layout/i18n';
 import './index.css';
