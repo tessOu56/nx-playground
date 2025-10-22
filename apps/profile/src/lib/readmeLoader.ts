@@ -15,38 +15,25 @@ import type { SupportedLocale } from './i18n/LocaleRouter';
  * 動態載入所有 README 檔案
  */
 const appsReadmeModules = import.meta.glob<string>(
-  '/apps/*/README.md',
-  { query: '?raw', import: 'default', eager: false }
-);
-
-const appsReadmeModulesZh = import.meta.glob<string>(
-  '/apps/*/README.zh-TW.md',
-  { query: '?raw', import: 'default', eager: false }
+  ['/apps/*/README.md', '/apps/*/README.zh-TW.md'],
+  { query: '?raw', import: 'default' }
 );
 
 const libsReadmeModules = import.meta.glob<string>(
-  '/libs/*/README.md',
-  { query: '?raw', import: 'default', eager: false }
+  ['/libs/*/README.md', '/libs/*/README.zh-TW.md'],
+  { query: '?raw', import: 'default' }
 );
-
-const libsReadmeModulesZh = import.meta.glob<string>(
-  '/libs/*/README.zh-TW.md',
-  { query: '?raw', import: 'default', eager: false }
-);
-
-const allAppsReadmes = { ...appsReadmeModules, ...appsReadmeModulesZh };
-const allLibsReadmes = { ...libsReadmeModules, ...libsReadmeModulesZh };
 
 console.log(
   '[README Loader] Found apps readmes:',
-  Object.keys(allAppsReadmes).length
+  Object.keys(appsReadmeModules).length
 );
-console.log('[README Loader] Apps paths:', Object.keys(allAppsReadmes));
+console.log('[README Loader] Apps paths:', Object.keys(appsReadmeModules));
 console.log(
   '[README Loader] Found libs readmes:',
-  Object.keys(allLibsReadmes).length
+  Object.keys(libsReadmeModules).length
 );
-console.log('[README Loader] Libs paths:', Object.keys(allLibsReadmes));
+console.log('[README Loader] Libs paths:', Object.keys(libsReadmeModules));
 
 /**
  * 解析 README 檔案
@@ -94,11 +81,11 @@ export async function loadAppReadme(
 
   console.log(`[README Loader] Loading app README: ${filePath}`);
 
-  const loader = allAppsReadmes[filePath];
+  const loader = appsReadmeModules[filePath];
   if (!loader) {
     const fallbackFile = locale === 'zh-TW' ? 'README.md' : 'README.zh-TW.md';
     const fallbackPath = `/apps/${appId}/${fallbackFile}`;
-    const fallbackLoader = allAppsReadmes[fallbackPath];
+    const fallbackLoader = appsReadmeModules[fallbackPath];
 
     if (!fallbackLoader) {
       console.warn(
@@ -127,11 +114,11 @@ export async function loadLibReadme(
 
   console.log(`[README Loader] Loading lib README: ${filePath}`);
 
-  const loader = allLibsReadmes[filePath];
+  const loader = libsReadmeModules[filePath];
   if (!loader) {
     const fallbackFile = locale === 'zh-TW' ? 'README.md' : 'README.zh-TW.md';
     const fallbackPath = `/libs/${libId}/${fallbackFile}`;
-    const fallbackLoader = allLibsReadmes[fallbackPath];
+    const fallbackLoader = libsReadmeModules[fallbackPath];
 
     if (!fallbackLoader) {
       console.warn(
@@ -159,7 +146,7 @@ export async function loadAllAppsReadmes(
 
   console.log(`[README Loader] loadAllAppsReadmes for locale: ${locale}`);
 
-  for (const [path, loader] of Object.entries(allAppsReadmes)) {
+  for (const [path, loader] of Object.entries(appsReadmeModules)) {
     if (!path.endsWith(fileName)) continue;
 
     console.log(`[README Loader] Loading: ${path}`);
@@ -192,7 +179,7 @@ export async function loadAllLibsReadmes(
 
   console.log(`[README Loader] loadAllLibsReadmes for locale: ${locale}`);
 
-  for (const [path, loader] of Object.entries(allLibsReadmes)) {
+  for (const [path, loader] of Object.entries(libsReadmeModules)) {
     if (!path.endsWith(fileName)) continue;
 
     console.log(`[README Loader] Loading: ${path}`);
