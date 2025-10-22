@@ -83,9 +83,13 @@ export const CoreStrengths: FC = () => {
 
   return (
     <section
-      className='relative min-h-screen flex flex-col justify-center overflow-hidden bg-white dark:bg-gray-900 py-16'
+      className='relative h-screen flex flex-col justify-center overflow-hidden'
       role='region'
       aria-label='Tech Stack Showcase'
+      style={{
+        background: 'linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%)',
+        backgroundAttachment: 'fixed',
+      }}
     >
       {/* Dynamic Parallax Background Layers */}
       <div className='absolute inset-0 pointer-events-none' aria-hidden='true'>
