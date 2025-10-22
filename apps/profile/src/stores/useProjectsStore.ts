@@ -27,11 +27,16 @@ export const useProjectsStore = create<ProjectsState>((set, get) => ({
 
   loadApps: async (locale: SupportedLocale) => {
     // 防止重複載入
-    if (get().apps[locale].length > 0) return;
+    if (get().apps[locale].length > 0) {
+      console.log(`[Store] Apps already loaded for ${locale}, count:`, get().apps[locale].length);
+      return;
+    }
 
+    console.log(`[Store] Loading apps for ${locale}...`);
     set({ loading: true });
     try {
       const apps = await loadAllApps(locale);
+      console.log(`[Store] Loaded ${apps.length} apps for ${locale}`);
       set(state => ({
         apps: { ...state.apps, [locale]: apps },
         loading: false,
@@ -44,11 +49,16 @@ export const useProjectsStore = create<ProjectsState>((set, get) => ({
 
   loadLibs: async (locale: SupportedLocale) => {
     // 防止重複載入
-    if (get().libs[locale].length > 0) return;
+    if (get().libs[locale].length > 0) {
+      console.log(`[Store] Libs already loaded for ${locale}, count:`, get().libs[locale].length);
+      return;
+    }
 
+    console.log(`[Store] Loading libs for ${locale}...`);
     set({ loading: true });
     try {
       const libs = await loadAllLibs(locale);
+      console.log(`[Store] Loaded ${libs.length} libs for ${locale}`);
       set(state => ({
         libs: { ...state.libs, [locale]: libs },
         loading: false,
