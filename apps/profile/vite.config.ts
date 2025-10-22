@@ -49,6 +49,10 @@ export default defineConfig(() => ({
         __dirname,
         '../../libs/hooks/src/index.ts'
       ),
+      '@nx-playground/tech-stack-data': resolve(
+        __dirname,
+        '../../libs/tech-stack-data/src/index.ts'
+      ),
     },
   },
   build: {

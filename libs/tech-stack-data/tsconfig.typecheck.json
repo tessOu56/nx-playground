@@ -1,8 +1,9 @@
 {
-  "extends": "./tsconfig.app.json",
+  "extends": "./tsconfig.lib.json",
   "compilerOptions": {
     "noEmit": true,
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "paths": {}
   },
   "include": ["src/**/*.ts", "src/**/*.tsx"],
   "exclude": [

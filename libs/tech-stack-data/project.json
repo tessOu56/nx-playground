@@ -3,7 +3,8 @@
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "libs/tech-stack-data/src",
   "projectType": "library",
-  "tags": ["npm:private", "npm:data"],
+  "tags": ["npm:private"],
+  "// targets": "to see all targets run: nx show project tech-stack-data --web",
   "targets": {
     "collect": {
       "executor": "nx:run-commands",
@@ -13,18 +14,21 @@
       }
     },
     "build": {
-      "executor": "@nx/js:tsc",
+      "executor": "@nx/vite:build",
       "outputs": ["{options.outputPath}"],
+      "defaultConfiguration": "production",
       "options": {
         "outputPath": "dist/libs/tech-stack-data",
-        "main": "libs/tech-stack-data/src/index.ts",
-        "tsConfig": "libs/tech-stack-data/tsconfig.lib.json",
-        "assets": ["libs/tech-stack-data/*.md"]
+        "tsConfig": "libs/tech-stack-data/tsconfig.lib.json"
+      },
+      "configurations": {
+        "development": {
+          "mode": "development"
+        },
+        "production": {
+          "mode": "production"
+        }
       }
-    },
-    "lint": {
-      "executor": "@nx/eslint:lint",
-      "outputs": ["{options.outputFile}"]
     },
     "test": {
       "executor": "@nx/vite:test",
@@ -32,6 +36,20 @@
       "options": {
         "passWithNoTests": true,
         "reportsDirectory": "../../coverage/libs/tech-stack-data"
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint",
+      "outputs": ["{options.outputFile}"]
+    },
+    "typecheck": {
+      "executor": "@nx/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/libs/tech-stack-data/tsc",
+        "main": "libs/tech-stack-data/src/index.ts",
+        "tsConfig": "libs/tech-stack-data/tsconfig.typecheck.json",
+        "assets": []
       }
     }
   }
