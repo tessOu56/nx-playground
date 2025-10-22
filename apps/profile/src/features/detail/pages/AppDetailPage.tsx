@@ -7,18 +7,19 @@ import type { AppData } from '../../../types/projectData';
 import { ProjectDetail } from '../components/ProjectDetail';
 
 export const AppDetailPage: FC = () => {
-  const { appId, locale } = useParams<{ appId: string; locale: string }>();
+  const { appId, projectId, locale } = useParams<{ appId?: string; projectId?: string; locale: string }>();
+  const id = projectId || appId;
   const currentLocale = (locale ?? 'en') as SupportedLocale;
   const [app, setApp] = useState<AppData | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (!appId) return;
+    if (!id) return;
 
     const loadData = async () => {
       setLoading(true);
       try {
-        const data = await loadApp(appId, currentLocale);
+        const data = await loadApp(id, currentLocale);
         setApp(data);
       } catch (error) {
         console.error('Failed to load app:', error);
@@ -29,7 +30,7 @@ export const AppDetailPage: FC = () => {
     };
 
     loadData();
-  }, [appId, currentLocale]);
+  }, [id, currentLocale]);
 
   if (loading) {
     return (
