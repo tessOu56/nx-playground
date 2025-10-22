@@ -1,7 +1,23 @@
+/* Timeline scroll snap */
+.snap-y {
+  scroll-snap-type: y mandatory;
+  scroll-behavior: smooth;
+  overflow-y: auto;
+}
+
+.snap-start {
+  scroll-snap-align: start;
+}
+
+.snap-always {
+  scroll-snap-stop: always;
+}
+
 /* Respect reduced motion preferences */
 @media (prefers-reduced-motion: reduce) {
   .snap-y {
     scroll-snap-type: none;
+    scroll-behavior: auto;
   }
 
   .motion-safe\:animate-bounce {
