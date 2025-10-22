@@ -14,7 +14,7 @@ import type { SupportedLocale } from './i18n/LocaleRouter';
 /**
  * 動態載入所有 Spec 檔案
  */
-const specsModules = import.meta.glob<string>('../../specs/**/*.md', {
+const specsModules = import.meta.glob<string>('/specs/**/*.md', {
   query: '?raw',
   import: 'default',
   eager: false,
@@ -75,14 +75,14 @@ export async function loadAppSpec(
   locale: SupportedLocale = 'en'
 ): Promise<ProjectSpec | null> {
   const fileName = locale === 'zh-TW' ? 'zh-TW.md' : 'en.md';
-  const filePath = `../../specs/apps/${appId}/${fileName}`;
+  const filePath = `/specs/apps/${appId}/${fileName}`;
 
   console.log(`[Spec Loader] Loading app spec: ${filePath}`);
 
   const loader = specsModules[filePath];
   if (!loader) {
     const fallbackFile = locale === 'zh-TW' ? 'en.md' : 'zh-TW.md';
-    const fallbackPath = `../../specs/apps/${appId}/${fallbackFile}`;
+    const fallbackPath = `/specs/apps/${appId}/${fallbackFile}`;
     const fallbackLoader = specsModules[fallbackPath];
 
     if (!fallbackLoader) {
@@ -106,14 +106,14 @@ export async function loadLibSpec(
   locale: SupportedLocale = 'en'
 ): Promise<ProjectSpec | null> {
   const fileName = locale === 'zh-TW' ? 'zh-TW.md' : 'en.md';
-  const filePath = `../../specs/libs/${libId}/${fileName}`;
+  const filePath = `/specs/libs/${libId}/${fileName}`;
 
   console.log(`[Spec Loader] Loading lib spec: ${filePath}`);
 
   const loader = specsModules[filePath];
   if (!loader) {
     const fallbackFile = locale === 'zh-TW' ? 'en.md' : 'zh-TW.md';
-    const fallbackPath = `../../specs/libs/${libId}/${fallbackFile}`;
+    const fallbackPath = `/specs/libs/${libId}/${fallbackFile}`;
     const fallbackLoader = specsModules[fallbackPath];
 
     if (!fallbackLoader) {

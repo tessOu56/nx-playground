@@ -15,25 +15,38 @@ import type { SupportedLocale } from './i18n/LocaleRouter';
  * 動態載入所有 README 檔案
  */
 const appsReadmeModules = import.meta.glob<string>(
-  ['../../apps/*/README.md', '../../apps/*/README.zh-TW.md'],
+  '/apps/*/README.md',
+  { query: '?raw', import: 'default', eager: false }
+);
+
+const appsReadmeModulesZh = import.meta.glob<string>(
+  '/apps/*/README.zh-TW.md',
   { query: '?raw', import: 'default', eager: false }
 );
 
 const libsReadmeModules = import.meta.glob<string>(
-  ['../../libs/*/README.md', '../../libs/*/README.zh-TW.md'],
+  '/libs/*/README.md',
   { query: '?raw', import: 'default', eager: false }
 );
 
+const libsReadmeModulesZh = import.meta.glob<string>(
+  '/libs/*/README.zh-TW.md',
+  { query: '?raw', import: 'default', eager: false }
+);
+
+const allAppsReadmes = { ...appsReadmeModules, ...appsReadmeModulesZh };
+const allLibsReadmes = { ...libsReadmeModules, ...libsReadmeModulesZh };
+
 console.log(
   '[README Loader] Found apps readmes:',
-  Object.keys(appsReadmeModules).length
+  Object.keys(allAppsReadmes).length
 );
-console.log('[README Loader] Apps paths:', Object.keys(appsReadmeModules));
+console.log('[README Loader] Apps paths:', Object.keys(allAppsReadmes));
 console.log(
   '[README Loader] Found libs readmes:',
-  Object.keys(libsReadmeModules).length
+  Object.keys(allLibsReadmes).length
 );
-console.log('[README Loader] Libs paths:', Object.keys(libsReadmeModules));
+console.log('[README Loader] Libs paths:', Object.keys(allLibsReadmes));
 
 /**
  * 解析 README 檔案
@@ -77,15 +90,15 @@ export async function loadAppReadme(
   locale: SupportedLocale = 'en'
 ): Promise<ProjectReadme | null> {
   const fileName = locale === 'zh-TW' ? 'README.zh-TW.md' : 'README.md';
-  const filePath = `../../apps/${appId}/${fileName}`;
+  const filePath = `/apps/${appId}/${fileName}`;
 
   console.log(`[README Loader] Loading app README: ${filePath}`);
 
-  const loader = appsReadmeModules[filePath];
+  const loader = allAppsReadmes[filePath];
   if (!loader) {
     const fallbackFile = locale === 'zh-TW' ? 'README.md' : 'README.zh-TW.md';
-    const fallbackPath = `../../apps/${appId}/${fallbackFile}`;
-    const fallbackLoader = appsReadmeModules[fallbackPath];
+    const fallbackPath = `/apps/${appId}/${fallbackFile}`;
+    const fallbackLoader = allAppsReadmes[fallbackPath];
 
     if (!fallbackLoader) {
       console.warn(
@@ -110,15 +123,15 @@ export async function loadLibReadme(
   locale: SupportedLocale = 'en'
 ): Promise<ProjectReadme | null> {
   const fileName = locale === 'zh-TW' ? 'README.zh-TW.md' : 'README.md';
-  const filePath = `../../libs/${libId}/${fileName}`;
+  const filePath = `/libs/${libId}/${fileName}`;
 
   console.log(`[README Loader] Loading lib README: ${filePath}`);
 
-  const loader = libsReadmeModules[filePath];
+  const loader = allLibsReadmes[filePath];
   if (!loader) {
     const fallbackFile = locale === 'zh-TW' ? 'README.md' : 'README.zh-TW.md';
-    const fallbackPath = `../../libs/${libId}/${fallbackFile}`;
-    const fallbackLoader = libsReadmeModules[fallbackPath];
+    const fallbackPath = `/libs/${libId}/${fallbackFile}`;
+    const fallbackLoader = allLibsReadmes[fallbackPath];
 
     if (!fallbackLoader) {
       console.warn(
@@ -144,20 +157,27 @@ export async function loadAllAppsReadmes(
   const readmes: ProjectReadme[] = [];
   const fileName = locale === 'zh-TW' ? 'README.zh-TW.md' : 'README.md';
 
-  for (const [path, loader] of Object.entries(appsReadmeModules)) {
+  console.log(`[README Loader] loadAllAppsReadmes for locale: ${locale}`);
+
+  for (const [path, loader] of Object.entries(allAppsReadmes)) {
     if (!path.endsWith(fileName)) continue;
 
+    console.log(`[README Loader] Loading: ${path}`);
     try {
       const content = await loader();
       const readme = await parseReadme(path, content);
       if (readme?.id) {
+        console.log(`[README Loader] Loaded app: ${readme.id} - ${readme.name}`);
         readmes.push(readme);
+      } else {
+        console.warn(`[README Loader] No ID found in ${path}`);
       }
     } catch (error) {
       console.error(`Error loading ${path}:`, error);
     }
   }
 
+  console.log(`[README Loader] Total apps loaded: ${readmes.length}`);
   return readmes.sort((a, b) => a.name.localeCompare(b.name));
 }
 
@@ -170,19 +190,26 @@ export async function loadAllLibsReadmes(
   const readmes: ProjectReadme[] = [];
   const fileName = locale === 'zh-TW' ? 'README.zh-TW.md' : 'README.md';
 
-  for (const [path, loader] of Object.entries(libsReadmeModules)) {
+  console.log(`[README Loader] loadAllLibsReadmes for locale: ${locale}`);
+
+  for (const [path, loader] of Object.entries(allLibsReadmes)) {
     if (!path.endsWith(fileName)) continue;
 
+    console.log(`[README Loader] Loading: ${path}`);
     try {
       const content = await loader();
       const readme = await parseReadme(path, content);
       if (readme?.id) {
+        console.log(`[README Loader] Loaded lib: ${readme.id} - ${readme.name}`);
         readmes.push(readme);
+      } else {
+        console.warn(`[README Loader] No ID found in ${path}`);
       }
     } catch (error) {
       console.error(`Error loading ${path}:`, error);
     }
   }
 
+  console.log(`[README Loader] Total libs loaded: ${readmes.length}`);
   return readmes.sort((a, b) => a.name.localeCompare(b.name));
 }
