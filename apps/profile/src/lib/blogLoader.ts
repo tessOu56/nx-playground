@@ -17,7 +17,8 @@ async function fetchBlog(
     const response = await fetch(url);
     if (!response.ok) {
       // Try fallback locale
-      const fallbackFile = locale === 'zh-TW' ? `${slug}.md` : `${slug}.zh-TW.md`;
+      const fallbackFile =
+        locale === 'zh-TW' ? `${slug}.md` : `${slug}.zh-TW.md`;
       const fallbackUrl = `/specs/blogs/${fallbackFile}`;
 
       const fallbackResponse = await fetch(fallbackUrl);
@@ -117,8 +118,9 @@ export async function loadAllBlogs(
   }
 
   // Sort by publish date (newest first)
-  return blogs.sort((a, b) => 
-    new Date(b.publishDate).getTime() - new Date(a.publishDate).getTime()
+  return blogs.sort(
+    (a, b) =>
+      new Date(b.publishDate).getTime() - new Date(a.publishDate).getTime()
   );
 }
 
@@ -167,4 +169,3 @@ export async function loadBlogsByTag(
   const blogs = await loadAllBlogs(locale);
   return blogs.filter(blog => blog.tags.includes(tag));
 }
-
