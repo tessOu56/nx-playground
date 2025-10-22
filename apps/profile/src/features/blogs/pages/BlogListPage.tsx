@@ -1,71 +1,76 @@
 /**
- * Documentation search page - displays all technical documents with search and filtering
+ * Blog list page - displays blog posts with filtering by year and tags
  */
 
 import { type FC, useEffect, useMemo, useState } from 'react';
 import { useParams, useSearchParams } from 'react-router-dom';
 
+import { BlogCard } from '../../../components/BlogCard';
+import { loadAllBlogMetadata } from '../../../lib/blogLoader';
 import { type SupportedLocale } from '../../../lib/i18n/LocaleRouter';
-import { useBlogsStore } from '../../../stores/useBlogsStore';
-import { BlogCard } from '../components/BlogCard';
-import { CategoryFilter } from '../components/CategoryFilter';
-import { SearchBar } from '../components/SearchBar';
-import { TagFilter } from '../components/TagFilter';
-import { useBlogTranslation } from '../hooks/useBlogsTranslation';
-import type { BlogCategory } from '../types';
-import { getAllTags } from '../utils/loadDocs';
+import type { BlogMetadata } from '../../../types/blogData';
 
 export const BlogListPage: FC = () => {
   const { locale } = useParams<{ locale: string }>();
   const currentLocale = (locale ?? 'en') as SupportedLocale;
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams] = useSearchParams();
 
-  const { t } = useBlogTranslation();
-
-  // 從 Zustand store 取得資料
-  const posts = useBlogsStore(state => state.posts[currentLocale]);
-  const loading = useBlogsStore(state => state.loading);
-  const loadPosts = useBlogsStore(state => state.loadPosts);
-
-  // UI state（保持 useState）
-  const [allTags, setAllTags] = useState<string[]>([]);
+  const [blogs, setBlogs] = useState<BlogMetadata[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [selectedYear, setSelectedYear] = useState<number | 'all'>('all');
   const [selectedTag, setSelectedTag] = useState<string | null>(null);
-  const [selectedCategory, setSelectedCategory] = useState<
-    BlogCategory | 'all'
-  >('all');
   const [searchQuery, setSearchQuery] = useState('');
 
-  // Read tag from URL params on mount
+  // Read URL params
   useEffect(() => {
-    const tagFromUrl = searchParams.get('tag');
-    if (tagFromUrl) {
-      setSelectedTag(tagFromUrl);
-      // Clear URL param after reading
-      setSearchParams({}, { replace: true });
-    }
-  }, [searchParams, setSearchParams]);
+    const yearParam = searchParams.get('year');
+    const tagParam = searchParams.get('tag');
+    
+    if (yearParam) setSelectedYear(parseInt(yearParam));
+    if (tagParam) setSelectedTag(tagParam);
+  }, [searchParams]);
 
-  // Load posts and tags
+  // Load blogs
   useEffect(() => {
     const loadData = async () => {
-      await loadPosts(currentLocale);
-      const tags = await getAllTags(currentLocale);
-      setAllTags(tags);
+      setLoading(true);
+      try {
+        const blogData = await loadAllBlogMetadata(currentLocale);
+        setBlogs(blogData);
+      } catch (error) {
+        console.error('Error loading blogs:', error);
+      } finally {
+        setLoading(false);
+      }
     };
 
     loadData();
-  }, [currentLocale, loadPosts]);
+  }, [currentLocale]);
 
-  // Filter posts
-  const filteredPosts = useMemo(() => {
-    return posts.filter(post => {
-      // Category filter
-      if (selectedCategory !== 'all' && post.category !== selectedCategory) {
+  // Extract unique years and tags
+  const years = useMemo(() => {
+    const uniqueYears = Array.from(
+      new Set(blogs.filter(b => b.year).map(b => b.year!))
+    ).sort((a, b) => b - a); // Newest first
+    return uniqueYears;
+  }, [blogs]);
+
+  const allTags = useMemo(() => {
+    const tagSet = new Set<string>();
+    blogs.forEach(blog => blog.tags.forEach(tag => tagSet.add(tag)));
+    return Array.from(tagSet).sort();
+  }, [blogs]);
+
+  // Filter blogs
+  const filteredBlogs = useMemo(() => {
+    return blogs.filter(blog => {
+      // Year filter
+      if (selectedYear !== 'all' && blog.year !== selectedYear) {
         return false;
       }
 
       // Tag filter
-      if (selectedTag && !post.tags.includes(selectedTag)) {
+      if (selectedTag && !blog.tags.includes(selectedTag)) {
         return false;
       }
 
@@ -73,147 +78,117 @@ export const BlogListPage: FC = () => {
       if (searchQuery) {
         const query = searchQuery.toLowerCase();
         return (
-          post.title.toLowerCase().includes(query) ||
-          post.excerpt.toLowerCase().includes(query) ||
-          post.tags.some(tag => tag.toLowerCase().includes(query))
+          blog.title.toLowerCase().includes(query) ||
+          blog.excerpt.toLowerCase().includes(query) ||
+          blog.tags.some(tag => tag.toLowerCase().includes(query))
         );
       }
 
       return true;
     });
-  }, [posts, selectedCategory, selectedTag, searchQuery]);
+  }, [blogs, selectedYear, selectedTag, searchQuery]);
 
   if (loading) {
     return (
-      <div className='container mx-auto px-4 py-8'>
-        <div className='text-center'>
-          <p className='text-muted-foreground'>Loading...</p>
-        </div>
+      <div className='min-h-screen flex items-center justify-center'>
+        <p className='text-lg text-gray-600 dark:text-gray-400'>Loading blogs...</p>
       </div>
     );
   }
 
   return (
-    <div className='container mx-auto px-4 py-8'>
-      {/* Search-focused Header */}
-      <header className='mb-8 max-w-3xl mx-auto'>
-        <h1 className='text-3xl md:text-4xl font-bold text-foreground mb-3 text-center'>
-          {String(t('title'))}
-        </h1>
-        <p className='text-base text-muted-foreground text-center mb-6'>
-          {String(t('subtitle'))}
-        </p>
+    <div className='min-h-screen bg-gray-50 dark:bg-gray-900 py-12 px-4'>
+      <div className='max-w-7xl mx-auto'>
+        {/* Header */}
+        <div className='text-center mb-12'>
+          <h1 className='text-5xl font-bold text-gray-900 dark:text-white mb-4'>
+            Blog
+          </h1>
+          <p className='text-xl text-gray-600 dark:text-gray-400 max-w-3xl mx-auto'>
+            Annual tech journey and reflections: My work experience, learning, and growth
+          </p>
+        </div>
 
-        {/* Prominent Search Bar */}
-        <SearchBar
-          value={searchQuery}
-          onChange={setSearchQuery}
-          placeholder={String(t('searchPlaceholder'))}
-        />
-      </header>
+        {/* Search Bar */}
+        <div className='max-w-2xl mx-auto mb-8'>
+          <input
+            type='search'
+            value={searchQuery}
+            onChange={e => setSearchQuery(e.target.value)}
+            placeholder='Search blogs...'
+            className='w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500'
+          />
+        </div>
 
-      {/* Filters */}
-      <div className='mb-6 space-y-4'>
-        <CategoryFilter
-          selectedCategory={selectedCategory}
-          onSelectCategory={setSelectedCategory}
-        />
-        <TagFilter
-          tags={allTags}
-          selectedTag={selectedTag}
-          onSelectTag={setSelectedTag}
-        />
-      </div>
+        {/* Filters */}
+        <div className='flex flex-wrap gap-4 mb-8 justify-center'>
+          {/* Year Filter */}
+          <div className='flex items-center gap-2'>
+            <span className='text-sm font-medium text-gray-700 dark:text-gray-300'>Year:</span>
+            <button
+              onClick={() => setSelectedYear('all')}
+              className={`px-4 py-2 rounded-lg transition-colors ${
+                selectedYear === 'all'
+                  ? 'bg-blue-600 text-white'
+                  : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600'
+              }`}
+            >
+              All
+            </button>
+            {years.map(year => (
+              <button
+                key={year}
+                onClick={() => setSelectedYear(year)}
+                className={`px-4 py-2 rounded-lg transition-colors ${
+                  selectedYear === year
+                    ? 'bg-blue-600 text-white'
+                    : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600'
+                }`}
+              >
+                {year}
+              </button>
+            ))}
+          </div>
 
-      {/* Results Count & Active Filters */}
-      {!loading && (
-        <div className='mb-4 flex items-center gap-2 text-sm'>
-          <span className='text-muted-foreground'>
-            找到{' '}
-            <span className='font-semibold text-foreground'>
-              {filteredPosts.length}
-            </span>{' '}
-            個文件
-          </span>
+          {/* Tag Filter */}
           {selectedTag && (
-            <span className='inline-flex items-center gap-1 px-2 py-1 bg-primary/10 text-primary rounded-md text-xs'>
-              標籤: {selectedTag}
+            <div className='flex items-center gap-2 px-4 py-2 bg-blue-100 dark:bg-blue-900/30 rounded-lg'>
+              <span className='text-sm text-blue-700 dark:text-blue-300'>
+                Tag: {selectedTag}
+              </span>
               <button
                 onClick={() => setSelectedTag(null)}
-                className='hover:bg-primary/20 rounded-full p-0.5'
+                className='text-blue-700 dark:text-blue-300 hover:text-blue-900 dark:hover:text-blue-100'
               >
-                <svg
-                  className='h-3 w-3'
-                  fill='none'
-                  viewBox='0 0 24 24'
-                  stroke='currentColor'
-                >
-                  <path
-                    strokeLinecap='round'
-                    strokeLinejoin='round'
-                    strokeWidth={2}
-                    d='M6 18L18 6M6 6l12 12'
-                  />
-                </svg>
+                ×
               </button>
-            </span>
-          )}
-          {searchQuery && (
-            <span className='inline-flex items-center gap-1 px-2 py-1 bg-primary/10 text-primary rounded-md text-xs'>
-              搜尋: {searchQuery}
-              <button
-                onClick={() => setSearchQuery('')}
-                className='hover:bg-primary/20 rounded-full p-0.5'
-              >
-                <svg
-                  className='h-3 w-3'
-                  fill='none'
-                  viewBox='0 0 24 24'
-                  stroke='currentColor'
-                >
-                  <path
-                    strokeLinecap='round'
-                    strokeLinejoin='round'
-                    strokeWidth={2}
-                    d='M6 18L18 6M6 6l12 12'
-                  />
-                </svg>
-              </button>
-            </span>
+            </div>
           )}
         </div>
-      )}
 
-      {/* Posts Grid */}
-      {filteredPosts.length > 0 ? (
-        <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6'>
-          {filteredPosts.map(post => (
-            <BlogCard key={post.slug} post={post} />
-          ))}
+        {/* Results Count */}
+        <div className='text-center mb-8 text-gray-600 dark:text-gray-400'>
+          Found {filteredBlogs.length} blog{filteredBlogs.length !== 1 ? 's' : ''}
         </div>
-      ) : (
-        <div className='text-center py-16'>
-          <svg
-            className='mx-auto h-16 w-16 text-muted-foreground mb-4'
-            fill='none'
-            viewBox='0 0 24 24'
-            stroke='currentColor'
-          >
-            <path
-              strokeLinecap='round'
-              strokeLinejoin='round'
-              strokeWidth={1.5}
-              d='M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z'
-            />
-          </svg>
-          <p className='text-lg text-muted-foreground mb-2'>
-            {String(t('noResults'))}
-          </p>
-          <p className='text-sm text-muted-foreground'>
-            試試調整搜尋關鍵字或標籤篩選
-          </p>
-        </div>
-      )}
+
+        {/* Blogs Grid */}
+        {filteredBlogs.length > 0 ? (
+          <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8'>
+            {filteredBlogs.map(blog => (
+              <BlogCard key={blog.slug} blog={blog} />
+            ))}
+          </div>
+        ) : (
+          <div className='text-center py-16'>
+            <p className='text-lg text-gray-600 dark:text-gray-400 mb-2'>
+              No blogs found
+            </p>
+            <p className='text-sm text-gray-500 dark:text-gray-500'>
+              Try adjusting your filters or search query
+            </p>
+          </div>
+        )}
+      </div>
     </div>
   );
 };
