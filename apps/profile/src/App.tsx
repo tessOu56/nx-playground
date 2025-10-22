@@ -9,9 +9,12 @@ import { AppDetailPage, LibDetailPage } from './features/detail';
 import { HomePage } from './features/home';
 import { LibsPage } from './features/libs';
 import { SearchPage } from './features/search';
+import { useScrollToTop } from './hooks/useScrollToTop';
 import { LocaleRouter } from './lib/i18n';
 
 function AppContent() {
+  useScrollToTop();
+  
   return (
     <Routes>
       {/* Redirect root to default locale (en) */}
