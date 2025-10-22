@@ -268,7 +268,7 @@ export const TechTimeline: FC = () => {
                   d='M9 5l7 7-7 7'
                 />
               </svg>
-              
+
               {/* Animated underline */}
               <div className='absolute bottom-0 left-0 w-0 h-0.5 bg-white transition-all duration-500 ease-out group-hover:w-full' />
             </button>
@@ -276,24 +276,6 @@ export const TechTimeline: FC = () => {
         </article>
       )}
 
-      {/* Final CTA */}
-      <div
-        className='snap-start snap-always min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-600 to-purple-600'
-        data-header-dark='true'
-      >
-        <div className='text-center text-white'>
-          <h2 className='text-5xl font-bold mb-6'>Explore All Blog Posts</h2>
-          <p className='text-xl mb-10 opacity-90'>
-            Dive deeper into my technical journey
-          </p>
-          <button
-            onClick={() => navigate(getLocalizedPath('/blogs'))}
-            className='px-10 py-5 bg-white text-blue-600 rounded-lg text-lg font-semibold hover:bg-gray-100 transition-colors shadow-xl'
-          >
-            View All Blogs →
-          </button>
-        </div>
-      </div>
     </div>
   );
 };
