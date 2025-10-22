@@ -1,40 +1,31 @@
-/**
- * Documentation detail page
- */
+import type { FC } from 'react';
+import { useEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 
-import { type FC, useEffect, useState } from 'react';
-import { Navigate, useParams } from 'react-router-dom';
-
-import { type SupportedLocale } from '../../../lib/i18n/LocaleRouter';
-import { BlogPost } from '../components/BlogPost';
-import { LanguageToggle } from '../components/LanguageToggle';
-import { ShareButtons } from '../components/ShareButtons';
-import { TableOfContents } from '../components/TableOfContents';
-import { TagList } from '../components/TagList';
-import { useBlogTranslation } from '../hooks/useBlogsTranslation';
-import type { BlogPost as BlogPostType } from '../types';
-import { loadPostBySlug } from '../utils/loadDocs';
+import { loadBlog } from '../../../lib/blogLoader';
+import type { SupportedLocale } from '../../../lib/i18n/LocaleRouter';
+import { useLocalizedNavigation } from '../../../lib/i18n/useLocalizedNavigation';
+import type { BlogPost } from '../../../types/blogData';
 
 export const BlogPostPage: FC = () => {
-  const { slug, locale } = useParams<{ slug: string; locale: string }>();
+  const { locale, slug } = useParams<{ locale: string; slug: string }>();
   const currentLocale = (locale ?? 'en') as SupportedLocale;
+  const navigate = useNavigate();
+  const { getLocalizedPath } = useLocalizedNavigation();
 
-  const { t } = useBlogTranslation();
-
-  const [post, setPost] = useState<BlogPostType | null>(null);
+  const [blog, setBlog] = useState<BlogPost | null>(null);
   const [loading, setLoading] = useState(true);
 
-  // Load post
   useEffect(() => {
     const loadData = async () => {
       if (!slug) return;
 
       setLoading(true);
       try {
-        const loadedPost = await loadPostBySlug(slug, currentLocale);
-        setPost(loadedPost);
+        const blogData = await loadBlog(slug, currentLocale);
+        setBlog(blogData);
       } catch (error) {
-        console.error('Failed to load blog post:', error);
+        console.error('Error loading blog:', error);
       } finally {
         setLoading(false);
       }
@@ -43,93 +34,179 @@ export const BlogPostPage: FC = () => {
     loadData();
   }, [slug, currentLocale]);
 
-  // Redirect if no slug
-  if (!slug) {
-    return <Navigate to={`/${currentLocale}/blog`} replace />;
-  }
-
-  // Loading state
   if (loading) {
     return (
-      <div className='container mx-auto px-4 py-8'>
+      <div className='min-h-screen flex items-center justify-center'>
+        <p className='text-lg text-gray-600 dark:text-gray-400'>Loading...</p>
+      </div>
+    );
+  }
+
+  if (!blog) {
+    return (
+      <div className='min-h-screen flex items-center justify-center'>
         <div className='text-center'>
-          <p className='text-muted-foreground'>Loading...</p>
+          <h1 className='text-4xl font-bold text-gray-900 dark:text-white mb-4'>
+            Blog Not Found
+          </h1>
+          <button
+            onClick={() => navigate(getLocalizedPath('/blogs'))}
+            className='px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700'
+          >
+            Back to Blogs
+          </button>
         </div>
       </div>
     );
   }
 
-  // Not found
-  if (!post) {
-    return <Navigate to={`/${currentLocale}/blog`} replace />;
-  }
-
-  // Show fallback notice if language mismatch
-  const isFallback = post.lang !== currentLocale;
+  const publishDate = new Date(blog.publishDate).toLocaleDateString('en-US', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+  });
 
   return (
-    <div className='container mx-auto px-4 py-8'>
-      <article className='max-w-4xl mx-auto'>
+    <div className='min-h-screen bg-gray-50 dark:bg-gray-900'>
+      <article className='max-w-4xl mx-auto px-4 py-12'>
+        {/* Breadcrumb */}
+        <nav className='mb-8'>
+          <button
+            onClick={() => navigate(getLocalizedPath('/blogs'))}
+            className='text-blue-600 dark:text-blue-400 hover:underline flex items-center gap-2'
+          >
+            <svg className='w-4 h-4' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
+              <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M15 19l-7-7 7-7' />
+            </svg>
+            Back to Blogs
+          </button>
+        </nav>
+
         {/* Header */}
-        <header className='mb-8 flex justify-between items-start gap-4'>
-          <div className='flex-1'>
-            <h1 className='text-4xl md:text-5xl font-bold text-foreground mb-4'>
-              {post.title}
-            </h1>
+        <header className='mb-8'>
+          {blog.coverImage && (
+            <img
+              src={blog.coverImage}
+              alt={blog.title}
+              className='w-full h-64 md:h-96 object-cover rounded-xl mb-8'
+            />
+          )}
 
-            {/* Meta info */}
-            <div className='flex flex-wrap items-center gap-3 text-sm text-muted-foreground mb-4'>
-              <time>
-                {String(t('publishedOn'))}:{' '}
-                {new Date(post.date).toLocaleDateString(
-                  post.lang === 'zh-TW' ? 'zh-TW' : 'en-US'
-                )}
-              </time>
-              <span>•</span>
-              <span>
-                {String(t('readingTime'))}: {post.readingTime}
+          <div className='flex items-center gap-4 text-sm text-gray-600 dark:text-gray-400 mb-4'>
+            <time dateTime={blog.publishDate}>{publishDate}</time>
+            {blog.readingTime && <span>• {blog.readingTime} min read</span>}
+            {blog.year && (
+              <span className='px-3 py-1 bg-blue-600 text-white rounded-full text-xs font-bold'>
+                {blog.year}
               </span>
-              <span>•</span>
-              <span className='capitalize'>
-                {String(t(`categories.${post.category}`))}
-              </span>
-            </div>
-
-            {/* Tags */}
-            <TagList tags={post.tags} />
-
-            {/* Fallback notice */}
-            {isFallback && (
-              <div className='mt-4 p-3 bg-muted border border-border rounded-lg text-sm text-muted-foreground'>
-                ⚠️ {String(t('fallbackNotice'))}
-              </div>
             )}
           </div>
 
-          {/* Language toggle */}
-          <LanguageToggle currentSlug={slug} />
+          <h1 className='text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-4'>
+            {blog.title}
+          </h1>
+
+          {blog.excerpt && (
+            <p className='text-xl text-gray-600 dark:text-gray-400 mb-6'>
+              {blog.excerpt}
+            </p>
+          )}
+
+          {/* Tags */}
+          {blog.tags && blog.tags.length > 0 && (
+            <div className='flex flex-wrap gap-2 mb-6'>
+              {blog.tags.map(tag => (
+                <span
+                  key={tag}
+                  className='px-3 py-1 text-sm bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-full'
+                >
+                  #{tag}
+                </span>
+              ))}
+            </div>
+          )}
+
+          {/* Tech Stack */}
+          {blog.techStack && blog.techStack.length > 0 && (
+            <div className='flex flex-wrap gap-2'>
+              {blog.techStack.map(tech => (
+                <span
+                  key={tech}
+                  className='px-3 py-1 text-sm bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 rounded font-medium'
+                >
+                  {tech}
+                </span>
+              ))}
+            </div>
+          )}
         </header>
 
-        {/* Content with TOC */}
-        <div className='grid grid-cols-1 lg:grid-cols-4 gap-8'>
-          {/* TOC Sidebar */}
-          <aside className='lg:col-span-1 order-2 lg:order-1'>
-            <div className='sticky top-20'>
-              <TableOfContents content={post.content} />
-            </div>
-          </aside>
+        {/* Content */}
+        <div 
+          className='prose prose-lg dark:prose-invert max-w-none mb-12'
+          dangerouslySetInnerHTML={{ __html: renderMarkdown(blog.content) }}
+        />
 
-          {/* Main content */}
-          <div className='lg:col-span-3 order-1 lg:order-2'>
-            <BlogPost content={post.content} />
-
-            {/* Footer */}
-            <footer className='mt-12 pt-8 border-t border-border'>
-              <ShareButtons title={post.title} url={window.location.href} />
-            </footer>
+        {/* Footer */}
+        <footer className='border-t border-gray-200 dark:border-gray-700 pt-8'>
+          <div className='flex items-center justify-between'>
+            <button
+              onClick={() => navigate(getLocalizedPath('/blogs'))}
+              className='px-6 py-3 bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-white rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600'
+            >
+              ← All Blogs
+            </button>
+            
+            {blog.year && (
+              <button
+                onClick={() => navigate(getLocalizedPath(`/blogs?year=${blog.year}`))}
+                className='px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700'
+              >
+                More from {blog.year} →
+              </button>
+            )}
           </div>
-        </div>
+        </footer>
       </article>
     </div>
   );
 };
+
+// Simple markdown renderer (basic HTML support)
+// TODO: Replace with proper markdown library (react-markdown) for production
+function renderMarkdown(markdown: string): string {
+  let html = markdown;
+
+  // Headers
+  html = html.replace(/^### (.*$)/gim, '<h3>$1</h3>');
+  html = html.replace(/^## (.*$)/gim, '<h2>$1</h2>');
+  html = html.replace(/^# (.*$)/gim, '<h1>$1</h1>');
+
+  // Bold
+  html = html.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+
+  // Italic
+  html = html.replace(/\*(.*?)\*/g, '<em>$1</em>');
+
+  // Links
+  html = html.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" class="text-blue-600 hover:underline">$1</a>');
+
+  // Code blocks
+  html = html.replace(/```(\w+)?\n([\s\S]*?)```/g, '<pre><code class="language-$1">$2</code></pre>');
+
+  // Inline code
+  html = html.replace(/`([^`]+)`/g, '<code class="bg-gray-100 dark:bg-gray-800 px-1 py-0.5 rounded">$1</code>');
+
+  // Line breaks
+  html = html.replace(/\n\n/g, '</p><p>');
+  html = html.replace(/\n/g, '<br>');
+
+  // Lists
+  html = html.replace(/^\* (.*$)/gim, '<li>$1</li>');
+  html = html.replace(/(<li>.*<\/li>)/s, '<ul>$1</ul>');
+
+  // Wrap in paragraphs
+  html = '<p>' + html + '</p>';
+
+  return html;
+}
