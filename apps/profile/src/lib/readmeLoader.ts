@@ -55,10 +55,13 @@ async function parseReadme(
   content: string
 ): Promise<ProjectReadme | null> {
   try {
-    console.log(`[README Loader] Parsing ${filePath}, content length: ${content.length}`);
-    
+    console.log(
+      `[README Loader] Parsing ${filePath}, content length: ${content.length}`
+    );
+    console.log(`[README Loader] First 200 chars:`, content.substring(0, 200));
+
     const { data, content: markdownContent } = matter(content);
-    
+
     console.log(`[README Loader] Front matter data:`, data);
     console.log(`[README Loader] Extracted id: ${data.id}`);
 
@@ -84,8 +87,12 @@ async function parseReadme(
       author: data.author,
       license: data.license,
     };
-    
-    console.log(`[README Loader] Successfully parsed ${filePath}:`, result.id, result.name);
+
+    console.log(
+      `[README Loader] Successfully parsed ${filePath}:`,
+      result.id,
+      result.name
+    );
     return result;
   } catch (error) {
     console.error(`Error parsing README ${filePath}:`, error);
