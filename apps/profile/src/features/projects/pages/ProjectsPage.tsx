@@ -35,15 +35,6 @@ export const ProjectsPage: FC = () => {
   const filteredApps = apps;
   const filteredLibs = libs;
 
-  // Debug: log data when loaded
-  useEffect(() => {
-    if (!loading) {
-      console.log('[ProjectsPage] Apps:', apps);
-      console.log('[ProjectsPage] Libs:', libs);
-      console.log('[ProjectsPage] Filtered Libs:', filteredLibs);
-    }
-  }, [loading, apps, libs, filteredLibs]);
-
   // Filter React apps and other framework apps
   const reactApps = useMemo(() => {
     return filteredApps.filter(app =>
@@ -62,9 +53,11 @@ export const ProjectsPage: FC = () => {
     );
   }, [filteredApps]);
 
-  // Filter React libs only (ui category)
+  // Filter React libs (show all React-related libs)
   const reactLibs = useMemo(() => {
-    return filteredLibs.filter(lib => lib.category === 'ui');
+    return filteredLibs.filter(lib => 
+      lib.techStack?.some(tech => tech.toLowerCase().includes('react'))
+    );
   }, [filteredLibs]);
 
   const totalProjects = apps.length + libs.length;
