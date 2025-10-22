@@ -32,8 +32,10 @@ export function Layout({ children }: LayoutProps) {
 
   useEffect(() => {
     const handleScroll = () => {
-      const windowHeight = document.documentElement.scrollHeight - window.innerHeight;
-      const scrolled = windowHeight > 0 ? (window.scrollY / windowHeight) * 100 : 0;
+      const windowHeight =
+        document.documentElement.scrollHeight - window.innerHeight;
+      const scrolled =
+        windowHeight > 0 ? (window.scrollY / windowHeight) * 100 : 0;
       setScrollProgress(scrolled);
     };
 
@@ -46,7 +48,7 @@ export function Layout({ children }: LayoutProps) {
       {/* Navigation with backdrop blur */}
       <nav className='sticky top-0 z-50 w-full border-b bg-background/80 backdrop-blur-sm'>
         {/* Progress Indicator */}
-        <div 
+        <div
           className='absolute top-0 left-0 h-1 bg-gradient-to-r from-blue-600 to-purple-600 transition-all duration-300 ease-out'
           style={{ width: `${scrollProgress}%` }}
           role='progressbar'

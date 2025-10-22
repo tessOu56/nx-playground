@@ -57,46 +57,26 @@ export const ProjectCard: FC<ProjectCardProps> = ({
         </div>
       </div>
 
-      {/* Description（優先使用 shortDesc，fallback 到 description）*/}
-      <p className='text-gray-600 dark:text-gray-400 mb-4 line-clamp-3'>
-        {project.shortDesc || project.description}
-      </p>
+      {/* Description (Full description, not shortDesc) */}
+      {project.description && (
+        <p className='text-gray-600 dark:text-gray-400 mb-4 line-clamp-4 leading-relaxed text-sm'>
+          {project.description}
+        </p>
+      )}
 
       {/* Tech Stack */}
       {project.techStack && project.techStack.length > 0 && (
-        <div className='mb-4'>
+        <div className='mt-auto'>
           <div className='flex flex-wrap gap-2'>
-            {project.techStack.slice(0, 4).map(tech => (
+            {project.techStack.slice(0, 5).map(tech => (
               <TechTag key={tech} name={tech} compact />
             ))}
-            {project.techStack.length > 4 && (
+            {project.techStack.length > 5 && (
               <span className='px-2 py-1 bg-muted text-muted-foreground rounded text-xs font-medium'>
-                +{project.techStack.length - 4}
+                +{project.techStack.length - 5}
               </span>
             )}
           </div>
-        </div>
-      )}
-
-      {/* Highlights */}
-      {project.highlights && project.highlights.length > 0 && (
-        <div>
-          <h4 className='font-semibold text-gray-900 dark:text-white mb-2 text-sm'>
-            Highlights:
-          </h4>
-          <ul className='space-y-1'>
-            {project.highlights.slice(0, 4).map(highlight => (
-              <li
-                key={highlight}
-                className='text-sm text-gray-600 dark:text-gray-400 flex items-start'
-              >
-                <span className='text-green-600 dark:text-green-400 mr-2'>
-                  ✓
-                </span>
-                {highlight}
-              </li>
-            ))}
-          </ul>
         </div>
       )}
     </div>
