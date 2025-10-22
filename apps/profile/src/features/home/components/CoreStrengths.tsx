@@ -1,150 +1,103 @@
-import { type FC } from 'react';
+import { type FC, useEffect } from 'react';
+import { techStack } from '@nx-playground/tech-stack-data';
 
-import { useHomeTranslation } from '../hooks/useHomeTranslation';
-import '../i18n';
-
-interface StrengthCard {
-  icon: JSX.Element;
-  titleKey: string;
-  descKey: string;
-  bgColor: string;
-  iconColor: string;
-}
+import './CoreStrengths.css';
 
 export const CoreStrengths: FC = () => {
-  const { t } = useHomeTranslation();
+  // Categorize tech stack
+  const frontendTech = techStack.filter(t => 
+    t.category === 'frontend' || 
+    ['React', 'Vue', 'Angular', 'TypeScript', 'Vite', 'Next.js', 'Tailwind', 'CSS'].some(name => t.name.includes(name))
+  );
 
-  const strengths: StrengthCard[] = [
-    {
-      icon: (
-        <svg
-          className='w-8 h-8'
-          fill='none'
-          stroke='currentColor'
-          viewBox='0 0 24 24'
-        >
-          <path
-            strokeLinecap='round'
-            strokeLinejoin='round'
-            strokeWidth={2}
-            d='M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01'
-          />
-        </svg>
-      ),
-      titleKey: 'strengths.reactSpecialist',
-      descKey: 'strengths.reactSpecialistDesc',
-      bgColor: 'bg-blue-100 dark:bg-blue-900/30',
-      iconColor: 'text-blue-600 dark:text-blue-400',
-    },
-    {
-      icon: (
-        <svg
-          className='w-8 h-8'
-          fill='none'
-          stroke='currentColor'
-          viewBox='0 0 24 24'
-        >
-          <path
-            strokeLinecap='round'
-            strokeLinejoin='round'
-            strokeWidth={2}
-            d='M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z'
-          />
-        </svg>
-      ),
-      titleKey: 'strengths.frontendArchitecture',
-      descKey: 'strengths.frontendArchitectureDesc',
-      bgColor: 'bg-purple-100 dark:bg-purple-900/30',
-      iconColor: 'text-purple-600 dark:text-purple-400',
-    },
-    {
-      icon: (
-        <svg
-          className='w-8 h-8'
-          fill='none'
-          stroke='currentColor'
-          viewBox='0 0 24 24'
-        >
-          <path
-            strokeLinecap='round'
-            strokeLinejoin='round'
-            strokeWidth={2}
-            d='M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z'
-          />
-          <path
-            strokeLinecap='round'
-            strokeLinejoin='round'
-            strokeWidth={2}
-            d='M15 12a3 3 0 11-6 0 3 3 0 016 0z'
-          />
-        </svg>
-      ),
-      titleKey: 'strengths.modernTooling',
-      descKey: 'strengths.modernToolingDesc',
-      bgColor: 'bg-green-100 dark:bg-green-900/30',
-      iconColor: 'text-green-600 dark:text-green-400',
-    },
-    {
-      icon: (
-        <svg
-          className='w-8 h-8'
-          fill='none'
-          stroke='currentColor'
-          viewBox='0 0 24 24'
-        >
-          <path
-            strokeLinecap='round'
-            strokeLinejoin='round'
-            strokeWidth={2}
-            d='M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1'
-          />
-        </svg>
-      ),
-      titleKey: 'strengths.apiIntegration',
-      descKey: 'strengths.apiIntegrationDesc',
-      bgColor: 'bg-orange-100 dark:bg-orange-900/30',
-      iconColor: 'text-orange-600 dark:text-orange-400',
-    },
-  ];
+  const backendTech = techStack.filter(t => 
+    t.category === 'backend' ||
+    ['Node', 'Express', 'NestJS', 'PostgreSQL', 'MongoDB', 'GraphQL', 'Prisma'].some(name => t.name.includes(name))
+  );
+
+  const devopsTech = techStack.filter(t => 
+    t.category === 'tools' || t.category === 'deployment' ||
+    ['Docker', 'Nx', 'GitHub', 'Vercel', 'Cloudflare', 'CI', 'pnpm'].some(name => t.name.includes(name))
+  );
+
+  // Pause animations when not in viewport (performance optimization)
+  useEffect(() => {
+    const rows = document.querySelectorAll('.carousel-track');
+    
+    const observer = new IntersectionObserver(
+      entries => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.remove('paused');
+          } else {
+            entry.target.classList.add('paused');
+          }
+        });
+      },
+      { threshold: 0.1 }
+    );
+
+    rows.forEach(row => observer.observe(row));
+
+    return () => observer.disconnect();
+  }, []);
 
   return (
-    <section className='container mx-auto px-4 py-16 md:py-20'>
-      <div className='max-w-6xl mx-auto'>
-        {/* Header */}
-        <div className='text-center mb-12'>
-          <h2 className='text-3xl md:text-4xl font-bold text-foreground mb-4'>
-            {String(t('strengths.title'))}
-          </h2>
-        </div>
+    <section 
+      className='min-h-screen flex flex-col justify-center overflow-hidden bg-white dark:bg-gray-900 py-16'
+      role='region'
+      aria-label='Tech Stack Showcase'
+    >
+      <div className='text-center mb-12'>
+        <h2 className='text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-4'>
+          Tech Stack
+        </h2>
+        <p className='text-xl text-gray-600 dark:text-gray-400'>
+          Technologies I use to build modern web applications
+        </p>
+      </div>
 
-        {/* Strengths Grid */}
-        <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6'>
-          {strengths.map((strength, index) => (
-            <div
-              key={index}
-              className='group bg-white dark:bg-gray-800 rounded-xl p-6 shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1 border border-gray-100 dark:border-gray-700'
+      {/* Row 1: Frontend - Widest (90vw) */}
+      <div className='carousel-row mb-8' style={{ maxWidth: '90vw', margin: '0 auto' }}>
+        <div className='carousel-track animate-scroll-left' aria-label='Frontend technologies'>
+          {[...frontendTech, ...frontendTech].map((tech, i) => (
+            <span
+              key={i}
+              className='tech-badge px-6 py-3 bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 rounded-lg font-medium text-lg whitespace-nowrap'
             >
-              {/* Icon */}
-              <div
-                className={`w-16 h-16 ${strength.bgColor} rounded-lg flex items-center justify-center mb-4 ${strength.iconColor} group-hover:scale-110 transition-transform duration-300`}
-              >
-                {strength.icon}
-              </div>
+              {tech.name}
+            </span>
+          ))}
+        </div>
+      </div>
 
-              {/* Title */}
-              <h3 className='text-xl font-semibold text-foreground mb-3'>
-                {String(t(strength.titleKey))}
-              </h3>
+      {/* Row 2: Backend - Medium (80vw) */}
+      <div className='carousel-row mb-8' style={{ maxWidth: '80vw', margin: '0 auto' }}>
+        <div className='carousel-track animate-scroll-right' aria-label='Backend technologies'>
+          {[...backendTech, ...backendTech].map((tech, i) => (
+            <span
+              key={i}
+              className='tech-badge px-6 py-3 bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300 rounded-lg font-medium text-lg whitespace-nowrap'
+            >
+              {tech.name}
+            </span>
+          ))}
+        </div>
+      </div>
 
-              {/* Description */}
-              <p className='text-muted-foreground leading-relaxed'>
-                {String(t(strength.descKey))}
-              </p>
-            </div>
+      {/* Row 3: DevOps - Narrowest (70vw) */}
+      <div className='carousel-row' style={{ maxWidth: '70vw', margin: '0 auto' }}>
+        <div className='carousel-track animate-scroll-left' aria-label='DevOps and tooling'>
+          {[...devopsTech, ...devopsTech].map((tech, i) => (
+            <span
+              key={i}
+              className='tech-badge px-6 py-3 bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300 rounded-lg font-medium text-lg whitespace-nowrap'
+            >
+              {tech.name}
+            </span>
           ))}
         </div>
       </div>
     </section>
   );
 };
-
