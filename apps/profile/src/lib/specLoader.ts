@@ -13,10 +13,12 @@ import type { SupportedLocale } from './i18n/LocaleRouter';
 
 /**
  * 動態載入所有 Spec 檔案
+ * Vite glob 從 project root 開始，所以 ../../ 會到 workspace root
  */
-const specsModules = import.meta.glob<string>('../../specs/**/*.md', {
+const specsModules = import.meta.glob('../../specs/**/*.md', {
   query: '?raw',
   import: 'default',
+  eager: true,
 });
 
 console.log('[Spec Loader] Found specs:', Object.keys(specsModules).length);

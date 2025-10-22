@@ -13,25 +13,26 @@ import type { SupportedLocale } from './i18n/LocaleRouter';
 
 /**
  * 動態載入所有 README 檔案
+ * Vite glob 從 project root 開始，所以 ../../ 會到 workspace root
  */
-const appsReadmeModules = import.meta.glob<string>(
+const appsReadmeModules = import.meta.glob(
   '../../apps/*/README.md',
-  { query: '?raw', import: 'default' }
+  { query: '?raw', import: 'default', eager: true }
 );
 
-const appsReadmeModulesZh = import.meta.glob<string>(
+const appsReadmeModulesZh = import.meta.glob(
   '../../apps/*/README.zh-TW.md',
-  { query: '?raw', import: 'default' }
+  { query: '?raw', import: 'default', eager: true }
 );
 
-const libsReadmeModules = import.meta.glob<string>(
+const libsReadmeModules = import.meta.glob(
   '../../libs/*/README.md',
-  { query: '?raw', import: 'default' }
+  { query: '?raw', import: 'default', eager: true }
 );
 
-const libsReadmeModulesZh = import.meta.glob<string>(
+const libsReadmeModulesZh = import.meta.glob(
   '../../libs/*/README.zh-TW.md',
-  { query: '?raw', import: 'default' }
+  { query: '?raw', import: 'default', eager: true }
 );
 
 const allAppsReadmes = { ...appsReadmeModules, ...appsReadmeModulesZh };
