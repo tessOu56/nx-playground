@@ -1,7 +1,3 @@
-/**
- * Blogs feature i18n configuration
- */
-
 import { createFeatureI18n } from '@nx-playground/i18n';
 
 import enBlogs from './locales/en/blogs.json';

@@ -3,6 +3,7 @@ import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 
 import { ProjectCard } from '../../../components/ProjectCard';
 import { SearchBar } from '../../../components/SearchBar';
+import { ts } from '../../../lib/i18n/helpers';
 import type { SupportedLocale } from '../../../lib/i18n/LocaleRouter';
 import { useLocalizedNavigation } from '../../../lib/i18n/useLocalizedNavigation';
 import { useProjectsStore } from '../../../stores/useProjectsStore';
@@ -17,7 +18,7 @@ export const AppsPage: FC = () => {
   const { t } = useAppsTranslation();
 
   const [searchParams, setSearchParams] = useSearchParams();
-  const searchTerm = searchParams.get('search') || '';
+  const searchTerm = searchParams.get('search') ?? '';
 
   // 從 Zustand store 取得資料
   const apps = useProjectsStore(state => state.apps[currentLocale]);
@@ -34,11 +35,15 @@ export const AppsPage: FC = () => {
     if (!searchTerm.trim()) return apps;
 
     const lowerSearch = searchTerm.toLowerCase();
-    return apps.filter((app) => {
+    return apps.filter(app => {
       const matchName = app.name.toLowerCase().includes(lowerSearch);
-      const matchDesc = (app.description || '').toLowerCase().includes(lowerSearch);
-      const matchShortDesc = (app.shortDesc || '').toLowerCase().includes(lowerSearch);
-      const matchTech = app.techStack?.some((tech) =>
+      const matchDesc = (app.description || '')
+        .toLowerCase()
+        .includes(lowerSearch);
+      const matchShortDesc = (app.shortDesc || '')
+        .toLowerCase()
+        .includes(lowerSearch);
+      const matchTech = app.techStack?.some(tech =>
         tech.toLowerCase().includes(lowerSearch)
       );
 
@@ -83,10 +88,10 @@ export const AppsPage: FC = () => {
             </svg>
           </div>
           <h1 className='text-5xl font-bold text-gray-900 dark:text-white mb-4'>
-            {String(t('title'))}
+            {ts(t, 'title')}
           </h1>
           <p className='text-xl text-gray-600 dark:text-gray-400 max-w-3xl mx-auto'>
-            {String(t('subtitle'))}
+            {ts(t, 'subtitle')}
           </p>
         </div>
 
@@ -94,7 +99,7 @@ export const AppsPage: FC = () => {
         <SearchBar
           value={searchTerm}
           onChange={handleSearchChange}
-          placeholder={String(t('searchPlaceholder'))}
+          placeholder={ts(t, 'searchPlaceholder')}
         />
 
         {/* Apps Grid */}
@@ -112,7 +117,7 @@ export const AppsPage: FC = () => {
         ) : (
           <div className='text-center py-16'>
             <p className='text-lg text-gray-600 dark:text-gray-400'>
-              {String(t('noResults'))}
+              {ts(t, 'noResults')}
             </p>
           </div>
         )}
@@ -125,7 +130,7 @@ export const AppsPage: FC = () => {
                 {apps.length}
               </div>
               <div className='text-gray-600 dark:text-gray-400 font-medium'>
-                {String(t('stats.applications'))}
+                {ts(t, 'stats.applications')}
               </div>
             </div>
             <div className='bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg text-center'>
@@ -133,7 +138,7 @@ export const AppsPage: FC = () => {
                 3
               </div>
               <div className='text-gray-600 dark:text-gray-400 font-medium'>
-                {String(t('stats.frameworks'))}
+                {ts(t, 'stats.frameworks')}
               </div>
             </div>
             <div className='bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg text-center'>
@@ -141,7 +146,7 @@ export const AppsPage: FC = () => {
                 30+
               </div>
               <div className='text-gray-600 dark:text-gray-400 font-medium'>
-                {String(t('stats.technologies'))}
+                {ts(t, 'stats.technologies')}
               </div>
             </div>
             <div className='bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg text-center'>
@@ -149,7 +154,7 @@ export const AppsPage: FC = () => {
                 100%
               </div>
               <div className='text-gray-600 dark:text-gray-400 font-medium'>
-                {String(t('stats.typescript'))}
+                {ts(t, 'stats.typescript')}
               </div>
             </div>
           </div>

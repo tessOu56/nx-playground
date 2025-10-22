@@ -9,4 +9,4 @@ export const useAppsTranslation = createFeatureTranslation('apps', [
   'stats.frameworks',
   'stats.technologies',
   'stats.typescript',
-] as const);
+]);

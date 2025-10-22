@@ -24,14 +24,12 @@ async function fetchReadme(
   const fileName = locale === 'zh-TW' ? 'README.zh-TW.md' : 'README.md';
   const url = `/${type}/${id}/${fileName}`;
 
-  console.log(`[README Loader] Fetching: ${url}`);
 
   try {
     const response = await fetch(url);
     if (!response.ok) {
       const fallbackFile = locale === 'zh-TW' ? 'README.md' : 'README.zh-TW.md';
       const fallbackUrl = `/${type}/${id}/${fallbackFile}`;
-      console.log(`[README Loader] Trying fallback: ${fallbackUrl}`);
 
       const fallbackResponse = await fetch(fallbackUrl);
       if (!fallbackResponse.ok) {
@@ -55,15 +53,7 @@ async function parseReadme(
   content: string
 ): Promise<ProjectReadme | null> {
   try {
-    console.log(
-      `[README Loader] Parsing ${filePath}, content length: ${content.length}`
-    );
-    console.log(`[README Loader] First 200 chars:`, content.substring(0, 200));
-
     const { data, content: markdownContent } = matter(content);
-
-    console.log(`[README Loader] Front matter data:`, data);
-    console.log(`[README Loader] Extracted id: ${data.id}`);
 
     if (!data.id) {
       console.warn(`[README Loader] No ID in front matter for ${filePath}`);
@@ -88,11 +78,6 @@ async function parseReadme(
       license: data.license,
     };
 
-    console.log(
-      `[README Loader] Successfully parsed ${filePath}:`,
-      result.id,
-      result.name
-    );
     return result;
   } catch (error) {
     console.error(`Error parsing README ${filePath}:`, error);
@@ -134,8 +119,6 @@ export async function loadLibReadme(
 export async function loadAllAppsReadmes(
   locale: SupportedLocale = 'en'
 ): Promise<ProjectReadme[]> {
-  console.log(`[README Loader] loadAllAppsReadmes for locale: ${locale}`);
-  console.log(`[README Loader] Loading ${APP_IDS.length} apps`);
 
   const readmes: ProjectReadme[] = [];
 
@@ -143,9 +126,6 @@ export async function loadAllAppsReadmes(
     try {
       const readme = await loadAppReadme(appId, locale);
       if (readme?.id) {
-        console.log(
-          `[README Loader] Loaded app: ${readme.id} - ${readme.name}`
-        );
         readmes.push(readme);
       }
     } catch (error) {
@@ -153,7 +133,6 @@ export async function loadAllAppsReadmes(
     }
   }
 
-  console.log(`[README Loader] Total apps loaded: ${readmes.length}`);
   return readmes.sort((a, b) => a.name.localeCompare(b.name));
 }
 
@@ -163,8 +142,6 @@ export async function loadAllAppsReadmes(
 export async function loadAllLibsReadmes(
   locale: SupportedLocale = 'en'
 ): Promise<ProjectReadme[]> {
-  console.log(`[README Loader] loadAllLibsReadmes for locale: ${locale}`);
-  console.log(`[README Loader] Loading ${LIB_IDS.length} libs`);
 
   const readmes: ProjectReadme[] = [];
 
@@ -172,9 +149,6 @@ export async function loadAllLibsReadmes(
     try {
       const readme = await loadLibReadme(libId, locale);
       if (readme?.id) {
-        console.log(
-          `[README Loader] Loaded lib: ${readme.id} - ${readme.name}`
-        );
         readmes.push(readme);
       }
     } catch (error) {
@@ -182,6 +156,5 @@ export async function loadAllLibsReadmes(
     }
   }
 
-  console.log(`[README Loader] Total libs loaded: ${readmes.length}`);
   return readmes.sort((a, b) => a.name.localeCompare(b.name));
 }

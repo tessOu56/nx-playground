@@ -5,6 +5,7 @@ import { ProjectCard } from '../../../components/ProjectCard';
 import { SearchBar } from '../../../components/SearchBar';
 import type { SupportedLocale } from '../../../lib/i18n/LocaleRouter';
 import { useLocalizedNavigation } from '../../../lib/i18n/useLocalizedNavigation';
+import { ts } from '../../../lib/i18n/helpers';
 import { useProjectsStore } from '../../../stores/useProjectsStore';
 import type { LibData } from '../../../types/projectData';
 import { useLibsTranslation } from '../hooks/useLibsTranslation';
@@ -35,11 +36,15 @@ export const LibsPage: FC = () => {
     if (!searchTerm.trim()) return libs;
 
     const lowerSearch = searchTerm.toLowerCase();
-    return libs.filter((lib) => {
+    return libs.filter(lib => {
       const matchName = lib.name.toLowerCase().includes(lowerSearch);
-      const matchDesc = (lib.description || '').toLowerCase().includes(lowerSearch);
-      const matchShortDesc = (lib.shortDesc || '').toLowerCase().includes(lowerSearch);
-      const matchTech = lib.techStack?.some((tech) =>
+      const matchDesc = (lib.description || '')
+        .toLowerCase()
+        .includes(lowerSearch);
+      const matchShortDesc = (lib.shortDesc || '')
+        .toLowerCase()
+        .includes(lowerSearch);
+      const matchTech = lib.techStack?.some(tech =>
         tech.toLowerCase().includes(lowerSearch)
       );
 
@@ -95,10 +100,10 @@ export const LibsPage: FC = () => {
             </svg>
           </div>
           <h1 className='text-5xl font-bold text-gray-900 dark:text-white mb-4'>
-            {String(t('title'))}
+            {ts(t, 'title')}
           </h1>
           <p className='text-xl text-gray-600 dark:text-gray-400 max-w-3xl mx-auto mb-4'>
-            {String(t('subtitle'))}
+            {ts(t, 'subtitle')}
           </p>
           <div className='flex items-center justify-center gap-6 text-sm text-gray-500 dark:text-gray-400'>
             <span className='flex items-center gap-2'>
@@ -150,7 +155,7 @@ export const LibsPage: FC = () => {
         <SearchBar
           value={searchTerm}
           onChange={handleSearchChange}
-          placeholder={String(t('searchPlaceholder'))}
+          placeholder={ts(t, 'searchPlaceholder')}
         />
 
         {/* Libraries by Category */}
@@ -166,7 +171,9 @@ export const LibsPage: FC = () => {
                     key={lib.id}
                     project={lib}
                     type='lib'
-                    onClick={() => navigate(getLocalizedPath(`/libs/${lib.id}`))}
+                    onClick={() =>
+                      navigate(getLocalizedPath(`/libs/${lib.id}`))
+                    }
                   />
                 ))}
               </div>
@@ -175,7 +182,7 @@ export const LibsPage: FC = () => {
         ) : (
           <div className='text-center py-16'>
             <p className='text-lg text-gray-600 dark:text-gray-400'>
-              {String(t('noResults'))}
+              {ts(t, 'noResults')}
             </p>
           </div>
         )}
@@ -184,27 +191,35 @@ export const LibsPage: FC = () => {
         {!searchTerm && (
           <section className='mt-16 bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl shadow-lg p-8 text-white'>
             <h2 className='text-3xl font-bold mb-4 text-center'>
-              {String(t('monorepoTitle'))}
+              {ts(t, 'monorepoTitle')}
             </h2>
             <p className='text-center text-lg mb-6 opacity-90'>
-              {String(t('monorepoSubtitle'))}
+              {ts(t, 'monorepoSubtitle')}
             </p>
             <div className='grid grid-cols-2 md:grid-cols-4 gap-4 text-center'>
               <div className='bg-white/10 backdrop-blur-sm rounded-lg p-4'>
                 <div className='text-3xl font-bold mb-1'>{libs.length}</div>
-                <div className='text-sm opacity-90'>{String(t('stats.libraries'))}</div>
+                <div className='text-sm opacity-90'>
+                  {ts(t, 'stats.libraries')}
+                </div>
               </div>
               <div className='bg-white/10 backdrop-blur-sm rounded-lg p-4'>
                 <div className='text-3xl font-bold mb-1'>7</div>
-                <div className='text-sm opacity-90'>{String(t('stats.applications'))}</div>
+                <div className='text-sm opacity-90'>
+                  {ts(t, 'stats.applications')}
+                </div>
               </div>
               <div className='bg-white/10 backdrop-blur-sm rounded-lg p-4'>
                 <div className='text-3xl font-bold mb-1'>100%</div>
-                <div className='text-sm opacity-90'>{String(t('stats.typescript'))}</div>
+                <div className='text-sm opacity-90'>
+                  {ts(t, 'stats.typescript')}
+                </div>
               </div>
               <div className='bg-white/10 backdrop-blur-sm rounded-lg p-4'>
                 <div className='text-3xl font-bold mb-1'>100%</div>
-                <div className='text-sm opacity-90'>{String(t('stats.reusable'))}</div>
+                <div className='text-sm opacity-90'>
+                  {ts(t, 'stats.reusable')}
+                </div>
               </div>
             </div>
           </section>

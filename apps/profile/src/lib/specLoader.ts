@@ -24,14 +24,12 @@ async function fetchSpec(
   const fileName = locale === 'zh-TW' ? 'zh-TW.md' : 'en.md';
   const url = `/specs/${type}/${id}/${fileName}`;
 
-  console.log(`[Spec Loader] Fetching: ${url}`);
 
   try {
     const response = await fetch(url);
     if (!response.ok) {
       const fallbackFile = locale === 'zh-TW' ? 'en.md' : 'zh-TW.md';
       const fallbackUrl = `/specs/${type}/${id}/${fallbackFile}`;
-      console.log(`[Spec Loader] Trying fallback: ${fallbackUrl}`);
 
       const fallbackResponse = await fetch(fallbackUrl);
       if (!fallbackResponse.ok) {
