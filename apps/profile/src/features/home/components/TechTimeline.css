@@ -1,0 +1,21 @@
+/* Respect reduced motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  .snap-y {
+    scroll-snap-type: none;
+  }
+
+  .motion-safe\:animate-bounce {
+    animation: none !important;
+  }
+
+  .motion-safe\:transition-transform,
+  .motion-safe\:transition-all,
+  .motion-safe\:hover\:scale-105,
+  .motion-safe\:hover\:scale-110,
+  .motion-safe\:hover\:shadow-xl,
+  .motion-safe\:hover\:-translate-y-1 {
+    transition-duration: 0.01ms !important;
+    transform: none !important;
+  }
+}
+
