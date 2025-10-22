@@ -17,19 +17,21 @@ export const TechProfile: FC = () => {
       {/* Decorative elements */}
       <div className='absolute top-0 right-0 -mt-20 -mr-20 w-96 h-96 bg-primary/5 rounded-full blur-3xl' />
       <div className='absolute bottom-0 left-0 -mb-20 -ml-20 w-96 h-96 bg-secondary/5 rounded-full blur-3xl' />
-      
+
       <div className='relative container mx-auto px-4 py-20 md:py-32'>
         <div className='max-w-4xl mx-auto text-center'>
           {/* Logo / Name */}
           <div className='mb-8'>
-            <h1 className='text-5xl md:text-6xl lg:text-7xl font-bold bg-gradient-to-r from-primary via-secondary to-primary bg-clip-text text-transparent mb-4'>
-              {siteConfig.siteName}
+            <h1 className='text-5xl md:text-6xl lg:text-7xl font-bold mb-4'>
+              <span className='bg-gradient-to-r from-blue-600 via-purple-600 to-blue-600 dark:from-blue-400 dark:via-purple-400 dark:to-blue-400 bg-clip-text text-transparent'>
+                {siteConfig.siteName}
+              </span>
             </h1>
-            <div className='h-[2px] w-24 bg-gradient-to-r from-primary to-secondary mx-auto' />
+            <div className='h-[2px] w-24 bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400 mx-auto' />
           </div>
 
           {/* Tagline */}
-          <h2 className='text-3xl md:text-4xl lg:text-5xl font-bold text-foreground mb-8'>
+          <h2 className='text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 dark:text-white mb-8'>
             {homeConfig.tagline[currentLang]}
           </h2>
 
