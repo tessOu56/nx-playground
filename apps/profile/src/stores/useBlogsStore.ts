@@ -1,17 +1,17 @@
 /**
  * Blogs Store
- * 管理 Blog Posts 的靜態資料（從 docs/ 載入）
+ * 管理 Blog Posts 的靜態資料（從 specs/blogs/ 載入）
  */
 
 import { create } from 'zustand';
 
-import type { BlogPost } from '../features/blogs/types';
-import { loadAllPosts } from '../features/blogs/utils/loadDocs';
+import { loadAllBlogMetadata } from '../lib/blogLoader';
 import type { SupportedLocale } from '../lib/i18n/LocaleRouter';
+import type { BlogMetadata } from '../types/blogData';
 
 interface BlogsState {
   // 按 locale 分別快取資料
-  posts: Record<SupportedLocale, BlogPost[]>;
+  posts: Record<SupportedLocale, BlogMetadata[]>;
   loading: boolean;
 
   // 載入方法
@@ -24,11 +24,16 @@ export const useBlogsStore = create<BlogsState>((set, get) => ({
 
   loadPosts: async (locale: SupportedLocale) => {
     // 防止重複載入
-    if (get().posts[locale].length > 0) return;
+    if (get().posts[locale].length > 0) {
+      console.log(`[BlogsStore] Posts already loaded for ${locale}, count:`, get().posts[locale].length);
+      return;
+    }
 
+    console.log(`[BlogsStore] Loading posts for ${locale}...`);
     set({ loading: true });
     try {
-      const posts = await loadAllPosts(locale);
+      const posts = await loadAllBlogMetadata(locale);
+      console.log(`[BlogsStore] Loaded ${posts.length} posts for ${locale}`);
       set(state => ({
         posts: { ...state.posts, [locale]: posts },
         loading: false,
