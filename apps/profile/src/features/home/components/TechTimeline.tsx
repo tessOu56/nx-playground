@@ -206,7 +206,7 @@ export const TechTimeline: FC = () => {
             <h2 className='text-5xl font-bold text-white mb-12'>
               Earlier Years
             </h2>
-            <div className='grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto'>
+            <div className='grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto mb-12'>
               {others.map(item => (
                 <button
                   key={item.year}
@@ -246,6 +246,32 @@ export const TechTimeline: FC = () => {
                 </button>
               ))}
             </div>
+
+            {/* Dynamic button with animated underline */}
+            <button
+              onClick={() => navigate(getLocalizedPath('/blogs'))}
+              className='group relative inline-flex items-center gap-2 text-white text-lg font-medium hover:text-white/90 transition-colors duration-200'
+              aria-label='View all blog posts'
+            >
+              <span>Explore All Blog Posts</span>
+              <svg
+                className='w-5 h-5 transition-transform duration-200 group-hover:translate-x-1'
+                fill='none'
+                stroke='currentColor'
+                viewBox='0 0 24 24'
+                aria-hidden='true'
+              >
+                <path
+                  strokeLinecap='round'
+                  strokeLinejoin='round'
+                  strokeWidth={2}
+                  d='M9 5l7 7-7 7'
+                />
+              </svg>
+              
+              {/* Animated underline */}
+              <div className='absolute bottom-0 left-0 w-0 h-0.5 bg-white transition-all duration-500 ease-out group-hover:w-full' />
+            </button>
           </div>
         </article>
       )}
