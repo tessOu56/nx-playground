@@ -59,15 +59,7 @@ export const TechProfile: FC = () => {
       }}
     >
       {/* Background with CSS gradient placeholder */}
-      <div 
-        className='absolute inset-0 bg-gradient-to-br from-blue-600 via-purple-600 to-blue-600 dark:from-blue-800 dark:via-purple-800 dark:to-blue-800' 
-        style={{
-          // Ensure dark background when header is in dark mode
-          background: headerDark 
-            ? 'linear-gradient(135deg, #1e3a8a 0%, #7c3aed 50%, #1e3a8a 100%)' 
-            : undefined
-        }}
-      />
+      <div className='absolute inset-0 bg-gradient-to-br from-blue-600 via-purple-600 to-blue-600 dark:from-blue-800 dark:via-purple-800 dark:to-blue-800' />
 
       {/* Lorem-picsum background image - lazy loaded */}
       <img
@@ -79,14 +71,7 @@ export const TechProfile: FC = () => {
       />
 
       {/* Overlay for text readability */}
-      <div 
-        className='absolute inset-0 bg-black/30' 
-        style={{ 
-          zIndex: 2,
-          // Adjust overlay opacity based on header state
-          backgroundColor: headerDark ? 'rgba(0, 0, 0, 0.5)' : 'rgba(0, 0, 0, 0.3)'
-        }} 
-      />
+      <div className='absolute inset-0 bg-black/30' style={{ zIndex: 2 }} />
 
       <div
         className='relative container mx-auto px-4 py-20 md:py-32'
