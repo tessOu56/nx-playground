@@ -8,8 +8,6 @@ import { type FC } from 'react';
 
 import type { AppData, LibData } from '../types/projectData';
 
-import { CategoryBadge } from './CategoryBadge';
-import { StatusBadge } from './StatusBadge';
 import { TechTag } from './TechTag';
 
 interface ProjectCardProps {
@@ -39,14 +37,11 @@ export const ProjectCard: FC<ProjectCardProps> = ({
       role={onClick ? 'button' : undefined}
       aria-label={`View ${project.name} details`}
     >
-      {/* Header - 4rem fixed height */}
-      <div className='flex items-start justify-between mb-3' style={{ minHeight: '4rem' }}>
-        <div className='flex-1 min-w-0'>
-          <h3 className='text-xl font-bold text-gray-900 dark:text-white line-clamp-1 mb-1'>
-            {project.name}
-          </h3>
-          {project.category && <CategoryBadge category={project.category} type={type} />}
-        </div>
+      {/* Header - simplified (name + version only) */}
+      <div className='flex items-start justify-between mb-3'>
+        <h3 className='text-xl font-bold text-gray-900 dark:text-white line-clamp-1 flex-1 min-w-0'>
+          {project.name}
+        </h3>
         {project.version && (
           <span className='text-xs text-gray-500 dark:text-gray-400 ml-2 whitespace-nowrap'>
             v{project.version}
