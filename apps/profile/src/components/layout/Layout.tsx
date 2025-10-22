@@ -48,7 +48,7 @@ export function Layout({ children }: LayoutProps) {
   // Adaptive header theme using sentinel pattern
   useEffect(() => {
     const darkSections = document.querySelectorAll('[data-header-dark="true"]');
-    
+
     const observer = new IntersectionObserver(
       entries => {
         let anyDarkVisible = false;
@@ -61,7 +61,7 @@ export function Layout({ children }: LayoutProps) {
       },
       {
         rootMargin: '-80px 0px 0px 0px',
-        threshold: 0
+        threshold: 0,
       }
     );
 
@@ -73,11 +73,13 @@ export function Layout({ children }: LayoutProps) {
   return (
     <div className='min-h-screen flex flex-col bg-background'>
       {/* Navigation with backdrop blur - adaptive theme */}
-      <nav className={`sticky top-0 z-50 w-full border-b backdrop-blur-sm transition-colors duration-300 ${
-        headerDark 
-          ? 'bg-gray-900/80 border-gray-700 text-white' 
-          : 'bg-background/80 border-border'
-      }`}>
+      <nav
+        className={`sticky top-0 z-50 w-full border-b backdrop-blur-sm transition-colors duration-300 ${
+          headerDark
+            ? 'bg-gray-900/80 border-gray-700 text-white'
+            : 'bg-background/80 border-border'
+        }`}
+      >
         {/* Progress Indicator */}
         <div
           className='absolute top-0 left-0 h-1 bg-gradient-to-r from-blue-600 to-purple-600 transition-all duration-300 ease-out'

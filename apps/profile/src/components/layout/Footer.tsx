@@ -6,9 +6,9 @@ export const Footer: FC = () => {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className='border-t border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900'>
-      <div className='container mx-auto px-4 py-6'>
-        <div className='text-center space-y-2'>
+    <footer className='border-t border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 opacity-60 hover:opacity-100 transition-opacity duration-300'>
+      <div className='container mx-auto px-4 py-3'>
+        <div className='text-center space-y-1'>
           {/* GitHub Link */}
           <div className='flex items-center justify-center gap-2'>
             <a
@@ -19,7 +19,7 @@ export const Footer: FC = () => {
               aria-label='GitHub Profile'
             >
               <svg
-                className='w-5 h-5'
+                className='w-4 h-4'
                 fill='currentColor'
                 viewBox='0 0 24 24'
                 aria-hidden='true'
@@ -30,13 +30,13 @@ export const Footer: FC = () => {
                   clipRule='evenodd'
                 />
               </svg>
-              <span>GitHub</span>
+              <span className='text-sm'>GitHub</span>
             </a>
           </div>
 
           {/* Copyright */}
-          <p className='text-sm text-gray-500 dark:text-gray-400'>
-            © {currentYear} {siteConfig.siteName}. All rights reserved.
+          <p className='text-xs text-gray-500 dark:text-gray-400'>
+            © {currentYear} {siteConfig.siteName}
           </p>
         </div>
       </div>
