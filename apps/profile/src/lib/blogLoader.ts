@@ -25,14 +25,22 @@ async function fetchBlog(
           return null;
         }
         const content = await fallbackResponse.text();
-        console.log(`[BlogLoader] Loaded fallback blog ${slug}, length:`, content.length);
+        console.log(
+          `[BlogLoader] Loaded fallback blog ${slug}, length:`,
+          content.length
+        );
+        console.log(`[BlogLoader] Content preview:`, content.substring(0, 200));
         return content;
       }
       console.warn(`Blog not found: ${slug}`);
       return null;
     }
     const content = await response.text();
-    console.log(`[BlogLoader] Loaded blog ${slug} (${locale}), length:`, content.length);
+    console.log(
+      `[BlogLoader] Loaded blog ${slug} (${locale}), length:`,
+      content.length
+    );
+    console.log(`[BlogLoader] Content preview:`, content.substring(0, 200));
     return content;
   } catch (error) {
     console.error(`Error fetching blog ${slug}:`, error);
@@ -46,8 +54,11 @@ async function fetchBlog(
 function parseBlog(content: string, slug: string): BlogPost | null {
   try {
     const { data, content: markdown } = matter(content);
-    
-    console.log(`[BlogLoader] Parsing ${slug}, front matter keys:`, Object.keys(data));
+
+    console.log(
+      `[BlogLoader] Parsing ${slug}, front matter keys:`,
+      Object.keys(data)
+    );
     console.log(`[BlogLoader] Front matter data:`, data);
 
     if (!data.title) {
