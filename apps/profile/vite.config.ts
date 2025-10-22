@@ -23,6 +23,14 @@ export default defineConfig(() => ({
   plugins: [react(), vanillaExtractPlugin()],
   define: {
     'process.env': process.env,
+    global: 'globalThis',
+  },
+  optimizeDeps: {
+    esbuildOptions: {
+      define: {
+        global: 'globalThis',
+      },
+    },
   },
 
   resolve: {

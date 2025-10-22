@@ -1,8 +1,11 @@
+import { Buffer } from 'buffer';
 import { themeManager } from '@nx-playground/design-system';
 import { i18n } from '@nx-playground/i18n';
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
+
+globalThis.Buffer = Buffer;
 
 import App from './App';
 import { blogsI18n } from './features/blogs';
