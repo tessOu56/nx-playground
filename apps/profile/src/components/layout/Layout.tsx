@@ -7,7 +7,7 @@ import { siteConfig } from '../../lib/siteConfig';
 
 import { useLayoutTranslation } from './hooks/useLayoutTranslation';
 import './i18n';
-import { LanguageSwitcher } from './LanguageSwitcher';
+import { LanguageToggle } from './LanguageToggle';
 import { Footer } from './Footer';
 
 interface LayoutProps {
@@ -168,7 +168,7 @@ export function Layout({ children }: LayoutProps) {
                 />
               </div>
 
-              <LanguageSwitcher />
+              <LanguageToggle />
             </div>
           </div>
 
