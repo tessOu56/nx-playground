@@ -20,21 +20,21 @@ export const LanguageToggle: FC = () => {
   };
 
   return (
-    <div className='relative flex items-center bg-gray-200 dark:bg-gray-700 rounded-full p-0.5'>
+    <div className='relative flex items-center bg-gray-200/50 dark:bg-gray-700/50 rounded-full p-0.5 backdrop-blur-sm border border-gray-300/50 dark:border-gray-600/50'>
       {/* Sliding background indicator */}
       <div
-        className={`absolute top-0.5 bottom-0.5 w-12 rounded-full bg-white dark:bg-gray-900 shadow-sm transition-transform duration-300 ease-out ${
+        className={`absolute top-0.5 bottom-0.5 w-12 rounded-full bg-gradient-to-r from-blue-600 to-purple-600 shadow-lg transition-transform duration-300 ease-out ${
           currentLocale === 'en' ? 'translate-x-0' : 'translate-x-12'
         }`}
         aria-hidden='true'
       />
-      
-      {/* Language buttons */}
+
+      {/* Language buttons - full clickable area */}
       <button
         onClick={() => switchLanguage('en')}
-        className={`relative z-10 px-3 py-1 rounded-full text-xs font-medium transition-colors duration-200 ${
+        className={`relative z-10 w-12 h-6 rounded-full text-xs font-medium transition-all duration-200 flex items-center justify-center ${
           currentLocale === 'en'
-            ? 'text-blue-600'
+            ? 'text-white'
             : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200'
         }`}
         aria-label='Switch to English'
@@ -44,9 +44,9 @@ export const LanguageToggle: FC = () => {
       </button>
       <button
         onClick={() => switchLanguage('zh-TW')}
-        className={`relative z-10 px-3 py-1 rounded-full text-xs font-medium transition-colors duration-200 ${
+        className={`relative z-10 w-12 h-6 rounded-full text-xs font-medium transition-all duration-200 flex items-center justify-center ${
           currentLocale === 'zh-TW'
-            ? 'text-blue-600'
+            ? 'text-white'
             : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200'
         }`}
         aria-label='Switch to Traditional Chinese'
