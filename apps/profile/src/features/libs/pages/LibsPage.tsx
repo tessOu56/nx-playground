@@ -47,10 +47,16 @@ export const LibsPage: FC = () => {
       const matchTech = lib.techStack?.some(tech =>
         tech.toLowerCase().includes(lowerSearch)
       );
+      // Also search by category (both original and translated)
+      const categoryTranslated = ts(t, `categories.${lib.category}`);
+      const matchCategory = 
+        lib.category.toLowerCase().includes(lowerSearch) ||
+        (categoryTranslated !== `categories.${lib.category}` && 
+         categoryTranslated.toLowerCase().includes(lowerSearch));
 
-      return matchName || matchDesc || matchShortDesc || matchTech;
+      return matchName || matchDesc || matchShortDesc || matchTech || matchCategory;
     });
-  }, [libs, searchTerm]);
+  }, [libs, searchTerm, t]);
 
   const groupedLibs = useMemo(() => {
     const grouped: Record<string, LibData[]> = {};
@@ -163,7 +169,7 @@ export const LibsPage: FC = () => {
           Object.entries(groupedLibs).map(([category, categoryLibs]) => (
             <section key={category} className='mb-16'>
               <h2 className='text-3xl font-bold text-gray-900 dark:text-white mb-8'>
-                {ts(t, `categories.${category}`) !== `categories.${category}` 
+                {ts(t, `categories.${category}`) !== `categories.${category}`
                   ? ts(t, `categories.${category}`)
                   : category.charAt(0).toUpperCase() + category.slice(1)}
               </h2>
