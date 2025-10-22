@@ -13,7 +13,7 @@ export const LanguageToggle: FC = () => {
   const switchLanguage = (newLocale: string) => {
     // Update i18n language
     i18n.changeLanguage(newLocale);
-    
+
     // Update URL
     const newPath = location.pathname.replace(/^\/(zh-TW|en)/, `/${newLocale}`);
     navigate(newPath + location.search);
