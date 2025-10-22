@@ -18,8 +18,7 @@ export const BlogListPage: FC = () => {
   const [blogs, setBlogs] = useState<BlogMetadata[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedYear, setSelectedYear] = useState<number | 'all'>('all');
-  const [selectedTag, setSelectedTag] = useState<string | null>(null);
-  const [searchQuery, setSearchQuery] = useState('');
+  const [selectedTag, setSelectedTag] = useState<string | 'all'>('all');
 
   // Read URL params
   useEffect(() => {
@@ -70,23 +69,13 @@ export const BlogListPage: FC = () => {
       }
 
       // Tag filter
-      if (selectedTag && !blog.tags.includes(selectedTag)) {
+      if (selectedTag !== 'all' && !blog.tags.includes(selectedTag)) {
         return false;
-      }
-
-      // Search filter
-      if (searchQuery) {
-        const query = searchQuery.toLowerCase();
-        return (
-          blog.title.toLowerCase().includes(query) ||
-          blog.excerpt.toLowerCase().includes(query) ||
-          blog.tags.some(tag => tag.toLowerCase().includes(query))
-        );
       }
 
       return true;
     });
-  }, [blogs, selectedYear, selectedTag, searchQuery]);
+  }, [blogs, selectedYear, selectedTag]);
 
   if (loading) {
     return (
@@ -112,19 +101,8 @@ export const BlogListPage: FC = () => {
           </p>
         </div>
 
-        {/* Search Bar */}
-        <div className='max-w-2xl mx-auto mb-8'>
-          <input
-            type='search'
-            value={searchQuery}
-            onChange={e => setSearchQuery(e.target.value)}
-            placeholder='Search blogs...'
-            className='w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500'
-          />
-        </div>
-
-        {/* Filters */}
-        <div className='flex flex-wrap gap-4 mb-8 justify-center'>
+        {/* Quick Filters */}
+        <div className='flex flex-wrap gap-4 mb-8 justify-center max-w-2xl mx-auto'>
           {/* Year Filter */}
           <div className='flex items-center gap-2'>
             <span className='text-sm font-medium text-gray-700 dark:text-gray-300'>
@@ -156,19 +134,23 @@ export const BlogListPage: FC = () => {
           </div>
 
           {/* Tag Filter */}
-          {selectedTag && (
-            <div className='flex items-center gap-2 px-4 py-2 bg-blue-100 dark:bg-blue-900/30 rounded-lg'>
-              <span className='text-sm text-blue-700 dark:text-blue-300'>
-                Tag: {selectedTag}
-              </span>
-              <button
-                onClick={() => setSelectedTag(null)}
-                className='text-blue-700 dark:text-blue-300 hover:text-blue-900 dark:hover:text-blue-100'
-              >
-                ×
-              </button>
-            </div>
-          )}
+          <div className='flex items-center gap-2'>
+            <span className='text-sm font-medium text-gray-700 dark:text-gray-300'>
+              Tag:
+            </span>
+            <select
+              value={selectedTag}
+              onChange={e => setSelectedTag(e.target.value as typeof selectedTag)}
+              className='px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500'
+            >
+              <option value='all'>All Tags</option>
+              {allTags.map(tag => (
+                <option key={tag} value={tag}>
+                  {tag}
+                </option>
+              ))}
+            </select>
+          </div>
         </div>
 
         {/* Results Count */}
