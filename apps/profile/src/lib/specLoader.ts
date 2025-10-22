@@ -131,21 +131,15 @@ export async function loadAllAppsSpecs(
   locale: SupportedLocale = 'en'
 ): Promise<ProjectSpec[]> {
   const specs: ProjectSpec[] = [];
-  const fileName = locale === 'zh-TW' ? 'zh-TW.md' : 'en.md';
 
-  for (const [path, loader] of Object.entries(specsModules)) {
-    // 只載入 apps/ 下的檔案
-    if (!path.includes('/specs/apps/')) continue;
-    if (!path.endsWith(fileName)) continue;
-
+  for (const appId of APP_IDS) {
     try {
-      const content = await loader();
-      const spec = await parseSpec(path, content);
+      const spec = await loadAppSpec(appId, locale);
       if (spec?.id && spec.published) {
         specs.push(spec);
       }
-    } catch (_error) {
-      // Silent fail
+    } catch (error) {
+      console.warn(`Error loading spec for app ${appId}:`, error);
     }
   }
 
