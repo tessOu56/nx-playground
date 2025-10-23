@@ -20,7 +20,7 @@ export function Layout({ children }: LayoutProps) {
   const { getLocalizedPath } = useLocalizedNavigation();
   const { t } = useLayoutTranslation();
   const [scrollProgress, setScrollProgress] = useState(0);
-  const [headerDark, setHeaderDark] = useState(true); // Default to dark for home page hero
+  const [headerDark, setHeaderDark] = useState(false); // Default to light mode
   const [searchQuery, setSearchQuery] = useState('');
   const [hasSearchHistory, setHasSearchHistory] = useState(false);
 
@@ -56,8 +56,12 @@ export function Layout({ children }: LayoutProps) {
     setHasSearchHistory(history === 'true');
   }, []);
 
-  // Let IntersectionObserver handle all header dark mode detection
-  // No manual page-based logic needed
+  // Reset header to light mode when changing pages (except home page)
+  useEffect(() => {
+    if (!isHomePage) {
+      setHeaderDark(false);
+    }
+  }, [location.pathname, isHomePage]);
 
   // Scroll progress indicator with RAF throttling
   useEffect(() => {
