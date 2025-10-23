@@ -1,7 +1,7 @@
-import type { FC } from 'react';
-import { useState, useEffect } from 'react';
+import { type FC, useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 
+import { useSearchStore } from '../../../stores/searchStore';
 import { ChatMessage } from '../components/ChatMessage';
 import { ExampleQueries } from '../components/ExampleQueries';
 import { InfoBanner } from '../components/InfoBanner';
@@ -16,7 +16,8 @@ interface Message {
 
 export const SearchPage: FC = () => {
   const [searchParams] = useSearchParams();
-  const initialQuery = searchParams.get('q') || '';
+  const initialQuery = searchParams.get('q') ?? '';
+  const { setHasSearchHistory } = useSearchStore();
 
   const [messages, setMessages] = useState<Message[]>([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -24,8 +25,8 @@ export const SearchPage: FC = () => {
   const handleSendMessage = async (content: string) => {
     if (!content.trim()) return;
 
-    // Mark that user has search history
-    localStorage.setItem('hasSearchHistory', 'true');
+    // Mark that user has search history using store
+    setHasSearchHistory(true);
 
     // Add user message
     const userMessage: Message = {
