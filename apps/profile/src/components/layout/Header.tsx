@@ -4,6 +4,7 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 
 import { useLocalizedNavigation } from '../../lib/i18n/useLocalizedNavigation';
 import { siteConfig } from '../../lib/siteConfig';
+import { useSearchStore } from '../../stores/searchStore';
 
 import { useLayoutTranslation } from './hooks/useLayoutTranslation';
 import { LanguageToggle } from './LanguageToggle';
@@ -20,8 +21,9 @@ export function Header({ scrollProgress }: HeaderProps) {
   const { getLocalizedPath } = useLocalizedNavigation();
   const { t } = useLayoutTranslation();
   const [headerDark, setHeaderDark] = useState(false);
-  const [searchQuery, setSearchQuery] = useState('');
-  const [hasSearchHistory, setHasSearchHistory] = useState(false);
+
+  // Use search store instead of local state
+  const { hasSearchHistory, currentQuery, setCurrentQuery } = useSearchStore();
 
   const isActive = (path: string) => {
     const pathWithoutLocale = location.pathname.replace(/^\/(zh-TW|en)/, '');
@@ -36,24 +38,12 @@ export function Header({ scrollProgress }: HeaderProps) {
   const isHomePage = isActive('/');
   const isSearchPage = isActive('/search');
 
-  // Track search query from URL and save to localStorage
+  // Track search query from URL and save to store
   useEffect(() => {
     const params = new URLSearchParams(location.search);
     const query = params.get('q') ?? '';
-    setSearchQuery(query);
-
-    // If on search page with a query, mark that we have search history
-    if (isSearchPage && query) {
-      localStorage.setItem('hasSearchHistory', 'true');
-      setHasSearchHistory(true);
-    }
-  }, [location.search, isSearchPage]);
-
-  // Check for search history on mount
-  useEffect(() => {
-    const history = localStorage.getItem('hasSearchHistory');
-    setHasSearchHistory(history === 'true');
-  }, []);
+    setCurrentQuery(query);
+  }, [location.search, setCurrentQuery]);
 
   // Reset header to light mode when changing pages (except home page)
   useEffect(() => {
@@ -214,13 +204,13 @@ export function Header({ scrollProgress }: HeaderProps) {
                   <span className='thinking-dots' />
                 </div>
               )}
-              {isSearchPage && searchQuery && (
+              {isSearchPage && currentQuery && (
                 <span
                   className={`text-sm px-3 py-1.5 ${
                     headerDark ? 'text-white' : 'text-gray-900 dark:text-white'
                   }`}
                 >
-                  "{searchQuery}"
+                  "{currentQuery}"
                 </span>
               )}
             </div>
