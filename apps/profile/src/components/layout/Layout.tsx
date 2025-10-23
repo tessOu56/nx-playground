@@ -1,14 +1,14 @@
+import { Sparkles } from 'lucide-react';
 import { type ReactNode, useEffect, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { Sparkles } from 'lucide-react';
 
 import { useLocalizedNavigation } from '../../lib/i18n/useLocalizedNavigation';
 import { siteConfig } from '../../lib/siteConfig';
 
+import { Footer } from './Footer';
 import { useLayoutTranslation } from './hooks/useLayoutTranslation';
 import './i18n';
 import { LanguageToggle } from './LanguageToggle';
-import { Footer } from './Footer';
 
 interface LayoutProps {
   children: ReactNode;
@@ -40,9 +40,9 @@ export function Layout({ children }: LayoutProps) {
   // Track search query from URL and save to localStorage
   useEffect(() => {
     const params = new URLSearchParams(location.search);
-    const query = params.get('q') || '';
+    const query = params.get('q') ?? '';
     setSearchQuery(query);
-    
+
     // If on search page with a query, mark that we have search history
     if (isSearchPage && query) {
       localStorage.setItem('hasSearchHistory', 'true');
@@ -56,12 +56,7 @@ export function Layout({ children }: LayoutProps) {
     setHasSearchHistory(history === 'true');
   }, []);
 
-  // Reset header state when path changes (except on initial home page load)
-  useEffect(() => {
-    if (!isHomePage) {
-      setHeaderDark(false);
-    }
-  }, [location.pathname, isHomePage]);
+  // Note: Removed automatic header reset - let IntersectionObserver handle all cases
 
   // Scroll progress indicator with RAF throttling
   useEffect(() => {
@@ -273,7 +268,7 @@ export function Layout({ children }: LayoutProps) {
                     onClick={() => navigate(getLocalizedPath('/search'))}
                   >
                     <span>AI is thinking</span>
-                    <span className='thinking-dots'></span>
+                    <span className='thinking-dots' />
                   </div>
                 )}
                 {isSearchPage && searchQuery && (
