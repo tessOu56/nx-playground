@@ -4,7 +4,6 @@ import { useSearchParams } from 'react-router-dom';
 import { useSearchStore } from '../../../stores/searchStore';
 import { ChatMessage } from '../components/ChatMessage';
 import { ExampleQueries } from '../components/ExampleQueries';
-import { InfoBanner } from '../components/InfoBanner';
 import { MessageInput } from '../components/MessageInput';
 
 interface Message {
@@ -61,51 +60,47 @@ export const SearchPage: FC = () => {
   }, []); // Empty dependency array - only run once on mount
 
   return (
-    <div className='min-h-screen bg-gray-50 dark:bg-gray-900 pb-32'>
+    <div className='min-h-screen bg-gradient-to-br from-gray-900 via-blue-900 to-gray-900 pb-32'>
       <div className='container mx-auto px-4 py-12'>
         {/* Page Header */}
-        <div className='text-center mb-12'>
-          <h1 className='text-4xl font-bold text-gray-900 dark:text-white mb-4'>
+        <div className='text-center mb-8'>
+          <h1 className='text-4xl font-bold text-white mb-4'>
             AI-Powered Search
           </h1>
-          <p className='text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto'>
+          <p className='text-lg text-gray-300 max-w-2xl mx-auto mb-3'>
             Ask me anything about my projects, tech stack, or experience. I'm
             here to help you explore!
           </p>
+          <p className='text-sm text-gray-400'>
+            AI assistant powered by knowledge of all projects, blogs, and tech stack
+          </p>
         </div>
 
-        {/* Chat Container */}
+        {/* Chat Container - Invisible border, natural flow */}
         <div className='max-w-4xl mx-auto'>
-          <div className='bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden min-h-[70vh]'>
-            {/* Info Banner inside chat */}
-            <div className='border-b border-gray-200 dark:border-gray-700 p-4'>
-              <InfoBanner />
-            </div>
-
-            {/* Messages Area - Scrollable */}
-            <div className='p-6'>
-              {messages.length === 0 ? (
-                <ExampleQueries onQueryClick={handleSendMessage} />
-              ) : (
-                <div className='space-y-4'>
-                  {messages.map(message => (
-                    <ChatMessage key={message.id} message={message} />
-                  ))}
-                  {isLoading && (
-                    <div className='flex items-center gap-2 text-gray-500 dark:text-gray-400'>
-                      <div className='animate-spin rounded-full h-4 w-4 border-b-2 border-blue-600' />
-                      <span>Thinking...</span>
-                    </div>
-                  )}
-                </div>
-              )}
-            </div>
+          {/* Messages Area */}
+          <div className='min-h-[70vh]'>
+            {messages.length === 0 ? (
+              <ExampleQueries onQueryClick={handleSendMessage} />
+            ) : (
+              <div className='space-y-4'>
+                {messages.map(message => (
+                  <ChatMessage key={message.id} message={message} />
+                ))}
+                {isLoading && (
+                  <div className='flex items-center gap-2 text-gray-300'>
+                    <div className='animate-spin rounded-full h-4 w-4 border-b-2 border-blue-400' />
+                    <span>Thinking...</span>
+                  </div>
+                )}
+              </div>
+            )}
           </div>
         </div>
       </div>
 
       {/* Input Area - Fixed at bottom of viewport */}
-      <div className='fixed bottom-0 left-0 right-0 border-t border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 p-4 shadow-lg z-40'>
+      <div className='fixed bottom-0 left-0 right-0 border-t border-white/10 bg-gray-900/80 backdrop-blur-lg p-4 z-40'>
         <div className='container mx-auto max-w-4xl'>
           <MessageInput onSend={handleSendMessage} disabled={isLoading} />
         </div>
