@@ -1,6 +1,7 @@
 import type { FC } from 'react';
 
 import { siteConfig } from '../../lib/siteConfig';
+
 import { useLayoutTranslation } from './hooks/useLayoutTranslation';
 
 export const Footer: FC = () => {
@@ -45,4 +46,3 @@ export const Footer: FC = () => {
     </footer>
   );
 };
-
