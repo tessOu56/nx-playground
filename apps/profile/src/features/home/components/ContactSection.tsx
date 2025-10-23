@@ -25,9 +25,9 @@ export const ContactSection: FC = () => {
   }, []);
 
   return (
-    <section
+    <div
       id='contact-section'
-      className='h-screen flex items-center justify-center bg-gradient-to-br from-blue-600 via-purple-600 to-blue-600 dark:from-blue-900 dark:via-purple-900 dark:to-blue-900 relative overflow-hidden'
+      className='flex-1 flex items-center justify-center bg-gradient-to-br from-blue-600 via-purple-600 to-blue-600 dark:from-blue-900 dark:via-purple-900 dark:to-blue-900 relative overflow-hidden'
       data-header-dark='true'
     >
       {/* Snowfall Effect */}
@@ -80,6 +80,6 @@ export const ContactSection: FC = () => {
           {homeConfig.contact.email}
         </p>
       </div>
-    </section>
+    </div>
   );
 };
