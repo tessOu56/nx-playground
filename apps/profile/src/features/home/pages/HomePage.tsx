@@ -14,10 +14,12 @@ export const HomePage: FC = () => {
   useEffect(() => {
     document.documentElement.style.scrollSnapType = 'y mandatory';
     document.documentElement.style.scrollBehavior = 'smooth';
-
+    document.body.style.overscrollBehaviorY = 'none';
+    
     return () => {
       document.documentElement.style.scrollSnapType = '';
       document.documentElement.style.scrollBehavior = '';
+      document.body.style.overscrollBehaviorY = '';
     };
   }, []);
 
