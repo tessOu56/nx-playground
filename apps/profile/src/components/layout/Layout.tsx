@@ -93,19 +93,23 @@ export function Layout({ children }: LayoutProps) {
 
     const observer = new IntersectionObserver(
       entries => {
-        let anyDarkVisible = false;
+        // Find the section with highest intersection ratio (most visible)
+        let mostVisibleDarkSection = false;
+        let maxRatio = 0;
+
         entries.forEach(entry => {
-          // Trigger if section is visible with reasonable intersection
-          if (entry.isIntersecting && entry.intersectionRatio > 0.1) {
-            anyDarkVisible = true;
+          if (entry.isIntersecting && entry.intersectionRatio > maxRatio) {
+            maxRatio = entry.intersectionRatio;
+            mostVisibleDarkSection = true;
           }
         });
-        // Apply dark header when dark sections are visible
-        setHeaderDark(anyDarkVisible);
+
+        // Apply dark header if any dark section is significantly visible (>30%)
+        setHeaderDark(mostVisibleDarkSection && maxRatio > 0.3);
       },
       {
-        rootMargin: '-50px 0px -50px 0px', // Less conservative margins
-        threshold: [0, 0.1, 0.3, 0.5, 0.7, 1.0], // More thresholds including 0.1
+        rootMargin: '-80px 0px -80px 0px', // Account for fixed header height
+        threshold: [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0], // More granular thresholds
       }
     );
 
