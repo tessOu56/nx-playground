@@ -29,7 +29,7 @@ export const ExampleQueries: FC<ExampleQueriesProps> = ({ onQueryClick }) => {
           <button
             key={index}
             onClick={() => onQueryClick(query)}
-            className='text-left p-4 rounded-lg border border-white/20 bg-white/5 hover:border-blue-400 hover:bg-white/10 transition-colors backdrop-blur-sm'
+            className='text-left p-4 rounded-lg border border-white/20 bg-white/5 hover:border-purple-400 hover:bg-white/10 transition-colors backdrop-blur-sm'
           >
             <div className='text-sm text-gray-200'>
               {query}

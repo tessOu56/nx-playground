@@ -60,7 +60,7 @@ export const SearchPage: FC = () => {
   }, []); // Empty dependency array - only run once on mount
 
   return (
-    <div className='min-h-screen bg-gradient-to-br from-gray-900 via-blue-900 to-gray-900 pb-32'>
+    <div className='min-h-screen bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900 pb-32'>
       <div className='container mx-auto px-4 py-12'>
         {/* Page Header */}
         <div className='text-center mb-8'>
@@ -72,7 +72,8 @@ export const SearchPage: FC = () => {
             here to help you explore!
           </p>
           <p className='text-sm text-gray-400'>
-            AI assistant powered by knowledge of all projects, blogs, and tech stack
+            AI assistant powered by knowledge of all projects, blogs, and tech
+            stack
           </p>
         </div>
 
@@ -89,7 +90,7 @@ export const SearchPage: FC = () => {
                 ))}
                 {isLoading && (
                   <div className='flex items-center gap-2 text-gray-300'>
-                    <div className='animate-spin rounded-full h-4 w-4 border-b-2 border-blue-400' />
+                    <div className='animate-spin rounded-full h-4 w-4 border-b-2 border-purple-400' />
                     <span>Thinking...</span>
                   </div>
                 )}
@@ -100,9 +101,11 @@ export const SearchPage: FC = () => {
       </div>
 
       {/* Input Area - Fixed at bottom of viewport */}
-      <div className='fixed bottom-0 left-0 right-0 border-t border-white/10 bg-gray-900/80 backdrop-blur-lg p-4 z-40'>
-        <div className='container mx-auto max-w-4xl'>
-          <MessageInput onSend={handleSendMessage} disabled={isLoading} />
+      <div className='fixed bottom-0 left-0 right-0 border-t border-white/10 bg-purple-900/80 backdrop-blur-lg p-4 z-40'>
+        <div className='container mx-auto px-4'>
+          <div className='max-w-4xl mx-auto'>
+            <MessageInput onSend={handleSendMessage} disabled={isLoading} />
+          </div>
         </div>
       </div>
     </div>
