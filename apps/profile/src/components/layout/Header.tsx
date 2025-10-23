@@ -83,7 +83,7 @@ export function Header({ scrollProgress }: HeaderProps) {
         setHeaderDark(mostVisibleDarkSection && maxRatio > 0.2);
       },
       {
-        rootMargin: '-50px 0px -50px 0px', // Less strict margins
+        rootMargin: '0px', // No margin - detect exact viewport boundaries
         threshold: [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0], // More granular thresholds
       }
     );
