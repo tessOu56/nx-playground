@@ -136,11 +136,7 @@ export function Layout({ children }: LayoutProps) {
                     headerDark
                       ? 'text-white hover:text-white/90'
                       : 'text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white'
-                  } ${
-                    isActive('/')
-                      ? 'text-blue-600 dark:text-blue-400'
-                      : ''
-                  }`}
+                  } ${isActive('/') ? 'text-blue-600 dark:text-blue-400' : ''}`}
                 >
                   {String(t('nav.home'))}
                   {/* Active underline */}
@@ -148,9 +144,9 @@ export function Layout({ children }: LayoutProps) {
                     <div className='absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400' />
                   )}
                   {/* Hover underline */}
-                  <div className='absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400 transform scale-x-0 transition-transform duration-200 hover:scale-x-100' />
+                  <div className='absolute bottom-0 left-0 h-0.5 bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400 w-0 transition-all duration-300 hover:w-full' />
                 </button>
-                
+
                 <button
                   onClick={() => navigate(getLocalizedPath('/projects'))}
                   className={`relative px-4 py-2 text-sm font-medium transition-all duration-200 ${
@@ -169,9 +165,9 @@ export function Layout({ children }: LayoutProps) {
                     <div className='absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400' />
                   )}
                   {/* Hover underline */}
-                  <div className='absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400 transform scale-x-0 transition-transform duration-200 hover:scale-x-100' />
+                  <div className='absolute bottom-0 left-0 h-0.5 bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400 w-0 transition-all duration-300 hover:w-full' />
                 </button>
-                
+
                 <button
                   onClick={() => navigate(getLocalizedPath('/blogs'))}
                   className={`relative px-4 py-2 text-sm font-medium transition-all duration-200 ${
@@ -179,9 +175,7 @@ export function Layout({ children }: LayoutProps) {
                       ? 'text-white hover:text-white/90'
                       : 'text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white'
                   } ${
-                    isActive('/blogs')
-                      ? 'text-blue-600 dark:text-blue-400'
-                      : ''
+                    isActive('/blogs') ? 'text-blue-600 dark:text-blue-400' : ''
                   }`}
                 >
                   {String(t('nav.blogs'))}
@@ -190,7 +184,7 @@ export function Layout({ children }: LayoutProps) {
                     <div className='absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400' />
                   )}
                   {/* Hover underline */}
-                  <div className='absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400 transform scale-x-0 transition-transform duration-200 hover:scale-x-100' />
+                  <div className='absolute bottom-0 left-0 h-0.5 bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400 w-0 transition-all duration-300 hover:w-full' />
                 </button>
               </div>
             </div>
