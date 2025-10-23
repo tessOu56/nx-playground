@@ -36,12 +36,13 @@ export const HomePage: FC = () => {
       {/* 3. Tech Journey Timeline (2025 → 2019) */}
       <TechTimeline />
 
-      {/* 4. Contact Section with Footer */}
-      <section className='snap-start snap-always h-screen flex flex-col'>
-        <div className='flex-1'>
-          <ContactSection />
+      {/* 4. Contact Section with Footer overlay */}
+      <section className='snap-start snap-always h-screen relative'>
+        <ContactSection />
+        {/* Footer overlay at bottom */}
+        <div className='absolute bottom-0 left-0 right-0'>
+          <Footer />
         </div>
-        <Footer />
       </section>
     </>
   );

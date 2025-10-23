@@ -6,7 +6,7 @@ export const Footer: FC = () => {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className='border-t border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 opacity-60 hover:opacity-100 transition-opacity duration-300'>
+    <footer className='backdrop-blur-sm bg-white/30 dark:bg-gray-900/30 opacity-80 hover:opacity-100 transition-opacity duration-300'>
       <div className='container mx-auto px-4 py-3'>
         <div className='text-center space-y-1'>
           {/* GitHub Link */}
@@ -15,7 +15,7 @@ export const Footer: FC = () => {
               href={siteConfig.social.github}
               target='_blank'
               rel='noopener noreferrer'
-              className='flex items-center gap-2 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors'
+              className='flex items-center gap-2 text-gray-700 dark:text-gray-200 hover:text-gray-900 dark:hover:text-white transition-colors'
               aria-label='GitHub Profile'
             >
               <svg
@@ -35,7 +35,7 @@ export const Footer: FC = () => {
           </div>
 
           {/* Copyright */}
-          <p className='text-xs text-gray-500 dark:text-gray-400'>
+          <p className='text-xs text-gray-600 dark:text-gray-300'>
             © {currentYear} {siteConfig.siteName}
           </p>
         </div>
