@@ -84,137 +84,144 @@ export const TechTimeline: FC = () => {
   return (
     <>
       {/* Featured years: full screens */}
-      {featured.map((item, index) => (
-        <article
-          key={item.year}
-          className='snap-start snap-always h-screen flex items-center justify-center bg-gradient-to-br from-gray-50 to-white dark:from-gray-900 dark:to-gray-800 relative'
-          aria-label={`Tech journey in ${item.year}: ${item.title}`}
-          tabIndex={0}
-          onKeyDown={e => {
-            if (e.key === 'Enter') {
-              navigate(getLocalizedPath(`/blogs/${item.blogSlug}`));
-            }
-          }}
-          role='button'
-          data-header-dark={index % 2 !== 0 || index === 0 ? 'true' : undefined}
-          style={{
-            background:
-              index % 2 === 0
-                ? 'linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%)'
-                : 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-          }}
-        >
-          <div className='container mx-auto px-4 text-center'>
-            {/* Year */}
-            <h2
-              className='text-8xl md:text-9xl font-bold mb-6 motion-safe:transition-transform motion-safe:hover:scale-110'
-              style={{
-                color: index % 2 === 0 ? '#1a202c' : '#ffffff',
-                textShadow:
-                  index % 2 === 0 ? 'none' : '0 4px 8px rgba(0,0,0,0.3)',
-              }}
-            >
-              {item.year}
-            </h2>
-
-            {/* Title */}
-            <h3
-              className='text-2xl md:text-4xl font-semibold mb-6 max-w-3xl mx-auto'
-              style={{ color: index % 2 === 0 ? '#2d3748' : '#ffffff' }}
-            >
-              {item.title}
-            </h3>
-
-            {/* Tech Stack */}
-            <div className='flex flex-wrap gap-3 justify-center mb-8 max-w-4xl mx-auto'>
-              {item.tech.map(tech => (
-                <span
-                  key={tech}
-                  className='px-4 py-2 rounded-lg font-medium text-sm motion-safe:transition-transform motion-safe:hover:scale-105'
-                  style={{
-                    background:
-                      index % 2 === 0
-                        ? 'rgba(99, 102, 241, 0.1)'
-                        : 'rgba(255, 255, 255, 0.2)',
-                    color: index % 2 === 0 ? '#4f46e5' : '#ffffff',
-                    backdropFilter: 'blur(10px)',
-                  }}
-                >
-                  {tech}
-                </span>
-              ))}
-            </div>
-
-            {/* Milestone */}
-            <p
-              className='text-lg md:text-xl max-w-2xl mx-auto mb-10 leading-relaxed'
-              style={{
-                color: index % 2 === 0 ? '#4a5568' : 'rgba(255,255,255,0.9)',
-              }}
-            >
-              {item.milestone}
-            </p>
-
-            {/* Read More Button */}
-            <button
-              onClick={() =>
-                navigate(getLocalizedPath(`/blogs/${item.blogSlug}`))
+      {featured.map((item, index) => {
+        // Define background based on year
+        // 2024: dark purple gradient
+        // 2023: light gradient
+        // 2022: dark purple gradient
+        // 2021: light gradient
+        const isDarkBackground = item.year === 2024 || item.year === 2022 || item.year === 2020;
+        
+        const bgGradient = isDarkBackground
+          ? 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)'
+          : 'linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%)';
+        
+        return (
+          <article
+            key={item.year}
+            className='snap-start snap-always h-screen flex items-center justify-center bg-gradient-to-br from-gray-50 to-white dark:from-gray-900 dark:to-gray-800 relative'
+            aria-label={`Tech journey in ${item.year}: ${item.title}`}
+            tabIndex={0}
+            onKeyDown={e => {
+              if (e.key === 'Enter') {
+                navigate(getLocalizedPath(`/blogs/${item.blogSlug}`));
               }
-              className='px-8 py-4 rounded-lg font-medium text-lg shadow-lg motion-safe:transition-all motion-safe:hover:shadow-xl motion-safe:hover:-translate-y-1'
-              style={{
-                background:
-                  index % 2 === 0
-                    ? 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)'
-                    : '#ffffff',
-                color: index % 2 === 0 ? '#ffffff' : '#1a202c',
-              }}
-              aria-label={`Read full blog post: ${item.title}`}
-            >
-              Read More →
-            </button>
-
-            {/* Down Arrow Button */}
-            {(index < featured.length - 1 || others.length > 0) && (
-              <button
-                onClick={scrollToNext}
-                className='absolute bottom-8 left-1/2 transform -translate-x-1/2 motion-safe:animate-bounce hover:scale-110 transition-transform duration-300'
-                aria-label='Scroll to next section'
+            }}
+            role='button'
+            data-header-dark={isDarkBackground ? 'true' : undefined}
+            style={{ background: bgGradient }}
+          >
+            <div className='container mx-auto px-4 text-center'>
+              {/* Year */}
+              <h2
+                className='text-8xl md:text-9xl font-bold mb-6 motion-safe:transition-transform motion-safe:hover:scale-110'
+                style={{
+                  color: isDarkBackground ? '#ffffff' : '#1a202c',
+                  textShadow: isDarkBackground
+                    ? '0 4px 8px rgba(0,0,0,0.3)'
+                    : 'none',
+                }}
               >
-                <div
-                  className='w-12 h-12 rounded-full flex items-center justify-center backdrop-blur-sm border-2 transition-all duration-300'
-                  style={{
-                    background:
-                      index % 2 === 0
-                        ? 'rgba(99, 102, 241, 0.2)'
-                        : 'rgba(255, 255, 255, 0.2)',
-                    borderColor:
-                      index % 2 === 0
-                        ? 'rgba(99, 102, 241, 0.5)'
-                        : 'rgba(255, 255, 255, 0.5)',
-                  }}
-                >
-                  <svg
-                    className='w-6 h-6'
-                    fill='none'
-                    stroke='currentColor'
-                    viewBox='0 0 24 24'
+                {item.year}
+              </h2>
+
+              {/* Title */}
+              <h3
+                className='text-2xl md:text-4xl font-semibold mb-6 max-w-3xl mx-auto'
+                style={{ color: isDarkBackground ? '#ffffff' : '#2d3748' }}
+              >
+                {item.title}
+              </h3>
+
+              {/* Tech Stack */}
+              <div className='flex flex-wrap gap-3 justify-center mb-8 max-w-4xl mx-auto'>
+                {item.tech.map(tech => (
+                  <span
+                    key={tech}
+                    className='px-4 py-2 rounded-lg font-medium text-sm motion-safe:transition-transform motion-safe:hover:scale-105'
                     style={{
-                      color: index % 2 === 0 ? '#4f46e5' : '#ffffff',
+                      background: isDarkBackground
+                        ? 'rgba(255, 255, 255, 0.2)'
+                        : 'rgba(99, 102, 241, 0.1)',
+                      color: isDarkBackground ? '#ffffff' : '#4f46e5',
+                      backdropFilter: 'blur(10px)',
                     }}
                   >
-                    <path
-                      strokeLinecap='round'
-                      strokeLinejoin='round'
-                      strokeWidth={2}
-                      d='M19 14l-7 7m0 0l-7-7m7 7V3'
-                    />
-                  </svg>
-                </div>
+                    {tech}
+                  </span>
+                ))}
+              </div>
+
+              {/* Milestone */}
+              <p
+                className='text-lg md:text-xl max-w-2xl mx-auto mb-10 leading-relaxed'
+                style={{
+                  color: isDarkBackground
+                    ? 'rgba(255,255,255,0.9)'
+                    : '#4a5568',
+                }}
+              >
+                {item.milestone}
+              </p>
+
+              {/* Read More Button */}
+              <button
+                onClick={() =>
+                  navigate(getLocalizedPath(`/blogs/${item.blogSlug}`))
+                }
+                className='px-8 py-4 rounded-lg font-medium text-lg shadow-lg motion-safe:transition-all motion-safe:hover:shadow-xl motion-safe:hover:-translate-y-1'
+                style={{
+                  background: isDarkBackground
+                    ? '#ffffff'
+                    : 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                  color: isDarkBackground ? '#1a202c' : '#ffffff',
+                }}
+                aria-label={`Read full blog post: ${item.title}`}
+              >
+                Read More →
               </button>
-            )}
-          </div>
-        </article>
-      ))}
+
+              {/* Down Arrow Button */}
+              {(index < featured.length - 1 || others.length > 0) && (
+                <button
+                  onClick={scrollToNext}
+                  className='absolute bottom-8 left-1/2 transform -translate-x-1/2 motion-safe:animate-bounce hover:scale-110 transition-transform duration-300'
+                  aria-label='Scroll to next section'
+                >
+                  <div
+                    className='w-12 h-12 rounded-full flex items-center justify-center backdrop-blur-sm border-2 transition-all duration-300'
+                    style={{
+                      background: isDarkBackground
+                        ? 'rgba(255, 255, 255, 0.2)'
+                        : 'rgba(99, 102, 241, 0.2)',
+                      borderColor: isDarkBackground
+                        ? 'rgba(255, 255, 255, 0.5)'
+                        : 'rgba(99, 102, 241, 0.5)',
+                    }}
+                  >
+                    <svg
+                      className='w-6 h-6'
+                      fill='none'
+                      stroke='currentColor'
+                      viewBox='0 0 24 24'
+                      style={{
+                        color: isDarkBackground ? '#ffffff' : '#4f46e5',
+                      }}
+                    >
+                      <path
+                        strokeLinecap='round'
+                        strokeLinejoin='round'
+                        strokeWidth={2}
+                        d='M19 14l-7 7m0 0l-7-7m7 7V3'
+                      />
+                    </svg>
+                  </div>
+                </button>
+              )}
+            </div>
+          </article>
+        );
+      })}
 
       {/* Others: Summary screen */}
       {others.length > 0 && (
