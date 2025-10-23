@@ -9,6 +9,13 @@
   scroll-snap-stop: always;
 }
 
+/* Prevent all overscroll behavior on home page */
+html, body {
+  overscroll-behavior: none;
+  overscroll-behavior-y: none;
+  overscroll-behavior-x: none;
+}
+
 /* Respect reduced motion preferences */
 @media (prefers-reduced-motion: reduce) {
   html {
