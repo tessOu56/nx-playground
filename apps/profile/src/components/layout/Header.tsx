@@ -135,36 +135,23 @@ export function Header({ scrollProgress }: HeaderProps) {
                 headerDark={headerDark}
                 onClick={() => navigate(getLocalizedPath('/blogs'))}
               />
-
-              {/* AI Search Button */}
-              <button
+              <NavButton
+                path='/search'
+                label='AI Search'
+                isActive={isActive('/search')}
+                headerDark={headerDark}
                 onClick={() => navigate(getLocalizedPath('/search'))}
-                className={`group relative px-4 py-2 text-sm font-medium transition-all duration-200 flex items-center gap-2 ${
-                  headerDark
-                    ? 'text-white hover:text-white/90'
-                    : 'text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white'
-                } ${
-                  isActive('/search') ? 'text-blue-600 dark:text-blue-400' : ''
-                }`}
-              >
-                <Sparkles
-                  className={`w-4 h-4 ${
-                    headerDark
-                      ? 'text-purple-400'
-                      : 'text-purple-600 dark:text-purple-400'
-                  }`}
-                />
-                <span>AI Search</span>
-                {hasSearchHistory && !isActive('/search') && (
-                  <span className='thinking-dots' />
-                )}
-                {/* Active underline */}
-                {isActive('/search') && (
-                  <div className='absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400' />
-                )}
-                {/* Hover underline */}
-                <div className='absolute bottom-0 left-0 h-0.5 bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400 w-0 transition-all duration-300 group-hover:w-full' />
-              </button>
+                icon={
+                  <Sparkles
+                    className={`w-4 h-4 ${
+                      headerDark
+                        ? 'text-purple-400'
+                        : 'text-purple-600 dark:text-purple-400'
+                    }`}
+                  />
+                }
+                showLoading={hasSearchHistory}
+              />
             </div>
           </div>
 
