@@ -20,8 +20,9 @@ export function Layout({ children }: LayoutProps) {
   const { getLocalizedPath } = useLocalizedNavigation();
   const { t } = useLayoutTranslation();
   const [scrollProgress, setScrollProgress] = useState(0);
-  const [headerDark, setHeaderDark] = useState(false);
+  const [headerDark, setHeaderDark] = useState(true); // Default to dark for home page hero
   const [searchQuery, setSearchQuery] = useState('');
+  const [hasSearchHistory, setHasSearchHistory] = useState(false);
 
   const isActive = (path: string) => {
     const pathWithoutLocale = location.pathname.replace(/^\/(zh-TW|en)/, '');
@@ -36,16 +37,31 @@ export function Layout({ children }: LayoutProps) {
   const isHomePage = isActive('/');
   const isSearchPage = isActive('/search');
 
-  // Track search query from URL
+  // Track search query from URL and save to localStorage
   useEffect(() => {
     const params = new URLSearchParams(location.search);
-    setSearchQuery(params.get('q') || '');
-  }, [location.search]);
+    const query = params.get('q') || '';
+    setSearchQuery(query);
+    
+    // If on search page with a query, mark that we have search history
+    if (isSearchPage && query) {
+      localStorage.setItem('hasSearchHistory', 'true');
+      setHasSearchHistory(true);
+    }
+  }, [location.search, isSearchPage]);
 
-  // Reset header state when path changes
+  // Check for search history on mount
   useEffect(() => {
-    setHeaderDark(false);
-  }, [location.pathname]);
+    const history = localStorage.getItem('hasSearchHistory');
+    setHasSearchHistory(history === 'true');
+  }, []);
+
+  // Reset header state when path changes (except on initial home page load)
+  useEffect(() => {
+    if (!isHomePage) {
+      setHeaderDark(false);
+    }
+  }, [location.pathname, isHomePage]);
 
   // Scroll progress indicator with RAF throttling
   useEffect(() => {
@@ -211,14 +227,14 @@ export function Layout({ children }: LayoutProps) {
                   <Sparkles
                     className={`w-5 h-5 ${
                       headerDark
-                        ? 'text-blue-400'
-                        : 'text-blue-600 dark:text-blue-400'
+                        ? 'text-purple-400'
+                        : 'text-purple-600 dark:text-purple-400'
                     }`}
                   />
                 </button>
 
                 {/* Input / Text / Hidden - conditional display */}
-                {!isSearchPage && (
+                {!isSearchPage && !hasSearchHistory && (
                   <input
                     type='search'
                     placeholder='Ask AI about...'
@@ -242,6 +258,19 @@ export function Layout({ children }: LayoutProps) {
                     }}
                     aria-label='AI search'
                   />
+                )}
+                {!isSearchPage && hasSearchHistory && (
+                  <div
+                    className={`flex items-center gap-1 px-3 py-1.5 text-sm rounded-lg border backdrop-blur-sm cursor-pointer ${
+                      headerDark
+                        ? 'bg-white/10 border-white/20 text-white'
+                        : 'border-gray-300 dark:border-gray-600 bg-white/80 dark:bg-gray-800/80 text-gray-900 dark:text-white'
+                    }`}
+                    onClick={() => navigate(getLocalizedPath('/search'))}
+                  >
+                    <span>AI is thinking</span>
+                    <span className='thinking-dots'></span>
+                  </div>
                 )}
                 {isSearchPage && searchQuery && (
                   <span
