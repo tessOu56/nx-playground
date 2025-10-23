@@ -18,7 +18,7 @@ export const HomePage: FC = () => {
     document.body.style.overscrollBehaviorX = 'none';
     document.documentElement.style.overscrollBehaviorY = 'none';
     document.documentElement.style.overscrollBehaviorX = 'none';
-    
+
     return () => {
       document.documentElement.style.scrollSnapType = '';
       document.documentElement.style.scrollBehavior = '';
