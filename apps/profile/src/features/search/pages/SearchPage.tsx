@@ -60,7 +60,10 @@ export const SearchPage: FC = () => {
   }, []); // Empty dependency array - only run once on mount
 
   return (
-    <div className='min-h-screen bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900 pb-32' data-header-dark='true'>
+    <div
+      className='min-h-screen bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900 pb-32'
+      data-header-dark='true'
+    >
       <div className='container mx-auto px-4 py-12'>
         {/* Page Header */}
         <div className='text-center mb-8'>
