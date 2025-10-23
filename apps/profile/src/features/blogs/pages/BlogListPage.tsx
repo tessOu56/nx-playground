@@ -5,10 +5,10 @@
 import { type FC, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
-import { BlogCard } from '../../../components/BlogCard';
 import { loadAllBlogMetadata } from '../../../lib/blogLoader';
 import { type SupportedLocale } from '../../../lib/i18n/LocaleRouter';
 import type { BlogMetadata } from '../../../types/blogData';
+import { BlogCard } from '../components/BlogCard';
 
 export const BlogListPage: FC = () => {
   const { locale } = useParams<{ locale: string }>();
@@ -24,7 +24,9 @@ export const BlogListPage: FC = () => {
       try {
         const blogData = await loadAllBlogMetadata(currentLocale);
         // Sort by year (newest first)
-        const sortedBlogs = blogData.sort((a, b) => (b.year || 0) - (a.year || 0));
+        const sortedBlogs = blogData.sort(
+          (a, b) => (b.year || 0) - (a.year || 0)
+        );
         setBlogs(sortedBlogs);
       } catch (error) {
         console.error('Error loading blogs:', error);
