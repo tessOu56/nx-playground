@@ -1,5 +1,6 @@
 import { type ReactNode, useEffect, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { Sparkles } from 'lucide-react';
 
 import { useLocalizedNavigation } from '../../lib/i18n/useLocalizedNavigation';
 import { siteConfig } from '../../lib/siteConfig';
@@ -20,6 +21,7 @@ export function Layout({ children }: LayoutProps) {
   const { t } = useLayoutTranslation();
   const [scrollProgress, setScrollProgress] = useState(0);
   const [headerDark, setHeaderDark] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
 
   const isActive = (path: string) => {
     const pathWithoutLocale = location.pathname.replace(/^\/(zh-TW|en)/, '');
@@ -30,8 +32,15 @@ export function Layout({ children }: LayoutProps) {
     return pathWithoutLocale.startsWith(path);
   };
 
-  // Check if we're on home page
+  // Check if we're on home page or search page
   const isHomePage = isActive('/');
+  const isSearchPage = isActive('/search');
+
+  // Track search query from URL
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    setSearchQuery(params.get('q') || '');
+  }, [location.search]);
 
   // Reset header state when path changes
   useEffect(() => {
@@ -191,31 +200,60 @@ export function Layout({ children }: LayoutProps) {
 
             {/* Search Input & Controls */}
             <div className='flex items-center gap-3'>
-              {/* Search Input */}
-              <div className='hidden md:block'>
-                <input
-                  type='search'
-                  placeholder='Ask AI about...'
-                  className={`w-64 px-3 py-1.5 text-sm rounded-lg border focus:outline-none focus:ring-1 focus:ring-blue-500 backdrop-blur-sm ${
-                    headerDark
-                      ? 'bg-white/10 border-white/20 text-white placeholder-white/60'
-                      : 'border-gray-300 dark:border-gray-600 bg-white/80 dark:bg-gray-800/80 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400'
-                  }`}
-                  onKeyDown={e => {
-                    if (e.key === 'Enter') {
-                      const query = e.currentTarget.value;
-                      if (query.trim()) {
-                        navigate(
-                          getLocalizedPath(
-                            `/search?q=${encodeURIComponent(query)}`
-                          )
-                        );
-                        e.currentTarget.value = '';
+              {/* Search with Sparkles Icon */}
+              <div className='hidden md:flex items-center gap-2'>
+                {/* Sparkle Icon - always visible, clickable */}
+                <button
+                  onClick={() => navigate(getLocalizedPath('/search'))}
+                  className='p-1 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-all animate-sparkle'
+                  aria-label='AI Search'
+                >
+                  <Sparkles
+                    className={`w-5 h-5 ${
+                      headerDark
+                        ? 'text-blue-400'
+                        : 'text-blue-600 dark:text-blue-400'
+                    }`}
+                  />
+                </button>
+
+                {/* Input / Text / Hidden - conditional display */}
+                {!isSearchPage && (
+                  <input
+                    type='search'
+                    placeholder='Ask AI about...'
+                    className={`w-64 px-3 py-1.5 text-sm rounded-lg border focus:outline-none focus:ring-1 focus:ring-blue-500 backdrop-blur-sm ${
+                      headerDark
+                        ? 'bg-white/10 border-white/20 text-white placeholder-white/60'
+                        : 'border-gray-300 dark:border-gray-600 bg-white/80 dark:bg-gray-800/80 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400'
+                    }`}
+                    onKeyDown={e => {
+                      if (e.key === 'Enter') {
+                        const query = e.currentTarget.value;
+                        if (query.trim()) {
+                          navigate(
+                            getLocalizedPath(
+                              `/search?q=${encodeURIComponent(query)}`
+                            )
+                          );
+                          e.currentTarget.value = '';
+                        }
                       }
-                    }
-                  }}
-                  aria-label='AI search'
-                />
+                    }}
+                    aria-label='AI search'
+                  />
+                )}
+                {isSearchPage && searchQuery && (
+                  <span
+                    className={`text-sm px-3 py-1.5 ${
+                      headerDark
+                        ? 'text-white'
+                        : 'text-gray-900 dark:text-white'
+                    }`}
+                  >
+                    "{searchQuery}"
+                  </span>
+                )}
               </div>
 
               <LanguageToggle />

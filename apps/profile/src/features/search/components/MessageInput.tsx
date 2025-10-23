@@ -1,5 +1,5 @@
 import type { FC, KeyboardEvent } from 'react';
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 
 interface MessageInputProps {
   onSend: (message: string) => void;
@@ -8,11 +8,19 @@ interface MessageInputProps {
 
 export const MessageInput: FC<MessageInputProps> = ({ onSend, disabled }) => {
   const [input, setInput] = useState('');
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
+
+  // Auto-focus input on mount
+  useEffect(() => {
+    textareaRef.current?.focus();
+  }, []);
 
   const handleSend = () => {
     if (input.trim() && !disabled) {
       onSend(input);
       setInput('');
+      // Re-focus after sending
+      setTimeout(() => textareaRef.current?.focus(), 0);
     }
   };
 
@@ -27,6 +35,7 @@ export const MessageInput: FC<MessageInputProps> = ({ onSend, disabled }) => {
     <div className='bg-white dark:bg-gray-800 rounded-lg shadow-lg p-4'>
       <div className='flex gap-2'>
         <textarea
+          ref={textareaRef}
           value={input}
           onChange={e => setInput(e.target.value)}
           onKeyDown={handleKeyDown}
