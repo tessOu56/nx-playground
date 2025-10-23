@@ -6,7 +6,7 @@ export const Footer: FC = () => {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className='backdrop-blur-sm bg-white/30 dark:bg-gray-900/30 opacity-80 hover:opacity-100 transition-opacity duration-300'>
+    <footer className='backdrop-blur-sm opacity-80 hover:opacity-100 transition-opacity duration-300'>
       <div className='container mx-auto px-4 py-3'>
         <div className='text-center space-y-1'>
           {/* GitHub Link */}
