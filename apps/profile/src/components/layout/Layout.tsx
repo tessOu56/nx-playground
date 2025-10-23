@@ -34,6 +34,11 @@ export function Layout({ children }: LayoutProps) {
   // Check if we're on home page
   const isHomePage = isActive('/');
 
+  // Reset header state when path changes
+  useEffect(() => {
+    setHeaderDark(false);
+  }, [location.pathname]);
+
   // Scroll progress indicator with RAF throttling
   useEffect(() => {
     let rafId = 0;

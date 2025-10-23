@@ -1,8 +1,10 @@
 import type { FC } from 'react';
 
 import { siteConfig } from '../../lib/siteConfig';
+import { useLayoutTranslation } from './hooks/useLayoutTranslation';
 
 export const Footer: FC = () => {
+  const { t } = useLayoutTranslation();
   const currentYear = new Date().getFullYear();
 
   return (
@@ -30,7 +32,7 @@ export const Footer: FC = () => {
                   clipRule='evenodd'
                 />
               </svg>
-              <span className='text-sm'>GitHub</span>
+              <span className='text-sm'>{String(t('footer.sourceCode'))}</span>
             </a>
           </div>
 
