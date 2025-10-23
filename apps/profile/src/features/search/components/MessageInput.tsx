@@ -32,7 +32,7 @@ export const MessageInput: FC<MessageInputProps> = ({ onSend, disabled }) => {
   };
 
   return (
-    <div className='bg-white dark:bg-gray-800 rounded-lg shadow-lg p-4'>
+    <div>
       <div className='flex gap-2'>
         <textarea
           ref={textareaRef}
@@ -40,7 +40,7 @@ export const MessageInput: FC<MessageInputProps> = ({ onSend, disabled }) => {
           onChange={e => setInput(e.target.value)}
           onKeyDown={handleKeyDown}
           placeholder='Ask me anything about my projects, tech stack, or experience...'
-          className='flex-1 resize-none rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 p-3 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500'
+          className='flex-1 resize-none rounded-lg border border-white/30 bg-white/10 backdrop-blur-sm p-3 text-white placeholder-gray-400 focus:border-blue-400 focus:outline-none focus:ring-2 focus:ring-blue-400/50'
           rows={3}
           disabled={disabled}
           aria-label='Message input'
@@ -48,13 +48,13 @@ export const MessageInput: FC<MessageInputProps> = ({ onSend, disabled }) => {
         <button
           onClick={handleSend}
           disabled={disabled || !input.trim()}
-          className='self-end px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors'
+          className='self-end px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:bg-gray-600 disabled:cursor-not-allowed transition-colors'
           aria-label='Send message'
         >
           Send
         </button>
       </div>
-      <div className='text-xs text-gray-500 dark:text-gray-400 mt-2'>
+      <div className='text-xs text-gray-400 mt-2'>
         Press Enter to send, Shift+Enter for new line
       </div>
     </div>

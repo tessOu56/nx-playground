@@ -16,10 +16,10 @@ export const ExampleQueries: FC<ExampleQueriesProps> = ({ onQueryClick }) => {
   return (
     <div className='flex flex-col items-center justify-center h-full py-12'>
       <div className='text-center mb-8'>
-        <h2 className='text-3xl font-bold text-gray-900 dark:text-white mb-2'>
+        <h2 className='text-3xl font-bold text-white mb-2'>
           👋 Ask Me Anything
         </h2>
-        <p className='text-gray-600 dark:text-gray-400'>
+        <p className='text-gray-300'>
           Try one of these example questions to get started
         </p>
       </div>
@@ -29,9 +29,9 @@ export const ExampleQueries: FC<ExampleQueriesProps> = ({ onQueryClick }) => {
           <button
             key={index}
             onClick={() => onQueryClick(query)}
-            className='text-left p-4 rounded-lg border border-gray-200 dark:border-gray-700 hover:border-blue-500 hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-colors'
+            className='text-left p-4 rounded-lg border border-white/20 bg-white/5 hover:border-blue-400 hover:bg-white/10 transition-colors backdrop-blur-sm'
           >
-            <div className='text-sm text-gray-700 dark:text-gray-300'>
+            <div className='text-sm text-gray-200'>
               {query}
             </div>
           </button>
