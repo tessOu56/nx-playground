@@ -23,8 +23,8 @@ export const ChatMessage: FC<ChatMessageProps> = ({ message }) => {
       <div
         className={`max-w-[80%] rounded-lg p-4 ${
           isUser
-            ? 'bg-purple-600 text-white'
-            : 'bg-white/10 backdrop-blur-sm text-white border border-white/20'
+            ? 'bg-gradient-to-br from-purple-600 to-purple-700 text-white shadow-lg shadow-purple-500/50'
+            : 'bg-gradient-to-br from-purple-500/20 to-blue-500/20 backdrop-blur-sm text-white border border-purple-400/30 shadow-lg shadow-purple-500/20'
         }`}
       >
         <div className='text-sm font-medium mb-1'>

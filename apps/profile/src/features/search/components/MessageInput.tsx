@@ -45,7 +45,7 @@ export const MessageInput: FC<MessageInputProps> = ({ onSend, disabled }) => {
           onChange={e => setInput(e.target.value)}
           onKeyDown={handleKeyDown}
           placeholder='Ask me anything about my projects, tech stack, or experience...'
-          className='w-full resize-none rounded-lg border border-white/30 bg-white/10 backdrop-blur-sm p-3 pr-24 text-white placeholder-gray-400 focus:border-purple-400 focus:outline-none focus:ring-2 focus:ring-purple-400/50'
+          className='w-full resize-none rounded-lg border-0 bg-transparent p-3 pr-24 text-white placeholder-gray-400 focus:outline-none focus:ring-0'
           rows={3}
           disabled={disabled}
           aria-label='Message input'
