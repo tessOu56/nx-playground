@@ -1,4 +1,3 @@
-import { Button } from '@nx-playground/ui-components';
 import { type ReactNode, useEffect, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 
@@ -130,43 +129,69 @@ export function Layout({ children }: LayoutProps) {
                   </span>
                 </h1>
               </Link>
-              <div className='hidden md:flex items-center gap-2'>
-                <Button
-                  variant={isActive('/') ? 'default' : 'ghost'}
-                  size='sm'
+              <div className='hidden md:flex items-center'>
+                <button
                   onClick={() => navigate(getLocalizedPath('/'))}
-                  style={
+                  className={`relative px-4 py-2 text-sm font-medium transition-all duration-200 ${
                     headerDark
-                      ? { color: 'white', background: 'rgba(255,255,255,0.1)' }
-                      : undefined
-                  }
+                      ? 'text-white hover:text-white/90'
+                      : 'text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white'
+                  } ${
+                    isActive('/')
+                      ? 'text-blue-600 dark:text-blue-400'
+                      : ''
+                  }`}
                 >
                   {String(t('nav.home'))}
-                </Button>
-                <Button
-                  variant={isActive('/projects') ? 'default' : 'ghost'}
-                  size='sm'
+                  {/* Active underline */}
+                  {isActive('/') && (
+                    <div className='absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400' />
+                  )}
+                  {/* Hover underline */}
+                  <div className='absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400 transform scale-x-0 transition-transform duration-200 hover:scale-x-100' />
+                </button>
+                
+                <button
                   onClick={() => navigate(getLocalizedPath('/projects'))}
-                  style={
+                  className={`relative px-4 py-2 text-sm font-medium transition-all duration-200 ${
                     headerDark
-                      ? { color: 'white', background: 'rgba(255,255,255,0.1)' }
-                      : undefined
-                  }
+                      ? 'text-white hover:text-white/90'
+                      : 'text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white'
+                  } ${
+                    isActive('/projects')
+                      ? 'text-blue-600 dark:text-blue-400'
+                      : ''
+                  }`}
                 >
                   {String(t('nav.projects'))}
-                </Button>
-                <Button
-                  variant={isActive('/blogs') ? 'default' : 'ghost'}
-                  size='sm'
+                  {/* Active underline */}
+                  {isActive('/projects') && (
+                    <div className='absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400' />
+                  )}
+                  {/* Hover underline */}
+                  <div className='absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400 transform scale-x-0 transition-transform duration-200 hover:scale-x-100' />
+                </button>
+                
+                <button
                   onClick={() => navigate(getLocalizedPath('/blogs'))}
-                  style={
+                  className={`relative px-4 py-2 text-sm font-medium transition-all duration-200 ${
                     headerDark
-                      ? { color: 'white', background: 'rgba(255,255,255,0.1)' }
-                      : undefined
-                  }
+                      ? 'text-white hover:text-white/90'
+                      : 'text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white'
+                  } ${
+                    isActive('/blogs')
+                      ? 'text-blue-600 dark:text-blue-400'
+                      : ''
+                  }`}
                 >
                   {String(t('nav.blogs'))}
-                </Button>
+                  {/* Active underline */}
+                  {isActive('/blogs') && (
+                    <div className='absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400' />
+                  )}
+                  {/* Hover underline */}
+                  <div className='absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400 transform scale-x-0 transition-transform duration-200 hover:scale-x-100' />
+                </button>
               </div>
             </div>
 
@@ -205,42 +230,48 @@ export function Layout({ children }: LayoutProps) {
 
           {/* Mobile Navigation */}
           <div className='md:hidden pb-4 flex gap-2'>
-            <Button
-              variant={isActive('/') ? 'default' : 'ghost'}
-              size='sm'
+            <button
               onClick={() => navigate(getLocalizedPath('/'))}
-              style={
+              className={`relative px-3 py-2 text-sm font-medium rounded-md transition-all duration-200 ${
                 headerDark
-                  ? { color: 'white', background: 'rgba(255,255,255,0.1)' }
-                  : undefined
-              }
+                  ? 'text-white hover:text-white/90 hover:bg-white/10'
+                  : 'text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800'
+              } ${
+                isActive('/')
+                  ? 'text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/20'
+                  : ''
+              }`}
             >
               {String(t('nav.home'))}
-            </Button>
-            <Button
-              variant={isActive('/projects') ? 'default' : 'ghost'}
-              size='sm'
+            </button>
+            <button
               onClick={() => navigate(getLocalizedPath('/projects'))}
-              style={
+              className={`relative px-3 py-2 text-sm font-medium rounded-md transition-all duration-200 ${
                 headerDark
-                  ? { color: 'white', background: 'rgba(255,255,255,0.1)' }
-                  : undefined
-              }
+                  ? 'text-white hover:text-white/90 hover:bg-white/10'
+                  : 'text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800'
+              } ${
+                isActive('/projects')
+                  ? 'text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/20'
+                  : ''
+              }`}
             >
               {String(t('nav.projects'))}
-            </Button>
-            <Button
-              variant={isActive('/blogs') ? 'default' : 'ghost'}
-              size='sm'
+            </button>
+            <button
               onClick={() => navigate(getLocalizedPath('/blogs'))}
-              style={
+              className={`relative px-3 py-2 text-sm font-medium rounded-md transition-all duration-200 ${
                 headerDark
-                  ? { color: 'white', background: 'rgba(255,255,255,0.1)' }
-                  : undefined
-              }
+                  ? 'text-white hover:text-white/90 hover:bg-white/10'
+                  : 'text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800'
+              } ${
+                isActive('/blogs')
+                  ? 'text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/20'
+                  : ''
+              }`}
             >
               {String(t('nav.blogs'))}
-            </Button>
+            </button>
           </div>
         </div>
       </nav>
