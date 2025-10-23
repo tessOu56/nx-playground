@@ -61,41 +61,53 @@ export const SearchPage: FC = () => {
   }, []); // Empty dependency array - only run once on mount
 
   return (
-    <div className='h-screen flex flex-col bg-gray-50 dark:bg-gray-900'>
-      {/* 1. Info Banner - Fixed at top */}
-      <div className='flex-shrink-0 px-4 pt-8'>
-        <div className='max-w-4xl mx-auto'>
-          <InfoBanner />
+    <div className='min-h-screen bg-gray-50 dark:bg-gray-900'>
+      <div className='container mx-auto px-4 py-12'>
+        {/* Page Header */}
+        <div className='text-center mb-12'>
+          <h1 className='text-4xl font-bold text-gray-900 dark:text-white mb-4'>
+            AI-Powered Search
+          </h1>
+          <p className='text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto'>
+            Ask me anything about my projects, tech stack, or experience. I'm here to help you explore!
+          </p>
         </div>
-      </div>
 
-      {/* 2. Messages Area - Scrollable middle section */}
-      <div className='flex-1 overflow-y-auto px-4 py-4'>
+        {/* Chat Container */}
         <div className='max-w-4xl mx-auto'>
-          <div className='bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 min-h-full'>
-            {messages.length === 0 ? (
-              <ExampleQueries onQueryClick={handleSendMessage} />
-            ) : (
-              <div className='space-y-4'>
-                {messages.map(message => (
-                  <ChatMessage key={message.id} message={message} />
-                ))}
-                {isLoading && (
-                  <div className='flex items-center gap-2 text-gray-500 dark:text-gray-400'>
-                    <div className='animate-spin rounded-full h-4 w-4 border-b-2 border-blue-600' />
-                    <span>Thinking...</span>
-                  </div>
-                )}
-              </div>
-            )}
+          <div className='bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden min-h-[70vh] flex flex-col'>
+            {/* Info Banner inside chat */}
+            <div className='border-b border-gray-200 dark:border-gray-700 p-4'>
+              <InfoBanner />
+            </div>
+
+            {/* Messages Area - Scrollable */}
+            <div className='flex-1 overflow-y-auto p-6'>
+              {messages.length === 0 ? (
+                <ExampleQueries onQueryClick={handleSendMessage} />
+              ) : (
+                <div className='space-y-4'>
+                  {messages.map(message => (
+                    <ChatMessage key={message.id} message={message} />
+                  ))}
+                  {isLoading && (
+                    <div className='flex items-center gap-2 text-gray-500 dark:text-gray-400'>
+                      <div className='animate-spin rounded-full h-4 w-4 border-b-2 border-blue-600' />
+                      <span>Thinking...</span>
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
+
+            {/* Input Area - Fixed at bottom of chat box with margin */}
+            <div className='border-t border-gray-200 dark:border-gray-700 p-4 bg-gray-50 dark:bg-gray-900/50'>
+              <MessageInput onSend={handleSendMessage} disabled={isLoading} />
+            </div>
           </div>
-        </div>
-      </div>
 
-      {/* 3. Input Area - Fixed at bottom */}
-      <div className='flex-shrink-0 border-t bg-white dark:bg-gray-800 p-4'>
-        <div className='max-w-4xl mx-auto'>
-          <MessageInput onSend={handleSendMessage} disabled={isLoading} />
+          {/* Bottom margin for footer visibility */}
+          <div className='h-24' />
         </div>
       </div>
     </div>
