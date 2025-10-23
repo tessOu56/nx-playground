@@ -60,7 +60,7 @@ export const SearchPage: FC = () => {
   }, []); // Empty dependency array - only run once on mount
 
   return (
-    <div className='min-h-screen bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900 pb-32'>
+    <div className='min-h-screen bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900 pb-32' data-header-dark='true'>
       <div className='container mx-auto px-4 py-12'>
         {/* Page Header */}
         <div className='text-center mb-8'>
@@ -101,7 +101,7 @@ export const SearchPage: FC = () => {
       </div>
 
       {/* Input Area - Fixed at bottom of viewport */}
-      <div className='fixed bottom-0 left-0 right-0 border-t border-white/10 bg-purple-900/80 backdrop-blur-lg p-4 z-40'>
+      <div className='fixed bottom-0 left-0 right-0 bg-purple-900/60 backdrop-blur-lg p-4 z-40'>
         <div className='container mx-auto px-4'>
           <div className='max-w-4xl mx-auto'>
             <MessageInput onSend={handleSendMessage} disabled={isLoading} />
