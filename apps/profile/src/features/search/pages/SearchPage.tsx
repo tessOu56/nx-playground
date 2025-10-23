@@ -24,6 +24,9 @@ export const SearchPage: FC = () => {
   const handleSendMessage = async (content: string) => {
     if (!content.trim()) return;
 
+    // Mark that user has search history
+    localStorage.setItem('hasSearchHistory', 'true');
+
     // Add user message
     const userMessage: Message = {
       id: Date.now().toString(),
