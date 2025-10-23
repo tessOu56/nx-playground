@@ -23,7 +23,7 @@ export const ChatMessage: FC<ChatMessageProps> = ({ message }) => {
       <div
         className={`max-w-[80%] rounded-lg p-4 ${
           isUser
-            ? 'bg-blue-600 text-white'
+            ? 'bg-purple-600 text-white'
             : 'bg-white/10 backdrop-blur-sm text-white border border-white/20'
         }`}
       >

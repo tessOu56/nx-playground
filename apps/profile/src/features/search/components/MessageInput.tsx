@@ -1,5 +1,10 @@
-import type { FC, KeyboardEvent } from 'react';
-import { useState, useRef, useEffect } from 'react';
+import {
+  type FC,
+  type KeyboardEvent,
+  useState,
+  useRef,
+  useEffect,
+} from 'react';
 
 interface MessageInputProps {
   onSend: (message: string) => void;
@@ -33,22 +38,22 @@ export const MessageInput: FC<MessageInputProps> = ({ onSend, disabled }) => {
 
   return (
     <div>
-      <div className='flex gap-2'>
+      <div className='relative'>
         <textarea
           ref={textareaRef}
           value={input}
           onChange={e => setInput(e.target.value)}
           onKeyDown={handleKeyDown}
           placeholder='Ask me anything about my projects, tech stack, or experience...'
-          className='flex-1 resize-none rounded-lg border border-white/30 bg-white/10 backdrop-blur-sm p-3 text-white placeholder-gray-400 focus:border-blue-400 focus:outline-none focus:ring-2 focus:ring-blue-400/50'
+          className='w-full resize-none rounded-lg border border-white/30 bg-white/10 backdrop-blur-sm p-3 pr-24 text-white placeholder-gray-400 focus:border-purple-400 focus:outline-none focus:ring-2 focus:ring-purple-400/50'
           rows={3}
           disabled={disabled}
           aria-label='Message input'
         />
         <button
           onClick={handleSend}
-          disabled={disabled || !input.trim()}
-          className='self-end px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:bg-gray-600 disabled:cursor-not-allowed transition-colors'
+          disabled={(disabled ?? false) || !input.trim()}
+          className='absolute bottom-3 right-3 px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 disabled:bg-gray-600 disabled:cursor-not-allowed transition-colors text-sm font-medium'
           aria-label='Send message'
         >
           Send
@@ -60,4 +65,3 @@ export const MessageInput: FC<MessageInputProps> = ({ onSend, disabled }) => {
     </div>
   );
 };
-
