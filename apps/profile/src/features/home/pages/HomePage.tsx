@@ -15,11 +15,17 @@ export const HomePage: FC = () => {
     document.documentElement.style.scrollSnapType = 'y mandatory';
     document.documentElement.style.scrollBehavior = 'smooth';
     document.body.style.overscrollBehaviorY = 'none';
+    document.body.style.overscrollBehaviorX = 'none';
+    document.documentElement.style.overscrollBehaviorY = 'none';
+    document.documentElement.style.overscrollBehaviorX = 'none';
     
     return () => {
       document.documentElement.style.scrollSnapType = '';
       document.documentElement.style.scrollBehavior = '';
       document.body.style.overscrollBehaviorY = '';
+      document.body.style.overscrollBehaviorX = '';
+      document.documentElement.style.overscrollBehaviorY = '';
+      document.documentElement.style.overscrollBehaviorX = '';
     };
   }, []);
 
