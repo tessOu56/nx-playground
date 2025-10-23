@@ -61,7 +61,7 @@ export const SearchPage: FC = () => {
   }, []); // Empty dependency array - only run once on mount
 
   return (
-    <div className='min-h-screen bg-gray-50 dark:bg-gray-900'>
+    <div className='min-h-screen bg-gray-50 dark:bg-gray-900 pb-32'>
       <div className='container mx-auto px-4 py-12'>
         {/* Page Header */}
         <div className='text-center mb-12'>
@@ -69,20 +69,21 @@ export const SearchPage: FC = () => {
             AI-Powered Search
           </h1>
           <p className='text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto'>
-            Ask me anything about my projects, tech stack, or experience. I'm here to help you explore!
+            Ask me anything about my projects, tech stack, or experience. I'm
+            here to help you explore!
           </p>
         </div>
 
         {/* Chat Container */}
         <div className='max-w-4xl mx-auto'>
-          <div className='bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden min-h-[70vh] flex flex-col'>
+          <div className='bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden min-h-[70vh]'>
             {/* Info Banner inside chat */}
             <div className='border-b border-gray-200 dark:border-gray-700 p-4'>
               <InfoBanner />
             </div>
 
             {/* Messages Area - Scrollable */}
-            <div className='flex-1 overflow-y-auto p-6'>
+            <div className='p-6'>
               {messages.length === 0 ? (
                 <ExampleQueries onQueryClick={handleSendMessage} />
               ) : (
@@ -99,15 +100,14 @@ export const SearchPage: FC = () => {
                 </div>
               )}
             </div>
-
-            {/* Input Area - Fixed at bottom of chat box with margin */}
-            <div className='border-t border-gray-200 dark:border-gray-700 p-4 bg-gray-50 dark:bg-gray-900/50'>
-              <MessageInput onSend={handleSendMessage} disabled={isLoading} />
-            </div>
           </div>
+        </div>
+      </div>
 
-          {/* Bottom margin for footer visibility */}
-          <div className='h-24' />
+      {/* Input Area - Fixed at bottom of viewport */}
+      <div className='fixed bottom-0 left-0 right-0 border-t border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 p-4 shadow-lg z-40'>
+        <div className='container mx-auto max-w-4xl'>
+          <MessageInput onSend={handleSendMessage} disabled={isLoading} />
         </div>
       </div>
     </div>
