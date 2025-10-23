@@ -23,7 +23,7 @@ export function Header({ scrollProgress }: HeaderProps) {
   const [headerDark, setHeaderDark] = useState(false);
 
   // Use search store instead of local state
-  const { hasSearchHistory, currentQuery, setCurrentQuery } = useSearchStore();
+  const { hasSearchHistory } = useSearchStore();
 
   const isActive = (path: string) => {
     const pathWithoutLocale = location.pathname.replace(/^\/(zh-TW|en)/, '');
@@ -34,16 +34,8 @@ export function Header({ scrollProgress }: HeaderProps) {
     return pathWithoutLocale.startsWith(path);
   };
 
-  // Check if we're on home page or search page
+  // Check if we're on home page
   const isHomePage = isActive('/');
-  const isSearchPage = isActive('/search');
-
-  // Track search query from URL and save to store
-  useEffect(() => {
-    const params = new URLSearchParams(location.search);
-    const query = params.get('q') ?? '';
-    setCurrentQuery(query);
-  }, [location.search, setCurrentQuery]);
 
   // Reset header to light mode when changing pages (except home page)
   useEffect(() => {
@@ -143,78 +135,41 @@ export function Header({ scrollProgress }: HeaderProps) {
                 headerDark={headerDark}
                 onClick={() => navigate(getLocalizedPath('/blogs'))}
               />
-            </div>
-          </div>
 
-          {/* Search Input & Controls */}
-          <div className='flex items-center gap-3'>
-            {/* Search with Sparkles Icon */}
-            <div className='hidden md:flex items-center gap-2'>
-              {/* Sparkle Icon - always visible, clickable */}
+              {/* AI Search Button */}
               <button
                 onClick={() => navigate(getLocalizedPath('/search'))}
-                className='p-1 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-all animate-sparkle'
-                aria-label='AI Search'
+                className={`group relative px-4 py-2 text-sm font-medium transition-all duration-200 flex items-center gap-2 ${
+                  headerDark
+                    ? 'text-white hover:text-white/90'
+                    : 'text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white'
+                } ${
+                  isActive('/search') ? 'text-blue-600 dark:text-blue-400' : ''
+                }`}
               >
                 <Sparkles
-                  className={`w-5 h-5 ${
+                  className={`w-4 h-4 ${
                     headerDark
                       ? 'text-purple-400'
                       : 'text-purple-600 dark:text-purple-400'
                   }`}
                 />
-              </button>
-
-              {/* Input / Text / Hidden - conditional display */}
-              {!isSearchPage && !hasSearchHistory && (
-                <input
-                  type='search'
-                  placeholder='Ask AI about...'
-                  className={`w-64 px-3 py-1.5 text-sm rounded-lg border focus:outline-none focus:ring-1 focus:ring-blue-500 backdrop-blur-sm ${
-                    headerDark
-                      ? 'bg-white/10 border-white/20 text-white placeholder-white/60'
-                      : 'border-gray-300 dark:border-gray-600 bg-white/80 dark:bg-gray-800/80 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400'
-                  }`}
-                  onKeyDown={e => {
-                    if (e.key === 'Enter') {
-                      const query = e.currentTarget.value;
-                      if (query.trim()) {
-                        navigate(
-                          getLocalizedPath(
-                            `/search?q=${encodeURIComponent(query)}`
-                          )
-                        );
-                        e.currentTarget.value = '';
-                      }
-                    }
-                  }}
-                  aria-label='AI search'
-                />
-              )}
-              {!isSearchPage && hasSearchHistory && (
-                <div
-                  className={`flex items-center gap-1 px-3 py-1.5 text-sm rounded-lg border backdrop-blur-sm cursor-pointer ${
-                    headerDark
-                      ? 'bg-white/10 border-white/20 text-white'
-                      : 'border-gray-300 dark:border-gray-600 bg-white/80 dark:bg-gray-800/80 text-gray-900 dark:text-white'
-                  }`}
-                  onClick={() => navigate(getLocalizedPath('/search'))}
-                >
-                  <span>AI is thinking</span>
+                <span>AI Search</span>
+                {hasSearchHistory && !isActive('/search') && (
                   <span className='thinking-dots' />
-                </div>
-              )}
-              {isSearchPage && currentQuery && (
-                <span
-                  className={`text-sm px-3 py-1.5 ${
-                    headerDark ? 'text-white' : 'text-gray-900 dark:text-white'
-                  }`}
-                >
-                  "{currentQuery}"
-                </span>
-              )}
+                )}
+                {/* Active underline */}
+                {isActive('/search') && (
+                  <div className='absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400' />
+                )}
+                {/* Hover underline */}
+                <div className='absolute bottom-0 left-0 h-0.5 bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400 w-0 transition-all duration-300 group-hover:w-full' />
+              </button>
             </div>
+          </div>
 
+          {/* Right side controls */}
+          <div className='flex items-center gap-3'>
             <LanguageToggle />
           </div>
         </div>
@@ -242,6 +197,24 @@ export function Header({ scrollProgress }: HeaderProps) {
             headerDark={headerDark}
             onClick={() => navigate(getLocalizedPath('/blogs'))}
           />
+          <button
+            onClick={() => navigate(getLocalizedPath('/search'))}
+            className={`relative px-3 py-2 text-sm font-medium rounded-md transition-all duration-200 flex items-center gap-2 ${
+              headerDark
+                ? 'text-white hover:text-white/90 hover:bg-white/10'
+                : 'text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800'
+            } ${
+              isActive('/search')
+                ? 'text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/20'
+                : ''
+            }`}
+          >
+            <Sparkles className='w-4 h-4 text-purple-600 dark:text-purple-400' />
+            <span>AI</span>
+            {hasSearchHistory && !isActive('/search') && (
+              <span className='thinking-dots' />
+            )}
+          </button>
         </div>
       </div>
     </nav>

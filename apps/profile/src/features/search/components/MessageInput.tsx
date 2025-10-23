@@ -1,3 +1,4 @@
+import { Send } from 'lucide-react';
 import {
   type FC,
   type KeyboardEvent,
@@ -53,10 +54,10 @@ export const MessageInput: FC<MessageInputProps> = ({ onSend, disabled }) => {
         <button
           onClick={handleSend}
           disabled={(disabled ?? false) || !input.trim()}
-          className='absolute bottom-3 right-3 px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 disabled:bg-gray-600 disabled:cursor-not-allowed transition-colors text-sm font-medium'
+          className='absolute bottom-3 right-3 p-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 disabled:bg-gray-600 disabled:cursor-not-allowed transition-colors'
           aria-label='Send message'
         >
-          Send
+          <Send className='w-5 h-5' />
         </button>
       </div>
       <div className='text-xs text-gray-400 mt-2'>
