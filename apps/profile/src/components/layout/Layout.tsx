@@ -56,7 +56,14 @@ export function Layout({ children }: LayoutProps) {
     setHasSearchHistory(history === 'true');
   }, []);
 
-  // Note: Removed automatic header reset - let IntersectionObserver handle all cases
+  // Set initial header state based on page
+  useEffect(() => {
+    if (isHomePage) {
+      setHeaderDark(true); // Home page starts with dark header for hero
+    } else {
+      setHeaderDark(false); // Other pages start with light header
+    }
+  }, [isHomePage]);
 
   // Scroll progress indicator with RAF throttling
   useEffect(() => {
