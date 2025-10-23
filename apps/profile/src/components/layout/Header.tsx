@@ -7,6 +7,8 @@ import { siteConfig } from '../../lib/siteConfig';
 
 import { useLayoutTranslation } from './hooks/useLayoutTranslation';
 import { LanguageToggle } from './LanguageToggle';
+import { MobileNavButton } from './MobileNavButton';
+import { NavButton } from './NavButton';
 
 interface HeaderProps {
   scrollProgress: number;
@@ -130,62 +132,27 @@ export function Header({ scrollProgress }: HeaderProps) {
               </h1>
             </Link>
             <div className='hidden md:flex items-center'>
-              <button
+              <NavButton
+                path='/'
+                label={String(t('nav.home'))}
+                isActive={isActive('/')}
+                headerDark={headerDark}
                 onClick={() => navigate(getLocalizedPath('/'))}
-                className={`group relative px-4 py-2 text-sm font-medium transition-all duration-200 ${
-                  headerDark
-                    ? 'text-white hover:text-white/90'
-                    : 'text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white'
-                } ${isActive('/') ? 'text-blue-600 dark:text-blue-400' : ''}`}
-              >
-                {String(t('nav.home'))}
-                {/* Active underline */}
-                {isActive('/') && (
-                  <div className='absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400' />
-                )}
-                {/* Hover underline */}
-                <div className='absolute bottom-0 left-0 h-0.5 bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400 w-0 transition-all duration-300 group-hover:w-full' />
-              </button>
-
-              <button
+              />
+              <NavButton
+                path='/projects'
+                label={String(t('nav.projects'))}
+                isActive={isActive('/projects')}
+                headerDark={headerDark}
                 onClick={() => navigate(getLocalizedPath('/projects'))}
-                className={`group relative px-4 py-2 text-sm font-medium transition-all duration-200 ${
-                  headerDark
-                    ? 'text-white hover:text-white/90'
-                    : 'text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white'
-                } ${
-                  isActive('/projects')
-                    ? 'text-blue-600 dark:text-blue-400'
-                    : ''
-                }`}
-              >
-                {String(t('nav.projects'))}
-                {/* Active underline */}
-                {isActive('/projects') && (
-                  <div className='absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400' />
-                )}
-                {/* Hover underline */}
-                <div className='absolute bottom-0 left-0 h-0.5 bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400 w-0 transition-all duration-300 group-hover:w-full' />
-              </button>
-
-              <button
+              />
+              <NavButton
+                path='/blogs'
+                label={String(t('nav.blogs'))}
+                isActive={isActive('/blogs')}
+                headerDark={headerDark}
                 onClick={() => navigate(getLocalizedPath('/blogs'))}
-                className={`group relative px-4 py-2 text-sm font-medium transition-all duration-200 ${
-                  headerDark
-                    ? 'text-white hover:text-white/90'
-                    : 'text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white'
-                } ${
-                  isActive('/blogs') ? 'text-blue-600 dark:text-blue-400' : ''
-                }`}
-              >
-                {String(t('nav.blogs'))}
-                {/* Active underline */}
-                {isActive('/blogs') && (
-                  <div className='absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400' />
-                )}
-                {/* Hover underline */}
-                <div className='absolute bottom-0 left-0 h-0.5 bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400 w-0 transition-all duration-300 group-hover:w-full' />
-              </button>
+              />
             </div>
           </div>
 
@@ -264,48 +231,27 @@ export function Header({ scrollProgress }: HeaderProps) {
 
         {/* Mobile Navigation */}
         <div className='md:hidden pb-4 flex gap-2'>
-          <button
+          <MobileNavButton
+            path='/'
+            label={String(t('nav.home'))}
+            isActive={isActive('/')}
+            headerDark={headerDark}
             onClick={() => navigate(getLocalizedPath('/'))}
-            className={`relative px-3 py-2 text-sm font-medium rounded-md transition-all duration-200 ${
-              headerDark
-                ? 'text-white hover:text-white/90 hover:bg-white/10'
-                : 'text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800'
-            } ${
-              isActive('/')
-                ? 'text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/20'
-                : ''
-            }`}
-          >
-            {String(t('nav.home'))}
-          </button>
-          <button
+          />
+          <MobileNavButton
+            path='/projects'
+            label={String(t('nav.projects'))}
+            isActive={isActive('/projects')}
+            headerDark={headerDark}
             onClick={() => navigate(getLocalizedPath('/projects'))}
-            className={`relative px-3 py-2 text-sm font-medium rounded-md transition-all duration-200 ${
-              headerDark
-                ? 'text-white hover:text-white/90 hover:bg-white/10'
-                : 'text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800'
-            } ${
-              isActive('/projects')
-                ? 'text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/20'
-                : ''
-            }`}
-          >
-            {String(t('nav.projects'))}
-          </button>
-          <button
+          />
+          <MobileNavButton
+            path='/blogs'
+            label={String(t('nav.blogs'))}
+            isActive={isActive('/blogs')}
+            headerDark={headerDark}
             onClick={() => navigate(getLocalizedPath('/blogs'))}
-            className={`relative px-3 py-2 text-sm font-medium rounded-md transition-all duration-200 ${
-              headerDark
-                ? 'text-white hover:text-white/90 hover:bg-white/10'
-                : 'text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800'
-            } ${
-              isActive('/blogs')
-                ? 'text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/20'
-                : ''
-            }`}
-          >
-            {String(t('nav.blogs'))}
-          </button>
+          />
         </div>
       </div>
     </nav>
