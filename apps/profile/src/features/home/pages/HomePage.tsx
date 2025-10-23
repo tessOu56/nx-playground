@@ -14,7 +14,7 @@ export const HomePage: FC = () => {
   useEffect(() => {
     document.documentElement.style.scrollSnapType = 'y mandatory';
     document.documentElement.style.scrollBehavior = 'smooth';
-    
+
     return () => {
       document.documentElement.style.scrollSnapType = '';
       document.documentElement.style.scrollBehavior = '';
@@ -37,12 +37,14 @@ export const HomePage: FC = () => {
       <TechTimeline />
 
       {/* 4. Contact Section */}
-      <section className='snap-start snap-always'>
+      <section className='snap-start'>
         <ContactSection />
       </section>
 
-      {/* Footer at the end of content */}
-      <Footer />
+      {/* Footer at the end of content - min height to ensure scrollability */}
+      <div className='min-h-[10vh]'>
+        <Footer />
+      </div>
     </>
   );
 };

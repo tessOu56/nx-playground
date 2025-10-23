@@ -1,4 +1,5 @@
 import type { FC } from 'react';
+import { useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLocation, useNavigate } from 'react-router-dom';
 
@@ -6,17 +7,38 @@ export const LanguageToggle: FC = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const { i18n } = useTranslation();
+  const savedScrollPosition = useRef<number>(0);
+  const isLanguageSwitch = useRef<boolean>(false);
 
   // Extract current locale from path
   const currentLocale = location.pathname.match(/^\/(zh-TW|en)/)?.[1] || 'en';
 
+  // Restore scroll position after language switch
+  useEffect(() => {
+    if (isLanguageSwitch.current && savedScrollPosition.current > 0) {
+      // Use setTimeout to ensure DOM is ready
+      setTimeout(() => {
+        window.scrollTo({
+          top: savedScrollPosition.current,
+          behavior: 'instant' as ScrollBehavior,
+        });
+        isLanguageSwitch.current = false;
+        savedScrollPosition.current = 0;
+      }, 0);
+    }
+  }, [location.pathname]);
+
   const switchLanguage = (newLocale: string) => {
+    // Save current scroll position
+    savedScrollPosition.current = window.scrollY;
+    isLanguageSwitch.current = true;
+
     // Update i18n language
     i18n.changeLanguage(newLocale);
 
     // Update URL
     const newPath = location.pathname.replace(/^\/(zh-TW|en)/, `/${newLocale}`);
-    navigate(newPath + location.search);
+    navigate(newPath + location.search, { replace: true });
   };
 
   return (
