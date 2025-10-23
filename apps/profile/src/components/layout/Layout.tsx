@@ -149,7 +149,7 @@ export function Layout({ children }: LayoutProps) {
 
                 <button
                   onClick={() => navigate(getLocalizedPath('/projects'))}
-                  className={`relative px-4 py-2 text-sm font-medium transition-all duration-200 ${
+                  className={`group relative px-4 py-2 text-sm font-medium transition-all duration-200 ${
                     headerDark
                       ? 'text-white hover:text-white/90'
                       : 'text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white'
@@ -170,7 +170,7 @@ export function Layout({ children }: LayoutProps) {
 
                 <button
                   onClick={() => navigate(getLocalizedPath('/blogs'))}
-                  className={`relative px-4 py-2 text-sm font-medium transition-all duration-200 ${
+                  className={`group relative px-4 py-2 text-sm font-medium transition-all duration-200 ${
                     headerDark
                       ? 'text-white hover:text-white/90'
                       : 'text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white'
