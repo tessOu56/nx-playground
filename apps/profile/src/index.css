@@ -52,3 +52,15 @@ code {
 .animate-sparkle {
   animation: sparkle-pulse 2s ease-in-out infinite;
 }
+
+/* Thinking dots animation for search input */
+@keyframes thinking-dots {
+  0%, 20% { content: '.'; }
+  40% { content: '..'; }
+  60%, 100% { content: '...'; }
+}
+
+.thinking-dots::after {
+  content: '.';
+  animation: thinking-dots 1.5s steps(1) infinite;
+}
