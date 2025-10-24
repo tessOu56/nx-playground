@@ -1,7 +1,18 @@
 ---
 id: search-engine
-version: 0.1.0
-lastUpdated: '2025-10-24'
+name: Search Engine
+version: 1.0.0
+description: Custom search engine with keyword matching and intent detection
+techStack:
+  - TypeScript
+  - Node.js
+features:
+  - Keyword matching
+  - Intent detection
+  - Search indexing
+  - Response generation
+  - Suggested questions
+lastUpdated: '2025-01-24'
 category: utils
 status: production
 published: true

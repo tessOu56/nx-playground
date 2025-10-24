@@ -1,7 +1,22 @@
 ---
 id: vue-motion
+name: Vue Motion Sandbox
 version: 0.1.0
-lastUpdated: '2025-10-24'
+description: Animation sandbox built with Vue 3, featuring GSAP, Three.js, and Lottie animations
+techStack:
+  - Vue 3
+  - TypeScript
+  - GSAP
+  - Three.js
+  - Lottie
+  - Tailwind CSS
+features:
+  - Animation Playground
+  - GSAP Animations
+  - 3D Scenes
+  - Lottie Player
+  - Export Presets
+lastUpdated: '2025-01-24'
 category: vue
 status: production
 published: true
