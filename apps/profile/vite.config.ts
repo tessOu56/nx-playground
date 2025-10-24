@@ -117,6 +117,10 @@ export default defineConfig(() => ({
         __dirname,
         '../../libs/tech-stack-data/src/index.ts'
       ),
+      '@nx-playground/search-engine': resolve(
+        __dirname,
+        '../../libs/search-engine/src/index.ts'
+      ),
     },
   },
   build: {
@@ -156,7 +160,7 @@ export default defineConfig(() => ({
           if (id.includes('@nx-playground/design-system')) {
             return 'design-system';
           }
-          
+
           // Feature libraries
           if (id.includes('@nx-playground/search-engine')) {
             return 'search-engine';
