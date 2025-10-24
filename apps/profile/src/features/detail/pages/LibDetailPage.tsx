@@ -48,5 +48,5 @@ export const LibDetailPage: FC = () => {
     );
   }
 
-  return <ProjectDetail project={lib} type='lib' />;
+  return <ProjectDetail key={`${id}-${currentLocale}`} project={lib} type='lib' />;
 };

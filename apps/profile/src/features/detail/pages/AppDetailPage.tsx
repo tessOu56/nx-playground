@@ -48,5 +48,5 @@ export const AppDetailPage: FC = () => {
     );
   }
 
-  return <ProjectDetail project={app} type='app' />;
+  return <ProjectDetail key={`${id}-${currentLocale}`} project={app} type='app' />;
 };
