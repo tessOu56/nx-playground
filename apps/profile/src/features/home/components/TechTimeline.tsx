@@ -226,10 +226,13 @@ export const TechTimeline: FC = () => {
       {/* Others: Summary screen */}
       {others.length > 0 && (
         <article
-          className='timeline-section snap-start snap-always min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-900 to-gray-800 relative'
+          className='timeline-section snap-start snap-always h-screen flex items-center justify-center relative'
           data-header-dark='true'
         >
-          <div className='container mx-auto px-4 text-center'>
+          {/* Background covering full section including header */}
+          <div className='absolute inset-0 bg-gradient-to-br from-gray-900 to-gray-800' />
+          
+          <div className='relative container mx-auto px-4 text-center' style={{ zIndex: 1 }}>
             <h2 className='text-5xl font-bold text-white mb-12'>
               Earlier Years
             </h2>
