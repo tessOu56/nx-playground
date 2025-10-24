@@ -13,8 +13,8 @@ const ProjectsPage = lazy(() => import('./features/projects').then(m => ({ defau
 const BlogListPage = lazy(() => import('./features/blogs').then(m => ({ default: m.BlogListPage })));
 const BlogPostPage = lazy(() => import('./features/blogs').then(m => ({ default: m.BlogPostPage })));
 const SearchPage = lazy(() => import('./features/search').then(m => ({ default: m.SearchPage })));
-const AppDetailPage = lazy(() => import('./features/detail').then(m => ({ default: m.AppDetailPage })));
-const LibDetailPage = lazy(() => import('./features/detail').then(m => ({ default: m.LibDetailPage })));
+const AppDetailPage = lazy(() => import('./features/projects').then(m => ({ default: m.AppDetailPage })));
+const LibDetailPage = lazy(() => import('./features/projects').then(m => ({ default: m.LibDetailPage })));
 const NotFoundPage = lazy(() => import('./features/404').then(m => ({ default: m.NotFoundPage })));
 
 function AppContent() {
