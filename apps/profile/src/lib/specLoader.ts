@@ -10,7 +10,7 @@ import html from 'remark-html';
 import type { ProjectSpec } from '../types/projectData';
 
 import type { SupportedLocale } from './i18n/LocaleRouter';
-import { APP_IDS, LIB_IDS } from './projectList';
+import { APP_IDS, LIB_IDS, idToDir } from './projectList';
 
 /**
  * Fetch Spec 檔案
@@ -21,16 +21,19 @@ async function fetchSpec(
   id: string,
   locale: SupportedLocale
 ): Promise<string | null> {
+  // 將顯示用 id 轉換為實體目錄名稱
+  const dirName = idToDir(id);
+  
   // Try locale-specific version first, fallback to English
-  const url = `/specs/${type}/${id}/${locale}.md`;
+  const url = `/specs/${type}/${dirName}/${locale}.md`;
 
   try {
     const response = await fetch(url);
     if (!response.ok) {
       // If zh-TW not found, fallback to English
       if (locale === 'zh-TW') {
-        console.warn(`Spec ${locale}.md not found for ${type}/${id}, falling back to en.md`);
-        const fallbackUrl = `/specs/${type}/${id}/en.md`;
+        console.warn(`Spec ${locale}.md not found for ${type}/${dirName}, falling back to en.md`);
+        const fallbackUrl = `/specs/${type}/${dirName}/en.md`;
         const fallbackResponse = await fetch(fallbackUrl);
         if (!fallbackResponse.ok) {
           return null;
@@ -41,7 +44,7 @@ async function fetchSpec(
     }
     return await response.text();
   } catch (error) {
-    console.error(`Error fetching spec for ${type}/${id}:`, error);
+    console.error(`Error fetching spec for ${type}/${dirName}:`, error);
     return null;
   }
 }
@@ -51,7 +54,8 @@ async function fetchSpec(
  */
 async function parseSpec(
   filePath: string,
-  content: string
+  content: string,
+  displayId?: string
 ): Promise<ProjectSpec | null> {
   try {
     const { data, content: markdownContent } = matter(content);
@@ -66,8 +70,8 @@ async function parseSpec(
     }
 
     return {
-      // Basic Info
-      id: data.id ?? '',
+      // Basic Info (使用顯示 id 如果有提供)
+      id: displayId ?? data.id ?? '',
       name: data.name ?? data.id ?? '',
       version: data.version ?? '0.0.0',
       description: data.description ?? data.shortDesc ?? '',
@@ -118,8 +122,10 @@ export async function loadAppSpec(
   const content = await fetchSpec('apps', appId, locale);
   if (!content) return null;
 
+  const dirName = idToDir(appId);
   const fileName = locale === 'zh-TW' ? 'zh-TW.md' : 'en.md';
-  return parseSpec(`/specs/apps/${appId}/${fileName}`, content);
+  // 傳入 appId 作為顯示 id
+  return parseSpec(`/specs/apps/${dirName}/${fileName}`, content, appId);
 }
 
 /**
@@ -132,8 +138,10 @@ export async function loadLibSpec(
   const content = await fetchSpec('libs', libId, locale);
   if (!content) return null;
 
+  const dirName = idToDir(libId);
   const fileName = locale === 'zh-TW' ? 'zh-TW.md' : 'en.md';
-  return parseSpec(`/specs/libs/${libId}/${fileName}`, content);
+  // 傳入 libId 作為顯示 id
+  return parseSpec(`/specs/libs/${dirName}/${fileName}`, content, libId);
 }
 
 /**

@@ -15,18 +15,12 @@ import {
 } from './specLoader';
 
 /**
- * 自訂排序函數：profile 在第一位，其他按 id 字母排序
+ * 排序函數：純粹按 id 字母排序
  * 使用 id 排序確保 en 和 zh-TW 順序一致
+ * id 命名系統應設計為讓重要專案自然排在前面 (例如: 01-profile, 02-xxx)
  */
 function sortProjects<T extends { id: string }>(projects: T[]): T[] {
-  return projects.sort((a, b) => {
-    // profile 永遠在第一位
-    if (a.id === 'profile') return -1;
-    if (b.id === 'profile') return 1;
-    
-    // 其他按 id 字母排序
-    return a.id.localeCompare(b.id);
-  });
+  return projects.sort((a, b) => a.id.localeCompare(b.id));
 }
 
 /**
