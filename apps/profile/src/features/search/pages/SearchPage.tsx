@@ -60,45 +60,52 @@ export const SearchPage: FC = () => {
   }, []); // Empty dependency array - only run once on mount
 
   return (
-    <div
-      className='min-h-screen bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900 pb-32'
-      data-header-dark='true'
-    >
-      <div className='container mx-auto px-4 py-12'>
-        {/* Page Header */}
-        <div className='text-center mb-8'>
-          <h1 className='text-4xl font-bold text-white mb-4'>
-            AI-Powered Search
-          </h1>
-          <p className='text-lg text-gray-300 max-w-2xl mx-auto mb-3'>
-            Ask me anything about my projects, tech stack, or experience. I'm
-            here to help you explore!
-          </p>
-          <p className='text-sm text-gray-400'>
-            AI assistant powered by knowledge of all projects, blogs, and tech
-            stack
-          </p>
+    <div className='min-h-screen pb-32'>
+      {/* Top section with light background - header stays light mode */}
+      <div className='bg-gray-50 dark:bg-gray-900 py-12'>
+        <div className='container mx-auto px-4'>
+          <div className='text-center mb-8'>
+            <h1 className='text-4xl font-bold text-gray-900 dark:text-white mb-4'>
+              AI-Powered Search
+            </h1>
+            <p className='text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto mb-3'>
+              Ask me anything about my projects, tech stack, or experience. I'm
+              here to help you explore!
+            </p>
+            <p className='text-sm text-gray-500 dark:text-gray-500'>
+              AI assistant powered by knowledge of all projects, blogs, and tech
+              stack
+            </p>
+          </div>
         </div>
+      </div>
 
+      {/* Gradient section with dark background - header switches to dark mode when entered */}
+      <div
+        className='bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900 px-4 py-8'
+        data-header-dark='true'
+      >
         {/* Chat Container - Invisible border, natural flow */}
-        <div className='max-w-4xl mx-auto'>
-          {/* Messages Area */}
-          <div className='min-h-[70vh]'>
-            {messages.length === 0 ? (
-              <ExampleQueries onQueryClick={handleSendMessage} />
-            ) : (
-              <div className='space-y-4'>
-                {messages.map(message => (
-                  <ChatMessage key={message.id} message={message} />
-                ))}
-                {isLoading && (
-                  <div className='flex items-center gap-2 text-gray-300'>
-                    <div className='animate-spin rounded-full h-4 w-4 border-b-2 border-purple-400' />
-                    <span>Thinking...</span>
-                  </div>
-                )}
-              </div>
-            )}
+        <div className='container mx-auto'>
+          <div className='max-w-4xl mx-auto'>
+            {/* Messages Area */}
+            <div className='min-h-[70vh]'>
+              {messages.length === 0 ? (
+                <ExampleQueries onQueryClick={handleSendMessage} />
+              ) : (
+                <div className='space-y-4'>
+                  {messages.map(message => (
+                    <ChatMessage key={message.id} message={message} />
+                  ))}
+                  {isLoading && (
+                    <div className='flex items-center gap-2 text-gray-300'>
+                      <div className='animate-spin rounded-full h-4 w-4 border-b-2 border-purple-400' />
+                      <span>Thinking...</span>
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </div>
