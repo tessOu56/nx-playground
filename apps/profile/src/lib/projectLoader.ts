@@ -15,6 +15,21 @@ import {
 } from './specLoader';
 
 /**
+ * 自訂排序函數：profile 在第一位，其他按 id 字母排序
+ * 使用 id 排序確保 en 和 zh-TW 順序一致
+ */
+function sortProjects<T extends { id: string }>(projects: T[]): T[] {
+  return projects.sort((a, b) => {
+    // profile 永遠在第一位
+    if (a.id === 'profile') return -1;
+    if (b.id === 'profile') return 1;
+    
+    // 其他按 id 字母排序
+    return a.id.localeCompare(b.id);
+  });
+}
+
+/**
  * 載入單一 App 的完整資料
  * Spec 為單一資料來源
  */
@@ -113,7 +128,7 @@ export async function loadAllApps(
       }
     }
 
-    return apps.sort((a, b) => (a.name || a.id).localeCompare(b.name || b.id));
+    return sortProjects(apps);
   } catch (error) {
     console.error('Error loading all apps:', error);
     return [];
@@ -159,7 +174,7 @@ export async function loadAllLibs(
       }
     }
 
-    return libs.sort((a, b) => (a.name || a.id).localeCompare(b.name || b.id));
+    return sortProjects(libs);
   } catch (error) {
     console.error('Error loading all libs:', error);
     return [];
