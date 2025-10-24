@@ -1,4 +1,4 @@
-import type { SearchableItem, SearchResult } from './types';
+import type { SearchableItem, SearchResult, Intent } from './types';
 
 /**
  * Extract keywords from query
@@ -91,10 +91,7 @@ export function searchItems(
 /**
  * Detect query intent
  */
-export function detectIntent(query: string): {
-  type: 'project' | 'blog' | 'tech' | 'experience' | 'general';
-  keywords: string[];
-} {
+export function detectIntent(query: string): Intent {
   const lowerQuery = query.toLowerCase();
   const keywords = extractKeywords(query);
 
