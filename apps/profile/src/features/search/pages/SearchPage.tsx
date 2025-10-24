@@ -150,12 +150,12 @@ export const SearchPage: FC = () => {
 
   // Handle new conversation
   const handleNewConversation = () => {
-    if (hasUnsavedChanges) {
-      const confirm = window.confirm(
-        '確定要開始新的對話嗎？當前對話已儲存。'
-      );
-      if (!confirm) return;
-    }
+    const userConfirmed = window.confirm(
+      messages.length > 0 
+        ? '確定要開始新的對話嗎？當前對話已儲存。'
+        : '確定要開始新的對話嗎？'
+    );
+    if (!userConfirmed) return;
     
     createNewSession();
     setHasUnsavedChanges(false);
