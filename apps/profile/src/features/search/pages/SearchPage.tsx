@@ -60,48 +60,51 @@ export const SearchPage: FC = () => {
   }, []); // Empty dependency array - only run once on mount
 
   return (
-    <div
-      className='min-h-screen bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900 pb-32'
-      data-header-dark='true'
-    >
-      <div className='container mx-auto px-4 pt-24'>
-        {/* Page Header */}
-        <div className='text-center max-w-3xl mx-auto mb-12'>
-          <h1 className='text-5xl font-bold text-white mb-6'>
-            AI-Powered Search
-          </h1>
-          <p className='text-xl text-gray-200 mb-4 leading-relaxed'>
-            Ask me anything about my projects, tech stack, or experience. I'm
-            here to help you explore!
-          </p>
-          <p className='text-sm text-gray-400'>
-            AI assistant powered by knowledge of all projects, blogs, and tech
-            stack
-          </p>
-        </div>
+    <div className='min-h-screen pb-32'>
+      {/* Full page with dark gradient background */}
+      <section className='relative min-h-screen flex flex-col' data-header-dark='true'>
+        {/* Background covering full page including header */}
+        <div className='absolute inset-0 bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900' />
 
-        {/* Chat Container - Invisible border, natural flow */}
-        <div className='max-w-4xl mx-auto'>
-          {/* Messages Area */}
-          <div className='min-h-[70vh]'>
-            {messages.length === 0 ? (
-              <ExampleQueries onQueryClick={handleSendMessage} />
-            ) : (
-              <div className='space-y-4'>
-                {messages.map(message => (
-                  <ChatMessage key={message.id} message={message} />
-                ))}
-                {isLoading && (
-                  <div className='flex items-center gap-2 text-gray-300'>
-                    <div className='animate-spin rounded-full h-4 w-4 border-b-2 border-purple-400' />
-                    <span>Thinking...</span>
-                  </div>
-                )}
-              </div>
-            )}
+        <div className='relative container mx-auto px-4 pt-24 flex-1' style={{ zIndex: 1 }}>
+          {/* Page Header */}
+          <div className='text-center max-w-3xl mx-auto mb-12'>
+            <h1 className='text-5xl font-bold text-white mb-6'>
+              AI-Powered Search
+            </h1>
+            <p className='text-xl text-gray-200 mb-4 leading-relaxed'>
+              Ask me anything about my projects, tech stack, or experience. I'm
+              here to help you explore!
+            </p>
+            <p className='text-sm text-gray-400'>
+              AI assistant powered by knowledge of all projects, blogs, and tech
+              stack
+            </p>
+          </div>
+
+          {/* Chat Container */}
+          <div className='max-w-4xl mx-auto'>
+            {/* Messages Area */}
+            <div className='min-h-[70vh]'>
+              {messages.length === 0 ? (
+                <ExampleQueries onQueryClick={handleSendMessage} />
+              ) : (
+                <div className='space-y-4'>
+                  {messages.map(message => (
+                    <ChatMessage key={message.id} message={message} />
+                  ))}
+                  {isLoading && (
+                    <div className='flex items-center gap-2 text-gray-300'>
+                      <div className='animate-spin rounded-full h-4 w-4 border-b-2 border-purple-400' />
+                      <span>Thinking...</span>
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
           </div>
         </div>
-      </div>
+      </section>
 
       {/* Input Area - Fixed at bottom of viewport */}
       <div className='fixed bottom-0 left-0 right-0 backdrop-blur-lg p-4 z-40'>

@@ -48,6 +48,20 @@ export function Header({ scrollProgress }: HeaderProps) {
   useEffect(() => {
     const darkSections = document.querySelectorAll('[data-header-dark="true"]');
 
+    // Check initial state immediately
+    let initialDark = false;
+    darkSections.forEach(section => {
+      const rect = section.getBoundingClientRect();
+      const viewportHeight = window.innerHeight;
+      const visibleHeight =
+        Math.min(rect.bottom, viewportHeight) - Math.max(rect.top, 0);
+      const ratio = visibleHeight / viewportHeight;
+      if (ratio > 0.2) {
+        initialDark = true;
+      }
+    });
+    setHeaderDark(initialDark);
+
     const observer = new IntersectionObserver(
       entries => {
         // Find the section with highest intersection ratio (most visible)
