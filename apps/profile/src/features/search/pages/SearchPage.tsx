@@ -65,15 +65,18 @@ export const SearchPage: FC = () => {
     buildIndex();
   }, []);
 
-  // Scroll to latest user message
-  const scrollToLatestMessage = () => {
-    setTimeout(() => {
-      latestUserMessageRef.current?.scrollIntoView({
-        behavior: 'smooth',
-        block: 'start',
-      });
-    }, 100);
-  };
+  // Auto-scroll when new user message is added
+  useEffect(() => {
+    if (messages.length > 0 && messages[messages.length - 1].role === 'user') {
+      // Wait for DOM to render
+      setTimeout(() => {
+        latestUserMessageRef.current?.scrollIntoView({
+          behavior: 'smooth',
+          block: 'start',
+        });
+      }, 150);
+    }
+  }, [messages]);
 
   const handleSendMessage = async (content: string) => {
     if (!content.trim() || !searchIndex) return;
@@ -89,9 +92,6 @@ export const SearchPage: FC = () => {
       timestamp: new Date(),
     };
     addMessage(userMessage);
-
-    // Scroll to latest message
-    scrollToLatestMessage();
 
     // Search and generate AI response
     setIsLoading(true);
