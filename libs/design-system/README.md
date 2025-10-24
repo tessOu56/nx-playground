@@ -198,6 +198,100 @@ pnpm design:tokens
 
 查看 `src/tokens/generated/TOKENS.md` 獲取完整的 token 參考文檔。
 
+## 🎨 Header 自適應主題整合
+
+### 概述
+
+Header 元件會根據當前視窗區段的背景顏色自動調整主題（亮/暗模式）。
+
+### 實作方式
+
+#### 1. 標記深色背景區段
+
+在深色背景的 section 加入 `data-header-dark="true"` 屬性：
+
+```tsx
+<section 
+  data-header-dark="true"
+  className="bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900"
+>
+  {/* 內容 */}
+</section>
+```
+
+#### 2. IntersectionObserver 模式
+
+Header 使用 IntersectionObserver 偵測何時進入深色背景區段：
+
+- **Root Margin**：0px（精確的視窗邊界）
+- **Threshold**：細緻化（0 到 1.0，每 0.1 一個級距）
+- **啟動條件**：需要 >30% 可見度以防止閃爍
+
+#### 3. Design Token 使用
+
+Header 樣式使用設計系統 tokens：
+
+**Light Mode（預設）**：
+- 背景：`bg-background/80` 搭配 backdrop-blur
+- 文字：使用 design tokens 的標準文字顏色
+- 邊框：`border-border`
+
+**Dark Mode（在深色區段時）**：
+- 背景：`bg-gray-900/80` 
+- 文字：`text-white`
+- 邊框：`border-gray-700`
+
+### 頁面範例
+
+#### Search Page（初始 Light Mode）
+
+```tsx
+<div className='min-h-screen'>
+  {/* 頂部淺色區域 - header 保持 light mode */}
+  <div className='bg-gray-50 dark:bg-gray-900 py-12'>
+    <h1>AI-Powered Search</h1>
+  </div>
+  
+  {/* 深色漸層區域 - header 進入後切換 dark mode */}
+  <div 
+    className='bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900'
+    data-header-dark='true'
+  >
+    {/* Chat content */}
+  </div>
+</div>
+```
+
+#### Home Page（Hero Dark Mode）
+
+```tsx
+{/* Hero section - header dark mode */}
+<section 
+  data-header-dark='true'
+  className='h-screen bg-gradient-to-br from-gray-900 via-blue-900 to-gray-900'
+>
+  {/* Hero content */}
+</section>
+
+{/* Other sections - header light mode */}
+<section className='bg-gray-50'>
+  {/* Content */}
+</section>
+```
+
+### 最佳實踐
+
+1. **使用語義化背景**：優先使用設計系統的漸層
+2. **一致的偵測**：深色區段永遠使用 `data-header-dark`
+3. **測試轉場**：確保邊界切換流暢
+4. **行動裝置考量**：行為應在所有視窗尺寸正常運作
+
+### 參考實作
+
+完整實作請參考 `apps/profile/src/components/layout/Header.tsx`。
+
+詳細行為規範請參考 `.cursor/rules/header-behavior.md`。
+
 ## 🔗 相關連結
 
 - [Style Dictionary](https://amzn.github.io/style-dictionary)
