@@ -1,51 +1,63 @@
 ---
 id: auth
-version: 1.0.0
-lastUpdated: '2025-10-20'
+version: 0.1.0
+lastUpdated: '2025-10-24'
 category: react
-status: production
+status: development
 published: true
-shortDesc: English documentation for AUTH
-purpose: '**Last Updated**: 2025-10-20'
+
+shortDesc: |
+  Authentication service with SSO integration.
+  Centralized authentication for all monorepo applications.
+
+purpose: |
+  Unified authentication solution demonstrating SSO architecture,
+  OAuth integration, and cross-app session management.
+
 highlights:
-  - React 19
-  - Vite
-  - Ory Kratos
-  - Authentication
-  - SSO
+  - Single Sign-On (SSO) ready
+  - OAuth 2.0 integration
+  - JWT token management
+  - Session persistence
+  - Multi-app authentication hub
+  - React-based auth UI
+
+useCases:
+  - Centralized authentication for all apps
+  - SSO demonstration
+  - OAuth integration showcase
+  - Session management example
+
+targetAudience: |
+  Demonstrates authentication architecture and security implementation skills.
+
 reviewer: tessou
+reviewedAt: '2025-10-24'
+nextReview: '2025-11-24'
 updateFrequency: per-feature
-lastSync: '2025-10-21'
+draftStatus: false
+approvalStatus: approved
+
+lastSync: '2025-10-24'
 ---
 
-# AUTH
+# Auth - Centralized Authentication Service
 
-> English documentation coming soon...
+SSO authentication hub for the entire monorepo with OAuth integration support.
 
-**Last Updated**: 2025-10-20
+## Current Status
+- Completion: 60%
+- SSO: Architecture designed
+- Production: Not deployed
 
----
+## Features
+- Login/Signup UI
+- Password recovery
+- OAuth providers
+- JWT token handling
 
-## 🎯 Overview
-
-TODO: Add English overview
-
----
-
-## 🛠️ Tech Stack
-
-TODO: List technologies
-
----
-
-## ✨ Key Features
-
-TODO: List features
-
----
-
-## 📝 Status
-
-⚠️ This is a placeholder. Full English documentation is being prepared.
-
-For now, please refer to the [Traditional Chinese version](../zh-TW/AUTH.md).
+## Roadmap
+- Complete SSO implementation
+- Integrate with api-server
+- Add more OAuth providers
+- Session management UI
