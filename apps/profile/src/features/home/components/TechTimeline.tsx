@@ -111,10 +111,10 @@ export const TechTimeline: FC = () => {
             data-header-dark={isDarkBackground ? 'true' : undefined}
             style={{ background: bgGradient }}
           >
-            <div className='container mx-auto px-4 text-center'>
+            <div className='container mx-auto px-4 sm:px-6 text-center'>
               {/* Year */}
               <h2
-                className='text-8xl md:text-9xl font-bold mb-6 motion-safe:transition-transform motion-safe:hover:scale-110'
+                className='text-6xl sm:text-7xl md:text-8xl lg:text-9xl font-bold mb-4 sm:mb-6 motion-safe:transition-transform motion-safe:hover:scale-110'
                 style={{
                   color: isDarkBackground ? '#ffffff' : '#1a202c',
                   textShadow: isDarkBackground
@@ -127,18 +127,18 @@ export const TechTimeline: FC = () => {
 
               {/* Title */}
               <h3
-                className='text-2xl md:text-4xl font-semibold mb-6 max-w-3xl mx-auto'
+                className='text-lg sm:text-xl md:text-3xl lg:text-4xl font-semibold mb-4 sm:mb-6 max-w-3xl mx-auto px-2'
                 style={{ color: isDarkBackground ? '#ffffff' : '#2d3748' }}
               >
                 {item.title}
               </h3>
 
               {/* Tech Stack */}
-              <div className='flex flex-wrap gap-3 justify-center mb-8 max-w-4xl mx-auto'>
+              <div className='flex flex-wrap gap-2 sm:gap-3 justify-center mb-6 sm:mb-8 max-w-4xl mx-auto px-2'>
                 {item.tech.map(tech => (
                   <span
                     key={tech}
-                    className='px-4 py-2 rounded-lg font-medium text-sm motion-safe:transition-transform motion-safe:hover:scale-105'
+                    className='px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg font-medium text-xs sm:text-sm motion-safe:transition-transform motion-safe:hover:scale-105'
                     style={{
                       background: isDarkBackground
                         ? 'rgba(255, 255, 255, 0.2)'
@@ -154,7 +154,7 @@ export const TechTimeline: FC = () => {
 
               {/* Milestone */}
               <p
-                className='text-lg md:text-xl max-w-2xl mx-auto mb-10 leading-relaxed'
+                className='text-sm sm:text-base md:text-lg lg:text-xl max-w-2xl mx-auto mb-6 sm:mb-10 leading-relaxed px-4'
                 style={{
                   color: isDarkBackground
                     ? 'rgba(255,255,255,0.9)'
@@ -169,7 +169,7 @@ export const TechTimeline: FC = () => {
                 onClick={() =>
                   navigate(getLocalizedPath(`/blogs/${item.blogSlug}`))
                 }
-                className='px-8 py-4 rounded-lg font-medium text-lg shadow-lg motion-safe:transition-all motion-safe:hover:shadow-xl motion-safe:hover:-translate-y-1'
+                className='px-6 sm:px-8 py-3 sm:py-4 rounded-lg font-medium text-sm sm:text-base md:text-lg shadow-lg motion-safe:transition-all motion-safe:hover:shadow-xl motion-safe:hover:-translate-y-1'
                 style={{
                   background: isDarkBackground
                     ? '#ffffff'
@@ -232,37 +232,37 @@ export const TechTimeline: FC = () => {
           {/* Background covering full section including header */}
           <div className='absolute inset-0 bg-gradient-to-br from-gray-900 to-gray-800' />
           
-          <div className='relative container mx-auto px-4 text-center' style={{ zIndex: 1 }}>
-            <h2 className='text-5xl font-bold text-white mb-12'>
+          <div className='relative container mx-auto px-4 sm:px-6 text-center' style={{ zIndex: 1 }}>
+            <h2 className='text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-8 sm:mb-12'>
               Earlier Years
             </h2>
-            <div className='grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto mb-12'>
+            <div className='grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 md:gap-8 max-w-4xl mx-auto mb-8 sm:mb-12'>
               {others.map(item => (
                 <button
                   key={item.year}
                   onClick={() =>
                     navigate(getLocalizedPath(`/blogs/${item.blogSlug}`))
                   }
-                  className='bg-white/10 backdrop-blur-sm rounded-xl p-6 hover:bg-white/20 transition-all text-left'
+                  className='bg-white/10 backdrop-blur-sm rounded-xl p-4 sm:p-6 hover:bg-white/20 transition-all text-left'
                   aria-label={`View ${item.year} blog: ${item.title}`}
                 >
-                  <div className='flex items-center gap-4 mb-3'>
-                    <span className='text-3xl font-bold text-white'>
+                  <div className='flex items-center gap-3 sm:gap-4 mb-2 sm:mb-3'>
+                    <span className='text-2xl sm:text-3xl font-bold text-white'>
                       {item.year}
                     </span>
                     <div className='h-px flex-1 bg-white/30' />
                   </div>
-                  <h3 className='text-xl font-semibold text-white mb-2 line-clamp-1'>
+                  <h3 className='text-base sm:text-lg md:text-xl font-semibold text-white mb-1 sm:mb-2 line-clamp-2'>
                     {item.title}
                   </h3>
-                  <p className='text-white/80 text-sm line-clamp-2 mb-3'>
+                  <p className='text-white/80 text-xs sm:text-sm line-clamp-2 mb-2 sm:mb-3'>
                     {item.milestone}
                   </p>
-                  <div className='flex flex-wrap gap-2'>
+                  <div className='flex flex-wrap gap-1.5 sm:gap-2'>
                     {item.tech.slice(0, 3).map(tech => (
                       <span
                         key={tech}
-                        className='px-2 py-1 bg-white/20 text-white text-xs rounded'
+                        className='px-2 py-0.5 sm:py-1 bg-white/20 text-white text-[10px] sm:text-xs rounded'
                       >
                         {tech}
                       </span>
