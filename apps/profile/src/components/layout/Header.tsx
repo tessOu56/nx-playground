@@ -193,7 +193,7 @@ export function Header({ scrollProgress }: HeaderProps) {
         </div>
 
         {/* Mobile Navigation */}
-        <div className='md:hidden pb-4 flex gap-2'>
+        <div className='md:hidden pb-4 flex gap-1 justify-between'>
           <MobileNavButton
             path='/'
             label={String(t('nav.home'))}
