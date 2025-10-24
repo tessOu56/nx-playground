@@ -113,7 +113,7 @@ export async function loadAllApps(
       }
     }
 
-    return apps.sort((a, b) => a.name.localeCompare(b.name));
+    return apps.sort((a, b) => (a.name || a.id).localeCompare(b.name || b.id));
   } catch (error) {
     console.error('Error loading all apps:', error);
     return [];
@@ -159,7 +159,7 @@ export async function loadAllLibs(
       }
     }
 
-    return libs.sort((a, b) => a.name.localeCompare(b.name));
+    return libs.sort((a, b) => (a.name || a.id).localeCompare(b.name || b.id));
   } catch (error) {
     console.error('Error loading all libs:', error);
     return [];
