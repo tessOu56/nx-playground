@@ -62,7 +62,7 @@ export const SearchPage: FC = () => {
   return (
     <div className='min-h-screen pb-32'>
       {/* Top section with light background - header stays light mode */}
-      <div className='bg-gradient-to-b from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 py-16'>
+      <div className='bg-gradient-to-b from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 pt-24 pb-32'>
         <div className='container mx-auto px-4'>
           <div className='text-center max-w-3xl mx-auto'>
             <h1 className='text-5xl font-bold text-gray-900 dark:text-white mb-6'>
@@ -82,7 +82,7 @@ export const SearchPage: FC = () => {
 
       {/* Gradient section with dark background - header switches to dark mode when entered */}
       <div
-        className='bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900 px-4 py-8'
+        className='bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900 px-4 pt-8 pb-8'
         data-header-dark='true'
       >
         {/* Chat Container - Invisible border, natural flow */}
