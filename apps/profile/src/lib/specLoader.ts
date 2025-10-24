@@ -21,12 +21,22 @@ async function fetchSpec(
   id: string,
   locale: SupportedLocale
 ): Promise<string | null> {
-  // Use locale-specific version
+  // Try locale-specific version first, fallback to English
   const url = `/specs/${type}/${id}/${locale}.md`;
 
   try {
     const response = await fetch(url);
     if (!response.ok) {
+      // If zh-TW not found, fallback to English
+      if (locale === 'zh-TW') {
+        console.warn(`Spec ${locale}.md not found for ${type}/${id}, falling back to en.md`);
+        const fallbackUrl = `/specs/${type}/${id}/en.md`;
+        const fallbackResponse = await fetch(fallbackUrl);
+        if (!fallbackResponse.ok) {
+          return null;
+        }
+        return await fallbackResponse.text();
+      }
       return null;
     }
     return await response.text();
