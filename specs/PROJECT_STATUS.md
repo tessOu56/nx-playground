@@ -1,6 +1,6 @@
 # NX Playground - Project Status Overview
 
-**Last Updated**: 2025-01-24  
+**Last Updated**: 2025-01-24
 **Maintainer**: Tess
 
 ---
@@ -9,7 +9,7 @@
 
 - **Total Projects**: 17 (7 apps + 10 libs)
 - **Production Ready**: 3 apps
-- **In Development**: 4 apps  
+- **In Development**: 4 apps
 - **Stable Libraries**: 10 libs
 
 ---
@@ -17,6 +17,7 @@
 ## Apps Status
 
 ### Profile (React 19 + Vite)
+
 - **Status**: Production (98%) - Phase 1 Complete ✅
 - **Progress**: `[███████████░] 98%`
 - **Milestone**: Major refactoring complete (2025-01-24)
@@ -24,36 +25,42 @@
 - **Spec**: `specs/apps/profile/en.md`
 
 ### Event Portal (Next.js 15)
+
 - **Status**: Development (70%)
 - **Progress**: `[████████░░░░] 70%`
 - **Next**: LINE LIFF integration, Payment flow, QR ticketing
 - **Spec**: `specs/apps/event-portal/en.md`
 
 ### Event CMS (React + Vite)
+
 - **Status**: Development (70%)
 - **Progress**: `[████████░░░░] 70%`
 - **Next**: API integration, Form validation enhancement
 - **Spec**: `specs/apps/event-cms/en.md`
 
 ### API Server (NestJS 10)
+
 - **Status**: Functional (80%)
 - **Progress**: `[█████████░░░] 80%`
 - **Next**: Authentication guards, Testing coverage
 - **Spec**: `specs/apps/api-server/en.md`
 
 ### Auth (React + Vite)
+
 - **Status**: Development (60%)
 - **Progress**: `[███████░░░░░] 60%`
 - **Next**: SSO completion, Email verification, Testing
 - **Spec**: `specs/apps/auth/en.md`
 
 ### Enterprise Admin (Angular 20)
+
 - **Status**: Development (75%)
 - **Progress**: `[█████████░░░] 75%`
 - **Next**: Feature pages, Data integration, Role management
 - **Spec**: `specs/apps/enterprise-admin/en.md`
 
 ### Vue Motion (Vue 3)
+
 - **Status**: Demo Ready (85%)
 - **Progress**: `[██████████░░] 85%`
 - **Next**: Animation library expansion, Documentation
@@ -65,27 +72,29 @@
 
 All **10 libraries** marked as **Stable** ✅:
 
-| Library | Purpose | Status |
-|---------|---------|--------|
-| ui-components | Radix UI component library | ✅ Stable |
-| design-system | Design tokens & theming | ✅ Stable |
-| i18n | Internationalization (i18next) | ✅ Stable |
-| search-engine | AI-powered search engine | ✅ Stable |
-| api-client | OpenAPI generated client | ✅ Stable |
-| charts | Chart.js & Recharts wrapper | ✅ Stable |
-| hooks | Custom React hooks | ✅ Stable |
-| tech-stack-data | Auto tech stack collector | ✅ Stable |
-| auth-client | Authentication utilities | ✅ Stable |
-| animation-data | Vue animation data mgmt | ✅ Stable |
+| Library         | Purpose                        | Status    |
+| --------------- | ------------------------------ | --------- |
+| ui-components   | Radix UI component library     | ✅ Stable |
+| design-system   | Design tokens & theming        | ✅ Stable |
+| i18n            | Internationalization (i18next) | ✅ Stable |
+| search-engine   | AI-powered search engine       | ✅ Stable |
+| api-client      | OpenAPI generated client       | ✅ Stable |
+| charts          | Chart.js & Recharts wrapper    | ✅ Stable |
+| hooks           | Custom React hooks             | ✅ Stable |
+| tech-stack-data | Auto tech stack collector      | ✅ Stable |
+| auth-client     | Authentication utilities       | ✅ Stable |
+| animation-data  | Vue animation data mgmt        | ✅ Stable |
 
 ---
 
 ## Focus Areas (Priority Order)
 
 ### P0: Profile Excellence
+
 **Goal**: Polish Profile app to showcase PM & technical capabilities
 
 **Phase 1 Complete** (2025-01-24) ✅:
+
 - ✅ Lighthouse 90+ (Performance, PWA)
 - ✅ Multi-language with fallback mechanism (en, zh-TW)
 - ✅ AI Search with conversation persistence
@@ -97,6 +106,7 @@ All **10 libraries** marked as **Stable** ✅:
 - ✅ Project status tracking in UI
 
 **Next Phase**:
+
 - 📋 Analytics integration (Google Analytics / Plausible)
 - 📋 Blog content creation (3-5 technical posts)
 - 📋 Performance monitoring (Web Vitals)
@@ -105,6 +115,7 @@ All **10 libraries** marked as **Stable** ✅:
 **Timeline**: 1-2 weeks
 
 ### P1: Event Platform Completion
+
 **Goal**: Complete end-to-end event management system
 
 - 📋 API Server authentication guards & authorization
@@ -116,6 +127,7 @@ All **10 libraries** marked as **Stable** ✅:
 **Timeline**: 4-6 weeks
 
 ### P2: Shared Infrastructure
+
 **Goal**: Improve code quality and developer experience
 
 - 📋 Testing coverage (target 70%+)
@@ -127,6 +139,7 @@ All **10 libraries** marked as **Stable** ✅:
 **Timeline**: 2-3 weeks
 
 ### P3: Other Apps Enhancement
+
 **Goal**: Complete remaining applications
 
 - 📋 Auth: SSO completion, comprehensive testing
@@ -139,42 +152,59 @@ All **10 libraries** marked as **Stable** ✅:
 
 ## Recent Achievements
 
-### 2025-01-24
-- ✅ Comprehensive Lighthouse optimization (PWA, performance)
-- ✅ Multi-language fallback mechanism (README + Spec)
-- ✅ Fixed locale-specific content loading
+### 2025-01-24 - Profile Phase 1 Complete ✅
+
+**Major Refactoring & Optimization**:
+- ✅ Comprehensive Lighthouse optimization (PWA, Service Worker, 90+ scores)
+- ✅ Multi-language fallback mechanism (README + Spec loaders)
+- ✅ Fixed locale-specific content loading (all pages)
 - ✅ Vite middleware 404 handling fix
-- ✅ Projects page i18n completion
+- ✅ Complete i18n coverage (Projects + Home pages, no hardcoded text)
+- ✅ Scroll-to-top button with purple gradient theme
+- ✅ Project status reorganization (removed 5 temp docs)
+- ✅ Progress tracking in Projects page UI
+- ✅ Updated 4 priority app specs with Progress & Roadmap sections
+
+**Metrics**:
+- Profile completion: 95% → 98%
+- Lighthouse scores: 90+ achieved
+- i18n coverage: 100% (all components)
+- Bundle size: Within budget (250KB gzipped)
 
 ### 2025-01-23
-- ✅ AI Search conversation persistence
+
+- ✅ AI Search conversation persistence with Zustand
 - ✅ Suggested questions after AI responses
-- ✅ Search page UI/UX refinement
+- ✅ Search page dark theme refinement
 - ✅ Footer conditional display logic
 
 ### 2025-01-22
-- ✅ Header adaptive dark/light mode
-- ✅ Tech Stack liquid background effect
+
+- ✅ Header adaptive dark/light mode with IntersectionObserver
+- ✅ Tech Stack liquid background effect (mouse-reactive)
 - ✅ Navigation button componentization
-- ✅ Mobile responsive improvements
+- ✅ Mobile responsive improvements (all sections)
 
 ---
 
 ## Technical Debt Tracker
 
 ### High Priority
+
 - Profile: Analytics integration needed
 - API Server: Authentication guards missing
 - Event Platform: API integration incomplete
 - All Apps: Testing coverage < 30%
 
 ### Medium Priority
+
 - TypeScript strict mode not enabled
 - E2E testing suite missing
 - Documentation needs updates
 - CI/CD pipeline not set up
 
 ### Low Priority
+
 - Monitoring & alerting not configured
 - Performance budgets not enforced
 - Code coverage tracking needed
@@ -184,18 +214,21 @@ All **10 libraries** marked as **Stable** ✅:
 ## Metrics & KPIs
 
 ### Code Quality
+
 - **TypeScript Coverage**: 100%
 - **Test Coverage**: ~25% (Target: 70%+)
 - **Linter Errors**: 0
 - **Bundle Size**: Within budget ✅
 
 ### Performance (Profile App)
+
 - **Lighthouse Score**: 90+ (Target achieved ✅)
 - **First Contentful Paint**: < 1.5s ✅
 - **Time to Interactive**: < 3.5s ✅
 - **PWA Ready**: Yes ✅
 
 ### Development
+
 - **Total LOC**: ~50,000+
 - **Shared Code**: ~40% (libs usage)
 - **Deployment**: Manual (CI/CD pending)
@@ -209,10 +242,86 @@ All **10 libraries** marked as **Stable** ✅:
 
 ---
 
+## NX Monorepo - Next Steps & Strategic Planning
+
+### Immediate Actions (This Week)
+
+**Profile App**:
+1. Set up Google Analytics / Plausible
+2. Create first technical blog post
+3. Test production build thoroughly
+4. Prepare Cloudflare Pages deployment
+
+**Event Platform**:
+1. Priority: Complete API Server auth guards
+2. Start Event CMS API integration
+3. Test Event Portal with mock data
+
+### Short-term Goals (1 Month)
+
+**Technical Excellence**:
+- Increase test coverage to 50%+ (focus on critical paths)
+- Set up basic CI/CD with GitHub Actions
+- Implement error tracking (Sentry or similar)
+- Add performance monitoring (Web Vitals)
+
+**Product Completion**:
+- Profile: Deploy to production, add 3-5 blog posts
+- Event Platform: Complete API integration for CMS + Portal
+- API Server: Implement JWT auth + RBAC
+
+### Mid-term Vision (2-3 Months)
+
+**Infrastructure**:
+- Full CI/CD pipeline with automated testing
+- Comprehensive E2E test suite (Playwright)
+- Monitoring dashboard (performance + errors)
+- Documentation site (Docusaurus or similar)
+
+**Product Portfolio**:
+- Profile: Fully featured with analytics and rich content
+- Event Platform: Production-ready with payment integration
+- All apps: 70%+ test coverage
+
+### Long-term Strategy (6 Months)
+
+**Monorepo Maturity**:
+- Nx Cloud integration for distributed caching
+- Automated dependency updates (Renovate)
+- Performance budgets enforced in CI
+- Comprehensive developer documentation
+
+**Product Expansion**:
+- New applications showcasing different tech stacks
+- Expanded shared library ecosystem
+- Open-source some reusable libraries
+- Case studies and technical blog series
+
+---
+
+## Decision Log
+
+### 2025-01-24: Project Status Reorganization
+- **Decision**: Remove all temporary planning docs, use specs/PROJECT_STATUS.md as single source of truth
+- **Rationale**: Avoid scattered documentation, ensure single canonical reference
+- **Impact**: Cleaner repo structure, easier maintenance
+
+### 2025-01-24: Multi-language Fallback
+- **Decision**: Implement fallback to English when zh-TW not available
+- **Rationale**: Allow progressive translation without breaking UX
+- **Impact**: All projects visible in both languages, better user experience
+
+### 2025-01-24: Lighthouse 90+ Target
+- **Decision**: Prioritize performance optimization to achieve Lighthouse 90+
+- **Rationale**: Demonstrate technical excellence and best practices
+- **Impact**: Better user experience, improved SEO, professional credibility
+
+---
+
 ## References
 
 - **Specs Directory**: `specs/apps/` and `specs/libs/`
-- **Documentation**: `docs/`
+- **Documentation**: `docs/` and `apps/*/LIGHTHOUSE_OPTIMIZATION.md`
 - **Standards**: `specs/STANDARDS/`
 - **Templates**: `specs/TEMPLATES/`
-
+- **Progress Tracking**: This document (specs/PROJECT_STATUS.md)
