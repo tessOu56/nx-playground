@@ -60,13 +60,20 @@ export const SearchPage: FC = () => {
   }, []); // Empty dependency array - only run once on mount
 
   return (
-    <div className='min-h-screen pb-32'>
+    <>
       {/* Full page with dark gradient background */}
-      <section className='relative min-h-screen flex flex-col' data-header-dark='true'>
-        {/* Background covering full page including header */}
+      <section
+        className='relative pb-32'
+        data-header-dark='true'
+        style={{ minHeight: 'calc(100vh + 10rem)' }}
+      >
+        {/* Background covering full section including header */}
         <div className='absolute inset-0 bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900' />
 
-        <div className='relative container mx-auto px-4 pt-24 flex-1' style={{ zIndex: 1 }}>
+        <div
+          className='relative container mx-auto px-4 pt-24 flex-1'
+          style={{ zIndex: 1 }}
+        >
           {/* Page Header */}
           <div className='text-center max-w-3xl mx-auto mb-12'>
             <h1 className='text-5xl font-bold text-white mb-6'>
@@ -114,6 +121,6 @@ export const SearchPage: FC = () => {
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
