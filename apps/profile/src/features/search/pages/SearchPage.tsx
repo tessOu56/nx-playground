@@ -1,7 +1,17 @@
+import {
+  buildSearchIndex,
+  detectIntent,
+  generateResponse,
+  searchItems,
+  type SearchIndex,
+} from '@nx-playground/search-engine';
+import { techStack } from '@nx-playground/tech-stack-data';
 import { type FC, useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 
 import { SEO } from '../../../components/SEO';
+import { loadAllBlogMetadata } from '../../../lib/blogLoader';
+import { loadAllApps, loadAllLibs } from '../../../lib/projectLoader';
 import { useSearchStore } from '../../../stores/searchStore';
 import { ChatMessage } from '../components/ChatMessage';
 import { ExampleQueries } from '../components/ExampleQueries';
@@ -21,9 +31,34 @@ export const SearchPage: FC = () => {
 
   const [messages, setMessages] = useState<Message[]>([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [searchIndex, setSearchIndex] = useState<SearchIndex | null>(null);
+
+  // Build search index on mount
+  useEffect(() => {
+    const buildIndex = async () => {
+      try {
+        const [projects, blogs] = await Promise.all([
+          Promise.all([loadAllApps('en'), loadAllLibs('en')]).then(([apps, libs]) => [...apps, ...libs]),
+          loadAllBlogMetadata('en'),
+        ]);
+
+        const index = buildSearchIndex({
+          projects,
+          blogs,
+          techStack,
+        });
+
+        setSearchIndex(index);
+      } catch (error) {
+        console.error('Failed to build search index:', error);
+      }
+    };
+
+    buildIndex();
+  }, []);
 
   const handleSendMessage = async (content: string) => {
-    if (!content.trim()) return;
+    if (!content.trim() || !searchIndex) return;
 
     // Mark that user has search history using store
     setHasSearchHistory(true);
@@ -37,19 +72,46 @@ export const SearchPage: FC = () => {
     };
     setMessages(prev => [...prev, userMessage]);
 
-    // Simulate AI response (placeholder)
+    // Search and generate AI response
     setIsLoading(true);
+    
+    // Simulate slight delay for better UX
     setTimeout(() => {
-      const aiMessage: Message = {
-        id: (Date.now() + 1).toString(),
-        role: 'assistant',
-        content:
-          "I'm currently being set up! Soon I'll be able to answer questions about projects, tech stack, and experience. Stay tuned! 🤖",
-        timestamp: new Date(),
-      };
-      setMessages(prev => [...prev, aiMessage]);
-      setIsLoading(false);
-    }, 1000);
+      try {
+        // Detect query intent
+        const intent = detectIntent(content);
+
+        // Search across all items
+        const allItems = [
+          ...searchIndex.projects,
+          ...searchIndex.blogs,
+          ...searchIndex.tech,
+        ];
+        const results = searchItems(content, allItems, 10);
+
+        // Generate response
+        const responseContent = generateResponse(content, results, intent);
+
+        const aiMessage: Message = {
+          id: (Date.now() + 1).toString(),
+          role: 'assistant',
+          content: responseContent,
+          timestamp: new Date(),
+        };
+        setMessages(prev => [...prev, aiMessage]);
+      } catch (error) {
+        console.error('Search error:', error);
+        const errorMessage: Message = {
+          id: (Date.now() + 1).toString(),
+          role: 'assistant',
+          content: "Sorry, I encountered an error while searching. Please try again!",
+          timestamp: new Date(),
+        };
+        setMessages(prev => [...prev, errorMessage]);
+      } finally {
+        setIsLoading(false);
+      }
+    }, 500);
   };
 
   // Handle initial query - use useEffect instead of useState
