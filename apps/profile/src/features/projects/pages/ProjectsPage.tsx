@@ -83,14 +83,47 @@ export const ProjectsPage: FC = () => {
       
       <div className='min-h-screen bg-gradient-to-b from-gray-50 to-white dark:from-gray-900 dark:to-gray-800 py-12 px-4'>
         <div className='max-w-7xl mx-auto'>
-          {/* Header */}
-          <div className='text-center mb-12'>
+        {/* Header */}
+        <div className='text-center mb-12'>
           <h1 className='text-5xl font-bold text-gray-900 dark:text-white mb-4'>
             {ts(t, 'title')}
           </h1>
           <p className='text-xl text-gray-600 dark:text-gray-400 max-w-3xl mx-auto'>
             {ts(t, 'subtitle')}
           </p>
+        </div>
+
+        {/* Progress Overview */}
+        <div className='mb-8 bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6'>
+          <h2 className='text-2xl font-bold text-gray-900 dark:text-white mb-4'>
+            {ts(t, 'progress.title')}
+          </h2>
+          <div className='grid grid-cols-1 md:grid-cols-3 gap-4'>
+            <div>
+              <div className='text-sm text-gray-600 dark:text-gray-400 mb-1'>
+                {ts(t, 'progress.productionReady')}
+              </div>
+              <div className='text-2xl font-bold text-green-600 dark:text-green-400'>
+                3 / 7 Apps
+              </div>
+            </div>
+            <div>
+              <div className='text-sm text-gray-600 dark:text-gray-400 mb-1'>
+                {ts(t, 'progress.inDevelopment')}
+              </div>
+              <div className='text-2xl font-bold text-yellow-600 dark:text-yellow-400'>
+                4 Apps
+              </div>
+            </div>
+            <div>
+              <div className='text-sm text-gray-600 dark:text-gray-400 mb-1'>
+                {ts(t, 'progress.stableLibs')}
+              </div>
+              <div className='text-2xl font-bold text-blue-600 dark:text-blue-400'>
+                10 / 10
+              </div>
+            </div>
+          </div>
         </div>
 
         {/* Stats */}

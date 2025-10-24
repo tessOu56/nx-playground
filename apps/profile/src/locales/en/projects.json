@@ -28,5 +28,11 @@
     "ui": "UI & Design",
     "data": "Data & State",
     "utils": "Utilities & Tools"
+  },
+  "progress": {
+    "title": "Development Progress",
+    "productionReady": "Production Ready",
+    "inDevelopment": "In Development",
+    "stableLibs": "Stable Libraries"
   }
 }

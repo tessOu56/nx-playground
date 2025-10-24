@@ -46,20 +46,68 @@ lastSync: '2025-10-24'
 
 Next.js-based event browsing and registration platform with LINE LIFF integration.
 
-## Current Status
-- Completion: 70%
-- LINE LIFF: Configured, testing needed
-- Production: Not yet deployed
-
 ## Technical Stack
 - Next.js 15 (App Router)
 - React 19
 - LINE LIFF SDK
 - next-intl for i18n
+- Tailwind CSS
+- TypeScript
 
-## Roadmap
-- Complete API integration with api-server
-- Implement registration flow
-- QR code ticket generation
-- LINE LIFF full integration
-- Deploy to production
+---
+
+## Progress & Roadmap
+
+### Current Status
+- **Version**: 0.0.1
+- **Completion**: 70%
+- **Stage**: Development
+- **Last Updated**: 2025-01-24
+
+### Completed Features
+- ✅ Next.js 15 App Router setup
+- ✅ Event browsing UI (list & detail pages)
+- ✅ LINE LIFF SDK configuration
+- ✅ Multi-language support (next-intl)
+- ✅ Responsive design
+- ✅ Event card components
+- ✅ Static site generation (SSG)
+
+### In Progress
+- 🚧 API integration with event API server
+- 🚧 Registration flow implementation
+- 🚧 LINE LIFF authentication testing
+
+### Next Steps (Roadmap)
+
+**P0 - Critical** (2-3 weeks):
+- [ ] Complete API integration with api-server
+- [ ] Implement event registration flow
+- [ ] LINE LIFF full authentication integration
+- [ ] QR code ticket generation system
+
+**P1 - High** (1 month):
+- [ ] Payment flow (Stripe/TapPay integration)
+- [ ] User dashboard (my events, tickets)
+- [ ] Email notifications
+- [ ] Testing (E2E with Playwright)
+
+**P2 - Medium**:
+- [ ] Event search & filtering
+- [ ] Event recommendations
+- [ ] Social sharing
+- [ ] Analytics integration
+
+### Technical Debt
+- API client needs full integration
+- Authentication flow not complete
+- Test coverage: 0% (target 60%+)
+- Production deployment pending
+
+### Dependencies
+- Requires: `api-server` with event endpoints
+- Requires: LINE LIFF testing account
+- Requires: Payment gateway setup
+
+### Changelog
+Version history will be tracked once production release begins

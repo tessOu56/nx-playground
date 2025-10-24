@@ -25,5 +25,9 @@ export const useProjectsTranslation = createFeatureTranslation('projects', [
   'categories.ui',
   'categories.data',
   'categories.utils',
+  'progress.title',
+  'progress.productionReady',
+  'progress.inDevelopment',
+  'progress.stableLibs',
 ]);
 
