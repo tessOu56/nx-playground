@@ -1,7 +1,24 @@
 ---
 id: auth
-version: 0.1.0
-lastUpdated: '2025-10-24'
+name: Auth Service
+version: 0.2.19
+description: Authentication service with Ory Kratos backend, supporting email login, social login, and SSO
+techStack:
+  - React 19
+  - TypeScript
+  - Vite 6
+  - Tailwind CSS
+  - React Hook Form
+  - Zod
+  - Ory Kratos
+features:
+  - User Login
+  - User Registration
+  - Email Verification
+  - Password Recovery
+  - Social Login
+  - SSO Integration
+lastUpdated: '2025-01-24'
 category: react
 status: development
 published: true

@@ -1,51 +1,64 @@
 ---
 id: animation-data
-version: 1.0.0
-lastUpdated: '2025-10-20'
-category: vue
+name: Animation Data
+version: 0.0.1
+description: Animation data management for Vue motion applications
+techStack:
+  - Vue 3
+  - TypeScript
+features:
+  - Animation presets
+  - Data transformers
+  - Export utilities
+lastUpdated: '2025-01-24'
+category: data
 status: production
 published: true
-shortDesc: English documentation for ANIMATION_DATA
-purpose: '**Last Updated**: 2025-10-20'
+
+shortDesc: |
+  Animation data management utilities for Vue applications.
+  Presets, transformers, and data handling for motion design.
+
+purpose: |
+  Support Vue Motion Sandbox with structured animation data management.
+  Demonstrates data layer architecture for creative applications.
+
 highlights:
-  - Vue
-  - Animation
-  - Data Layer
-  - CSS
-  - TypeScript
-reviewer: tessou
-updateFrequency: per-feature
-lastSync: '2025-10-21'
+  - Animation preset library
+  - Data transformation utilities
+  - Export/import functionality
+  - TypeScript type safety
+
+useCases:
+  - Animation data storage
+  - Preset management
+  - Cross-app animation sharing
+
+targetAudience: |
+  Demonstrates data architecture and Vue ecosystem expertise.
 ---
 
-# ANIMATION_DATA
+# Animation Data - Vue Animation Utilities
 
-> English documentation coming soon...
+Data management library for Vue 3 animation applications, providing presets, transformers, and export utilities.
 
-**Last Updated**: 2025-10-20
+## Purpose
 
----
+Centralized animation data layer supporting Vue Motion Sandbox and future animation-focused applications.
 
-## 🎯 Overview
+## Key Features
 
-TODO: Add English overview
+- **Animation Presets**: Predefined animation configurations
+- **Data Transformers**: Convert between different animation formats
+- **Export Utilities**: Save and share animation data
+- **Type Safety**: Full TypeScript support
 
----
+## Technical Stack
 
-## 🛠️ Tech Stack
+- Vue 3 Composition API
+- TypeScript for type safety
+- Modular architecture
 
-TODO: List technologies
+## Integration
 
----
-
-## ✨ Key Features
-
-TODO: List features
-
----
-
-## 📝 Status
-
-⚠️ This is a placeholder. Full English documentation is being prepared.
-
-For now, please refer to the [Traditional Chinese version](../zh-TW/ANIMATION_DATA.md).
+Used by `vue-motion` app for animation data management.

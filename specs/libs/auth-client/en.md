@@ -1,9 +1,19 @@
 ---
 id: auth-client
+name: Auth Client
 version: 0.1.0
-lastUpdated: '2025-10-24'
+description: Authentication utilities and context providers
+techStack:
+  - React 19
+  - TypeScript
+features:
+  - Auth context
+  - Protected routes
+  - Session management
+  - Token handling
+lastUpdated: '2025-01-24'
 category: utils
-status: development
+status: production
 published: true
 
 shortDesc: |

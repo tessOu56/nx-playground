@@ -1,7 +1,18 @@
 ---
 id: tech-stack-data
+name: Tech Stack Data
 version: 0.0.1
-lastUpdated: '2025-10-24'
+description: Automatically collect and manage technology stack data from nx workspace
+techStack:
+  - TypeScript
+  - Nx
+  - Node.js
+features:
+  - Auto-collect from package.json
+  - Manual data supplement
+  - Project dependency analysis
+  - Category classification
+lastUpdated: '2025-01-24'
 category: data
 status: production
 published: true

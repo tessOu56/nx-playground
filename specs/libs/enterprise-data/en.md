@@ -1,50 +1,66 @@
 ---
 id: enterprise-data
-version: 1.0.0
-lastUpdated: '2025-10-20'
-category: angular
+name: Enterprise Data
+version: 0.0.1
+description: Data handling layer for Angular enterprise applications
+techStack:
+  - Angular 20
+  - RxJS
+  - TypeScript
+features:
+  - Data models
+  - Service layer
+  - Validators
+  - Transformers
+lastUpdated: '2025-01-24'
+category: data
 status: production
 published: true
-shortDesc: English documentation for ENTERPRISE_DATA
-purpose: '**Last Updated**: 2025-10-20'
+
+shortDesc: |
+  Data handling layer for Angular enterprise applications.
+  Service layer, validators, and data transformers.
+
+purpose: |
+  Provide centralized data management for Angular apps in the monorepo.
+  Demonstrates reactive programming with RxJS and service-oriented architecture.
+
 highlights:
-  - Angular
-  - Data Layer
-  - Architecture
-  - TypeScript
-reviewer: tessou
-updateFrequency: per-feature
-lastSync: '2025-10-21'
+  - RxJS-based data services
+  - Data validation layer
+  - Type-safe data models
+  - State synchronization
+
+useCases:
+  - Enterprise data management
+  - Form validation
+  - API data transformation
+
+targetAudience: |
+  Demonstrates Angular expertise and enterprise application architecture.
 ---
 
-# ENTERPRISE_DATA
+# Enterprise Data - Angular Data Layer
 
-> English documentation coming soon...
+Data handling library for Angular enterprise applications, providing models, services, and validators.
 
-**Last Updated**: 2025-10-20
+## Purpose
 
----
+Centralized data layer supporting Enterprise Admin and future Angular applications with reactive data management.
 
-## 🎯 Overview
+## Key Features
 
-TODO: Add English overview
+- **Data Models**: Type-safe entity definitions
+- **Service Layer**: RxJS-based data services
+- **Validators**: Input validation utilities
+- **Transformers**: Data transformation pipelines
 
----
+## Technical Stack
 
-## 🛠️ Tech Stack
+- Angular 20 with Signals
+- RxJS for reactive programming
+- TypeScript for type safety
 
-TODO: List technologies
+## Integration
 
----
-
-## ✨ Key Features
-
-TODO: List features
-
----
-
-## 📝 Status
-
-⚠️ This is a placeholder. Full English documentation is being prepared.
-
-For now, please refer to the [Traditional Chinese version](../zh-TW/ENTERPRISE_DATA.md).
+Used by `enterprise-admin` app for data management.

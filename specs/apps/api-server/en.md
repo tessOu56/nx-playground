@@ -1,7 +1,22 @@
 ---
 id: api-server
+name: API Server
 version: 0.1.0
-lastUpdated: '2025-10-24'
+description: RESTful API server built with NestJS and Prisma, providing OpenAPI documentation
+techStack:
+  - NestJS
+  - Prisma
+  - PostgreSQL
+  - TypeScript
+  - OpenAPI
+  - Swagger
+features:
+  - REST API
+  - Database ORM
+  - OpenAPI Docs
+  - Authentication
+  - Authorization
+lastUpdated: '2025-01-24'
 category: backend
 status: development
 published: true

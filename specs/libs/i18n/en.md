@@ -1,7 +1,20 @@
 ---
 id: i18n
+name: Internationalization
 version: 0.0.1
-lastUpdated: '2025-10-24'
+description: i18next-based internationalization solution with feature-level translations
+techStack:
+  - i18next
+  - React
+  - TypeScript
+  - next-intl
+features:
+  - Feature-based namespaces
+  - Language detection
+  - SSR support
+  - Type-safe keys
+  - Dynamic loading
+lastUpdated: '2025-01-24'
 category: utils
 status: production
 published: true

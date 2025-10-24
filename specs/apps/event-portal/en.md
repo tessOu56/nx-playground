@@ -1,7 +1,22 @@
 ---
 id: event-portal
+name: Event Platform
 version: 0.0.1
-lastUpdated: '2025-10-24'
+description: Event browsing and registration platform with LINE LIFF integration and QR code ticketing
+techStack:
+  - Next.js 15
+  - React 19
+  - TypeScript
+  - Tailwind CSS
+  - LINE LIFF SDK
+  - next-intl
+features:
+  - Event Browsing
+  - Event Registration
+  - QR Code Tickets
+  - LINE LIFF Integration
+  - Multi-language Support
+lastUpdated: '2025-01-24'
 category: nextjs
 status: development
 published: true

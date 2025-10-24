@@ -1,7 +1,23 @@
 ---
 id: event-cms
+name: Event Management Console
 version: 0.1.0
-lastUpdated: '2025-10-24'
+description: Complete event management admin console with drag-and-drop form builder, user management, and role-based access control
+techStack:
+  - React 19
+  - TypeScript
+  - Vite 6
+  - Zustand
+  - React Query
+  - React Hook Form
+  - Tailwind CSS
+features:
+  - Event Management
+  - Form Template Editor
+  - User Management
+  - Role Management
+  - i18n Support
+lastUpdated: '2025-01-24'
 category: react
 status: development
 published: true

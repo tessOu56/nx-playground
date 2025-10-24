@@ -1,7 +1,20 @@
 ---
 id: design-system
+name: Design System
 version: 0.1.0
-lastUpdated: '2025-10-24'
+description: Design tokens and theming system with Style Dictionary integration
+techStack:
+  - Style Dictionary
+  - CSS Variables
+  - Tailwind CSS
+  - TypeScript
+features:
+  - Design tokens
+  - Multiple themes
+  - CSS variables
+  - Tailwind integration
+  - Token visualization
+lastUpdated: '2025-01-24'
 category: ui
 status: production
 published: true
