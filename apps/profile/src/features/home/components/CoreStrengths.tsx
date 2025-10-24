@@ -168,12 +168,12 @@ export const CoreStrengths: FC = () => {
       </div>
 
       {/* Content */}
-      <div className='relative z-10'>
-        <div className='text-center mb-16'>
-          <h2 className='text-4xl md:text-5xl font-bold text-white mb-4'>
+      <div className='relative z-10 px-4'>
+        <div className='text-center mb-12 sm:mb-16'>
+          <h2 className='text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-3 sm:mb-4'>
             Tech Stack
           </h2>
-          <p className='text-xl text-gray-300'>
+          <p className='text-base sm:text-lg md:text-xl text-gray-300 px-4'>
             Technologies I use to build modern web applications
           </p>
         </div>
@@ -201,7 +201,7 @@ export const CoreStrengths: FC = () => {
                     )
                   )
                 }
-                className='tech-badge px-6 py-3 bg-blue-500/20 backdrop-blur-sm text-blue-200 border border-blue-400/30 rounded-lg font-medium text-lg whitespace-nowrap motion-safe:hover:scale-110 motion-safe:hover:bg-blue-500/30 motion-safe:transition-all cursor-pointer'
+                className='tech-badge px-4 sm:px-6 py-2 sm:py-3 bg-blue-500/20 backdrop-blur-sm text-blue-200 border border-blue-400/30 rounded-lg font-medium text-sm sm:text-base md:text-lg whitespace-nowrap motion-safe:hover:scale-110 motion-safe:hover:bg-blue-500/30 motion-safe:transition-all cursor-pointer'
                 aria-label={`Search for ${tech.name}`}
               >
                 {tech.name}
@@ -233,7 +233,7 @@ export const CoreStrengths: FC = () => {
                     )
                   )
                 }
-                className='tech-badge px-6 py-3 bg-green-500/20 backdrop-blur-sm text-green-200 border border-green-400/30 rounded-lg font-medium text-lg whitespace-nowrap motion-safe:hover:scale-110 motion-safe:hover:bg-green-500/30 motion-safe:transition-all cursor-pointer'
+                className='tech-badge px-4 sm:px-6 py-2 sm:py-3 bg-green-500/20 backdrop-blur-sm text-green-200 border border-green-400/30 rounded-lg font-medium text-sm sm:text-base md:text-lg whitespace-nowrap motion-safe:hover:scale-110 motion-safe:hover:bg-green-500/30 motion-safe:transition-all cursor-pointer'
                 aria-label={`Search for ${tech.name}`}
               >
                 {tech.name}
@@ -265,7 +265,7 @@ export const CoreStrengths: FC = () => {
                     )
                   )
                 }
-                className='tech-badge px-6 py-3 bg-purple-500/20 backdrop-blur-sm text-purple-200 border border-purple-400/30 rounded-lg font-medium text-lg whitespace-nowrap motion-safe:hover:scale-110 motion-safe:hover:bg-purple-500/30 motion-safe:transition-all cursor-pointer'
+                className='tech-badge px-4 sm:px-6 py-2 sm:py-3 bg-purple-500/20 backdrop-blur-sm text-purple-200 border border-purple-400/30 rounded-lg font-medium text-sm sm:text-base md:text-lg whitespace-nowrap motion-safe:hover:scale-110 motion-safe:hover:bg-purple-500/30 motion-safe:transition-all cursor-pointer'
                 aria-label={`Search for ${tech.name}`}
               >
                 {tech.name}
