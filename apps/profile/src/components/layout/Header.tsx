@@ -61,6 +61,10 @@ export function Header({ scrollProgress }: HeaderProps) {
     setHeaderDark(initialDark);
 
     // Create observer with header-area-only detection
+    // Calculate viewport height minus header height for bottom margin
+    const viewportHeight = window.innerHeight;
+    const bottomMargin = -(viewportHeight - HEADER_HEIGHT);
+    
     const observer = new IntersectionObserver(
       entries => {
         // Simple check: any dark section in header area?
@@ -70,8 +74,8 @@ export function Header({ scrollProgress }: HeaderProps) {
       {
         root: null, // viewport
         // rootMargin: only observe top HEADER_HEIGHT px band
-        // Bottom shrinks by (100vh - HEADER_HEIGHT) to create header-height band
-        rootMargin: `0px 0px calc(-100vh + ${HEADER_HEIGHT}px) 0px`,
+        // Bottom shrinks to create header-height observation band
+        rootMargin: `0px 0px ${bottomMargin}px 0px`,
         threshold: 0, // Trigger as soon as any part enters
       }
     );
