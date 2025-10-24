@@ -232,57 +232,97 @@ export const TechTimeline: FC = () => {
           {/* Background covering full section including header */}
           <div className='absolute inset-0 bg-gradient-to-br from-gray-900 to-gray-800' />
           
-          <div className='relative container mx-auto px-4 sm:px-6 text-center' style={{ zIndex: 1 }}>
-            <h2 className='text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-8 sm:mb-12'>
+          <div className='relative container mx-auto px-4 sm:px-6' style={{ zIndex: 1 }}>
+            <h2 className='text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-6 sm:mb-8 md:mb-12 text-center'>
               Earlier Years
             </h2>
-            <div className='grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 md:gap-8 max-w-4xl mx-auto mb-8 sm:mb-12'>
-              {others.map(item => (
-                <button
-                  key={item.year}
-                  onClick={() =>
-                    navigate(getLocalizedPath(`/blogs/${item.blogSlug}`))
-                  }
-                  className='bg-white/10 backdrop-blur-sm rounded-xl p-4 sm:p-6 hover:bg-white/20 transition-all text-left'
-                  aria-label={`View ${item.year} blog: ${item.title}`}
-                >
-                  <div className='flex items-center gap-3 sm:gap-4 mb-2 sm:mb-3'>
-                    <span className='text-2xl sm:text-3xl font-bold text-white'>
-                      {item.year}
-                    </span>
-                    <div className='h-px flex-1 bg-white/30' />
+            
+            {/* Timeline Layout: Vertical on mobile, Grid on desktop */}
+            <div className='max-w-5xl mx-auto'>
+              {/* Mobile: Vertical Timeline */}
+              <div className='md:hidden space-y-4'>
+                {others.map((item, index) => (
+                  <div key={item.year} className='relative pl-8'>
+                    {/* Timeline dot and line */}
+                    <div className='absolute left-0 top-0 bottom-0 flex flex-col items-center'>
+                      <div className='w-3 h-3 rounded-full bg-white/80 mt-1.5' />
+                      {index < others.length - 1 && (
+                        <div className='w-px flex-1 bg-white/30 mt-2' />
+                      )}
+                    </div>
+                    
+                    {/* Minimal Card */}
+                    <button
+                      onClick={() =>
+                        navigate(getLocalizedPath(`/blogs/${item.blogSlug}`))
+                      }
+                      className='w-full text-left bg-white/5 backdrop-blur-sm rounded-lg p-3 hover:bg-white/10 transition-all'
+                      aria-label={`View ${item.year} blog: ${item.title}`}
+                    >
+                      <div className='flex items-baseline gap-2 mb-1'>
+                        <span className='text-lg font-bold text-white'>{item.year}</span>
+                        <h3 className='text-sm font-semibold text-white/90 line-clamp-1 flex-1'>
+                          {item.title}
+                        </h3>
+                      </div>
+                      <p className='text-xs text-white/70 line-clamp-2'>
+                        {item.milestone}
+                      </p>
+                    </button>
                   </div>
-                  <h3 className='text-base sm:text-lg md:text-xl font-semibold text-white mb-1 sm:mb-2 line-clamp-2'>
-                    {item.title}
-                  </h3>
-                  <p className='text-white/80 text-xs sm:text-sm line-clamp-2 mb-2 sm:mb-3'>
-                    {item.milestone}
-                  </p>
-                  <div className='flex flex-wrap gap-1.5 sm:gap-2'>
-                    {item.tech.slice(0, 3).map(tech => (
-                      <span
-                        key={tech}
-                        className='px-2 py-0.5 sm:py-1 bg-white/20 text-white text-[10px] sm:text-xs rounded'
-                      >
-                        {tech}
+                ))}
+              </div>
+              
+              {/* Desktop: Grid with Tech Stack */}
+              <div className='hidden md:grid grid-cols-2 gap-6 lg:gap-8 mb-8 lg:mb-12'>
+                {others.map(item => (
+                  <button
+                    key={item.year}
+                    onClick={() =>
+                      navigate(getLocalizedPath(`/blogs/${item.blogSlug}`))
+                    }
+                    className='bg-white/10 backdrop-blur-sm rounded-xl p-6 hover:bg-white/20 transition-all text-left'
+                    aria-label={`View ${item.year} blog: ${item.title}`}
+                  >
+                    <div className='flex items-center gap-4 mb-3'>
+                      <span className='text-3xl font-bold text-white'>
+                        {item.year}
                       </span>
-                    ))}
-                    {item.tech.length > 3 && (
-                      <span className='px-2 py-1 bg-white/20 text-white text-xs rounded'>
-                        +{item.tech.length - 3}
-                      </span>
-                    )}
-                  </div>
-                </button>
-              ))}
+                      <div className='h-px flex-1 bg-white/30' />
+                    </div>
+                    <h3 className='text-xl font-semibold text-white mb-2 line-clamp-2'>
+                      {item.title}
+                    </h3>
+                    <p className='text-white/80 text-sm line-clamp-2 mb-3'>
+                      {item.milestone}
+                    </p>
+                    <div className='flex flex-wrap gap-2'>
+                      {item.tech.slice(0, 3).map(tech => (
+                        <span
+                          key={tech}
+                          className='px-2 py-1 bg-white/20 text-white text-xs rounded'
+                        >
+                          {tech}
+                        </span>
+                      ))}
+                      {item.tech.length > 3 && (
+                        <span className='px-2 py-1 bg-white/20 text-white text-xs rounded'>
+                          +{item.tech.length - 3}
+                        </span>
+                      )}
+                    </div>
+                  </button>
+                ))}
+              </div>
             </div>
 
             {/* Dynamic button with animated underline */}
-            <button
-              onClick={() => navigate(getLocalizedPath('/blogs'))}
-              className='group relative inline-flex items-center gap-2 text-white text-lg font-medium hover:text-white/90 transition-colors duration-200'
-              aria-label='View all blog posts'
-            >
+            <div className='text-center mt-6 sm:mt-8 md:mt-0'>
+              <button
+                onClick={() => navigate(getLocalizedPath('/blogs'))}
+                className='group relative inline-flex items-center gap-2 text-white text-base sm:text-lg font-medium hover:text-white/90 transition-colors duration-200'
+                aria-label='View all blog posts'
+              >
               <span>Explore All Blog Posts</span>
               <svg
                 className='w-5 h-5 transition-transform duration-200 group-hover:translate-x-1'
@@ -301,7 +341,8 @@ export const TechTimeline: FC = () => {
 
               {/* Animated underline */}
               <div className='absolute bottom-0 left-0 w-0 h-0.5 bg-white transition-all duration-500 ease-out group-hover:w-full' />
-            </button>
+              </button>
+            </div>
           </div>
         </article>
       )}
