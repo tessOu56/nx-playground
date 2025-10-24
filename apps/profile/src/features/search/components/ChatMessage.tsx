@@ -13,6 +13,11 @@ interface ChatMessageProps {
 
 export const ChatMessage: FC<ChatMessageProps> = ({ message }) => {
   const isUser = message.role === 'user';
+  
+  // Convert timestamp to Date if it's a string (from localStorage)
+  const timestamp = typeof message.timestamp === 'string' 
+    ? new Date(message.timestamp) 
+    : message.timestamp;
 
   return (
     <div
@@ -32,7 +37,7 @@ export const ChatMessage: FC<ChatMessageProps> = ({ message }) => {
         </div>
         <div className='whitespace-pre-wrap'>{message.content}</div>
         <div className='text-xs opacity-70 mt-2'>
-          {message.timestamp.toLocaleTimeString()}
+          {timestamp.toLocaleTimeString()}
         </div>
       </div>
     </div>
