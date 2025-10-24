@@ -215,24 +215,15 @@ export function Header({ scrollProgress }: HeaderProps) {
             headerDark={headerDark}
             onClick={() => navigate(getLocalizedPath('/blogs'))}
           />
-          <button
+          <MobileNavButton
+            path='/search'
+            label='AI'
+            isActive={isActive('/search')}
+            headerDark={headerDark}
             onClick={() => navigate(getLocalizedPath('/search'))}
-            className={`relative px-3 py-2 text-sm font-medium rounded-md transition-all duration-200 flex items-center gap-2 ${
-              headerDark
-                ? 'text-white hover:text-white/90 hover:bg-white/10'
-                : 'text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800'
-            } ${
-              isActive('/search')
-                ? 'text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/20'
-                : ''
-            }`}
-          >
-            <Sparkles className='w-4 h-4 text-purple-600 dark:text-purple-400' />
-            <span>AI</span>
-            {hasSearchHistory && !isActive('/search') && (
-              <span className='thinking-dots' />
-            )}
-          </button>
+            icon={<Sparkles className='w-4 h-4 text-purple-600 dark:text-purple-400' />}
+            showLoading={hasSearchHistory}
+          />
         </div>
       </div>
     </nav>
