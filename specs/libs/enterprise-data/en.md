@@ -111,9 +111,9 @@ import { UserModel, UserService } from '@nx-playground/enterprise-data';
 @Component({...})
 export class UserList {
   users$ = this.userService.getUsers();
-  
+
   constructor(private userService: UserService) {}
-  
+
   createUser(data: Partial<UserModel>) {
     this.userService.create(data).subscribe();
   }
