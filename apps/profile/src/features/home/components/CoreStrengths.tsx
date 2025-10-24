@@ -105,10 +105,11 @@ export const CoreStrengths: FC = () => {
         className='absolute inset-0'
         style={{
           backgroundColor: '#1a1a2e',
-          backgroundImage: 'linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%)',
+          backgroundImage:
+            'linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%)',
         }}
       />
-      
+
       {/* Flowing liquid orbs following mouse */}
       <div className='absolute inset-0 pointer-events-none' aria-hidden='true'>
         {/* Main liquid orb - follows mouse closely with purple glow */}
