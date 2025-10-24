@@ -64,7 +64,7 @@ export function Header({ scrollProgress }: HeaderProps) {
     // Calculate viewport height minus header height for bottom margin
     const viewportHeight = window.innerHeight;
     const bottomMargin = -(viewportHeight - HEADER_HEIGHT);
-    
+
     const observer = new IntersectionObserver(
       entries => {
         // Simple check: any dark section in header area?
