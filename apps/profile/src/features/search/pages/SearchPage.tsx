@@ -2,37 +2,44 @@ import {
   buildSearchIndex,
   detectIntent,
   generateResponse,
+  generateSuggestedQuestions,
   searchItems,
   type SearchIndex,
 } from '@nx-playground/search-engine';
 import { techStack } from '@nx-playground/tech-stack-data';
-import { type FC, useState, useEffect } from 'react';
+import { type FC, useState, useEffect, useRef } from 'react';
 import { useSearchParams } from 'react-router-dom';
+import { RotateCcw } from 'lucide-react';
 
 import { LoadingSpinner } from '../../../components/LoadingSpinner';
 import { SEO } from '../../../components/SEO';
 import { loadAllBlogMetadata } from '../../../lib/blogLoader';
 import { loadAllApps, loadAllLibs } from '../../../lib/projectLoader';
-import { useSearchStore } from '../../../stores/searchStore';
+import { useSearchStore, type Message } from '../../../stores/searchStore';
 import { ChatMessage } from '../components/ChatMessage';
 import { ExampleQueries } from '../components/ExampleQueries';
 import { MessageInput } from '../components/MessageInput';
-
-interface Message {
-  id: string;
-  role: 'user' | 'assistant';
-  content: string;
-  timestamp: Date;
-}
+import { SuggestedQuestions } from '../components/SuggestedQuestions';
 
 export const SearchPage: FC = () => {
   const [searchParams] = useSearchParams();
   const initialQuery = searchParams.get('q') ?? '';
-  const { setHasSearchHistory } = useSearchStore();
+  const {
+    addMessage,
+    createNewSession,
+    getCurrentSession,
+    clearCurrentSession,
+  } = useSearchStore();
 
-  const [messages, setMessages] = useState<Message[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [searchIndex, setSearchIndex] = useState<SearchIndex | null>(null);
+  const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+  const latestUserMessageRef = useRef<HTMLDivElement>(null);
+
+  // Get current session messages
+  const currentSession = getCurrentSession();
+  const messages = currentSession?.messages || [];
 
   // Build search index on mount
   useEffect(() => {
@@ -58,11 +65,21 @@ export const SearchPage: FC = () => {
     buildIndex();
   }, []);
 
+  // Scroll to latest user message
+  const scrollToLatestMessage = () => {
+    setTimeout(() => {
+      latestUserMessageRef.current?.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start',
+      });
+    }, 100);
+  };
+
   const handleSendMessage = async (content: string) => {
     if (!content.trim() || !searchIndex) return;
 
-    // Mark that user has search history using store
-    setHasSearchHistory(true);
+    // Mark as unsaved changes
+    setHasUnsavedChanges(true);
 
     // Add user message
     const userMessage: Message = {
@@ -71,7 +88,10 @@ export const SearchPage: FC = () => {
       content,
       timestamp: new Date(),
     };
-    setMessages(prev => [...prev, userMessage]);
+    addMessage(userMessage);
+
+    // Scroll to latest message
+    scrollToLatestMessage();
 
     // Search and generate AI response
     setIsLoading(true);
@@ -93,13 +113,25 @@ export const SearchPage: FC = () => {
         // Generate response
         const responseContent = generateResponse(content, results, intent);
 
+        // Generate suggested questions based on conversation
+        const conversationHistory = [
+          ...messages.map(m => ({ role: m.role, content: m.content })),
+          { role: 'user' as const, content },
+          { role: 'assistant' as const, content: responseContent },
+        ];
+        const suggestions = generateSuggestedQuestions(conversationHistory, intent);
+
         const aiMessage: Message = {
           id: (Date.now() + 1).toString(),
           role: 'assistant',
           content: responseContent,
           timestamp: new Date(),
+          suggestedQuestions: suggestions,
         };
-        setMessages(prev => [...prev, aiMessage]);
+        addMessage(aiMessage);
+        
+        // Mark as saved
+        setHasUnsavedChanges(false);
       } catch (error) {
         console.error('Search error:', error);
         const errorMessage: Message = {
@@ -108,12 +140,39 @@ export const SearchPage: FC = () => {
           content: "Sorry, I encountered an error while searching. Please try again!",
           timestamp: new Date(),
         };
-        setMessages(prev => [...prev, errorMessage]);
+        addMessage(errorMessage);
+        setHasUnsavedChanges(false);
       } finally {
         setIsLoading(false);
       }
     }, 500);
   };
+
+  // Handle new conversation
+  const handleNewConversation = () => {
+    if (hasUnsavedChanges) {
+      const confirm = window.confirm(
+        '確定要開始新的對話嗎？當前對話已儲存。'
+      );
+      if (!confirm) return;
+    }
+    
+    createNewSession();
+    setHasUnsavedChanges(false);
+  };
+
+  // Warn before leaving if there are unsaved changes
+  useEffect(() => {
+    const handleBeforeUnload = (e: BeforeUnloadEvent) => {
+      if (hasUnsavedChanges) {
+        e.preventDefault();
+        e.returnValue = '您有未儲存的對話內容，確定要離開嗎？';
+      }
+    };
+
+    window.addEventListener('beforeunload', handleBeforeUnload);
+    return () => window.removeEventListener('beforeunload', handleBeforeUnload);
+  }, [hasUnsavedChanges]);
 
   // Handle initial query - use useEffect instead of useState
   useEffect(() => {
@@ -145,16 +204,28 @@ export const SearchPage: FC = () => {
           className='relative container mx-auto px-4 pt-24 flex-1'
           style={{ zIndex: 1 }}
         >
-          {/* Page Header */}
+          {/* Page Header with New Conversation Button */}
           <div className='text-center max-w-3xl mx-auto mb-12'>
-            <h1 className='text-5xl font-bold text-white mb-6'>
-              AI-Powered Search
-            </h1>
-            <p className='text-xl text-gray-200 mb-4 leading-relaxed'>
+            <div className='flex items-center justify-center gap-4 mb-6'>
+              <h1 className='text-3xl sm:text-4xl md:text-5xl font-bold text-white'>
+                AI-Powered Search
+              </h1>
+              {messages.length > 0 && (
+                <button
+                  onClick={handleNewConversation}
+                  className='flex items-center gap-2 px-3 py-1.5 bg-white/10 hover:bg-white/20 text-white text-sm rounded-lg transition-all backdrop-blur-sm border border-white/20'
+                  aria-label='Start new conversation'
+                >
+                  <RotateCcw className='w-4 h-4' />
+                  <span className='hidden sm:inline'>重新開始</span>
+                </button>
+              )}
+            </div>
+            <p className='text-base sm:text-lg md:text-xl text-gray-200 mb-4 leading-relaxed px-4'>
               Ask me anything about my projects, tech stack, or experience. I'm
               here to help you explore!
             </p>
-            <p className='text-sm text-gray-400'>
+            <p className='text-xs sm:text-sm text-gray-400'>
               AI assistant powered by knowledge of all projects, blogs, and tech
               stack
             </p>
@@ -162,21 +233,51 @@ export const SearchPage: FC = () => {
 
           {/* Chat Container */}
           <div className='max-w-4xl mx-auto'>
-            {/* Messages Area */}
-            <div className='min-h-[70vh]'>
-              {!searchIndex ? (
+            {!searchIndex ? (
+              <div className='min-h-[70vh] flex items-center justify-center'>
                 <LoadingSpinner size='lg' color='white' text='Loading knowledge base...' />
-              ) : messages.length === 0 ? (
-                <ExampleQueries onQueryClick={handleSendMessage} />
-              ) : (
-                <div className='space-y-4'>
-                  {messages.map(message => (
-                    <ChatMessage key={message.id} message={message} />
-                  ))}
-                  {isLoading && <LoadingSpinner size='sm' color='white' text='Thinking...' />}
+              </div>
+            ) : (
+              <>
+                {/* Example Queries - Always at top, can scroll up to access */}
+                <div className='mb-8'>
+                  <ExampleQueries onQueryClick={handleSendMessage} />
                 </div>
-              )}
-            </div>
+
+                {/* Messages Area */}
+                {messages.length > 0 && (
+                  <div className='space-y-4 mb-8'>
+                    {messages.map((message, index) => {
+                      const isLatestUser =
+                        message.role === 'user' &&
+                        index === messages.length - (isLoading ? 1 : 2);
+                      
+                      return (
+                        <div
+                          key={message.id}
+                          ref={isLatestUser ? latestUserMessageRef : null}
+                        >
+                          <ChatMessage message={message} />
+                          {/* Show suggested questions after AI messages */}
+                          {message.role === 'assistant' &&
+                            message.suggestedQuestions &&
+                            message.suggestedQuestions.length > 0 && (
+                              <SuggestedQuestions
+                                questions={message.suggestedQuestions}
+                                onQuestionClick={handleSendMessage}
+                              />
+                            )}
+                        </div>
+                      );
+                    })}
+                    {isLoading && (
+                      <LoadingSpinner size='sm' color='white' text='Thinking...' />
+                    )}
+                    <div ref={messagesEndRef} />
+                  </div>
+                )}
+              </>
+            )}
           </div>
         </div>
       </section>
