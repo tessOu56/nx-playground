@@ -30,7 +30,9 @@ async function fetchReadme(
     if (!response.ok) {
       // If zh-TW not found, fallback to English
       if (locale === 'zh-TW') {
-        console.warn(`README.zh-TW.md not found for ${type}/${id}, falling back to README.md`);
+        console.warn(
+          `README.zh-TW.md not found for ${type}/${id}, falling back to README.md`
+        );
         const fallbackUrl = `/${type}/${id}/README.md`;
         const fallbackResponse = await fetch(fallbackUrl);
         if (!fallbackResponse.ok) {

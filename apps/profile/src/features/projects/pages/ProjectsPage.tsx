@@ -66,7 +66,7 @@ export const ProjectsPage: FC = () => {
     return (
       <div className='min-h-screen flex items-center justify-center'>
         <p className='text-lg text-gray-600 dark:text-gray-400'>
-          Loading projects...
+          {ts(t, 'loading')}
         </p>
       </div>
     );
@@ -135,10 +135,10 @@ export const ProjectsPage: FC = () => {
         <section id='react-apps' className='mb-16'>
           <div className='mb-8'>
             <h2 className='text-4xl font-bold text-gray-900 dark:text-white mb-2'>
-              React Applications
+              {ts(t, 'sections.reactApps')}
             </h2>
             <p className='text-lg text-gray-600 dark:text-gray-400'>
-              Production-ready React applications
+              {ts(t, 'sections.reactAppsDesc')}
             </p>
           </div>
 
@@ -157,7 +157,7 @@ export const ProjectsPage: FC = () => {
             </div>
           ) : (
             <p className='text-center text-gray-600 dark:text-gray-400 py-8'>
-              No React applications found
+              {ts(t, 'sections.noReactApps')}
             </p>
           )}
         </section>
@@ -166,10 +166,10 @@ export const ProjectsPage: FC = () => {
         <section id='react-libs' className='mb-16'>
           <div className='mb-8'>
             <h2 className='text-4xl font-bold text-gray-900 dark:text-white mb-2'>
-              React Libraries
+              {ts(t, 'sections.reactLibs')}
             </h2>
             <p className='text-lg text-gray-600 dark:text-gray-400'>
-              Reusable React components and utilities
+              {ts(t, 'sections.reactLibsDesc')}
             </p>
           </div>
 
@@ -188,7 +188,7 @@ export const ProjectsPage: FC = () => {
             </div>
           ) : (
             <p className='text-center text-gray-600 dark:text-gray-400 py-8'>
-              No React libraries found
+              {ts(t, 'sections.noReactLibs')}
             </p>
           )}
         </section>
@@ -198,10 +198,10 @@ export const ProjectsPage: FC = () => {
           <section id='other-frameworks' className='mb-16'>
             <div className='mb-8'>
               <h2 className='text-4xl font-bold text-gray-900 dark:text-white mb-2'>
-                Other Framework Practice
+                {ts(t, 'sections.otherFrameworks')}
               </h2>
               <p className='text-lg text-gray-600 dark:text-gray-400'>
-                Angular and Vue exploration projects
+                {ts(t, 'sections.otherFrameworksDesc')}
               </p>
             </div>
 

@@ -3,11 +3,20 @@
   "subtitle": "Production applications and reusable libraries built with modern frameworks",
   "searchPlaceholder": "Search all projects...",
   "noResults": "No projects found matching your search",
+  "loading": "Loading projects...",
   "sections": {
     "apps": "Applications",
     "appsDesc": "Production-ready applications built with React, Angular, and Vue",
     "libs": "Shared Libraries",
-    "libsDesc": "Reusable components, hooks, and utilities across the monorepo"
+    "libsDesc": "Reusable components, hooks, and utilities across the monorepo",
+    "reactApps": "React Applications",
+    "reactAppsDesc": "Production-ready React applications",
+    "reactLibs": "React Libraries",
+    "reactLibsDesc": "Reusable React components and utilities",
+    "otherFrameworks": "Other Framework Practice",
+    "otherFrameworksDesc": "Angular and Vue exploration projects",
+    "noReactApps": "No React applications found",
+    "noReactLibs": "No React libraries found"
   },
   "stats": {
     "totalProjects": "Total Projects",
