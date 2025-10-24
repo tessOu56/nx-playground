@@ -1,8 +1,8 @@
 ---
 id: auth-client
-name: Auth Client
+name: 認證客戶端
 version: 0.1.0
-description: Authentication utilities and context providers
+description: 認證工具與 context providers
 techStack:
   - React 19
   - TypeScript

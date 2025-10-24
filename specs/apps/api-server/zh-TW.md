@@ -1,8 +1,8 @@
 ---
 id: api-server
-name: API Server
+name: API 伺服器
 version: 0.1.0
-description: RESTful API server built with NestJS and Prisma, providing OpenAPI documentation
+description: 使用 NestJS 與 Prisma 建構的 RESTful API 伺服器，提供 OpenAPI 文檔
 techStack:
   - NestJS
   - Prisma

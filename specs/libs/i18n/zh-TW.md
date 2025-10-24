@@ -1,7 +1,20 @@
 ---
 id: i18n
+name: 國際化函式庫
+description: 基於 i18next 的國際化解決方案，具備功能層級翻譯
+techStack:
+  - i18next
+  - React
+  - TypeScript
+  - next-intl
+features:
+  - Feature-based namespaces
+  - Language detection
+  - SSR support
+  - Type-safe keys
+  - Dynamic loading
 version: 0.0.1
-lastUpdated: '2025-10-24'
+lastUpdated: '2025-01-24'
 category: utils
 status: production
 published: true

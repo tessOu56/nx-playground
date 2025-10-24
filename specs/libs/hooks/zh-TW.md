@@ -1,8 +1,8 @@
 ---
 id: hooks
-name: Custom Hooks
+name: 自訂 Hooks
 version: 0.0.1
-description: Collection of reusable React hooks for common patterns
+description: 可重用的 React hooks 集合，適用於常見模式
 techStack:
   - React 19
   - TypeScript
