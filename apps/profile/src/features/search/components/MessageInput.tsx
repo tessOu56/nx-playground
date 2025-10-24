@@ -21,6 +21,13 @@ export const MessageInput: FC<MessageInputProps> = ({ onSend, disabled }) => {
     textareaRef.current?.focus();
   }, []);
 
+  // Re-focus when disabled changes (AI response finished)
+  useEffect(() => {
+    if (!disabled) {
+      setTimeout(() => textareaRef.current?.focus(), 100);
+    }
+  }, [disabled]);
+
   const handleSend = () => {
     if (input.trim() && !disabled) {
       onSend(input);
