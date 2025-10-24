@@ -1,5 +1,6 @@
 import { type ReactNode, useEffect, useState } from 'react';
 
+import { ScrollToTop } from '../ScrollToTop';
 import { Footer } from './Footer';
 import { Header } from './Header';
 
@@ -51,6 +52,7 @@ export function Layout({ children, showFooter = true }: LayoutProps) {
       <Header scrollProgress={scrollProgress} />
       <main className='flex-1'>{children}</main>
       {showFooter && <Footer />}
+      <ScrollToTop />
     </div>
   );
 }
