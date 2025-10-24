@@ -27,9 +27,13 @@
     "subtitle": "Technologies and tools I work with",
     "searchHint": "💡 Click any tech tag to search related documentation"
   },
+  "timeline": {
+    "loading": "Loading timeline...",
+    "earlierYears": "Earlier Years"
+  },
   "contact": {
     "title": "Get In Touch",
-    "subtitle": "Feel free to reach out for collaborations or just a friendly chat",
+    "subtitle": "Have a project in mind? Let's work together.",
     "email": "Email",
     "sendEmail": "Send Email",
     "github": "GitHub",

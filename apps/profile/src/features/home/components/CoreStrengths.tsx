@@ -3,11 +3,14 @@ import { type FC, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { useLocalizedNavigation } from '../../../lib/i18n/useLocalizedNavigation';
+import { useHomeTranslation } from '../hooks/useHomeTranslation';
+import '../i18n';
 import './CoreStrengths.css';
 
 export const CoreStrengths: FC = () => {
   const navigate = useNavigate();
   const { getLocalizedPath } = useLocalizedNavigation();
+  const { t } = useHomeTranslation();
   const [hoveredRow, setHoveredRow] = useState<number | null>(null);
   const [scrollY, setScrollY] = useState(0);
   const [mousePosition, setMousePosition] = useState({ x: 50, y: 50 }); // Percentage
@@ -171,10 +174,10 @@ export const CoreStrengths: FC = () => {
       <div className='relative z-10 px-4'>
         <div className='text-center mb-12 sm:mb-16'>
           <h2 className='text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-3 sm:mb-4'>
-            Tech Stack
+            {String(t('skills.title'))}
           </h2>
           <p className='text-base sm:text-lg md:text-xl text-gray-300 px-4'>
-            Technologies I use to build modern web applications
+            {String(t('skills.subtitle'))}
           </p>
         </div>
 
