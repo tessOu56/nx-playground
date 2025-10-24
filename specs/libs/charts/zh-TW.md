@@ -1,7 +1,19 @@
 ---
 id: charts
+name: 圖表元件庫
+description: 支援 Chart.js 與 Recharts 的圖表元件庫
+techStack:
+  - Chart.js
+  - Recharts
+  - React 19
+  - TypeScript
+features:
+  - Multiple chart types
+  - Dual library support
+  - Responsive design
+  - Theme integration
 version: 0.1.0
-lastUpdated: '2025-10-24'
+lastUpdated: '2025-01-24'
 category: ui
 status: production
 published: true

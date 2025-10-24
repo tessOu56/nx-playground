@@ -1,8 +1,8 @@
 ---
 id: enterprise-admin
-name: Enterprise Admin
+name: 企業管理平台
 version: 0.0.0
-description: Enterprise-level admin console built with Angular 20 Signals, featuring dual-control approval and RBAC
+description: 使用 Angular 20 Signals 建構的企業級管理平台，具備雙重控制審批與 RBAC
 techStack:
   - Angular 20
   - Signal Store

@@ -1,8 +1,8 @@
 ---
 id: event-portal
-name: Event Platform
+name: 活動報名平台
 version: 0.0.1
-description: Event browsing and registration platform with LINE LIFF integration and QR code ticketing
+description: 整合 LINE LIFF 與 QR code 票券的活動瀏覽與報名平台
 techStack:
   - Next.js 15
   - React 19

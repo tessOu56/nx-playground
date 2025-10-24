@@ -1,7 +1,20 @@
 ---
 id: ui-components
+name: UI 元件庫
+description: 使用 React、TypeScript 與 Radix UI 建構的完整 UI 元件庫
+techStack:
+  - React 19
+  - Radix UI
+  - Tailwind CSS
+  - TypeScript
+features:
+  - 40+ components
+  - TypeScript support
+  - Accessibility-first
+  - Form components
+  - Navigation components
 version: 0.1.0
-lastUpdated: '2025-10-24'
+lastUpdated: '2025-01-24'
 category: ui
 status: production
 published: true

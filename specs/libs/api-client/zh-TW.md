@@ -1,8 +1,8 @@
 ---
 id: api-client
-name: API Client
+name: API 客戶端
 version: 0.0.1
-description: Type-safe API client generated from OpenAPI specifications using Orval
+description: 使用 Orval 從 OpenAPI 規格自動生成的型別安全 API 客戶端
 techStack:
   - OpenAPI
   - Orval

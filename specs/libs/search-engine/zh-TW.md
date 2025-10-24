@@ -1,8 +1,8 @@
 ---
 id: search-engine
-name: Search Engine
+name: 搜尋引擎
 version: 1.0.0
-description: Custom search engine with keyword matching and intent detection
+description: 具備關鍵字比對與意圖偵測的自訂搜尋引擎
 techStack:
   - TypeScript
   - Node.js

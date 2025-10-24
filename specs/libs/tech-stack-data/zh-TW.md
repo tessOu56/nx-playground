@@ -1,7 +1,18 @@
 ---
 id: tech-stack-data
+name: 技術棧資料
+description: 自動收集與管理 Nx workspace 的技術棧資料
+techStack:
+  - TypeScript
+  - Nx
+  - Node.js
+features:
+  - Auto-collect from package.json
+  - Manual data supplement
+  - Project dependency analysis
+  - Category classification
 version: 0.0.1
-lastUpdated: '2025-10-24'
+lastUpdated: '2025-01-24'
 category: data
 status: production
 published: true

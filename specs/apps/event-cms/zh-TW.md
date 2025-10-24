@@ -1,8 +1,8 @@
 ---
 id: event-cms
-name: Event Management Console
+name: 活動管理後台
 version: 0.1.0
-description: Complete event management admin console with drag-and-drop form builder, user management, and role-based access control
+description: 完整的活動管理後台系統，具備拖放式表單編輯器、使用者管理與角色權限控制
 techStack:
   - React 19
   - TypeScript

@@ -1,8 +1,8 @@
 ---
 id: vue-motion
-name: Vue Motion Sandbox
+name: Vue 動畫沙盒
 version: 0.1.0
-description: Animation sandbox built with Vue 3, featuring GSAP, Three.js, and Lottie animations
+description: 使用 Vue 3 建構的動畫沙盒，整合 GSAP、Three.js 與 Lottie 動畫
 techStack:
   - Vue 3
   - TypeScript

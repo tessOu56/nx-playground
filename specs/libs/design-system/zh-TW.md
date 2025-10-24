@@ -1,7 +1,20 @@
 ---
 id: design-system
+name: 設計系統
+description: 整合 Style Dictionary 的設計 token 與主題系統
+techStack:
+  - Style Dictionary
+  - CSS Variables
+  - Tailwind CSS
+  - TypeScript
+features:
+  - Design tokens
+  - Multiple themes
+  - CSS variables
+  - Tailwind integration
+  - Token visualization
 version: 0.1.0
-lastUpdated: '2025-10-24'
+lastUpdated: '2025-01-24'
 category: ui
 status: production
 published: true

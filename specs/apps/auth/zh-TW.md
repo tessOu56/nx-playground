@@ -1,8 +1,8 @@
 ---
 id: auth
-name: Auth Service
+name: 認證服務
 version: 0.2.19
-description: Authentication service with Ory Kratos backend, supporting email login, social login, and SSO
+description: 整合 Ory Kratos 後端的認證服務，支援電子郵件登入、社交登入與 SSO
 techStack:
   - React 19
   - TypeScript
