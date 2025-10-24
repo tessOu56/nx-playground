@@ -39,59 +39,65 @@ export function Header({ scrollProgress }: HeaderProps) {
 
   // Adaptive header theme using optimized intersection observer
   useEffect(() => {
-    // Small delay to ensure DOM is fully rendered
-    const timer = setTimeout(() => {
-      const darkSections = document.querySelectorAll(
-        '[data-header-dark="true"]'
-      );
+    const checkHeaderTheme = () => {
+      const darkSections = document.querySelectorAll('[data-header-dark="true"]');
+      
+      // If no dark sections, default to light mode
       if (darkSections.length === 0) {
         setHeaderDark(false);
         return;
       }
 
-      // Check initial state - is any dark section in header area?
-      const checkInitialState = () => {
-        const initialDark = Array.from(darkSections).some(section => {
-          const rect = section.getBoundingClientRect();
-          // Check if dark section overlaps header area (top 0 to HEADER_HEIGHT)
-          return rect.top < HEADER_HEIGHT && rect.bottom > 0;
-        });
-        setHeaderDark(initialDark);
-      };
+      // Check if any dark section is in header area (top 0 to HEADER_HEIGHT)
+      const isDark = Array.from(darkSections).some(section => {
+        const rect = section.getBoundingClientRect();
+        return rect.top < HEADER_HEIGHT && rect.bottom > 0;
+      });
+      
+      setHeaderDark(isDark);
+    };
 
-      checkInitialState();
+    // Check immediately on mount and path change
+    checkHeaderTheme();
 
-      // Create observer with header-area-only detection
-      // Calculate viewport height minus header height for bottom margin
-      const viewportHeight = window.innerHeight;
-      const bottomMargin = -(viewportHeight - HEADER_HEIGHT);
+    // Also check after a short delay to handle DOM rendering
+    const initialTimer = setTimeout(checkHeaderTheme, 50);
 
-      const observer = new IntersectionObserver(
-        entries => {
-          // Simple check: any dark section in header area?
-          const hasAnyDarkInHeader = entries.some(
-            entry => entry.isIntersecting
-          );
-          setHeaderDark(hasAnyDarkInHeader);
-        },
-        {
-          root: null, // viewport
-          // rootMargin: only observe top HEADER_HEIGHT px band
-          // Bottom shrinks to create header-height observation band
-          rootMargin: `0px 0px ${bottomMargin}px 0px`,
-          threshold: 0, // Trigger as soon as any part enters
-        }
-      );
+    // Create observer with header-area-only detection
+    const viewportHeight = window.innerHeight;
+    const bottomMargin = -(viewportHeight - HEADER_HEIGHT);
 
-      darkSections.forEach(section => observer.observe(section));
+    const observer = new IntersectionObserver(
+      () => {
+        // Re-check theme whenever any dark section enters/leaves the observation area
+        checkHeaderTheme();
+      },
+      {
+        root: null,
+        rootMargin: `0px 0px ${bottomMargin}px 0px`,
+        threshold: 0,
+      }
+    );
 
-      // Cleanup
-      return () => {
-        observer.disconnect();
-      };
-    }, 100); // 100ms delay for DOM to render
+    // Observe all dark sections
+    const darkSections = document.querySelectorAll('[data-header-dark="true"]');
+    darkSections.forEach(section => observer.observe(section));
 
-    return () => clearTimeout(timer);
+    // Also check on scroll (debounced)
+    let scrollTimer: number;
+    const handleScroll = () => {
+      if (scrollTimer) clearTimeout(scrollTimer);
+      scrollTimer = window.setTimeout(checkHeaderTheme, 50);
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+
+    return () => {
+      clearTimeout(initialTimer);
+      if (scrollTimer) clearTimeout(scrollTimer);
+      observer.disconnect();
+      window.removeEventListener('scroll', handleScroll);
+    };
   }, [location.pathname]);
 
   return (
