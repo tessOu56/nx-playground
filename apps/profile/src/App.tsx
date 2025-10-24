@@ -1,15 +1,21 @@
 import { I18nProvider } from '@nx-playground/i18n';
+import { lazy, Suspense } from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
 
+import { LoadingSpinner } from './components/LoadingSpinner';
 import { Layout } from './components/layout';
-import { NotFoundPage } from './features/404';
-import { BlogListPage, BlogPostPage } from './features/blogs';
-import { AppDetailPage, LibDetailPage } from './features/detail';
-import { HomePage } from './features/home';
-import { ProjectsPage } from './features/projects';
-import { SearchPage } from './features/search';
 import { useScrollToTop } from './hooks/useScrollToTop';
 import { LocaleRouter } from './lib/i18n';
+
+// Lazy load pages for code splitting
+const HomePage = lazy(() => import('./features/home').then(m => ({ default: m.HomePage })));
+const ProjectsPage = lazy(() => import('./features/projects').then(m => ({ default: m.ProjectsPage })));
+const BlogListPage = lazy(() => import('./features/blogs').then(m => ({ default: m.BlogListPage })));
+const BlogPostPage = lazy(() => import('./features/blogs').then(m => ({ default: m.BlogPostPage })));
+const SearchPage = lazy(() => import('./features/search').then(m => ({ default: m.SearchPage })));
+const AppDetailPage = lazy(() => import('./features/detail').then(m => ({ default: m.AppDetailPage })));
+const LibDetailPage = lazy(() => import('./features/detail').then(m => ({ default: m.LibDetailPage })));
+const NotFoundPage = lazy(() => import('./features/404').then(m => ({ default: m.NotFoundPage })));
 
 function AppContent() {
   useScrollToTop();
@@ -25,20 +31,28 @@ function AppContent() {
         element={
           <LocaleRouter>
             <Layout>
-              <Routes>
-                <Route path='/' element={<HomePage />} />
-                <Route path='/projects' element={<ProjectsPage />} />
-                <Route path='/projects/:projectId' element={<AppDetailPage />} />
-                <Route path='/blogs' element={<BlogListPage />} />
-                <Route path='/blogs/:slug' element={<BlogPostPage />} />
-                <Route path='/search' element={<SearchPage />} />
-                {/* Legacy redirects */}
-                <Route path='/apps' element={<Navigate to='/projects' replace />} />
-                <Route path='/libs' element={<Navigate to='/projects' replace />} />
-                <Route path='/apps/:appId' element={<Navigate to='/projects/:appId' replace />} />
-                <Route path='/libs/:libId' element={<Navigate to='/projects/:libId' replace />} />
-                <Route path='*' element={<NotFoundPage />} />
-              </Routes>
+              <Suspense
+                fallback={
+                  <div className='min-h-screen flex items-center justify-center'>
+                    <LoadingSpinner size='lg' color='purple' text='Loading...' />
+                  </div>
+                }
+              >
+                <Routes>
+                  <Route path='/' element={<HomePage />} />
+                  <Route path='/projects' element={<ProjectsPage />} />
+                  <Route path='/projects/:projectId' element={<AppDetailPage />} />
+                  <Route path='/blogs' element={<BlogListPage />} />
+                  <Route path='/blogs/:slug' element={<BlogPostPage />} />
+                  <Route path='/search' element={<SearchPage />} />
+                  {/* Legacy redirects */}
+                  <Route path='/apps' element={<Navigate to='/projects' replace />} />
+                  <Route path='/libs' element={<Navigate to='/projects' replace />} />
+                  <Route path='/apps/:appId' element={<Navigate to='/projects/:appId' replace />} />
+                  <Route path='/libs/:libId' element={<Navigate to='/projects/:libId' replace />} />
+                  <Route path='*' element={<NotFoundPage />} />
+                </Routes>
+              </Suspense>
             </Layout>
           </LocaleRouter>
         }

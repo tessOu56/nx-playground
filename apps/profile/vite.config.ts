@@ -126,6 +126,8 @@ export default defineConfig(() => ({
     commonjsOptions: {
       transformMixedEsModules: true,
     },
+    assetsInlineLimit: 4096, // Inline assets < 4KB as base64
+    chunkSizeWarningLimit: 500, // Warn if chunk > 500KB
     rollupOptions: {
       output: {
         manualChunks: id => {
@@ -153,6 +155,14 @@ export default defineConfig(() => ({
           }
           if (id.includes('@nx-playground/design-system')) {
             return 'design-system';
+          }
+          
+          // Feature libraries
+          if (id.includes('@nx-playground/search-engine')) {
+            return 'search-engine';
+          }
+          if (id.includes('@nx-playground/i18n')) {
+            return 'i18n';
           }
         },
       },
