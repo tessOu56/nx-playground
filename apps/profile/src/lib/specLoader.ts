@@ -66,8 +66,15 @@ async function parseSpec(
     }
 
     return {
+      // Basic Info
       id: data.id ?? '',
+      name: data.name ?? data.id ?? '',
       version: data.version ?? '0.0.0',
+      description: data.description ?? data.shortDesc ?? '',
+      techStack: data.techStack ?? [],
+      features: data.features ?? [],
+      
+      // Spec Fields
       category: data.category ?? '',
       status: data.status ?? 'development',
       published: data.published !== false,
@@ -89,6 +96,11 @@ async function parseSpec(
       relatedDocs: data.relatedDocs,
       stats: data.stats,
       specContent: htmlContent,
+      
+      // URLs (optional)
+      demoUrl: data.demoUrl,
+      repoUrl: data.repoUrl,
+      lastUpdated: data.lastUpdated,
     };
   } catch (_error) {
     // Silent fail for missing specs
