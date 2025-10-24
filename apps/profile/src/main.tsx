@@ -10,7 +10,6 @@ globalThis.Buffer = Buffer;
 
 import App from './App';
 import blogsI18n from './features/blogs/i18n';
-import detailI18n from './features/detail/i18n';
 import homeI18n from './features/home/i18n';
 import projectsI18n from './features/projects/i18n';
 import layoutI18n from './components/layout/i18n';
@@ -33,9 +32,9 @@ if (i18n.language !== initialLocale) {
 
 // Initialize feature i18n instances
 // The createFeatureI18n already registers resources, no need for .init() calls
+// Note: detailI18n is now merged into projectsI18n
 layoutI18n.init();
 homeI18n.init();
-detailI18n.init();
 blogsI18n.init();
 projectsI18n.init();
 
