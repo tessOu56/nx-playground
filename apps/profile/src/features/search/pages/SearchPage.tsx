@@ -62,17 +62,17 @@ export const SearchPage: FC = () => {
   return (
     <div className='min-h-screen pb-32'>
       {/* Top section with light background - header stays light mode */}
-      <div className='bg-gray-50 dark:bg-gray-900 py-12'>
+      <div className='bg-gradient-to-b from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 py-16'>
         <div className='container mx-auto px-4'>
-          <div className='text-center mb-8'>
-            <h1 className='text-4xl font-bold text-gray-900 dark:text-white mb-4'>
+          <div className='text-center max-w-3xl mx-auto'>
+            <h1 className='text-5xl font-bold text-gray-900 dark:text-white mb-6'>
               AI-Powered Search
             </h1>
-            <p className='text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto mb-3'>
+            <p className='text-xl text-gray-700 dark:text-gray-300 mb-4 leading-relaxed'>
               Ask me anything about my projects, tech stack, or experience. I'm
               here to help you explore!
             </p>
-            <p className='text-sm text-gray-500 dark:text-gray-500'>
+            <p className='text-sm text-gray-500 dark:text-gray-400'>
               AI assistant powered by knowledge of all projects, blogs, and tech
               stack
             </p>
