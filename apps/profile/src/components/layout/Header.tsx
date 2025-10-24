@@ -40,8 +40,10 @@ export function Header({ scrollProgress }: HeaderProps) {
   // Adaptive header theme using optimized intersection observer
   useEffect(() => {
     const checkHeaderTheme = () => {
-      const darkSections = document.querySelectorAll('[data-header-dark="true"]');
-      
+      const darkSections = document.querySelectorAll(
+        '[data-header-dark="true"]'
+      );
+
       // If no dark sections, default to light mode
       if (darkSections.length === 0) {
         setHeaderDark(false);
@@ -53,15 +55,17 @@ export function Header({ scrollProgress }: HeaderProps) {
         const rect = section.getBoundingClientRect();
         return rect.top < HEADER_HEIGHT && rect.bottom > 0;
       });
-      
+
       setHeaderDark(isDark);
     };
 
     // Check immediately on mount and path change
     checkHeaderTheme();
 
-    // Also check after a short delay to handle DOM rendering
-    const initialTimer = setTimeout(checkHeaderTheme, 50);
+    // Also check after short delays to handle DOM rendering
+    const timer1 = setTimeout(checkHeaderTheme, 50);
+    const timer2 = setTimeout(checkHeaderTheme, 150);
+    const timer3 = setTimeout(checkHeaderTheme, 300);
 
     // Create observer with header-area-only detection
     const viewportHeight = window.innerHeight;
@@ -93,7 +97,9 @@ export function Header({ scrollProgress }: HeaderProps) {
     window.addEventListener('scroll', handleScroll, { passive: true });
 
     return () => {
-      clearTimeout(initialTimer);
+      clearTimeout(timer1);
+      clearTimeout(timer2);
+      clearTimeout(timer3);
       if (scrollTimer) clearTimeout(scrollTimer);
       observer.disconnect();
       window.removeEventListener('scroll', handleScroll);
