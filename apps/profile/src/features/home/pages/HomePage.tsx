@@ -1,6 +1,7 @@
 import { type FC, useEffect } from 'react';
 
 import { Footer } from '../../../components/layout/Footer';
+import { SEO } from '../../../components/SEO';
 import {
   ContactSection,
   CoreStrengths,
@@ -31,6 +32,13 @@ export const HomePage: FC = () => {
 
   return (
     <>
+      <SEO
+        title='Tess - Full-Stack Developer Portfolio'
+        description='Explore my journey through modern web development. Specializing in React, TypeScript, Nx Monorepo, and full-stack solutions.'
+        url='/'
+        tags={['React', 'TypeScript', 'Nx', 'Full-Stack', 'Web Development']}
+      />
+      
       {/* 1. Hero Section with Background */}
       <section className='snap-start snap-always'>
         <TechProfile />

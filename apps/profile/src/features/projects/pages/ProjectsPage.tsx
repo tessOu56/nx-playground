@@ -2,6 +2,7 @@ import { type FC, useEffect, useMemo, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
 import { ProjectCard } from '../../../components/ProjectCard';
+import { SEO } from '../../../components/SEO';
 import type { SupportedLocale } from '../../../lib/i18n/LocaleRouter';
 import { useLocalizedNavigation } from '../../../lib/i18n/useLocalizedNavigation';
 import { ts } from '../../../lib/i18n/helpers';
@@ -72,10 +73,18 @@ export const ProjectsPage: FC = () => {
   }
 
   return (
-    <div className='min-h-screen bg-gradient-to-b from-gray-50 to-white dark:from-gray-900 dark:to-gray-800 py-12 px-4'>
-      <div className='max-w-7xl mx-auto'>
-        {/* Header */}
-        <div className='text-center mb-12'>
+    <>
+      <SEO
+        title='Projects'
+        description='Explore my React, Angular, Vue, and Next.js projects. Discover apps and libraries built with modern web technologies in a monorepo architecture.'
+        url='/projects'
+        tags={['Projects', 'React', 'Angular', 'Vue', 'Next.js', 'Nx Monorepo', 'Libraries']}
+      />
+      
+      <div className='min-h-screen bg-gradient-to-b from-gray-50 to-white dark:from-gray-900 dark:to-gray-800 py-12 px-4'>
+        <div className='max-w-7xl mx-auto'>
+          {/* Header */}
+          <div className='text-center mb-12'>
           <h1 className='text-5xl font-bold text-gray-900 dark:text-white mb-4'>
             {ts(t, 'title')}
           </h1>
@@ -212,5 +221,6 @@ export const ProjectsPage: FC = () => {
         )}
       </div>
     </div>
+    </>
   );
 };

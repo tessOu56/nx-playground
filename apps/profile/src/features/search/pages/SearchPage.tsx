@@ -1,6 +1,7 @@
 import { type FC, useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 
+import { SEO } from '../../../components/SEO';
 import { useSearchStore } from '../../../stores/searchStore';
 import { ChatMessage } from '../components/ChatMessage';
 import { ExampleQueries } from '../components/ExampleQueries';
@@ -61,6 +62,13 @@ export const SearchPage: FC = () => {
 
   return (
     <>
+      <SEO
+        title='AI Search'
+        description='Ask me anything about my projects, tech stack, or experience. AI-powered knowledge assistant to help you explore my work.'
+        url='/search'
+        tags={['AI Search', 'Assistant', 'Projects', 'Tech Stack']}
+      />
+      
       {/* Full page with dark gradient background */}
       <section
         className='relative pb-32'

@@ -37,7 +37,6 @@ export function Header({ scrollProgress }: HeaderProps) {
     return pathWithoutLocale.startsWith(path);
   };
 
-
   // Adaptive header theme using optimized intersection observer
   useEffect(() => {
     const darkSections = document.querySelectorAll('[data-header-dark="true"]');

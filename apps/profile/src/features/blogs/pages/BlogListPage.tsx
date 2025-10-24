@@ -5,6 +5,7 @@
 import { type FC, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
+import { SEO } from '../../../components/SEO';
 import { loadAllBlogMetadata } from '../../../lib/blogLoader';
 import { type SupportedLocale } from '../../../lib/i18n/LocaleRouter';
 import type { BlogMetadata } from '../../../types/blogData';
@@ -49,10 +50,18 @@ export const BlogListPage: FC = () => {
   }
 
   return (
-    <div className='min-h-screen bg-gray-50 dark:bg-gray-900 py-12 px-4'>
-      <div className='max-w-7xl mx-auto'>
-        {/* Header */}
-        <div className='text-center mb-12'>
+    <>
+      <SEO
+        title='Blog'
+        description='Read about my tech journey, development insights, and lessons learned. Articles covering React, TypeScript, Nx, monorepo architecture, and modern web development.'
+        url='/blogs'
+        tags={['Blog', 'Tech Journey', 'Development', 'React', 'TypeScript', 'Nx']}
+      />
+      
+      <div className='min-h-screen bg-gray-50 dark:bg-gray-900 py-12 px-4'>
+        <div className='max-w-7xl mx-auto'>
+          {/* Header */}
+          <div className='text-center mb-12'>
           <h1 className='text-5xl font-bold text-gray-900 dark:text-white mb-4'>
             Blog
           </h1>
@@ -78,5 +87,6 @@ export const BlogListPage: FC = () => {
         )}
       </div>
     </div>
+    </>
   );
 };
