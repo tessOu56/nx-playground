@@ -31,6 +31,7 @@ lastUpdated: '2025-01-24'
 This is a **public-facing event platform** where users can discover, browse, and register for events with integrated ticketing.
 
 Unlike basic event listing sites, this platform offers:
+
 - Seamless LINE integration for one-tap registration
 - QR code digital tickets for contactless entry
 - Multi-language support for international audiences
@@ -93,12 +94,12 @@ The design serves as a **complete user-facing event platform**, demonstrating mo
 
 ## Development Focus / 製作重點
 
-| Aspect                       | Description                                                              |
-| ---------------------------- | ------------------------------------------------------------------------ |
-| **Performance**              | Next.js SSG for sub-second page loads                                    |
-| **Mobile Experience**        | Progressive Web App with offline ticket viewing                          |
-| **Third-party Integration**  | LINE LIFF SDK for seamless social login                                 |
-| **Internationalization**     | next-intl for scalable multi-language support                            |
+| Aspect                      | Description                                     |
+| --------------------------- | ----------------------------------------------- |
+| **Performance**             | Next.js SSG for sub-second page loads           |
+| **Mobile Experience**       | Progressive Web App with offline ticket viewing |
+| **Third-party Integration** | LINE LIFF SDK for seamless social login         |
+| **Internationalization**    | next-intl for scalable multi-language support   |
 
 **Result**: Fast, mobile-optimized platform with excellent user experience.
 
@@ -115,12 +116,12 @@ The design serves as a **complete user-facing event platform**, demonstrating mo
 
 ## Quality & Performance Metrics / 品質與效能指標
 
-| Metric                    | Industry Standard     | Actual Result           | Status |
-| ------------------------- | --------------------- | ----------------------- | ------ |
-| **First Load**            | Within 2 seconds      | ~1 second (SSG)         | ✅     |
-| **Mobile Performance**    | Lighthouse 80+        | 95+ (target)            | 🚧     |
-| **PWA Support**           | Installable           | Full offline support    | ✅     |
-| **Accessibility**         | WCAG AA               | Compliant               | ✅     |
+| Metric                 | Industry Standard | Actual Result        | Status |
+| ---------------------- | ----------------- | -------------------- | ------ |
+| **First Load**         | Within 2 seconds  | ~1 second (SSG)      | ✅     |
+| **Mobile Performance** | Lighthouse 80+    | 95+ (target)         | 🚧     |
+| **PWA Support**        | Installable       | Full offline support | ✅     |
+| **Accessibility**      | WCAG AA           | Compliant            | ✅     |
 
 **Conclusion**: Production-ready performance with focus on mobile users.
 
@@ -129,17 +130,20 @@ The design serves as a **complete user-facing event platform**, demonstrating mo
 ## Technical Architecture / 技術架構
 
 **Frontend Framework**:
+
 - Next.js 15 App Router for optimal performance
 - React 19 with Server Components
 - Static Site Generation (SSG) for event pages
 - Incremental Static Regeneration (ISR) for updates
 
 **Key Integrations**:
+
 - LINE LIFF SDK for authentication and social features
 - QR code generation library for tickets
 - Payment gateway API (integration planned)
 
 **Data Flow**:
+
 - Event data fetched from api-server
 - User profiles synced with LINE
 - Tickets stored in user session + email delivery
@@ -158,6 +162,7 @@ The design serves as a **complete user-facing event platform**, demonstrating mo
 - Environment variables: LINE LIFF ID, API endpoint
 
 **Features**:
+
 - Automatic deployments on git push
 - Preview deployments for PRs
 - Edge Functions for API routes
@@ -167,6 +172,7 @@ The design serves as a **complete user-facing event platform**, demonstrating mo
 ## Current Progress / 開發進度
 
 ### Completed ✅
+
 - Next.js 15 project setup with App Router
 - Event browsing and list pages
 - Event detail page with responsive design
@@ -174,12 +180,14 @@ The design serves as a **complete user-facing event platform**, demonstrating mo
 - Basic routing and navigation
 
 ### In Progress 🚧
+
 - LINE LIFF SDK integration
 - QR code ticket generation
 - Registration form and validation
 - User authentication flow
 
 ### Next Steps 📋
+
 - Complete LINE login integration
 - Implement ticket generation service
 - Connect with api-server for event data
