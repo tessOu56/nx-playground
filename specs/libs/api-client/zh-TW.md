@@ -1,7 +1,19 @@
 ---
 id: api-client
+name: API Client
 version: 0.0.1
-lastUpdated: '2025-10-24'
+description: Type-safe API client generated from OpenAPI specifications using Orval
+techStack:
+  - OpenAPI
+  - Orval
+  - React Query
+  - TypeScript
+features:
+  - OpenAPI integration
+  - Auto type generation
+  - React Query hooks
+  - Mock data support
+lastUpdated: '2025-01-24'
 category: data
 status: production
 published: true
