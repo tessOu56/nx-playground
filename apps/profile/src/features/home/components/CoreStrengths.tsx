@@ -100,30 +100,23 @@ export const CoreStrengths: FC = () => {
       aria-label='Tech Stack Showcase'
       data-header-dark='true'
     >
-      {/* Animated liquid gradient background */}
+      {/* Base dark gradient background */}
       <div
-        className='absolute inset-0 transition-all duration-1000 ease-out'
+        className='absolute inset-0'
         style={{
-          background: `
-            radial-gradient(circle at ${mousePosition.x}% ${mousePosition.y}%,
-              rgba(139, 92, 246, 0.3) 0%,
-              transparent 50%),
-            radial-gradient(circle at ${100 - mousePosition.x}% ${
-            100 - mousePosition.y
-          }%,
-              rgba(59, 130, 246, 0.3) 0%,
-              transparent 50%),
-            linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%)
-          `,
+          backgroundColor: '#1a1a2e',
+          backgroundImage: 'linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%)',
         }}
       />
+      
       {/* Flowing liquid orbs following mouse */}
       <div className='absolute inset-0 pointer-events-none' aria-hidden='true'>
         {/* Main liquid orb - follows mouse closely with purple glow */}
         <div
           className='absolute w-[600px] h-[600px] rounded-full blur-3xl transition-all duration-700 ease-out'
           style={{
-            background: 'radial-gradient(circle, rgba(139, 92, 246, 0.5) 0%, transparent 70%)',
+            background:
+              'radial-gradient(circle, rgba(139, 92, 246, 0.5) 0%, transparent 70%)',
             left: `${mousePosition.x}%`,
             top: `${mousePosition.y}%`,
             transform: 'translate(-50%, -50%)',
@@ -134,7 +127,8 @@ export const CoreStrengths: FC = () => {
         <div
           className='absolute w-[500px] h-[500px] rounded-full blur-3xl transition-all duration-1000 ease-out'
           style={{
-            background: 'radial-gradient(circle, rgba(59, 130, 246, 0.4) 0%, transparent 70%)',
+            background:
+              'radial-gradient(circle, rgba(59, 130, 246, 0.4) 0%, transparent 70%)',
             left: `${100 - mousePosition.x}%`,
             top: `${100 - mousePosition.y}%`,
             transform: 'translate(-50%, -50%)',
@@ -145,7 +139,8 @@ export const CoreStrengths: FC = () => {
         <div
           className='absolute w-[400px] h-[400px] rounded-full blur-3xl transition-all duration-1500 ease-out'
           style={{
-            background: 'radial-gradient(circle, rgba(34, 211, 238, 0.3) 0%, transparent 70%)',
+            background:
+              'radial-gradient(circle, rgba(34, 211, 238, 0.3) 0%, transparent 70%)',
             left: `${50 + (mousePosition.x - 50) * 0.5}%`,
             top: `${50 + (mousePosition.y - 50) * 0.5}%`,
             transform: 'translate(-50%, -50%)',
