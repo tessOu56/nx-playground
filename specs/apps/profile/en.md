@@ -19,10 +19,13 @@ purpose: |
 highlights:
   - Complete project lifecycle management (Spec → Code → Production)
   - AI-powered knowledge assistant with conversation persistence
-  - Performance optimized (PWA, Code splitting, Lighthouse target 90+)
-  - Notion-inspired clean design system
-  - Multi-language support (en, zh-TW)
-  - Mobile-first responsive design
+  - Performance optimized (PWA, Code splitting, Lighthouse 90+ achieved)
+  - Adaptive UI (auto dark/light header, liquid tech stack background)
+  - Multi-language with fallback mechanism (en, zh-TW)
+  - Mobile-first responsive with scroll-snap sections
+  - Notion-inspired clean project detail pages
+  - Comprehensive i18n (all pages, all components)
+  - Scroll-to-top UX enhancement
 
 # Project Management Metrics
 stats:
