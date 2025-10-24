@@ -21,13 +21,14 @@ async function fetchReadme(
   id: string,
   locale: SupportedLocale
 ): Promise<string | null> {
-  // Always use English version (only en maintained)
-  const url = `/${type}/${id}/README.md`;
+  // Use locale-specific version
+  const fileName = locale === 'zh-TW' ? 'README.zh-TW.md' : 'README.md';
+  const url = `/${type}/${id}/${fileName}`;
 
   try {
     const response = await fetch(url);
     if (!response.ok) {
-      console.warn(`README not found for ${type}/${id}`);
+      console.warn(`README not found for ${type}/${id} (${locale})`);
       return null;
     }
     return await response.text();
