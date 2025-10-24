@@ -21,14 +21,25 @@ async function fetchReadme(
   id: string,
   locale: SupportedLocale
 ): Promise<string | null> {
-  // Use locale-specific version
+  // Try locale-specific version first, fallback to English
   const fileName = locale === 'zh-TW' ? 'README.zh-TW.md' : 'README.md';
   const url = `/${type}/${id}/${fileName}`;
 
   try {
     const response = await fetch(url);
     if (!response.ok) {
-      console.warn(`README not found for ${type}/${id} (${locale})`);
+      // If zh-TW not found, fallback to English
+      if (locale === 'zh-TW') {
+        console.warn(`README.zh-TW.md not found for ${type}/${id}, falling back to README.md`);
+        const fallbackUrl = `/${type}/${id}/README.md`;
+        const fallbackResponse = await fetch(fallbackUrl);
+        if (!fallbackResponse.ok) {
+          console.warn(`README not found for ${type}/${id}`);
+          return null;
+        }
+        return await fallbackResponse.text();
+      }
+      console.warn(`README not found for ${type}/${id}`);
       return null;
     }
     return await response.text();
@@ -112,7 +123,6 @@ export async function loadLibReadme(
 export async function loadAllAppsReadmes(
   locale: SupportedLocale = 'en'
 ): Promise<ProjectReadme[]> {
-
   const readmes: ProjectReadme[] = [];
 
   for (const appId of APP_IDS) {
@@ -135,7 +145,6 @@ export async function loadAllAppsReadmes(
 export async function loadAllLibsReadmes(
   locale: SupportedLocale = 'en'
 ): Promise<ProjectReadme[]> {
-
   const readmes: ProjectReadme[] = [];
 
   for (const libId of LIB_IDS) {
