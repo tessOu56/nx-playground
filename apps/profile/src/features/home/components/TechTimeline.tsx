@@ -5,6 +5,8 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { loadAllBlogs } from '../../../lib/blogLoader';
 import type { SupportedLocale } from '../../../lib/i18n/LocaleRouter';
 import { useLocalizedNavigation } from '../../../lib/i18n/useLocalizedNavigation';
+import { useHomeTranslation } from '../hooks/useHomeTranslation';
+import '../i18n';
 import './TechTimeline.css';
 
 interface TimelineItem {
@@ -20,6 +22,7 @@ export const TechTimeline: FC = () => {
   const currentLocale = (locale ?? 'en') as SupportedLocale;
   const navigate = useNavigate();
   const { getLocalizedPath } = useLocalizedNavigation();
+  const { t } = useHomeTranslation();
 
   const [featured, setFeatured] = useState<TimelineItem[]>([]);
   const [others, setOthers] = useState<TimelineItem[]>([]);
@@ -70,7 +73,7 @@ export const TechTimeline: FC = () => {
       <section className='py-16 bg-white dark:bg-gray-800'>
         <div className='container mx-auto px-4'>
           <p className='text-center text-gray-600 dark:text-gray-400'>
-            Loading timeline...
+            {String(t('timeline.loading'))}
           </p>
         </div>
       </section>
@@ -234,7 +237,7 @@ export const TechTimeline: FC = () => {
           
           <div className='relative container mx-auto px-4 sm:px-6' style={{ zIndex: 1 }}>
             <h2 className='text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-6 sm:mb-8 md:mb-12 text-center'>
-              Earlier Years
+              {String(t('timeline.earlierYears'))}
             </h2>
             
             {/* Timeline Layout: Vertical on mobile, Grid on desktop */}

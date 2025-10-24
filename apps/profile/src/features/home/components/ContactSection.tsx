@@ -1,6 +1,8 @@
 import { type FC, useState, useEffect } from 'react';
 
 import { homeConfig } from '../data/homeConfig';
+import { useHomeTranslation } from '../hooks/useHomeTranslation';
+import '../i18n';
 import './ContactSection.css';
 
 interface Snowflake {
@@ -11,6 +13,7 @@ interface Snowflake {
 }
 
 export const ContactSection: FC = () => {
+  const { t } = useHomeTranslation();
   const [snowflakes, setSnowflakes] = useState<Snowflake[]>([]);
 
   useEffect(() => {
@@ -48,10 +51,10 @@ export const ContactSection: FC = () => {
       {/* Content */}
       <div className='relative z-10 text-center px-4 sm:px-6 max-w-2xl mx-auto'>
         <h2 className='text-3xl sm:text-4xl md:text-5xl lg:text-7xl font-bold text-white mb-6 sm:mb-8 drop-shadow-2xl'>
-          Get In Touch
+          {String(t('contact.title'))}
         </h2>
         <p className='text-base sm:text-lg md:text-xl lg:text-2xl text-white/90 mb-8 sm:mb-12 drop-shadow-lg'>
-          Have a project in mind? Let's work together.
+          {String(t('contact.subtitle'))}
         </p>
 
         {/* Email Button */}
@@ -73,7 +76,7 @@ export const ContactSection: FC = () => {
               d='M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z'
             />
           </svg>
-          <span>Send Email</span>
+          <span>{String(t('contact.sendEmail'))}</span>
         </a>
 
         <p className='mt-6 sm:mt-8 text-white/80 text-sm sm:text-base md:text-lg drop-shadow'>
