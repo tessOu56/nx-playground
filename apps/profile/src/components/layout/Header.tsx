@@ -37,15 +37,6 @@ export function Header({ scrollProgress }: HeaderProps) {
     return pathWithoutLocale.startsWith(path);
   };
 
-  // Check if we're on home page
-  const isHomePage = isActive('/');
-
-  // Reset header to light mode when changing pages (except home page)
-  useEffect(() => {
-    if (!isHomePage) {
-      setHeaderDark(false);
-    }
-  }, [location.pathname, isHomePage]);
 
   // Adaptive header theme using optimized intersection observer
   useEffect(() => {
