@@ -34,7 +34,10 @@ function markdownLoaderPlugin(): Plugin {
             res.end(content);
             return;
           } catch (error) {
-            // File not found, continue
+            // File not found, return 404
+            res.statusCode = 404;
+            res.end('Not Found');
+            return;
           }
         }
 
@@ -51,7 +54,10 @@ function markdownLoaderPlugin(): Plugin {
             res.end(content);
             return;
           } catch (error) {
-            // File not found, continue
+            // File not found, return 404
+            res.statusCode = 404;
+            res.end('Not Found');
+            return;
           }
         }
 
