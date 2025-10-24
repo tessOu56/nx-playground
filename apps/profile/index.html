@@ -6,11 +6,20 @@
     <base href="/" />
 
     <!-- Viewport and Performance -->
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
     <meta name="theme-color" content="#8b5cf6" />
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#ffffff" />
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#1f2937" />
     
     <!-- Default Meta (will be overridden by react-helmet-async) -->
     <meta name="description" content="Full-Stack Developer Portfolio - React, TypeScript, Nx Monorepo" />
+    <meta name="author" content="Tess" />
+    <meta name="keywords" content="Full-Stack Developer, React, TypeScript, Nx, Portfolio, Web Development" />
+    
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Tess - Full-Stack Developer Portfolio" />
+    <meta property="og:description" content="Full-Stack Developer Portfolio - React, TypeScript, Nx Monorepo" />
     
     <!-- Favicon -->
     <link rel="icon" type="image/x-icon" href="/favicon.ico" />
@@ -21,14 +30,45 @@
     <!-- Apple Touch Icon -->
     <link rel="apple-touch-icon" href="/favicon.ico" />
     
+    <!-- Apple Mobile Web App -->
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="Tess Portfolio" />
+    
     <!-- Preconnect to external domains -->
     <link rel="preconnect" href="https://picsum.photos" crossorigin />
     
     <!-- DNS Prefetch -->
     <link rel="dns-prefetch" href="https://picsum.photos" />
+    
+    <!-- Preload critical fonts -->
+    <link rel="preload" href="/fonts/system-ui.woff2" as="font" type="font/woff2" crossorigin />
+    
+    <!-- Font optimization -->
+    <style>
+      /* System font stack for instant rendering */
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+          'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+          sans-serif;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+      }
+      
+      /* Prevent layout shift on load */
+      #root {
+        min-height: 100vh;
+      }
+    </style>
   </head>
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
+    <noscript>
+      <div style="padding: 2rem; text-align: center;">
+        <h1>JavaScript Required</h1>
+        <p>This application requires JavaScript to be enabled in your browser.</p>
+      </div>
+    </noscript>
   </body>
 </html>
