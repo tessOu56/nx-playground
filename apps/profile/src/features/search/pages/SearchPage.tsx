@@ -9,6 +9,7 @@ import { techStack } from '@nx-playground/tech-stack-data';
 import { type FC, useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 
+import { LoadingSpinner } from '../../../components/LoadingSpinner';
 import { SEO } from '../../../components/SEO';
 import { loadAllBlogMetadata } from '../../../lib/blogLoader';
 import { loadAllApps, loadAllLibs } from '../../../lib/projectLoader';
@@ -163,19 +164,16 @@ export const SearchPage: FC = () => {
           <div className='max-w-4xl mx-auto'>
             {/* Messages Area */}
             <div className='min-h-[70vh]'>
-              {messages.length === 0 ? (
+              {!searchIndex ? (
+                <LoadingSpinner size='lg' color='white' text='Loading knowledge base...' />
+              ) : messages.length === 0 ? (
                 <ExampleQueries onQueryClick={handleSendMessage} />
               ) : (
                 <div className='space-y-4'>
                   {messages.map(message => (
                     <ChatMessage key={message.id} message={message} />
                   ))}
-                  {isLoading && (
-                    <div className='flex items-center gap-2 text-gray-300'>
-                      <div className='animate-spin rounded-full h-4 w-4 border-b-2 border-purple-400' />
-                      <span>Thinking...</span>
-                    </div>
-                  )}
+                  {isLoading && <LoadingSpinner size='sm' color='white' text='Thinking...' />}
                 </div>
               )}
             </div>
