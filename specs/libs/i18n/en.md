@@ -1,5 +1,5 @@
 ---
-id: i18n
+id: 03-i18n
 name: Internationalization
 version: 0.0.1
 description: i18next-based internationalization solution with feature-level translations
@@ -14,70 +14,157 @@ features:
   - SSR support
   - Type-safe keys
   - Dynamic loading
-lastUpdated: '2025-01-24'
-category: utils
 status: production
+category: utils
 published: true
-
-shortDesc: |
-  i18next-based internationalization solution with feature-level translations.
-  Enables multi-language support across React applications.
-
-purpose: |
-  Provide scalable i18n architecture for monorepo applications.
-  Demonstrates translation management, lazy loading strategies,
-  and feature-based organization patterns.
-
-highlights:
-  - Feature-level translation namespaces
-  - Lazy loading for performance
-  - TypeScript type-safe translations
-  - Locale detection and switching
-  - Shared + feature-specific translations
-  - React hooks integration
-
-stats:
-  languages: 2
-  namespaces: 15
-  translations: 200
-
-useCases:
-  - Multi-language React applications
-  - Feature-based translation organization
-  - Scalable i18n architecture demonstration
-  - Type-safe translation workflow
-
-targetAudience: |
-  International application developers and teams implementing
-  scalable translation systems for large applications.
-
-reviewer: tessou
-reviewedAt: '2025-10-24'
-nextReview: '2025-12-24'
-updateFrequency: per-feature
-draftStatus: false
-approvalStatus: approved
-
-lastSync: '2025-10-24'
+lastUpdated: '2025-01-24'
 ---
 
-# I18n - Feature-Based Internationalization
+# Internationalization – 國際化函式庫
 
-Scalable i18n solution built with i18next, supporting feature-level namespaces and lazy loading for optimal performance.
+(i18next-based Multi-language Solution)
 
-## Architecture
+## Overview / 概念與定位
 
-- i18next core + React integration
-- Feature-level namespaces
-- Lazy loading translations
-- TypeScript utilities for type safety
+This is a **centralized internationalization library** enabling multi-language support across all applications with feature-level translation management.
 
-## Supported Languages
+Unlike basic translation files, this library offers:
+- Feature-based namespace organization for scalability
+- Automatic language detection and fallback
+- Type-safe translation keys with IntelliSense
+- Server-side rendering (SSR) support for Next.js
+- Dynamic translation loading for performance
 
-- English (en)
+The library serves as the **i18n foundation** for the entire monorepo, demonstrating scalable translation architecture.
+
+---
+
+## Core Capabilities / 核心能力
+
+### 1. Feature-Based Translation Organization
+
+- Translations organized by feature/module, not globally
+- Namespace isolation preventing key conflicts
+- Lazy loading of feature translations
+- Easy to maintain and scale
+- Clear ownership of translation files
+
+**Key Value**: Scalable i18n architecture that grows with the application without becoming unwieldy.
+
+---
+
+### 2. Automatic Language Management
+
+- Browser language detection
+- User preference persistence
+- Fallback to default language if translation missing
+- Dynamic language switching without reload
+- Locale-specific date, number, currency formatting
+
+**Key Value**: Seamless multi-language experience with intelligent fallbacks.
+
+---
+
+### 3. Developer Experience
+
+- Type-safe translation keys with TypeScript
+- IntelliSense autocomplete for all keys
+- Missing translation warnings in development
+- Hot reload for translation updates
+- CLI tools for translation management
+
+**Key Value**: Prevents translation errors and improves development speed.
+
+---
+
+## Technical Highlights / 技術亮點
+
+| Aspect                  | Description                                               |
+| ----------------------- | --------------------------------------------------------- |
+| **i18next**             | Industry-standard i18n framework with rich ecosystem      |
+| **Type Safety**         | Generated TypeScript types for all translation keys       |
+| **SSR Support**         | next-intl for Next.js server-side rendering               |
+| **Performance**         | Dynamic loading reduces initial bundle size               |
+
+**Result**: Robust i18n system handling complex translation scenarios.
+
+---
+
+## Usage Scope / 使用範圍
+
+**Applications Using This Library**:
+- Profile (en, zh-TW)
+- Event-Portal (en, zh-TW) with next-intl
+- Event-CMS (en, zh-TW)
+- Auth (en, zh-TW)
+
+**Supported Languages**:
+- English (en) - Default
 - Traditional Chinese (zh-TW)
+- Expandable to more languages
 
-## Value
+---
 
-Demonstrates modern i18n architecture patterns for large-scale applications with hundreds of translation keys.
+## API & Integration / 整合方式
 
+**React Usage**:
+```tsx
+import { useTranslation } from '@nx-playground/i18n';
+
+function MyComponent() {
+  const { t } = useTranslation('featureName');
+  
+  return <h1>{t('welcome.title')}</h1>;
+}
+```
+
+**Next.js Usage**:
+```tsx
+import { useTranslations } from 'next-intl';
+
+function Page() {
+  const t = useTranslations('featureName');
+  
+  return <h1>{t('welcome.title')}</h1>;
+}
+```
+
+**Key Exports**:
+- `createFeatureI18n()` - Feature translation factory
+- Translation hooks with type safety
+- Language switching utilities
+
+---
+
+## Quality Standards / 品質標準
+
+**Translation Quality**:
+- Native speaker reviews for zh-TW
+- Consistent terminology across features
+- Context-aware translations
+
+**Testing**:
+- Missing translation detection
+- Placeholder validation
+- Language switching tests
+
+**Maintenance**:
+- Regular translation audits
+- Deprecated key cleanup
+- Documentation for translators
+
+---
+
+## License / 授權
+
+MIT (Open for use and modification)
+
+---
+
+## Additional Documentation / 補充文件
+
+- `specs/libs/i18n/en.md` - English specification (this file)
+- `specs/libs/i18n/zh-TW.md` - Traditional Chinese specification
+- `libs/i18n/README.md` - Developer documentation
+
+Note: Translation file structure and usage guidelines can be found in the README.md.

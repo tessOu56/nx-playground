@@ -1,5 +1,5 @@
 ---
-id: design-system
+id: 02-design-system
 name: Design System
 version: 0.1.0
 description: Design tokens and theming system with Style Dictionary integration
@@ -14,72 +14,152 @@ features:
   - CSS variables
   - Tailwind integration
   - Token visualization
-lastUpdated: '2025-01-24'
-category: ui
 status: production
+category: ui
 published: true
-
-shortDesc: |
-  Design tokens and theming system with Style Dictionary integration.
-  Provides consistent design language across all applications.
-
-purpose: |
-  Centralized design token management demonstrating design system architecture,
-  token transformation pipelines, and cross-platform design consistency.
-
-highlights:
-  - Style Dictionary for token transformation
-  - Multi-platform output (CSS, JS, JSON)
-  - Semantic color system
-  - Typography scale and spacing
-  - Dark mode support
-  - Automated token generation
-
-stats:
-  tokens: 100
-  platforms: 3
-  themes: 2
-
-useCases:
-  - Design consistency across React, Angular, Vue apps
-  - Design system as code approach
-  - Token-based theming demonstration
-  - Multi-platform design token distribution
-
-targetAudience: |
-  Design systems engineers, frontend architects, and teams implementing
-  scalable design token systems across multiple platforms.
-
-reviewer: tessou
-reviewedAt: '2025-10-24'
-nextReview: '2025-12-24'
-updateFrequency: monthly
-draftStatus: false
-approvalStatus: approved
-
-lastSync: '2025-10-24'
+lastUpdated: '2025-01-24'
 ---
 
-# Design System - Token-Based Design Language
+# Design System – 設計系統
 
-Design token system powering consistent UI across the entire monorepo, built with Style Dictionary.
+(Design Tokens and Theming Foundation)
 
-## Architecture
+## Overview / 概念與定位
+
+This is a **centralized design token system** that ensures visual consistency across all applications in the monorepo.
+
+Unlike hardcoded design values, this system offers:
+- Single source of truth for all design decisions (colors, spacing, typography)
+- Platform-agnostic tokens transformable to any format
+- Multiple theme support (light, dark, custom)
+- Automatic synchronization across apps
+- Visual token browser for designers and developers
+
+The system serves as the **design foundation** for the entire platform, demonstrating systematic design thinking and scalability.
+
+---
+
+## Core Capabilities / 核心能力
+
+### 1. Design Token Management
+
+- Centralized token definitions (colors, spacing, typography, shadows)
+- Semantic naming system (primary, secondary, surface, etc.)
+- Token aliasing and references
+- Automatic validation and type checking
+- Version control for design changes
+
+**Key Value**: One change updates all applications instantly, ensuring design consistency.
+
+---
+
+### 2. Multi-Theme Support
+
+- Light and dark themes out of the box
+- Custom theme creation with token overrides
+- Theme switching without page reload
+- Per-component theme customization
+- Theme preview tool
+
+**Key Value**: Flexible theming system supporting diverse brand requirements.
+
+---
+
+### 3. Cross-Platform Token Transform
 
 - Style Dictionary for token transformation
-- Source tokens in JSON
-- Output to CSS variables, Tailwind config, TypeScript
-- Automated build pipeline
+- CSS variables for web applications
+- Tailwind configuration generation
+- TypeScript type definitions
+- JSON exports for design tools
 
-## Token Categories
+**Key Value**: Design tokens usable across any platform or framework.
 
-- Colors (semantic + primitive)
-- Typography (scale, weights, line heights)
-- Spacing (consistent 8px grid)
-- Shadows and effects
-- Border radius and borders
+---
 
-## Value
+## Technical Highlights / 技術亮點
 
-Demonstrates modern design system architecture and token management strategies used by companies like Shopify, Atlassian, and Adobe.
+| Aspect                  | Description                                               |
+| ----------------------- | --------------------------------------------------------- |
+| **Style Dictionary**    | Industry-standard token transformation pipeline           |
+| **CSS Variables**       | Runtime theme switching without rebuild                   |
+| **Tailwind Integration** | Auto-generated config from design tokens                 |
+| **Type Safety**         | TypeScript definitions for all tokens                     |
 
+**Result**: Scalable design system supporting multiple apps and themes.
+
+---
+
+## Usage Scope / 使用範圍
+
+**Applications Using This Library**:
+- All React apps (Profile, Event-CMS, Event-Portal, Auth)
+- Tailwind config shared across projects
+- CSS variables available globally
+
+**Key Use Cases**:
+- Consistent color palette across apps
+- Standardized spacing and sizing
+- Typography system
+- Shadow and border radius standards
+
+---
+
+## API & Integration / 整合方式
+
+**Token Usage in CSS**:
+```css
+.card {
+  background: var(--color-surface);
+  padding: var(--spacing-4);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+}
+```
+
+**Token Usage in Tailwind**:
+```tsx
+<div className="bg-surface p-4 rounded-md shadow-sm">
+  Content
+</div>
+```
+
+**Key Exports**:
+- CSS variables in `tokens.css`
+- Tailwind config in `tailwind.config.js`
+- TypeScript types in `tokens.ts`
+
+---
+
+## Quality Standards / 品質標準
+
+**Validation**:
+- Automatic token validation in build
+- Type checking for token references
+- No orphaned or undefined tokens
+
+**Documentation**:
+- Visual token browser
+- Usage guidelines
+- Migration guides for updates
+
+**Maintenance**:
+- Semantic versioning for breaking changes
+- Changelog for all token updates
+- Automated tests for token generation
+
+---
+
+## License / 授權
+
+MIT (Open for use and modification)
+
+---
+
+## Additional Documentation / 補充文件
+
+- `specs/libs/design-system/en.md` - English specification (this file)
+- `specs/libs/design-system/zh-TW.md` - Traditional Chinese specification
+- `libs/design-system/README.md` - Developer documentation
+
+Note: Token definitions and transformation setup can be found in the README.md.
