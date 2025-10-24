@@ -1,6 +1,6 @@
-import { type FC, useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
 import { techStack } from '@nx-playground/tech-stack-data';
+import { type FC, useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import { useLocalizedNavigation } from '../../../lib/i18n/useLocalizedNavigation';
 import './CoreStrengths.css';
@@ -10,6 +10,7 @@ export const CoreStrengths: FC = () => {
   const { getLocalizedPath } = useLocalizedNavigation();
   const [hoveredRow, setHoveredRow] = useState<number | null>(null);
   const [scrollY, setScrollY] = useState(0);
+  const [mousePosition, setMousePosition] = useState({ x: 50, y: 50 }); // Percentage
 
   // Track scroll for parallax effect
   useEffect(() => {
@@ -19,6 +20,18 @@ export const CoreStrengths: FC = () => {
 
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  // Track mouse position for liquid flow effect
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      const x = (e.clientX / window.innerWidth) * 100;
+      const y = (e.clientY / window.innerHeight) * 100;
+      setMousePosition({ x, y });
+    };
+
+    window.addEventListener('mousemove', handleMouseMove, { passive: true });
+    return () => window.removeEventListener('mousemove', handleMouseMove);
   }, []);
   // Categorize tech stack
   const frontendTech = techStack.filter(
@@ -84,74 +97,76 @@ export const CoreStrengths: FC = () => {
   return (
     <section
       className='relative h-screen flex flex-col justify-center overflow-hidden'
-      role='region'
       aria-label='Tech Stack Showcase'
       data-header-dark='true'
-      style={{
-        background: 'linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%)',
-        backgroundAttachment: 'fixed',
-      }}
     >
-      {/* Dynamic Parallax Background Layers */}
+      {/* Animated liquid gradient background */}
+      <div
+        className='absolute inset-0 transition-all duration-1000 ease-out'
+        style={{
+          background: `
+            radial-gradient(circle at ${mousePosition.x}% ${mousePosition.y}%,
+              rgba(139, 92, 246, 0.3) 0%,
+              transparent 50%),
+            radial-gradient(circle at ${100 - mousePosition.x}% ${
+            100 - mousePosition.y
+          }%,
+              rgba(59, 130, 246, 0.3) 0%,
+              transparent 50%),
+            linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%)
+          `,
+        }}
+      />
+      {/* Flowing liquid orbs following mouse */}
       <div className='absolute inset-0 pointer-events-none' aria-hidden='true'>
-        {/* Frontend row background - Blue */}
+        {/* Main liquid orb - follows mouse closely with purple glow */}
         <div
-          className='absolute w-96 h-96 bg-blue-500/10 rounded-full blur-3xl transition-all duration-1000'
+          className='absolute w-[600px] h-[600px] rounded-full blur-3xl transition-all duration-700 ease-out'
           style={{
-            top: '15%',
-            left: '10%',
-            transform: `translateY(${scrollY * 0.2}px) translateX(${
-              hoveredRow === 0 ? '20px' : '0px'
-            })`,
-            opacity: hoveredRow === 0 ? 0.3 : 0.1,
+            background: 'radial-gradient(circle, rgba(139, 92, 246, 0.5) 0%, transparent 70%)',
+            left: `${mousePosition.x}%`,
+            top: `${mousePosition.y}%`,
+            transform: 'translate(-50%, -50%)',
           }}
         />
 
-        {/* Backend row background - Green */}
+        {/* Secondary orb - inverse position with blue glow */}
         <div
-          className='absolute w-96 h-96 bg-green-500/10 rounded-full blur-3xl transition-all duration-1000'
+          className='absolute w-[500px] h-[500px] rounded-full blur-3xl transition-all duration-1000 ease-out'
           style={{
-            top: '50%',
-            right: '10%',
-            transform: `translateY(${scrollY * 0.3}px) translateX(${
-              hoveredRow === 1 ? '-20px' : '0px'
-            })`,
-            opacity: hoveredRow === 1 ? 0.3 : 0.1,
+            background: 'radial-gradient(circle, rgba(59, 130, 246, 0.4) 0%, transparent 70%)',
+            left: `${100 - mousePosition.x}%`,
+            top: `${100 - mousePosition.y}%`,
+            transform: 'translate(-50%, -50%)',
           }}
         />
 
-        {/* DevOps row background - Purple */}
+        {/* Tertiary orb - delayed center follow with cyan */}
         <div
-          className='absolute w-80 h-80 bg-purple-500/10 rounded-full blur-3xl transition-all duration-1000'
+          className='absolute w-[400px] h-[400px] rounded-full blur-3xl transition-all duration-1500 ease-out'
           style={{
-            bottom: '15%',
-            left: '30%',
-            transform: `translateY(${scrollY * 0.15}px) translateX(${
-              hoveredRow === 2 ? '20px' : '0px'
-            })`,
-            opacity: hoveredRow === 2 ? 0.3 : 0.1,
+            background: 'radial-gradient(circle, rgba(34, 211, 238, 0.3) 0%, transparent 70%)',
+            left: `${50 + (mousePosition.x - 50) * 0.5}%`,
+            top: `${50 + (mousePosition.y - 50) * 0.5}%`,
+            transform: 'translate(-50%, -50%)',
           }}
         />
 
-        {/* Additional floating elements */}
+        {/* Ambient floating orbs with scroll animation */}
         <div
-          className='absolute w-64 h-64 bg-cyan-500/5 rounded-full blur-2xl transition-all duration-2000'
+          className='absolute w-80 h-80 bg-pink-400/15 rounded-full blur-3xl transition-all duration-2000'
           style={{
-            top: '25%',
-            right: '30%',
-            transform: `translateY(${scrollY * 0.1}px) rotate(${
-              scrollY * 0.05
-            }deg)`,
+            top: `${30 + Math.sin(scrollY * 0.01) * 15}%`,
+            left: `${20 + Math.cos(scrollY * 0.01) * 15}%`,
+            transform: `scale(${1 + Math.sin(scrollY * 0.005) * 0.3})`,
           }}
         />
         <div
-          className='absolute w-48 h-48 bg-pink-500/5 rounded-full blur-2xl transition-all duration-2000'
+          className='absolute w-72 h-72 bg-indigo-400/15 rounded-full blur-3xl transition-all duration-2000'
           style={{
-            bottom: '25%',
-            right: '20%',
-            transform: `translateY(${scrollY * 0.25}px) rotate(${
-              -scrollY * 0.03
-            }deg)`,
+            bottom: `${25 + Math.sin(scrollY * 0.008) * 15}%`,
+            right: `${15 + Math.cos(scrollY * 0.008) * 15}%`,
+            transform: `scale(${1 + Math.cos(scrollY * 0.006) * 0.3})`,
           }}
         />
       </div>
