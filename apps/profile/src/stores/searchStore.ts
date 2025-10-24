@@ -65,15 +65,35 @@ export const useSearchStore = create<SearchState>()(
             hasSearchHistory: true,
           });
         } else {
-          // Add to existing session
-          set({
-            conversationSessions: state.conversationSessions.map(session =>
-              session.sessionId === sessionId
-                ? { ...session, messages: [...session.messages, message] }
-                : session
-            ),
-            hasSearchHistory: true,
-          });
+          // Check if session exists in array
+          const sessionExists = state.conversationSessions.some(
+            s => s.sessionId === sessionId
+          );
+          
+          if (sessionExists) {
+            // Add to existing session
+            set({
+              conversationSessions: state.conversationSessions.map(session =>
+                session.sessionId === sessionId
+                  ? { ...session, messages: [...session.messages, message] }
+                  : session
+              ),
+              hasSearchHistory: true,
+            });
+          } else {
+            // Session ID exists but session not in array - create new session
+            set({
+              conversationSessions: [
+                ...state.conversationSessions,
+                {
+                  sessionId,
+                  timestamp: new Date(),
+                  messages: [message],
+                },
+              ],
+              hasSearchHistory: true,
+            });
+          }
         }
       },
       
