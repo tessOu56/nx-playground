@@ -28,5 +28,11 @@
     "ui": "UI 與設計",
     "data": "資料與狀態",
     "utils": "工具與輔助"
+  },
+  "progress": {
+    "title": "開發進度",
+    "productionReady": "已上線",
+    "inDevelopment": "開發中",
+    "stableLibs": "穩定函式庫"
   }
 }

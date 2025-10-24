@@ -46,25 +46,78 @@ lastSync: '2025-10-24'
 
 RESTful API server powering event management platform with auto-generated OpenAPI documentation.
 
-## Current Status
-- Completion: 80%
-- Authentication: Pending
-- Production: Development only
-
 ## Technical Stack
 - NestJS 10
 - Prisma ORM
-- PostgreSQL
+- PostgreSQL / SQLite
 - OpenAPI/Swagger
+- TypeScript
+- Jest for testing
 
 ## API Endpoints
 - Events API (CRUD)
 - Users API (CRUD)
 - OpenAPI docs at /api/docs
+- Health check endpoint
 
-## Roadmap
-- Implement JWT authentication
-- Add RBAC (Role-Based Access Control)
-- File upload service
-- Rate limiting
-- Production deployment
+---
+
+## Progress & Roadmap
+
+### Current Status
+- **Version**: 0.1.0
+- **Completion**: 80%
+- **Stage**: Functional (Development)
+- **Last Updated**: 2025-01-24
+
+### Completed Features
+- ✅ NestJS 10 project setup
+- ✅ Prisma ORM with PostgreSQL/SQLite
+- ✅ Events API (full CRUD)
+- ✅ Users API (full CRUD)
+- ✅ OpenAPI/Swagger documentation
+- ✅ Code-first API design
+- ✅ DTO validation with class-validator
+- ✅ Database migrations
+- ✅ Seed data scripts
+- ✅ Auto-generate OpenAPI for frontend
+
+### In Progress
+- 🚧 JWT authentication guards
+- 🚧 RBAC (Role-Based Access Control)
+- 🚧 Testing coverage
+
+### Next Steps (Roadmap)
+
+**P0 - Critical** (2-3 weeks):
+- [ ] Implement JWT authentication guards
+- [ ] Add RBAC for protected endpoints
+- [ ] File upload service (images for events)
+- [ ] Testing (unit + integration, target 70%+)
+
+**P1 - High** (1 month):
+- [ ] Rate limiting middleware
+- [ ] Request logging
+- [ ] Error tracking (Sentry)
+- [ ] API versioning strategy
+
+**P2 - Medium**:
+- [ ] Caching layer (Redis)
+- [ ] Database query optimization
+- [ ] API performance monitoring
+- [ ] Documentation improvements
+
+### Technical Debt
+- Authentication guards not implemented
+- Authorization logic missing
+- Test coverage < 20% (target 70%+)
+- Production database not configured
+- Error handling needs standardization
+
+### Dependencies
+- Requires: PostgreSQL for production
+- Requires: Redis for caching (future)
+- Requires: File storage service (future)
+
+### Changelog
+See `apps/api-server/CHANGELOG.md` (to be created)

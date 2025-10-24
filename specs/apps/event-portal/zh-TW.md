@@ -46,21 +46,69 @@ lastSync: '2025-10-24'
 
 基於 Next.js 的活動瀏覽與報名平台，整合 LINE LIFF。
 
-## 當前狀態
-- 完成度：70%
-- LINE LIFF：已配置，測試中
-- 生產環境：尚未部署
-
 ## 技術棧
 - Next.js 15（App Router）
 - React 19
 - LINE LIFF SDK
 - next-intl 國際化
+- Tailwind CSS
+- TypeScript
 
-## 路線圖
-- 完成與 api-server 整合
-- 實作報名流程
-- QR code 票券生成
-- LINE LIFF 完整整合
-- 部署至生產環境
+---
+
+## 進度與規劃
+
+### 目前狀態
+- **版本**: 0.0.1
+- **完成度**: 70%
+- **階段**: 開發中
+- **最後更新**: 2025-01-24
+
+### 已完成功能
+- ✅ Next.js 15 App Router 設定
+- ✅ 活動瀏覽 UI（列表與詳情頁）
+- ✅ LINE LIFF SDK 配置
+- ✅ 多語言支援（next-intl）
+- ✅ 響應式設計
+- ✅ 活動卡片元件
+- ✅ 靜態網站生成（SSG）
+
+### 進行中
+- 🚧 與活動 API server 整合
+- 🚧 報名流程實作
+- 🚧 LINE LIFF 認證測試
+
+### 下一步（Roadmap）
+
+**P0 - 關鍵** (2-3 週):
+- [ ] 完成與 api-server 的 API 整合
+- [ ] 實作活動報名流程
+- [ ] LINE LIFF 完整認證整合
+- [ ] QR code 票券生成系統
+
+**P1 - 高優先** (1 個月):
+- [ ] 支付流程（Stripe/TapPay 整合）
+- [ ] 使用者儀表板（我的活動、票券）
+- [ ] Email 通知
+- [ ] 測試（Playwright E2E）
+
+**P2 - 中優先**:
+- [ ] 活動搜尋與篩選
+- [ ] 活動推薦
+- [ ] 社群分享
+- [ ] Analytics 整合
+
+### 技術債務
+- API client 需要完整整合
+- 認證流程尚未完成
+- 測試覆蓋率：0%（目標 60%+）
+- 生產環境部署待處理
+
+### 相依性
+- 需要：`api-server` 提供活動 endpoints
+- 需要：LINE LIFF 測試帳號
+- 需要：金流閘道設定
+
+### Changelog
+正式發布後開始追蹤版本歷史
 

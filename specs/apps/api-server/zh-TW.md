@@ -45,26 +45,79 @@ lastSync: '2025-10-24'
 
 為活動管理平台提供 RESTful API，具備自動生成的 OpenAPI 文檔。
 
-## 當前狀態
-- 完成度：80%
-- 認證系統：待實作
-- 生產環境：僅開發環境
-
 ## 技術棧
 - NestJS 10
 - Prisma ORM
-- PostgreSQL
+- PostgreSQL / SQLite
 - OpenAPI/Swagger
+- TypeScript
+- Jest 測試
 
 ## API Endpoints
 - Events API（CRUD）
 - Users API（CRUD）
 - OpenAPI 文檔於 /api/docs
+- Health check endpoint
 
-## 路線圖
-- 實作 JWT 認證
-- 新增 RBAC（角色權限控制）
-- 檔案上傳服務
-- Rate limiting
-- 生產環境部署
+---
+
+## 進度與規劃
+
+### 目前狀態
+- **版本**: 0.1.0
+- **完成度**: 80%
+- **階段**: 功能可用（開發中）
+- **最後更新**: 2025-01-24
+
+### 已完成功能
+- ✅ NestJS 10 專案設定
+- ✅ Prisma ORM 整合 PostgreSQL/SQLite
+- ✅ Events API（完整 CRUD）
+- ✅ Users API（完整 CRUD）
+- ✅ OpenAPI/Swagger 文檔
+- ✅ Code-first API 設計
+- ✅ DTO 驗證（class-validator）
+- ✅ 資料庫遷移
+- ✅ Seed data 腳本
+- ✅ 自動生成 OpenAPI 供前端使用
+
+### 進行中
+- 🚧 JWT 認證 guards
+- 🚧 RBAC（角色權限控制）
+- 🚧 測試覆蓋率提升
+
+### 下一步（Roadmap）
+
+**P0 - 關鍵** (2-3 週):
+- [ ] 實作 JWT 認證 guards
+- [ ] 新增 RBAC 保護端點
+- [ ] 檔案上傳服務（活動圖片）
+- [ ] 測試（單元 + 整合，目標 70%+）
+
+**P1 - 高優先** (1 個月):
+- [ ] Rate limiting middleware
+- [ ] 請求日誌記錄
+- [ ] 錯誤追蹤（Sentry）
+- [ ] API 版本化策略
+
+**P2 - 中優先**:
+- [ ] 快取層（Redis）
+- [ ] 資料庫查詢最佳化
+- [ ] API 效能監控
+- [ ] 文檔改進
+
+### 技術債務
+- 認證 guards 尚未實作
+- 授權邏輯缺失
+- 測試覆蓋率 < 20%（目標 70%+）
+- 生產資料庫尚未配置
+- 錯誤處理需要標準化
+
+### 相依性
+- 需要：PostgreSQL 生產環境
+- 需要：Redis 快取（未來）
+- 需要：檔案儲存服務（未來）
+
+### Changelog
+詳見 `apps/api-server/CHANGELOG.md`（待建立）
 
