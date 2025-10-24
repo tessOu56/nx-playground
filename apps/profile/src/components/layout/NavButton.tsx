@@ -30,7 +30,10 @@ export function NavButton({
     >
       {icon}
       <span>{label}</span>
-      {showLoading && !isActive && <span className='thinking-dots' />}
+      {/* Always reserve space for thinking dots to prevent layout shift */}
+      <span className='w-4 inline-block'>
+        {showLoading && !isActive && <span className='thinking-dots' />}
+      </span>
       {/* Active underline */}
       {isActive && (
         <div className='absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400' />
