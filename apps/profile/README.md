@@ -1,123 +1,228 @@
----
-id: profile
-name: Profile
-version: 1.0.0
-description: Technical portfolio showcasing projects and skills in Nx monorepo
-techStack:
-  - React 19
-  - Vite 6
-  - TypeScript
-  - Tailwind CSS
-  - React Router
-features:
-  - Multi-language Support (en, zh-TW)
-  - AI-Powered Search
-  - Project & Blog Showcase
-  - Responsive Design
-  - PWA Support
-lastUpdated: '2025-01-24'
----
-
 # Profile - Technical Portfolio
 
-> Full-stack developer portfolio built with React 19, Vite 6, and modern web technologies in an Nx monorepo.
+> Production-grade React portfolio with AI search, built in Nx monorepo
 
-## Quick Start
+![Status](https://img.shields.io/badge/status-production-green) ![Version](https://img.shields.io/badge/version-1.0.0-blue) ![TypeScript](https://img.shields.io/badge/typescript-100%25-blue)
 
-### Install Dependencies
+---
+
+## TL;DR / Quickstart
+
 ```bash
+# 1. Install dependencies
 pnpm install
-```
 
-### Start Development Server
-```bash
-# Using Makefile (recommended)
+# 2. Start dev server
 make dev-profile
+# or: nx serve profile
 
-# Using pnpm
-pnpm dev:profile
-
-# Using Nx
-nx serve profile
+# 3. Visit
+http://localhost:3003
 ```
 
-Visit: **http://localhost:3003**
+---
 
-### Build for Production
+## Scripts (Nx Command Cheatsheet)
+
 ```bash
-nx build profile --configuration=production
+# Development
+nx serve profile                    # Start dev server (port 3003)
+nx serve profile --host 0.0.0.0    # Expose to network
+
+# Build
+nx build profile                    # Production build
+nx build profile --configuration=development
+
+# Test
+nx test profile                     # Run unit tests
+nx test profile --watch            # Watch mode
+nx test profile --coverage         # With coverage
+
+# Quality
+nx lint profile                     # ESLint
+nx typecheck profile               # TypeScript check
+
+# Preview
+cd apps/profile && pnpm preview    # Preview production build
 ```
 
-Output: `dist/apps/profile/`
-
 ---
 
-## Features
+## Configuration
 
-- **Multi-page Application**: Home, Projects, Blogs, Search, Detail pages
-- **AI Search**: Smart keyword matching with conversation persistence
-- **Multi-language**: Full support for English and Traditional Chinese
-- **Performance**: Lighthouse 90+, PWA ready, code splitting
-- **Responsive**: Mobile-first design with adaptive header
-- **Modern UI**: Notion-style clean interface
+| Variable | Required | Default | Purpose |
+|----------|----------|---------|---------|
+| `NODE_ENV` | No | development | Environment mode |
+| `VITE_*` | No | - | Vite env vars (if needed) |
 
----
-
-## Tech Stack
-
-- React 19 + TypeScript
-- Vite 6 (build tool)
-- React Router 6 (routing)
-- Tailwind CSS (styling)
-- Zustand (state management)
-- i18next (internationalization)
-
-### Shared Libraries
-- `@nx-playground/ui-components` - Component library
-- `@nx-playground/design-system` - Design tokens
-- `@nx-playground/i18n` - Internationalization
-- `@nx-playground/search-engine` - Search engine
-- `@nx-playground/hooks` - React hooks
+No environment variables required for basic development.
 
 ---
 
 ## Project Structure
 
 ```
-src/
-├── features/           # Feature modules
-│   ├── home/          # Home page
-│   ├── projects/      # Projects showcase
-│   ├── blogs/         # Blog system
-│   ├── search/        # AI search
-│   └── detail/        # Detail pages
-├── components/        # Shared components
-├── lib/               # Utilities (loaders, helpers)
-├── stores/            # Zustand stores
-└── locales/           # i18n translations
+apps/profile/
+├── src/
+│   ├── features/           # Feature modules
+│   │   ├── home/          # Hero, Tech Stack, Timeline, Contact
+│   │   ├── projects/      # Projects showcase with progress
+│   │   ├── blogs/         # Blog list and detail pages
+│   │   ├── search/        # AI-powered search
+│   │   └── detail/        # Notion-style detail pages
+│   ├── components/        # Shared UI components
+│   │   ├── layout/       # Header, Footer, Layout
+│   │   ├── SEO.tsx       # Meta tags management
+│   │   └── ScrollToTop.tsx
+│   ├── lib/              # Utilities and loaders
+│   │   ├── projectLoader.ts  # Load projects from specs
+│   │   ├── blogLoader.ts     # Load blogs from markdown
+│   │   └── specLoader.ts     # Load spec files
+│   ├── stores/           # Zustand state management
+│   │   ├── useProjectsStore.ts
+│   │   ├── useBlogsStore.ts
+│   │   └── searchStore.ts
+│   └── locales/          # i18n translations (en, zh-TW)
+├── public/
+│   ├── sw.js            # Service Worker (PWA)
+│   ├── manifest.json    # PWA manifest
+│   └── specs/           # Spec markdown files (served by Vite)
+└── vite.config.ts       # Vite config with markdown loader
 ```
+
+---
+
+## Tech Decisions (Summary)
+
+### Why React 19?
+- Latest features (Compiler, Server Components ready)
+- Industry standard, large ecosystem
+- Excellent TypeScript support
+
+### Why Vite 6?
+- Fast HMR (Hot Module Replacement)
+- Better DX than Create React App
+- Native ESM, faster builds
+
+### Why Zustand?
+- Simpler than Redux (less boilerplate)
+- Performant (no unnecessary re-renders)
+- Small bundle size (~1KB)
+
+### Why Nx Monorepo?
+- Share libraries across apps
+- Consistent tooling and standards
+- Atomic commits across dependencies
+
+**Details**: See `specs/apps/profile/en.md`
+
+---
+
+## Interfaces (App Routes)
+
+### Public Routes
+- `GET /` → Redirect to `/en`
+- `GET /:locale` → Home page
+- `GET /:locale/projects` → Projects showcase
+- `GET /:locale/projects/:id` → Project detail
+- `GET /:locale/blogs` → Blog list
+- `GET /:locale/blogs/:slug` → Blog post
+- `GET /:locale/search` → AI search
+- `GET /:locale/*` → 404 page
+
+### Supported Locales
+- `en` - English
+- `zh-TW` - Traditional Chinese
 
 ---
 
 ## Development
 
-### Available Commands
-
+### Local Development
 ```bash
-# Development
-pnpm dev:profile          # Start dev server
-nx serve profile          # Alternative with Nx
+# Start dev server
+nx serve profile
 
-# Build
-nx build profile          # Production build
-nx build profile --watch  # Watch mode
+# Server runs on http://localhost:3003
+# Auto-redirects to /zh-TW (default locale)
+```
 
-# Test
-nx test profile           # Run tests
-nx test profile --watch   # Watch mode
+### Testing
+```bash
+# Unit tests
+nx test profile
 
-# Lint
-nx lint profile           # Check code quality
+# With coverage
+nx test profile --coverage
+
+# Watch mode
+nx test profile --watch
+```
+
+### Type Checking
+```bash
+# Check TypeScript types
+nx typecheck profile
+
+# Check with watch
+nx typecheck profile --watch
+```
+
+---
+
+## CI / Release
+
+### Nx Affected Commands
+```bash
+# Test only affected projects
+nx affected:test
+
+# Build only affected
+nx affected:build
+
+# Lint only affected
+nx affected:lint
+```
+
+### Versioning
+```bash
+# Bump version (update package.json)
+npm version patch   # 1.0.0 → 1.0.1
+npm version minor   # 1.0.0 → 1.1.0
+npm version major   # 1.0.0 → 2.0.0
+```
+
+---
+
+## i18n (Internationalization)
+
+### Supported Languages
+- **English** (`en`) - Default
+- **Traditional Chinese** (`zh-TW`)
+
+### Translation Files
+```
+src/
+├── locales/              # Shared translations
+│   ├── en/
+│   │   ├── common.json
+│   │   ├── home.json
+│   │   └── projects.json
+│   └── zh-TW/
+│       ├── common.json
+│       ├── home.json
+│       └── projects.json
+└── features/
+    └── */locales/        # Feature-specific translations
+```
+
+### Check for Missing Translations
+```bash
+# Search for missing translation keys
+grep -r "MISSING" apps/profile/src/locales
+
+# Check if all keys are used
+grep -r "t('" apps/profile/src
 ```
 
 ---
@@ -126,13 +231,32 @@ nx lint profile           # Check code quality
 
 ### Cloudflare Pages
 
-**Build settings**:
+**Build Settings**:
 - Build command: `nx build profile --configuration=production`
-- Build output: `dist/apps/profile`
-- Node version: 20+
+- Build output directory: `dist/apps/profile`
+- Root directory: `/` (monorepo root)
+- Node version: `20`
 
-**Environment variables**:
-- `NODE_VERSION=20`
+**Environment Variables**:
+```
+NODE_VERSION=20
+```
+
+**Custom Redirects**: 
+`public/_redirects` handles SPA routing:
+```
+/* /index.html 200
+```
+
+---
+
+## Links
+
+- **Spec**: `specs/apps/profile/en.md` (Product specification)
+- **Spec (繁中)**: `specs/apps/profile/zh-TW.md`
+- **Performance**: `apps/profile/LIGHTHOUSE_OPTIMIZATION.md`
+- **Project Status**: `specs/PROJECT_STATUS.md` (Overall progress)
+- **Live Demo**: TBD (Cloudflare Pages)
 
 ---
 
@@ -142,4 +266,4 @@ MIT
 
 ---
 
-Built with ❤️ using Nx, React, and modern web technologies
+**Built with ❤️ using Nx, React, and modern web technologies**
