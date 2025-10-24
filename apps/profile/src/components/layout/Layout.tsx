@@ -5,9 +5,10 @@ import { Header } from './Header';
 
 interface LayoutProps {
   children: ReactNode;
+  showFooter?: boolean;
 }
 
-export function Layout({ children }: LayoutProps) {
+export function Layout({ children, showFooter = true }: LayoutProps) {
   const [scrollProgress, setScrollProgress] = useState(0);
 
   // Scroll progress indicator with RAF throttling
@@ -49,7 +50,7 @@ export function Layout({ children }: LayoutProps) {
     <div className='min-h-screen flex flex-col bg-background'>
       <Header scrollProgress={scrollProgress} />
       <main className='flex-1'>{children}</main>
-      <Footer />
+      {showFooter && <Footer />}
     </div>
   );
 }

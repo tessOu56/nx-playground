@@ -30,30 +30,82 @@ function AppContent() {
         path='/:locale/*'
         element={
           <LocaleRouter>
-            <Layout>
-              <Suspense
-                fallback={
-                  <div className='min-h-screen flex items-center justify-center'>
-                    <LoadingSpinner size='lg' color='purple' text='Loading...' />
-                  </div>
-                }
-              >
-                <Routes>
-                  <Route path='/' element={<HomePage />} />
-                  <Route path='/projects' element={<ProjectsPage />} />
-                  <Route path='/projects/:projectId' element={<AppDetailPage />} />
-                  <Route path='/blogs' element={<BlogListPage />} />
-                  <Route path='/blogs/:slug' element={<BlogPostPage />} />
-                  <Route path='/search' element={<SearchPage />} />
-                  {/* Legacy redirects */}
-                  <Route path='/apps' element={<Navigate to='/projects' replace />} />
-                  <Route path='/libs' element={<Navigate to='/projects' replace />} />
-                  <Route path='/apps/:appId' element={<Navigate to='/projects/:appId' replace />} />
-                  <Route path='/libs/:libId' element={<Navigate to='/projects/:libId' replace />} />
-                  <Route path='*' element={<NotFoundPage />} />
-                </Routes>
-              </Suspense>
-            </Layout>
+            <Suspense
+              fallback={
+                <div className='min-h-screen flex items-center justify-center'>
+                  <LoadingSpinner size='lg' color='purple' text='Loading...' />
+                </div>
+              }
+            >
+              <Routes>
+                {/* Home - no footer in Layout */}
+                <Route
+                  path='/'
+                  element={
+                    <Layout showFooter={false}>
+                      <HomePage />
+                    </Layout>
+                  }
+                />
+                {/* Search - no footer in Layout */}
+                <Route
+                  path='/search'
+                  element={
+                    <Layout showFooter={false}>
+                      <SearchPage />
+                    </Layout>
+                  }
+                />
+                {/* Projects - show footer */}
+                <Route
+                  path='/projects'
+                  element={
+                    <Layout>
+                      <ProjectsPage />
+                    </Layout>
+                  }
+                />
+                <Route
+                  path='/projects/:projectId'
+                  element={
+                    <Layout>
+                      <AppDetailPage />
+                    </Layout>
+                  }
+                />
+                {/* Blogs - show footer */}
+                <Route
+                  path='/blogs'
+                  element={
+                    <Layout>
+                      <BlogListPage />
+                    </Layout>
+                  }
+                />
+                <Route
+                  path='/blogs/:slug'
+                  element={
+                    <Layout>
+                      <BlogPostPage />
+                    </Layout>
+                  }
+                />
+                {/* 404 - show footer */}
+                <Route
+                  path='*'
+                  element={
+                    <Layout>
+                      <NotFoundPage />
+                    </Layout>
+                  }
+                />
+                {/* Legacy redirects */}
+                <Route path='/apps' element={<Navigate to='/projects' replace />} />
+                <Route path='/libs' element={<Navigate to='/projects' replace />} />
+                <Route path='/apps/:appId' element={<Navigate to='/projects/:appId' replace />} />
+                <Route path='/libs/:libId' element={<Navigate to='/projects/:libId' replace />} />
+              </Routes>
+            </Suspense>
           </LocaleRouter>
         }
       />
