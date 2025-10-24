@@ -11,6 +11,9 @@ import { LanguageToggle } from './LanguageToggle';
 import { MobileNavButton } from './MobileNavButton';
 import { NavButton } from './NavButton';
 
+// Header height constant - matches actual header height in CSS
+const HEADER_HEIGHT = 50; // px
+
 interface HeaderProps {
   scrollProgress: number;
 }
@@ -44,50 +47,39 @@ export function Header({ scrollProgress }: HeaderProps) {
     }
   }, [location.pathname, isHomePage]);
 
-  // Adaptive header theme using sentinel pattern
+  // Adaptive header theme using optimized intersection observer
   useEffect(() => {
     const darkSections = document.querySelectorAll('[data-header-dark="true"]');
+    if (darkSections.length === 0) return;
 
-    // Check initial state immediately
-    let initialDark = false;
-    darkSections.forEach(section => {
+    // Check initial state immediately - simplified logic
+    const initialDark = Array.from(darkSections).some(section => {
       const rect = section.getBoundingClientRect();
-      const viewportHeight = window.innerHeight;
-      const visibleHeight =
-        Math.min(rect.bottom, viewportHeight) - Math.max(rect.top, 0);
-      const ratio = visibleHeight / viewportHeight;
-      if (ratio > 0.2) {
-        initialDark = true;
-      }
+      // Check if dark section overlaps header area (top 0 to HEADER_HEIGHT)
+      return rect.top < HEADER_HEIGHT && rect.bottom > 0;
     });
     setHeaderDark(initialDark);
 
+    // Create observer with header-area-only detection
     const observer = new IntersectionObserver(
       entries => {
-        // Find the section with highest intersection ratio (most visible)
-        let mostVisibleDarkSection = false;
-        let maxRatio = 0;
-
-        entries.forEach(entry => {
-          if (entry.isIntersecting && entry.intersectionRatio > maxRatio) {
-            maxRatio = entry.intersectionRatio;
-            mostVisibleDarkSection = true;
-          }
-        });
-
-        // Apply dark header if any dark section is visible (>20%)
-        setHeaderDark(mostVisibleDarkSection && maxRatio > 0.2);
+        // Simple check: any dark section in header area?
+        const hasAnyDarkInHeader = entries.some(entry => entry.isIntersecting);
+        setHeaderDark(hasAnyDarkInHeader);
       },
       {
-        rootMargin: '0px', // No margin - detect exact viewport boundaries
-        threshold: [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0], // More granular thresholds
+        root: null, // viewport
+        // rootMargin: only observe top HEADER_HEIGHT px band
+        // Bottom shrinks by (100vh - HEADER_HEIGHT) to create header-height band
+        rootMargin: `0px 0px calc(-100vh + ${HEADER_HEIGHT}px) 0px`,
+        threshold: 0, // Trigger as soon as any part enters
       }
     );
 
     darkSections.forEach(section => observer.observe(section));
 
     return () => observer.disconnect();
-  }, [location.pathname, isHomePage]);
+  }, [location.pathname]);
 
   return (
     <nav
