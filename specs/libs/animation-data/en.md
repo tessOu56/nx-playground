@@ -10,55 +10,138 @@ features:
   - Animation presets
   - Data transformers
   - Export utilities
-lastUpdated: '2025-01-24'
-category: data
 status: production
+category: data
 published: true
-
-shortDesc: |
-  Animation data management utilities for Vue applications.
-  Presets, transformers, and data handling for motion design.
-
-purpose: |
-  Support Vue Motion Sandbox with structured animation data management.
-  Demonstrates data layer architecture for creative applications.
-
-highlights:
-  - Animation preset library
-  - Data transformation utilities
-  - Export/import functionality
-  - TypeScript type safety
-
-useCases:
-  - Animation data storage
-  - Preset management
-  - Cross-app animation sharing
-
-targetAudience: |
-  Demonstrates data architecture and Vue ecosystem expertise.
+lastUpdated: '2025-01-24'
 ---
 
-# Animation Data - Vue Animation Utilities
+# Animation Data – 動畫資料
 
-Data management library for Vue 3 animation applications, providing presets, transformers, and export utilities.
+(Animation Data Management for Vue)
 
-## Purpose
+## Overview / 概念與定位
 
-Centralized animation data layer supporting Vue Motion Sandbox and future animation-focused applications.
+This is an **animation data management library** supporting Vue Motion Sandbox with structured preset storage and transformation utilities.
 
-## Key Features
+Unlike inline animation configurations, this library offers:
 
-- **Animation Presets**: Predefined animation configurations
-- **Data Transformers**: Convert between different animation formats
-- **Export Utilities**: Save and share animation data
-- **Type Safety**: Full TypeScript support
+- Reusable animation presets library
+- Data transformers for different animation libraries
+- Import/export functionality for sharing
+- TypeScript support for animation configurations
+- Validation for animation data structures
 
-## Technical Stack
+The library serves Vue applications needing **structured animation data management**.
 
-- Vue 3 Composition API
-- TypeScript for type safety
-- Modular architecture
+---
 
-## Integration
+## Core Capabilities / 核心能力
 
-Used by `vue-motion` app for animation data management.
+### 1. Animation Preset Library
+
+- Pre-built animation configurations
+- Categorized by type (enter, exit, attention, etc.)
+- Customizable parameters
+- Version tracking for presets
+- Search and filter presets
+
+**Key Value**: Reusable animation patterns accelerating motion design development.
+
+---
+
+### 2. Data Transformation
+
+- Convert between GSAP, Three.js, Lottie formats
+- Normalize animation timing and easing
+- Scale and adjust animations programmatically
+- Batch transformations for collections
+- Validation and error handling
+
+**Key Value**: Enables animation reuse across different libraries and contexts.
+
+---
+
+### 3. Import/Export System
+
+- Save animation configurations as JSON
+- Load presets from files
+- Share presets with team
+- Export code snippets for direct use
+- Versioned preset format
+
+**Key Value**: Facilitates collaboration and animation asset management.
+
+---
+
+## Technical Highlights / 技術亮點
+
+| Aspect          | Description                                   |
+| --------------- | --------------------------------------------- |
+| **Vue 3**       | Composable data layer for Vue applications    |
+| **Type Safety** | TypeScript definitions for all animation data |
+| **Validation**  | Runtime validation preventing invalid configs |
+| **Modularity**  | Framework-agnostic core with Vue wrappers     |
+
+**Result**: Organized animation data layer supporting creative development.
+
+---
+
+## Usage Scope / 使用範圍
+
+**Applications**:
+
+- Vue Motion Sandbox (primary consumer)
+- Future Vue animation projects
+
+**Use Cases**:
+
+- Store reusable animation patterns
+- Transform animations between libraries
+- Share animation configurations
+- Validate animation data
+
+---
+
+## API & Integration / 整合方式
+
+**Example Usage**:
+
+```tsx
+import { getPreset, transformToGSAP } from '@nx-playground/animation-data';
+
+const fadeInPreset = getPreset('fadeIn');
+const gsapConfig = transformToGSAP(fadeInPreset);
+
+// Use in GSAP
+gsap.from('.element', gsapConfig);
+```
+
+---
+
+## Quality Standards / 品質標準
+
+**Validation**:
+
+- Schema validation for all presets
+- Type checking at compile and runtime
+- Error messages for invalid configurations
+
+**Documentation**:
+
+- Preset catalog with examples
+- Transformation guides
+- API reference
+
+---
+
+## License / 授權
+
+MIT (Open for use and modification)
+
+---
+
+## Additional Documentation / 補充文件
+
+- `specs/libs/animation-data/en.md` - English specification (this file)
+- `libs/animation-data/README.md` - Developer documentation
