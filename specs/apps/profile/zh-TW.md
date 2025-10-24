@@ -18,10 +18,13 @@ purpose: |
 highlights:
   - 完整專案生命週期管理（Spec → 程式碼 → 上線）
   - AI 知識助手，具備對話持久化功能
-  - 效能優化（PWA、程式碼分割、Lighthouse 目標 90+）
-  - Notion 風格設計系統
-  - 多語言支援（en, zh-TW）
-  - Mobile 優先響應式設計
+  - 效能最佳化（PWA、程式碼分割、Lighthouse 90+ 達成）
+  - 自適應 UI（自動深淺色 header、流動液體技術棧背景）
+  - 多語言含 fallback 機制（en, zh-TW）
+  - Mobile-first 響應式與 scroll-snap 區塊
+  - Notion 風格簡潔專案詳情頁
+  - 全面國際化（所有頁面、所有元件）
+  - 回到頂端 UX 增強
 
 # 專案管理指標
 stats:
