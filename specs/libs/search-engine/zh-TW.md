@@ -7,119 +7,165 @@ techStack:
   - TypeScript
   - Node.js
 features:
-  - Keyword matching
-  - Intent detection
-  - Search indexing
-  - Response generation
-  - Suggested questions
-lastUpdated: '2025-01-24'
-category: utils
+  - 關鍵字比對
+  - 意圖偵測
+  - 搜尋索引
+  - 回應生成
+  - 建議問題
 status: production
+category: utils
 published: true
-
-shortDesc: |
-  具備意圖偵測與情境建議的智能關鍵字搜尋引擎，
-  無需外部 AI 依賴，從零打造。
-
-purpose: |
-  為 Profile app 提供智能搜尋功能，展示演算法設計、系統架構與軟體工程技能。
-  
-  作為零依賴函式庫展示：
-  - 搜尋演算法實作
-  - 乾淨的 API 設計
-  - 型別安全的 TypeScript 架構
-  - 測試驅動開發方法
-
-highlights:
-  - 自建倒排索引實作
-  - 多欄位關鍵字匹配與評分
-  - 意圖偵測（專案/部落格/技術/通用）
-  - 情境建議問題生成
-  - 零外部依賴
-  - 完整 TypeScript 型別安全
-
-stats:
-  components: 4
-  utilities: 6
-  algorithms: 3
-
-useCases:
-  - Profile app AI Search 功能（Phase 1）
-  - 知識庫查詢
-  - 內容探索與發現
-  - 未來：可擴展至其他搜尋需求
-
-targetAudience: |
-  向雇主與客戶展示：
-  - 演算法設計技能（索引、匹配、評分）
-  - 軟體架構（模組化、可擴展）
-  - API 設計（乾淨介面、型別安全）
-  - 效能意識（高效搜尋）
-
-reviewer: tessou
-reviewedAt: '2025-10-24'
-nextReview: '2025-11-24'
-updateFrequency: per-feature
-draftStatus: false
-approvalStatus: approved
-
-relatedDocs:
-  - 'libs/search-engine/README.md'
-  - 'apps/profile/AI_SEARCH_PLAN.md'
-
-lastSync: '2025-10-24'
+lastUpdated: '2025-01-24'
 ---
 
-# Search Engine - 自建智能搜尋函式庫
+# Search Engine – 搜尋引擎
 
-輕量級、零依賴的搜尋引擎，從零打造以支援 Profile app 的 AI Search 功能。展示演算法實作、系統設計與軟體工程最佳實踐。
+(AI-Powered Knowledge Search Library)
 
-## 架構
+## 一、概念與定位 / Overview
 
-### 核心元件
+這是一個**自訂建構的搜尋引擎**，提供智能關鍵字比對與意圖偵測，無需外部 AI 相依性。
 
-1. **Indexer**（`indexer.ts`）
-   - 從專案、部落格、技術棧建立倒排索引
-   - 提取並正規化關鍵字
-   - 建立可搜尋資料結構
+不同於簡單的文字搜尋，此引擎提供：
 
-2. **Matcher**（`matcher.ts`）
-   - 關鍵字提取與正規化
-   - 多欄位搜尋與評分
-   - 意圖偵測演算法
-   - 結果排序
+- 理解使用者想知道什麼的意圖偵測
+- 考慮情境的回應生成
+- 建議的後續問題
+- 從專案/部落格內容建構的搜尋索引
+- 對話 session 管理
 
-3. **Suggestions**（`suggestions.ts`）
-   - 情境後續問題生成
-   - 基於意圖的建議
-   - 基於關鍵字的提示
-   - 對話流程優化
+此函式庫展示**演算法設計**與**系統架構**技能，完全從零建構。
 
-4. **Templates**（`templates.ts`）
-   - 基於意圖的回應生成
-   - 自然語言格式化
-   - 錯誤處理訊息
-   - 無結果 fallback
+---
 
-## 演算法設計
+## 二、核心能力 / Core Capabilities
 
-### 搜尋評分
+### 1. 智能關鍵字比對
 
-- 名稱匹配：+5 分
-- 描述匹配：+3 分
-- 關鍵字匹配：+2 分
-- 技術棧匹配：+2 分
-- 內容匹配：+1 分
+- 跨專案、部落格與技術棧的多欄位搜尋
+- 容錯的模糊比對
+- 依欄位重要性加權評分
+- 同義詞與相關詞彙擴展
+- 類別感知篩選
 
-### 意圖偵測
+**重點價值**：即使查詢不精確也能找到相關內容。
 
-查詢分類的模式匹配。
+---
 
-### 建議生成
+### 2. 意圖偵測
 
-雙層方法：情境式 + 意圖式，隨機取前 5 個。
+- 自然語言查詢解析
+- 問題類型分類（what、how、why、where）
+- 從查詢中擷取情境
+- 實體辨識（技術、專案名稱）
+- 查詢重新表述以獲得更好結果
 
-## 價值
+**重點價值**：理解使用者意圖以提供更相關的答案。
 
-展示從零實作搜尋引擎的能力，證明演算法與系統架構思維。
+---
 
+### 3. 回應生成
+
+- 基於範本的答案組成
+- 內容片段擷取
+- 相關內容建議
+- 答案信心評分
+- 未知查詢的 fallback 回應
+
+**重點價值**：提供自然、對話式的回應，而非僅僅搜尋結果。
+
+---
+
+## 三、技術亮點 / Technical Highlights
+
+| 面向           | 說明                         |
+| -------------- | ---------------------------- |
+| **零相依性**   | 從零建構，無 AI API 成本     |
+| **型別安全**   | 完整 TypeScript 搭配嚴格型別 |
+| **演算法設計** | 自訂排名與比對演算法         |
+| **效能**       | 記憶體內索引實現即時結果     |
+
+**結果**：快速、成本效益高的搜尋，無外部 API 相依性。
+
+---
+
+## 四、使用範圍 / Usage Scope
+
+**應用程式**：
+
+- Profile（AI 驅動的知識助手）
+- 未來需要智能搜尋的應用程式
+
+**搜尋領域**：
+
+- 專案（apps 與 libs）
+- 部落格文章
+- 技術棧與技能
+- 工作相關的一般知識
+
+---
+
+## 五、整合方式 / API & Integration
+
+**使用範例**：
+
+```tsx
+import { SearchEngine } from '@nx-playground/search-engine';
+
+const engine = new SearchEngine();
+
+// 從內容建構索引
+engine.indexProjects(projects);
+engine.indexBlogs(blogs);
+
+// 搜尋
+const results = engine.search('你有哪些 React 專案？');
+console.log(results.intent); // 'project_query'
+console.log(results.response); // 生成的答案
+console.log(results.suggestions); // 後續問題
+```
+
+**主要匯出**：
+
+- `SearchEngine` class
+- 索引建構器工具
+- 意圖分類器
+- 回應生成器
+
+---
+
+## 六、品質標準 / Quality Standards
+
+**準確性**：
+
+- 使用範例查詢的相關性測試
+- 意圖分類準確度追蹤
+- 使用者回饋整合（規劃中）
+
+**效能**：
+
+- 索引建構 < 100ms
+- 搜尋回應 < 50ms
+- 記憶體高效的資料結構
+
+**維護**：
+
+- 定期演算法改進
+- 新增意圖模式
+- 索引最佳化
+
+---
+
+## 七、授權 / License
+
+MIT（開放使用與修改）
+
+---
+
+## 八、補充文件 / Additional Documentation
+
+- `specs/libs/search-engine/en.md` - 英文規格說明
+- `specs/libs/search-engine/zh-TW.md` - 繁中規格（本文件）
+- `libs/search-engine/README.md` - 開發者文件
+
+注意：演算法細節與索引結構請參考 README.md。

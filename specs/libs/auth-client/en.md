@@ -11,59 +11,163 @@ features:
   - Protected routes
   - Session management
   - Token handling
-lastUpdated: '2025-01-24'
-category: utils
 status: production
+category: utils
 published: true
-
-shortDesc: |
-  Authentication utilities and context providers for React applications.
-  Simplifies auth integration across apps.
-
-purpose: |
-  Shared authentication logic demonstrating auth state management
-  and cross-app session handling.
-
-highlights:
-  - React Context for auth state
-  - Token management utilities
-  - Protected route components
-  - Session persistence
-  - Type-safe auth hooks
-
-stats:
-  hooks: 4
-  components: 3
-  utilities: 5
-
-useCases:
-  - Shared auth logic across React apps
-  - Authentication state management
-  - Protected routes implementation
-
-targetAudience: |
-  Shows authentication architecture and React Context patterns.
-
-reviewer: tessou
-reviewedAt: '2025-10-24'
-nextReview: '2025-11-24'
-updateFrequency: per-feature
-draftStatus: false
-approvalStatus: approved
-
-lastSync: '2025-10-24'
+lastUpdated: '2025-01-24'
 ---
 
-# Auth Client - Authentication Utilities
+# Auth Client – 認證客戶端
 
-React authentication utilities providing shared auth logic and components.
+(Authentication Utilities Library)
 
-## Features
-- useAuth hook
-- AuthProvider context
-- ProtectedRoute component
-- Token management
+## Overview / 概念與定位
 
-## Value
-Demonstrates auth architecture and React patterns for authentication.
+This is a **shared authentication library** providing React context, hooks, and utilities for managing user authentication across applications.
 
+Unlike scattered auth logic, this library offers:
+
+- Centralized auth state management
+- Protected route components
+- Token storage and refresh logic
+- Session persistence across page reloads
+- TypeScript support for auth data
+
+The library enables **consistent auth patterns** across all React applications in the monorepo.
+
+---
+
+## Core Capabilities / 核心能力
+
+### 1. Auth Context Provider
+
+- Global authentication state
+- User profile data management
+- Login/logout state handling
+- Token storage and retrieval
+- Auth status listeners
+
+**Key Value**: Single source of truth for authentication state across the entire app.
+
+---
+
+### 2. Protected Route Components
+
+- Route guards based on authentication status
+- Role-based route protection
+- Automatic redirects to login
+- Permission checking utilities
+- Loading states during auth checks
+
+**Key Value**: Declarative route protection preventing unauthorized access.
+
+---
+
+### 3. Token Management
+
+- Secure token storage (httpOnly cookies or memory)
+- Automatic token refresh before expiration
+- Token validation and parsing
+- Multi-tab synchronization
+- Logout on token expiry
+
+**Key Value**: Handles complex token lifecycle automatically, ensuring secure sessions.
+
+---
+
+## Technical Highlights / 技術亮點
+
+| Aspect            | Description                                    |
+| ----------------- | ---------------------------------------------- |
+| **React Context** | Provider pattern for global auth state         |
+| **Type Safety**   | Full TypeScript for user data and tokens       |
+| **Security**      | Secure token storage with automatic refresh    |
+| **Integration**   | Works with any auth backend (Ory Kratos, etc.) |
+
+**Result**: Secure, reusable auth logic reducing implementation time.
+
+---
+
+## Usage Scope / 使用範圍
+
+**Applications**:
+
+- Profile (user session)
+- Event-CMS (admin auth)
+- Event-Portal (user registration)
+- All apps requiring authentication
+
+**Common Patterns**:
+
+- Login/logout flows
+- Protected admin pages
+- User profile display
+- Conditional UI based on auth status
+
+---
+
+## API & Integration / 整合方式
+
+**Setup**:
+
+```tsx
+import { AuthProvider } from '@nx-playground/auth-client';
+
+function App() {
+  return (
+    <AuthProvider>
+      <Routes />
+    </AuthProvider>
+  );
+}
+```
+
+**Usage**:
+
+```tsx
+import { useAuth, ProtectedRoute } from '@nx-playground/auth-client';
+
+function Profile() {
+  const { user, logout } = useAuth();
+  return <div>Welcome {user?.name}</div>;
+}
+
+function AdminPage() {
+  return (
+    <ProtectedRoute requiredRole='admin'>
+      <AdminDashboard />
+    </ProtectedRoute>
+  );
+}
+```
+
+---
+
+## Quality Standards / 品質標準
+
+**Security**:
+
+- Secure token storage best practices
+- CSRF protection
+- XSS prevention
+- Regular security audits
+
+**Testing**:
+
+- Unit tests for all utilities
+- Integration tests with auth flows
+- Security penetration testing
+
+---
+
+## License / 授權
+
+MIT (Open for use and modification)
+
+---
+
+## Additional Documentation / 補充文件
+
+- `specs/libs/auth-client/en.md` - English specification (this file)
+- `specs/libs/auth-client/zh-TW.md` - Traditional Chinese specification
+- `libs/auth-client/README.md` - Developer documentation

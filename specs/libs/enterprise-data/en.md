@@ -12,55 +12,137 @@ features:
   - Service layer
   - Validators
   - Transformers
-lastUpdated: '2025-01-24'
-category: data
 status: production
+category: angular
 published: true
-
-shortDesc: |
-  Data handling layer for Angular enterprise applications.
-  Service layer, validators, and data transformers.
-
-purpose: |
-  Provide centralized data management for Angular apps in the monorepo.
-  Demonstrates reactive programming with RxJS and service-oriented architecture.
-
-highlights:
-  - RxJS-based data services
-  - Data validation layer
-  - Type-safe data models
-  - State synchronization
-
-useCases:
-  - Enterprise data management
-  - Form validation
-  - API data transformation
-
-targetAudience: |
-  Demonstrates Angular expertise and enterprise application architecture.
+lastUpdated: '2025-01-24'
 ---
 
-# Enterprise Data - Angular Data Layer
+# Enterprise Data – 企業資料層
 
-Data handling library for Angular enterprise applications, providing models, services, and validators.
+(Data Management for Angular Enterprise Apps)
 
-## Purpose
+## Overview / 概念與定位
 
-Centralized data layer supporting Enterprise Admin and future Angular applications with reactive data management.
+This is a **data handling library** for Angular applications, providing models, services, and utilities for enterprise data management.
 
-## Key Features
+Unlike scattered data logic, this library offers:
+- Centralized data models with validation
+- Service layer for API communication
+- Data transformers and formatters
+- RxJS-based reactive data streams
+- TypeScript support with strict typing
 
-- **Data Models**: Type-safe entity definitions
-- **Service Layer**: RxJS-based data services
-- **Validators**: Input validation utilities
-- **Transformers**: Data transformation pipelines
+The library serves as the **data foundation** for Angular enterprise applications.
 
-## Technical Stack
+---
 
-- Angular 20 with Signals
-- RxJS for reactive programming
-- TypeScript for type safety
+## Core Capabilities / 核心能力
 
-## Integration
+### 1. Data Models
 
-Used by `enterprise-admin` app for data management.
+- TypeScript interfaces and classes
+- Validation decorators
+- Default values and factories
+- Immutable data structures
+- Model inheritance and composition
+
+**Key Value**: Type-safe data models preventing runtime errors.
+
+---
+
+### 2. Service Layer
+
+- API communication services
+- Caching strategies with RxJS
+- Error handling and retry logic
+- Request/response transformation
+- Pagination and filtering utilities
+
+**Key Value**: Consistent data access patterns across features.
+
+---
+
+### 3. Validators & Transformers
+
+- Input validation functions
+- Data normalization utilities
+- Format converters (date, currency, etc.)
+- Business rule validators
+- Custom validator composition
+
+**Key Value**: Ensures data integrity throughout the application.
+
+---
+
+## Technical Highlights / 技術亮點
+
+| Aspect          | Description                                   |
+| --------------- | --------------------------------------------- |
+| **Angular 20**  | Modern Angular with standalone components     |
+| **RxJS**        | Reactive data streams for real-time updates   |
+| **Type Safety** | Full TypeScript with strict null checks       |
+| **Modularity**  | Feature-based data organization               |
+
+**Result**: Clean data layer following Angular best practices.
+
+---
+
+## Usage Scope / 使用範圍
+
+**Applications**:
+- Enterprise-Admin (primary consumer)
+- Future Angular enterprise apps
+
+**Data Domains**:
+- User and role data
+- Approval workflow data
+- Audit log entries
+- System configuration
+
+---
+
+## API & Integration / 整合方式
+
+**Example Usage**:
+```typescript
+import { UserModel, UserService } from '@nx-playground/enterprise-data';
+
+@Component({...})
+export class UserList {
+  users$ = this.userService.getUsers();
+  
+  constructor(private userService: UserService) {}
+  
+  createUser(data: Partial<UserModel>) {
+    this.userService.create(data).subscribe();
+  }
+}
+```
+
+---
+
+## Quality Standards / 品質標準
+
+**Data Integrity**:
+- Validation at model level
+- Type safety enforced
+- Immutable data patterns
+
+**Testing**:
+- Unit tests for models and services
+- Integration tests with mock API
+- Validation logic tests
+
+---
+
+## License / 授權
+
+MIT (Open for use and modification)
+
+---
+
+## Additional Documentation / 補充文件
+
+- `specs/libs/enterprise-data/en.md` - English specification (this file)
+- `libs/enterprise-data/README.md` - Developer documentation
