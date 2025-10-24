@@ -1,5 +1,5 @@
 ---
-id: profile
+id: 01-profile
 name: Profile
 version: 1.0.0
 description: Professional portfolio website showcasing technical skills, projects, and knowledge through AI-powered search
@@ -20,356 +20,172 @@ features:
   - Mobile-first responsive design
 status: production
 category: react
+published: true
 lastUpdated: '2025-01-24'
 ---
 
-# Profile - Technical Portfolio
+# Profile – Professional Portfolio Website
 
-## What is This?
+## Overview / 概念與定位
 
-A professional portfolio website that showcases my technical skills, completed projects, and knowledge through an intelligent search system. Think of it as a **dynamic, interactive resume** that visitors can explore at their own pace.
+This is an interactive **professional portfolio website** that serves as a digital resume.
 
-Unlike a static PDF resume, this portfolio offers:
-- **Searchable knowledge base** - Ask questions, get instant answers
-- **Live project demonstrations** - See what I've built
-- **Technical insights** - Read about my problem-solving approach
-- **Bilingual content** - Accessible to international audiences
+Unlike static PDF resumes, it allows visitors to:
+
+- Browse completed projects and work samples directly
+- Ask questions in natural language (e.g., "What frontend projects do you have?")
+- Read technical insights and career-related articles
+- Access seamlessly on mobile, desktop, or even offline
+
+The design functions like an **interactive digital business card**, presenting "what I can do, how I think, and what I've accomplished" in a short time.
 
 ---
 
-## Key Capabilities (What It Does)
+## Core Features
 
-### 1. Smart Project Showcase
-**What visitors see**: All my applications and reusable code libraries in one place
+### 1. Project Showcase
 
-**Features**:
-- Clear project cards with status indicators (Production, In Development)
-- Detailed project pages explaining purpose and technology choices
-- Progress tracking showing completion status
-- Technology tags for easy filtering
+- Display all applications and components in card format
+- Each project includes purpose, design rationale, and development progress
+- Tags for filtering by domain (frontend, AI, product design, etc.)
 
-**Business value**: Demonstrates range of technical capabilities and project management skills
+**Key Value**: Clearly demonstrates technical scope and execution quality to recruiters or collaborators.
 
-### 2. AI-Powered Knowledge Assistant
-**What it does**: Intelligent search that understands questions and provides contextual answers
+---
 
-**Capabilities**:
-- Answers questions about projects ("What projects use React?")
-- Explains technical choices ("Why did you choose TypeScript?")
-- Suggests related topics to explore
-- Remembers conversation history
-- Works across all content (projects, blogs, tech stack)
+### 2. AI-Powered Search Assistant
 
-**Business value**: Shows innovation and modern development practices; makes information accessible
+- Visitors can input questions like: "Why use TypeScript?"
+- System automatically answers based on website content and provides further reading
+- Cross-page search (projects, blog, tech categories, etc.)
+
+**Key Value**: Transforms portfolio into a "conversational resume" with AI-enhanced navigation.
+
+---
 
 ### 3. Technical Blog
-**What it offers**: Insights and knowledge sharing through technical articles
 
-**Content**:
-- Year-organized posts (2019-2025)
-- Real-world problem-solving examples
-- Technology deep-dives and reviews
-- Lessons learned from projects
+**Content Structure**:
 
-**Business value**: Demonstrates continuous learning, communication skills, and thought leadership
+- Automatically archived by year (continuously updated since inception)
+- Includes practical cases, design thinking, tool comparisons, and learning logs
+- Emphasizes decision-making context and implementation outcomes for each article
 
-### 4. Adaptive User Experience
-**How it works**: Automatically adjusts for optimal viewing experience
-
-**Features**:
-- **Smart theming**: Header color adapts to content background (dark/light)
-- **Mobile-optimized**: Perfect experience on any device size
-- **Fast loading**: Achieves industry-benchmark performance (Lighthouse 90+)
-- **Works offline**: Can be installed as app, functions without internet
-- **Multiple languages**: Full support for English and Traditional Chinese
-
-**Business value**: Professional presentation, accessibility, global reach
+**Key Value**: Demonstrates long-term learning and analytical ability, not just results.
 
 ---
 
-## Technology Highlights (How It's Built)
+### 4. User Experience Design
 
-### Modern Web Platform
-**React 19 + TypeScript**
-- Industry-standard technologies used by companies like Facebook, Airbnb, Netflix
-- Type safety ensures reliability (catches errors before deployment)
-- Latest features for optimal performance
+- **Adaptive interface**: Switches theme based on dark/light background
+- **Mobile-first design**: Full browsing on mobile devices
+- **Speed optimization**: ~1.5 second load time
+- **Offline capable**: Can be installed like an app
+- **Bilingual interface**: Supports English and Traditional Chinese
 
-**Progressive Web App (PWA)**
-- Can be installed like a native mobile app
-- Works offline after first visit
-- Fast loading through intelligent caching
-
-### Performance Excellence
-
-**Lighthouse Score: 90+** (Industry Benchmark)
-- Performance: 90+ (loads in < 2 seconds)
-- Accessibility: 95+ (usable by people with disabilities)
-- Best Practices: 100 (follows web standards)
-- SEO: 100 (optimized for search engines)
-
-**What this means**:
-- Fast, smooth user experience
-- Professional quality
-- Accessible to all users
-- Discoverable on search engines
-
-### Smart Architecture
-
-**Nx Monorepo Structure**
-- **Benefit**: Code reusability across projects (write once, use everywhere)
-- **Result**: Faster development, consistent quality
-- **Scale**: 10 shared libraries, 7 applications using them
-
-**Code Splitting**
-- **Benefit**: Only loads what's needed for current page
-- **Result**: Faster initial load, better perceived performance
-- **Impact**: ~250KB initial bundle (highly optimized)
+**Key Value**: Ensures smooth usage across different devices, languages, and network conditions.
 
 ---
 
-## Project Scope & Scale
+## Development Focus
 
-### Application Overview
-- **7 main pages**: Home, Projects, Blogs, Search, Detail, 404
-- **25+ features**: Implemented and tested
-- **8 shared libraries**: Reused across applications
-- **2 languages**: Full bilingual support
+| Aspect                       | Description                                                              |
+| ---------------------------- | ------------------------------------------------------------------------ |
+| **Architecture**             | Modular design allowing shared components across pages, easy maintenance |
+| **Quality Control**          | Automated testing and checks with every update to ensure consistency     |
+| **Performance Optimization** | Loads only necessary content, reducing wait time                         |
+| **Internationalization**     | All copy supports bilingual switching (EN/zh-TW) in real-time            |
 
-### User Capabilities
-Visitors can:
-1. **Explore projects** - Browse apps and libraries with detailed information
-2. **Search intelligently** - Ask questions and get contextual answers
-3. **Read insights** - Access technical blog posts and knowledge
-4. **Switch languages** - View all content in English or Traditional Chinese
-5. **Install as app** - Add to home screen (mobile/desktop)
-6. **Use offline** - Access previously visited content without internet
+**Result**: Overall website maintains 90+ score on Google Lighthouse (speed, usability, SEO all excellent).
 
 ---
 
-## Quality & Reliability
+## Content Scope
 
-### Performance Metrics
-
-| Metric | Industry Standard | This App | Status |
-|--------|-------------------|----------|--------|
-| Page Load Time | < 3s | < 1.5s | ✅ Excellent |
-| Lighthouse Score | 50-70 | 90+ | ✅ Excellent |
-| Mobile Responsive | Required | 100% | ✅ Complete |
-| Accessibility | WCAG 2.1 | AA Compliant | ✅ Certified |
-| Bundle Size | < 500KB | ~250KB | ✅ Optimized |
-
-### Code Quality
-- **100% TypeScript**: Type-safe, fewer bugs
-- **0 Linter Errors**: Clean, consistent code
-- **Modern Standards**: Following latest best practices
-- **Performance Budget**: Actively monitored and enforced
+- **Main Pages**: Home, Projects, Blog, Search, etc.
+- **Feature Modules**: 20+ modules (search, language switching, filtering, etc.)
+- **Multilingual Content**: Complete EN/zh-TW support
+- **Offline Available**: Can browse without network after initial load
 
 ---
 
-## Technical Architecture (Simplified)
+## Quality & Performance Metrics
 
-Think of the application like a **well-organized building**:
+| Metric                    | Industry Standard | Actual Result   | Status |
+| ------------------------- | ----------------- | --------------- | ------ |
+| **Load Time**             | Within 3 seconds  | ~1.5 seconds    | ✅     |
+| **Overall Performance**   | Average site ~70  | 90+             | ✅     |
+| **Mobile Responsiveness** | Required          | Fully supported | ✅     |
+| **Accessibility**         | Basic compliance  | Passed          | ✅     |
 
-**Foundation (React + TypeScript)**
-- Solid, reliable base used by industry leaders
-- Type safety = structural integrity
-
-**Floors (Pages)**
-- Home: Welcome and overview
-- Projects: Showcase and details
-- Blogs: Knowledge sharing
-- Search: AI assistant
-
-**Utilities (Shared Libraries)**
-- Like plumbing/electricity in a building
-- Reused across all floors
-- Maintained centrally for consistency
-
-**Smart Systems (AI Search)**
-- Intelligent assistant to help navigate
-- Context-aware responses
-- Conversation memory
+**Conclusion**: Overall performance meets product-grade demonstration standards, stably presenting content with multi-device support.
 
 ---
 
-## Business Value
+## Maintenance & Updates
 
-### For Recruiters & Hiring Managers
-✅ **Modern technical skills** - React 19, TypeScript, latest tools
-✅ **Product thinking** - Not just code, but complete solutions
-✅ **Quality focus** - Lighthouse 90+, accessibility, performance
-✅ **Project management** - Planning, execution, delivery demonstrated
-✅ **Communication** - Technical blog, clear documentation
+**Operation Flow**:
 
-### For Potential Clients
-✅ **Professional delivery** - Production-ready quality
-✅ **User experience** - Fast, smooth, accessible
-✅ **Reliability** - Works offline, type-safe code
-✅ **Maintenance** - Well-documented, clean architecture
-✅ **Global reach** - Multi-language support
+1. Install development environment
+2. Start preview mode for adjustments
+3. Automated testing and quality checks
+4. One-click generation of production version
 
-### For Collaboration
-✅ **Knowledge sharing** - Open technical blog
-✅ **Best practices** - Clean, maintainable code
-✅ **Modern stack** - Easy for other developers to work with
+**Automation**:
+
+- Only rebuilds updated portions
+- Code remains clean, warning-free
+- Automatic deployment to cloud platform
 
 ---
 
-## Development Workflow
+## Internationalization / Language Management
 
-### Getting Started
-```bash
-# 1. Clone and install
-pnpm install
+**Supported Languages**:
 
-# 2. Start development
-nx serve profile
+- English (default)
+- Traditional Chinese (zh-TW)
 
-# 3. Make changes
-# All hot-reloading enabled
+**Structure Example**:
 
-# 4. Check quality
-nx lint profile
-nx typecheck profile
-
-# 5. Build for production
-nx build profile
 ```
-
-### Testing
-```bash
-# Unit tests
-nx test profile
-
-# Watch mode during development
-nx test profile --watch
-```
-
----
-
-## CI / Release
-
-### Affected Commands (Nx Feature)
-```bash
-# Only test what changed
-nx affected:test
-
-# Only build what changed  
-nx affected:build
-
-# Only lint what changed
-nx affected:lint
-```
-
-### Version Management
-```bash
-# Bump version
-npm version patch    # 1.0.0 → 1.0.1
-npm version minor    # 1.0.0 → 1.1.0
-npm version major    # 1.0.0 → 2.0.0
-```
-
----
-
-## Internationalization (i18n)
-
-### Supported Languages
-- **English** (`en`) - Default
-- **Traditional Chinese** (`zh-TW`)
-
-### Translation Structure
-```
-src/locales/
+locales/
 ├── en/
-│   ├── common.json      # Shared text (header, footer)
-│   ├── home.json        # Home page
-│   └── projects.json    # Projects page
-└── zh-TW/               # Same structure
-```
-
-### Check Translations
-```bash
-# Find missing translations
-grep -r "MISSING" apps/profile/src/locales
-
-# Find untranslated text
-grep -rn '"[A-Z]' apps/profile/src --include="*.tsx" | grep -v "import\|export"
+│   └── home.json
+└── zh-TW/
+    └── home.json
 ```
 
 ---
 
 ## Deployment
 
-### Cloudflare Pages (Recommended)
+**Primary Platform**: Cloudflare Pages
 
-**Build Configuration**:
-```yaml
-Build command: nx build profile --configuration=production
-Build output: dist/apps/profile
-Root directory: /
-Node version: 20
-```
+**Configuration Summary**:
 
-**Environment Variables**:
-```
-NODE_VERSION=20
-```
+- Build command: `nx build profile`
+- Output: `dist/apps/profile`
+- Node version: 20
 
-**SPA Routing**: `public/_redirects` ensures all routes work
+**SPA Routing Support**:
+
 ```
 /* /index.html 200
 ```
 
 ---
 
-## Links & Resources
-
-### Documentation
-- **Product Spec**: `specs/apps/profile/en.md` (What it does, for whom)
-- **繁中規格**: `specs/apps/profile/zh-TW.md`
-- **Performance Guide**: `apps/profile/LIGHTHOUSE_OPTIMIZATION.md`
-- **Project Status**: `specs/PROJECT_STATUS.md` (Overall Nx monorepo progress)
-
-### External
-- **Live Demo**: TBD (Deploying to Cloudflare Pages)
-- **Lighthouse Report**: 90+ scores achieved
-
----
-
-## Troubleshooting
-
-### Port Already in Use
-```bash
-# Kill existing Vite processes
-pkill -f "vite.*profile"
-
-# Or use different port
-nx serve profile --port 3004
-```
-
-### Build Errors
-```bash
-# Clean cache and rebuild
-rm -rf node_modules/.vite
-nx build profile
-```
-
-### Type Errors
-```bash
-# Check TypeScript issues
-nx typecheck profile
-
-# May need to regenerate types
-pnpm install
-```
-
----
-
 ## License
 
-MIT
+MIT (Open for use and modification)
 
 ---
 
-**Questions?** See `specs/apps/profile/en.md` for detailed specification
+## Additional Documentation
+
+- `specs/apps/profile/en.md` - English specification (this file)
+- `specs/apps/profile/zh-TW.md` - Traditional Chinese specification
+- `apps/profile/README.md` - Developer documentation
+
+Note: Technical implementation details can be found in the README.md within the project directory.
