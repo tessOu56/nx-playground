@@ -21,8 +21,8 @@ async function fetchSpec(
   id: string,
   locale: SupportedLocale
 ): Promise<string | null> {
-  // Always use English version (only en maintained)
-  const url = `/specs/${type}/${id}/en.md`;
+  // Use locale-specific version
+  const url = `/specs/${type}/${id}/${locale}.md`;
 
   try {
     const response = await fetch(url);
