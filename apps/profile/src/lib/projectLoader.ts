@@ -1,18 +1,12 @@
 /**
  * 專案載入器
- * 合併 README、Spec 和 CHANGELOG 的資料
+ * Spec 為單一資料來源（不再載入 README）
  */
 
-import type { AppData, LibData, ProjectData } from '../types/projectData';
+import type { AppData, LibData } from '../types/projectData';
 
 import { loadProjectChangelog } from './changelogLoader';
 import type { SupportedLocale } from './i18n/LocaleRouter';
-import {
-  loadAppReadme,
-  loadLibReadme,
-  loadAllAppsReadmes,
-  loadAllLibsReadmes,
-} from './readmeLoader';
 import {
   loadAppSpec,
   loadLibSpec,
@@ -21,78 +15,27 @@ import {
 } from './specLoader';
 
 /**
- * 合併 README 和 Spec 資料
- */
-function mergeProjectData(
-  readme: any,
-  spec: any,
-  locale: SupportedLocale
-): ProjectData {
-  return {
-    // README 欄位
-    id: readme?.id ?? spec?.id ?? '',
-    name: readme?.name ?? spec?.id ?? '',
-    version: readme?.version ?? spec?.version ?? '0.0.0',
-    description: readme?.description ?? '',
-    techStack: readme?.techStack ?? [],
-    features: readme?.features ?? [],
-    readmeContent: readme?.readmeContent ?? '',
-    demoUrl: readme?.demoUrl,
-    repoUrl: readme?.repoUrl,
-    lastUpdated: readme?.lastUpdated ?? spec?.specLastUpdated,
-    author: readme?.author,
-    license: readme?.license,
-
-    // Spec 欄位
-    category: spec?.category ?? 'react',
-    status: spec?.status ?? 'development',
-    published: spec?.published !== false,
-    shortDesc: spec?.shortDesc ?? readme?.description ?? '',
-    purpose: spec?.purpose ?? '',
-    highlights: spec?.highlights ?? [],
-    useCases: spec?.useCases,
-    targetAudience: spec?.targetAudience,
-    specLastUpdated: spec?.specLastUpdated ?? '',
-    reviewer: spec?.reviewer,
-    reviewedAt: spec?.reviewedAt,
-    updateFrequency: spec?.updateFrequency,
-    nextReview: spec?.nextReview,
-    draftStatus: spec?.draftStatus,
-    approvalStatus: spec?.approvalStatus,
-    changesSince: spec?.changesSince,
-    relatedDocs: spec?.relatedDocs,
-    stats: spec?.stats,
-    specContent: spec?.specContent,
-    lastSync: spec?.lastSync,
-
-    // 其他
-    locale,
-  };
-}
-
-/**
  * 載入單一 App 的完整資料
+ * Spec 為單一資料來源
  */
 export async function loadApp(
   appId: string,
   locale: SupportedLocale = 'en'
 ): Promise<AppData | null> {
   try {
-    const [readme, spec, changelog] = await Promise.all([
-      loadAppReadme(appId, locale),
+    const [spec, changelog] = await Promise.all([
       loadAppSpec(appId, locale),
       loadProjectChangelog('app', appId),
     ]);
 
-    if (!readme && !spec) {
-      console.warn(`No data found for app: ${appId}`);
+    if (!spec) {
+      console.warn(`No spec found for app: ${appId}`);
       return null;
     }
 
-    const projectData = mergeProjectData(readme, spec, locale);
-
     return {
-      ...projectData,
+      ...spec,
+      locale,
       changelog: changelog.releases.length > 0 ? changelog : undefined,
     } as AppData;
   } catch (error) {
@@ -103,27 +46,26 @@ export async function loadApp(
 
 /**
  * 載入單一 Lib 的完整資料
+ * Spec 為單一資料來源
  */
 export async function loadLib(
   libId: string,
   locale: SupportedLocale = 'en'
 ): Promise<LibData | null> {
   try {
-    const [readme, spec, changelog] = await Promise.all([
-      loadLibReadme(libId, locale),
+    const [spec, changelog] = await Promise.all([
       loadLibSpec(libId, locale),
       loadProjectChangelog('lib', libId),
     ]);
 
-    if (!readme && !spec) {
-      console.warn(`No data found for lib: ${libId}`);
+    if (!spec) {
+      console.warn(`No spec found for lib: ${libId}`);
       return null;
     }
 
-    const projectData = mergeProjectData(readme, spec, locale);
-
     return {
-      ...projectData,
+      ...spec,
+      locale,
       changelog: changelog.releases.length > 0 ? changelog : undefined,
     } as LibData;
   } catch (error) {
@@ -134,45 +76,41 @@ export async function loadLib(
 
 /**
  * 載入所有 Apps
+ * 僅從 Spec 載入
  */
 export async function loadAllApps(
   locale: SupportedLocale = 'en'
 ): Promise<AppData[]> {
   try {
-    const [readmes, specs] = await Promise.all([
-      loadAllAppsReadmes(locale),
-      loadAllAppsSpecs(locale),
-    ]);
+    const specs = await loadAllAppsSpecs(locale);
 
-    // 建立 ID 映射
-    const readmeMap = new Map(readmes.map(r => [r.id, r]));
-    const specMap = new Map(specs.map(s => [s.id, s]));
-
-    // 合併所有專案
-    const allIds = new Set([...readmeMap.keys(), ...specMap.keys()]);
     const apps: AppData[] = [];
 
-    for (const id of allIds) {
-      const readme = readmeMap.get(id);
-      const spec = specMap.get(id);
-
-      // 如果有 spec，只顯示已發布的專案
-      // 如果沒有 spec，但有 README，就顯示（預設為發布）
-      if (spec && spec.published === false) continue;
-
-      const projectData = mergeProjectData(readme, spec, locale);
+    for (const spec of specs) {
+      // 只顯示已發布的專案
+      if (spec.published === false) continue;
 
       // 載入 CHANGELOG（可選）
       try {
-        const changelog = await loadProjectChangelog('app', id);
+        const changelog = await loadProjectChangelog('app', spec.id);
         if (changelog.releases.length > 0) {
-          (projectData as any).changelog = changelog;
+          apps.push({
+            ...spec,
+            locale,
+            changelog,
+          } as AppData);
+        } else {
+          apps.push({
+            ...spec,
+            locale,
+          } as AppData);
         }
       } catch (_error) {
-        console.warn(`No changelog for ${id}`);
+        apps.push({
+          ...spec,
+          locale,
+        } as AppData);
       }
-
-      apps.push(projectData as AppData);
     }
 
     return apps.sort((a, b) => a.name.localeCompare(b.name));
@@ -184,45 +122,41 @@ export async function loadAllApps(
 
 /**
  * 載入所有 Libs
+ * 僅從 Spec 載入
  */
 export async function loadAllLibs(
   locale: SupportedLocale = 'en'
 ): Promise<LibData[]> {
   try {
-    const [readmes, specs] = await Promise.all([
-      loadAllLibsReadmes(locale),
-      loadAllLibsSpecs(locale),
-    ]);
+    const specs = await loadAllLibsSpecs(locale);
 
-    // 建立 ID 映射
-    const readmeMap = new Map(readmes.map(r => [r.id, r]));
-    const specMap = new Map(specs.map(s => [s.id, s]));
-
-    // 合併所有專案
-    const allIds = new Set([...readmeMap.keys(), ...specMap.keys()]);
     const libs: LibData[] = [];
 
-    for (const id of allIds) {
-      const readme = readmeMap.get(id);
-      const spec = specMap.get(id);
-
-      // 如果有 spec，只顯示已發布的專案
-      // 如果沒有 spec，但有 README，就顯示（預設為發布）
-      if (spec && spec.published === false) continue;
-
-      const projectData = mergeProjectData(readme, spec, locale);
+    for (const spec of specs) {
+      // 只顯示已發布的專案
+      if (spec.published === false) continue;
 
       // 載入 CHANGELOG（可選）
       try {
-        const changelog = await loadProjectChangelog('lib', id);
+        const changelog = await loadProjectChangelog('lib', spec.id);
         if (changelog.releases.length > 0) {
-          (projectData as any).changelog = changelog;
+          libs.push({
+            ...spec,
+            locale,
+            changelog,
+          } as LibData);
+        } else {
+          libs.push({
+            ...spec,
+            locale,
+          } as LibData);
         }
       } catch (_error) {
-        console.warn(`No changelog for ${id}`);
+        libs.push({
+          ...spec,
+          locale,
+        } as LibData);
       }
-
-      libs.push(projectData as LibData);
     }
 
     return libs.sort((a, b) => a.name.localeCompare(b.name));

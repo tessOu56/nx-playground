@@ -255,38 +255,13 @@ export const ProjectDetail: FC<ProjectDetailProps> = ({ project, type }) => {
           </section>
         )}
 
-        {/* Documentation - Notion embedded content */}
-        {(project.readmeContent || project.specContent) && (
+        {/* Specification - Notion embedded content */}
+        {project.specContent && (
           <section className='mb-12'>
-            <h2 className='text-2xl font-semibold text-gray-900 dark:text-white mb-4'>
-              {String(t('documentation'))}
-            </h2>
-
-            {/* README Content */}
-            {project.readmeContent && (
-              <div className='mb-8'>
-                <h3 className='text-lg font-medium text-gray-700 dark:text-gray-300 mb-3'>
-                  {String(t('readme'))}
-                </h3>
-                <div
-                  className='prose dark:prose-invert max-w-none prose-headings:text-gray-900 dark:prose-headings:text-white prose-p:text-gray-700 dark:prose-p:text-gray-300 prose-a:text-blue-600 dark:prose-a:text-blue-400'
-                  dangerouslySetInnerHTML={{ __html: project.readmeContent }}
-                />
-              </div>
-            )}
-
-            {/* Spec Content */}
-            {project.specContent && (
-              <div>
-                <h3 className='text-lg font-medium text-gray-700 dark:text-gray-300 mb-3'>
-                  {String(t('specContent'))}
-                </h3>
-                <div
-                  className='prose dark:prose-invert max-w-none prose-headings:text-gray-900 dark:prose-headings:text-white prose-p:text-gray-700 dark:prose-p:text-gray-300 prose-a:text-blue-600 dark:prose-a:text-blue-400'
-                  dangerouslySetInnerHTML={{ __html: project.specContent }}
-                />
-              </div>
-            )}
+            <div
+              className='prose dark:prose-invert max-w-none prose-headings:text-gray-900 dark:prose-headings:text-white prose-p:text-gray-700 dark:prose-p:text-gray-300 prose-a:text-blue-600 dark:prose-a:text-blue-400'
+              dangerouslySetInnerHTML={{ __html: project.specContent }}
+            />
           </section>
         )}
 
