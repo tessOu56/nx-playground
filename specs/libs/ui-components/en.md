@@ -1,7 +1,20 @@
 ---
 id: ui-components
+name: UI Components
 version: 0.1.0
-lastUpdated: '2025-10-24'
+description: Comprehensive UI component library built with React, TypeScript, and Radix UI primitives
+techStack:
+  - React 19
+  - Radix UI
+  - Tailwind CSS
+  - TypeScript
+features:
+  - 40+ components
+  - TypeScript support
+  - Accessibility-first
+  - Form components
+  - Navigation components
+lastUpdated: '2025-01-24'
 category: ui
 status: production
 published: true

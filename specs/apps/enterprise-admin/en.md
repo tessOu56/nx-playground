@@ -1,7 +1,21 @@
 ---
 id: enterprise-admin
-version: 0.1.0
-lastUpdated: '2025-10-24'
+name: Enterprise Admin
+version: 0.0.0
+description: Enterprise-level admin console built with Angular 20 Signals, featuring dual-control approval and RBAC
+techStack:
+  - Angular 20
+  - Signal Store
+  - TypeScript
+  - Tailwind CSS
+  - RxJS
+features:
+  - User Management
+  - RBAC
+  - Dual-control Approval
+  - Audit Logs
+  - SSE Real-time Updates
+lastUpdated: '2025-01-24'
 category: angular
 status: development
 published: true

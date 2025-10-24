@@ -1,7 +1,19 @@
 ---
 id: charts
+name: Chart Components
 version: 0.1.0
-lastUpdated: '2025-10-24'
+description: Chart component library with Chart.js and Recharts support
+techStack:
+  - Chart.js
+  - Recharts
+  - React 19
+  - TypeScript
+features:
+  - Multiple chart types
+  - Dual library support
+  - Responsive design
+  - Theme integration
+lastUpdated: '2025-01-24'
 category: ui
 status: production
 published: true

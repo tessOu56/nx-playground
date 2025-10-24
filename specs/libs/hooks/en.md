@@ -1,7 +1,18 @@
 ---
 id: hooks
+name: Custom Hooks
 version: 0.0.1
-lastUpdated: '2025-10-24'
+description: Collection of reusable React hooks for common patterns
+techStack:
+  - React 19
+  - TypeScript
+features:
+  - useDebounce
+  - useLocalStorage
+  - useAsync
+  - useModal
+  - usePagination
+lastUpdated: '2025-01-24'
 category: utils
 status: production
 published: true
