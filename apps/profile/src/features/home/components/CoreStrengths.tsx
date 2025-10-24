@@ -86,8 +86,9 @@ export const CoreStrengths: FC = () => {
       className='relative h-screen flex flex-col justify-center overflow-hidden'
       role='region'
       aria-label='Tech Stack Showcase'
+      data-header-dark='true'
       style={{
-        background: 'linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%)',
+        background: 'linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%)',
         backgroundAttachment: 'fixed',
       }}
     >
@@ -158,10 +159,10 @@ export const CoreStrengths: FC = () => {
       {/* Content */}
       <div className='relative z-10'>
         <div className='text-center mb-16'>
-          <h2 className='text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-4'>
+          <h2 className='text-4xl md:text-5xl font-bold text-white mb-4'>
             Tech Stack
           </h2>
-          <p className='text-xl text-gray-600 dark:text-gray-400'>
+          <p className='text-xl text-gray-300'>
             Technologies I use to build modern web applications
           </p>
         </div>
@@ -189,7 +190,7 @@ export const CoreStrengths: FC = () => {
                     )
                   )
                 }
-                className='tech-badge px-6 py-3 bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 rounded-lg font-medium text-lg whitespace-nowrap motion-safe:hover:scale-110 motion-safe:transition-transform cursor-pointer'
+                className='tech-badge px-6 py-3 bg-blue-500/20 backdrop-blur-sm text-blue-200 border border-blue-400/30 rounded-lg font-medium text-lg whitespace-nowrap motion-safe:hover:scale-110 motion-safe:hover:bg-blue-500/30 motion-safe:transition-all cursor-pointer'
                 aria-label={`Search for ${tech.name}`}
               >
                 {tech.name}
@@ -221,7 +222,7 @@ export const CoreStrengths: FC = () => {
                     )
                   )
                 }
-                className='tech-badge px-6 py-3 bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300 rounded-lg font-medium text-lg whitespace-nowrap motion-safe:hover:scale-110 motion-safe:transition-transform cursor-pointer'
+                className='tech-badge px-6 py-3 bg-green-500/20 backdrop-blur-sm text-green-200 border border-green-400/30 rounded-lg font-medium text-lg whitespace-nowrap motion-safe:hover:scale-110 motion-safe:hover:bg-green-500/30 motion-safe:transition-all cursor-pointer'
                 aria-label={`Search for ${tech.name}`}
               >
                 {tech.name}
@@ -253,7 +254,7 @@ export const CoreStrengths: FC = () => {
                     )
                   )
                 }
-                className='tech-badge px-6 py-3 bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300 rounded-lg font-medium text-lg whitespace-nowrap motion-safe:hover:scale-110 motion-safe:transition-transform cursor-pointer'
+                className='tech-badge px-6 py-3 bg-purple-500/20 backdrop-blur-sm text-purple-200 border border-purple-400/30 rounded-lg font-medium text-lg whitespace-nowrap motion-safe:hover:scale-110 motion-safe:hover:bg-purple-500/30 motion-safe:transition-all cursor-pointer'
                 aria-label={`Search for ${tech.name}`}
               >
                 {tech.name}
