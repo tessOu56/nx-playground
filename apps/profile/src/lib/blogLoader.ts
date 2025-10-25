@@ -5,17 +5,29 @@ import type { SupportedLocale } from './i18n/LocaleRouter';
 
 /**
  * Fetch blog markdown content from specs/blogs/
+ * Supports bilingual files: YYYY-MM.en.md and YYYY-MM.zh-TW.md
  */
 async function fetchBlog(
   slug: string,
   locale: SupportedLocale
 ): Promise<string | null> {
-  // Always use English version (only en maintained)
-  const url = `/specs/blogs/${slug}.md`;
+  // Try locale-specific version first
+  const url = `/specs/blogs/${slug}.${locale}.md`;
 
   try {
     const response = await fetch(url);
     if (!response.ok) {
+      // If zh-TW not found, fallback to English
+      if (locale === 'zh-TW') {
+        console.warn(`Blog ${slug}.${locale}.md not found, falling back to en`);
+        const fallbackUrl = `/specs/blogs/${slug}.en.md`;
+        const fallbackResponse = await fetch(fallbackUrl);
+        if (!fallbackResponse.ok) {
+          console.warn(`Blog not found: ${slug}`);
+          return null;
+        }
+        return await fallbackResponse.text();
+      }
       console.warn(`Blog not found: ${slug}`);
       return null;
     }
@@ -84,16 +96,15 @@ export async function loadBlog(
 export async function loadAllBlogs(
   locale: SupportedLocale = 'en'
 ): Promise<BlogPost[]> {
-  // Hardcoded blog slugs for now
-  // TODO: Generate this list dynamically or from a manifest file
+  // Blog slugs in YYYY-MM format (newest first)
   const blogSlugs = [
-    '2025-nx-deep-dive',
-    '2024-architecture-patterns',
-    '2023-monorepo-adventure',
-    '2022-typescript-mastery',
-    '2021-fullstack-evolution',
-    '2020-react-journey',
-    '2019-tech-review',
+    '2025-01',
+    '2024-06',
+    '2023-08',
+    '2022-05',
+    '2021-07',
+    '2020-09',
+    '2019-12',
   ];
 
   const blogs: BlogPost[] = [];
