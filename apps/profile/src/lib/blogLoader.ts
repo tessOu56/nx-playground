@@ -96,14 +96,14 @@ export async function loadBlog(
 export async function loadAllBlogs(
   locale: SupportedLocale = 'en'
 ): Promise<BlogPost[]> {
-  // Blog slugs in YYYY-MM format (newest first)
+  // Blog slugs in YYYY-12 format (all published in December)
   const blogSlugs = [
-    '2025-01',
-    '2024-06',
-    '2023-08',
-    '2022-05',
-    '2021-07',
-    '2020-09',
+    '2025-12',
+    '2024-12',
+    '2023-12',
+    '2022-12',
+    '2021-12',
+    '2020-12',
     '2019-12',
   ];
 
