@@ -14,7 +14,9 @@ describe('Common Schemas', () => {
   describe('emailSchema', () => {
     it('should accept valid emails', () => {
       expect(emailSchema.parse('user@example.com')).toBe('user@example.com');
-      expect(emailSchema.parse('test.user+tag@domain.co.uk')).toBe('test.user+tag@domain.co.uk');
+      expect(emailSchema.parse('test.user+tag@domain.co.uk')).toBe(
+        'test.user+tag@domain.co.uk'
+      );
     });
 
     it('should reject invalid emails', () => {
@@ -24,7 +26,9 @@ describe('Common Schemas', () => {
     });
 
     it('should trim and lowercase emails', () => {
-      expect(emailSchema.parse('  USER@EXAMPLE.COM  ')).toBe('user@example.com');
+      expect(emailSchema.parse('  USER@EXAMPLE.COM  ')).toBe(
+        'user@example.com'
+      );
     });
   });
 
@@ -47,7 +51,9 @@ describe('Common Schemas', () => {
     });
 
     it('should reject short passwords', () => {
-      expect(() => passwordSchema.parse('Pass1')).toThrow('at least 8 characters');
+      expect(() => passwordSchema.parse('Pass1')).toThrow(
+        'at least 8 characters'
+      );
     });
   });
 
@@ -116,4 +122,3 @@ describe('Common Schemas', () => {
     });
   });
 });
-
