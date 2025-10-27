@@ -1,6 +1,6 @@
 /**
  * Security Headers Verification Script
- * 
+ *
  * Checks if security headers are properly configured for production deployment.
  * Run: tsx apps/profile/scripts/verify-security-headers.ts [url]
  */
@@ -13,9 +13,7 @@ const REQUIRED_HEADERS = [
   'permissions-policy',
 ];
 
-const RECOMMENDED_HEADERS = [
-  'strict-transport-security',
-];
+const RECOMMENDED_HEADERS = ['strict-transport-security'];
 
 interface HeaderCheckResult {
   header: string;
@@ -46,10 +44,13 @@ async function checkSecurityHeaders(url: string): Promise<void> {
 
       if (present) {
         score = 10;
-        
+
         // Additional checks
         if (headerName === 'content-security-policy') {
-          if (value!.includes('unsafe-inline') && value!.includes('script-src')) {
+          if (
+            value!.includes('unsafe-inline') &&
+            value!.includes('script-src')
+          ) {
             issues.push('⚠️  Uses unsafe-inline for scripts (consider nonce)');
             score -= 2;
           }
@@ -62,7 +63,11 @@ async function checkSecurityHeaders(url: string): Promise<void> {
           }
         }
 
-        if (headerName === 'x-frame-options' && value !== 'DENY' && value !== 'SAMEORIGIN') {
+        if (
+          headerName === 'x-frame-options' &&
+          value !== 'DENY' &&
+          value !== 'SAMEORIGIN'
+        ) {
           issues.push(`⚠️  Weak value: ${value}`);
           score -= 5;
         }
@@ -71,7 +76,13 @@ async function checkSecurityHeaders(url: string): Promise<void> {
       }
 
       totalScore += score;
-      results.push({ header: headerName, present, value: value || undefined, score, issues });
+      results.push({
+        header: headerName,
+        present,
+        value: value || undefined,
+        score,
+        issues,
+      });
     }
 
     // Check recommended headers
@@ -84,7 +95,7 @@ async function checkSecurityHeaders(url: string): Promise<void> {
 
       if (present) {
         score = 5;
-        
+
         if (headerName === 'strict-transport-security') {
           if (!value!.includes('max-age')) {
             issues.push('⚠️  Missing max-age');
@@ -99,35 +110,70 @@ async function checkSecurityHeaders(url: string): Promise<void> {
       }
 
       totalScore += score;
-      results.push({ header: headerName, present, value: value || undefined, score, issues });
+      results.push({
+        header: headerName,
+        present,
+        value: value || undefined,
+        score,
+        issues,
+      });
     }
 
     // Print results
-    console.log('┌─────────────────────────────────────────────────────────────┐');
-    console.log('│                    Security Headers Report                  │');
-    console.log('└─────────────────────────────────────────────────────────────┘\n');
+    console.log(
+      '┌─────────────────────────────────────────────────────────────┐'
+    );
+    console.log(
+      '│                    Security Headers Report                  │'
+    );
+    console.log(
+      '└─────────────────────────────────────────────────────────────┘\n'
+    );
 
     for (const result of results) {
       const status = result.present ? '✅' : '❌';
       console.log(`${status} ${result.header.toUpperCase()}`);
-      
+
       if (result.value) {
-        console.log(`   Value: ${result.value.substring(0, 80)}${result.value.length > 80 ? '...' : ''}`);
+        console.log(
+          `   Value: ${result.value.substring(0, 80)}${
+            result.value.length > 80 ? '...' : ''
+          }`
+        );
       }
-      
+
       if (result.issues.length > 0) {
         result.issues.forEach(issue => console.log(`   ${issue}`));
       }
-      
-      console.log(`   Score: ${result.score}/${result.header in REQUIRED_HEADERS ? 10 : 5}\n`);
+
+      console.log(
+        `   Score: ${result.score}/${
+          result.header in REQUIRED_HEADERS ? 10 : 5
+        }\n`
+      );
     }
 
     const percentage = Math.round((totalScore / maxScore) * 100);
-    const grade = percentage >= 90 ? 'A' : percentage >= 75 ? 'B' : percentage >= 60 ? 'C' : percentage >= 50 ? 'D' : 'F';
+    const grade =
+      percentage >= 90
+        ? 'A'
+        : percentage >= 75
+        ? 'B'
+        : percentage >= 60
+        ? 'C'
+        : percentage >= 50
+        ? 'D'
+        : 'F';
 
-    console.log('┌─────────────────────────────────────────────────────────────┐');
-    console.log(`│  Overall Security Score: ${totalScore}/${maxScore} (${percentage}%) - Grade: ${grade}  │`);
-    console.log('└─────────────────────────────────────────────────────────────┘\n');
+    console.log(
+      '┌─────────────────────────────────────────────────────────────┐'
+    );
+    console.log(
+      `│  Overall Security Score: ${totalScore}/${maxScore} (${percentage}%) - Grade: ${grade}  │`
+    );
+    console.log(
+      '└─────────────────────────────────────────────────────────────┘\n'
+    );
 
     if (percentage < 75) {
       console.log('⚠️  Security headers need improvement!\n');
@@ -136,7 +182,6 @@ async function checkSecurityHeaders(url: string): Promise<void> {
       console.log('✅ Security headers look good!\n');
       process.exit(0);
     }
-
   } catch (error) {
     console.error('❌ Error checking headers:', error);
     process.exit(1);
@@ -146,4 +191,3 @@ async function checkSecurityHeaders(url: string): Promise<void> {
 // Get URL from command line or use default
 const url = process.argv[2] || 'http://localhost:3003';
 checkSecurityHeaders(url);
-

@@ -1,6 +1,9 @@
 import type { FC } from 'react';
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
+import { Eye, Users } from 'lucide-react';
+
+import { usePostViews } from '@nx-playground/supabase-client';
 
 import { loadBlog } from '../../../lib/blogLoader';
 import type { SupportedLocale } from '../../../lib/i18n/LocaleRouter';
@@ -15,6 +18,9 @@ export const BlogPostPage: FC = () => {
 
   const [blog, setBlog] = useState<BlogPost | null>(null);
   const [loading, setLoading] = useState(true);
+
+  // Track post views with Supabase
+  const { stats, trackView } = usePostViews(slug || '');
 
   useEffect(() => {
     const loadData = async () => {
@@ -33,6 +39,17 @@ export const BlogPostPage: FC = () => {
 
     loadData();
   }, [slug, currentLocale]);
+
+  // Track view on mount (with slight delay to avoid double counting)
+  useEffect(() => {
+    if (!slug) return;
+
+    const timer = setTimeout(() => {
+      trackView();
+    }, 1000); // 1 second delay
+
+    return () => clearTimeout(timer);
+  }, [slug, trackView]);
 
   if (loading) {
     return (
@@ -102,13 +119,27 @@ export const BlogPostPage: FC = () => {
             />
           )}
 
-          <div className='flex items-center gap-4 text-sm text-gray-600 dark:text-gray-400 mb-4'>
+          <div className='flex items-center gap-4 text-sm text-gray-600 dark:text-gray-400 mb-4 flex-wrap'>
             <time dateTime={blog.publishDate}>{publishDate}</time>
             {blog.readingTime && <span>• {blog.readingTime} min read</span>}
             {blog.year && (
               <span className='px-3 py-1 bg-blue-600 text-white rounded-full text-xs font-bold'>
                 {blog.year}
               </span>
+            )}
+            
+            {/* View Stats */}
+            {stats && (
+              <>
+                <span className='flex items-center gap-1.5'>
+                  <Eye className='w-4 h-4' />
+                  {stats.totalViews.toLocaleString()} views
+                </span>
+                <span className='flex items-center gap-1.5'>
+                  <Users className='w-4 h-4' />
+                  {stats.uniqueIps.toLocaleString()} visitors
+                </span>
+              </>
             )}
           </div>
 
