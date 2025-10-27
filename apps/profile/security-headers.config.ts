@@ -1,6 +1,6 @@
 /**
  * Security Headers Configuration for Profile App
- * 
+ *
  * This configuration defines security headers to protect against common web vulnerabilities:
  * - XSS (Cross-Site Scripting)
  * - Clickjacking
@@ -97,10 +97,12 @@ export function getProductionHeaders(): Record<string, string> {
 /**
  * Get security headers with nonce for production
  */
-export function getProductionHeadersWithNonce(nonce: string): Record<string, string> {
+export function getProductionHeadersWithNonce(
+  nonce: string
+): Record<string, string> {
   const csp = { ...productionCSP };
   csp['script-src'] = ["'self'", `'nonce-${nonce}'`];
-  
+
   return {
     'Content-Security-Policy': cspToString(csp),
     'X-Frame-Options': 'DENY',
@@ -123,4 +125,3 @@ export function getReportOnlyHeaders(): Record<string, string> {
     'Permissions-Policy': 'camera=(), microphone=(), geolocation=()',
   };
 }
-

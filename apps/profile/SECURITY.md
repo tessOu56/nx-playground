@@ -11,6 +11,7 @@ This application implements comprehensive security headers to protect against co
 **Purpose**: Prevents Cross-Site Scripting (XSS) and other code injection attacks.
 
 **Development Mode**:
+
 ```
 default-src 'self';
 script-src 'self' 'unsafe-inline' 'unsafe-eval';
@@ -20,6 +21,7 @@ connect-src 'self' ws: wss:;
 ```
 
 **Production Mode**:
+
 ```
 default-src 'self';
 script-src 'self';
@@ -35,6 +37,7 @@ upgrade-insecure-requests;
 ```
 
 **Known Exceptions**:
+
 - `'unsafe-inline'` for styles: Required by Tailwind CSS runtime styles
 - `https://picsum.photos`: Placeholder images (can be removed in production)
 
@@ -110,6 +113,7 @@ For stricter CSP without `'unsafe-inline'`:
 ### Manual Testing
 
 Check headers using browser DevTools:
+
 1. Open DevTools → Network tab
 2. Reload page
 3. Click on document request
@@ -118,6 +122,7 @@ Check headers using browser DevTools:
 ### Automated Testing
 
 Run verification script:
+
 ```bash
 # Check local dev server
 tsx apps/profile/scripts/verify-security-headers.ts http://localhost:3003
@@ -141,6 +146,7 @@ tsx apps/profile/scripts/verify-security-headers.ts https://your-domain.com
 **Issue**: Tailwind generates inline styles at runtime.
 
 **Mitigation**:
+
 - Accept `'unsafe-inline'` for styles (lower risk than scripts)
 - Consider extracting critical CSS for stricter CSP
 
@@ -149,6 +155,7 @@ tsx apps/profile/scripts/verify-security-headers.ts https://your-domain.com
 **Issue**: Blog cover images from `picsum.photos`.
 
 **Mitigation**:
+
 - Whitelist specific CDN in `img-src`
 - Consider hosting images locally for production
 
@@ -157,6 +164,7 @@ tsx apps/profile/scripts/verify-security-headers.ts https://your-domain.com
 **Issue**: Dev server needs relaxed CSP for HMR (Hot Module Replacement).
 
 **Solution**:
+
 - Separate dev and prod configurations
 - Use Report-Only mode for testing
 
@@ -179,7 +187,7 @@ If you discover a security vulnerability, please email: [your-email@example.com]
 - [x] Permissions-Policy configured
 - [x] HSTS enabled (production only)
 - [x] Dev/Prod environments separated
-- [x] Cloudflare _headers file created
+- [x] Cloudflare \_headers file created
 - [ ] CSP nonce implementation (future)
 - [ ] CSP violation reporting (optional)
 
@@ -195,4 +203,3 @@ If you discover a security vulnerability, please email: [your-email@example.com]
 ---
 
 Last Updated: 2025-01-27
-

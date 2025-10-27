@@ -1,0 +1,2 @@
+export { usePostViews } from './usePostViews';
+

@@ -50,10 +50,10 @@ cd apps/profile && pnpm preview    # Preview production build
 
 ## Configuration
 
-| Variable | Required | Default | Purpose |
-|----------|----------|---------|---------|
-| `NODE_ENV` | No | development | Environment mode |
-| `VITE_*` | No | - | Vite env vars (if needed) |
+| Variable   | Required | Default     | Purpose                   |
+| ---------- | -------- | ----------- | ------------------------- |
+| `NODE_ENV` | No       | development | Environment mode          |
+| `VITE_*`   | No       | -           | Vite env vars (if needed) |
 
 No environment variables required for basic development.
 
@@ -97,9 +97,10 @@ apps/profile/
 ### Security Headers
 
 This application implements comprehensive security headers:
+
 - **CSP (Content Security Policy)**: Prevents XSS attacks
 - **X-Frame-Options**: Prevents clickjacking
-- **X-Content-Type-Options**: Prevents MIME sniffing  
+- **X-Content-Type-Options**: Prevents MIME sniffing
 - **Referrer-Policy**: Controls referrer information
 - **Permissions-Policy**: Restricts browser features
 - **HSTS**: Forces HTTPS (production only)
@@ -113,6 +114,7 @@ This application implements comprehensive security headers:
 ### Validation
 
 Check security headers:
+
 ```bash
 tsx apps/profile/scripts/verify-security-headers.ts http://localhost:3003
 ```
@@ -124,21 +126,25 @@ See `SECURITY.md` for detailed security policy and best practices.
 ## Tech Decisions (Summary)
 
 ### Why React 19?
+
 - Latest features (Compiler, Server Components ready)
 - Industry standard, large ecosystem
 - Excellent TypeScript support
 
 ### Why Vite 6?
+
 - Fast HMR (Hot Module Replacement)
 - Better DX than Create React App
 - Native ESM, faster builds
 
 ### Why Zustand?
+
 - Simpler than Redux (less boilerplate)
 - Performant (no unnecessary re-renders)
 - Small bundle size (~1KB)
 
 ### Why Nx Monorepo?
+
 - Share libraries across apps
 - Consistent tooling and standards
 - Atomic commits across dependencies
@@ -150,6 +156,7 @@ See `SECURITY.md` for detailed security policy and best practices.
 ## Interfaces (App Routes)
 
 ### Public Routes
+
 - `GET /` → Redirect to `/en`
 - `GET /:locale` → Home page
 - `GET /:locale/projects` → Projects showcase
@@ -160,6 +167,7 @@ See `SECURITY.md` for detailed security policy and best practices.
 - `GET /:locale/*` → 404 page
 
 ### Supported Locales
+
 - `en` - English
 - `zh-TW` - Traditional Chinese
 
@@ -168,6 +176,7 @@ See `SECURITY.md` for detailed security policy and best practices.
 ## Development
 
 ### Local Development
+
 ```bash
 # Start dev server
 nx serve profile
@@ -177,6 +186,7 @@ nx serve profile
 ```
 
 ### Testing
+
 ```bash
 # Unit tests
 nx test profile
@@ -189,6 +199,7 @@ nx test profile --watch
 ```
 
 ### Type Checking
+
 ```bash
 # Check TypeScript types
 nx typecheck profile
@@ -202,6 +213,7 @@ nx typecheck profile --watch
 ## CI / Release
 
 ### Nx Affected Commands
+
 ```bash
 # Test only affected projects
 nx affected:test
@@ -214,6 +226,7 @@ nx affected:lint
 ```
 
 ### Versioning
+
 ```bash
 # Bump version (update package.json)
 npm version patch   # 1.0.0 → 1.0.1
@@ -226,10 +239,12 @@ npm version major   # 1.0.0 → 2.0.0
 ## i18n (Internationalization)
 
 ### Supported Languages
+
 - **English** (`en`) - Default
 - **Traditional Chinese** (`zh-TW`)
 
 ### Translation Files
+
 ```
 src/
 ├── locales/              # Shared translations
@@ -246,6 +261,7 @@ src/
 ```
 
 ### Check for Missing Translations
+
 ```bash
 # Search for missing translation keys
 grep -r "MISSING" apps/profile/src/locales
@@ -261,18 +277,21 @@ grep -r "t('" apps/profile/src
 ### Cloudflare Pages
 
 **Build Settings**:
+
 - Build command: `nx build profile --configuration=production`
 - Build output directory: `dist/apps/profile`
 - Root directory: `/` (monorepo root)
 - Node version: `20`
 
 **Environment Variables**:
+
 ```
 NODE_VERSION=20
 ```
 
-**Custom Redirects**: 
+**Custom Redirects**:
 `public/_redirects` handles SPA routing:
+
 ```
 /* /index.html 200
 ```
