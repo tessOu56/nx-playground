@@ -92,6 +92,35 @@ apps/profile/
 
 ---
 
+## 🔒 Security
+
+### Security Headers
+
+This application implements comprehensive security headers:
+- **CSP (Content Security Policy)**: Prevents XSS attacks
+- **X-Frame-Options**: Prevents clickjacking
+- **X-Content-Type-Options**: Prevents MIME sniffing  
+- **Referrer-Policy**: Controls referrer information
+- **Permissions-Policy**: Restricts browser features
+- **HSTS**: Forces HTTPS (production only)
+
+### Configuration Files
+
+- `security-headers.config.ts` - TypeScript config with dev/prod separation
+- `public/_headers` - Cloudflare Pages headers
+- `SECURITY.md` - Detailed security documentation
+
+### Validation
+
+Check security headers:
+```bash
+tsx apps/profile/scripts/verify-security-headers.ts http://localhost:3003
+```
+
+See `SECURITY.md` for detailed security policy and best practices.
+
+---
+
 ## Tech Decisions (Summary)
 
 ### Why React 19?
