@@ -1,9 +1,18 @@
 import { NestFactory } from '@nestjs/core';
 import { ValidationPipe } from '@nestjs/common';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
+import { logger } from '@nx-playground/logger';
 import { AppModule } from './app.module';
 
+// Initialize logger for API Server
+logger.setContext({
+  app: 'api-server',
+  environment: process.env.NODE_ENV || 'development',
+});
+
 async function bootstrap() {
+  logger.info('API Server starting');
+  
   const app = await NestFactory.create(AppModule);
 
   // Global prefix
@@ -50,9 +59,19 @@ async function bootstrap() {
   const port = process.env.PORT || 3001;
   await app.listen(port);
 
+  logger.info('API Server listening', {
+    port,
+    apiUrl: `http://localhost:${port}/api`,
+    docsUrl: `http://localhost:${port}/api/docs`,
+    openapiUrl: `http://localhost:${port}/api-json`,
+  });
+  
   console.log(`🚀 Application is running on: http://localhost:${port}/api`);
   console.log(`📚 Swagger docs: http://localhost:${port}/api/docs`);
   console.log(`📄 OpenAPI JSON: http://localhost:${port}/api-json`);
 }
 
-bootstrap();
+bootstrap().catch(error => {
+  logger.fatal('API Server failed to start', error);
+  process.exit(1);
+});

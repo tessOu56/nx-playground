@@ -3,6 +3,7 @@
  */
 
 import { Card, CardContent, CardHeader } from '@nx-playground/ui-components';
+import { formatDate } from '@nx-playground/utils';
 import { type FC } from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -54,7 +55,7 @@ export const BlogCard: FC<BlogCardProps> = ({ blog }) => {
         <div className='flex items-center justify-between'>
           <TagList tags={blog.tags?.slice(0, 3) || []} compact />
           <time className='text-sm text-muted-foreground'>
-            {new Date(blog.publishDate).toLocaleDateString('en-US')}
+            {formatDate(new Date(blog.publishDate), 'YYYY-MM-DD')}
           </time>
         </div>
       </CardContent>

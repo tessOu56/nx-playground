@@ -1,4 +1,5 @@
 import { yupResolver } from '@hookform/resolvers/yup';
+import { logger } from '@nx-playground/logger';
 import { observer } from 'mobx-react-lite';
 import { useEffect, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
@@ -110,25 +111,32 @@ function SignInForm() {
   const onSubmit: SubmitHandler<FormValues> = async data => {
     if (!isSubmitable) return;
     setIsSubmitable(false);
+    
+    logger.info('User attempting login', { email: data.email });
+    
     try {
-      const res = await postOryForm<ApiData.FlowRes | ApiData.SessionNodes>(
-        `/self-service/login`,
-        {
-          method: 'password',
-          identifier: data.email ?? '',
-          password: data.password ?? '',
-          csrf_token: stores.token,
-        },
-        {
-          params: { flow: flowId },
-        }
-      );
-      console.log(res);
+      const res = await logger.time('login-request', async () => {
+        return await postOryForm<ApiData.FlowRes | ApiData.SessionNodes>(
+          `/self-service/login`,
+          {
+            method: 'password',
+            identifier: data.email ?? '',
+            password: data.password ?? '',
+            csrf_token: stores.token,
+          },
+          {
+            params: { flow: flowId },
+          }
+        );
+      });
+
+      logger.debug('Login response received', { hasData: !!res?.data });
 
       if (res?.data && 'data' in res.data) {
         const msg = res.data.data?.ui?.messages?.[0];
         if (msg?.id === 1010016) {
           const tip = ApiCodes.ErrorCodes[1010016]?.tips;
+          logger.warn('Login error', { errorCode: 1010016, message: tip });
           toast.error(`${tip}`, { duration: Infinity, closeButton: true });
           return;
         }
@@ -139,9 +147,13 @@ function SignInForm() {
           step => step.action === 'redirect_browser_to'
         )?.redirect_browser_to;
 
-        if (redirect) handleRedirect(redirect);
+        if (redirect) {
+          logger.info('Login successful, redirecting', { redirect });
+          handleRedirect(redirect);
+        }
       }
     } catch (err: any) {
+      logger.error('Login failed', err, { email: data.email });
       handleOryLoginError(err);
     }
   };

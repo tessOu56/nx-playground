@@ -15,6 +15,7 @@ import {
   ApiParam,
   ApiQuery,
 } from '@nestjs/swagger';
+import { logger } from '@nx-playground/logger';
 
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -48,7 +49,19 @@ export class UsersController {
   @ApiResponse({ status: 200, type: User })
   @ApiResponse({ status: 404, description: 'User not found' })
   async findOne(@Param('id') id: string) {
-    return this.usersService.findOne(id);
+    logger.debug('Fetching user', { userId: id });
+    
+    const user = await logger.time('db-find-user', async () => {
+      return await this.usersService.findOne(id);
+    });
+    
+    if (user) {
+      logger.info('User fetched successfully', { userId: id });
+    } else {
+      logger.warn('User not found', { userId: id });
+    }
+    
+    return user;
   }
 
   @Post()
@@ -56,7 +69,25 @@ export class UsersController {
   @ApiResponse({ status: 201, type: User })
   @ApiResponse({ status: 400, description: 'Invalid input' })
   async create(@Body() createUserDto: CreateUserDto) {
-    return this.usersService.create(createUserDto);
+    logger.info('Creating new user', { email: createUserDto.email });
+    
+    try {
+      const user = await logger.time('db-create-user', async () => {
+        return await this.usersService.create(createUserDto);
+      });
+      
+      logger.info('User created successfully', { 
+        userId: user.id,
+        email: user.email,
+      });
+      
+      return user;
+    } catch (error) {
+      logger.error('Failed to create user', error, { 
+        email: createUserDto.email,
+      });
+      throw error;
+    }
   }
 
   @Put(':id')
