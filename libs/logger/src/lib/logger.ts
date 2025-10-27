@@ -1,6 +1,6 @@
 /**
  * Unified Logger for Nx Monorepo
- * 
+ *
  * Features:
  * - Structured logging (JSON format)
  * - Log levels (debug, info, warn, error, fatal)
@@ -125,16 +125,21 @@ class Logger {
   /**
    * Error level log
    */
-  error(message: string, error?: Error | unknown, data?: Record<string, unknown>): void {
-    const errorData = error instanceof Error
-      ? {
-          error: {
-            name: error.name,
-            message: error.message,
-            stack: error.stack,
-          },
-        }
-      : { error };
+  error(
+    message: string,
+    error?: Error | unknown,
+    data?: Record<string, unknown>
+  ): void {
+    const errorData =
+      error instanceof Error
+        ? {
+            error: {
+              name: error.name,
+              message: error.message,
+              stack: error.stack,
+            },
+          }
+        : { error };
 
     this.pinoLogger.error({ ...this.context, ...errorData, ...data }, message);
   }
@@ -142,16 +147,21 @@ class Logger {
   /**
    * Fatal level log (most severe)
    */
-  fatal(message: string, error?: Error | unknown, data?: Record<string, unknown>): void {
-    const errorData = error instanceof Error
-      ? {
-          error: {
-            name: error.name,
-            message: error.message,
-            stack: error.stack,
-          },
-        }
-      : { error };
+  fatal(
+    message: string,
+    error?: Error | unknown,
+    data?: Record<string, unknown>
+  ): void {
+    const errorData =
+      error instanceof Error
+        ? {
+            error: {
+              name: error.name,
+              message: error.message,
+              stack: error.stack,
+            },
+          }
+        : { error };
 
     this.pinoLogger.fatal({ ...this.context, ...errorData, ...data }, message);
   }
@@ -210,4 +220,3 @@ export { Logger };
 
 // Export type for context
 export type { LogContext };
-
