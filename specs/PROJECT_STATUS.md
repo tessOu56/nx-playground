@@ -1,16 +1,17 @@
 # NX Playground - Project Status Overview
 
-**Last Updated**: 2025-01-24
+**Last Updated**: 2025-01-27
 **Maintainer**: Tess
 
 ---
 
 ## Quick Summary
 
-- **Total Projects**: 17 (7 apps + 10 libs)
+- **Total Projects**: 18 (7 apps + 11 libs)
 - **Production Ready**: 3 apps
 - **In Development**: 4 apps
-- **Stable Libraries**: 10 libs
+- **Stable Libraries**: 11 libs
+- **Backend**: Supabase integration started ✅
 
 ---
 
@@ -70,7 +71,7 @@
 
 ## Libraries Status
 
-All **10 libraries** marked as **Stable** ✅:
+All **11 libraries** marked as **Stable** ✅:
 
 | Library         | Purpose                        | Status    |
 | --------------- | ------------------------------ | --------- |
@@ -78,6 +79,7 @@ All **10 libraries** marked as **Stable** ✅:
 | design-system   | Design tokens & theming        | ✅ Stable |
 | i18n            | Internationalization (i18next) | ✅ Stable |
 | search-engine   | AI-powered search engine       | ✅ Stable |
+| supabase-client | Supabase SDK wrapper + hooks   | ✅ Stable |
 | api-client      | OpenAPI generated client       | ✅ Stable |
 | charts          | Chart.js & Recharts wrapper    | ✅ Stable |
 | hooks           | Custom React hooks             | ✅ Stable |
@@ -98,6 +100,14 @@ All **10 libraries** marked as **Stable** ✅:
 - ✅ Lighthouse 90+ (Performance, PWA)
 - ✅ Multi-language with fallback mechanism (en, zh-TW)
 - ✅ AI Search with conversation persistence
+
+**Backend Integration Started** (2025-01-27) ✅:
+
+- ✅ Supabase client library (`@nx-playground/supabase-client`)
+- ✅ Blog view tracking with anti-spam protection
+- ✅ RLS policies for security
+- ✅ Edge Function for IP hashing & rate limiting
+- ✅ SQL migrations for data model
 - ✅ Adaptive header (auto dark/light mode detection)
 - ✅ Notion-style detail pages
 - ✅ Mobile responsive (all sections)
