@@ -41,6 +41,7 @@
       "@nx-playground/event-portal": ["apps/event-portal/src"],
       "@nx-playground/hooks": ["dist/libs/hooks/src"],
       "@nx-playground/i18n": ["dist/libs/i18n"],
+      "@nx-playground/logger": ["libs/logger/src/index.ts"],
       "@nx-playground/profile": ["apps/profile/src"],
       "@nx-playground/search-engine": ["libs/search-engine/src/index.ts"],
       "@nx-playground/supabase-client": ["libs/supabase-client/src/index.ts"],
