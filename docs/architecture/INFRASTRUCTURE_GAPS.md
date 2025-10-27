@@ -7,6 +7,7 @@
 ## 📊 現況總覽
 
 ### 已有 Apps (7)
+
 - ✅ profile (React 19 - Portfolio)
 - ✅ event-cms (React 19 - CMS)
 - ✅ event-portal (Next.js 15 - Portal)
@@ -16,6 +17,7 @@
 - ✅ enterprise-admin (Angular 20 - Admin Console)
 
 ### 已有 Libs (11)
+
 - ✅ ui-components (React UI library)
 - ✅ design-system (Design tokens)
 - ✅ i18n (Internationalization)
@@ -40,6 +42,7 @@
 **目的**: 統一的日誌系統
 
 **功能**:
+
 - Structured logging (JSON format)
 - Log levels (debug, info, warn, error)
 - Context injection (user, request ID)
@@ -49,6 +52,7 @@
 **技術棧**: TypeScript (agnostic)
 
 **使用場景**:
+
 ```typescript
 import { logger } from '@nx-playground/logger';
 
@@ -57,11 +61,13 @@ logger.error('API call failed', { endpoint: '/api/users', error });
 ```
 
 **為什麼需要**:
+
 - 目前各 app 可能有不同的 console.log/error 方式
 - 缺乏統一的 error tracking
 - Production 難以 debug
 
 **實作參考**:
+
 - `winston` (Node.js)
 - `pino` (高效能)
 - Custom wrapper for browser/server compatibility
@@ -75,6 +81,7 @@ logger.error('API call failed', { endpoint: '/api/users', error });
 **目的**: 跨棧共用的 validation schemas
 
 **功能**:
+
 - Zod schemas for common entities
 - TypeScript type inference
 - Reusable validation rules
@@ -83,6 +90,7 @@ logger.error('API call failed', { endpoint: '/api/users', error });
 **技術棧**: Zod + TypeScript (agnostic)
 
 **使用場景**:
+
 ```typescript
 import { userSchema, eventSchema } from '@nx-playground/validation';
 
@@ -93,11 +101,13 @@ if (!result.success) {
 ```
 
 **為什麼需要**:
+
 - auth, event-cms, api-server 都需要 user validation
 - 避免重複定義 schemas
 - 前後端一致的驗證邏輯
 
 **覆蓋範圍**:
+
 - User schemas (login, register, profile)
 - Event schemas (create, update)
 - Common types (email, phone, date)
@@ -111,6 +121,7 @@ if (!result.success) {
 **目的**: Framework-agnostic utility functions
 
 **功能**:
+
 - Date/time utilities
 - String formatters
 - Number formatters
@@ -120,6 +131,7 @@ if (!result.success) {
 **技術棧**: TypeScript (agnostic)
 
 **使用場景**:
+
 ```typescript
 import { formatDate, truncate, slugify } from '@nx-playground/utils';
 
@@ -129,6 +141,7 @@ const slug = slugify('Hello World');
 ```
 
 **為什麼需要**:
+
 - 目前 profile、event-cms 都有各自的 utils
 - 減少重複代碼
 - 單元測試覆蓋
@@ -142,6 +155,7 @@ const slug = slugify('Hello World');
 **目的**: 統一的錯誤處理機制
 
 **功能**:
+
 - Custom error classes
 - Error code definitions
 - Error boundary components (React)
@@ -151,6 +165,7 @@ const slug = slugify('Hello World');
 **技術棧**: TypeScript (with React wrapper)
 
 **使用場景**:
+
 ```typescript
 import { AppError, ErrorCodes } from '@nx-playground/error-handling';
 
@@ -159,10 +174,11 @@ throw new AppError(ErrorCodes.UNAUTHORIZED, 'User not authenticated');
 // React Error Boundary
 <ErrorBoundary>
   <YourComponent />
-</ErrorBoundary>
+</ErrorBoundary>;
 ```
 
 **為什麼需要**:
+
 - 統一的 error handling strategy
 - Better debugging experience
 - Consistent error UI
@@ -176,6 +192,7 @@ throw new AppError(ErrorCodes.UNAUTHORIZED, 'User not authenticated');
 **目的**: 共用常數定義
 
 **功能**:
+
 - API endpoints
 - Environment variables
 - Magic numbers
@@ -185,6 +202,7 @@ throw new AppError(ErrorCodes.UNAUTHORIZED, 'User not authenticated');
 **技術棧**: TypeScript (agnostic)
 
 **使用場景**:
+
 ```typescript
 import { API_ROUTES, HTTP_STATUS, PAGINATION } from '@nx-playground/constants';
 
@@ -195,6 +213,7 @@ if (response.status === HTTP_STATUS.OK) {
 ```
 
 **為什麼需要**:
+
 - 避免 magic strings/numbers
 - 單一來源真相
 - Type-safe constants
@@ -208,6 +227,7 @@ if (response.status === HTTP_STATUS.OK) {
 **目的**: 測試工具與 fixtures
 
 **功能**:
+
 - Mock data generators
 - Test helpers
 - Custom matchers
@@ -216,6 +236,7 @@ if (response.status === HTTP_STATUS.OK) {
 **技術棧**: TypeScript + Vitest/Jest
 
 **使用場景**:
+
 ```typescript
 import { createMockUser, renderWithProviders } from '@nx-playground/test-utils';
 
@@ -224,6 +245,7 @@ const { getByText } = renderWithProviders(<UserProfile user={mockUser} />);
 ```
 
 **為什麼需要**:
+
 - 統一的 testing strategy
 - 減少 test boilerplate
 - Reusable mock data
@@ -237,6 +259,7 @@ const { getByText } = renderWithProviders(<UserProfile user={mockUser} />);
 **目的**: 統一的 analytics tracking
 
 **功能**:
+
 - Event tracking wrapper
 - User behavior tracking
 - Performance monitoring
@@ -245,6 +268,7 @@ const { getByText } = renderWithProviders(<UserProfile user={mockUser} />);
 **技術棧**: TypeScript (agnostic)
 
 **使用場景**:
+
 ```typescript
 import { track } from '@nx-playground/analytics';
 
@@ -253,11 +277,13 @@ track('page_viewed', { page: '/blogs/2024-12' });
 ```
 
 **為什麼需要**:
+
 - Profile 需要 Google Analytics
 - 統一的 tracking interface
 - 易於切換 analytics provider
 
 **支援的 Providers**:
+
 - Google Analytics
 - Plausible
 - Mixpanel
@@ -272,6 +298,7 @@ track('page_viewed', { page: '/blogs/2024-12' });
 **目的**: Feature flag 系統
 
 **功能**:
+
 - Toggle features on/off
 - A/B testing support
 - Environment-based flags
@@ -280,6 +307,7 @@ track('page_viewed', { page: '/blogs/2024-12' });
 **技術棧**: TypeScript (agnostic)
 
 **使用場景**:
+
 ```typescript
 import { useFeatureFlag } from '@nx-playground/feature-flags';
 
@@ -292,6 +320,7 @@ return <OldUI />;
 ```
 
 **為什麼需要**:
+
 - 逐步推出新功能
 - A/B testing
 - 降低部署風險
@@ -305,6 +334,7 @@ return <OldUI />;
 **目的**: 統一的通知系統
 
 **功能**:
+
 - Toast notifications
 - Email notifications
 - Push notifications (future)
@@ -313,6 +343,7 @@ return <OldUI />;
 **技術棧**: TypeScript + React (for toast UI)
 
 **使用場景**:
+
 ```typescript
 import { toast } from '@nx-playground/notifications';
 
@@ -322,6 +353,7 @@ toast.warning('Session will expire in 5 minutes');
 ```
 
 **為什麼需要**:
+
 - 統一的 notification UX
 - 跨 app 一致體驗
 - Centralized notification queue
@@ -335,6 +367,7 @@ toast.warning('Session will expire in 5 minutes');
 **目的**: RBAC (Role-Based Access Control)
 
 **功能**:
+
 - Role definitions
 - Permission checks
 - Access control utilities
@@ -343,6 +376,7 @@ toast.warning('Session will expire in 5 minutes');
 **技術棧**: TypeScript (agnostic)
 
 **使用場景**:
+
 ```typescript
 import { hasPermission, ProtectedRoute } from '@nx-playground/permissions';
 
@@ -352,10 +386,11 @@ if (hasPermission(user, 'events:create')) {
 
 <ProtectedRoute requiredPermissions={['admin:read']}>
   <AdminPanel />
-</ProtectedRoute>
+</ProtectedRoute>;
 ```
 
 **為什麼需要**:
+
 - enterprise-admin 需要 RBAC
 - event-cms 需要角色管理
 - 統一的權限邏輯
@@ -371,6 +406,7 @@ if (hasPermission(user, 'events:create')) {
 **目的**: UI Components 展示與文件
 
 **功能**:
+
 - Showcase all UI components
 - Interactive playground
 - Props documentation
@@ -379,11 +415,13 @@ if (hasPermission(user, 'events:create')) {
 **技術棧**: Storybook 8 + React
 
 **為什麼需要**:
+
 - ui-components 缺乏視覺化文件
 - 開發 UI 時的即時預覽
 - Design System 展示
 
 **實作**:
+
 ```bash
 nx g @nx/storybook:configuration ui-components
 ```
@@ -397,6 +435,7 @@ nx g @nx/storybook:configuration ui-components
 **目的**: 技術文件網站
 
 **功能**:
+
 - API documentation
 - Library usage guides
 - Architecture diagrams
@@ -405,11 +444,13 @@ nx g @nx/storybook:configuration ui-components
 **技術棧**: Docusaurus / VitePress / Astro
 
 **為什麼需要**:
+
 - 目前文件散落在各 README
 - 缺乏統一的文件入口
 - 新成員 onboarding
 
 **內容**:
+
 - Getting Started
 - API Reference
 - Component Library
@@ -425,6 +466,7 @@ nx g @nx/storybook:configuration ui-components
 **目的**: 技術實驗沙盒
 
 **功能**:
+
 - Test new libraries
 - POC new features
 - Performance testing
@@ -433,6 +475,7 @@ nx g @nx/storybook:configuration ui-components
 **技術棧**: React 19 + Vite
 
 **為什麼需要**:
+
 - 避免在 production apps 實驗
 - 隔離的測試環境
 - 快速驗證想法
@@ -446,6 +489,7 @@ nx g @nx/storybook:configuration ui-components
 **目的**: 統一的管理後台
 
 **功能**:
+
 - User management
 - System monitoring
 - Analytics dashboard
@@ -454,6 +498,7 @@ nx g @nx/storybook:configuration ui-components
 **技術棧**: React 19 + Vite (or reuse enterprise-admin)
 
 **為什麼需要**:
+
 - 整合所有 apps 的管理功能
 - 單一登入點
 - 統一的 admin UI
@@ -495,15 +540,35 @@ nx g @nx/storybook:configuration ui-components
 ```json
 {
   "logger": ["type:lib", "stack:agnostic", "scope:shared", "category:utils"],
-  "validation": ["type:lib", "stack:agnostic", "scope:shared", "category:utils"],
+  "validation": [
+    "type:lib",
+    "stack:agnostic",
+    "scope:shared",
+    "category:utils"
+  ],
   "utils": ["type:lib", "stack:agnostic", "scope:shared", "category:utils"],
-  "error-handling": ["type:lib", "stack:react", "scope:primary", "category:utils"],
+  "error-handling": [
+    "type:lib",
+    "stack:react",
+    "scope:primary",
+    "category:utils"
+  ],
   "constants": ["type:lib", "stack:agnostic", "scope:shared", "category:utils"],
   "test-utils": ["type:lib", "stack:react", "scope:shared", "category:utils"],
   "analytics": ["type:lib", "stack:agnostic", "scope:shared", "category:utils"],
-  "feature-flags": ["type:lib", "stack:agnostic", "scope:shared", "category:utils"],
+  "feature-flags": [
+    "type:lib",
+    "stack:agnostic",
+    "scope:shared",
+    "category:utils"
+  ],
   "notifications": ["type:lib", "stack:react", "scope:primary", "category:ui"],
-  "permissions": ["type:lib", "stack:agnostic", "scope:shared", "category:utils"]
+  "permissions": [
+    "type:lib",
+    "stack:agnostic",
+    "scope:shared",
+    "category:utils"
+  ]
 }
 ```
 
@@ -563,4 +628,3 @@ nx g @nx/storybook:configuration ui-components --uiFramework=@storybook/react-vi
 ---
 
 最後更新：2025-01-27
-
