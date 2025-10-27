@@ -3,7 +3,9 @@ import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Eye, Users } from 'lucide-react';
 
+import { logger } from '@nx-playground/logger';
 import { usePostViews } from '@nx-playground/supabase-client';
+import { formatDate, formatNumber } from '@nx-playground/utils';
 
 import { loadBlog } from '../../../lib/blogLoader';
 import type { SupportedLocale } from '../../../lib/i18n/LocaleRouter';
@@ -28,10 +30,20 @@ export const BlogPostPage: FC = () => {
 
       setLoading(true);
       try {
-        const blogData = await loadBlog(slug, currentLocale);
+        logger.debug('Loading blog post', { slug, locale: currentLocale });
+        
+        const blogData = await logger.time('load-blog', async () => {
+          return await loadBlog(slug, currentLocale);
+        });
+        
         setBlog(blogData);
+        logger.info('Blog post loaded', { 
+          slug, 
+          title: blogData?.title,
+          locale: currentLocale,
+        });
       } catch (error) {
-        console.error('Error loading blog:', error);
+        logger.error('Failed to load blog post', error, { slug, locale: currentLocale });
       } finally {
         setLoading(false);
       }
@@ -44,8 +56,9 @@ export const BlogPostPage: FC = () => {
   useEffect(() => {
     if (!slug) return;
 
-    const timer = setTimeout(() => {
-      trackView();
+    const timer = setTimeout(async () => {
+      logger.debug('Tracking blog view', { slug });
+      await trackView();
     }, 1000); // 1 second delay
 
     return () => clearTimeout(timer);
@@ -77,11 +90,8 @@ export const BlogPostPage: FC = () => {
     );
   }
 
-  const publishDate = new Date(blog.publishDate).toLocaleDateString('en-US', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-  });
+  // Format publish date using utils
+  const publishDate = formatDate(new Date(blog.publishDate), 'YYYY-MM-DD');
 
   return (
     <div className='min-h-screen bg-gray-50 dark:bg-gray-900'>
@@ -133,11 +143,11 @@ export const BlogPostPage: FC = () => {
               <>
                 <span className='flex items-center gap-1.5'>
                   <Eye className='w-4 h-4' />
-                  {stats.totalViews.toLocaleString()} views
+                  {formatNumber(stats.totalViews)} views
                 </span>
                 <span className='flex items-center gap-1.5'>
                   <Users className='w-4 h-4' />
-                  {stats.uniqueIps.toLocaleString()} visitors
+                  {formatNumber(stats.uniqueIps)} visitors
                 </span>
               </>
             )}

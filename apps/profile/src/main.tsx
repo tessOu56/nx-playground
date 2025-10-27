@@ -1,6 +1,7 @@
 import { Buffer } from 'buffer';
 import { themeManager } from '@nx-playground/design-system';
 import { i18n } from '@nx-playground/i18n';
+import { logger } from '@nx-playground/logger';
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { HelmetProvider } from 'react-helmet-async';
@@ -14,6 +15,15 @@ import homeI18n from './features/home/i18n';
 import projectsI18n from './features/projects/i18n';
 import layoutI18n from './components/layout/i18n';
 import './index.css';
+
+// Initialize logger with app context
+logger.setContext({
+  app: 'profile',
+  version: '1.0.0',
+  environment: import.meta.env.MODE,
+});
+
+logger.info('Profile app initializing');
 
 // Initialize theme manager
 themeManager.setTheme(themeManager.getCurrentTheme());
@@ -61,10 +71,14 @@ if ('serviceWorker' in navigator && import.meta.env.PROD) {
     navigator.serviceWorker
       .register('/sw.js')
       .then(registration => {
-        console.log('SW registered:', registration);
+        logger.info('Service worker registered', {
+          scope: registration.scope,
+        });
       })
       .catch(error => {
-        console.log('SW registration failed:', error);
+        logger.error('Service worker registration failed', error);
       });
   });
 }
+
+logger.info('Profile app ready');

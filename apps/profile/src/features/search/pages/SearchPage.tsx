@@ -6,6 +6,7 @@ import {
   searchItems,
   type SearchIndex,
 } from '@nx-playground/search-engine';
+import { logger } from '@nx-playground/logger';
 import { techStack } from '@nx-playground/tech-stack-data';
 import { type FC, useState, useEffect, useRef } from 'react';
 import { useSearchParams } from 'react-router-dom';
@@ -46,20 +47,29 @@ export const SearchPage: FC = () => {
   useEffect(() => {
     const buildIndex = async () => {
       try {
-        const [projects, blogs] = await Promise.all([
-          Promise.all([loadAllApps('en'), loadAllLibs('en')]).then(([apps, libs]) => [...apps, ...libs]),
-          loadAllBlogMetadata('en'),
-        ]);
+        logger.debug('Building search index');
+        
+        const indexData = await logger.time('build-search-index', async () => {
+          const [projects, blogs] = await Promise.all([
+            Promise.all([loadAllApps('en'), loadAllLibs('en')]).then(([apps, libs]) => [...apps, ...libs]),
+            loadAllBlogMetadata('en'),
+          ]);
 
-        const index = buildSearchIndex({
-          projects,
-          blogs,
-          techStack,
+          return buildSearchIndex({
+            projects,
+            blogs,
+            techStack,
+          });
         });
 
-        setSearchIndex(index);
+        setSearchIndex(indexData);
+        logger.info('Search index built', {
+          projectsCount: indexData.projects.length,
+          blogsCount: indexData.blogs.length,
+          techStackCount: indexData.techStack.length,
+        });
       } catch (error) {
-        console.error('Failed to build search index:', error);
+        logger.error('Failed to build search index', error);
       }
     };
 
@@ -82,6 +92,8 @@ export const SearchPage: FC = () => {
   const handleSendMessage = async (content: string) => {
     if (!content.trim() || !searchIndex) return;
 
+    logger.info('User search query', { query: content, sessionId: currentSession?.id });
+
     // Mark as unsaved changes
     setHasUnsavedChanges(true);
 
@@ -102,6 +114,7 @@ export const SearchPage: FC = () => {
       try {
         // Detect query intent
         const intent = detectIntent(content);
+        logger.debug('Intent detected', { intent, query: content });
 
         // Search across all items
         const allItems = [
@@ -110,6 +123,11 @@ export const SearchPage: FC = () => {
           ...searchIndex.tech,
         ];
         const results = searchItems(content, allItems, 10);
+        logger.debug('Search results', { 
+          query: content, 
+          resultCount: results.length,
+          topResult: results[0]?.title,
+        });
 
         // Generate response
         const responseContent = generateResponse(content, results, intent);
@@ -131,10 +149,17 @@ export const SearchPage: FC = () => {
         };
         addMessage(aiMessage);
         
+        logger.info('Search completed', {
+          query: content,
+          resultsCount: results.length,
+          suggestionsCount: suggestions.length,
+        });
+        
         // Mark as saved
         setHasUnsavedChanges(false);
       } catch (error) {
-        console.error('Search error:', error);
+        logger.error('Search query failed', error, { query: content });
+        
         const errorMessage: Message = {
           id: (Date.now() + 1).toString(),
           role: 'assistant',
@@ -157,6 +182,11 @@ export const SearchPage: FC = () => {
         : '確定要開始新的對話嗎？'
     );
     if (!userConfirmed) return;
+
+    logger.info('Starting new conversation', { 
+      previousSessionId: currentSession?.id,
+      previousMessageCount: messages.length,
+    });
     
     createNewSession();
     setHasUnsavedChanges(false);
