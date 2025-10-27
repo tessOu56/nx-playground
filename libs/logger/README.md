@@ -58,7 +58,7 @@ logger.setContext({
 });
 
 // All subsequent logs will include this context
-logger.info('User action'); 
+logger.info('User action');
 // Output: { userId: '123', sessionId: 'abc-def', environment: 'production', message: 'User action' }
 
 // Clear context (e.g., on logout)
@@ -100,23 +100,25 @@ try {
 
 ## 📊 Log Levels
 
-| Level   | Use Case                          | Environment      |
-|---------|-----------------------------------|------------------|
-| `trace` | Very detailed debugging           | Development only |
-| `debug` | Debugging information             | Development only |
-| `info`  | General informational messages    | All              |
-| `warn`  | Warning messages                  | All              |
-| `error` | Error messages with exceptions    | All              |
-| `fatal` | Critical errors (app crashes)     | All              |
+| Level   | Use Case                       | Environment      |
+| ------- | ------------------------------ | ---------------- |
+| `trace` | Very detailed debugging        | Development only |
+| `debug` | Debugging information          | Development only |
+| `info`  | General informational messages | All              |
+| `warn`  | Warning messages               | All              |
+| `error` | Error messages with exceptions | All              |
+| `fatal` | Critical errors (app crashes)  | All              |
 
 ### Setting Log Level
 
 **Environment Variable** (Node.js):
+
 ```bash
 LOG_LEVEL=debug npm start
 ```
 
 **Custom Logger Instance**:
+
 ```typescript
 import { Logger } from '@nx-playground/logger';
 
@@ -222,7 +224,7 @@ export class UsersController {
 ```typescript
 import { logger } from '@nx-playground/logger';
 
-Deno.serve(async (req) => {
+Deno.serve(async req => {
   const requestLogger = logger.child({
     requestId: crypto.randomUUID(),
     path: new URL(req.url).pathname,
@@ -267,10 +269,10 @@ describe('MyComponent', () => {
 
   it('should log user action', () => {
     const infoSpy = vi.spyOn(mockLogger, 'info');
-    
+
     // Your test code
     mockLogger.info('User clicked button');
-    
+
     expect(infoSpy).toHaveBeenCalledWith('User clicked button');
   });
 });
@@ -288,8 +290,8 @@ describe('MyComponent', () => {
 
 ```typescript
 // Good
-logger.info('User login successful', { 
-  userId: user.id, 
+logger.info('User login successful', {
+  userId: user.id,
   method: 'email',
   timestamp: new Date().toISOString(),
 });
@@ -345,9 +347,9 @@ import { logger } from '@nx-playground/logger';
 
 async function bootstrap() {
   logger.info('API server starting');
-  
+
   const app = await NestFactory.create(AppModule);
-  
+
   // Log all requests
   app.use((req, res, next) => {
     logger.info('Request received', {
@@ -356,7 +358,7 @@ async function bootstrap() {
     });
     next();
   });
-  
+
   await app.listen(3000);
   logger.info('API server listening', { port: 3000 });
 }
@@ -387,7 +389,14 @@ LOG_LEVEL=trace pnpm dev:profile
 ### Production (JSON)
 
 ```json
-{"level":30,"time":1706342415123,"name":"profile","userId":"123","email":"user@example.com","msg":"User logged in"}
+{
+  "level": 30,
+  "time": 1706342415123,
+  "name": "profile",
+  "userId": "123",
+  "email": "user@example.com",
+  "msg": "User logged in"
+}
 ```
 
 ## 🚀 Roadmap

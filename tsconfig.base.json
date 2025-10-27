@@ -47,6 +47,7 @@
       "@nx-playground/supabase-client": ["libs/supabase-client/src/index.ts"],
       "@nx-playground/tech-stack-data": ["libs/tech-stack-data/src/index.ts"],
       "@nx-playground/ui-components": ["dist/libs/ui-components"],
+      "@nx-playground/validation": ["libs/validation/src/index.ts"],
       "@nx-playground/vue-motion": ["apps/vue-motion/src"]
     }
   },

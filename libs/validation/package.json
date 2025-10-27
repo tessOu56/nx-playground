@@ -1,0 +1,10 @@
+{
+  "name": "@nx-playground/validation",
+  "version": "0.0.1",
+  "type": "module",
+  "main": "./index.js",
+  "types": "./index.d.ts",
+  "dependencies": {
+    "zod": "^3.25.76"
+  }
+}
