@@ -7,6 +7,8 @@ import react from '@vitejs/plugin-react';
 import { defineConfig } from 'vite';
 import type { Plugin } from 'vite';
 
+import { getDevelopmentHeaders } from './security-headers.config';
+
 /**
  * Vite plugin to serve README and Spec markdown files
  */
@@ -73,6 +75,7 @@ export default defineConfig(() => ({
   server: {
     port: 3003,
     host: '0.0.0.0',
+    headers: getDevelopmentHeaders(),
     fs: {
       allow: ['..', '../..'], // 允許訪問上層目錄（讀取 specs/ 和各專案 README）
     },
