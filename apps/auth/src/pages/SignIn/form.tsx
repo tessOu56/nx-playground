@@ -111,9 +111,9 @@ function SignInForm() {
   const onSubmit: SubmitHandler<FormValues> = async data => {
     if (!isSubmitable) return;
     setIsSubmitable(false);
-    
+
     logger.info('User attempting login', { email: data.email });
-    
+
     try {
       const res = await logger.time('login-request', async () => {
         return await postOryForm<ApiData.FlowRes | ApiData.SessionNodes>(
