@@ -26,6 +26,7 @@
     "noUnusedLocals": false,
     "noUnusedParameters": false,
     "paths": {
+      "@nx-playground/analytics": ["libs/analytics/src/index.ts"],
       "@nx-playground/animation-data": ["libs/animation-data/src/index.ts"],
       "@nx-playground/api-client": ["dist/libs/api-client"],
       "@nx-playground/api-server": ["apps/api-server/src"],
@@ -48,6 +49,7 @@
       "@nx-playground/search-engine": ["libs/search-engine/src/index.ts"],
       "@nx-playground/supabase-client": ["libs/supabase-client/src/index.ts"],
       "@nx-playground/tech-stack-data": ["libs/tech-stack-data/src/index.ts"],
+      "@nx-playground/test-utils": ["libs/test-utils/src/index.ts"],
       "@nx-playground/ui-components": ["dist/libs/ui-components"],
       "@nx-playground/utils": ["libs/utils/src/index.ts"],
       "@nx-playground/validation": ["libs/validation/src/index.ts"],
