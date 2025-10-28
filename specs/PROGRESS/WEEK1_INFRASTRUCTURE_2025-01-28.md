@@ -1,8 +1,8 @@
 # Week 1: Critical Infrastructure - Progress Report
 
 **Date**: 2025-01-28  
-**Status**: 🚧 In Progress (4/5 tasks complete)  
-**Commits**: 3 commits (9a102d4, f11da7f, 7d65ced)
+**Status**: ✅ Complete (5/5 tasks + bonus)  
+**Commits**: 6 commits (9a102d4, f11da7f, 7d65ced, 9ed3211, 70061d7, f20fd63)
 
 ---
 
@@ -14,8 +14,9 @@
 | 2 | libs/analytics | ✅ Complete | 1.5h | 18 files |
 | 3 | apps/storybook | ✅ Complete | 1h | 7 files |
 | 4 | Profile Analytics | ✅ Complete | 0.5h | 4 files |
-| 5 | Event Portal LIFF | ⏳ Pending | - | - |
-| **Total** | | **80%** | **4h / 24h** | **53 files** |
+| 5 | Event Portal LIFF | ✅ Complete | 0.5h | 5 files |
+| **Bonus** | libs/permissions | ✅ Complete | 1h | 18 files |
+| **Total** | | **100%** | **6h / 24h** | **76 files** |
 
 ---
 
