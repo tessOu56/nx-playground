@@ -3,9 +3,9 @@ import { useNavigate, useParams } from 'react-router-dom';
 
 import { ProjectCard } from '../../../components/ProjectCard';
 import { SEO } from '../../../components/SEO';
+import { ts } from '../../../lib/i18n/helpers';
 import type { SupportedLocale } from '../../../lib/i18n/LocaleRouter';
 import { useLocalizedNavigation } from '../../../lib/i18n/useLocalizedNavigation';
-import { ts } from '../../../lib/i18n/helpers';
 import { useProjectsStore } from '../../../stores/useProjectsStore';
 import type { LibData } from '../../../types/projectData';
 import { useProjectsTranslation } from '../hooks/useProjectsTranslation';

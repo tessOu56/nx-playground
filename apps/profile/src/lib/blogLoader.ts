@@ -2,6 +2,7 @@ import { logger } from '@nx-playground/logger';
 import matter from 'gray-matter';
 
 import type { BlogPost, BlogMetadata } from '../types/blogData';
+
 import type { SupportedLocale } from './i18n/LocaleRouter';
 
 /**

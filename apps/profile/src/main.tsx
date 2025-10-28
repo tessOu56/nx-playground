@@ -1,4 +1,5 @@
 import { Buffer } from 'buffer';
+
 import { initAnalytics } from '@nx-playground/analytics';
 import { themeManager } from '@nx-playground/design-system';
 import { i18n } from '@nx-playground/i18n';
@@ -8,14 +9,14 @@ import { createRoot } from 'react-dom/client';
 import { HelmetProvider } from 'react-helmet-async';
 import { BrowserRouter } from 'react-router-dom';
 
-globalThis.Buffer = Buffer;
-
 import App from './App';
+import layoutI18n from './components/layout/i18n';
 import blogsI18n from './features/blogs/i18n';
 import homeI18n from './features/home/i18n';
 import projectsI18n from './features/projects/i18n';
-import layoutI18n from './components/layout/i18n';
 import './index.css';
+
+globalThis.Buffer = Buffer;
 
 // Initialize logger with app context
 logger.setContext({

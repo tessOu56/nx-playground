@@ -151,7 +151,7 @@ curl -X POST \
     "post_id": "2024-12",
     "total_views": 1,
     "unique_ips": 1,
-    "last_updated": "2025-01-27T..."
+    "last_updated": "2025-10-27T..."
   }
 }
 ```
@@ -360,5 +360,5 @@ Supabase Dashboard → Usage:
 
 ---
 
-最後更新：2025-01-27
+最後更新：2025-10-27
 

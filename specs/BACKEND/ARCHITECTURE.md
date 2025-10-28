@@ -380,6 +380,6 @@ apps/
 
 ---
 
-最後更新：2025-01-27
+最後更新：2025-10-27
 作者：Tess (nx-playground maintainer)
 
