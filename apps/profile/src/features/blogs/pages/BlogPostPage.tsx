@@ -3,8 +3,7 @@ import { logger } from '@nx-playground/logger';
 import { usePostViews } from '@nx-playground/supabase-client';
 import { formatDate, formatNumber } from '@nx-playground/utils';
 import { Eye, Users } from 'lucide-react';
-import type { FC } from 'react';
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, useRef, type FC } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
 import { loadBlog } from '../../../lib/blogLoader';
@@ -23,7 +22,7 @@ export const BlogPostPage: FC = () => {
   const startTimeRef = useRef<number>(Date.now());
 
   // Track post views with Supabase
-  const { stats, trackView } = usePostViews(slug || '');
+  const { stats, trackView } = usePostViews(slug ?? '');
 
   useEffect(() => {
     const loadData = async () => {
@@ -37,23 +36,23 @@ export const BlogPostPage: FC = () => {
           return await loadBlog(slug, currentLocale);
         });
 
-          setBlog(blogData);
-          logger.info('Blog post loaded', {
-            slug,
-            title: blogData?.title,
-            locale: currentLocale,
-          });
+        setBlog(blogData);
+        logger.info('Blog post loaded', {
+          slug,
+          title: blogData?.title,
+          locale: currentLocale,
+        });
 
-          // Track blog view
-          if (blogData) {
+        // Track blog view
+        if (blogData) {
             track('blog_viewed', {
               slug,
               title: blogData.title,
-              year: blogData.year || '',
+              year: blogData.year ?? '',
               locale: currentLocale,
-              readingTime: blogData.readingTime || 0,
+              readingTime: blogData.readingTime ?? 0,
             });
-          }
+        }
       } catch (error) {
         logger.error('Failed to load blog post', error, {
           slug,
@@ -76,14 +75,16 @@ export const BlogPostPage: FC = () => {
       await trackView();
     }, 1000); // 1 second delay
 
-      return () => clearTimeout(timer);
-    }, [slug, trackView]);
+    return () => clearTimeout(timer);
+  }, [slug, trackView]);
 
   // Track reading time on unmount
   useEffect(() => {
     return () => {
       if (blog) {
-        const timeSpent = Math.floor((Date.now() - startTimeRef.current) / 1000);
+        const timeSpent = Math.floor(
+          (Date.now() - startTimeRef.current) / 1000
+        );
         track('blog_read_time', {
           slug: slug || '',
           title: blog.title,

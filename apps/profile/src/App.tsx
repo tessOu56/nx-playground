@@ -3,8 +3,8 @@ import { I18nProvider } from '@nx-playground/i18n';
 import { lazy, Suspense } from 'react';
 import { Navigate, Route, Routes, useLocation } from 'react-router-dom';
 
-import { LoadingSpinner } from './components/LoadingSpinner';
 import { Layout } from './components/layout';
+import { LoadingSpinner } from './components/LoadingSpinner';
 import { useScrollToTop } from './hooks/useScrollToTop';
 import { LocaleRouter } from './lib/i18n';
 

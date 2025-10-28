@@ -1,3 +1,5 @@
+import { track } from '@nx-playground/analytics';
+import { logger } from '@nx-playground/logger';
 import {
   buildSearchIndex,
   detectIntent,
@@ -6,16 +8,14 @@ import {
   searchItems,
   type SearchIndex,
 } from '@nx-playground/search-engine';
-import { track } from '@nx-playground/analytics';
-import { logger } from '@nx-playground/logger';
 import { techStack } from '@nx-playground/tech-stack-data';
+import { RotateCcw } from 'lucide-react';
 import { type FC, useState, useEffect, useRef } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { RotateCcw } from 'lucide-react';
 
+import { Footer } from '../../../components/layout/Footer';
 import { LoadingSpinner } from '../../../components/LoadingSpinner';
 import { SEO } from '../../../components/SEO';
-import { Footer } from '../../../components/layout/Footer';
 import { loadAllBlogMetadata } from '../../../lib/blogLoader';
 import { loadAllApps, loadAllLibs } from '../../../lib/projectLoader';
 import { useSearchStore, type Message } from '../../../stores/searchStore';
@@ -49,10 +49,12 @@ export const SearchPage: FC = () => {
     const buildIndex = async () => {
       try {
         logger.debug('Building search index');
-        
+
         const indexData = await logger.time('build-search-index', async () => {
           const [projects, blogs] = await Promise.all([
-            Promise.all([loadAllApps('en'), loadAllLibs('en')]).then(([apps, libs]) => [...apps, ...libs]),
+            Promise.all([loadAllApps('en'), loadAllLibs('en')]).then(
+              ([apps, libs]) => [...apps, ...libs]
+            ),
             loadAllBlogMetadata('en'),
           ]);
 
@@ -93,7 +95,10 @@ export const SearchPage: FC = () => {
   const handleSendMessage = async (content: string) => {
     if (!content.trim() || !searchIndex) return;
 
-    logger.info('User search query', { query: content, sessionId: currentSession?.id });
+    logger.info('User search query', {
+      query: content,
+      sessionId: currentSession?.id,
+    });
 
     // Track AI search query
     track('ai_search_query', {
@@ -116,7 +121,7 @@ export const SearchPage: FC = () => {
 
     // Search and generate AI response
     setIsLoading(true);
-    
+
     // Simulate slight delay for better UX
     setTimeout(() => {
       try {
@@ -131,8 +136,8 @@ export const SearchPage: FC = () => {
           ...searchIndex.tech,
         ];
         const results = searchItems(content, allItems, 10);
-        logger.debug('Search results', { 
-          query: content, 
+        logger.debug('Search results', {
+          query: content,
           resultCount: results.length,
           topResult: results[0]?.title,
         });
@@ -146,7 +151,10 @@ export const SearchPage: FC = () => {
           { role: 'user' as const, content },
           { role: 'assistant' as const, content: responseContent },
         ];
-        const suggestions = generateSuggestedQuestions(conversationHistory, intent);
+        const suggestions = generateSuggestedQuestions(
+          conversationHistory,
+          intent
+        );
 
         const aiMessage: Message = {
           id: (Date.now() + 1).toString(),
@@ -156,30 +164,31 @@ export const SearchPage: FC = () => {
           suggestedQuestions: suggestions,
         };
         addMessage(aiMessage);
-        
-              logger.info('Search completed', {
-                query: content,
-                resultsCount: results.length,
-                suggestionsCount: suggestions.length,
-              });
 
-              // Track search results
-              track('ai_search_completed', {
-                query: content.substring(0, 100),
-                resultCount: results.length,
-                intent,
-                suggestionsCount: suggestions.length,
-              });
+        logger.info('Search completed', {
+          query: content,
+          resultsCount: results.length,
+          suggestionsCount: suggestions.length,
+        });
 
-              // Mark as saved
-              setHasUnsavedChanges(false);
+        // Track search results
+        track('ai_search_completed', {
+          query: content.substring(0, 100),
+          resultCount: results.length,
+          intent,
+          suggestionsCount: suggestions.length,
+        });
+
+        // Mark as saved
+        setHasUnsavedChanges(false);
       } catch (error) {
         logger.error('Search query failed', error, { query: content });
-        
+
         const errorMessage: Message = {
           id: (Date.now() + 1).toString(),
           role: 'assistant',
-          content: "Sorry, I encountered an error while searching. Please try again!",
+          content:
+            'Sorry, I encountered an error while searching. Please try again!',
           timestamp: new Date(),
         };
         addMessage(errorMessage);
@@ -193,25 +202,25 @@ export const SearchPage: FC = () => {
   // Handle new conversation
   const handleNewConversation = () => {
     const userConfirmed = window.confirm(
-      messages.length > 0 
+      messages.length > 0
         ? '確定要開始新的對話嗎？當前對話已儲存。'
         : '確定要開始新的對話嗎？'
     );
     if (!userConfirmed) return;
 
-      logger.info('Starting new conversation', {
-        previousSessionId: currentSession?.id,
-        previousMessageCount: messages.length,
-      });
+    logger.info('Starting new conversation', {
+      previousSessionId: currentSession?.id,
+      previousMessageCount: messages.length,
+    });
 
-      // Track new conversation
-      track('ai_search_new_conversation', {
-        previousMessageCount: messages.length,
-        previousSessionId: currentSession?.id || 'none',
-      });
+    // Track new conversation
+    track('ai_search_new_conversation', {
+      previousMessageCount: messages.length,
+      previousSessionId: currentSession?.id || 'none',
+    });
 
-      createNewSession();
-      setHasUnsavedChanges(false);
+    createNewSession();
+    setHasUnsavedChanges(false);
   };
 
   // Warn before leaving if there are unsaved changes
@@ -243,7 +252,7 @@ export const SearchPage: FC = () => {
         url='/search'
         tags={['AI Search', 'Assistant', 'Projects', 'Tech Stack']}
       />
-      
+
       {/* Full page with dark gradient background */}
       <section
         className='relative pb-48'
@@ -288,7 +297,11 @@ export const SearchPage: FC = () => {
           <div className='max-w-4xl mx-auto'>
             {!searchIndex ? (
               <div className='min-h-[70vh] flex items-center justify-center'>
-                <LoadingSpinner size='lg' color='white' text='Loading knowledge base...' />
+                <LoadingSpinner
+                  size='lg'
+                  color='white'
+                  text='Loading knowledge base...'
+                />
               </div>
             ) : (
               <>
@@ -304,7 +317,7 @@ export const SearchPage: FC = () => {
                       const isLatestUser =
                         message.role === 'user' &&
                         index === messages.length - (isLoading ? 1 : 2);
-                      
+
                       return (
                         <div
                           key={message.id}
@@ -324,7 +337,11 @@ export const SearchPage: FC = () => {
                       );
                     })}
                     {isLoading && (
-                      <LoadingSpinner size='sm' color='white' text='Thinking...' />
+                      <LoadingSpinner
+                        size='sm'
+                        color='white'
+                        text='Thinking...'
+                      />
                     )}
                     <div ref={messagesEndRef} />
                   </div>

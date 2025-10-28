@@ -1,4 +1,5 @@
 import { createFeatureI18n } from '@nx-playground/i18n';
+
 import commonEn from '../../locales/en/common.json';
 import detailEn from '../../locales/en/detail.json';
 import projectsEn from '../../locales/en/projects.json';
