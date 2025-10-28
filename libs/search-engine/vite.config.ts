@@ -10,6 +10,7 @@ export default defineConfig({
     }),
   ],
   build: {
+    outDir: '../../dist/libs/search-engine',
     lib: {
       entry: 'src/index.ts',
       name: 'SearchEngine',
