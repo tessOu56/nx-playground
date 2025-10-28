@@ -132,7 +132,7 @@ export async function loadProjectChangelog(
     const content = await loader();
     return parseChangelog(content, id);
   } catch (error) {
-    console.error(`Error loading changelog for ${id}:`, error);
+    logger.error(`Failed to load changelog`, error, { type, id });
     return {
       appId: id,
       releases: [],

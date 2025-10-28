@@ -410,7 +410,7 @@ LOG_LEVEL=trace pnpm dev:profile
 ## 🔗 Links
 
 - [Pino Documentation](https://getpino.io/)
-- [Infrastructure Gaps Analysis](../../docs/architecture/INFRASTRUCTURE_GAPS.md)
+- [Infrastructure Gaps Analysis](../../specs/ARCHITECTURE/INFRASTRUCTURE_GAPS.md)
 - [Project Status](../../specs/PROJECT_STATUS.md)
 
 ---

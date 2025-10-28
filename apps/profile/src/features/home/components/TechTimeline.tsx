@@ -1,3 +1,4 @@
+import { logger } from '@nx-playground/logger';
 import type { FC } from 'react';
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -51,7 +52,7 @@ export const TechTimeline: FC = () => {
         // Remaining years in summary screen
         setOthers(timelineData.slice(3));
       } catch (error) {
-        console.error('Error loading timeline:', error);
+        logger.error('Failed to load timeline data', error);
       } finally {
         setLoading(false);
       }

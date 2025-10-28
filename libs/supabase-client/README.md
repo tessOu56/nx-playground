@@ -190,7 +190,7 @@ const { stats, isLoading, error, trackView } = usePostViews(postId);
 
 - [Supabase Docs](https://supabase.com/docs)
 - [Project Status](../../specs/PROJECT_STATUS.md)
-- [Backend Evaluation Plan](../../docs/backend/BACKEND_EVALUATION.md)
+- [Backend Evaluation Plan](../../specs/BACKEND/BACKEND_EVALUATION.md)
 
 ---
 

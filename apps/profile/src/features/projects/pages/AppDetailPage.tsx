@@ -1,3 +1,4 @@
+import { logger } from '@nx-playground/logger';
 import { type FC, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
@@ -37,7 +38,7 @@ export const AppDetailPage: FC = () => {
 
         setProject(data);
       } catch (error) {
-        console.error('Failed to load project:', error);
+        logger.error('Failed to load project', error, { id, locale: currentLocale });
         setProject(null);
       } finally {
         setLoading(false);

@@ -252,8 +252,8 @@
 
 ### For Architecture
 
-- **Multi-Stack Strategy**: `docs/architecture/MULTI_STACK_STRATEGY.md`
-- **Infrastructure Gaps**: `docs/architecture/INFRASTRUCTURE_GAPS.md`
+- **Multi-Stack Strategy**: `specs/ARCHITECTURE/MULTI_STACK_STRATEGY.md`
+- **Infrastructure Gaps**: `specs/ARCHITECTURE/INFRASTRUCTURE_GAPS.md`
 - **Project Status**: `specs/PROJECT_STATUS.md`
 
 ---
