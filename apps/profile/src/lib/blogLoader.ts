@@ -1,3 +1,4 @@
+import { logger } from '@nx-playground/logger';
 import matter from 'gray-matter';
 
 import type { BlogPost, BlogMetadata } from '../types/blogData';
@@ -16,27 +17,27 @@ async function fetchBlog(
 
   try {
     const response = await fetch(url);
-    if (!response.ok) {
-      // If zh-TW not found, fallback to English
-      if (locale === 'zh-TW') {
-        console.warn(`Blog ${slug}.${locale}.md not found, falling back to en`);
-        const fallbackUrl = `/specs/blogs/${slug}.en.md`;
-        const fallbackResponse = await fetch(fallbackUrl);
-        if (!fallbackResponse.ok) {
-          console.warn(`Blog not found: ${slug}`);
-          return null;
+      if (!response.ok) {
+        // If zh-TW not found, fallback to English
+        if (locale === 'zh-TW') {
+          logger.warn(`Blog not found for locale, falling back to en`, { slug, locale });
+          const fallbackUrl = `/specs/blogs/${slug}.en.md`;
+          const fallbackResponse = await fetch(fallbackUrl);
+          if (!fallbackResponse.ok) {
+            logger.warn(`Blog not found`, { slug });
+            return null;
+          }
+          return await fallbackResponse.text();
         }
-        return await fallbackResponse.text();
+        logger.warn(`Blog not found`, { slug, locale });
+        return null;
       }
-      console.warn(`Blog not found: ${slug}`);
+      const content = await response.text();
+      return content;
+    } catch (error) {
+      logger.error(`Failed to fetch blog`, error, { slug, locale });
       return null;
     }
-    const content = await response.text();
-    return content;
-  } catch (error) {
-    console.error(`Error fetching blog ${slug}:`, error);
-    return null;
-  }
 }
 
 /**
@@ -47,7 +48,7 @@ function parseBlog(content: string, slug: string): BlogPost | null {
     const { data, content: markdown } = matter(content);
 
     if (!data.title) {
-      console.warn(`No title in front matter for blog: ${slug}`);
+      logger.warn(`Blog missing title in front matter`, { slug });
       return null;
     }
 
@@ -70,7 +71,7 @@ function parseBlog(content: string, slug: string): BlogPost | null {
       readingTime: data.readingTime || readingTime,
     };
   } catch (error) {
-    console.error(`Error parsing blog ${slug}:`, error);
+    logger.error(`Failed to parse blog`, error, { slug });
     return null;
   }
 }
@@ -116,7 +117,7 @@ export async function loadAllBlogs(
         blogs.push(blog);
       }
     } catch (error) {
-      console.error(`Error loading blog ${slug}:`, error);
+      logger.error(`Failed to load blog`, error, { slug, locale });
     }
   }
 

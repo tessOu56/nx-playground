@@ -30,23 +30,21 @@ async function fetchReadme(
     if (!response.ok) {
       // If zh-TW not found, fallback to English
       if (locale === 'zh-TW') {
-        console.warn(
-          `README.zh-TW.md not found for ${type}/${id}, falling back to README.md`
-        );
+        logger.warn(`README not found for locale, falling back to default`, { type, id, locale });
         const fallbackUrl = `/${type}/${id}/README.md`;
         const fallbackResponse = await fetch(fallbackUrl);
         if (!fallbackResponse.ok) {
-          console.warn(`README not found for ${type}/${id}`);
+          logger.warn(`README not found`, { type, id });
           return null;
         }
         return await fallbackResponse.text();
       }
-      console.warn(`README not found for ${type}/${id}`);
+      logger.warn(`README not found`, { type, id, locale });
       return null;
     }
     return await response.text();
   } catch (error) {
-    console.error(`Error fetching README for ${type}/${id}:`, error);
+    logger.error(`Failed to fetch README`, error, { type, id, locale });
     return null;
   }
 }
@@ -59,12 +57,12 @@ async function parseReadme(
   content: string
 ): Promise<ProjectReadme | null> {
   try {
-    const { data, content: markdownContent } = matter(content);
+      const { data, content: markdownContent } = matter(content);
 
-    if (!data.id) {
-      console.warn(`[README Loader] No ID in front matter for ${filePath}`);
-      return null;
-    }
+      if (!data.id) {
+        logger.warn(`README missing ID in front matter`, { filePath });
+        return null;
+      }
 
     const processedContent = await remark().use(html).process(markdownContent);
     const htmlContent = processedContent.toString();
@@ -86,7 +84,7 @@ async function parseReadme(
 
     return result;
   } catch (error) {
-    console.error(`Error parsing README ${filePath}:`, error);
+    logger.error(`Failed to parse README`, error, { filePath });
     return null;
   }
 }
@@ -134,7 +132,7 @@ export async function loadAllAppsReadmes(
         readmes.push(readme);
       }
     } catch (error) {
-      console.error(`Error loading app ${appId}:`, error);
+      logger.error(`Failed to load app README`, error, { appId, locale });
     }
   }
 
@@ -156,7 +154,7 @@ export async function loadAllLibsReadmes(
         readmes.push(readme);
       }
     } catch (error) {
-      console.error(`Error loading lib ${libId}:`, error);
+      logger.error(`Failed to load lib README`, error, { libId, locale });
     }
   }
 

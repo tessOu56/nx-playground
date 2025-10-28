@@ -3,6 +3,8 @@
  * Spec 為單一資料來源（不再載入 README）
  */
 
+import { logger } from '@nx-playground/logger';
+
 import type { AppData, LibData } from '../types/projectData';
 
 import { loadProjectChangelog } from './changelogLoader';
@@ -37,20 +39,20 @@ export async function loadApp(
       loadProjectChangelog('app', appId),
     ]);
 
-    if (!spec) {
-      console.warn(`No spec found for app: ${appId}`);
-      return null;
-    }
+      if (!spec) {
+        logger.warn(`No spec found for app`, { appId, locale });
+        return null;
+      }
 
     return {
       ...spec,
       locale,
-      changelog: changelog.releases.length > 0 ? changelog : undefined,
-    } as AppData;
-  } catch (error) {
-    console.error(`Error loading app ${appId}:`, error);
-    return null;
-  }
+        changelog: changelog.releases.length > 0 ? changelog : undefined,
+      } as AppData;
+    } catch (error) {
+      logger.error(`Failed to load app`, error, { appId, locale });
+      return null;
+    }
 }
 
 /**
@@ -67,20 +69,20 @@ export async function loadLib(
       loadProjectChangelog('lib', libId),
     ]);
 
-    if (!spec) {
-      console.warn(`No spec found for lib: ${libId}`);
-      return null;
-    }
+      if (!spec) {
+        logger.warn(`No spec found for lib`, { libId, locale });
+        return null;
+      }
 
     return {
       ...spec,
       locale,
-      changelog: changelog.releases.length > 0 ? changelog : undefined,
-    } as LibData;
-  } catch (error) {
-    console.error(`Error loading lib ${libId}:`, error);
-    return null;
-  }
+        changelog: changelog.releases.length > 0 ? changelog : undefined,
+      } as LibData;
+    } catch (error) {
+      logger.error(`Failed to load lib`, error, { libId, locale });
+      return null;
+    }
 }
 
 /**
@@ -124,7 +126,7 @@ export async function loadAllApps(
 
     return sortProjects(apps);
   } catch (error) {
-    console.error('Error loading all apps:', error);
+    logger.error(`Failed to load all apps`, error, { locale });
     return [];
   }
 }
@@ -170,7 +172,7 @@ export async function loadAllLibs(
 
     return sortProjects(libs);
   } catch (error) {
-    console.error('Error loading all libs:', error);
+    logger.error(`Failed to load all libs`, error, { locale });
     return [];
   }
 }
