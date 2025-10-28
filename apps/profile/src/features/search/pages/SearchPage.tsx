@@ -6,6 +6,7 @@ import {
   searchItems,
   type SearchIndex,
 } from '@nx-playground/search-engine';
+import { track } from '@nx-playground/analytics';
 import { logger } from '@nx-playground/logger';
 import { techStack } from '@nx-playground/tech-stack-data';
 import { type FC, useState, useEffect, useRef } from 'react';
@@ -94,6 +95,13 @@ export const SearchPage: FC = () => {
 
     logger.info('User search query', { query: content, sessionId: currentSession?.id });
 
+    // Track AI search query
+    track('ai_search_query', {
+      query: content.substring(0, 100), // Limit length for privacy
+      sessionId: currentSession?.id || 'new',
+      messageCount: messages.length + 1,
+    });
+
     // Mark as unsaved changes
     setHasUnsavedChanges(true);
 
@@ -149,14 +157,22 @@ export const SearchPage: FC = () => {
         };
         addMessage(aiMessage);
         
-        logger.info('Search completed', {
-          query: content,
-          resultsCount: results.length,
-          suggestionsCount: suggestions.length,
-        });
-        
-        // Mark as saved
-        setHasUnsavedChanges(false);
+              logger.info('Search completed', {
+                query: content,
+                resultsCount: results.length,
+                suggestionsCount: suggestions.length,
+              });
+
+              // Track search results
+              track('ai_search_completed', {
+                query: content.substring(0, 100),
+                resultCount: results.length,
+                intent,
+                suggestionsCount: suggestions.length,
+              });
+
+              // Mark as saved
+              setHasUnsavedChanges(false);
       } catch (error) {
         logger.error('Search query failed', error, { query: content });
         
@@ -183,13 +199,19 @@ export const SearchPage: FC = () => {
     );
     if (!userConfirmed) return;
 
-    logger.info('Starting new conversation', { 
-      previousSessionId: currentSession?.id,
-      previousMessageCount: messages.length,
-    });
-    
-    createNewSession();
-    setHasUnsavedChanges(false);
+      logger.info('Starting new conversation', {
+        previousSessionId: currentSession?.id,
+        previousMessageCount: messages.length,
+      });
+
+      // Track new conversation
+      track('ai_search_new_conversation', {
+        previousMessageCount: messages.length,
+        previousSessionId: currentSession?.id || 'none',
+      });
+
+      createNewSession();
+      setHasUnsavedChanges(false);
   };
 
   // Warn before leaving if there are unsaved changes
