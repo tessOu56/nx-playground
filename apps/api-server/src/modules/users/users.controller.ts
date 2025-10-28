@@ -55,17 +55,17 @@ export class UsersController {
   @ApiResponse({ status: 404, description: 'User not found' })
   async findOne(@Param('id') id: string) {
     logger.debug('Fetching user', { userId: id });
-    
+
     const user = await logger.time('db-find-user', async () => {
       return await this.usersService.findOne(id);
     });
-    
+
     if (user) {
       logger.info('User fetched successfully', { userId: id });
     } else {
       logger.warn('User not found', { userId: id });
     }
-    
+
     return user;
   }
 
@@ -76,20 +76,20 @@ export class UsersController {
   @ApiResponse({ status: 400, description: 'Invalid input' })
   async create(@Body() createUserDto: CreateUserDto) {
     logger.info('Creating new user', { email: createUserDto.email });
-    
+
     try {
       const user = await logger.time('db-create-user', async () => {
         return await this.usersService.create(createUserDto);
       });
-      
-      logger.info('User created successfully', { 
+
+      logger.info('User created successfully', {
         userId: user.id,
         email: user.email,
       });
-      
+
       return user;
     } catch (error) {
-      logger.error('Failed to create user', error, { 
+      logger.error('Failed to create user', error, {
         email: createUserDto.email,
       });
       throw error;
