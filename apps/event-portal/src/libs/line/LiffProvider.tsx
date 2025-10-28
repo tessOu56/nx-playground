@@ -1,5 +1,6 @@
 'use client';
 
+import { logger } from '@nx-playground/logger';
 import React, {
   createContext,
   useContext,
@@ -106,10 +107,9 @@ export const LiffProvider: FC<LiffProviderProps> = ({ children }) => {
           try {
             userInfo = await handleLineCallback();
           } catch (callbackError) {
-            console.warn(
-              '處理 LINE 登入回調失敗，可能是頁面導航觸發的:',
-              callbackError
-            );
+            logger.warn('LINE callback processing failed (may be navigation)', {
+              error: callbackError instanceof Error ? callbackError.message : String(callbackError)
+            });
           }
         }
 

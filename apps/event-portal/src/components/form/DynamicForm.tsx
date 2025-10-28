@@ -109,7 +109,7 @@ export function DynamicForm({
             {...commonProps}
             type={field.type}
             disabled={isSubmitting || readOnly}
-            // TODO: FormInput 不支援 rules prop，需要用 Controller validation
+            // Note: Validation handled via commonProps (required, minLength, maxLength, pattern)
           />
         );
 
@@ -119,7 +119,7 @@ export function DynamicForm({
             key={field.id}
             {...commonProps}
             disabled={isSubmitting || readOnly}
-            // TODO: FormTextarea 不支援 rules prop，需要用 Controller validation
+            // Note: Validation handled via commonProps (required, minLength, maxLength)
           />
         );
 
@@ -130,7 +130,7 @@ export function DynamicForm({
             {...commonProps}
             disabled={isSubmitting || readOnly}
             options={field.options ?? []}
-            // TODO: FormSelect 不支援 rules prop，需要用 Controller validation
+            // Note: Validation handled via commonProps (required)
           />
         );
 

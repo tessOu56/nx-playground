@@ -1,4 +1,5 @@
 // 條件導入 LIFF，避免 SSR 問題
+import { logger } from '@nx-playground/logger';
 import { LINE_CONSTANTS, liffConfig } from './constants';
 import { restoreLiffState, saveLiffState } from './storage';
 
@@ -20,7 +21,7 @@ const loadLiffModule = async (): Promise<unknown> => {
       error instanceof Error &&
       error.name === 'SecurityError'
     ) {
-      console.log('LIFF 安全錯誤已忽略（開發環境）');
+      logger.debug('LIFF security error ignored in development');
       return null;
     }
     return null;
@@ -62,7 +63,7 @@ export const initializeLiff = async (): Promise<boolean> => {
 
     if (isHttps && isNotLocalhost && isDevelopment) {
       // 在 HTTPS 開發環境中，跳過 LIFF 初始化以避免安全錯誤
-      console.log('跳過 LIFF 初始化：HTTPS 開發環境');
+      logger.debug('Skipping LIFF init in HTTPS development environment');
       return false;
     }
   }

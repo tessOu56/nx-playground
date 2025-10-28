@@ -16,6 +16,8 @@ const nextConfig = {
     '@nx-playground/api-client',
     '@nx-playground/auth-client',
     '@nx-playground/hooks',
+    '@nx-playground/logger',
+    '@nx-playground/validation',
   ],
   typescript: {
     ignoreBuildErrors: false,
@@ -71,6 +73,8 @@ const nextConfig = {
     config.resolve.alias = {
       ...config.resolve.alias,
       '@': path.resolve(__dirname, './src'),
+      '@nx-playground/logger': path.resolve(__dirname, '../../libs/logger/src/index.ts'),
+      '@nx-playground/validation': path.resolve(__dirname, '../../libs/validation/src/index.ts'),
     };
 
     // 根據環境動態設置設計系統路徑
