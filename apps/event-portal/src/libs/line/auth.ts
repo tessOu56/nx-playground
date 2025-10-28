@@ -148,8 +148,8 @@ export const getLineUserInfo = async () => {
       if (callbackUserInfo) {
         return callbackUserInfo;
       }
-    } catch (_callbackError) {
-      console.error(_callbackError);
+    } catch (callbackError) {
+      logger.error('LINE callback error', callbackError);
     }
 
     return null;
