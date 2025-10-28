@@ -45,13 +45,13 @@ export const BlogPostPage: FC = () => {
 
         // Track blog view
         if (blogData) {
-            track('blog_viewed', {
-              slug,
-              title: blogData.title,
-              year: blogData.year ?? '',
-              locale: currentLocale,
-              readingTime: blogData.readingTime ?? 0,
-            });
+          track('blog_viewed', {
+            slug,
+            title: blogData.title,
+            year: blogData.year ?? '',
+            locale: currentLocale,
+            readingTime: blogData.readingTime ?? 0,
+          });
         }
       } catch (error) {
         logger.error('Failed to load blog post', error, {

@@ -7,6 +7,7 @@ import {
   Body,
   Param,
   Query,
+  UseGuards,
 } from '@nestjs/common';
 import {
   ApiTags,
@@ -17,6 +18,8 @@ import {
 } from '@nestjs/swagger';
 import { logger } from '@nx-playground/logger';
 
+import { PermissionsGuard } from '../../guards/permissions.guard';
+import { RequirePermissions } from '../../decorators/permissions.decorator';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
@@ -24,10 +27,12 @@ import { UsersService } from './users.service';
 
 @Controller('users')
 @ApiTags('users')
+@UseGuards(PermissionsGuard)
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Get()
+  @RequirePermissions('users:read')
   @ApiOperation({ summary: 'Get all users' })
   @ApiQuery({ name: 'role', required: false })
   @ApiQuery({ name: 'status', required: false })
@@ -65,6 +70,7 @@ export class UsersController {
   }
 
   @Post()
+  @RequirePermissions('users:create')
   @ApiOperation({ summary: 'Create new user' })
   @ApiResponse({ status: 201, type: User })
   @ApiResponse({ status: 400, description: 'Invalid input' })
@@ -91,6 +97,7 @@ export class UsersController {
   }
 
   @Put(':id')
+  @RequirePermissions('users:update')
   @ApiOperation({ summary: 'Update user' })
   @ApiParam({ name: 'id', type: String })
   @ApiResponse({ status: 200, type: User })
@@ -100,6 +107,7 @@ export class UsersController {
   }
 
   @Delete(':id')
+  @RequirePermissions('users:delete')
   @ApiOperation({ summary: 'Delete user' })
   @ApiParam({ name: 'id', type: String })
   @ApiResponse({ status: 200, description: 'User deleted' })
