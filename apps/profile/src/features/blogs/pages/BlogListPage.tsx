@@ -1,3 +1,4 @@
+import { logger } from '@nx-playground/logger';
 /**
  * Blog list page - displays all blog posts sorted by year
  */
@@ -30,7 +31,7 @@ export const BlogListPage: FC = () => {
         );
         setBlogs(sortedBlogs);
       } catch (error) {
-        console.error('Error loading blogs:', error);
+        logger.error('Failed to load blogs', error, { locale: currentLocale });
       } finally {
         setLoading(false);
       }

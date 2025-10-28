@@ -100,7 +100,7 @@ nx serve api-server
 - `PUT /api/users/:id` - 更新用戶
 - `DELETE /api/users/:id` - 刪除用戶
 
-完整 API 文檔請查看 Swagger UI 或 `docs/backend/API_DESIGN.md`
+完整 API 文檔請查看 Swagger UI 或 `specs/BACKEND/API_DESIGN.md`
 
 ---
 
@@ -323,7 +323,7 @@ curl http://localhost:3001/api/users
 
 ## 📖 相關文檔
 
-- [實施規格](../../docs/backend/IMPLEMENTATION_SPEC.md)
-- [API 設計](../../docs/backend/API_DESIGN.md)
-- [資料庫設計](../../docs/backend/DATABASE_DESIGN.md)
+- [實施規格](../../specs/BACKEND/IMPLEMENTATION_SPEC.md)
+- [API 設計](../../specs/BACKEND/API_DESIGN.md)
+- [資料庫設計](../../specs/BACKEND/DATABASE_DESIGN.md)
 - [專案規格](../../docs/PROJECT_SPECIFICATION.md)

@@ -23,7 +23,7 @@ async function fetchSpec(
 ): Promise<string | null> {
   // 將顯示用 id 轉換為實體目錄名稱
   const dirName = idToDir(id);
-  
+
   // Try locale-specific version first, fallback to English
   const url = `/specs/${type}/${dirName}/${locale}.md`;
 
@@ -32,7 +32,11 @@ async function fetchSpec(
     if (!response.ok) {
       // If zh-TW not found, fallback to English
       if (locale === 'zh-TW') {
-        logger.warn(`Spec not found for locale, falling back to en`, { type, id: dirName, locale });
+        logger.warn(`Spec not found for locale, falling back to en`, {
+          type,
+          id: dirName,
+          locale,
+        });
         const fallbackUrl = `/specs/${type}/${dirName}/en.md`;
         const fallbackResponse = await fetch(fallbackUrl);
         if (!fallbackResponse.ok) {
@@ -77,7 +81,7 @@ async function parseSpec(
       description: data.description ?? data.shortDesc ?? '',
       techStack: data.techStack ?? [],
       features: data.features ?? [],
-      
+
       // Spec Fields
       category: data.category ?? '',
       status: data.status ?? 'development',
@@ -100,7 +104,7 @@ async function parseSpec(
       relatedDocs: data.relatedDocs,
       stats: data.stats,
       specContent: htmlContent,
-      
+
       // URLs (optional)
       demoUrl: data.demoUrl,
       repoUrl: data.repoUrl,
@@ -159,7 +163,11 @@ export async function loadAllAppsSpecs(
         specs.push(spec);
       }
     } catch (error) {
-      logger.warn(`Failed to load app spec`, { appId, locale, error: (error as Error).message });
+      logger.warn(`Failed to load app spec`, {
+        appId,
+        locale,
+        error: (error as Error).message,
+      });
     }
   }
 
@@ -181,7 +189,11 @@ export async function loadAllLibsSpecs(
         specs.push(spec);
       }
     } catch (error) {
-      logger.warn(`Failed to load lib spec`, { libId, locale, error: (error as Error).message });
+      logger.warn(`Failed to load lib spec`, {
+        libId,
+        locale,
+        error: (error as Error).message,
+      });
     }
   }
 

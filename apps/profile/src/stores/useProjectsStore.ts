@@ -3,6 +3,7 @@
  * 管理 Apps 和 Libs 的靜態資料（從 README + PRD 載入）
  */
 
+import { logger } from '@nx-playground/logger';
 import { create } from 'zustand';
 
 import type { SupportedLocale } from '../lib/i18n/LocaleRouter';
@@ -28,24 +29,24 @@ export const useProjectsStore = create<ProjectsState>((set, get) => ({
   loadApps: async (locale: SupportedLocale) => {
     // 防止重複載入
     if (get().apps[locale].length > 0) {
-      console.log(
-        `[Store] Apps already loaded for ${locale}, count:`,
-        get().apps[locale].length
-      );
+      logger.debug(`Apps already loaded for locale`, {
+        locale,
+        count: get().apps[locale].length,
+      });
       return;
     }
 
-    console.log(`[Store] Loading apps for ${locale}...`);
+    logger.info(`Loading apps`, { locale });
     set({ loading: true });
     try {
       const apps = await loadAllApps(locale);
-      console.log(`[Store] Loaded ${apps.length} apps for ${locale}`);
+      logger.info(`Apps loaded successfully`, { locale, count: apps.length });
       set(state => ({
         apps: { ...state.apps, [locale]: apps },
         loading: false,
       }));
     } catch (error) {
-      console.error('Failed to load apps:', error);
+      logger.error(`Failed to load apps`, error, { locale });
       set({ loading: false });
     }
   },
@@ -53,24 +54,24 @@ export const useProjectsStore = create<ProjectsState>((set, get) => ({
   loadLibs: async (locale: SupportedLocale) => {
     // 防止重複載入
     if (get().libs[locale].length > 0) {
-      console.log(
-        `[Store] Libs already loaded for ${locale}, count:`,
-        get().libs[locale].length
-      );
+      logger.debug(`Libs already loaded for locale`, {
+        locale,
+        count: get().libs[locale].length,
+      });
       return;
     }
 
-    console.log(`[Store] Loading libs for ${locale}...`);
+    logger.info(`Loading libs`, { locale });
     set({ loading: true });
     try {
       const libs = await loadAllLibs(locale);
-      console.log(`[Store] Loaded ${libs.length} libs for ${locale}`);
+      logger.info(`Libs loaded successfully`, { locale, count: libs.length });
       set(state => ({
         libs: { ...state.libs, [locale]: libs },
         loading: false,
       }));
     } catch (error) {
-      console.error('Failed to load libs:', error);
+      logger.error(`Failed to load libs`, error, { locale });
       set({ loading: false });
     }
   },

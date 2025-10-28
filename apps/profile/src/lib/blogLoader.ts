@@ -17,27 +17,30 @@ async function fetchBlog(
 
   try {
     const response = await fetch(url);
-      if (!response.ok) {
-        // If zh-TW not found, fallback to English
-        if (locale === 'zh-TW') {
-          logger.warn(`Blog not found for locale, falling back to en`, { slug, locale });
-          const fallbackUrl = `/specs/blogs/${slug}.en.md`;
-          const fallbackResponse = await fetch(fallbackUrl);
-          if (!fallbackResponse.ok) {
-            logger.warn(`Blog not found`, { slug });
-            return null;
-          }
-          return await fallbackResponse.text();
+    if (!response.ok) {
+      // If zh-TW not found, fallback to English
+      if (locale === 'zh-TW') {
+        logger.warn(`Blog not found for locale, falling back to en`, {
+          slug,
+          locale,
+        });
+        const fallbackUrl = `/specs/blogs/${slug}.en.md`;
+        const fallbackResponse = await fetch(fallbackUrl);
+        if (!fallbackResponse.ok) {
+          logger.warn(`Blog not found`, { slug });
+          return null;
         }
-        logger.warn(`Blog not found`, { slug, locale });
-        return null;
+        return await fallbackResponse.text();
       }
-      const content = await response.text();
-      return content;
-    } catch (error) {
-      logger.error(`Failed to fetch blog`, error, { slug, locale });
+      logger.warn(`Blog not found`, { slug, locale });
       return null;
     }
+    const content = await response.text();
+    return content;
+  } catch (error) {
+    logger.error(`Failed to fetch blog`, error, { slug, locale });
+    return null;
+  }
 }
 
 /**

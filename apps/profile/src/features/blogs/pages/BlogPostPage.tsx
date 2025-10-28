@@ -1,11 +1,10 @@
-import type { FC } from 'react';
-import { useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
-import { Eye, Users } from 'lucide-react';
-
 import { logger } from '@nx-playground/logger';
 import { usePostViews } from '@nx-playground/supabase-client';
 import { formatDate, formatNumber } from '@nx-playground/utils';
+import { Eye, Users } from 'lucide-react';
+import type { FC } from 'react';
+import { useEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 
 import { loadBlog } from '../../../lib/blogLoader';
 import type { SupportedLocale } from '../../../lib/i18n/LocaleRouter';
@@ -31,19 +30,22 @@ export const BlogPostPage: FC = () => {
       setLoading(true);
       try {
         logger.debug('Loading blog post', { slug, locale: currentLocale });
-        
+
         const blogData = await logger.time('load-blog', async () => {
           return await loadBlog(slug, currentLocale);
         });
-        
+
         setBlog(blogData);
-        logger.info('Blog post loaded', { 
-          slug, 
+        logger.info('Blog post loaded', {
+          slug,
           title: blogData?.title,
           locale: currentLocale,
         });
       } catch (error) {
-        logger.error('Failed to load blog post', error, { slug, locale: currentLocale });
+        logger.error('Failed to load blog post', error, {
+          slug,
+          locale: currentLocale,
+        });
       } finally {
         setLoading(false);
       }
@@ -137,7 +139,7 @@ export const BlogPostPage: FC = () => {
                 {blog.year}
               </span>
             )}
-            
+
             {/* View Stats */}
             {stats && (
               <>
@@ -270,7 +272,7 @@ function renderMarkdown(markdown: string): string {
   html = html.replace(/(<li>.*<\/li>)/s, '<ul>$1</ul>');
 
   // Wrap in paragraphs
-  html = '<p>' + html + '</p>';
+  html = `<p>${html}</p>`;
 
   return html;
 }

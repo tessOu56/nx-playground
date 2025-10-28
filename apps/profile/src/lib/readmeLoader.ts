@@ -30,7 +30,11 @@ async function fetchReadme(
     if (!response.ok) {
       // If zh-TW not found, fallback to English
       if (locale === 'zh-TW') {
-        logger.warn(`README not found for locale, falling back to default`, { type, id, locale });
+        logger.warn(`README not found for locale, falling back to default`, {
+          type,
+          id,
+          locale,
+        });
         const fallbackUrl = `/${type}/${id}/README.md`;
         const fallbackResponse = await fetch(fallbackUrl);
         if (!fallbackResponse.ok) {
@@ -57,12 +61,12 @@ async function parseReadme(
   content: string
 ): Promise<ProjectReadme | null> {
   try {
-      const { data, content: markdownContent } = matter(content);
+    const { data, content: markdownContent } = matter(content);
 
-      if (!data.id) {
-        logger.warn(`README missing ID in front matter`, { filePath });
-        return null;
-      }
+    if (!data.id) {
+      logger.warn(`README missing ID in front matter`, { filePath });
+      return null;
+    }
 
     const processedContent = await remark().use(html).process(markdownContent);
     const htmlContent = processedContent.toString();

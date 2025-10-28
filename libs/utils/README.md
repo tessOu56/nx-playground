@@ -291,7 +291,7 @@ nx test @nx-playground/utils
 
 ## 🔗 Links
 
-- [Infrastructure Gaps Analysis](../../docs/architecture/INFRASTRUCTURE_GAPS.md)
+- [Infrastructure Gaps Analysis](../../specs/ARCHITECTURE/INFRASTRUCTURE_GAPS.md)
 - [Project Status](../../specs/PROJECT_STATUS.md)
 
 ---

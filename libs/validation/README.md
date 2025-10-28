@@ -454,7 +454,7 @@ export * from './schemas/blog';
 ## 🔗 Links
 
 - [Zod Documentation](https://zod.dev/)
-- [Infrastructure Gaps Analysis](../../docs/architecture/INFRASTRUCTURE_GAPS.md)
+- [Infrastructure Gaps Analysis](../../specs/ARCHITECTURE/INFRASTRUCTURE_GAPS.md)
 - [Project Status](../../specs/PROJECT_STATUS.md)
 
 ---

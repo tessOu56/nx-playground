@@ -1,3 +1,4 @@
+import { logger } from '@nx-playground/logger';
 import { type FC, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
@@ -22,7 +23,7 @@ export const LibDetailPage: FC = () => {
         const data = await loadLib(id, currentLocale);
         setLib(data);
       } catch (error) {
-        console.error('Failed to load lib:', error);
+        logger.error('Failed to load lib', error, { id, locale: currentLocale });
         setLib(null);
       } finally {
         setLoading(false);

@@ -3,6 +3,7 @@
  * 管理 Blog Posts 的靜態資料（從 specs/blogs/ 載入）
  */
 
+import { logger } from '@nx-playground/logger';
 import { create } from 'zustand';
 
 import { loadAllBlogMetadata } from '../lib/blogLoader';
@@ -25,21 +26,24 @@ export const useBlogsStore = create<BlogsState>((set, get) => ({
   loadPosts: async (locale: SupportedLocale) => {
     // 防止重複載入
     if (get().posts[locale].length > 0) {
-      console.log(`[BlogsStore] Posts already loaded for ${locale}, count:`, get().posts[locale].length);
+      logger.debug(`Blog posts already loaded for locale`, {
+        locale,
+        count: get().posts[locale].length,
+      });
       return;
     }
 
-    console.log(`[BlogsStore] Loading posts for ${locale}...`);
+    logger.info(`Loading blog posts`, { locale });
     set({ loading: true });
     try {
       const posts = await loadAllBlogMetadata(locale);
-      console.log(`[BlogsStore] Loaded ${posts.length} posts for ${locale}`);
+      logger.info(`Blog posts loaded successfully`, { locale, count: posts.length });
       set(state => ({
         posts: { ...state.posts, [locale]: posts },
         loading: false,
       }));
     } catch (error) {
-      console.error('Failed to load blog posts:', error);
+      logger.error(`Failed to load blog posts`, error, { locale });
       set({ loading: false });
     }
   },
