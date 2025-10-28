@@ -1,0 +1,11 @@
+{
+  "name": "@nx-playground/permissions",
+  "version": "0.0.1",
+  "type": "module",
+  "main": "./index.js",
+  "types": "./index.d.ts",
+  "dependencies": {
+    "react": "19.0.0",
+    "react-dom": "19.0.0"
+  }
+}
