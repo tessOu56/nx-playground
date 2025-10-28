@@ -37,7 +37,10 @@ export const useBlogsStore = create<BlogsState>((set, get) => ({
     set({ loading: true });
     try {
       const posts = await loadAllBlogMetadata(locale);
-      logger.info(`Blog posts loaded successfully`, { locale, count: posts.length });
+      logger.info(`Blog posts loaded successfully`, {
+        locale,
+        count: posts.length,
+      });
       set(state => ({
         posts: { ...state.posts, [locale]: posts },
         loading: false,
