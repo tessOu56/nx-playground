@@ -143,20 +143,20 @@ export default defineConfig(() => ({
         __dirname,
         '../../libs/utils/src/index.ts'
       ),
-            '@nx-playground/supabase-client': resolve(
-              __dirname,
-              '../../libs/supabase-client/src/index.ts'
-            ),
-            '@nx-playground/analytics': resolve(
-              __dirname,
-              '../../libs/analytics/src/index.ts'
-            ),
-            '@nx-playground/test-utils': resolve(
-              __dirname,
-              '../../libs/test-utils/src/index.ts'
-            ),
-          },
-        },
+      '@nx-playground/supabase-client': resolve(
+        __dirname,
+        '../../libs/supabase-client/src/index.ts'
+      ),
+      '@nx-playground/analytics': resolve(
+        __dirname,
+        '../../libs/analytics/src/index.ts'
+      ),
+      '@nx-playground/test-utils': resolve(
+        __dirname,
+        '../../libs/test-utils/src/index.ts'
+      ),
+    },
+  },
   build: {
     outDir: '../../dist/apps/profile',
     emptyOutDir: true,
