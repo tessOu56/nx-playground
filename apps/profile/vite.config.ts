@@ -130,6 +130,23 @@ export default defineConfig(() => ({
         __dirname,
         '../../libs/search-engine/src/index.ts'
       ),
+      // New libraries
+      '@nx-playground/logger': resolve(
+        __dirname,
+        '../../libs/logger/src/index.ts'
+      ),
+      '@nx-playground/validation': resolve(
+        __dirname,
+        '../../libs/validation/src/index.ts'
+      ),
+      '@nx-playground/utils': resolve(
+        __dirname,
+        '../../libs/utils/src/index.ts'
+      ),
+      '@nx-playground/supabase-client': resolve(
+        __dirname,
+        '../../libs/supabase-client/src/index.ts'
+      ),
     },
   },
   build: {
