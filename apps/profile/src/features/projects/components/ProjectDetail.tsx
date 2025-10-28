@@ -1,4 +1,5 @@
-import { type FC, useState } from 'react';
+import { track } from '@nx-playground/analytics';
+import { type FC, useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 
 import { TechTag } from '../../../components/TechTag';
@@ -15,6 +16,17 @@ export const ProjectDetail: FC<ProjectDetailProps> = ({ project, type }) => {
   const { t } = useDetailTranslation();
   const { getLocalizedPath } = useLocalizedNavigation();
   const [showAllVersions, setShowAllVersions] = useState(false);
+
+  // Track project view
+  useEffect(() => {
+    track('project_viewed', {
+      projectId: project.id,
+      projectName: project.name || project.id,
+      type,
+      status: project.status,
+      category: project.category || 'unknown',
+    });
+  }, [project.id, project.name, project.status, project.category, type]);
 
   const backPath = '/projects';
   const backText = type === 'app' ? t('backToApps') : t('backToLibs');
