@@ -225,8 +225,10 @@ export const BlogPostPage: FC = () => {
   );
 };
 
-// Simple markdown renderer (basic HTML support)
-// TODO: Replace with proper markdown library (react-markdown) for production
+// Custom markdown renderer
+// Decision: Keep this lightweight implementation instead of adding react-markdown dependency
+// Rationale: Works well for current needs, no additional bundle size, simple to maintain
+// If more complex markdown features are needed in the future, consider react-markdown or remark-html
 function renderMarkdown(markdown: string): string {
   let html = markdown;
 

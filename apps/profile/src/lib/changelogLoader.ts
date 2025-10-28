@@ -3,6 +3,8 @@
  * 從各專案的 CHANGELOG.md 讀取版本歷史
  */
 
+import { logger } from '@nx-playground/logger';
+
 import type { ProjectChangelog, Release } from '../types/projectData';
 
 /**
@@ -160,7 +162,7 @@ export async function loadAllChangelogs(): Promise<ProjectChangelog[]> {
         changelogs.push(changelog);
       }
     } catch (error) {
-      console.error(`Error loading ${path}:`, error);
+      logger.error(`Failed to load changelog`, error, { path });
     }
   }
 

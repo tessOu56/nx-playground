@@ -32,7 +32,7 @@ async function fetchSpec(
     if (!response.ok) {
       // If zh-TW not found, fallback to English
       if (locale === 'zh-TW') {
-        console.warn(`Spec ${locale}.md not found for ${type}/${dirName}, falling back to en.md`);
+        logger.warn(`Spec not found for locale, falling back to en`, { type, id: dirName, locale });
         const fallbackUrl = `/specs/${type}/${dirName}/en.md`;
         const fallbackResponse = await fetch(fallbackUrl);
         if (!fallbackResponse.ok) {
@@ -44,7 +44,7 @@ async function fetchSpec(
     }
     return await response.text();
   } catch (error) {
-    console.error(`Error fetching spec for ${type}/${dirName}:`, error);
+    logger.error(`Failed to fetch spec`, error, { type, id: dirName, locale });
     return null;
   }
 }
@@ -159,7 +159,7 @@ export async function loadAllAppsSpecs(
         specs.push(spec);
       }
     } catch (error) {
-      console.warn(`Error loading spec for app ${appId}:`, error);
+      logger.warn(`Failed to load app spec`, { appId, locale, error: (error as Error).message });
     }
   }
 
@@ -181,7 +181,7 @@ export async function loadAllLibsSpecs(
         specs.push(spec);
       }
     } catch (error) {
-      console.warn(`Error loading spec for lib ${libId}:`, error);
+      logger.warn(`Failed to load lib spec`, { libId, locale, error: (error as Error).message });
     }
   }
 
