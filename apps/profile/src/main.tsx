@@ -1,4 +1,5 @@
 import { Buffer } from 'buffer';
+import { initAnalytics } from '@nx-playground/analytics';
 import { themeManager } from '@nx-playground/design-system';
 import { i18n } from '@nx-playground/i18n';
 import { logger } from '@nx-playground/logger';
@@ -24,6 +25,18 @@ logger.setContext({
 });
 
 logger.info('Profile app initializing');
+
+// Initialize analytics
+initAnalytics({
+  provider: (import.meta.env.VITE_ANALYTICS_PROVIDER as 'ga4' | 'plausible' | 'none') || 'none',
+  measurementId: import.meta.env.VITE_GA4_MEASUREMENT_ID,
+  domain: import.meta.env.VITE_PLAUSIBLE_DOMAIN,
+  debug: import.meta.env.MODE === 'development',
+});
+
+logger.info('Analytics initialized', {
+  provider: import.meta.env.VITE_ANALYTICS_PROVIDER || 'none',
+});
 
 // Initialize theme manager
 themeManager.setTheme(themeManager.getCurrentTheme());

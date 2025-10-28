@@ -1,6 +1,7 @@
+import { usePageTracking } from '@nx-playground/analytics';
 import { I18nProvider } from '@nx-playground/i18n';
 import { lazy, Suspense } from 'react';
-import { Navigate, Route, Routes } from 'react-router-dom';
+import { Navigate, Route, Routes, useLocation } from 'react-router-dom';
 
 import { LoadingSpinner } from './components/LoadingSpinner';
 import { Layout } from './components/layout';
@@ -18,7 +19,11 @@ const LibDetailPage = lazy(() => import('./features/projects').then(m => ({ defa
 const NotFoundPage = lazy(() => import('./features/404').then(m => ({ default: m.NotFoundPage })));
 
 function AppContent() {
+  const location = useLocation();
   useScrollToTop();
+  
+  // Track page views automatically
+  usePageTracking(location.pathname);
 
   return (
     <Routes>
