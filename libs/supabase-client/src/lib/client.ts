@@ -91,4 +91,3 @@ export function validateEnvironment(): {
     errors,
   };
 }
-

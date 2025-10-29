@@ -7,6 +7,10 @@ import { useEffect, useState } from 'react';
 
 import { getSupabaseClient } from '../client';
 
+import type { Database } from '../types';
+
+type PostViewStatsRow = Database['public']['Tables']['post_view_stats']['Row'];
+
 interface PostViewStats {
   postId: string;
   totalViews: number;
@@ -63,15 +67,18 @@ export function usePostViews(postId: string): UsePostViewsResult {
             throw fetchError;
           }
         } else if (data) {
+          const statsData = data as PostViewStatsRow;
           setStats({
-            postId: data.post_id,
-            totalViews: data.total_views,
-            uniqueIps: data.unique_ips,
-            lastUpdated: data.last_updated,
+            postId: statsData.post_id,
+            totalViews: statsData.total_views,
+            uniqueIps: statsData.unique_ips,
+            lastUpdated: statsData.last_updated,
           });
         }
       } catch (err) {
-        setError(err instanceof Error ? err : new Error('Failed to fetch view stats'));
+        setError(
+          err instanceof Error ? err : new Error('Failed to fetch view stats')
+        );
       } finally {
         setIsLoading(false);
       }
@@ -84,9 +91,12 @@ export function usePostViews(postId: string): UsePostViewsResult {
   const trackView = async () => {
     try {
       // Call Edge Function to track view
-      const { data, error: trackError } = await supabase.functions.invoke('track-view', {
-        body: { postId },
-      });
+      const { data, error: trackError } = await supabase.functions.invoke(
+        'track-view',
+        {
+          body: { postId },
+        }
+      );
 
       if (trackError) {
         console.error('Failed to track view:', trackError);
@@ -114,4 +124,3 @@ export function usePostViews(postId: string): UsePostViewsResult {
     trackView,
   };
 }
-
