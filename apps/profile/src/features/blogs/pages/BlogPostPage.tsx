@@ -86,10 +86,10 @@ export const BlogPostPage: FC = () => {
           (Date.now() - startTimeRef.current) / 1000
         );
         track('blog_read_time', {
-          slug: slug || '',
+          slug: slug ?? '',
           title: blog.title,
           timeSpent,
-          completed: timeSpent >= (blog.readingTime || 0) * 60 * 0.8, // 80% of estimated time
+          completed: timeSpent >= (blog.readingTime ?? 0) * 60 * 0.8, // 80% of estimated time
         });
       }
     };
