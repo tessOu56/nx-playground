@@ -64,6 +64,18 @@
     },
     {
       "path": "../../libs/search-engine/tsconfig.lib.json"
+    },
+    {
+      "path": "../../libs/logger/tsconfig.lib.json"
+    },
+    {
+      "path": "../../libs/supabase-client/tsconfig.lib.json"
+    },
+    {
+      "path": "../../libs/utils/tsconfig.lib.json"
+    },
+    {
+      "path": "../../libs/analytics/tsconfig.lib.json"
     }
   ]
 }
