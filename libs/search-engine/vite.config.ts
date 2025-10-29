@@ -1,12 +1,13 @@
 import { defineConfig } from 'vite';
 import dts from 'vite-plugin-dts';
-import { join, resolve } from 'path';
+import { resolve } from 'path';
 
 export default defineConfig({
   plugins: [
     dts({
       entryRoot: 'src',
-      tsconfigPath: join(__dirname, 'tsconfig.lib.json'),
+      tsconfigPath: resolve(__dirname, 'tsconfig.lib.json'),
+      outDir: resolve(__dirname, '../../dist/libs/search-engine'),
     }),
   ],
   build: {
