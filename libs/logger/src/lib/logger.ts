@@ -219,4 +219,4 @@ export const logger = new Logger();
 export { Logger };
 
 // Export type for context
-export type { LogContext };
+export type { LogContext as LogContextType };
