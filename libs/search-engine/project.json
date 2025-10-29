@@ -9,7 +9,8 @@
       "executor": "@nx/vite:build",
       "outputs": ["{options.outputPath}"],
       "options": {
-        "outputPath": "dist/libs/search-engine"
+        "outputPath": "dist/libs/search-engine",
+        "configFile": "libs/search-engine/vite.config.ts"
       }
     },
     "lint": {
