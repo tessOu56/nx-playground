@@ -62,7 +62,7 @@ export function usePostViews(postId: string): UsePostViewsResult {
           } else {
             throw fetchError;
           }
-        } else {
+        } else if (data) {
           setStats({
             postId: data.post_id,
             totalViews: data.total_views,

@@ -1,6 +1,6 @@
 import { defineConfig } from 'vite';
 import dts from 'vite-plugin-dts';
-import { join } from 'path';
+import { join, resolve } from 'path';
 
 export default defineConfig({
   plugins: [
@@ -10,10 +10,10 @@ export default defineConfig({
     }),
   ],
   build: {
-    outDir: '../../dist/libs/search-engine',
+    outDir: resolve(__dirname, '../../dist/libs/search-engine'),
     emptyOutDir: true,
     lib: {
-      entry: join(__dirname, 'src/index.ts'),
+      entry: resolve(__dirname, 'src/index.ts'),
       name: 'SearchEngine',
       fileName: 'index',
       formats: ['es'],
