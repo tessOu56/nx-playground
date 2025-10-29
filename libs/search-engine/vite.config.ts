@@ -11,8 +11,9 @@ export default defineConfig({
   ],
   build: {
     outDir: '../../dist/libs/search-engine',
+    emptyOutDir: true,
     lib: {
-      entry: 'src/index.ts',
+      entry: join(__dirname, 'src/index.ts'),
       name: 'SearchEngine',
       fileName: 'index',
       formats: ['es'],
