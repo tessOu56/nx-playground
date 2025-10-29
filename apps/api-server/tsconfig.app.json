@@ -11,5 +11,13 @@
     "noPropertyAccessFromIndexSignature": false
   },
   "exclude": ["jest.config.ts", "src/**/*.spec.ts", "src/**/*.test.ts"],
-  "include": ["src/**/*.ts"]
+  "include": ["src/**/*.ts"],
+  "references": [
+    {
+      "path": "../../libs/logger/tsconfig.lib.json"
+    },
+    {
+      "path": "../../libs/permissions/tsconfig.lib.json"
+    }
+  ]
 }

@@ -29,7 +29,9 @@
       "@nx-playground/i18n": ["../../libs/i18n/src"],
       "@nx-playground/api-client": ["../../libs/api-client/src"],
       "@nx-playground/auth-client": ["../../libs/auth-client/src"],
-      "@nx-playground/hooks": ["../../libs/hooks/src"]
+      "@nx-playground/hooks": ["../../libs/hooks/src"],
+      "@nx-playground/logger": ["../../libs/logger/src"],
+      "@nx-playground/validation": ["../../libs/validation/src"]
     }
   },
   "include": [
