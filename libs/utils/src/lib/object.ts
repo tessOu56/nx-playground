@@ -146,4 +146,3 @@ export function has(obj: Record<string, unknown>, path: string): boolean {
 
   return true;
 }
-
