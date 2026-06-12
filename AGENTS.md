@@ -1,0 +1,40 @@
+# AGENTS.md — nx-playground
+
+## Purpose
+
+Nx 21 monorepo 樞紐：跨框架前端練習、共享 charts、NestJS api-server。  
+**中央規劃 SSOT**：`platform-command/planning/projects/nx-playground.md`  
+**階段 SSOT**：`docs/PROJECT-PLAN.md` · **生態**：`platform-command/docs/agent-collaboration.md`
+
+## Before coding
+
+1. Read `docs/PROJECT-PLAN.md` for current phase.
+2. Read `docs/platform-inbox/CURRENT.md` for P0/P1 tickets from platform-command.
+3. Read `docs/ECOSYSTEM.md` for mirror repo boundaries (vue-motion-sandbox, angular-dashboard-sandbox).
+4. Long specs → **develop-md**; link only, do not duplicate.
+
+## Quick start
+
+```bash
+make setup          # or: pnpm install && scripts/env-setup.sh
+pnpm dev:api        # localhost:3001
+pnpm dev:profile    # localhost:3003
+pnpm dev:vue-motion # localhost:8080
+pnpm dev:enterprise # localhost:4200
+```
+
+## Allowed
+
+- `apps/*`, `libs/*`, `docs/`, `.cursor/` (project skills/hooks)
+
+## Forbidden
+
+- Copying portal UI or agent-core from ai-search-portal into this repo
+- New features in vue-motion-sandbox or angular-dashboard-sandbox (mirror repos only)
+- Replacing develop-md vision bodies (link only)
+
+## Integration
+
+- Tickets: `docs/platform-inbox/` ← `platform-command/scripts/distribute-inbox.ps1`
+- Promote motion experiments → ai-search-portal `labs/motion/`
+- API contract alignment → polyglot-labs `docs/api-contract.md`
