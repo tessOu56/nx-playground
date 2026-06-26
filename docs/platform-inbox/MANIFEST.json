@@ -1,10 +1,12 @@
 ﻿{
-    "distributedAt":  "2026-06-12T17:45:01.1215660+08:00",
+    "distributedAt":  "2026-06-26T17:53:51.7865367+08:00",
     "project":  "nx-playground",
     "source":  "platform-command",
     "ticketIds":  [
                       "T-2026-008",
                       "T-2026-009",
-                      "T-2026-010"
+                      "T-2026-010",
+                      "T-2026-018",
+                      "T-ds-2026-002"
                   ]
 }

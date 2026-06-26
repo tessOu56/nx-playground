@@ -64,6 +64,7 @@ export default {
   setup() {
     const menuItems = ref([
       { path: "/", name: "首頁" },
+      { path: "/vue-basics", name: "Vue 基礎" },
       { path: "/particles", name: "粒子特效" },
       { path: "/gsap-animations", name: "GSAP 動畫" },
       { path: "/three-js", name: "Three.js 3D" },

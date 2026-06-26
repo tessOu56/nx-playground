@@ -68,7 +68,13 @@
     "cloudflare:setup": "./scripts/setup-cloudflare-quick.sh",
     "cloudflare:token:encrypt": "./scripts/manage-cloudflare-token.sh encrypt",
     "cloudflare:token:decrypt": "./scripts/manage-cloudflare-token.sh decrypt",
-    "fix:nx-cloud": "./scripts/fix-nx-cloud.sh"
+    "fix:nx-cloud": "./scripts/fix-nx-cloud.sh",
+    "contracts:build": "pnpm --dir libs/contracts run build",
+    "generate:api:catalog:dev": "cd libs/api-client && npm run generate:api:catalog:dev",
+    "contracts:wire": "pnpm contracts:build && pnpm generate:api:catalog:dev && pnpm --dir apps/api-server run gen:contract-types",
+    "external:asp:install": "pnpm --dir external/ai-search-portal install",
+    "external:asp:dev": "pnpm --dir external/ai-search-portal dev",
+    "external:asp:build": "pnpm --dir external/ai-search-portal build"
   },
   "private": true,
   "dependencies": {

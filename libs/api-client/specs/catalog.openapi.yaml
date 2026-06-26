@@ -1,0 +1,235 @@
+openapi: 3.1.0
+info:
+  title: NX Playground Catalog API
+  description: Catalog API — aligned with ai-search-portal CatalogApiRow & py-able-labs Ex02. 回應以共用信封包裝。
+  version: 0.0.0
+tags:
+  - name: catalog
+paths:
+  /catalog/items:
+    get:
+      operationId: Items_list
+      summary: List catalog items with type filter and pagination
+      parameters:
+        - name: type
+          in: query
+          required: false
+          schema:
+            $ref: '#/components/schemas/ItemType'
+          explode: false
+        - name: page
+          in: query
+          required: false
+          schema:
+            type: integer
+            format: int32
+            default: 1
+          explode: false
+        - name: pageSize
+          in: query
+          required: false
+          schema:
+            type: integer
+            format: int32
+            default: 20
+          explode: false
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - is_success
+                  - datetime
+                  - result
+                properties:
+                  is_success:
+                    type: boolean
+                  datetime:
+                    type: string
+                  result:
+                    $ref: '#/components/schemas/CatalogItemPage'
+                description: 成功回應信封
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+      tags:
+        - catalog
+    post:
+      operationId: Items_create
+      summary: Create a catalog item
+      parameters: []
+      responses:
+        '201':
+          description: The request has succeeded and a new resource has been created as a result.
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - is_success
+                  - datetime
+                  - result
+                properties:
+                  is_success:
+                    type: boolean
+                  datetime:
+                    type: string
+                  result:
+                    $ref: '#/components/schemas/CatalogItem'
+                description: 成功回應信封
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+      tags:
+        - catalog
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateCatalogItem'
+  /catalog/items/{id}:
+    get:
+      operationId: Items_read
+      summary: Get a catalog item by id
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - is_success
+                  - datetime
+                  - result
+                properties:
+                  is_success:
+                    type: boolean
+                  datetime:
+                    type: string
+                  result:
+                    $ref: '#/components/schemas/CatalogItem'
+                description: 成功回應信封
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+      tags:
+        - catalog
+components:
+  schemas:
+    CatalogItem:
+      type: object
+      required:
+        - id
+        - name
+        - itemType
+        - status
+        - createdAt
+        - updatedAt
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        itemType:
+          $ref: '#/components/schemas/ItemType'
+        description:
+          type: string
+        status:
+          $ref: '#/components/schemas/ItemStatus'
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+      description: A catalog item
+    CatalogItemPage:
+      type: object
+      required:
+        - items
+        - page
+        - pageSize
+        - total
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/CatalogItem'
+        page:
+          type: integer
+          format: int32
+        pageSize:
+          type: integer
+          format: int32
+        total:
+          type: integer
+          format: int32
+      description: Paginated list of catalog items
+    CreateCatalogItem:
+      type: object
+      required:
+        - name
+        - itemType
+      properties:
+        name:
+          type: string
+        itemType:
+          $ref: '#/components/schemas/ItemType'
+        description:
+          type: string
+      description: Payload to create a catalog item
+    ErrorMessage:
+      type: object
+      required:
+        - is_success
+        - datetime
+        - error_code
+        - error_type
+        - error_message
+      properties:
+        is_success:
+          type: boolean
+        datetime:
+          type: string
+        error_code:
+          type: string
+        error_type:
+          type: string
+        error_message:
+          type: string
+      description: 錯誤回應信封
+    ItemStatus:
+      type: string
+      enum:
+        - draft
+        - published
+        - archived
+      description: Lifecycle status of a catalog item
+    ItemType:
+      type: string
+      enum:
+        - app
+        - dataset
+        - model
+        - service
+      description: Type of a catalog item

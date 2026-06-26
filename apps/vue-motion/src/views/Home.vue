@@ -103,6 +103,15 @@ export default {
 
     const effects = ref([
       {
+        id: 0,
+        title: "Vue 3 基礎實驗室",
+        description:
+          "從 React 視角學 Composition API、Composables、Pinia，打好基礎再玩動畫",
+        icon: "📚",
+        path: "/vue-basics",
+        tech: ["Composition API", "Pinia", "Composables"],
+      },
+      {
         id: 1,
         title: "粒子特效",
         description: "使用 Canvas 和 WebGL 創建的粒子系統，支援滑鼠互動",
