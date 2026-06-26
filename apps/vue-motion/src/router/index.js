@@ -37,6 +37,11 @@ const routes = [
     name: "Interactive",
     component: () => import("../views/effects/Interactive.vue"),
   },
+  {
+    path: "/vue-basics",
+    name: "VueBasics",
+    component: () => import("../views/learn/VueBasics.vue"),
+  },
 ]
 
 const router = createRouter({

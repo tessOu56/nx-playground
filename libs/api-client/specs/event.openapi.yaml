@@ -1,868 +1,375 @@
-openapi: 3.0.1
+openapi: 3.1.0
 info:
-  title: NX Playground
-  description: ''
-  version: 1.0.0
+  title: NX Playground Event API
+  description: |-
+    Event API — ported to TypeSpec from event.openapi.yaml (was protobuf/gRPC-gateway derived).
+    One module, two interfaces: ConsoleEvents (admin CRUD) + PublicEvents (public read/search).
+    Field names kept snake_case to preserve the existing wire contract.
+  version: 0.0.0
 tags:
-  - name: event/EventService
-  - name: EventService
-  - name: SaaS_API
-  - name: event/PublicEventService
-  - name: PublicEventService
+  - name: event
 paths:
   /console/events:
     get:
+      operationId: ConsoleEvents_list
       summary: Get list of events with filtering and pagination
-      deprecated: false
-      description: ''
-      operationId: EventService_GetEventList
-      tags:
-        - event/EventService
-        - EventService
-        - SaaS_API
       parameters:
         - name: page_token
           in: query
-          description: |-
-            Pagination
-
-            for cursor-based pagination
           required: false
           schema:
             type: string
+          explode: false
         - name: page
           in: query
-          description: for page-based pagination
           required: false
           schema:
-            format: int32
             type: integer
+            format: int32
+          explode: false
         - name: page_size
           in: query
-          description: default 20, max 100
           required: false
           schema:
-            format: int32
             type: integer
+            format: int32
+          explode: false
         - name: status
           in: query
-          description: |-
-            Filters
-
-            draft|published|archived
           required: false
           schema:
             type: string
+          explode: false
         - name: visibility
           in: query
-          description: public|private
           required: false
           schema:
             type: string
-        - name: session_start_time_from
-          in: query
-          description: RFC3339
-          required: false
-          schema:
-            type: string
-        - name: session_start_time_to
-          in: query
-          description: RFC3339
-          required: false
-          schema:
-            type: string
+          explode: false
         - name: title_search
           in: query
-          description: full-text search
           required: false
           schema:
             type: string
+          explode: false
         - name: sort_by
           in: query
-          description: |-
-            Sorting
-
-            created_at|updated_at|session_start_time
           required: false
           schema:
             type: string
+          explode: false
         - name: sort_order
           in: query
-          description: asc|desc, default desc
           required: false
           schema:
             type: string
-        - name: x-user-id
-          in: header
-          description: ''
-          example: '12345678'
+          explode: false
+        - name: session_start_time_from
+          in: query
+          required: false
           schema:
             type: string
-            default: '12345678'
-        - name: x-user-account
-          in: header
-          description: ''
-          example: nx-playground-tester
+          explode: false
+        - name: session_start_time_to
+          in: query
+          required: false
           schema:
             type: string
-            default: nx-playground-tester
-        - name: x-user-email
-          in: header
-          description: ''
-          example: nx-playground-test@gmail.com
-          schema:
-            type: string
-            default: nx-playground-test@gmail.com
-        - name: x-user-name
-          in: header
-          description: ''
-          example: nx-playground
-          schema:
-            type: string
-            default: nx-playground
-        - name: x-user-language
-          in: header
-          description: ''
-          example: zh-TW
-          schema:
-            type: string
-            default: zh-TW
-        - name: X-Merchant-Id
-          in: header
-          description: ''
-          example: '168'
-          schema:
-            type: string
-            default: '168'
+          explode: false
       responses:
         '200':
-          description: A successful response.
+          description: The request has succeeded.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/eventEventListResponse'
-          headers: {}
-        '500':
+                $ref: '#/components/schemas/EventListResponse'
+        default:
           description: An unexpected error response.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/rpcStatus'
-          headers: {}
-      security: []
-      x-authorizer-payload: >
-        {"namespace": "Image","object": "{{ printIndex
-        .MatchContext.RegexpCaptureGroups 2 }}", "relation":
-        "access","subject_set": {"namespace": "User","object": "{{ print
-        .Subject }}"}}
+                $ref: '#/components/schemas/RpcStatus'
+      tags:
+        - event
     post:
-      summary: Create a new event
-      deprecated: false
-      description: ''
-      operationId: EventService_CreateEvent
-      tags:
-        - event/EventService
-        - EventService
-        - SaaS_API
-      parameters:
-        - name: x-user-id
-          in: header
-          description: ''
-          example: '12345678'
-          schema:
-            type: string
-            default: '12345678'
-        - name: x-user-account
-          in: header
-          description: ''
-          example: nx-playground-tester
-          schema:
-            type: string
-            default: nx-playground-tester
-        - name: x-user-email
-          in: header
-          description: ''
-          example: nx-playground-test@gmail.com
-          schema:
-            type: string
-            default: nx-playground-test@gmail.com
-        - name: x-user-name
-          in: header
-          description: ''
-          example: nx-playground
-          schema:
-            type: string
-            default: nx-playground
-        - name: x-user-language
-          in: header
-          description: ''
-          example: zh-TW
-          schema:
-            type: string
-            default: zh-TW
-        - name: X-Merchant-Id
-          in: header
-          description: ''
-          example: '168'
-          schema:
-            type: string
-            default: '168'
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/eventCreateEventRequest'
+      operationId: ConsoleEvents_create
+      summary: Create event (always created as draft)
+      parameters: []
       responses:
         '200':
-          description: A successful response.
+          description: The request has succeeded.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/eventCreateEventResponse'
-          headers: {}
-        '500':
+                $ref: '#/components/schemas/CreateEventResponse'
+        default:
           description: An unexpected error response.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/rpcStatus'
-          headers: {}
-      security: []
+                $ref: '#/components/schemas/RpcStatus'
+      tags:
+        - event
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateEventRequest'
   /console/events/{id}:
-    delete:
-      summary: Delete an event
-      deprecated: false
-      description: ''
-      operationId: EventService_DeleteEvent
-      tags:
-        - event/EventService
-        - EventService
-        - SaaS_API
-      parameters:
-        - name: id
-          in: path
-          description: ''
-          required: true
-          example: ''
-          schema:
-            type: string
-        - name: x-user-id
-          in: header
-          description: ''
-          example: '12345678'
-          schema:
-            type: string
-            default: '12345678'
-        - name: x-user-account
-          in: header
-          description: ''
-          example: nx-playground-tester
-          schema:
-            type: string
-            default: nx-playground-tester
-        - name: x-user-email
-          in: header
-          description: ''
-          example: nx-playground-test@gmail.com
-          schema:
-            type: string
-            default: nx-playground-test@gmail.com
-        - name: x-user-name
-          in: header
-          description: ''
-          example: nx-playground
-          schema:
-            type: string
-            default: nx-playground
-        - name: x-user-language
-          in: header
-          description: ''
-          example: zh-TW
-          schema:
-            type: string
-            default: zh-TW
-        - name: X-Merchant-Id
-          in: header
-          description: ''
-          example: '168'
-          schema:
-            type: string
-            default: '168'
-      responses:
-        '200':
-          description: A successful response.
-          content:
-            application/json:
-              schema:
-                type: object
-                properties: {}
-          headers: {}
-        '500':
-          description: An unexpected error response.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/rpcStatus'
-          headers: {}
-      security: []
     get:
-      summary: Get a single event by ID
-      deprecated: false
-      description: ''
-      operationId: EventService_GetEvent
-      tags:
-        - event/EventService
-        - EventService
-        - SaaS_API
+      operationId: ConsoleEvents_read
+      summary: Get event by id
       parameters:
         - name: id
           in: path
-          description: ''
           required: true
-          example: ''
           schema:
             type: string
-        - name: x-user-id
-          in: header
-          description: ''
-          example: '12345678'
-          schema:
-            type: string
-            default: '12345678'
-        - name: x-user-account
-          in: header
-          description: ''
-          example: nx-playground-tester
-          schema:
-            type: string
-            default: nx-playground-tester
-        - name: x-user-email
-          in: header
-          description: ''
-          example: nx-playground-test@gmail.com
-          schema:
-            type: string
-            default: nx-playground-test@gmail.com
-        - name: x-user-name
-          in: header
-          description: ''
-          example: nx-playground
-          schema:
-            type: string
-            default: nx-playground
-        - name: x-user-language
-          in: header
-          description: ''
-          example: zh-TW
-          schema:
-            type: string
-            default: zh-TW
-        - name: X-Merchant-Id
-          in: header
-          description: ''
-          example: '168'
-          schema:
-            type: string
-            default: '168'
       responses:
         '200':
-          description: A successful response.
+          description: The request has succeeded.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/eventEvent'
-          headers: {}
-        '500':
+                $ref: '#/components/schemas/Event'
+        default:
           description: An unexpected error response.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/rpcStatus'
-          headers: {}
-      security: []
-    patch:
-      summary: Patch event (partial update)
-      deprecated: false
-      description: ''
-      operationId: EventService_PatchEvent
+                $ref: '#/components/schemas/RpcStatus'
       tags:
-        - event/EventService
-        - EventService
-        - SaaS_API
+        - event
+    patch:
+      operationId: ConsoleEvents_update
+      summary: Patch event
       parameters:
         - name: id
           in: path
-          description: ''
           required: true
-          example: ''
           schema:
             type: string
-        - name: x-user-id
-          in: header
-          description: ''
-          example: '12345678'
-          schema:
-            type: string
-            default: '12345678'
-        - name: x-user-account
-          in: header
-          description: ''
-          example: nx-playground-tester
-          schema:
-            type: string
-            default: nx-playground-tester
-        - name: x-user-email
-          in: header
-          description: ''
-          example: nx-playground-test@gmail.com
-          schema:
-            type: string
-            default: nx-playground-test@gmail.com
-        - name: x-user-name
-          in: header
-          description: ''
-          example: nx-playground
-          schema:
-            type: string
-            default: nx-playground
-        - name: x-user-language
-          in: header
-          description: ''
-          example: zh-TW
-          schema:
-            type: string
-            default: zh-TW
-        - name: X-Merchant-Id
-          in: header
-          description: ''
-          example: '168'
-          schema:
-            type: string
-            default: '168'
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Event'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RpcStatus'
+      tags:
+        - event
       requestBody:
+        required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/EventServicePatchEventBody'
+              $ref: '#/components/schemas/PatchEventBody'
+    delete:
+      operationId: ConsoleEvents_delete
+      summary: Delete event
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
       responses:
-        '200':
-          description: A successful response.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/eventEvent'
-          headers: {}
-        '500':
+        default:
           description: An unexpected error response.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/rpcStatus'
-          headers: {}
-      security: []
+                $ref: '#/components/schemas/RpcStatus'
+      tags:
+        - event
   /console/events/{id}/sessions/{session_id}:
     delete:
-      summary: Delete a specific session by ID
-      deprecated: false
-      description: ''
-      operationId: EventService_DeleteSession
-      tags:
-        - event/EventService
-        - EventService
-        - SaaS_API
+      operationId: ConsoleEvents_deleteSession
+      summary: Delete a session of an event
       parameters:
-        - name: event_id
+        - name: id
           in: path
-          description: ''
           required: true
-          example: ''
           schema:
             type: string
         - name: session_id
           in: path
-          description: ''
           required: true
-          example: ''
           schema:
             type: string
-        - name: id
-          in: path
-          description: ''
-          required: true
-          example: ''
-          schema:
-            type: string
-        - name: x-user-id
-          in: header
-          description: ''
-          example: '12345678'
-          schema:
-            type: string
-            default: '12345678'
-        - name: x-user-account
-          in: header
-          description: ''
-          example: nx-playground-tester
-          schema:
-            type: string
-            default: nx-playground-tester
-        - name: x-user-email
-          in: header
-          description: ''
-          example: nx-playground-test@gmail.com
-          schema:
-            type: string
-            default: nx-playground-test@gmail.com
-        - name: x-user-name
-          in: header
-          description: ''
-          example: nx-playground
-          schema:
-            type: string
-            default: nx-playground
-        - name: x-user-language
-          in: header
-          description: ''
-          example: zh-TW
-          schema:
-            type: string
-            default: zh-TW
-        - name: X-Merchant-Id
-          in: header
-          description: ''
-          example: '168'
-          schema:
-            type: string
-            default: '168'
       responses:
-        '200':
-          description: A successful response.
-          content:
-            application/json:
-              schema:
-                type: object
-                properties: {}
-          headers: {}
-        '500':
+        default:
           description: An unexpected error response.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/rpcStatus'
-          headers: {}
-      security: []
+                $ref: '#/components/schemas/RpcStatus'
+      tags:
+        - event
   /console/events/{id}/status:
     put:
+      operationId: ConsoleEvents_updateStatus
       summary: Update event status
-      deprecated: false
-      description: ''
-      operationId: EventService_UpdateEventStatus
-      tags:
-        - event/EventService
-        - EventService
-        - SaaS_API
       parameters:
         - name: id
           in: path
-          description: ''
           required: true
-          example: ''
           schema:
             type: string
-        - name: x-user-id
-          in: header
-          description: ''
-          example: '12345678'
-          schema:
-            type: string
-            default: '12345678'
-        - name: x-user-account
-          in: header
-          description: ''
-          example: nx-playground-tester
-          schema:
-            type: string
-            default: nx-playground-tester
-        - name: x-user-email
-          in: header
-          description: ''
-          example: nx-playground-test@gmail.com
-          schema:
-            type: string
-            default: nx-playground-test@gmail.com
-        - name: x-user-name
-          in: header
-          description: ''
-          example: nx-playground
-          schema:
-            type: string
-            default: nx-playground
-        - name: x-user-language
-          in: header
-          description: ''
-          example: zh-TW
-          schema:
-            type: string
-            default: zh-TW
-        - name: X-Merchant-Id
-          in: header
-          description: ''
-          example: '168'
-          schema:
-            type: string
-            default: '168'
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Event'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RpcStatus'
+      tags:
+        - event
       requestBody:
+        required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/EventServiceUpdateEventStatusBody'
-      responses:
-        '200':
-          description: A successful response.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/eventEvent'
-          headers: {}
-        '500':
-          description: An unexpected error response.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/rpcStatus'
-          headers: {}
-      security: []
+              $ref: '#/components/schemas/UpdateEventStatusBody'
   /events:
     get:
+      operationId: PublicEvents_search
       summary: Search public events
-      deprecated: false
-      description: ''
-      operationId: PublicEventService_SearchEvents
-      tags:
-        - event/PublicEventService
-        - PublicEventService
-        - SaaS_API
       parameters:
         - name: page_token
           in: query
-          description: Pagination
           required: false
           schema:
             type: string
+          explode: false
         - name: page
           in: query
-          description: ''
           required: false
           schema:
-            format: int32
             type: integer
+            format: int32
+          explode: false
         - name: page_size
           in: query
-          description: ''
           required: false
           schema:
-            format: int32
             type: integer
+            format: int32
+          explode: false
         - name: brand_id
           in: query
-          description: |-
-            Filters
-
-            filter by specific brand
           required: false
           schema:
             type: string
+          explode: false
         - name: title_search
           in: query
-          description: full-text search
           required: false
           schema:
             type: string
-        - name: session_start_time_from
-          in: query
-          description: ''
-          required: false
-          schema:
-            type: string
-        - name: session_start_time_to
-          in: query
-          description: ''
-          required: false
-          schema:
-            type: string
-        - name: location_lat
-          in: query
-          description: Location-based search
-          required: false
-          schema:
-            format: double
-            type: number
-        - name: location_lng
-          in: query
-          description: ''
-          required: false
-          schema:
-            format: double
-            type: number
-        - name: location_radius
-          in: query
-          description: in meters, default 1000
-          required: false
-          schema:
-            format: int32
-            type: integer
+          explode: false
         - name: sort_by
           in: query
-          description: |-
-            Sorting
-
-            session_start_time|created_at
           required: false
           schema:
             type: string
+          explode: false
         - name: sort_order
           in: query
-          description: asc|desc
           required: false
           schema:
             type: string
-        - name: x-user-id
-          in: header
-          description: ''
-          example: '12345678'
+          explode: false
+        - name: session_start_time_from
+          in: query
+          required: false
           schema:
             type: string
-            default: '12345678'
-        - name: x-user-account
-          in: header
-          description: ''
-          example: nx-playground-tester
+          explode: false
+        - name: session_start_time_to
+          in: query
+          required: false
           schema:
             type: string
-            default: nx-playground-tester
-        - name: x-user-email
-          in: header
-          description: ''
-          example: nx-playground-test@gmail.com
+          explode: false
+        - name: location_lat
+          in: query
+          required: false
           schema:
-            type: string
-            default: nx-playground-test@gmail.com
-        - name: x-user-name
-          in: header
-          description: ''
-          example: nx-playground
+            type: number
+            format: double
+          explode: false
+        - name: location_lng
+          in: query
+          required: false
           schema:
-            type: string
-            default: nx-playground
-        - name: x-user-language
-          in: header
-          description: ''
-          example: zh-TW
+            type: number
+            format: double
+          explode: false
+        - name: location_radius
+          in: query
+          required: false
           schema:
-            type: string
-            default: zh-TW
-        - name: X-Merchant-Id
-          in: header
-          description: ''
-          example: '168'
-          schema:
-            type: string
-            default: '168'
+            type: number
+            format: double
+          explode: false
       responses:
         '200':
-          description: A successful response.
+          description: The request has succeeded.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/eventEventListResponse'
-          headers: {}
-        '500':
+                $ref: '#/components/schemas/EventListResponse'
+        default:
           description: An unexpected error response.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/rpcStatus'
-          headers: {}
-      security: []
+                $ref: '#/components/schemas/RpcStatus'
+      tags:
+        - event
   /events/{id}:
     get:
-      summary: Get a public event by ID (for sharing links)
-      deprecated: false
-      description: ''
-      operationId: PublicEventService_GetEvent
-      tags:
-        - event/PublicEventService
-        - PublicEventService
-        - SaaS_API
+      operationId: PublicEvents_read
+      summary: Get a public event by id
       parameters:
         - name: id
           in: path
-          description: ''
           required: true
-          example: ''
           schema:
             type: string
-        - name: x-user-id
-          in: header
-          description: ''
-          example: '12345678'
-          schema:
-            type: string
-            default: '12345678'
-        - name: x-user-account
-          in: header
-          description: ''
-          example: nx-playground-tester
-          schema:
-            type: string
-            default: nx-playground-tester
-        - name: x-user-email
-          in: header
-          description: ''
-          example: nx-playground-test@gmail.com
-          schema:
-            type: string
-            default: nx-playground-test@gmail.com
-        - name: x-user-name
-          in: header
-          description: ''
-          example: nx-playground
-          schema:
-            type: string
-            default: nx-playground
-        - name: x-user-language
-          in: header
-          description: ''
-          example: zh-TW
-          schema:
-            type: string
-            default: zh-TW
-        - name: X-Merchant-Id
-          in: header
-          description: ''
-          example: '168'
-          schema:
-            type: string
-            default: '168'
       responses:
         '200':
-          description: A successful response.
+          description: The request has succeeded.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/eventEvent'
-          headers: {}
-        '500':
+                $ref: '#/components/schemas/Event'
+        default:
           description: An unexpected error response.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/rpcStatus'
-          headers: {}
-      security: []
+                $ref: '#/components/schemas/RpcStatus'
+      tags:
+        - event
 components:
   schemas:
-    EventServicePatchEventBody:
+    CreateEventRequest:
+      type: object
       properties:
         title:
           type: string
@@ -873,75 +380,38 @@ components:
         cover_image_url:
           type: string
         location:
-          $ref: '#/components/schemas/eventLocation'
+          $ref: '#/components/schemas/Location'
         sessions:
-          items:
-            $ref: '#/components/schemas/eventSession'
-          title: Replace all sessions if provided
           type: array
+          items:
+            $ref: '#/components/schemas/Session'
         detail:
-          items:
-            $ref: '#/components/schemas/eventDetailBlock'
-          title: Replace all detail blocks if provided
           type: array
+          items:
+            $ref: '#/components/schemas/DetailBlock'
         faq:
-          items:
-            $ref: '#/components/schemas/eventFAQ'
-          title: Replace all FAQ if provided
           type: array
+          items:
+            $ref: '#/components/schemas/FAQ'
+    CreateEventResponse:
       type: object
-    EventServiceUpdateEventStatusBody:
-      properties:
-        status:
-          title: draft|published|archived
-          type: string
-      type: object
-    eventCreateEventRequest:
-      properties:
-        title:
-          type: string
-        summary:
-          type: string
-        visibility:
-          title: status field removed - events are always created as draft
-          type: string
-        cover_image_url:
-          type: string
-        location:
-          $ref: '#/components/schemas/eventLocation'
-        sessions:
-          items:
-            $ref: '#/components/schemas/eventSession'
-          type: array
-        detail:
-          items:
-            $ref: '#/components/schemas/eventDetailBlock'
-          type: array
-        faq:
-          items:
-            $ref: '#/components/schemas/eventFAQ'
-          type: array
-      title: Request messages
-      type: object
-    eventCreateEventResponse:
       properties:
         id:
           type: string
         created_at:
           type: string
-      title: Response messages
+    DetailBlock:
       type: object
-    eventDetailBlock:
       properties:
         type:
           type: string
         text_data:
-          $ref: '#/components/schemas/eventTextData'
+          $ref: '#/components/schemas/TextData'
         image_data:
-          $ref: '#/components/schemas/eventImageData'
-      title: Detail block for structured content
+          $ref: '#/components/schemas/ImageData'
+      description: Detail block for structured content
+    Event:
       type: object
-    eventEvent:
       properties:
         id:
           type: string
@@ -952,27 +422,27 @@ components:
         summary:
           type: string
         status:
-          title: draft, published, archived
           type: string
+          description: draft, published, archived
         visibility:
-          title: public, private
           type: string
+          description: public, private
         cover_image_url:
           type: string
         location:
-          $ref: '#/components/schemas/eventLocation'
+          $ref: '#/components/schemas/Location'
         sessions:
-          items:
-            $ref: '#/components/schemas/eventSession'
           type: array
+          items:
+            $ref: '#/components/schemas/Session'
         detail:
-          items:
-            $ref: '#/components/schemas/eventDetailBlock'
           type: array
+          items:
+            $ref: '#/components/schemas/DetailBlock'
         faq:
-          items:
-            $ref: '#/components/schemas/eventFAQ'
           type: array
+          items:
+            $ref: '#/components/schemas/FAQ'
         created_at:
           type: string
         created_by:
@@ -981,38 +451,38 @@ components:
           type: string
         updated_by:
           type: string
-      title: Core Event message
+      description: Core Event message
+    EventListResponse:
       type: object
-    eventEventListResponse:
       properties:
         events:
-          items:
-            $ref: '#/components/schemas/eventEvent'
           type: array
+          items:
+            $ref: '#/components/schemas/Event'
         pagination:
-          $ref: '#/components/schemas/eventPagination'
+          $ref: '#/components/schemas/Pagination'
+    FAQ:
       type: object
-    eventFAQ:
       properties:
         question:
           type: string
         answer:
           type: string
-      title: FAQ entry
+      description: FAQ entry
+    GeoJSONPoint:
       type: object
-    eventGeoJSONPoint:
       properties:
         type:
-          title: Always "Point"
           type: string
+          description: Always "Point"
         coordinates:
-          items:
-            format: double
-            type: number
-          title: '[longitude, latitude]'
           type: array
+          items:
+            type: number
+            format: double
+      description: 'GeoJSON Point: coordinates are [longitude, latitude]'
+    ImageData:
       type: object
-    eventImageData:
       properties:
         url:
           type: string
@@ -1020,9 +490,9 @@ components:
           type: string
         caption:
           type: string
-      title: Image block data
+      description: Image block data
+    Location:
       type: object
-    eventLocation:
       properties:
         name:
           type: string
@@ -1031,77 +501,95 @@ components:
         place_id:
           type: string
         coordinates:
-          $ref: '#/components/schemas/eventGeoJSONPoint'
-      title: Location with GeoJSON Point structure
+          $ref: '#/components/schemas/GeoJSONPoint'
+      description: Location with GeoJSON Point structure
+    Pagination:
       type: object
-    eventPagination:
       properties:
         next_page_token:
-          title: for cursor-based
           type: string
         prev_page_token:
-          title: for cursor-based
           type: string
         has_next:
           type: boolean
         has_prev:
           type: boolean
         total_count:
-          format: int32
           type: integer
+          format: int32
         current_page:
-          format: int32
-          title: for page-based
           type: integer
+          format: int32
         total_pages:
-          format: int32
-          title: for page-based
           type: integer
+          format: int32
+    PatchEventBody:
       type: object
-    eventSession:
+      properties:
+        title:
+          type: string
+        summary:
+          type: string
+        visibility:
+          type: string
+        cover_image_url:
+          type: string
+        location:
+          $ref: '#/components/schemas/Location'
+        sessions:
+          type: array
+          items:
+            $ref: '#/components/schemas/Session'
+        detail:
+          type: array
+          items:
+            $ref: '#/components/schemas/DetailBlock'
+        faq:
+          type: array
+          items:
+            $ref: '#/components/schemas/FAQ'
+    RpcStatus:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+        details:
+          type: array
+          items:
+            type: object
+            unevaluatedProperties: {}
+      description: Standard error envelope (gRPC-gateway rpcStatus equivalent)
+    Session:
+      type: object
       properties:
         id:
           type: string
         name:
-          title: Session name (optional)
           type: string
+          description: Session name (optional)
         capacity:
-          format: int32
-          title: Capacity limit (optional, null means unlimited)
           type: integer
+          format: int32
+          description: Capacity limit; omitted means unlimited
         start_time:
-          title: RFC3339 format
           type: string
+          description: RFC3339
         end_time:
-          title: RFC3339 format
           type: string
-      title: Session for time-based event scheduling
+          description: RFC3339
+      description: Session for time-based event scheduling
+    TextData:
       type: object
-    eventTextData:
       properties:
         content:
           type: string
-      title: Text block data
+      description: Text block data
+    UpdateEventStatusBody:
       type: object
-    protobufAny:
-      additionalProperties:
-        type: string
       properties:
-        '@type':
+        status:
           type: string
-      type: object
-    rpcStatus:
-      properties:
-        code:
-          format: int32
-          type: integer
-        message:
-          type: string
-        details:
-          items:
-            $ref: '#/components/schemas/protobufAny'
-          type: array
-      type: object
-  securitySchemes: {}
-servers: []
-security: []
+      description: draft|published|archived

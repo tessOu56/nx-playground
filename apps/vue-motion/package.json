@@ -32,6 +32,7 @@
     "core-js": "^3.8.3",
     "gsap": "^3.13.0",
     "lottie-web": "^5.13.0",
+    "pinia": "^3.0.4",
     "three": "^0.180.0",
     "vue": "^3.2.13",
     "vue-router": "^4.5.1"
@@ -59,6 +60,12 @@
     ],
     "parserOptions": {
       "parser": "@babel/eslint-parser"
+    },
+    "globals": {
+      "defineProps": "readonly",
+      "defineEmits": "readonly",
+      "defineExpose": "readonly",
+      "withDefaults": "readonly"
     },
     "rules": {}
   },

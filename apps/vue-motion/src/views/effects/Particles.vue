@@ -96,6 +96,31 @@
         </li>
       </ul>
     </div>
+
+    <!-- 練習題 4：生命週期與清理 -->
+    <div class="card border-l-4 border-indigo-500 bg-indigo-50/50">
+      <h3 class="text-xl font-bold text-gray-800 mb-3">
+        📖 練習題 4：onMounted / onUnmounted 清理
+      </h3>
+      <p class="text-gray-600 text-sm mb-4 leading-relaxed">
+        本頁在 <code class="bg-white px-1 rounded">setup()</code> 內註冊資源，
+        離開路由時必須在 <code class="bg-white px-1 rounded">onUnmounted</code> 清理，
+        否則動畫迴圈與 resize 監聽會繼續跑（記憶體洩漏 / 背景 CPU）。
+      </p>
+      <ul class="space-y-2 text-sm text-gray-700 font-mono bg-white rounded-lg p-4">
+        <li>
+          <span class="text-indigo-600">onMounted</span>
+          → initCanvas()、animate()、window resize 監聽
+        </li>
+        <li>
+          <span class="text-pink-600">onUnmounted</span>
+          → cancelAnimationFrame(animationId)、removeEventListener("resize")
+        </li>
+      </ul>
+      <p class="mt-3 text-xs text-gray-500">
+        對照 React：<code>useEffect(() => { ...; return cleanup }, [])</code>
+      </p>
+    </div>
   </div>
 </template>
 
@@ -255,6 +280,7 @@ export default {
     }
 
     onMounted(() => {
+      // 練習題 4：掛載時初始化 canvas 並啟動動畫迴圈
       initCanvas()
       animate()
 
@@ -262,6 +288,7 @@ export default {
     })
 
     onUnmounted(() => {
+      // 練習題 4：離開頁面時取消 rAF 與事件監聽，避免洩漏
       if (animationId) {
         cancelAnimationFrame(animationId)
       }

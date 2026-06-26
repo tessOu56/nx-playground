@@ -3,11 +3,11 @@ import * as path from 'path';
 
 import { defineConfig } from 'orval';
 
-// 獲取環境變數，默認為 'dev'
+// Environment variables, default to 'dev'
 const ENV = process.env.API_ENV ?? 'dev';
 const API_MODULE = process.env.API_MODULE ?? 'form';
 
-// 掃描 specs 目錄，找到對應環境的 API 規格文件
+// Scan the specs dir to find the spec file matching the module/env
 function findApiSpec(module: string, env: string): string {
   const specsDir = './specs';
   const possibleFiles = [
@@ -15,6 +15,9 @@ function findApiSpec(module: string, env: string): string {
     `${module}-${env}.yaml`,
     `${module}-v${env}.openapi.yaml`,
     `${module}-v${env}.yaml`,
+    // env-less specs (e.g. event.openapi.yaml) - fallback before default
+    `${module}.openapi.yaml`,
+    `${module}.yaml`,
   ];
 
   for (const file of possibleFiles) {
@@ -24,11 +27,11 @@ function findApiSpec(module: string, env: string): string {
     }
   }
 
-  // 如果找不到對應環境的文件，使用默認的 openapi.yaml
+  // Fall back to a default openapi.yaml if present
   const defaultFile = path.join(specsDir, 'openapi.yaml');
   if (fs.existsSync(defaultFile)) {
     console.warn(
-      `⚠️  Warning: No API spec found for ${module}-${env}, using default openapi.yaml`
+      `Warning: No API spec found for ${module}-${env}, using default openapi.yaml`
     );
     return defaultFile;
   }
@@ -38,7 +41,7 @@ function findApiSpec(module: string, env: string): string {
   );
 }
 
-// 生成輸出目錄路徑
+// Build the output directory path
 function getOutputPath(module: string, env: string): string {
   return `./src/generated/${module}/${env}`;
 }
@@ -47,7 +50,7 @@ const apiSpecPath = findApiSpec(API_MODULE, ENV);
 const outputPath = getOutputPath(API_MODULE, ENV);
 
 export default defineConfig({
-  nx-playground: {
+  'nx-playground': {
     input: {
       target: apiSpecPath,
     },

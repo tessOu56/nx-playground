@@ -1,0 +1,11 @@
+{
+  "name": "ext-ai-search-portal",
+  "projectType": "application",
+  "sourceRoot": "external/ai-search-portal",
+  "tags": ["scope:external", "type:submodule"],
+  "targets": {
+    "dev":     { "executor": "nx:run-commands", "options": { "command": "pnpm --dir external/ai-search-portal dev" } },
+    "build":   { "executor": "nx:run-commands", "options": { "command": "pnpm --dir external/ai-search-portal build" } },
+    "install": { "executor": "nx:run-commands", "options": { "command": "pnpm --dir external/ai-search-portal install" } }
+  }
+}

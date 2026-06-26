@@ -48,6 +48,11 @@
       "types": "./src/generated/event/dev/nx-playgroundAPI.ts",
       "import": "./src/generated/event/dev/nx-playgroundAPI.ts",
       "default": "./src/generated/event/dev/nx-playgroundAPI.ts"
+    },
+    "./catalog/dev": {
+      "types": "./src/generated/catalog/dev/nXPlaygroundCatalogAPI.ts",
+      "import": "./src/generated/catalog/dev/nXPlaygroundCatalogAPI.ts",
+      "default": "./src/generated/catalog/dev/nXPlaygroundCatalogAPI.ts"
     }
   },
   "scripts": {
@@ -61,9 +66,10 @@
     "generate:api:community:dev": "API_MODULE=community API_ENV=dev orval --config orval.config.ts",
     "generate:api:tickets:dev": "API_MODULE=tickets API_ENV=dev orval --config orval.config.ts",
     "generate:api:event:dev": "API_MODULE=event API_ENV=dev orval --config orval.config.ts",
-    "generate:api:all": "npm run generate:api:form:dev && npm run generate:api:form:v1 && npm run generate:api:identity:dev && npm run generate:api:media:dev && npm run generate:api:community:dev && npm run generate:api:tickets:dev && npm run generate:api:event:dev",
+    "generate:api:all": "npm run generate:api:form:dev && npm run generate:api:form:v1 && npm run generate:api:identity:dev && npm run generate:api:media:dev && npm run generate:api:community:dev && npm run generate:api:tickets:dev && npm run generate:api:event:dev && npm run generate:api:catalog:dev",
     "generate:types": "openapi-typescript ./specs/openapi.yaml -o ./src/generated/types.ts",
-    "prebuild": "npm run generate:api:all"
+    "prebuild": "npm run generate:api:all",
+    "generate:api:catalog:dev": "API_MODULE=catalog API_ENV=dev orval --config orval.config.ts"
   },
   "keywords": [
     "react",

@@ -1,0 +1,15 @@
+{
+  "name": "@nx-playground/contracts",
+  "version": "0.0.1",
+  "private": true,
+  "description": "TypeSpec contract source of truth. Emits OpenAPI consumed by the frontend (libs/api-client via Orval) and the backend (apps/api-server NestJS).",
+  "scripts": {
+    "build": "tsp compile main.tsp --config tspconfig.yaml",
+    "watch": "tsp compile main.tsp --config tspconfig.yaml --watch"
+  },
+  "devDependencies": {
+    "@typespec/compiler": "^1.13.0",
+    "@typespec/http": "^1.13.0",
+    "@typespec/openapi3": "^1.13.0"
+  }
+}
