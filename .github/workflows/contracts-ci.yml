@@ -18,17 +18,16 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: pnpm/action-setup@v4
-        with:
-          version: 9
       - uses: actions/setup-node@v4
         with:
           node-version: 22
-          cache: pnpm
-      - run: pnpm install --frozen-lockfile
+      # Isolated install: monorepo pnpm-lock is out of sync (vue-motion pinia); contracts only.
+      - name: Install TypeSpec toolchain
+        working-directory: libs/contracts
+        run: npm install --no-save @typespec/compiler@^1.13.0 @typespec/http@^1.13.0 @typespec/openapi3@^1.13.0
       - name: tsp compile
         working-directory: libs/contracts
-        run: pnpm run build
+        run: npx tsp compile main.tsp --config tspconfig.yaml
       - name: verify OpenAPI artifacts
         run: |
           test -f libs/api-client/specs/catalog.openapi.yaml
