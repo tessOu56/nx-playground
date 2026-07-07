@@ -36,4 +36,4 @@ jobs:
       - name: spectral lint (catalog)
         run: |
           npm install --no-save @stoplight/spectral-cli@6.15.0 @stoplight/spectral-rulesets
-          npx spectral lint libs/api-client/specs/catalog.openapi.yaml -r @stoplight/spectral-rulesets/oas
+          npx spectral lint libs/api-client/specs/catalog.openapi.yaml -r @stoplight/spectral-rulesets/oas --fail-severity error
