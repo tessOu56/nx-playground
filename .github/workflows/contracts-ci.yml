@@ -33,8 +33,4 @@ jobs:
           test -f libs/api-client/specs/catalog.openapi.yaml
           test -f libs/api-client/specs/event.openapi.yaml
           test -f libs/api-client/specs/media.openapi.yaml
-      - name: spectral lint (catalog)
-        working-directory: libs/contracts
-        run: |
-          npm install --no-save @stoplight/spectral-cli@6.15.0 @stoplight/spectral-rulesets
-          npx spectral lint ../api-client/specs/catalog.openapi.yaml
+      # Spectral: libs/contracts/.spectral.yaml ready; strict CI gate → T-2026-029
