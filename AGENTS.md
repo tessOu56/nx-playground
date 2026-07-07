@@ -18,6 +18,7 @@ Nx 21 monorepo 樞紐：跨框架前端練習、共享 charts、NestJS api-serve
 
 ```bash
 make setup          # or: pnpm install && scripts/env-setup.sh
+# Windows / CI differences: docs/DEV-ENVIRONMENT.md + scripts/detect-platform.ps1
 pnpm dev:api        # localhost:3001
 pnpm dev:profile    # localhost:3003
 pnpm dev:vue-motion # localhost:8080
