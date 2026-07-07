@@ -10,7 +10,7 @@
 ## TypeSpec spine (SSOT)
 
 - Source: `libs/contracts/*.tsp` → `tsp compile` → `libs/api-client/specs/*.openapi.yaml`
-- CI: `.github/workflows/contracts-ci.yml` runs tsp compile + artifact verify (Spectral gate W3).
+- CI: `.github/workflows/contracts-ci.yml` runs tsp compile + artifact verify + Spectral (relaxed `.spectral.yaml`; strict rules T-2026-029).
 
 ## Comparison
 

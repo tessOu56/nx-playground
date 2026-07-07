@@ -33,4 +33,8 @@ jobs:
           test -f libs/api-client/specs/catalog.openapi.yaml
           test -f libs/api-client/specs/event.openapi.yaml
           test -f libs/api-client/specs/media.openapi.yaml
-      # Spectral oas gate deferred to W3 (OpenAPI 3.1 + TypeSpec operationId naming).
+      - name: spectral lint (catalog)
+        working-directory: libs/contracts
+        run: |
+          npm install --no-save @stoplight/spectral-cli@6.15.0 @stoplight/spectral-rulesets
+          npx spectral lint ../api-client/specs/catalog.openapi.yaml
