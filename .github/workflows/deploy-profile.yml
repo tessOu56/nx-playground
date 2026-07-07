@@ -1,21 +1,37 @@
 name: Deploy Profile to Cloudflare Pages
 
+# STOP automatic deploy (2026-07-07): push trigger removed — see docs/DEPLOY-CLOUDFLARE-RETIREMENT.md
+# Manual maintenance only via workflow_dispatch + DEPLOY confirmation.
+
 on:
-  push:
-    branches:
-      - main
-    paths:
-      - 'apps/profile/**'
-      - 'libs/**'
-      - 'package.json'
-      - 'pnpm-lock.yaml'
   workflow_dispatch:
+    inputs:
+      reason:
+        description: Maintenance reason (audit trail)
+        required: true
+        type: string
+      confirm:
+        description: Type DEPLOY to confirm (non-routine maintenance)
+        required: true
+        type: string
+
+concurrency:
+  group: deploy-profile-cloudflare
+  cancel-in-progress: true
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    name: Deploy to Cloudflare Pages
+    name: Deploy to Cloudflare Pages (maintenance)
     steps:
+      - name: Confirm manual maintenance
+        run: |
+          if [ "${{ github.event.inputs.confirm }}" != "DEPLOY" ]; then
+            echo "::error::Confirmation failed. Type DEPLOY in the confirm field."
+            exit 1
+          fi
+          echo "Manual deploy reason: ${{ github.event.inputs.reason }}"
+
       - name: Checkout
         uses: actions/checkout@v4
 
@@ -27,7 +43,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: '22'
           cache: 'pnpm'
 
       - name: Install dependencies
@@ -43,6 +59,5 @@ jobs:
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           projectName: nx-playground-profile
           directory: dist/apps/profile
-          # Optional: Git integration
           gitHubToken: ${{ secrets.GITHUB_TOKEN }}
           branch: main

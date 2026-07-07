@@ -1,8 +1,10 @@
 # Cloudflare Pages Deployment Guide
 
+> **2026-07-07** — Automatic profile deploy **stopped**. See [`docs/DEPLOY-CLOUDFLARE-RETIREMENT.md`](docs/DEPLOY-CLOUDFLARE-RETIREMENT.md). Manual workflow only for non-routine maintenance.
+
 ## Apps Deployment Configuration
 
-### 1. ✅ Profile (已部署)
+### 1. Profile — maintenance-only (automatic deploy retired)
 
 - **Project Name**: `nx-playground-profile`
 - **Build Command**: `pnpm nx build profile --configuration=production`
