@@ -1,6 +1,7 @@
 {
   "sidebar.title": "NX Playground Console",
   "sidebar.navigation.dashboard": "儀表板",
+  "sidebar.navigation.flow": "流程視覺化",
   "sidebar.navigation.events": "活動管理",
   "sidebar.navigation.users": "用戶管理",
   "sidebar.navigation.forms": "表單模板",

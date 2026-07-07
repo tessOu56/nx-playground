@@ -40,4 +40,5 @@ Verified local URLs: api `3001`, profile `3003`, vue-motion `8080` (mirror repo)
 ## Do not
 
 - Develop in mirror repos (vue-motion-sandbox, angular-dashboard-sandbox)
+- Rely on automatic Cloudflare profile deploy (retired 2026-07-07 — see `docs/DEPLOY-CLOUDFLARE-RETIREMENT.md`)
 - Merge into ai-search-portal monorepo without documented evaluation

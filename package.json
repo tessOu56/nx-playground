@@ -2,6 +2,10 @@
   "name": "@nx-playground/source",
   "version": "0.0.0",
   "license": "MIT",
+  "packageManager": "pnpm@10.13.1",
+  "engines": {
+    "node": ">=22"
+  },
   "scripts": {
     "prepare": "husky",
     "dev": "make dev",
@@ -126,6 +130,7 @@
     "@vanilla-extract/sprinkles": "^1.6.5",
     "@vueuse/core": "^13.9.0",
     "@vueuse/motion": "^3.0.3",
+    "@xyflow/react": "^12.11.0",
     "axios": "^1.7.9",
     "big.js": "7.0.1",
     "chart.js": "^4.5.0",
