@@ -1,4 +1,4 @@
-import { Dashboard, FormsDemo } from '../../features';
+import { Dashboard, EventFlowPage, FormsDemo } from '../../features';
 import { DashboardLayout } from '../../layouts';
 
 export const dashboardRoutes = [
@@ -13,6 +13,10 @@ export const dashboardRoutes = [
       {
         path: 'forms-demo',
         element: <FormsDemo />,
+      },
+      {
+        path: 'flow',
+        element: <EventFlowPage />,
       },
     ],
   },

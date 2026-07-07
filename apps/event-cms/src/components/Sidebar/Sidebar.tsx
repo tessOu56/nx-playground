@@ -8,6 +8,7 @@ import {
   Palette,
   Settings,
   Users,
+  Workflow,
   X,
   Bell,
 } from 'lucide-react';
@@ -37,6 +38,11 @@ export const Sidebar: React.FC<SidebarProps> = ({
       path: '/dashboard',
       label: t('sidebar.navigation.dashboard') as string,
       icon: LayoutDashboard,
+    },
+    {
+      path: '/dashboard/flow',
+      label: t('sidebar.navigation.flow') as string,
+      icon: Workflow,
     },
     {
       path: '/events',

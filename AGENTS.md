@@ -40,3 +40,9 @@ pnpm dev:enterprise # localhost:4200
 - Tickets: `docs/platform-inbox/` ← `platform-command/scripts/distribute-inbox.ps1`
 - Promote motion experiments → ai-search-portal `labs/motion/`
 - API contract alignment → polyglot-labs `docs/api-contract.md`
+
+## 開發環境（2026-07 統一）
+
+- Node 22（`.nvmrc`/`engines`）· pnpm 10.13.1（`packageManager`，`corepack enable` 生效）
+- 平台差異與 workaround：[docs/DEV-ENVIRONMENT.md](docs/DEV-ENVIRONMENT.md)；生態矩陣：`platform-command/docs/dev-environment.md`
+- Claude/Cowork agent sandbox 限制：`platform-command/docs/cowork-sandbox.md`

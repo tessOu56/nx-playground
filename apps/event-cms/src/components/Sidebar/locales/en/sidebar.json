@@ -1,6 +1,7 @@
 {
   "sidebar.title": "NX Playground Console",
   "sidebar.navigation.dashboard": "Dashboard",
+  "sidebar.navigation.flow": "Flow View",
   "sidebar.navigation.events": "Events",
   "sidebar.navigation.users": "Users",
   "sidebar.navigation.forms": "Form Templates",
