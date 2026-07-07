@@ -1,0 +1,38 @@
+name: contracts-ci
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'libs/contracts/**'
+      - 'libs/api-client/specs/**'
+      - '.github/workflows/contracts-ci.yml'
+  pull_request:
+    paths:
+      - 'libs/contracts/**'
+      - 'libs/api-client/specs/**'
+  workflow_dispatch:
+
+jobs:
+  typespec-compile:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - name: tsp compile
+        working-directory: libs/contracts
+        run: pnpm run build
+      - name: verify OpenAPI artifacts
+        run: |
+          test -f libs/api-client/specs/catalog.openapi.yaml
+          test -f libs/api-client/specs/event.openapi.yaml
+          test -f libs/api-client/specs/media.openapi.yaml
+      - name: spectral lint (catalog)
+        run: npx --yes @stoplight/spectral-cli lint libs/api-client/specs/catalog.openapi.yaml -r spectral:oas
