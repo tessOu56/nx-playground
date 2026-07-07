@@ -26,8 +26,8 @@ develop-md
 ## Sync ritual (hub → satellite)
 
 1. Change and commit in `apps/vue-motion` or `apps/enterprise-admin`.
-2. Copy tree to satellite repo (exclude `node_modules`, `.env`, `dist`).
-3. Commit satellite; optional WATCH entry in platform-command.
+2. From platform-command: `.\scripts\sync-nx-mirrors.ps1 -Target vue|angular|all -Commit` (SSOT `registry/nx-mirrors.json`; preserves satellite `.github/`, `README.md`, `vue.config.js`).
+3. Optional WATCH entry in platform-command.
 
 ## Registry
 
