@@ -1,6 +1,6 @@
 # NX Playground
 
-> 實驗性 Nx Monorepo 專案 - 整合多個前端技術棧的完整展示平台
+> 企業級前端能力實驗場 — Nx Monorepo 上驗證認證、CMS、設計系統、跨框架整合等情境；成熟能力經 [explore-design-sdk](https://github.com/tessOu56/explore-design-sdk) 與契約模式升級進正式產品（[ai-search-portal](https://github.com/tessOu56/ai-search-portal)），並以 standalone mirror（vue-motion-sandbox、angular-dashboard-sandbox）對外展示。
 
 [![Nx](https://img.shields.io/badge/Nx-21.4-blue.svg)](https://nx.dev)
 [![React](https://img.shields.io/badge/React-19-cyan.svg)](https://react.dev)
