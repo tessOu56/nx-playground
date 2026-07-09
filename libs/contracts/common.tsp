@@ -1,5 +1,5 @@
 /**
- * 共用回應信封（able_api 風格，跨服務約定）。
+ * 共用回應信封（內部 API 參考風格，跨服務約定）。
  * 信封欄位為 snake_case；result 內的領域 payload 維持各自命名（catalog 為 camelCase）。
  */
 
