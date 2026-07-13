@@ -8,11 +8,12 @@ Nx 21 monorepo 樞紐：跨框架前端練習、共享 charts、NestJS api-serve
 
 ## Before coding
 
-1. Read `docs/PROJECT-PLAN.md` for current phase.
-2. Read `docs/platform-inbox/CURRENT.md` for P0/P1 tickets from platform-command.
-3. Read `docs/ECOSYSTEM.md` for mirror repo boundaries (vue-motion-sandbox, angular-dashboard-sandbox).
-4. **Design system**：消費 `explore-design-sdk`；規格見該 repo `docs/EXPLORE-SDK.md`。
-5. Long specs → **develop-md**; link only, do not duplicate.
+1. Read [`docs/platform-inbox/PROFILE.md`](docs/platform-inbox/PROFILE.md) for business×technical×objectives context (platform-command 派送).
+2. Read `docs/PROJECT-PLAN.md` for current phase.
+3. Read `docs/platform-inbox/CURRENT.md` for P0/P1 tickets from platform-command.
+4. Read `docs/ECOSYSTEM.md` for mirror repo boundaries (vue-motion-sandbox, angular-dashboard-sandbox).
+5. **Design system**：消費 `explore-design-sdk`；規格見該 repo `docs/EXPLORE-SDK.md`。
+6. Long specs → **develop-md**; link only, do not duplicate.
 
 ## Quick start
 
