@@ -1,7 +1,7 @@
 # Agent Profile — nx-playground
 
 > **GENERATED — do not edit.** 產生器：`scripts/build-agent-profiles.py`；業務維度 SSOT：`registry/business-profiles.json`；其餘由既有 registry 合成。
-> 來源版本：business-profiles 2026-07-09 · agent-assets 2026-07-09 · domain-spec unknown
+> 來源版本：business-profiles 2026-07-09 · agent-assets 2026-07-31 · domain-spec 2026-07-09
 > ⚠️ 業務維度為 **draft**，owner 確認後轉 confirmed。
 
 ## 業務（為何存在）
@@ -15,12 +15,12 @@
 
 | 詞 | 定義 | 生態對照 |
 | --- | --- | --- |
-| `monorepo` | ⚠️ domain spec 未收錄 | — |
-| `affected-graph` | ⚠️ domain spec 未收錄 | — |
-| `mirror` | ⚠️ domain spec 未收錄 | — |
-| `promote` | ⚠️ domain spec 未收錄 | — |
-| `feature-based-architecture` | ⚠️ domain spec 未收錄 | — |
-| `contract-first` | ⚠️ domain spec 未收錄 | — |
+| **Monorepo** | 多套件/多應用共倉，統一工具鏈與依賴圖。 | pnpm workspaces（全生態）、Nx（nx-playground）、turbo（portal） |
+| **Affected graph** | 由變更集推導受影響專案，只建置/測試受影響部分。 | nx affected（lint/typecheck/test:affected）；nx graph.json |
+| **Mirror repo** | 由源頭同步產生的唯讀展示/備份副本，不直接修改。 | able mirrors（nightly sync）、nx → vue/angular sandbox（sync 腳本） |
+| **Promotion pipeline** | 實驗成果通過門檻後升入正式產品的流程。 | labs → portal/SDK 晉升管線（capability-alignment §6）；ODM promote 規則 |
+| **Feature-based architecture** | 以業務功能為邊界組織程式碼，禁止 feature 間直接依賴。 | portal app/features/*（no feature→feature）；nx event-cms 定為 module→feature 重構練兵場 |
+| **Contract-first development** | 先定義介面契約再實作；UI 與服務皆消費契約。 | portal「Spec → Contract → Mock → Test → UI」鏈；packages/shared-contracts |
 
 ## 技術（agent 可用什麼）
 
