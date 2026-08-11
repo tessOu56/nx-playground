@@ -1,5 +1,9 @@
-name: Deploy Profile to Cloudflare Pages
+name: Deploy Profile to Cloudflare Pages (ARCHIVED)
 
+# ARCHIVED (Phase 2, 2026-08-11) — moved out of .github/workflows/ so GitHub Actions no
+# longer registers this workflow at all. See docs/DEPLOY-CLOUDFLARE-RETIREMENT.md.
+# Restore by moving this file back to .github/workflows/ if Cloudflare is ever reactivated.
+#
 # STOP automatic deploy (2026-07-07): push trigger removed — see docs/DEPLOY-CLOUDFLARE-RETIREMENT.md
 # Manual maintenance only via workflow_dispatch + DEPLOY confirmation.
 
@@ -41,4 +45,19 @@ jobs:
           version: 9
 
       - name: Setup Node.js
-        uses
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: 22
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build profile
+        run: pnpm exec nx build @nx-playground/profile
+
+      - name: Deploy to Cloudflare Pages
+        uses: cloudflare/wrangler-action@da0e0dfe58b7a431659754fdf3f186c529afbe65 # v3.14.1
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: pages deploy dist/apps/profile --project-name=nx-playground-profile

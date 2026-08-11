@@ -292,8 +292,34 @@ Header 樣式使用設計系統 tokens：
 
 詳細行為規範請參考 `.cursor/rules/header-behavior.md`。
 
+## 🔌 explore-design-sdk adapter（T-ds-2026-002）
+
+`explore-design-sdk`（sibling repo `../../../explore-design-sdk`）is the SSOT for L1
+primitives / L2 semantic catalog / L3 per-application semantic maps. `libs/design-system`
+**remains** the Style Dictionary / Tailwind + Vanilla Extract *output* adapter for
+nx-playground's own apps — `pnpm design:tokens` (this doc's main flow, `src/tokens/raw/*.json`
+→ generated themes) is unchanged and still the SSOT for what actually ships in `apps/*`.
+
+To consume the SDK without coupling `design:tokens`'s build to it, this package depends on
+`@explore-design/sdk` as a local `file:` dependency (`../../../explore-design-sdk/packages/sdk`,
+with `@explore-design/tokens` resolved the same way via a root `pnpm.overrides` entry) and
+provides a read-only bridge script:
+
+```bash
+pnpm design:tokens:explore-sdk   # from repo root, or:
+pnpm --filter @nx-playground/design-system run tokens:explore-sdk
+```
+
+This resolves the `enterprise` application map (matches `apps/enterprise-admin` +
+`src/tokens/raw/enterprise-tokens.json`) through `@explore-design/sdk`'s
+`createExploreSdk().resolveAll('enterprise')` and writes
+`src/tokens/generated/explore-sdk-resolved.json` — useful for diffing "what the SDK says an
+app's tokens should be" against what design-system's own Style Dictionary pipeline ships,
+without making `design:tokens` depend on `explore-design-sdk` at build time.
+
 ## 🔗 相關連結
 
 - [Style Dictionary](https://amzn.github.io/style-dictionary)
 - [Vanilla Extract](https://vanilla-extract.style)
 - [Tailwind CSS](https://tailwindcss.com)
+- [explore-design-sdk](https://github.com/tessOu56/explore-design-sdk) — L2/L3 semantic map SSOT

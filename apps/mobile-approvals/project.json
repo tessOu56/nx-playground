@@ -1,0 +1,30 @@
+{
+  "name": "@nx-playground/mobile-approvals",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/mobile-approvals/src",
+  "projectType": "application",
+  "tags": ["type:app", "platform:expo", "tech:mobile-m0"],
+  "targets": {
+    "start": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "expo start",
+        "cwd": "apps/mobile-approvals"
+      }
+    },
+    "web": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "expo start --web",
+        "cwd": "apps/mobile-approvals"
+      }
+    },
+    "test": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "jest --config jest.config.js",
+        "cwd": "apps/mobile-approvals"
+      }
+    }
+  }
+}

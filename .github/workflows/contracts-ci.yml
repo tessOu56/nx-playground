@@ -21,10 +21,13 @@ jobs:
       - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
         with:
           node-version: 22
-      # Isolated install: monorepo pnpm-lock is out of sync (vue-motion pinia); contracts only.
-      - name: Install TypeSpec toolchain
-        working-directory: libs/contracts
-        run: npm install --no-save @typespec/compiler@^1.13.0 @typespec/http@^1.13.0 @typespec/openapi3@^1.13.0
+      - uses: pnpm/action-setup@fc06bc1257f339d1d5d8b3a19a8cae5388b55320 # v4.4.0
+        with:
+          version: 10.13.1
+      # T-2026-028: pnpm-lock.yaml is reconciled (vue-motion pinia included); root frozen
+      # install now works in CI, so contracts no longer needs an isolated npm toolchain.
+      - name: Install workspace deps (frozen lockfile)
+        run: pnpm install --frozen-lockfile
       - name: tsp compile
         working-directory: libs/contracts
         run: npx tsp compile main.tsp --config tspconfig.yaml
@@ -32,4 +35,4 @@ jobs:
         run: |
           test -f libs/api-client/specs/catalog.openapi.yaml
           test -f libs/api-client/specs/event.openapi.yaml
-          test -f libs/
+          test -f libs/api-client/specs/media.openapi.yaml

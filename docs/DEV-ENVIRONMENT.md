@@ -25,9 +25,15 @@ Use this in install/setup scripts before choosing package manager flags or paths
 | Spectral `-r spectral:oas` | Built-in alias works in some versions | Treat as file path — use `libs/contracts/.spectral.yaml` + `@stoplight/spectral-rulesets` |
 | Full monorepo install | Reliable in Actions | Large installs may hit `ENOENT` on deep `node_modules` renames — prefer `--lockfile-only` to refresh lock, then install |
 
-## Contracts / TypeSpec (isolated)
+## Contracts / TypeSpec
 
-When root `pnpm install` is blocked:
+**T-2026-028 (done 2026-08-11):** `pnpm-lock.yaml` is reconciled (includes `apps/vue-motion` pinia)
+and `pnpm install --frozen-lockfile` passes on `ubuntu-latest`. `.github/workflows/contracts-ci.yml`
+now runs the standard root frozen install (via `pnpm/action-setup`) instead of an isolated
+per-package npm toolchain.
+
+Fallback path — if a future lockfile drift blocks root install again, use the isolated toolchain
+until the lockfile is refreshed:
 
 ```powershell
 cd libs/contracts
@@ -35,10 +41,14 @@ npm install --no-save @typespec/compiler@^1.13.0 @typespec/http@^1.13.0 @typespe
 npx tsp compile main.tsp --config tspconfig.yaml
 ```
 
-CI: `.github/workflows/contracts-ci.yml` (isolated npm until lockfile ritual is green everywhere).
+Lockfile-only refresh when a full Windows install fails (`ENOENT` on deep `node_modules` renames):
+
+```powershell
+pnpm install --lockfile-only   # refresh pnpm-lock.yaml without materializing node_modules
+pnpm install                   # then do the real install
+```
 
 ## Planning follow-ups
 
-- **T-2026-028** — Reconcile pnpm lockfile + restore monorepo frozen install in CI
 - **T-2026-029** — Spectral strict rules + TypeSpec operationId naming
 - **T-2026-030** — Portfolio dev-environment control (platform-command)

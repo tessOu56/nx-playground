@@ -1,0 +1,20 @@
+{
+  "expo": {
+    "name": "mobile-approvals",
+    "slug": "mobile-approvals",
+    "version": "0.1.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "automatic",
+    "newArchEnabled": true,
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.nxplayground.mobileapprovals"
+    },
+    "android": {
+      "package": "com.nxplayground.mobileapprovals"
+    },
+    "web": {
+      "bundler": "metro"
+    }
+  }
+}

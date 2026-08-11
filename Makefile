@@ -129,6 +129,13 @@ setup: ## 設置開發環境
 	@./scripts/env-setup.sh
 	@echo "$(GREEN)[SUCCESS]$(NC) 開發環境設置完成！"
 
+setup-lockfile-only: ## Windows 完整 install 失敗（深層 node_modules ENOENT）時：只刷新 lockfile 再安裝
+	@echo "$(BLUE)[INFO]$(NC) pnpm install --lockfile-only（不落地 node_modules）..."
+	@pnpm install --lockfile-only
+	@echo "$(BLUE)[INFO]$(NC) 再執行實際安裝..."
+	@pnpm install
+	@echo "$(GREEN)[SUCCESS]$(NC) lockfile-only 刷新流程完成（見 docs/DEV-ENVIRONMENT.md）"
+
 stop: ## 停止當前開發站台
 	@echo "$(BLUE)[INFO]$(NC) 停止當前開發站台..."
 	@pkill -f "nx serve" || true

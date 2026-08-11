@@ -19,6 +19,10 @@
     "tokens:build": "npm run tokens:css-to-json && npm run tokens:json-to-themes",
     "tokens:generate": "npm run tokens:build",
     "tokens:view": "node scripts/tokens-viewer.js",
-    "tokens:colors": "node scripts/color-preview.js"
+    "tokens:colors": "node scripts/color-preview.js",
+    "tokens:explore-sdk": "node scripts/explore-sdk-adapter.mjs"
+  },
+  "dependencies": {
+    "@explore-design/sdk": "file:../../../explore-design-sdk/packages/sdk"
   }
 }

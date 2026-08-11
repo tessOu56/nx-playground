@@ -1,0 +1,29 @@
+{
+  "name": "@nx-playground/mobile-approvals",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Mobile line M0 — approval list, confirm, result mock flow (Expo). Contract shape mirrors portal access-request.",
+  "main": "index.ts",
+  "scripts": {
+    "start": "expo start",
+    "web": "expo start --web",
+    "test": "jest --config jest.config.js"
+  },
+  "dependencies": {
+    "@expo/metro-runtime": "~5.0.5",
+    "expo": "~53.0.27",
+    "expo-status-bar": "~2.2.3",
+    "react": "19.0.0",
+    "react-native": "0.79.6",
+    "react-native-web": "^0.20.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.25.2",
+    "@types/jest": "^29.5.14",
+    "@types/react": "~19.0.14",
+    "babel-preset-expo": "~13.0.0",
+    "jest": "^29.7.0",
+    "ts-jest": "^29.2.5",
+    "typescript": "~5.8.3"
+  }
+}

@@ -1,6 +1,6 @@
 # Cloudflare profile deploy — retirement plan
 
-**Status**: Phase 1 ✅ automatic CI stopped (2026-07-07) · Phase 2 optional full teardown
+**Status**: Phase 1 ✅ automatic CI stopped (2026-07-07) · Phase 2 ✅ workflow archived (2026-08-11, Cloudflare Pages project deletion deferred to owner)
 
 ## Why retire automatic deploy
 
@@ -28,21 +28,26 @@ Canonical deploy strategy: [develop-md integrated-roadmap D1](https://github.com
 
 Use only for: token rotation smoke test, one-off demo before archive, or debugging build output — **not** part of normal dev loop.
 
-## Phase 2 — Full exit (pick a window)
+## Phase 2 — Full exit (done 2026-08-11)
 
-Do when **at least one** is true:
-
-- [ ] vue-motion-sandbox + angular-dashboard-sandbox both have live GitHub Pages demos
-- [ ] profile motion promoted to ai-search-portal `labs/motion` (T-2026-011)
-- [ ] No need to keep `nx-playground-profile` Cloudflare Pages project
+Trigger criterion met: vue-motion-sandbox already has a live GitHub Pages demo
+(`.github/workflows/deploy-pages.yml`), confirming the mirror-out + Pages strategy is the
+portfolio's real showcase path and `nx-playground-profile` on Cloudflare is no longer needed
+as an active deploy target.
 
 Steps:
 
-1. Delete or pause Cloudflare Pages project `nx-playground-profile`
-2. Move `.github/workflows/deploy-profile.yml` → `.github/workflows/archive/deploy-profile.yml` (or delete)
-3. Add banner to `CLOUDFLARE_DEPLOYMENT_GUIDE.md` → archived
-4. Update `registry/projects.json` `deploy.notes` → "local only; Cloudflare retired"
-5. Remove `cloudflare:*` npm scripts if unused (optional)
+1. ~~Delete or pause Cloudflare Pages project `nx-playground-profile`~~ — **deferred to owner**
+   (requires interactive Cloudflare dashboard / API token access not available to the agent
+   sandbox). Manual step: Cloudflare dashboard → Pages → `nx-playground-profile` → Settings →
+   Delete project (or leave paused; no billing impact on the free tier).
+2. [x] Moved `.github/workflows/deploy-profile.yml` → `.github/workflows/archive/deploy-profile.yml`
+   — GitHub Actions no longer registers it (only top-level `.github/workflows/*.yml` files run).
+3. [x] Banner added to `CLOUDFLARE_DEPLOYMENT_GUIDE.md` marking the profile section archived.
+4. [x] `registry/projects.json` `deploy.notes` updated (platform-command) — local only; Cloudflare
+   Pages project deletion deferred to owner.
+5. `cloudflare:*` npm scripts left as-is (harmless no-ops without the workflow trigger; optional
+   future cleanup).
 
 ## Alternatives (preferred showcase path)
 

@@ -60,6 +60,7 @@
     "design:tokens:watch": "cd libs/design-system && pnpm run tokens:build && chokidar \"libs/design-system/src/tokens/source/**/*.css\" -c \"pnpm run design:tokens\"",
     "design:tokens:view": "cd libs/design-system && pnpm run tokens:view",
     "design:tokens:colors": "cd libs/design-system && pnpm run tokens:colors",
+    "design:tokens:explore-sdk": "cd libs/design-system && pnpm run tokens:explore-sdk",
     "install:safe": "pnpm install --frozen-lockfile --ignore-scripts",
     "install:audit": "pnpm install --frozen-lockfile && pnpm audit",
     "audit:fix": "pnpm audit --fix",
@@ -200,7 +201,8 @@
       "tmp@<=0.2.3": ">=0.2.4",
       "next@>=15.0.0 <=15.4.4": ">=15.4.5",
       "next@>=15.0.0-canary.0 <15.4.7": ">=15.4.7",
-      "react-hook-form": "7.62.0"
+      "react-hook-form": "7.62.0",
+      "@explore-design/tokens": "file:../explore-design-sdk/packages/tokens"
     }
   },
   "devDependencies": {
