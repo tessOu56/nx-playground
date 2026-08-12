@@ -202,7 +202,7 @@
       "next@>=15.0.0 <=15.4.4": ">=15.4.5",
       "next@>=15.0.0-canary.0 <15.4.7": ">=15.4.7",
       "react-hook-form": "7.62.0",
-      "@explore-design/tokens": "file:../explore-design-sdk/packages/tokens"
+      "@is_tess/tokens": "^0.1.0"
     }
   },
   "devDependencies": {

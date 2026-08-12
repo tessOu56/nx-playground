@@ -301,8 +301,8 @@ nx-playground's own apps — `pnpm design:tokens` (this doc's main flow, `src/to
 → generated themes) is unchanged and still the SSOT for what actually ships in `apps/*`.
 
 To consume the SDK without coupling `design:tokens`'s build to it, this package depends on
-`@explore-design/sdk` as a local `file:` dependency (`../../../explore-design-sdk/packages/sdk`,
-with `@explore-design/tokens` resolved the same way via a root `pnpm.overrides` entry) and
+`@is_tess/sdk` as a local `file:` dependency (`../../../explore-design-sdk/packages/sdk`,
+with `@is_tess/tokens` resolved the same way via a root `pnpm.overrides` entry) and
 provides a read-only bridge script:
 
 ```bash
@@ -311,7 +311,7 @@ pnpm --filter @nx-playground/design-system run tokens:explore-sdk
 ```
 
 This resolves the `enterprise` application map (matches `apps/enterprise-admin` +
-`src/tokens/raw/enterprise-tokens.json`) through `@explore-design/sdk`'s
+`src/tokens/raw/enterprise-tokens.json`) through `@is_tess/sdk`'s
 `createExploreSdk().resolveAll('enterprise')` and writes
 `src/tokens/generated/explore-sdk-resolved.json` — useful for diffing "what the SDK says an
 app's tokens should be" against what design-system's own Style Dictionary pipeline ships,

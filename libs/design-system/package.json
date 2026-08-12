@@ -23,6 +23,6 @@
     "tokens:explore-sdk": "node scripts/explore-sdk-adapter.mjs"
   },
   "dependencies": {
-    "@explore-design/sdk": "file:../../../explore-design-sdk/packages/sdk"
+    "@is_tess/sdk": "^0.1.0"
   }
 }
