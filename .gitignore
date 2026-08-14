@@ -90,3 +90,6 @@ docker-compose.override.yml
 apps/api-server/prisma/*.db
 apps/api-server/prisma/*.db-journal
 .angular/
+
+# Platform tickets SSOT is platform-command — never commit distributed inbox
+docs/platform-inbox/
