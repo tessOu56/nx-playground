@@ -22,7 +22,7 @@ pnpm dev:vue-motion
 
 ## 跨 repo
 
-- **explore-design-sdk**：L2/L3 token SSOT
-- Mirror：勿在 vue-motion-sandbox / angular-dashboard-sandbox 開發
-- Promote：prototype → ai-search-portal `labs/motion/`
+- **explore-design-sdk**：L2/L3 token SSOT；Angular／Vue 獨立後直接消費
+- **vue-motion-sandbox / angular-dashboard-sandbox**：canonical after inversion — do not double-write with nx apps
+- Planning：platform-command only
 
