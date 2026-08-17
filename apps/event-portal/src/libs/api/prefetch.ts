@@ -1,13 +1,13 @@
 import { type QueryClient } from '@tanstack/react-query';
 
+import { fetchPortalEvent, fetchPortalEvents } from './hooks/useEvents';
 import { ENV_CONFIG } from '../constants';
 import { mockBills } from '../mock/bills';
-import { mockEvents } from '../mock/events';
 import { mockOrders } from '../mock/orders';
 import { mockUsers } from '../mock/users';
 import { mockVendors } from '../mock/vendors';
 
-import type { Event, Vendor, User, Order, Bill } from '@/types';
+import type { Vendor, User, Order, Bill } from '@/types';
 
 /**
  * Server-side 資料預取函數
@@ -15,44 +15,36 @@ import type { Event, Vendor, User, Order, Bill } from '@/types';
  * 實現 SSR + React Query 的無閃爍渲染
  */
 
-// 預取所有活動
 export async function prefetchEvents(queryClient: QueryClient) {
-  if (!ENV_CONFIG.ENABLE_MOCK_DATA) return;
-
   await queryClient.prefetchQuery({
     queryKey: ['events'],
-    queryFn: () => mockEvents,
+    queryFn: fetchPortalEvents,
     staleTime: 5 * 60 * 1000,
   });
 }
 
-// 預取特定活動
 export async function prefetchEvent(queryClient: QueryClient, eventId: string) {
-  if (!ENV_CONFIG.ENABLE_MOCK_DATA) return;
-
   await queryClient.prefetchQuery({
     queryKey: ['event', eventId],
-    queryFn: () => mockEvents.find((event: Event) => event.id === eventId),
+    queryFn: () => fetchPortalEvent(eventId),
     staleTime: 5 * 60 * 1000,
   });
 }
 
-// 預取主辦方的活動
 export async function prefetchEventsByVendor(
   queryClient: QueryClient,
   vendorId: string
 ) {
-  if (!ENV_CONFIG.ENABLE_MOCK_DATA) return;
-
   await queryClient.prefetchQuery({
     queryKey: ['events', 'vendor', vendorId],
-    queryFn: () =>
-      mockEvents.filter((event: Event) => event.vendorId === vendorId),
+    queryFn: async () => {
+      const events = await fetchPortalEvents();
+      return events.filter(event => event.vendorId === vendorId);
+    },
     staleTime: 5 * 60 * 1000,
   });
 }
 
-// 預取所有主辦方
 export async function prefetchVendors(queryClient: QueryClient) {
   if (!ENV_CONFIG.ENABLE_MOCK_DATA) return;
 
@@ -63,7 +55,6 @@ export async function prefetchVendors(queryClient: QueryClient) {
   });
 }
 
-// 預取特定主辦方
 export async function prefetchVendor(
   queryClient: QueryClient,
   vendorId: string
@@ -77,7 +68,6 @@ export async function prefetchVendor(
   });
 }
 
-// 預取所有用戶
 export async function prefetchUsers(queryClient: QueryClient) {
   if (!ENV_CONFIG.ENABLE_MOCK_DATA) return;
 
@@ -88,7 +78,6 @@ export async function prefetchUsers(queryClient: QueryClient) {
   });
 }
 
-// 預取特定用戶
 export async function prefetchUser(queryClient: QueryClient, userId: string) {
   if (!ENV_CONFIG.ENABLE_MOCK_DATA) return;
 
@@ -99,7 +88,6 @@ export async function prefetchUser(queryClient: QueryClient, userId: string) {
   });
 }
 
-// 預取用戶的訂單
 export async function prefetchOrdersByUser(
   queryClient: QueryClient,
   userId: string
@@ -113,7 +101,6 @@ export async function prefetchOrdersByUser(
   });
 }
 
-// 預取特定訂單
 export async function prefetchOrder(queryClient: QueryClient, orderId: string) {
   if (!ENV_CONFIG.ENABLE_MOCK_DATA) return;
 
@@ -124,7 +111,6 @@ export async function prefetchOrder(queryClient: QueryClient, orderId: string) {
   });
 }
 
-// 預取用戶的帳單
 export async function prefetchBillsByUser(
   queryClient: QueryClient,
   userId: string
@@ -138,7 +124,6 @@ export async function prefetchBillsByUser(
   });
 }
 
-// 預取訂單的帳單
 export async function prefetchBillByOrder(
   queryClient: QueryClient,
   orderId: string
@@ -152,7 +137,6 @@ export async function prefetchBillByOrder(
   });
 }
 
-// 頁面級別的預取函數
 export async function prefetchEventPage(
   queryClient: QueryClient,
   eventId: string

@@ -64,11 +64,18 @@ pnpm contracts:wire
 
 → 同一套 catalog 語彙貫穿產品線前後端與多 repo。
 
-## 下一步
+## Event-stack spine (Nest dump, T-2026-223)
 
-- 把 `event`/`media` 等既有 spec 也改由 TypeSpec 定義（漸進；目前 catalog 為示範模組）。
-- CI 加 `tsp compile` + Spectral lint + oasdiff 破壞性變更檢查（契約治理閘）。
-- 後端接 Prisma 取代 in-memory seed。
+Catalog still uses TypeSpec. The **activity integration spine** uses Nest Events + Orders:
+
+1. Implement/change DTOs in `apps/api-server`.
+2. `nx run @nx-playground/api-server:openapi-generate` writes `libs/api-client/specs/event-stack.openapi.json`. Keep `event-stack.openapi.yaml` aligned.
+3. Frontends import `@nx-playground/api-client` event-stack client (same paths as the spec).
+4. `pnpm generate:api:event-stack:dev` regenerates Orval output under `libs/api-client/src/event-stack/generated`.
+5. Live: `NEXT_PUBLIC_API_BASE_URL=http://localhost:3001/api`. Mock: `http://localhost:3011/api` (`pnpm dev:api-mock`).
+6. Shared seed/fixtures: `libs/api-fixtures` (Prisma seed + mock store).
+
+TypeSpec `event.tsp` (`/console/events`) is a **different** shape — do not mix it into this spine.
 
 ---
 

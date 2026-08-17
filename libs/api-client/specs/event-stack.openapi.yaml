@@ -1,0 +1,290 @@
+openapi: 3.0.3
+info:
+  title: NX Playground event-stack API
+  description: >
+    Spine contract dumped from Nest Events + Orders (not TypeSpec /console/events).
+    Frontends talk to live Nest (:3001) or stateful api-mock (:3011) with the same paths.
+  version: '1.0.0'
+servers:
+  - url: http://localhost:3001/api
+    description: live Nest + Prisma
+  - url: http://localhost:3011/api
+    description: stateful contract mock
+tags:
+  - name: events
+  - name: orders
+paths:
+  /events:
+    get:
+      tags: [events]
+      summary: Get all events
+      operationId: listEvents
+      parameters:
+        - in: query
+          name: status
+          schema:
+            type: string
+        - in: query
+          name: page
+          schema:
+            type: number
+        - in: query
+          name: limit
+          schema:
+            type: number
+      responses:
+        '200':
+          description: Paginated events
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EventListResponse'
+    post:
+      tags: [events]
+      summary: Create new event
+      operationId: createEvent
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateEventDto'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Event'
+        '400':
+          description: Invalid input
+  /events/{id}:
+    get:
+      tags: [events]
+      summary: Get event by ID
+      operationId: getEvent
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Event
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Event'
+        '404':
+          description: Event not found
+    put:
+      tags: [events]
+      summary: Update event
+      operationId: updateEvent
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateEventDto'
+      responses:
+        '200':
+          description: Updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Event'
+        '404':
+          description: Event not found
+    delete:
+      tags: [events]
+      summary: Delete event
+      operationId: deleteEvent
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Deleted
+        '404':
+          description: Event not found
+  /orders:
+    post:
+      tags: [orders]
+      summary: Create an order for an event
+      operationId: createOrder
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateOrderDto'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+        '400':
+          description: Invalid event or user
+  /orders/{id}:
+    get:
+      tags: [orders]
+      summary: Get order by ID
+      operationId: getOrder
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Order
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+        '404':
+          description: Order not found
+  /orders/{id}/confirm:
+    post:
+      tags: [orders]
+      summary: Confirm an order
+      operationId: confirmOrder
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Confirmed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+        '404':
+          description: Order not found
+components:
+  schemas:
+    CreateEventDto:
+      type: object
+      required: [title, startDate, endDate]
+      additionalProperties: false
+      properties:
+        title:
+          type: string
+        description:
+          type: string
+        location:
+          type: string
+        startDate:
+          type: string
+          format: date-time
+        endDate:
+          type: string
+          format: date-time
+        maxAttendees:
+          type: number
+        status:
+          type: string
+          enum: [draft, published]
+        formId:
+          type: string
+    Event:
+      type: object
+      required: [id, title, startDate, endDate, status, createdAt, updatedAt]
+      properties:
+        id:
+          type: string
+        title:
+          type: string
+        description:
+          type: string
+        location:
+          type: string
+        startDate:
+          type: string
+          format: date-time
+        endDate:
+          type: string
+          format: date-time
+        maxAttendees:
+          type: number
+        status:
+          type: string
+          enum: [draft, published, cancelled]
+        formId:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+    EventListResponse:
+      type: object
+      required: [items, total, page, limit, totalPages]
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/Event'
+        total:
+          type: number
+        page:
+          type: number
+        limit:
+          type: number
+        totalPages:
+          type: number
+    CreateOrderDto:
+      type: object
+      required: [eventId]
+      additionalProperties: false
+      properties:
+        eventId:
+          type: string
+        userId:
+          type: string
+        status:
+          type: string
+          enum: [pending, confirmed, cancelled]
+        data:
+          type: object
+          additionalProperties: true
+    Order:
+      type: object
+      required: [id, eventId, userId, status, data, createdAt, updatedAt]
+      properties:
+        id:
+          type: string
+        eventId:
+          type: string
+        userId:
+          type: string
+        status:
+          type: string
+          enum: [pending, confirmed, cancelled]
+        data:
+          type: object
+          additionalProperties: true
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time

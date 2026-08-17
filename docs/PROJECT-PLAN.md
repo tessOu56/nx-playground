@@ -15,8 +15,9 @@ Angular / Vue / profile / mobile-approvals are leaving or already have independe
 | App | Port | Notes |
 |-----|------|--------|
 | event-portal | 3000 | C-end Next app |
-| auth | (README in app; **collides with 3000** — known debt) | Kratos + LINE |
+| auth | 3004 | Kratos + LINE |
 | api-server | 3001 | NestJS + Prisma; Swagger `/api/docs` |
+| api-mock | 3011 | Stateful mock of the Nest event-stack OpenAPI |
 | event-cms | 3002 | React ops console |
 | profile | 3003 | Personal site — no new features (graduate) |
 | vue-motion | 8080 | Mirror of `vue-motion-sandbox` until inversion |
@@ -25,10 +26,10 @@ Angular / Vue / profile / mobile-approvals are leaving or already have independe
 ## Bootstrap
 
 1. `pnpm install --no-frozen-lockfile` (first clone) or `make setup`
-2. `.env`: `DATABASE_URL=file:./apps/api-server/prisma/dev.db` and `NEXT_PUBLIC_API_BASE_URL=http://localhost:3001/api`
-3. `npx prisma generate --schema=apps/api-server/prisma/schema.prisma` + `db push`
-4. API: `npx nx build @nx-playground/api-server --configuration=development` then serve; if worker error: `node dist/apps/api-server/main.js`
-5. Frontends: `pnpm dev:event-portal`, `pnpm dev:event-cms` (plus auth per app README)
+2. `.env`: `DATABASE_URL=file:./apps/api-server/prisma/dev.db` and `NEXT_PUBLIC_API_BASE_URL=http://localhost:3001/api` (mock: `http://localhost:3011/api`). `scripts/env-setup.sh` writes these defaults.
+3. `npx prisma generate --schema=apps/api-server/prisma/schema.prisma` + `db push` + `nx run @nx-playground/api-server:prisma-seed`
+4. API live: `pnpm dev:api`. Contract mock: `pnpm dev:api-mock`.
+5. Frontends: `pnpm dev:event-portal`, `pnpm dev:event-cms`, `pnpm dev:auth`
 
 Runnable how-to that stays in-repo: [`DEV-ENVIRONMENT.md`](./DEV-ENVIRONMENT.md), [`CONTRACT-PIPELINE.md`](./CONTRACT-PIPELINE.md).
 

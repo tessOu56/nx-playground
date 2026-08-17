@@ -7,7 +7,7 @@ import { defineConfig } from 'vite';
 
 export default defineConfig(() => ({
   root: __dirname,
-  cacheDir: '../../node_modules/.vite/apps/console',
+  envDir: resolve(__dirname, '../..'),
   server: {
     port: 3002,
     host: '0.0.0.0',

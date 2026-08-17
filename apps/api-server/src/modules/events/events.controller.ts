@@ -17,6 +17,7 @@ import {
 } from '@nestjs/swagger';
 
 import { CreateEventDto } from './dto/create-event.dto';
+import { EventListResponse } from './dto/event-list-response.dto';
 import { UpdateEventDto } from './dto/update-event.dto';
 import { Event } from './entities/event.entity';
 import { EventsService } from './events.service';
@@ -31,7 +32,7 @@ export class EventsController {
   @ApiQuery({ name: 'status', required: false })
   @ApiQuery({ name: 'page', required: false, type: Number })
   @ApiQuery({ name: 'limit', required: false, type: Number })
-  @ApiResponse({ status: 200, type: [Event] })
+  @ApiResponse({ status: 200, type: EventListResponse })
   async findAll(
     @Query('status') status?: string,
     @Query('page') page?: number,

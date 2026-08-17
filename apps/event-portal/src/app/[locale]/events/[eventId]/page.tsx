@@ -3,13 +3,12 @@ import { Suspense } from 'react';
 import { EventDetailSkeleton } from './components';
 import { EventDetail } from './components/layout/EventDetail';
 
-import { mockEvents } from '@/libs/mock/events';
+import { eventStaticParams } from '@/libs/api/event-static-params';
 
-// 生成靜態參數
+export const dynamicParams = true;
+
 export async function generateStaticParams() {
-  return mockEvents.map(event => ({
-    eventId: event.id,
-  }));
+  return eventStaticParams();
 }
 
 export default async function EventDetailPage({

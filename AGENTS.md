@@ -22,7 +22,9 @@ make setup          # or: pnpm install && scripts/env-setup.sh
 # Platform differences: docs/DEV-ENVIRONMENT.md
 pnpm dev:event-portal  # localhost:3000
 pnpm dev:event-cms     # localhost:3002
-# api-server :3001 — see docs/PROJECT-PLAN.md
+pnpm dev:api           # localhost:3001
+pnpm dev:api-mock      # localhost:3011 (same OpenAPI, in-memory)
+pnpm dev:auth          # localhost:3004
 ```
 
 Profile / vue-motion / enterprise-admin / mobile-approvals still exist on disk; **no new features** there until graduate tickets (platform-command T-228–230).

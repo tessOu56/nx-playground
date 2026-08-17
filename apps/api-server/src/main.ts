@@ -24,6 +24,7 @@ async function bootstrap() {
     origin: process.env.CORS_ORIGIN?.split(',') || [
       'http://localhost:3002',
       'http://localhost:3000',
+      'http://localhost:3004',
     ],
     credentials: true,
   });

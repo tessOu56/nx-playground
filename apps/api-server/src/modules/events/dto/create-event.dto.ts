@@ -35,7 +35,7 @@ export class CreateEventDto {
   @IsOptional()
   maxAttendees?: number;
 
-  @ApiProperty({ enum: ['draft', 'published'], default: 'draft' })
+  @ApiProperty({ enum: ['draft', 'published'], default: 'draft', required: false })
   @IsEnum(['draft', 'published'])
   @IsOptional()
   status?: string;

@@ -2,7 +2,7 @@
 export const ENV_CONFIG = {
   // API 相關
   API_BASE_URL:
-    process.env.NEXT_PUBLIC_API_BASE_URL ?? 'https://api.nx-playground.local',
+    process.env.NEXT_PUBLIC_API_BASE_URL ?? 'http://localhost:3001/api',
   API_TIMEOUT: parseInt(process.env.NEXT_PUBLIC_API_TIMEOUT ?? '10000', 10),
 
   // LINE 相關（基本配置，詳細配置在 lib/line/constants.ts）
@@ -19,7 +19,7 @@ export const ENV_CONFIG = {
 
   // 功能開關
   ENABLE_DEVTOOLS: process.env.NEXT_PUBLIC_ENABLE_DEVTOOLS === 'true',
-  ENABLE_MOCK_DATA: process.env.NEXT_PUBLIC_ENABLE_MOCK_DATA !== 'false', // 預設啟用
+  ENABLE_MOCK_DATA: process.env.NEXT_PUBLIC_ENABLE_MOCK_DATA === 'true',
 
   // 其他配置
   APP_NAME: process.env.NEXT_PUBLIC_APP_NAME ?? 'NX Playground Events',

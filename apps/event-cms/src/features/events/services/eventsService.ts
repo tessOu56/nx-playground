@@ -1,60 +1,79 @@
-/**
- * Events Service - API 調用層
- *
- * 負責所有與活動相關的 API 調用
- */
+import {
+  createEvent,
+  deleteEvent,
+  getEvent,
+  listEvents,
+  updateEvent,
+  type CreateEventDto,
+  type EventStackEvent,
+} from '@nx-playground/api-client';
 
 import { type EventFormValue } from '../types';
 
+function sessionToIso(date: string, time: string): string {
+  const normalizedTime = time.length === 5 ? `${time}:00` : time;
+  return new Date(`${date}T${normalizedTime}`).toISOString();
+}
+
+export function toCreateEventDto(data: EventFormValue): CreateEventDto {
+  const first = data.sessionBlock[0];
+  const startDate = first
+    ? sessionToIso(first.date, first.startTime)
+    : new Date().toISOString();
+  const endDate = first
+    ? sessionToIso(first.date, first.endTime)
+    : new Date(Date.now() + 2 * 60 * 60 * 1000).toISOString();
+
+  return {
+    title: data.eventName,
+    description: data.eventDescription,
+    location: data.eventLocation,
+    startDate,
+    endDate,
+    maxAttendees: first?.capacityLimit ?? undefined,
+    status: data.visibility === 'public' ? 'published' : 'draft',
+  };
+}
+
 export class EventsService {
-  /**
-   * 創建活動
-   */
-  static async createEvent(data: EventFormValue): Promise<void> {
-    // TODO: 實作 API 調用
-    console.log('Creating event:', data);
+  static async createEvent(data: EventFormValue): Promise<EventStackEvent> {
+    return createEvent(toCreateEventDto(data));
   }
 
-  /**
-   * 更新活動
-   */
   static async updateEvent(
     id: string,
     data: Partial<EventFormValue>
-  ): Promise<void> {
-    // TODO: 實作 API 調用
-    console.log('Updating event:', id, data);
+  ): Promise<EventStackEvent> {
+    const patch: Partial<CreateEventDto> = {};
+    if (data.eventName) patch.title = data.eventName;
+    if (data.eventDescription) patch.description = data.eventDescription;
+    if (data.eventLocation) patch.location = data.eventLocation;
+    if (data.visibility) {
+      patch.status = data.visibility === 'public' ? 'published' : 'draft';
+    }
+    if (data.sessionBlock?.[0]) {
+      const first = data.sessionBlock[0];
+      patch.startDate = sessionToIso(first.date, first.startTime);
+      patch.endDate = sessionToIso(first.date, first.endTime);
+      if (first.capacityLimit) patch.maxAttendees = first.capacityLimit;
+    }
+    return updateEvent(id, patch);
   }
 
-  /**
-   * 刪除活動
-   */
   static async deleteEvent(id: string): Promise<void> {
-    // TODO: 實作 API 調用
-    console.log('Deleting event:', id);
+    await deleteEvent(id);
   }
 
-  /**
-   * 取得活動列表
-   */
-  static async getEvents(): Promise<any[]> {
-    // TODO: 實作 API 調用
-    return [];
+  static async getEvents(): Promise<EventStackEvent[]> {
+    const page = await listEvents({ limit: 50 });
+    return page.items;
   }
 
-  /**
-   * 取得單一活動
-   */
-  static async getEventById(id: string): Promise<any> {
-    // TODO: 實作 API 調用
-    return null;
+  static async getEventById(id: string): Promise<EventStackEvent> {
+    return getEvent(id);
   }
 
-  /**
-   * 上傳圖片
-   */
   static async uploadImage(file: File): Promise<string> {
-    // TODO: 實作圖片上傳
     return URL.createObjectURL(file);
   }
 }

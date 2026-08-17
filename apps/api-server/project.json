@@ -42,7 +42,7 @@
       "defaultConfiguration": "development",
       "options": {
         "buildTarget": "@nx-playground/api-server:build",
-        "port": 3001
+        "port": 9229
       },
       "configurations": {
         "development": {

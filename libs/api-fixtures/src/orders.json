@@ -1,0 +1,27 @@
+{
+  "orders": [
+    {
+      "id": "order_demo_1",
+      "eventId": "event_react19",
+      "userId": "user_demo",
+      "status": "confirmed",
+      "data": {
+        "name": "一般用戶",
+        "email": "user@nx-playground.local",
+        "phone": "0912345678",
+        "note": "期待參加！"
+      }
+    },
+    {
+      "id": "order_demo_2",
+      "eventId": "event_nestjs",
+      "userId": "user_demo",
+      "status": "pending",
+      "data": {
+        "name": "一般用戶",
+        "email": "user@nx-playground.local",
+        "phone": "0912345678"
+      }
+    }
+  ]
+}

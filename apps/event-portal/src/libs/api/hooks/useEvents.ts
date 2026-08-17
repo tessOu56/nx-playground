@@ -1,32 +1,43 @@
 import { useQuery } from '@tanstack/react-query';
+import { getEvent, listEvents } from '@nx-playground/api-client';
 
-import { mockEvents, mockEventDetails } from '../../mock/events';
+import { toPortalEvent, toPortalEventDetail } from '../event-stack-map';
 
-// 獲取所有活動
+export async function fetchPortalEvents() {
+  const page = await listEvents({ status: 'published', limit: 50 });
+  return page.items.map(toPortalEvent);
+}
+
+export async function fetchPortalEvent(eventId: string) {
+  const event = await getEvent(eventId);
+  return toPortalEventDetail(event);
+}
+
 export function useEvents() {
   return useQuery({
     queryKey: ['events'],
-    queryFn: () => mockEvents,
-    staleTime: 5 * 60 * 1000, // 5分鐘
+    queryFn: fetchPortalEvents,
+    staleTime: 5 * 60 * 1000,
   });
 }
 
-// 根據 ID 獲取特定活動（返回完整 EventDetail）
 export function useEvent(eventId: string) {
   return useQuery({
     queryKey: ['event', eventId],
-    queryFn: () => mockEventDetails.find(event => event.id === eventId),
-    staleTime: 5 * 60 * 1000, // 5分鐘
+    queryFn: () => fetchPortalEvent(eventId),
+    staleTime: 5 * 60 * 1000,
     enabled: !!eventId,
   });
 }
 
-// 根據主辦方 ID 獲取活動
 export function useEventsByVendor(vendorId: string) {
   return useQuery({
     queryKey: ['events', 'vendor', vendorId],
-    queryFn: () => mockEvents.filter(event => event.vendorId === vendorId),
-    staleTime: 5 * 60 * 1000, // 5分鐘
+    queryFn: async () => {
+      const events = await fetchPortalEvents();
+      return events.filter(event => event.vendorId === vendorId);
+    },
+    staleTime: 5 * 60 * 1000,
     enabled: !!vendorId,
   });
 }

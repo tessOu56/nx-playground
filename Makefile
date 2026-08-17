@@ -1,6 +1,6 @@
 # ==================== NX Playground 本地開發環境管理 Makefile ====================
 
-.PHONY: help dev dev-event-portal dev-event-cms setup stop restart logs clean build status prod test test-mock test-react test-i18n test-coverage test-watch test-affected
+.PHONY: help dev dev-event-portal dev-event-cms dev-api dev-api-mock dev-auth setup stop restart logs clean build status prod test test-mock test-react test-i18n test-coverage test-watch test-affected
 
 # 預設目標
 .DEFAULT_GOAL := help
@@ -20,6 +20,9 @@ help: ## 顯示此幫助信息
 	@echo "  dev               啟動所有服務 (Event Portal + Event CMS)"
 	@echo "  dev-event-portal  僅啟動 Event Portal 服務 (http://localhost:3000)"
 	@echo "  dev-event-cms     僅啟動 Event CMS 服務 (http://localhost:3002)"
+	@echo "  dev-api           僅啟動 API Server 服務 (http://localhost:3001)"
+	@echo "  dev-api-mock      僅啟動契約 mock (http://localhost:3011)"
+	@echo "  dev-auth          僅啟動 Auth 服務 (http://localhost:3004)"
 	@echo "  dev-profile       僅啟動 Profile 服務 (http://localhost:3003)"
 	@echo "  dev-vue           僅啟動 Vue Motion 服務 (http://localhost:8080)"
 	@echo "  dev-enterprise    僅啟動 Enterprise Admin 服務 (http://localhost:4200)"
@@ -116,6 +119,14 @@ dev-profile: ## 僅啟動 Profile 服務
 dev-api: ## 僅啟動 API Server 服務
 	@echo "$(BLUE)[INFO]$(NC) 啟動 API Server 服務 (http://localhost:3001)..."
 	@pnpm exec nx serve @nx-playground/api-server
+
+dev-api-mock: ## 僅啟動 event-stack 契約 mock
+	@echo "$(BLUE)[INFO]$(NC) 啟動 api-mock (http://localhost:3011)..."
+	@pnpm exec nx serve @nx-playground/api-mock
+
+dev-auth: ## 僅啟動 Auth 服務
+	@echo "$(BLUE)[INFO]$(NC) 啟動 Auth 服務 (http://localhost:3004)..."
+	@pnpm exec nx serve @nx-playground/auth
 
 setup: ## 設置開發環境
 	@echo "$(BLUE)[INFO]$(NC) 設置 NX Playground 開發環境..."

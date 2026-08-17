@@ -27,6 +27,10 @@
     "noUnusedParameters": false,
     "paths": {
       "@nx-playground/analytics": ["libs/analytics/src/index.ts"],
+      "@nx-playground/api-fixtures": ["libs/api-fixtures/src/index.ts"],
+      "@nx-playground/api-client/event-stack": [
+        "libs/api-client/src/event-stack/index.ts"
+      ],
       "@nx-playground/animation-data": ["libs/animation-data/src/index.ts"],
       "@nx-playground/api-client": ["dist/libs/api-client"],
       "@nx-playground/api-server": ["apps/api-server/src"],

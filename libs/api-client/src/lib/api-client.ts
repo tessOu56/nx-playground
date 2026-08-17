@@ -50,10 +50,11 @@ const createApiClient = (baseURL: string): AxiosInstance => {
 
 // 創建默認 API 客戶端實例
 export const apiClientInstance = createApiClient(
-  typeof process !== 'undefined' &&
-    process.env.REACT_APP_API_URL &&
-    typeof process.env.REACT_APP_API_URL === 'string'
-    ? process.env.REACT_APP_API_URL
+  typeof process !== 'undefined'
+    ? process.env.NEXT_PUBLIC_API_BASE_URL ||
+        process.env.VITE_API_BASE_URL ||
+        process.env.REACT_APP_API_URL ||
+        'http://localhost:3001/api'
     : 'http://localhost:3001/api'
 );
 

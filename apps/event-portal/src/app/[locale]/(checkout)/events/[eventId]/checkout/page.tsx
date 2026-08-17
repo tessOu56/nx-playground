@@ -4,14 +4,13 @@ import { Suspense } from 'react';
 import { CheckoutLayoutSkeleton } from './components';
 import { CheckoutClient } from './components/layout/CheckoutClient';
 
-import { mockEvents } from '@/libs/mock/events';
+import { eventStaticParams } from '@/libs/api/event-static-params';
 import type { PaymentMethod } from '@/types';
 
-// 生成靜態參數
+export const dynamicParams = true;
+
 export async function generateStaticParams() {
-  return mockEvents.map(event => ({
-    eventId: event.id,
-  }));
+  return eventStaticParams();
 }
 
 // 固定 metadata

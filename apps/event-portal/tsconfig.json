@@ -20,7 +20,10 @@
       "@nx-playground/ui-components": ["../../libs/ui-components/src"],
       "@nx-playground/design-system": ["../../dist/libs/design-system/src"],
       "@nx-playground/i18n": ["../../libs/i18n/src"],
-      "@nx-playground/api-client": ["../../libs/api-client/src"],
+      "@nx-playground/api-client": ["../../libs/api-client/src/index.ts"],
+      "@nx-playground/api-client/event-stack": [
+        "../../libs/api-client/src/event-stack/index.ts"
+      ],
       "@nx-playground/auth-client": ["../../libs/auth-client/src"],
       "@nx-playground/hooks": ["../../libs/hooks/src"]
     },
