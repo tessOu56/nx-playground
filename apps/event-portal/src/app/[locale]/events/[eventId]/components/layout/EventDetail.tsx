@@ -98,11 +98,12 @@ export function EventDetail({ eventId }: EventDetailProps) {
 
   return (
     <div className='space-y-6'>
-      {/* 活動資訊頭部 - 根據狀態顯示內容 */}
-      {error || !event ? (
-        <EventInfoHeaderError />
-      ) : isLoading ? (
+      {isLoading ? (
         <EventInfoHeaderSkeleton />
+      ) : error ? (
+        <EventInfoHeaderError kind='api' />
+      ) : !event ? (
+        <EventInfoHeaderError kind='not-found' />
       ) : (
         <EventInfoHeader event={event} eventId={eventId} />
       )}

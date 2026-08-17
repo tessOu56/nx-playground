@@ -11,6 +11,7 @@ export function useEvents() {
     queryKey: ['events'],
     queryFn: fetchPortalEvents,
     staleTime: 5 * 60 * 1000,
+    retry: 1,
   });
 }
 
@@ -20,6 +21,7 @@ export function useEvent(eventId: string) {
     queryFn: () => fetchPortalEvent(eventId),
     staleTime: 5 * 60 * 1000,
     enabled: !!eventId,
+    retry: 1,
   });
 }
 

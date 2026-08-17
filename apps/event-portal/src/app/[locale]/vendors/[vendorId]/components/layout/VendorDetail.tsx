@@ -60,6 +60,7 @@ export function VendorDetail({ vendorId }: VendorDetailProps) {
     data: events,
     isLoading: eventsLoading,
     error: eventsError,
+    refetch: refetchEvents,
   } = useEventsByVendor(vendorId);
 
   // 當主辦方資料載入完成時，更新 store
@@ -140,7 +141,7 @@ export function VendorDetail({ vendorId }: VendorDetailProps) {
           {displayLineSettings?.displayName ?? '主辦方'} 的活動
         </h3>
         {eventsError ? (
-          <EventListError />
+          <EventListError onRetry={() => void refetchEvents()} />
         ) : eventsLoading ? (
           <EventListSkeleton />
         ) : events && events.length > 0 ? (

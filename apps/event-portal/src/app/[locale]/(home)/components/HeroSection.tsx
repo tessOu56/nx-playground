@@ -12,8 +12,8 @@ export function HeroSection() {
       ?.scrollIntoView({ behavior: 'smooth' });
   };
 
-  const goToOrders = () => {
-    router.push('/orders');
+  const goToEvents = () => {
+    router.push('/events');
   };
 
   return (
@@ -35,12 +35,12 @@ export function HeroSection() {
               size='lg'
               variant='primary'
               className='bg-green-600 hover:bg-green-700 text-white font-semibold'
-              onClick={scrollToLogin}
+              onClick={goToEvents}
             >
-              立即登入
+              瀏覽活動
             </Button>
-            <Button variant='outline' size='lg' onClick={goToOrders}>
-              查看我的訂單
+            <Button variant='outline' size='lg' onClick={scrollToLogin}>
+              LINE 登入
             </Button>
           </div>
         </div>
