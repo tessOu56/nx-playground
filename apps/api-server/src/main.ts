@@ -54,8 +54,12 @@ async function bootstrap() {
   SwaggerModule.setup('api/docs', app, document);
 
   // Expose OpenAPI JSON endpoint
-  app.getHttpAdapter().get('/api-json', (req, res) => {
+  app.getHttpAdapter().get('/api-json', (_req, res) => {
     res.json(document);
+  });
+
+  app.getHttpAdapter().get('/', (_req, res) => {
+    res.redirect('/api/docs');
   });
 
   const port = process.env.PORT || 3001;

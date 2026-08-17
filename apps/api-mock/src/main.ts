@@ -54,7 +54,9 @@ function match(
     return { name: 'confirmOrder', params: { id: ordersConfirm[1] } };
   }
   if (ordersId && method === 'GET') return { name: 'getOrder', params: { id: ordersId[1] } };
-  if (method === 'GET' && pathname === '/api/health') return { name: 'health', params: {} };
+  if (method === 'GET' && (pathname === '/' || pathname === '/api/health')) {
+    return { name: 'health', params: {} };
+  }
   return null;
 }
 

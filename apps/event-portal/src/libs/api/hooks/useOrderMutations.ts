@@ -1,5 +1,10 @@
+'use client';
+
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { confirmOrder as confirmOrderApi, createOrder } from '@nx-playground/api-client';
+import {
+  confirmOrder as confirmOrderApi,
+  createOrder,
+} from '@nx-playground/api-client/event-stack';
 
 import type {
   Order,

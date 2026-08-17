@@ -3,7 +3,7 @@
  */
 
 import type { Metadata } from 'next';
-import { getEvent, getOrder } from '@nx-playground/api-client';
+import { getEvent, getOrder } from '@nx-playground/api-client/event-stack';
 
 export async function generateEventMetadata({
   params,

@@ -29,6 +29,10 @@ export default defineConfig({
         __dirname,
         '../../libs/api-client/src/index.ts'
       ),
+      '@nx-playground/logger': path.resolve(
+        __dirname,
+        '../../libs/logger/src/index.ts'
+      ),
     },
   },
   build: {

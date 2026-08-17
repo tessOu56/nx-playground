@@ -1,4 +1,4 @@
-import type { EventStackEvent } from '@nx-playground/api-client';
+import type { EventStackEvent } from '@nx-playground/api-client/event-stack';
 
 import type { Event, EventDetail, LineSettings, Vendor } from '@/types';
 

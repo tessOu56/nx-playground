@@ -1,17 +1,10 @@
+'use client';
+
 import { useQuery } from '@tanstack/react-query';
-import { getEvent, listEvents } from '@nx-playground/api-client';
 
-import { toPortalEvent, toPortalEventDetail } from '../event-stack-map';
+import { fetchPortalEvent, fetchPortalEvents } from '../event-stack-fetch';
 
-export async function fetchPortalEvents() {
-  const page = await listEvents({ status: 'published', limit: 50 });
-  return page.items.map(toPortalEvent);
-}
-
-export async function fetchPortalEvent(eventId: string) {
-  const event = await getEvent(eventId);
-  return toPortalEventDetail(event);
-}
+export { fetchPortalEvent, fetchPortalEvents } from '../event-stack-fetch';
 
 export function useEvents() {
   return useQuery({
