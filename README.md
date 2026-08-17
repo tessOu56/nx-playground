@@ -1,6 +1,8 @@
 # NX Playground
 
-> 企業級前端能力實驗場 — Nx Monorepo 上驗證認證、CMS、設計系統、跨框架整合等情境；成熟能力經 [explore-design-sdk](https://github.com/tessOu56/explore-design-sdk) 與契約模式升級進正式產品（[ai-search-portal](https://github.com/tessOu56/ai-search-portal)），並以 standalone mirror（vue-motion-sandbox、angular-dashboard-sandbox）對外展示。
+> Event + commerce integration on Nx — C-end portal, React ops CMS, Nest API, auth/LIFF.  
+> **Planning SSOT**: private platform-command (`planning/projects/nx-playground.md`). This README is how-to.  
+> Angular / Vue live in [angular-dashboard-sandbox](https://github.com/tessOu56/angular-dashboard-sandbox) and [vue-motion-sandbox](https://github.com/tessOu56/vue-motion-sandbox) (canonical after mirror inversion). Design tokens: [explore-design-sdk](https://github.com/tessOu56/explore-design-sdk).
 
 [![Nx](https://img.shields.io/badge/Nx-21.4-blue.svg)](https://nx.dev)
 [![React](https://img.shields.io/badge/React-19-cyan.svg)](https://react.dev)
@@ -8,15 +10,16 @@
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.8-blue.svg)](https://typescriptlang.org)
 [![pnpm](https://img.shields.io/badge/pnpm-10.13-orange.svg)](https://pnpm.io)
 
-## 📋 專案簡介
+## 專案簡介
 
-NX Playground 是一個展示現代前端技術棧的實驗性 Monorepo 專案，包含：
+產品路徑（請優先跑這些）：
 
-- 🔐 完整的認證系統
-- 📊 活動內容管理系統 (CMS)
-- 🎫 公開活動展示平台
-- 🎨 設計系統和 UI 組件庫
-- 🧩 跨框架整合 (React, Next.js, Angular, Vue)
+- 🎫 **event-portal** — 公開活動（Next.js 15，:3000）
+- 📊 **event-cms** — 活動營運（React 19，:3002）
+- 🔧 **api-server** — NestJS + Prisma（:3001，Swagger `/api/docs`）
+- 🔐 **auth** — Kratos + LINE（埠見 app README；與 portal :3000 衝突是已知債）
+
+其餘 app（profile、vue-motion、enterprise-admin、mobile-approvals）仍在 repo 內，轉型完成前**不加功能**。
 
 ## 🚀 快速開始
 
@@ -29,15 +32,13 @@ make setup      # 安裝依賴並設置環境
 ### 啟動服務
 
 ```bash
-# 啟動單一服務
-make dev-event-portal  # Event Portal 服務
-make dev-event-cms     # Event CMS 服務
-make dev-profile       # Profile 技術展示
+# 產品路徑
+make dev-event-portal  # Event Portal :3000
+make dev-event-cms     # Event CMS :3002
 
 # 或使用 pnpm
 pnpm dev:event-portal
 pnpm dev:event-cms
-pnpm dev:profile
 ```
 
 ## 📋 常用命令

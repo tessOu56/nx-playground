@@ -1,34 +1,16 @@
-# Ecosystem — nx-playground hub
+# Ecosystem pointer — nx-playground
 
 ## Role
 
-**Hub** in the personal platform ecosystem. Satellite repos sync from this monorepo.
+Public **event + commerce** monorepo (portal / cms / api / auth). Planning SSOT is **platform-command**, not this file.
 
-| Satellite | Sync source | Rule |
-|-----------|-------------|------|
-| [vue-motion-sandbox](https://github.com/tessOu56/vue-motion-sandbox) | `apps/vue-motion` | No new features in satellite |
-| [angular-dashboard-sandbox](https://github.com/tessOu56/angular-dashboard-sandbox) | `apps/enterprise-admin` | E2E may stay in satellite only |
+Angular and Vue slices are independent GitHub repos. Until mirror inversion (platform-command T-228), `apps/vue-motion` and `apps/enterprise-admin` still exist here as copies — **do not add features in both places**.
 
-## Upstream / downstream
+| Repo | Today | After T-228 |
+|------|-------|-------------|
+| [vue-motion-sandbox](https://github.com/tessOu56/vue-motion-sandbox) | Pages LIVE; sync from nx | **canonical** |
+| [angular-dashboard-sandbox](https://github.com/tessOu56/angular-dashboard-sandbox) | sync from nx | **canonical** |
 
-```text
-platform-command (registry, tickets, inbox)
-    ↓ distribute-inbox
-nx-playground (this repo)
-    ↓ promote motion
-ai-search-portal labs/motion/
-    ↓ API contract
-polyglot-labs
-    ↓ specs
-develop-md
-```
+SDK: [explore-design-sdk](https://github.com/tessOu56/explore-design-sdk) — consume directly; nx `libs/design-system` is one adapter, not the only door.
 
-## Sync ritual (hub → satellite)
-
-1. Change and commit in `apps/vue-motion` or `apps/enterprise-admin`.
-2. From platform-command: `.\scripts\sync-nx-mirrors.ps1 -Target vue|angular|all -Commit` (SSOT `registry/nx-mirrors.json`; preserves satellite `.github/`, `README.md`, `vue.config.js`).
-3. Optional WATCH entry in platform-command.
-
-## Registry
-
-`platform-command/registry/projects.json` — deploy.url stays null until Cloudflare STOP lifted.
+Tickets are not tracked here.

@@ -2,46 +2,49 @@
 
 ## Purpose
 
-Nx 21 monorepo 樞紐：跨框架前端練習、共享 charts、NestJS api-server.  
-**Phase SSOT**：`docs/PROJECT-PLAN.md` · **Agent 協作**：`docs/agent-collaboration.md`
+Nx monorepo for the **event + commerce integration stack**: `event-portal`, `event-cms`, `api-server`, `auth`.
 
-**Tickets are not tracked in this repo.** Use phase checklists in PROJECT-PLAN for in-repo work items.
+**Planning SSOT is not this repo.** Stages and tickets live in private **platform-command** (`planning/projects/nx-playground.md`, `planning/portfolio-velocity.md`). Public `docs/PROJECT-PLAN.md` is setup/ports only.
+
+**Tickets are not tracked here.** Paste the central ticket when implementing.
 
 ## Before coding
 
-1. Read `docs/PROJECT-PLAN.md` for current phase.
-2. Read `docs/ECOSYSTEM.md` for mirror repo boundaries (vue-motion-sandbox, angular-dashboard-sandbox).
-3. Read `docs/CONTRACT-PIPELINE.md` when touching API contracts.
-4. **Design system**：消費 `explore-design-sdk`；規格見該 repo `docs/EXPLORE-SDK.md`。
-5. Long specs → link only in docs; do not duplicate full vision bodies here.
+1. Runnable how-to: `docs/PROJECT-PLAN.md` (ports) · `docs/DEV-ENVIRONMENT.md` · `docs/CONTRACT-PIPELINE.md`.
+2. Mirror status: `docs/ECOSYSTEM.md` — Angular/Vue independent repos; do not double-write.
+3. Design system: consume `explore-design-sdk`; this repo’s `libs/design-system` is one adapter.
+4. Long specs → link only; do not revive a public roadmap.
 
 ## Quick start
 
 ```bash
 make setup          # or: pnpm install && scripts/env-setup.sh
-# Platform differences: docs/DEV-ENVIRONMENT.md + scripts/detect-platform.ps1
-pnpm dev:api        # localhost:3001
-pnpm dev:profile    # localhost:3003
-pnpm dev:vue-motion # localhost:8080
-pnpm dev:enterprise # localhost:4200
+# Platform differences: docs/DEV-ENVIRONMENT.md
+pnpm dev:event-portal  # localhost:3000
+pnpm dev:event-cms     # localhost:3002
+# api-server :3001 — see docs/PROJECT-PLAN.md
 ```
+
+Profile / vue-motion / enterprise-admin / mobile-approvals still exist on disk; **no new features** there until graduate tickets (platform-command T-228–230).
 
 ## Allowed
 
-- `apps/*`, `libs/*`, `docs/`, `.cursor/` (project skills/hooks)
+- `apps/event-portal`, `apps/event-cms`, `apps/api-server`, `apps/auth`, shared libs used by those apps, `docs/` how-to, `.cursor/`
 
 ## Forbidden
 
 - Copying portal UI or agent-core from ai-search-portal into this repo
-- New features in vue-motion-sandbox or angular-dashboard-sandbox (mirror repos only)
+- New Angular/Vue features in both nx and the satellite repos
+- New profile or mobile-approvals features (not event-stack)
 - Committing `docs/platform-inbox/` (gitignored local-only path)
+- Treating this repo’s PROJECT-PLAN as phase SSOT
 
 ## Integration
 
-- Promote motion experiments → ai-search-portal `labs/motion/`
-- API contract alignment → polyglot-labs `docs/api-contract.md`
+- SDK: `explore-design-sdk` (any framework)
+- Portal HITL mobile mock is not event QR check-in
 
-## 開發環境（2026-07 統一）
+## 開發環境
 
-- Node 22（`.nvmrc`/`engines`）· pnpm 10.13.1（`packageManager`，`corepack enable` 生效）
-- 平台差異與 workaround：[docs/DEV-ENVIRONMENT.md](docs/DEV-ENVIRONMENT.md)
+- Node 22（`.nvmrc`/`engines`）· pnpm 10.13.1（`packageManager`，`corepack enable`）
+- 平台差異：[docs/DEV-ENVIRONMENT.md](docs/DEV-ENVIRONMENT.md)
