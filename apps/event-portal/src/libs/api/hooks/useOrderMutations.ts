@@ -1,8 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-
-import { ENV_CONFIG } from '../../constants';
-import { mockEvents } from '../../mock/events';
-import { updateMultipleTicketQuantities } from '../../mock/tickets/utils';
+import { confirmOrder as confirmOrderApi, createOrder } from '@nx-playground/api-client';
 
 import type {
   Order,
@@ -12,27 +9,17 @@ import type {
   PaymentMethod,
   OrderConfirmationRequest,
   OrderConfirmationResponse,
+  Event,
 } from '@/types';
 
 const confirmOrder = async (
   request: OrderConfirmationRequest
 ): Promise<OrderConfirmationResponse> => {
-  const response = await fetch(
-    `${ENV_CONFIG.API_BASE_URL}/api/orders/${request.orderId}/confirm`,
-    {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(request),
-    }
-  );
-
-  if (!response.ok) {
-    throw new Error(`Failed to confirm order: ${response.statusText}`);
-  }
-
-  return await response.json();
+  const order = await confirmOrderApi(request.orderId);
+  return {
+    success: true,
+    order: { id: order.id } as Order,
+  };
 };
 
 // 創建訂單和帳單 (mutation)
@@ -48,29 +35,27 @@ export function useCreateOrder() {
       totalAmount: number;
       totalTickets: number;
     }) => {
-      const orderId = `order-${Date.now()}`;
-      const billId = `bill-${Date.now()}`;
-      const now = new Date().toISOString();
-      const dueDate = new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString();
-
-      // 更新票券數量
-      const ticketUpdates = Object.entries(orderData.tickets).map(
-        ([ticketId, quantity]) => ({
+      const apiOrder = await createOrder({
+        eventId: orderData.eventId,
+        userId: 'user_demo',
+        data: {
           sessionId: orderData.sessionId,
-          ticketId,
-          soldQuantity: quantity,
-        })
-      );
+          tickets: orderData.tickets,
+          paymentMethod: orderData.paymentMethod,
+          totalAmount: orderData.totalAmount,
+          totalTickets: orderData.totalTickets,
+        },
+      });
 
-      const updateResult = updateMultipleTicketQuantities(ticketUpdates);
-      if (!updateResult.success) {
-        throw new Error(`更新票券數量失敗: ${updateResult.errors.join(', ')}`);
-      }
+      const orderId = apiOrder.id;
+      const billId = `bill-${apiOrder.id}`;
+      const now = apiOrder.createdAt;
+      const dueDate = new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString();
 
       const order: Order = {
         id: orderId,
         eventId: orderData.eventId,
-        userId: 'line-user-01', // 暫時使用固定用戶ID
+        userId: apiOrder.userId,
         quantity: orderData.totalTickets,
         totalAmount: orderData.totalAmount,
         status: 'pending',
@@ -83,7 +68,7 @@ export function useCreateOrder() {
         id: billId,
         orderId,
         eventId: orderData.eventId,
-        userId: 'line-user-01',
+        userId: apiOrder.userId,
         amount: orderData.totalAmount,
         status: 'pending',
         paymentMethod: orderData.paymentMethod,
@@ -98,10 +83,6 @@ export function useCreateOrder() {
           transferAmount: orderData.totalAmount,
         }),
       };
-
-      // 在實際應用中，這裡會調用 API
-      // const response = await api.post('/orders', { order, bill });
-      // return response.data;
 
       return { order, bill };
     },
@@ -123,7 +104,9 @@ export function useCreateOrder() {
         const qty = quantity as number;
 
         // 從活動資料獲取票券類型的實際資訊
-        const event = mockEvents.find(e => e.id === variables.eventId);
+        const event = queryClient.getQueryData(['event', variables.eventId]) as
+          | Event
+          | undefined;
         const session = event?.sessions.find(s => s.id === variables.sessionId);
         const ticketType = session?.tickets?.find(
           (t: any) => t.id === ticketTypeId

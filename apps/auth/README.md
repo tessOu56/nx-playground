@@ -54,7 +54,7 @@ pnpm dev:auth
 nx serve @nx-playground/auth
 ```
 
-服務運行在: **http://localhost:3000**
+服務運行在: **http://localhost:3004**
 
 ### 獨立開發
 

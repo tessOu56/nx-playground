@@ -1,0 +1,15 @@
+{
+  "name": "@nx-playground/api-fixtures",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/api-fixtures/src",
+  "projectType": "library",
+  "tags": ["type:lib", "scope:event-stack"],
+  "targets": {
+    "test": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "node --import tsx --test libs/api-fixtures/src/store.test.ts"
+      }
+    }
+  }
+}

@@ -17,7 +17,8 @@
 - 🎫 **event-portal** — 公開活動（Next.js 15，:3000）
 - 📊 **event-cms** — 活動營運（React 19，:3002）
 - 🔧 **api-server** — NestJS + Prisma（:3001，Swagger `/api/docs`）
-- 🔐 **auth** — Kratos + LINE（埠見 app README；與 portal :3000 衝突是已知債）
+- 🧪 **api-mock** — 同一份 event-stack OpenAPI 的 stateful mock（:3011）
+- 🔐 **auth** — Kratos + LINE（:3004）
 
 其餘 app（profile、vue-motion、enterprise-admin、mobile-approvals）仍在 repo 內，轉型完成前**不加功能**。
 
@@ -35,10 +36,12 @@ make setup      # 安裝依賴並設置環境
 # 產品路徑
 make dev-event-portal  # Event Portal :3000
 make dev-event-cms     # Event CMS :3002
+make dev-api           # Nest live API :3001
+make dev-auth          # Auth :3004
 
-# 或使用 pnpm
-pnpm dev:event-portal
-pnpm dev:event-cms
+# 契約 mock（可取代 Nest；CMS POST 後 Portal GET 看得到）
+make dev-api-mock      # :3011
+# then: NEXT_PUBLIC_API_BASE_URL=http://localhost:3011/api VITE_API_BASE_URL=http://localhost:3011/api
 ```
 
 ## 📋 常用命令
@@ -58,10 +61,12 @@ pnpm dev:event-cms
 
 ## 🌐 服務網址
 
-- **API Server** (後端 API): http://localhost:3001/api
+- **API Server** (live Nest): http://localhost:3001/api
   - Swagger Docs: http://localhost:3001/api/docs
+- **API mock** (same OpenAPI, in-memory): http://localhost:3011/api
 - **Event Portal** (活動展示): http://localhost:3000
 - **Event CMS** (活動管理): http://localhost:3002
+- **Auth**: http://localhost:3004
 - **Profile** (技術展示): http://localhost:3003
 - **Vue Motion** (動畫實驗): http://localhost:8080
 - **Enterprise Admin** (企業管理): http://localhost:4200
@@ -72,7 +77,8 @@ pnpm dev:event-cms
 nx-playground/
 ├── apps/                    # 應用程式
 │   ├── api-server/         # 🔧 API Server (NestJS 10, Port 3001)
-│   ├── auth/               # 🔐 認證服務 (React + Vite)
+│   ├── api-mock/           # 🧪 event-stack mock (Port 3011)
+│   ├── auth/               # 🔐 認證服務 (React + Vite, Port 3004)
 │   ├── event-cms/          # 📊 活動 CMS (React + Vite, Port 3002)
 │   ├── event-portal/       # 🎫 活動展示 (Next.js 15, Port 3000)
 │   ├── profile/            # 🎯 技術展示 (React + Vite, Port 3003)

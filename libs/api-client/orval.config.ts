@@ -17,6 +17,7 @@ function findApiSpec(module: string, env: string): string {
     `${module}-v${env}.yaml`,
     // env-less specs (e.g. event.openapi.yaml) - fallback before default
     `${module}.openapi.yaml`,
+    `${module}.openapi.json`,
     `${module}.yaml`,
   ];
 

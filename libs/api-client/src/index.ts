@@ -36,6 +36,8 @@ export type {
   UseMutationOptions,
 } from '@tanstack/react-query';
 
+export * from './event-stack';
+
 // Note: For environment-specific APIs, import directly from:
 // - import { useGetTemplates } from '@nx-playground/api-client/form/dev';
 // - import { useGetRegistrationFlows } from '@nx-playground/api-client/identity/dev';

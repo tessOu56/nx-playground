@@ -1,144 +1,74 @@
 import { PrismaClient } from '@prisma/client';
 
+import eventsSeed from '../../../libs/api-fixtures/src/events.json';
+import ordersSeed from '../../../libs/api-fixtures/src/orders.json';
+import usersSeed from '../../../libs/api-fixtures/src/users.json';
+
 const prisma = new PrismaClient();
 
 async function main() {
-  console.log('🌱 Starting seed...');
+  console.log('🌱 Resetting demo tables and seeding libs/api-fixtures...');
 
-  // 創建用戶
-  const admin = await prisma.user.upsert({
-    where: { email: 'admin@nx-playground.local' },
-    update: {},
-    create: {
-      email: 'admin@nx-playground.local',
-      name: '管理員',
-      role: 'admin',
-      status: 'active',
-    },
-  });
+  await prisma.order.deleteMany();
+  await prisma.event.deleteMany();
+  await prisma.form.deleteMany();
+  await prisma.session.deleteMany();
+  await prisma.user.deleteMany();
 
-  const organizer = await prisma.user.upsert({
-    where: { email: 'organizer@nx-playground.local' },
-    update: {},
-    create: {
-      email: 'organizer@nx-playground.local',
-      name: '活動主辦人',
-      role: 'organizer',
-      status: 'active',
-    },
-  });
+  for (const user of usersSeed.users) {
+    await prisma.user.create({
+      data: {
+        id: user.id,
+        email: user.email,
+        name: user.name,
+        role: user.role,
+        status: user.status,
+      },
+    });
+  }
 
-  const user1 = await prisma.user.upsert({
-    where: { email: 'user@nx-playground.local' },
-    update: {},
-    create: {
-      email: 'user@nx-playground.local',
-      name: '一般用戶',
-      role: 'user',
-      status: 'active',
-    },
-  });
-
-  console.log('✅ Created users:', { admin, organizer, user1 });
-
-  // 創建表單
-  const form = await prisma.form.upsert({
-    where: { id: 'form_basic' },
-    update: {},
-    create: {
-      id: 'form_basic',
-      name: '基本報名表單',
-      schema: JSON.stringify({
-        fields: [
-          { id: 'name', type: 'text', label: '姓名', required: true },
-          { id: 'email', type: 'email', label: 'Email', required: true },
-          { id: 'phone', type: 'tel', label: '電話', required: false },
-          { id: 'note', type: 'textarea', label: '備註', required: false },
-        ],
-      }),
-    },
-  });
-
-  console.log('✅ Created form:', form);
-
-  // 創建活動
-  const event1 = await prisma.event.create({
+  await prisma.form.create({
     data: {
-      title: 'React 19 技術分享會',
-      description: '深入了解 React 19 的新特性和最佳實踐',
-      location: '台北市信義區',
-      startDate: new Date('2025-11-15T14:00:00Z'),
-      endDate: new Date('2025-11-15T17:00:00Z'),
-      maxAttendees: 50,
-      status: 'published',
-      formId: form.id,
+      id: eventsSeed.form.id,
+      name: eventsSeed.form.name,
+      schema: JSON.stringify(eventsSeed.form.schema),
     },
   });
 
-  const event2 = await prisma.event.create({
-    data: {
-      title: 'NestJS 實戰工作坊',
-      description: '從零開始構建企業級後端應用',
-      location: '台北市大安區',
-      startDate: new Date('2025-12-01T09:00:00Z'),
-      endDate: new Date('2025-12-01T16:00:00Z'),
-      maxAttendees: 30,
-      status: 'published',
-      formId: form.id,
-    },
-  });
+  for (const event of eventsSeed.events) {
+    await prisma.event.create({
+      data: {
+        id: event.id,
+        title: event.title,
+        description: event.description,
+        location: event.location,
+        startDate: new Date(event.startDate),
+        endDate: new Date(event.endDate),
+        maxAttendees: event.maxAttendees,
+        status: event.status,
+        formId: event.formId,
+      },
+    });
+  }
 
-  const event3 = await prisma.event.create({
-    data: {
-      title: 'Nx Monorepo 最佳實踐',
-      description: '大型專案的架構設計和管理',
-      location: '線上',
-      startDate: new Date('2025-12-20T19:00:00Z'),
-      endDate: new Date('2025-12-20T21:00:00Z'),
-      maxAttendees: 100,
-      status: 'draft',
-      formId: form.id,
-    },
-  });
+  for (const order of ordersSeed.orders) {
+    await prisma.order.create({
+      data: {
+        id: order.id,
+        eventId: order.eventId,
+        userId: order.userId,
+        status: order.status,
+        data: JSON.stringify(order.data),
+      },
+    });
+  }
 
-  console.log('✅ Created events:', { event1, event2, event3 });
-
-  // 創建訂單
-  const order1 = await prisma.order.create({
-    data: {
-      eventId: event1.id,
-      userId: user1.id,
-      status: 'confirmed',
-      data: JSON.stringify({
-        name: '一般用戶',
-        email: 'user@nx-playground.local',
-        phone: '0912345678',
-        note: '期待參加！',
-      }),
-    },
-  });
-
-  const order2 = await prisma.order.create({
-    data: {
-      eventId: event2.id,
-      userId: user1.id,
-      status: 'pending',
-      data: JSON.stringify({
-        name: '一般用戶',
-        email: 'user@nx-playground.local',
-        phone: '0912345678',
-      }),
-    },
-  });
-
-  console.log('✅ Created orders:', { order1, order2 });
-
-  console.log('🎉 Seed completed successfully!');
+  console.log('🎉 Seed completed from shared fixtures');
 }
 
 main()
-  .catch(e => {
-    console.error('❌ Seed failed:', e);
+  .catch(error => {
+    console.error('❌ Seed failed:', error);
     process.exit(1);
   })
   .finally(async () => {
