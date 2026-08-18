@@ -6,5 +6,4 @@
 export { getEventStackBaseUrl, eventStackRequest } from './http';
 export * from './types';
 export * from './operations';
-export * from './hooks';
-export * as eventStackGenerated from './generated/nXPlaygroundEventStackAPI';
+// Hooks stay off this entry so Next.js Server Components can import fetch ops.

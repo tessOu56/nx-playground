@@ -33,10 +33,11 @@ export function useEventCreateController() {
   const handleSubmit = useCallback(async (data: EventFormValue) => {
     try {
       await EventsService.createEvent(data);
-      // Handle success
     } catch (error) {
-      // Handle error
       console.error('Failed to create event:', error);
+      window.alert(
+        '無法連線活動 API，活動未寫入。請啟動 Nest (:3001) 或 api-mock (:3011)。'
+      );
     }
   }, []);
 

@@ -1,4 +1,4 @@
-import { listEvents } from '@nx-playground/api-client';
+import { listEvents } from '@nx-playground/api-client/event-stack';
 
 export async function eventStaticParams(): Promise<{ eventId: string }[]> {
   try {

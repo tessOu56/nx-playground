@@ -1,6 +1,6 @@
 # ==================== NX Playground 本地開發環境管理 Makefile ====================
 
-.PHONY: help dev dev-event-portal dev-event-cms dev-api dev-api-mock dev-auth setup stop restart logs clean build status prod test test-mock test-react test-i18n test-coverage test-watch test-affected
+.PHONY: help dev dev-event-portal dev-event-cms dev-api dev-api-mock dev-auth setup seed stop restart logs clean build status prod test test-mock test-react test-i18n test-coverage test-watch test-affected
 
 # 預設目標
 .DEFAULT_GOAL := help
@@ -28,6 +28,7 @@ help: ## 顯示此幫助信息
 	@echo "  dev-enterprise    僅啟動 Enterprise Admin 服務 (http://localhost:4200)"
 	@echo "  dev-api           僅啟動 API Server 服務 (http://localhost:3001)"
 	@echo "  setup        設置開發環境 (安裝依賴、環境變數)"
+	@echo "  seed         Prisma seed from libs/api-fixtures"
 	@echo "  stop         停止當前開發站台"
 	@echo "  restart      重啟所有開發服務"
 	@echo "  logs         查看服務日誌"
@@ -139,6 +140,13 @@ setup: ## 設置開發環境
 	@echo "$(BLUE)[INFO]$(NC) 設置環境變數..."
 	@./scripts/env-setup.sh
 	@echo "$(GREEN)[SUCCESS]$(NC) 開發環境設置完成！"
+
+seed: ## Prisma seed from libs/api-fixtures (no hand-editing the DB)
+	@echo "$(BLUE)[INFO]$(NC) prisma generate + db push + seed..."
+	@npx prisma generate --schema=apps/api-server/prisma/schema.prisma
+	@npx prisma db push --schema=apps/api-server/prisma/schema.prisma --accept-data-loss
+	@pnpm exec nx run @nx-playground/api-server:prisma-seed
+	@echo "$(GREEN)[SUCCESS]$(NC) seed from libs/api-fixtures"
 
 setup-lockfile-only: ## Windows 完整 install 失敗（深層 node_modules ENOENT）時：只刷新 lockfile 再安裝
 	@echo "$(BLUE)[INFO]$(NC) pnpm install --lockfile-only（不落地 node_modules）..."

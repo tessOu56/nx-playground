@@ -73,6 +73,10 @@ const nextConfig = {
     config.resolve.alias = {
       ...config.resolve.alias,
       '@': path.resolve(__dirname, './src'),
+      '@nx-playground/api-client/event-stack': path.resolve(
+        __dirname,
+        '../../libs/api-client/src/event-stack/index.ts'
+      ),
       '@nx-playground/api-client': path.resolve(
         __dirname,
         '../../libs/api-client/src/index.ts'

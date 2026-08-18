@@ -1,6 +1,6 @@
 import { type QueryClient } from '@tanstack/react-query';
 
-import { fetchPortalEvent, fetchPortalEvents } from './hooks/useEvents';
+import { fetchPortalEvent, fetchPortalEvents } from './event-stack-fetch';
 import { ENV_CONFIG } from '../constants';
 import { mockBills } from '../mock/bills';
 import { mockOrders } from '../mock/orders';

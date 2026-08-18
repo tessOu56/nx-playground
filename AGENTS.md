@@ -10,7 +10,7 @@ Nx monorepo for the **event + commerce integration stack**: `event-portal`, `eve
 
 ## Before coding
 
-1. Runnable how-to: `docs/PROJECT-PLAN.md` (ports) · `docs/DEV-ENVIRONMENT.md` · `docs/CONTRACT-PIPELINE.md`.
+1. Runnable how-to: `docs/EVENT-STACK-DEMO.md` (interview path) · `docs/PROJECT-PLAN.md` (ports) · `docs/DEV-ENVIRONMENT.md` · `docs/CONTRACT-PIPELINE.md`.
 2. Mirror status: `docs/ECOSYSTEM.md` — Angular/Vue independent repos; do not double-write.
 3. Design system: consume `explore-design-sdk`; this repo’s `libs/design-system` is one adapter.
 4. Long specs → link only; do not revive a public roadmap.

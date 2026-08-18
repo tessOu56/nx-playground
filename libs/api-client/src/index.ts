@@ -37,6 +37,7 @@ export type {
 } from '@tanstack/react-query';
 
 export * from './event-stack';
+export * from './event-stack/hooks';
 
 // Note: For environment-specific APIs, import directly from:
 // - import { useGetTemplates } from '@nx-playground/api-client/form/dev';

@@ -2,6 +2,7 @@
 
 > Event + commerce integration on Nx — C-end portal, React ops CMS, Nest API, auth/LIFF.  
 > **Planning SSOT**: private platform-command (`planning/projects/nx-playground.md`). This README is how-to.  
+> **Interview demo pack**: [`docs/EVENT-STACK-DEMO.md`](./docs/EVENT-STACK-DEMO.md) (happy path + seed + API-down error UI).  
 > Angular / Vue live in [angular-dashboard-sandbox](https://github.com/tessOu56/angular-dashboard-sandbox) and [vue-motion-sandbox](https://github.com/tessOu56/vue-motion-sandbox) (canonical after mirror inversion). Design tokens: [explore-design-sdk](https://github.com/tessOu56/explore-design-sdk).
 
 [![Nx](https://img.shields.io/badge/Nx-21.4-blue.svg)](https://nx.dev)
@@ -42,6 +43,9 @@ make dev-auth          # Auth :3004
 # 契約 mock（可取代 Nest；CMS POST 後 Portal GET 看得到）
 make dev-api-mock      # :3011
 # then: NEXT_PUBLIC_API_BASE_URL=http://localhost:3011/api VITE_API_BASE_URL=http://localhost:3011/api
+
+# Seed fixtures into SQLite (live Nest)
+make seed
 ```
 
 ## 📋 常用命令

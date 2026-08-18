@@ -31,7 +31,7 @@ Angular / Vue / profile / mobile-approvals are leaving or already have independe
 4. API live: `pnpm dev:api`. Contract mock: `pnpm dev:api-mock`.
 5. Frontends: `pnpm dev:event-portal`, `pnpm dev:event-cms`, `pnpm dev:auth`
 
-Runnable how-to that stays in-repo: [`DEV-ENVIRONMENT.md`](./DEV-ENVIRONMENT.md), [`CONTRACT-PIPELINE.md`](./CONTRACT-PIPELINE.md).
+Runnable how-to that stays in-repo: [`EVENT-STACK-DEMO.md`](./EVENT-STACK-DEMO.md) (interview happy path + failure), [`DEV-ENVIRONMENT.md`](./DEV-ENVIRONMENT.md), [`CONTRACT-PIPELINE.md`](./CONTRACT-PIPELINE.md).
 
 ## Do not
 
