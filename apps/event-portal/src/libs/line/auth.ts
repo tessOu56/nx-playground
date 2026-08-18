@@ -149,7 +149,7 @@ export const getLineUserInfo = async () => {
         return callbackUserInfo;
       }
     } catch (callbackError) {
-      logger.error('LINE callback error', callbackError);
+      console.error('LINE callback error', callbackError);
     }
 
     return null;

@@ -1,7 +1,7 @@
 # Event-stack interview demo (T-2026-231)
 
 > How-to only. Stages and tickets live in private **platform-command**.  
-> Hosted Vercel URL is **T-2026-233** (after this pack is stable). This file is not a production launch.
+> Hosted labelled demo (T-2026-233): https://nx-event-portal.vercel.app/zh-TW/events — see `docs/HOSTED-DEMO.md`. This file is not a production launch.
 
 ## Ports (do not drift)
 

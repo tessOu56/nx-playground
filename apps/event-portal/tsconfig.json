@@ -25,7 +25,9 @@
         "../../libs/api-client/src/event-stack/index.ts"
       ],
       "@nx-playground/auth-client": ["../../libs/auth-client/src"],
-      "@nx-playground/hooks": ["../../libs/hooks/src"]
+      "@nx-playground/hooks": ["../../libs/hooks/src"],
+      "@nx-playground/logger": ["../../libs/logger/src"],
+      "@nx-playground/validation": ["../../libs/validation/src"]
     },
     "baseUrl": ".",
     "outDir": "dist",
