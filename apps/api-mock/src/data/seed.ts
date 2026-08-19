@@ -1,6 +1,6 @@
 import type { EventRecord, OrderRecord, UserRecord } from './types.js';
 
-/** In-memory fixtures for the labelled Vercel demo (cold start resets). */
+/** Fixtures loaded into memory (local) or Postgres (hosted `DATABASE_URL`). */
 export const usersSeed: { users: UserRecord[] } = {
   users: [
     {

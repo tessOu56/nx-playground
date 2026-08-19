@@ -2,7 +2,7 @@
 
 > Event + commerce integration on Nx — C-end portal, React ops CMS, Nest API, auth/LIFF.  
 > **Planning SSOT**: private platform-command (`planning/projects/nx-playground.md`). This README is how-to.  
-> **Interview demo pack**: [`docs/EVENT-STACK-DEMO.md`](./docs/EVENT-STACK-DEMO.md) (happy path + seed + API-down error UI).  
+> Local run: [`docs/EVENT-STACK-DEMO.md`](./docs/EVENT-STACK-DEMO.md). Hosted: [`docs/HOSTED-DEMO.md`](./docs/HOSTED-DEMO.md).  
 > Angular / Vue live in [angular-dashboard-sandbox](https://github.com/tessOu56/angular-dashboard-sandbox) and [vue-motion-sandbox](https://github.com/tessOu56/vue-motion-sandbox) (canonical after mirror inversion). Design tokens: [explore-design-sdk](https://github.com/tessOu56/explore-design-sdk).
 
 [![Nx](https://img.shields.io/badge/Nx-21.4-blue.svg)](https://nx.dev)

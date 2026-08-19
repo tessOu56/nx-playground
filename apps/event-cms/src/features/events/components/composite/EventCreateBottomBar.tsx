@@ -1,6 +1,7 @@
 import { Button, useToast } from '@nx-playground/ui-components';
 import { type SubmitHandler, useFormContext } from 'react-hook-form';
 
+import { useEventCreateController } from '../../controllers';
 import {
   useEventStore,
   useNavigateStore,
@@ -17,6 +18,7 @@ import { Text } from '../core';
 
 export function EventCreateBottombar() {
   const { getValues, trigger, setValue } = useFormContext<EventFormValue>();
+  const { handleSubmit: persistEvent } = useEventCreateController();
   const { setEditingBlock } = useEventStore();
   const { navigate, setNavigate } = useNavigateStore();
   const { setHasError } = useSessionStore();
@@ -165,17 +167,20 @@ export function EventCreateBottombar() {
         break;
       }
       case 4: {
-        const isbankValid = await trigger('bankTransfer');
-        setHasError(!isbankValid);
-        if (!isbankValid) {
-          addToast({
-            message: '請確認銀行匯款資訊是否有正確輸入',
-            type: 'error',
-          });
-          return;
+        const bankEnabled = getValues('bankTransfer.enable');
+        if (bankEnabled) {
+          const isbankValid = await trigger('bankTransfer');
+          setHasError(!isbankValid);
+          if (!isbankValid) {
+            addToast({
+              message: '請確認銀行匯款資訊是否有正確輸入',
+              type: 'error',
+            });
+            return;
+          }
         }
         onSubmit(getValues());
-        setNavigate(NavigateEnum.event);
+        await persistEvent(getValues());
         break;
       }
 

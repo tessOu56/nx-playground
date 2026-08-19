@@ -5,6 +5,7 @@
  */
 
 import { useCallback } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import { EventsService } from '../services';
 import {
@@ -18,6 +19,7 @@ import {
 import { type EventFormValue } from '../types';
 
 export function useEventCreateController() {
+  const goToEvents = useNavigate();
   // Stores
   const { navigate, setNavigate } = useNavigateStore();
   const { editingBlock, setEditingBlock } = useEventStore();
@@ -33,13 +35,14 @@ export function useEventCreateController() {
   const handleSubmit = useCallback(async (data: EventFormValue) => {
     try {
       await EventsService.createEvent(data);
+      goToEvents('/events');
     } catch (error) {
       console.error('Failed to create event:', error);
       window.alert(
-        '無法連線活動 API，活動未寫入。請啟動 Nest (:3001) 或 api-mock (:3011)。'
+        '無法連線活動 API，活動未寫入。請確認 API 網址（VITE_API_BASE_URL）可連線。'
       );
     }
-  }, []);
+  }, [goToEvents]);
 
   /**
    * 處理圖片上傳

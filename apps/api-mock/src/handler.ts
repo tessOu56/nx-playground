@@ -1,8 +1,6 @@
 import type { IncomingMessage, ServerResponse } from 'node:http';
 
-import { EventStackStore } from './data/store.js';
-
-export const store = new EventStackStore();
+import { getEventStackRepo } from './data/get-store.js';
 
 export const CORS: Record<string, string> = {
   'Access-Control-Allow-Origin': process.env.CORS_ORIGIN || '*',
@@ -69,21 +67,23 @@ export async function handleEventStackHttp(
   const route = match(method, url.pathname);
   if (!route) {
     send(res, 501, {
-      message: `No event-stack mock handler for ${method} ${url.pathname}`,
+      message: `No event-stack handler for ${method} ${url.pathname}`,
     });
     return;
   }
 
+  const store = getEventStackRepo();
+
   try {
     switch (route.name) {
       case 'health':
-        send(res, 200, { status: 'ok', mode: 'mock', demo: true });
+        send(res, 200, { status: 'ok', storage: store.storage });
         return;
       case 'listEvents':
         send(
           res,
           200,
-          store.listEvents({
+          await store.listEvents({
             status: url.searchParams.get('status') ?? undefined,
             page: url.searchParams.get('page')
               ? Number(url.searchParams.get('page'))
@@ -95,7 +95,7 @@ export async function handleEventStackHttp(
         );
         return;
       case 'getEvent': {
-        const event = store.getEvent(route.params.id);
+        const event = await store.getEvent(route.params.id);
         if (!event) {
           send(res, 404, { message: `Event ${route.params.id} not found` });
           return;
@@ -105,7 +105,7 @@ export async function handleEventStackHttp(
       }
       case 'createEvent': {
         const body = await readJson(req);
-        const created = store.createEvent({
+        const created = await store.createEvent({
           title: String(body.title ?? ''),
           description: body.description as string | undefined,
           location: body.location as string | undefined,
@@ -121,7 +121,7 @@ export async function handleEventStackHttp(
       }
       case 'updateEvent': {
         const body = await readJson(req);
-        const updated = store.updateEvent(route.params.id, body);
+        const updated = await store.updateEvent(route.params.id, body);
         if (!updated) {
           send(res, 404, { message: `Event ${route.params.id} not found` });
           return;
@@ -130,7 +130,7 @@ export async function handleEventStackHttp(
         return;
       }
       case 'deleteEvent': {
-        const ok = store.deleteEvent(route.params.id);
+        const ok = await store.deleteEvent(route.params.id);
         if (!ok) {
           send(res, 404, { message: `Event ${route.params.id} not found` });
           return;
@@ -140,7 +140,7 @@ export async function handleEventStackHttp(
       }
       case 'createOrder': {
         const body = await readJson(req);
-        const created = store.createOrder({
+        const created = await store.createOrder({
           eventId: String(body.eventId ?? ''),
           userId: body.userId as string | undefined,
           status: body.status as string | undefined,
@@ -154,7 +154,7 @@ export async function handleEventStackHttp(
         return;
       }
       case 'getOrder': {
-        const order = store.getOrder(route.params.id);
+        const order = await store.getOrder(route.params.id);
         if (!order) {
           send(res, 404, { message: `Order ${route.params.id} not found` });
           return;
@@ -163,7 +163,7 @@ export async function handleEventStackHttp(
         return;
       }
       case 'confirmOrder': {
-        const order = store.confirmOrder(route.params.id);
+        const order = await store.confirmOrder(route.params.id);
         if (!order) {
           send(res, 404, { message: `Order ${route.params.id} not found` });
           return;
@@ -173,12 +173,12 @@ export async function handleEventStackHttp(
       }
       default:
         send(res, 501, {
-          message: `No event-stack mock handler for ${method} ${url.pathname}`,
+          message: `No event-stack handler for ${method} ${url.pathname}`,
         });
     }
   } catch (error) {
     send(res, 500, {
-      message: error instanceof Error ? error.message : 'mock server error',
+      message: error instanceof Error ? error.message : 'event-stack server error',
     });
   }
 }

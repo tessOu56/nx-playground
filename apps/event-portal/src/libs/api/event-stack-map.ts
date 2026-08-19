@@ -16,7 +16,7 @@ export const STACK_VENDOR: Vendor = {
 
 const STACK_LINE: LineSettings = {
   officialAccountId: 'stack-line',
-  description: 'Event-stack demo LINE account',
+  description: 'Event Stack LINE account',
   displayName: 'Event Stack',
 };
 

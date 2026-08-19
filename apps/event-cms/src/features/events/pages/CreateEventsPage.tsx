@@ -25,6 +25,7 @@ import {
   VisibilityBlock,
 } from '../components';
 import { FormModal } from '../components/composite/FormModal';
+import { useEventCreateController } from '../controllers';
 import {
   useFormStore,
   useNavigateStore,
@@ -33,6 +34,7 @@ import {
 import { type EventFormValue, eventFormSchema } from '../types';
 
 export function CreateEventsPage() {
+  const { handleSubmit: persistEvent } = useEventCreateController();
   const { navigate } = useNavigateStore();
   const formSaveTemplate = useFormStore(state => state.openSaveTemplate);
   const formApplyTemplate = useFormStore(state => state.openApplyTemplate);
@@ -156,7 +158,11 @@ export function CreateEventsPage() {
     <FormProvider {...methods}>
       <form className='w-full h-full'>
         <div className='w-full h-full '>
-          <EventCreateTopbar handleSaveEvent={() => console.log('saving...')} />
+          <EventCreateTopbar
+            handleSaveEvent={() => {
+              void persistEvent(getValues());
+            }}
+          />
 
           <div className='flex'>
             {/* sidebar - tab */}

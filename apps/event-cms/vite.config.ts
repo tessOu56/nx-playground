@@ -3,11 +3,16 @@ import { resolve } from 'path';
 
 import { vanillaExtractPlugin } from '@vanilla-extract/vite-plugin';
 import react from '@vitejs/plugin-react';
-import { defineConfig } from 'vite';
+import { defineConfig, loadEnv } from 'vite';
 
-export default defineConfig(() => ({
+export default defineConfig(({ mode }) => {
+  const envDir = resolve(__dirname, '../..');
+  const fileEnv = loadEnv(mode, envDir, '');
+  const viteApiBaseUrl = fileEnv.VITE_API_BASE_URL ?? process.env.VITE_API_BASE_URL ?? '';
+
+  return {
   root: __dirname,
-  envDir: resolve(__dirname, '../..'),
+  envDir,
   server: {
     port: 3002,
     host: '0.0.0.0',
@@ -18,7 +23,8 @@ export default defineConfig(() => ({
   },
   plugins: [react(), vanillaExtractPlugin()],
   define: {
-    'process.env': process.env,
+    'process.env.VITE_API_BASE_URL': JSON.stringify(viteApiBaseUrl),
+    'process.env.NODE_ENV': JSON.stringify(mode),
   },
 
   resolve: {
@@ -118,4 +124,5 @@ export default defineConfig(() => ({
       provider: 'v8' as const,
     },
   },
-}));
+  };
+});

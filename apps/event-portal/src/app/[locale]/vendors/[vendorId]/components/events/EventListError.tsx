@@ -8,18 +8,14 @@ interface EventListErrorProps {
 export function EventListError({ onRetry }: EventListErrorProps) {
   return (
     <div
-      className='bg-white rounded-lg shadow-md p-6'
+      className='rounded-lg bg-white p-6 shadow-md'
       role='alert'
       data-testid='event-stack-api-error'
     >
-      <div className='flex flex-col items-center justify-center py-12 space-y-4'>
-        <div className='text-center space-y-2'>
-          <div className='text-red-600 font-medium'>無法連線活動 API</div>
-          <div className='text-gray-500 text-sm'>
-            列表來自 Nest（:3001）或 api-mock（:3011），不是內建假資料。請確認
-            API 已啟動，或改
-            <code className='mx-1 text-xs'>NEXT_PUBLIC_API_BASE_URL</code>。
-          </div>
+      <div className='flex flex-col items-center justify-center space-y-4 py-12'>
+        <div className='space-y-2 text-center'>
+          <div className='font-medium text-red-600'>目前無法載入活動</div>
+          <div className='text-sm text-gray-500'>請稍後再試。</div>
         </div>
         {onRetry ? (
           <button

@@ -1,18 +1,34 @@
-import { DemoBanner } from './components/DemoBanner';
-import { EventStackList } from './components/EventStackList';
+import { EventListError } from '@/app/[locale]/vendors/[vendorId]/components/events/EventListError';
+import { fetchPortalEvents } from '@/libs/api/event-stack-fetch';
+
+import { EventStackCards } from './components/EventStackCards';
 
 export const dynamic = 'force-dynamic';
 
-export default function EventsIndexPage() {
+export default async function EventsIndexPage({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}) {
+  const { locale } = await params;
+
+  let events: Awaited<ReturnType<typeof fetchPortalEvents>> = [];
+  let loadError = false;
+  try {
+    events = await fetchPortalEvents();
+  } catch {
+    loadError = true;
+  }
+
   return (
     <div className='mx-auto max-w-5xl px-4 py-10'>
-      <DemoBanner />
-      <h1 className='mb-2 text-2xl font-bold text-gray-900'>活動列表</h1>
-      <p className='mb-8 text-sm text-gray-600'>
-        資料來自 event-stack API（Nest :3001 或 api-mock :3011）。API
-        關閉時會顯示錯誤，不會改塞假資料。
-      </p>
-      <EventStackList />
+      <h1 className='mb-2 text-2xl font-semibold text-gray-900'>活動列表</h1>
+      <p className='mb-8 text-sm text-gray-600'>選擇一場活動查看詳情與報名。</p>
+      {loadError ? (
+        <EventListError />
+      ) : (
+        <EventStackCards events={events} locale={locale} />
+      )}
     </div>
   );
 }

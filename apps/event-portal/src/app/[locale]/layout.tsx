@@ -2,6 +2,7 @@ import { notFound } from 'next/navigation';
 import { NextIntlClientProvider } from 'next-intl';
 
 import { Header, EventsSidebar, ToastProvider } from '@/components';
+import { PublicSiteHeader } from '@/components/header/PublicSiteHeader';
 import { LiffProvider, ErrorBoundary, QueryProvider } from '@/libs';
 
 const locales = ['zh-TW', 'en'] as const;
@@ -45,14 +46,18 @@ export default async function LocaleLayout({
         <ErrorBoundary>
           <ToastProvider>
             <LiffProvider>
-              {/* 頁面流程導航 */}
-              <Header />
-
-              {/* 主要內容 */}
-              <main className='min-h-screen bg-gray-50'>{children}</main>
-
-              {/* 開發工具側邊欄 */}
-              <EventsSidebar />
+              {process.env.NODE_ENV !== 'production' ? (
+                <>
+                  <Header />
+                  <main className='min-h-screen bg-gray-50'>{children}</main>
+                  <EventsSidebar />
+                </>
+              ) : (
+                <>
+                  <PublicSiteHeader locale={locale} />
+                  <main className='min-h-screen bg-gray-50'>{children}</main>
+                </>
+              )}
             </LiffProvider>
           </ToastProvider>
         </ErrorBoundary>
