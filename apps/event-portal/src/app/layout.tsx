@@ -20,9 +20,14 @@ export const metadata: Metadata = {
     address: false,
     telephone: false,
   },
-  metadataBase: new URL('https://events.nx-playground.local'),
+  metadataBase: new URL(
+    process.env.NEXT_PUBLIC_SITE_URL ?? 'https://nx-event-portal.vercel.app'
+  ),
   icons: {
-    icon: [{ url: '/icon.svg', type: 'image/svg+xml' }],
+    icon: [
+      { url: '/icon.svg', type: 'image/svg+xml' },
+      { url: '/favicon.svg', type: 'image/svg+xml' },
+    ],
     apple: [{ url: '/apple-icon.svg', type: 'image/svg+xml' }],
   },
   alternates: {
@@ -31,7 +36,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: 'website',
     locale: 'zh_TW',
-    url: 'https://events.nx-playground.local',
+    url: 'https://nx-event-portal.vercel.app',
     siteName: 'NX Playground Events',
     title: 'NX Playground Events - 活動管理平台',
     description: '基於 LIFF 的活動管理平台，提供豐富的活動體驗',
@@ -69,6 +74,10 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang='zh-TW'>
+      <head>
+        <link rel='icon' href='/icon.svg' type='image/svg+xml' />
+        <link rel='apple-touch-icon' href='/apple-icon.svg' />
+      </head>
       <body className={inter.className}>{children}</body>
     </html>
   );
