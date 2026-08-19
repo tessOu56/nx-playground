@@ -21,6 +21,10 @@ export const metadata: Metadata = {
     telephone: false,
   },
   metadataBase: new URL('https://events.nx-playground.local'),
+  icons: {
+    icon: [{ url: '/icon.svg', type: 'image/svg+xml' }],
+    apple: [{ url: '/apple-icon.svg', type: 'image/svg+xml' }],
+  },
   alternates: {
     canonical: '/',
   },
