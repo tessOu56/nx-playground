@@ -1,61 +1,14 @@
 import { useQuery } from '@tanstack/react-query';
 import { listEvents, listOrders } from '@nx-playground/api-client/event-stack';
-import type { EventStackOrder } from '@nx-playground/api-client/event-stack';
 
+import { toPortalOrderListItem } from '../map-event-stack-order';
 import { mockBills } from '../../mock/bills';
 import { mockOrders } from '../../mock/orders';
 import { mockPayments } from '../../mock/payments';
 
 import type { OrderListItem, OrdersStats } from '@/types/orderList';
-import type { PaymentMethod } from '@/types/bill';
-import type { OrderStatus } from '@/types/order';
 
 const DEMO_USER_ID = 'user_demo';
-
-function paymentMethodFromData(data: Record<string, unknown>): PaymentMethod {
-  return data.paymentMethod === 'atm' ? 'atm' : 'cash';
-}
-
-function orderStatusFromApi(status: string): OrderStatus {
-  if (
-    status === 'pending' ||
-    status === 'confirmed' ||
-    status === 'completed' ||
-    status === 'cancelled'
-  ) {
-    return status;
-  }
-  return 'pending';
-}
-
-function toListItem(
-  order: EventStackOrder,
-  event?: { title?: string; startDate?: string }
-): OrderListItem {
-  const quantity =
-    Number(order.data.totalTickets ?? order.data.quantity ?? 1) || 1;
-  const totalAmount = Number(order.data.totalAmount ?? 0) || 0;
-  return {
-    id: order.id,
-    eventId: order.eventId,
-    userId: order.userId,
-    quantity,
-    totalAmount,
-    status: orderStatusFromApi(order.status),
-    paymentMethod: paymentMethodFromData(order.data),
-    createdAt: order.createdAt,
-    updatedAt: order.updatedAt,
-    itemsCount: quantity,
-    eventTitle: event?.title,
-    eventDate: event?.startDate,
-    billStatus: order.status,
-    paymentRecords: 0,
-    orderItemsSummary: {
-      totalItems: quantity,
-      ticketTypes: [],
-    },
-  };
-}
 
 export function useOrdersListByUser(userId: string = DEMO_USER_ID) {
   return useQuery({
@@ -67,7 +20,7 @@ export function useOrdersListByUser(userId: string = DEMO_USER_ID) {
       ]);
       const eventsById = new Map(events.items.map(event => [event.id, event]));
       return orders.items.map(order =>
-        toListItem(order, eventsById.get(order.eventId))
+        toPortalOrderListItem(order, eventsById.get(order.eventId))
       );
     },
     staleTime: 5 * 60 * 1000,

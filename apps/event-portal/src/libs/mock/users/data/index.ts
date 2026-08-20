@@ -5,6 +5,16 @@ import type { LiffUserInfo } from '@/types/line';
 
 // 統一的用戶列表（包含一般用戶和主辦方用戶）
 export const mockUsers: User[] = [
+  {
+    id: 'user_demo',
+    name: '一般用戶',
+    avatar: getVendorAvatarUrl('demo'),
+    email: 'user@nx-playground.local',
+    phone: '0912-345-678',
+    bio: 'Hobby demo 契約用戶（user_demo），不是登入帳號。',
+    joinedDate: '2026-08-18',
+    lineId: 'U_demo_user_demo_not_liff',
+  },
   // 一般用戶（只有參與者身份）
   {
     id: 'user-001',

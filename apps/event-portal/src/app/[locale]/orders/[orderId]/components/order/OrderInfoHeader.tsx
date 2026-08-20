@@ -10,7 +10,7 @@ interface OrderInfoHeaderProps {
   order: Order;
   scenario: string;
   orderItems: OrderItem[];
-  bill: Bill;
+  bill?: Bill;
 }
 
 export function OrderInfoHeader({
@@ -37,6 +37,10 @@ export function OrderInfoHeader({
     switch (status) {
       case 'pending':
         return 'bg-yellow-100 text-yellow-800';
+      case 'confirmed':
+        return 'bg-blue-100 text-blue-800';
+      case 'completed':
+        return 'bg-green-100 text-green-800';
       case 'verifying':
         return 'bg-blue-100 text-blue-800';
       case 'paid':
@@ -54,6 +58,10 @@ export function OrderInfoHeader({
     switch (status) {
       case 'pending':
         return '待付款';
+      case 'confirmed':
+        return '已確認';
+      case 'completed':
+        return '已完成';
       case 'verifying':
         return '核帳中';
       case 'paid':
@@ -67,14 +75,11 @@ export function OrderInfoHeader({
     }
   };
 
-  const totalQuantity = orderItems.reduce(
-    (sum, item) => sum + item.quantity,
-    0
-  );
-  const totalAmount = orderItems.reduce(
-    (sum, item) => sum + item.totalPrice,
-    0
-  );
+  const totalQuantity =
+    orderItems.reduce((sum, item) => sum + item.quantity, 0) || order.quantity;
+  const totalAmount =
+    orderItems.reduce((sum, item) => sum + item.totalPrice, 0) ||
+    order.totalAmount;
 
   return (
     <div className='bg-white rounded-lg shadow-md p-6'>
@@ -82,16 +87,18 @@ export function OrderInfoHeader({
         <h2 className='text-xl font-semibold text-gray-900'>
           訂單編號: {order.id}
         </h2>
-        <span className='px-3 py-1 bg-blue-100 text-blue-800 text-sm font-medium rounded-full'>
-          {scenario}
-        </span>
+        {scenario !== 'unknown' ? (
+          <span className='px-3 py-1 bg-blue-100 text-blue-800 text-sm font-medium rounded-full'>
+            {scenario}
+          </span>
+        ) : null}
       </div>
 
       <div className='grid grid-cols-1 md:grid-cols-2 gap-4 mb-4'>
         <div>
           <p className='text-sm text-gray-600'>客戶姓名</p>
           <p className='font-medium text-gray-900'>
-            {user?.name ?? '載入中...'}
+            {user?.name ?? order.userId}
           </p>
         </div>
         <div>
@@ -116,28 +123,32 @@ export function OrderInfoHeader({
         <div>
           <p className='text-sm text-gray-600'>轉帳帳號</p>
           <p className='font-medium text-gray-900'>
-            {order.paymentMethod === 'atm' ? bill?.transferAccount : '-'}
+            {order.paymentMethod === 'atm' ? bill?.transferAccount ?? '—' : '-'}
           </p>
         </div>
 
         <div>
           <p className='text-sm text-gray-600'>繳款期限</p>
           <p className='font-medium text-gray-900'>
-            {new Date(bill.dueDate).toLocaleDateString('zh-TW')}
+            {bill?.dueDate
+              ? new Date(bill.dueDate).toLocaleDateString('zh-TW')
+              : '—'}
           </p>
         </div>
 
         <div>
           <p className='text-sm text-gray-600'>繳款狀況</p>
           <p className='font-medium text-gray-900'>
-            {bill.id} -{getBillStatusLabel(bill.status)}
+            {bill?.id
+              ? `${bill.id} -${getBillStatusLabel(bill.status)}`
+              : '付款仍是示範殼'}
           </p>
         </div>
 
         <div>
           <p className='text-sm text-gray-600'>付款時間</p>
           <p className='font-medium text-gray-900'>
-            {bill.paidAt ? new Date(bill.paidAt).toLocaleString('zh-TW') : '-'}
+            {bill?.paidAt ? new Date(bill.paidAt).toLocaleString('zh-TW') : '-'}
           </p>
         </div>
       </div>
@@ -155,7 +166,9 @@ export function OrderInfoHeader({
       <div className='flex items-center justify-between pt-4'>
         <div>
           <p className='text-sm text-blue-700'>
-            共 {orderItems.length} 種票券，總計 {totalQuantity} 張
+            {orderItems.length > 0
+              ? `共 ${orderItems.length} 種票券，總計 ${totalQuantity} 張`
+              : `總計 ${totalQuantity} 張（票項明細仍是殼）`}
           </p>
         </div>
         <div className='text-right'>

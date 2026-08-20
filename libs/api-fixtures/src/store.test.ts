@@ -60,4 +60,11 @@ describe('event-stack fixtures', () => {
     const listed = store.listOrders({ userId: created.userId, limit: 50 });
     assert.ok(listed.items.some(order => order.id === created.id));
   });
+
+  it('seed order_demo_1 is readable by GET id', () => {
+    const store = new EventStackStore();
+    const fetched = store.getOrder('order_demo_1');
+    assert.equal(fetched?.id, 'order_demo_1');
+    assert.equal(fetched?.userId, 'user_demo');
+  });
 });

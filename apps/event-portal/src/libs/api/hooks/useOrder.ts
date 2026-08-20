@@ -1,8 +1,10 @@
 import { useQuery } from '@tanstack/react-query';
+import { getOrder } from '@nx-playground/api-client/event-stack';
 
+import { toPortalOrder } from '../map-event-stack-order';
 import { mockOrders } from '../../mock/orders';
 
-// 獲取所有訂單
+/** All-orders list remains mock (stats / leftover screens). Live list is useOrdersListByUser. */
 export function useOrders() {
   return useQuery({
     queryKey: ['orders'],
@@ -11,7 +13,7 @@ export function useOrders() {
   });
 }
 
-// 根據用戶 ID 獲取訂單
+/** User-filtered mock list. Live `/orders` uses useOrdersListByUser. */
 export function useOrdersByUser(userId: string) {
   return useQuery({
     queryKey: ['orders', 'user', userId],
@@ -21,26 +23,11 @@ export function useOrdersByUser(userId: string) {
   });
 }
 
-// 根據 ID 獲取訂單
+/** Live detail: GET /orders/{id}. Do not use mockOrders as queryFn. */
 export function useOrder(orderId: string) {
   return useQuery({
-    queryKey: ['order', orderId],
-    queryFn: () => {
-      console.log('useOrder queryFn called for orderId:', orderId);
-
-      // 從 mock 資料中查找訂單
-      const order = mockOrders.find(order => order.id === orderId);
-      if (!order) {
-        console.error(
-          `Order with id ${orderId} not found in mockOrders:`,
-          mockOrders
-        );
-        throw new Error(`Order with id ${orderId} not found`);
-      }
-
-      // 只返回純粹的 order 資料
-      return order;
-    },
+    queryKey: ['event-stack', 'order', orderId],
+    queryFn: async () => toPortalOrder(await getOrder(orderId)),
     staleTime: 5 * 60 * 1000,
     enabled: !!orderId,
   });
