@@ -2,13 +2,12 @@ import { Suspense } from 'react';
 
 import { OrderSkeleton, OrderDetail } from './components';
 
-import { mockOrders } from '@/libs/mock/orders';
+import { orderStaticParams } from '@/libs/api/order-static-params';
 
-// 生成靜態參數
+export const dynamicParams = true;
+
 export async function generateStaticParams() {
-  return mockOrders.map(order => ({
-    orderId: order.id,
-  }));
+  return orderStaticParams();
 }
 
 export default async function OrderPage({
