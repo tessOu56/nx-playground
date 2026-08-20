@@ -68,6 +68,19 @@ describe('event-stack fixtures', () => {
     assert.equal(fetched?.userId, 'user_demo');
   });
 
+  it('published catalog events carry sessions and prices in data', () => {
+    const react = loadFixtureEvents().find(event => event.id === 'event_react19');
+    const catalog = react?.data as { sessions?: { tickets?: { price?: number }[] }[] };
+    assert.ok(catalog?.sessions && catalog.sessions.length >= 2);
+    assert.equal(catalog.sessions[0]?.tickets?.[0]?.price, 800);
+    const archived = loadFixtureEvents().find(
+      event => event.id === 'event_archived'
+    );
+    assert.equal(archived?.status, 'cancelled');
+    const draft = loadFixtureEvents().find(event => event.id === 'event_nx');
+    assert.equal(draft?.status, 'draft');
+  });
+
   it('createOrder stubs a LINE attendee instead of requiring a seeded user', () => {
     const store = new EventStackStore();
     const created = store.createOrder({

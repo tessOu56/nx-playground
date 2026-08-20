@@ -26,9 +26,16 @@ export function isEventCompleted(eventDate: string): boolean {
  */
 export function canSellTicket(
   eventDate: string,
-  availableQuantity: number
+  availableQuantity: number,
+  ticket?: { saleEndTime?: string; status?: string }
 ): boolean {
   if (isEventCompleted(eventDate)) {
+    return false;
+  }
+  if (ticket?.status === 'stopped' || ticket?.status === 'sold_out') {
+    return false;
+  }
+  if (ticket?.saleEndTime && new Date(ticket.saleEndTime) <= new Date()) {
     return false;
   }
 

@@ -15,35 +15,264 @@
     {
       "id": "event_react19",
       "title": "React 19 技術分享會",
-      "description": "深入了解 React 19 的新特性和最佳實踐",
-      "location": "台北市信義區",
+      "description": "從 compiler、Actions 到表單狀態，帶現場工程師把 React 19 接到現有 Next 專案。",
+      "location": "台北市信義區松高路 1 號 12 樓",
       "startDate": "2026-11-15T14:00:00.000Z",
       "endDate": "2026-11-15T17:00:00.000Z",
-      "maxAttendees": 50,
+      "maxAttendees": 80,
       "status": "published",
-      "formId": "form_basic"
+      "formId": "form_basic",
+      "data": {
+        "image": "https://picsum.photos/seed/event_react19/1200/640",
+        "category": "前端",
+        "tags": ["React", "Next.js"],
+        "saleStart": "2026-08-01T00:00:00.000Z",
+        "saleEnd": "2026-11-14T16:00:00.000Z",
+        "content": [
+          {
+            "type": "h2",
+            "text_data": "這場會講什麼"
+          },
+          {
+            "type": "text",
+            "text_data": "不是發佈會回放。我們用一個活動報名頁當範例，走完 compiler、useActionState、以及錯誤邊界怎麼接到既有 API。"
+          },
+          {
+            "type": "list",
+            "text_data": "14:00 報到\n14:20 React 19 變更地圖\n15:20 實作：表單 Actions\n16:20 問答"
+          }
+        ],
+        "faq": [
+          {
+            "question": "需要自備筆電嗎？",
+            "answer": "聽講不強制。想跟著改範例請帶 Node 22 與 pnpm。"
+          },
+          {
+            "question": "現場有飲食嗎？",
+            "answer": "有茶水與簡單點心。午晚餐請自理。"
+          }
+        ],
+        "sessions": [
+          {
+            "id": "event_react19-session-a",
+            "name": "下午場",
+            "date": "2026-11-15",
+            "time": "14:00",
+            "capacity": 50,
+            "tickets": [
+              {
+                "id": "event_react19-ticket-general",
+                "name": "一般票",
+                "description": "含座位與投影片",
+                "price": 800,
+                "totalQuantity": 40,
+                "availableQuantity": 40,
+                "status": "selling",
+                "saleStartTime": "2026-08-01T00:00:00.000Z",
+                "saleEndTime": "2026-11-14T16:00:00.000Z"
+              },
+              {
+                "id": "event_react19-ticket-vip",
+                "name": "交流票",
+                "description": "一般票＋會後 30 分鐘講者問答",
+                "price": 1500,
+                "totalQuantity": 10,
+                "availableQuantity": 10,
+                "status": "selling",
+                "saleStartTime": "2026-08-01T00:00:00.000Z",
+                "saleEndTime": "2026-11-14T16:00:00.000Z"
+              }
+            ]
+          },
+          {
+            "id": "event_react19-session-b",
+            "name": "晚場加開",
+            "date": "2026-11-15",
+            "time": "18:30",
+            "capacity": 30,
+            "tickets": [
+              {
+                "id": "event_react19-ticket-evening",
+                "name": "晚場票",
+                "description": "精簡版議程，適合下班後參加",
+                "price": 600,
+                "totalQuantity": 30,
+                "availableQuantity": 30,
+                "status": "selling",
+                "saleStartTime": "2026-08-01T00:00:00.000Z",
+                "saleEndTime": "2026-11-14T16:00:00.000Z"
+              }
+            ]
+          }
+        ]
+      }
     },
     {
       "id": "event_nestjs",
       "title": "NestJS 實戰工作坊",
-      "description": "從零開始構建企業級後端應用",
-      "location": "台北市大安區",
+      "description": "一天把 OpenAPI、Prisma 與模組邊界走完。報名已截止，活動尚未舉行。",
+      "location": "台北市大安區復興南路一段 390 號",
       "startDate": "2026-12-01T09:00:00.000Z",
       "endDate": "2026-12-01T16:00:00.000Z",
       "maxAttendees": 30,
       "status": "published",
-      "formId": "form_basic"
+      "formId": "form_basic",
+      "data": {
+        "image": "https://picsum.photos/seed/event_nestjs/1200/640",
+        "category": "後端",
+        "tags": ["NestJS", "Prisma"],
+        "saleStart": "2026-06-01T00:00:00.000Z",
+        "saleEnd": "2026-08-01T16:00:00.000Z",
+        "content": [
+          {
+            "type": "text",
+            "text_data": "名額已額滿並關閉售票。活動當日仍會舉行，現場不接受加購。"
+          }
+        ],
+        "faq": [
+          {
+            "question": "可以候補嗎？",
+            "answer": "這場不開放候補。之後場次請看活動列表。"
+          }
+        ],
+        "sessions": [
+          {
+            "id": "event_nestjs-session",
+            "name": "全日工作坊",
+            "date": "2026-12-01",
+            "time": "09:00",
+            "capacity": 30,
+            "tickets": [
+              {
+                "id": "event_nestjs-ticket-general",
+                "name": "工作坊票",
+                "description": "含午餐",
+                "price": 3200,
+                "totalQuantity": 30,
+                "availableQuantity": 4,
+                "status": "stopped",
+                "saleStartTime": "2026-06-01T00:00:00.000Z",
+                "saleEndTime": "2026-08-01T16:00:00.000Z"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "event_summer",
+      "title": "夏日開源小聚",
+      "description": "2026 年 7 月已舉辦的社群小聚。留下議程給後來者參考。",
+      "location": "台中市西區公益路 130 號",
+      "startDate": "2026-07-12T13:00:00.000Z",
+      "endDate": "2026-07-12T17:00:00.000Z",
+      "maxAttendees": 40,
+      "status": "published",
+      "formId": "form_basic",
+      "data": {
+        "image": "https://picsum.photos/seed/event_summer/1200/640",
+        "category": "社群",
+        "tags": ["開源"],
+        "saleStart": "2026-05-01T00:00:00.000Z",
+        "saleEnd": "2026-07-11T16:00:00.000Z",
+        "content": [
+          {
+            "type": "text",
+            "text_data": "這場已經結束。投影片會放在主辦單位之後公告，不開放補報名。"
+          }
+        ],
+        "faq": [
+          {
+            "question": "有錄影嗎？",
+            "answer": "沒有整場錄影。部分講者投影片會另外公開。"
+          }
+        ],
+        "sessions": [
+          {
+            "id": "event_summer-session",
+            "name": "下午場",
+            "date": "2026-07-12",
+            "time": "13:00",
+            "capacity": 40,
+            "tickets": [
+              {
+                "id": "event_summer-ticket-free",
+                "name": "免費入場",
+                "description": "需報名，現場報到",
+                "price": 0,
+                "totalQuantity": 40,
+                "availableQuantity": 0,
+                "status": "stopped",
+                "saleStartTime": "2026-05-01T00:00:00.000Z",
+                "saleEndTime": "2026-07-11T16:00:00.000Z"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "event_archived",
+      "title": "城市夜跑（已下架）",
+      "description": "主辦改期，這筆活動已下架，僅留目錄紀錄。",
+      "location": "高雄市鹽埕區",
+      "startDate": "2026-10-10T18:00:00.000Z",
+      "endDate": "2026-10-10T21:00:00.000Z",
+      "maxAttendees": 200,
+      "status": "cancelled",
+      "formId": "form_basic",
+      "data": {
+        "image": "https://picsum.photos/seed/event_archived/1200/640",
+        "category": "戶外",
+        "tags": ["路跑"],
+        "saleStart": "2026-08-01T00:00:00.000Z",
+        "saleEnd": "2026-09-01T16:00:00.000Z",
+        "content": [
+          {
+            "type": "text",
+            "text_data": "活動已取消。請勿報名或轉讓舊票。"
+          }
+        ],
+        "faq": [],
+        "sessions": [
+          {
+            "id": "event_archived-session",
+            "name": "夜跑",
+            "date": "2026-10-10",
+            "time": "18:00",
+            "capacity": 200,
+            "tickets": [
+              {
+                "id": "event_archived-ticket",
+                "name": "報名名額",
+                "price": 350,
+                "totalQuantity": 200,
+                "availableQuantity": 200,
+                "status": "stopped",
+                "saleStartTime": "2026-08-01T00:00:00.000Z",
+                "saleEndTime": "2026-09-01T16:00:00.000Z"
+              }
+            ]
+          }
+        ]
+      }
     },
     {
       "id": "event_nx",
       "title": "Nx Monorepo 最佳實踐",
-      "description": "大型專案的架構設計和管理",
+      "description": "大型專案的架構設計和管理（草稿，不出現在公開列表）。",
       "location": "線上",
       "startDate": "2026-12-20T19:00:00.000Z",
       "endDate": "2026-12-20T21:00:00.000Z",
       "maxAttendees": 100,
       "status": "draft",
-      "formId": "form_basic"
+      "formId": "form_basic",
+      "data": {
+        "image": "https://picsum.photos/seed/event_nx/1200/640",
+        "category": "工程",
+        "tags": ["Nx"],
+        "sessions": []
+      }
     }
   ]
 }

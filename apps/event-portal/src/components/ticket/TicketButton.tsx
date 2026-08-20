@@ -22,7 +22,7 @@ export function TicketButton({
   onTicketClick,
   className,
 }: TicketButtonProps) {
-  const canSell = canSellTicket(eventDate, ticket.availableQuantity);
+  const canSell = canSellTicket(eventDate, ticket.availableQuantity, ticket);
   const isSoldOut = ticket.availableQuantity === 0;
   const isEventCompleted = !canSell && !isSoldOut;
 
@@ -31,6 +31,7 @@ export function TicketButton({
   };
 
   const getStatusText = () => {
+    if (ticket.status === 'stopped') return '報名截止';
     if (isEventCompleted) return '活動已結束';
     if (isSoldOut) return '已售完';
     return '可購買';

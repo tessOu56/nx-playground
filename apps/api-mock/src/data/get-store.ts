@@ -40,7 +40,11 @@ let cached: EventStackRepo | undefined;
 
 export function getEventStackRepo(): EventStackRepo {
   if (cached) return cached;
+  const forceMemory =
+    process.env.EVENT_STACK_STORE === 'memory' ||
+    process.env.EVENT_STACK_STORE === '1';
   const databaseUrl = process.env.DATABASE_URL;
-  cached = databaseUrl ? createNeonStore(databaseUrl) : memoryRepo();
+  cached =
+    !forceMemory && databaseUrl ? createNeonStore(databaseUrl) : memoryRepo();
   return cached;
 }

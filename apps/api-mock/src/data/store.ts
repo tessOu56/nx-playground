@@ -94,6 +94,7 @@ export class EventStackStore {
       maxAttendees: input.maxAttendees,
       status: input.status ?? 'draft',
       formId: input.formId,
+      data: input.data,
       createdAt: stamped,
       updatedAt: stamped,
     };

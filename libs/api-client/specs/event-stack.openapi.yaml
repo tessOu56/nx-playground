@@ -416,6 +416,10 @@ components:
           enum: [draft, published]
         formId:
           type: string
+        data:
+          type: object
+          additionalProperties: true
+          description: Catalog extras. Mock demo fills this; Nest may omit.
     Event:
       type: object
       required: [id, title, startDate, endDate, status, createdAt, updatedAt]
@@ -441,6 +445,10 @@ components:
           enum: [draft, published, cancelled]
         formId:
           type: string
+        data:
+          type: object
+          additionalProperties: true
+          description: Catalog extras (sessions, tickets, content). Mock demo fills this; Nest may omit.
         createdAt:
           type: string
           format: date-time

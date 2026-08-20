@@ -10,6 +10,7 @@ export interface EventRecord {
   maxAttendees?: number;
   status: string;
   formId?: string;
+  data?: Record<string, unknown>;
   createdAt: string;
   updatedAt: string;
 }
@@ -57,6 +58,7 @@ export interface CreateEventInput {
   maxAttendees?: number;
   status?: string;
   formId?: string;
+  data?: Record<string, unknown>;
 }
 
 export interface CreateOrderInput {

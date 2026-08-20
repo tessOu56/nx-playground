@@ -92,4 +92,6 @@ Cash / free checkout calls `POST /orders/{id}/confirm`, which **issues tickets**
 
 Checkout **第三方支付** creates `POST /payments/intents` then opens mock checkout (`GET /payments/mock-complete/{id}`) until `ECPAY_MERCHANT_ID` / `ECPAY_HASH_KEY` / `ECPAY_HASH_IV` are set. Webhook `POST /payments/webhook` is idempotent and issues tickets via confirm. Live merchant remains T-244 / STOP-014. This app never collects card numbers.
 
+Public Vercel C-end (T-258) talks to Hobby api-mock **memory** (`EVENT_STACK_STORE=memory`). Catalog comes from fixtures; orders/tickets do not survive a cold start. Product updates events by editing `libs/api-fixtures/src/events.json` and redeploying the mock.
+
 Set `PUBLIC_API_BASE_URL` (API origin + `/api`) and `PORTAL_PUBLIC_URL` (portal origin) so mock checkout can redirect back.

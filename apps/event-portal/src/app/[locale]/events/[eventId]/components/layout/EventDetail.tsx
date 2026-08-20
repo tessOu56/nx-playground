@@ -22,6 +22,7 @@ import {
   useVendorStoreActions,
 } from '@/libs';
 import { useLocalizedRouter } from '@/libs/i18n';
+import { canSellTicket } from '@/libs/utils/eventUtils';
 
 interface EventDetailProps {
   eventId: string;
@@ -81,11 +82,11 @@ export function EventDetail({ eventId }: EventDetailProps) {
   };
 
   const handleRegisterClick = (sessionId: string) => {
-    const session = event?.sessions?.find(s => s.id === sessionId);
+    if (!event) return;
+    const session = event.sessions?.find(s => s.id === sessionId);
     if (session) {
-      // 找到第一個可用的票券
-      const availableTicket = session.tickets?.find(
-        ticket => ticket.availableQuantity > 0
+      const availableTicket = session.tickets?.find(ticket =>
+        canSellTicket(event.date, ticket.availableQuantity, ticket)
       );
 
       if (availableTicket) {

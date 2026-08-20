@@ -26,7 +26,7 @@ export function EventSessionCard({
 }: EventSessionCardProps) {
   const hasAvailableTickets =
     session.tickets?.some(ticket =>
-      canSellTicket(event.date, ticket.availableQuantity)
+      canSellTicket(event.date, ticket.availableQuantity, ticket)
     ) ?? false;
 
   return (
@@ -105,11 +105,11 @@ export function EventSessionCard({
             className='w-full h-12'
             disabled={!hasAvailableTickets}
           >
-            {hasAvailableTickets ? '場次報名' : '暫無可售票券'}
+            {hasAvailableTickets ? '場次報名' : '無法報名'}
           </Button>
           {!hasAvailableTickets && (
             <p className='text-sm text-gray-500 text-center mt-2'>
-              此場次目前沒有可售票券
+              此場次已舉辦、已下架或報名截止
             </p>
           )}
         </div>

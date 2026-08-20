@@ -28,6 +28,14 @@ export class Event {
   @ApiProperty({ required: false })
   formId?: string;
 
+  @ApiProperty({
+    required: false,
+    type: 'object',
+    additionalProperties: true,
+    description: 'Catalog extras. Mock demo fills this; Nest may omit.',
+  })
+  data?: Record<string, unknown>;
+
   @ApiProperty()
   createdAt: Date;
 

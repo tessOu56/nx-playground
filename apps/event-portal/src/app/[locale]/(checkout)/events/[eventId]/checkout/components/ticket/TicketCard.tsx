@@ -17,7 +17,7 @@ export function TicketCard({
   quantity,
   onQuantityChange,
 }: TicketCardProps) {
-  const canSell = canSellTicket(event.date, ticket.availableQuantity);
+  const canSell = canSellTicket(event.date, ticket.availableQuantity, ticket);
 
   return (
     <div
@@ -76,7 +76,9 @@ export function TicketCard({
           }`}
         >
           {!canSell
-            ? '活動已結束'
+            ? ticket.status === 'stopped'
+              ? '報名截止'
+              : '活動已結束'
             : ticket.availableQuantity === 0
             ? '已售完'
             : '可購買'}

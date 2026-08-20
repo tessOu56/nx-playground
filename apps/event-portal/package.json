@@ -8,6 +8,7 @@
   "dependencies": {
     "@is_tess/sdk": "0.1.0",
     "@line/liff": "2.27.1",
+    "@next/env": "15.5.9",
     "@nx-playground/api-client": "workspace:*",
     "@nx-playground/auth-client": "workspace:*",
     "@nx-playground/design-system": "workspace:*",
@@ -41,13 +42,13 @@
     "react-hook-form": "7.62.0",
     "react-i18next": "15.6.1",
     "react-router-dom": "6.29.0",
+    "sharp": "0.34.3",
     "style-dictionary": "5.0.1",
     "swiper": "12.0.1",
     "tailwind-merge": "3.3.1",
     "tailwindcss-animate": "1.0.7",
-    "zustand": "5.0.6",
     "typescript": "5.8.2",
-    "sharp": "0.34.3"
+    "zustand": "5.0.6"
   },
   "packageManager": "pnpm@10.13.1",
   "pnpm": {

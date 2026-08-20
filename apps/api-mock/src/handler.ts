@@ -5,7 +5,6 @@ import {
   mockCompleteHtml,
   portalOrderReturnUrl,
 } from './data/payments.js';
-import { mockCompleteHtml, portalOrderReturnUrl } from './data/payments.js';
 
 const DEFAULT_CORS_ORIGINS = [
   'https://nx-event-portal.vercel.app',
@@ -72,19 +71,6 @@ export function sendHtml(
     'Content-Type': 'text/html; charset=utf-8',
   });
   res.end(html);
-}
-
-export function send(
-  req: IncomingMessage,
-  res: ServerResponse,
-  status: number,
-  body?: unknown
-) {
-  res.writeHead(status, {
-    ...corsHeaders(req),
-    'Content-Type': 'application/json',
-  });
-  res.end(body === undefined ? '' : JSON.stringify(body));
 }
 
 export async function readJson(req: IncomingMessage): Promise<Record<string, unknown>> {

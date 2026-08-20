@@ -7,6 +7,7 @@ export interface CreateEventDto {
   maxAttendees?: number;
   status?: 'draft' | 'published';
   formId?: string;
+  data?: Record<string, unknown>;
 }
 
 export interface EventStackEvent {
@@ -19,6 +20,7 @@ export interface EventStackEvent {
   maxAttendees?: number;
   status: string;
   formId?: string;
+  data?: Record<string, unknown>;
   createdAt: string;
   updatedAt: string;
 }

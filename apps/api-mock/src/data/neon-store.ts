@@ -104,20 +104,6 @@ function mapPaymentIntent(row: Record<string, unknown>): PaymentIntentRecord {
   };
 }
 
-function mapPaymentIntent(row: Record<string, unknown>): PaymentIntentRecord {
-  return {
-    id: String(row.id),
-    orderId: String(row.order_id),
-    provider: String(row.provider) as PaymentIntentRecord['provider'],
-    status: String(row.status) as PaymentIntentRecord['status'],
-    merchantTradeNo: String(row.merchant_trade_no),
-    amount: Number(row.amount),
-    checkoutUrl: String(row.checkout_url),
-    createdAt: String(row.created_at),
-    updatedAt: String(row.updated_at),
-  };
-}
-
 export function createNeonStore(databaseUrl: string): EventStackRepo {
   const sql = neon(databaseUrl);
   let boot: Promise<void> | undefined;

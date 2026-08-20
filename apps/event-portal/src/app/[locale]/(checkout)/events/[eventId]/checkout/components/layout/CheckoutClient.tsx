@@ -21,6 +21,7 @@ import {
 import { useToast } from '@/components';
 import { useEvent } from '@/libs/api/hooks';
 import { useCheckoutStore } from '@/stores/checkoutStore';
+import { canSellTicket } from '@/libs/utils/eventUtils';
 import type { Session, SessionTicket, PaymentMethod } from '@/types';
 
 interface CheckoutClientProps {
@@ -116,6 +117,23 @@ export function CheckoutClient({
         <TicketError type='loading-error' />
         <PaymentError type='loading-error' />
         <OrderError type={error ? 'loading-error' : 'no-event-data'} />
+      </div>
+    );
+  }
+
+  const canRegister = event.sessions.some(session =>
+    session.tickets.some(ticket =>
+      canSellTicket(event.date, ticket.availableQuantity, ticket)
+    )
+  );
+
+  if (!canRegister) {
+    return (
+      <div className='rounded-lg bg-white p-6 text-center shadow-md'>
+        <h2 className='text-lg font-semibold text-gray-900'>目前無法報名</h2>
+        <p className='mt-2 text-sm text-gray-600'>
+          這場活動已舉辦、已下架，或售票已截止。請回到列表選其他場次。
+        </p>
       </div>
     );
   }

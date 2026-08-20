@@ -12,6 +12,7 @@ export const eventRecordSchema = {
     maxAttendees: { type: 'integer' },
     status: { enum: ['draft', 'published', 'cancelled'] },
     formId: { type: 'string' },
+    data: { type: 'object' },
     createdAt: { type: 'string' },
     updatedAt: { type: 'string' },
   },
@@ -30,6 +31,7 @@ export const createEventSchema = {
     maxAttendees: { type: 'integer' },
     status: { enum: ['draft', 'published'] },
     formId: { type: 'string' },
+    data: { type: 'object' },
   },
 } as const;
 
