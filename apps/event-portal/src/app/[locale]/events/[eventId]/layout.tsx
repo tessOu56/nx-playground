@@ -5,6 +5,7 @@ import {
 } from '@tanstack/react-query';
 import { headers } from 'next/headers';
 
+import { BackLink } from '@/components/nav/BackLink';
 import { PageConfigs, prefetchEventPage, generateEventMetadata } from '@/libs';
 
 // 使用活動詳情頁面配置，包含動態 metadata 生成
@@ -16,9 +17,9 @@ export default async function EventDetailLayout({
   params,
 }: {
   children: React.ReactNode;
-  params: Promise<{ eventId: string }>;
+  params: Promise<{ locale: string; eventId: string }>;
 }) {
-  const { eventId } = await params;
+  const { locale, eventId } = await params;
 
   // 檢查當前路由是否為 checkout
   // 使用更簡單的方法：直接檢查 URL 中的路徑段
@@ -48,11 +49,14 @@ export default async function EventDetailLayout({
         <div className='page-container'>
           {/* 頁面標題 - 只在非 checkout 頁面顯示 */}
           {!isCheckoutPage && (
-            <div className='text-center mb-8'>
-              <h1 className='text-3xl font-bold text-gray-900 mb-2'>
-                活動詳情
-              </h1>
-              <p className='text-gray-600'>查看活動資訊和報名詳情</p>
+            <div className='mb-8'>
+              <BackLink href={`/${locale}/events`} />
+              <div className='text-center'>
+                <h1 className='text-3xl font-bold text-gray-900 mb-2'>
+                  活動詳情
+                </h1>
+                <p className='text-gray-600'>查看活動資訊和報名詳情</p>
+              </div>
             </div>
           )}
 

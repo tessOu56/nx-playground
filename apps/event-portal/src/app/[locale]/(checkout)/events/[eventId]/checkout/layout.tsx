@@ -4,6 +4,7 @@ import {
   HydrationBoundary,
 } from '@tanstack/react-query';
 
+import { BackLink } from '@/components/nav/BackLink';
 import { PageConfigs, prefetchEventPage } from '@/libs';
 
 // 使用結帳頁面配置，需要即時處理付款
@@ -14,9 +15,9 @@ export default async function CheckoutLayout({
   params,
 }: {
   children: React.ReactNode;
-  params: Promise<{ eventId: string }>;
+  params: Promise<{ locale: string; eventId: string }>;
 }) {
-  const { eventId } = await params;
+  const { locale, eventId } = await params;
 
   // 1. 創建 QueryClient 實例
   const queryClient = new QueryClient();
@@ -32,9 +33,12 @@ export default async function CheckoutLayout({
       <div className='min-h-screen bg-gray-50'>
         <div className='page-container'>
           {/* 頁面標題 - 結帳專用 */}
-          <div className='text-center mb-8'>
-            <h1 className='text-3xl font-bold text-gray-900 mb-2'>選擇票券</h1>
-            <p className='text-gray-600'>請選擇您想要的票券類型和付款方式</p>
+          <div className='mb-8'>
+            <BackLink href={`/${locale}/events/${eventId}`} />
+            <div className='text-center'>
+              <h1 className='text-3xl font-bold text-gray-900 mb-2'>選擇票券</h1>
+              <p className='text-gray-600'>請選擇您想要的票券類型和付款方式</p>
+            </div>
           </div>
 
           {/* 子頁面內容 */}
