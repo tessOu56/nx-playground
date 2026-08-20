@@ -2,96 +2,90 @@
 
 import { useLocale } from 'next-intl';
 
-import { Badge, Button, Card, CardContent } from '@/components';
-import { getPageNumbersWithLocale } from '@/libs';
+import { Button, Card, CardContent } from '@/components';
+import { useLocalizedRouter } from '@/libs/i18n';
+
+const STEPS_ZH = [
+  {
+    n: '1',
+    title: '瀏覽活動',
+    body: '查看場次、票種與報名狀態。',
+  },
+  {
+    n: '2',
+    title: 'LINE 登入報名',
+    body: '用 LINE 帳號報名，訂單會綁在您身上。',
+  },
+  {
+    n: '3',
+    title: '出示票券',
+    body: '報名完成後到「我的訂單」查看與核銷票券。',
+  },
+] as const;
+
+const STEPS_EN = [
+  {
+    n: '1',
+    title: 'Browse events',
+    body: 'Check sessions, ticket types, and whether registration is open.',
+  },
+  {
+    n: '2',
+    title: 'Sign in with LINE',
+    body: 'Register with your LINE account so orders stay with you.',
+  },
+  {
+    n: '3',
+    title: 'Show your ticket',
+    body: 'Open My orders after signup to view and check in.',
+  },
+] as const;
 
 export function UserFlowSection() {
   const locale = useLocale();
-  const pageNumbers = getPageNumbersWithLocale(locale);
-
-  // 定義用戶流程頁面的順序
-  const userFlowPages = [
-    'home',
-    'vendor-detail',
-    'event-detail',
-    'checkout',
-    'order',
-    'registration',
-    'feedback',
-    'ticket-detail',
-  ];
-
-  // 獲取用戶流程頁面配置
-  const userFlowData = userFlowPages
-    .map(key => ({ key, page: pageNumbers.allPages[key] }))
-    .filter(({ page }) => page);
+  const router = useLocalizedRouter();
+  const isEn = locale === 'en';
+  const steps = isEn ? STEPS_EN : STEPS_ZH;
 
   return (
     <section className='py-24 bg-gray-50'>
       <div className='mx-auto max-w-7xl px-4 sm:px-6 lg:px-8'>
         <div className='mx-auto max-w-2xl text-center'>
           <h2 className='text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl'>
-            {locale === 'en' ? 'User Flow' : '用戶流程'}
+            {isEn ? 'How it works' : '怎麼參加'}
           </h2>
           <p className='mt-4 text-lg leading-8 text-gray-600'>
-            {locale === 'en'
-              ? 'From discovering vendors to completing event check-in, we provide a complete event experience flow'
-              : '從發現主辦方到完成活動報到，我們提供完整的活動體驗流程'}
+            {isEn
+              ? 'From finding an event to showing your ticket at the door.'
+              : '從發現活動到入場出示票券。'}
           </p>
         </div>
 
-        <div className='mt-16 space-y-6'>
-          {userFlowData.map(({ key, page }) => (
-            <Card
-              key={key}
-              className='border-0 shadow-md hover:shadow-lg transition-shadow'
-            >
+        <div className='mt-16 grid gap-6 sm:grid-cols-3'>
+          {steps.map(step => (
+            <Card key={step.n} className='border-0 shadow-md'>
               <CardContent className='p-6'>
-                <div className='flex items-center space-x-6'>
-                  <div className='flex-shrink-0'>
-                    <div className='w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center'>
-                      <span className='text-xl font-bold text-blue-600'>
-                        {page.number}
-                      </span>
-                    </div>
-                  </div>
-                  <div className='flex-1'>
-                    <div className='flex items-center space-x-3 mb-2'>
-                      <h3 className='text-xl font-semibold text-gray-900'>
-                        {page.title}
-                      </h3>
-                      <Badge>
-                        {page.isPublic
-                          ? locale === 'en'
-                            ? 'Public'
-                            : '公開'
-                          : locale === 'en'
-                          ? 'Login'
-                          : '登入'}
-                      </Badge>
-                    </div>
-                    <p className='text-gray-600 mb-3'>{page.description}</p>
-                    <div className='flex items-center space-x-4 text-sm text-gray-500'>
-                      <span>
-                        {locale === 'en' ? 'Path' : '路徑'}: {page.path}
-                      </span>
-                      <span>•</span>
-                      <span>
-                        SEO:{' '}
-                        {page.seo?.title ??
-                          (locale === 'en' ? 'Not set' : '未設定')}
-                      </span>
-                    </div>
-                  </div>
-                  <div className='flex-shrink-0'>
-                    <Button variant='outline' size='sm'>
-                      {locale === 'en' ? 'View Details' : '查看詳情'}
-                    </Button>
-                  </div>
+                <div className='mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-green-100 text-lg font-bold text-green-700'>
+                  {step.n}
                 </div>
+                <h3 className='text-xl font-semibold text-gray-900'>
+                  {step.title}
+                </h3>
+                <p className='mt-2 text-gray-600'>{step.body}</p>
               </CardContent>
             </Card>
           ))}
+        </div>
+
+        <div className='mt-12 text-center'>
+          <Button
+            variant='primary'
+            size='lg'
+            className='bg-green-600 hover:bg-green-700 text-white font-semibold'
+            onClick={() => router.push('/events')}
+          >
+            {isEn ? 'See events' : '查看活動'}
+          </Button>
         </div>
       </div>
     </section>

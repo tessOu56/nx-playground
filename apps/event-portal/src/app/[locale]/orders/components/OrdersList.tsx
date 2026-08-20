@@ -106,7 +106,7 @@ export function OrdersList() {
           <h3 className='text-xl font-semibold text-gray-900 mb-2'>暫無訂單</h3>
           <p className='text-gray-600 mb-4'>您還沒有任何活動訂單</p>
           <Button
-            onClick={() => router.push('/')}
+            onClick={() => router.push('/events')}
             variant='primary'
             className='w-full'
           >
@@ -128,7 +128,7 @@ export function OrdersList() {
       </p>
       {!isLiffIdentity ? (
         <p className='text-sm text-amber-700 text-center' data-testid='attendee-demo-identity'>
-          示範身分（未綁 LINE）。真實參加者需 owner 自己的 LINE Developers／LIFF（STOP-013），不可用其他公司帳號。
+          尚未 LINE 登入。回首頁登入後，可查看綁在您帳號的訂單。
         </p>
       ) : null}
 

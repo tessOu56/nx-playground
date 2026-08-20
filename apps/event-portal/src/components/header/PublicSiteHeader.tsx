@@ -1,8 +1,11 @@
 import Link from 'next/link';
 
+import { PublicSiteAccount } from './PublicSiteAccount';
+
 export function PublicSiteHeader({ locale }: { locale: string }) {
   const home = `/${locale}`;
   const events = `/${locale}/events`;
+  const isEn = locale === 'en';
 
   return (
     <>
@@ -11,16 +14,17 @@ export function PublicSiteHeader({ locale }: { locale: string }) {
           <Link href={home} className='text-lg font-semibold text-gray-900'>
             NX Playground Events
           </Link>
-          <nav className='flex gap-4 text-sm'>
+          <nav className='flex items-center gap-4 text-sm'>
             <Link href={events} className='text-gray-700 hover:text-gray-900'>
-              活動
+              {isEn ? 'Events' : '活動'}
             </Link>
             <Link
               href={`${home}/orders`}
               className='text-gray-700 hover:text-gray-900'
             >
-              訂單
+              {isEn ? 'Orders' : '訂單'}
             </Link>
+            <PublicSiteAccount locale={locale} />
           </nav>
         </div>
       </header>

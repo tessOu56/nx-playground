@@ -151,7 +151,7 @@ export function OrderSummary({ event }: OrderSummaryProps) {
           </p>
         ) : !isLiffIdentity ? (
           <p className='text-xs text-amber-700 mt-2 text-center' data-testid='attendee-demo-identity'>
-            示範身分（未綁 LINE）
+            尚未 LINE 登入，訂單不會綁到 LINE 帳號
           </p>
         ) : !canProceedToNext ? (
           <p className='text-xs text-gray-500 mt-2 text-center'>
