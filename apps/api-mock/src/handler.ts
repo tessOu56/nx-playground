@@ -2,15 +2,43 @@ import type { IncomingMessage, ServerResponse } from 'node:http';
 
 import { getEventStackRepo } from './data/get-store.js';
 
-export const CORS: Record<string, string> = {
-  'Access-Control-Allow-Origin': process.env.CORS_ORIGIN || '*',
-  'Access-Control-Allow-Methods': 'GET,POST,PUT,DELETE,OPTIONS',
-  'Access-Control-Allow-Headers': 'Content-Type,Authorization',
-};
+const DEFAULT_CORS_ORIGINS = [
+  'https://nx-event-portal.vercel.app',
+  'http://localhost:3000',
+  'http://localhost:3002',
+  'http://localhost:3004',
+];
 
-export function send(res: ServerResponse, status: number, body?: unknown) {
+export function allowedCorsOrigins(): string[] {
+  return (process.env.CORS_ORIGIN || DEFAULT_CORS_ORIGINS.join(','))
+    .split(',')
+    .map(origin => origin.trim())
+    .filter(Boolean);
+}
+
+export function corsHeaders(req: IncomingMessage): Record<string, string> {
+  const allowed = allowedCorsOrigins();
+  const requestOrigin = req.headers.origin;
+  const allow =
+    requestOrigin && allowed.includes(requestOrigin)
+      ? requestOrigin
+      : allowed[0] ?? 'https://nx-event-portal.vercel.app';
+  return {
+    'Access-Control-Allow-Origin': allow,
+    'Access-Control-Allow-Methods': 'GET,POST,PUT,DELETE,OPTIONS',
+    'Access-Control-Allow-Headers': 'Content-Type,Authorization',
+    Vary: 'Origin',
+  };
+}
+
+export function send(
+  req: IncomingMessage,
+  res: ServerResponse,
+  status: number,
+  body?: unknown
+) {
   res.writeHead(status, {
-    ...CORS,
+    ...corsHeaders(req),
     'Content-Type': 'application/json',
   });
   res.end(body === undefined ? '' : JSON.stringify(body));
@@ -40,6 +68,7 @@ export function match(
   if (eventsId && method === 'GET') return { name: 'getEvent', params: { id: eventsId[1] } };
   if (eventsId && method === 'PUT') return { name: 'updateEvent', params: { id: eventsId[1] } };
   if (eventsId && method === 'DELETE') return { name: 'deleteEvent', params: { id: eventsId[1] } };
+  if (method === 'GET' && pathname === '/api/orders') return { name: 'listOrders', params: {} };
   if (method === 'POST' && pathname === '/api/orders') return { name: 'createOrder', params: {} };
   if (ordersConfirm && method === 'POST') {
     return { name: 'confirmOrder', params: { id: ordersConfirm[1] } };
@@ -59,14 +88,14 @@ export async function handleEventStackHttp(
   const method = (req.method ?? 'GET').toUpperCase();
 
   if (method === 'OPTIONS') {
-    res.writeHead(204, CORS);
+    res.writeHead(204, corsHeaders(req));
     res.end();
     return;
   }
 
   const route = match(method, url.pathname);
   if (!route) {
-    send(res, 501, {
+    send(req, res, 501, {
       message: `No event-stack handler for ${method} ${url.pathname}`,
     });
     return;
@@ -77,10 +106,11 @@ export async function handleEventStackHttp(
   try {
     switch (route.name) {
       case 'health':
-        send(res, 200, { status: 'ok', storage: store.storage });
+        send(req, res, 200, { status: 'ok', storage: store.storage });
         return;
       case 'listEvents':
         send(
+          req,
           res,
           200,
           await store.listEvents({
@@ -94,13 +124,29 @@ export async function handleEventStackHttp(
           })
         );
         return;
+      case 'listOrders':
+        send(
+          req,
+          res,
+          200,
+          await store.listOrders({
+            userId: url.searchParams.get('userId') ?? undefined,
+            page: url.searchParams.get('page')
+              ? Number(url.searchParams.get('page'))
+              : undefined,
+            limit: url.searchParams.get('limit')
+              ? Number(url.searchParams.get('limit'))
+              : undefined,
+          })
+        );
+        return;
       case 'getEvent': {
         const event = await store.getEvent(route.params.id);
         if (!event) {
-          send(res, 404, { message: `Event ${route.params.id} not found` });
+          send(req, res, 404, { message: `Event ${route.params.id} not found` });
           return;
         }
-        send(res, 200, event);
+        send(req, res, 200, event);
         return;
       }
       case 'createEvent': {
@@ -116,26 +162,26 @@ export async function handleEventStackHttp(
           status: body.status as string | undefined,
           formId: body.formId as string | undefined,
         });
-        send(res, 201, created);
+        send(req, res, 201, created);
         return;
       }
       case 'updateEvent': {
         const body = await readJson(req);
         const updated = await store.updateEvent(route.params.id, body);
         if (!updated) {
-          send(res, 404, { message: `Event ${route.params.id} not found` });
+          send(req, res, 404, { message: `Event ${route.params.id} not found` });
           return;
         }
-        send(res, 200, updated);
+        send(req, res, 200, updated);
         return;
       }
       case 'deleteEvent': {
         const ok = await store.deleteEvent(route.params.id);
         if (!ok) {
-          send(res, 404, { message: `Event ${route.params.id} not found` });
+          send(req, res, 404, { message: `Event ${route.params.id} not found` });
           return;
         }
-        send(res, 200, { message: 'Event deleted successfully', id: route.params.id });
+        send(req, res, 200, { message: 'Event deleted successfully', id: route.params.id });
         return;
       }
       case 'createOrder': {
@@ -147,37 +193,37 @@ export async function handleEventStackHttp(
           data: (body.data as Record<string, unknown>) ?? {},
         });
         if ('error' in created) {
-          send(res, 400, { message: created.error });
+          send(req, res, 400, { message: created.error });
           return;
         }
-        send(res, 201, created);
+        send(req, res, 201, created);
         return;
       }
       case 'getOrder': {
         const order = await store.getOrder(route.params.id);
         if (!order) {
-          send(res, 404, { message: `Order ${route.params.id} not found` });
+          send(req, res, 404, { message: `Order ${route.params.id} not found` });
           return;
         }
-        send(res, 200, order);
+        send(req, res, 200, order);
         return;
       }
       case 'confirmOrder': {
         const order = await store.confirmOrder(route.params.id);
         if (!order) {
-          send(res, 404, { message: `Order ${route.params.id} not found` });
+          send(req, res, 404, { message: `Order ${route.params.id} not found` });
           return;
         }
-        send(res, 200, order);
+        send(req, res, 200, order);
         return;
       }
       default:
-        send(res, 501, {
+        send(req, res, 501, {
           message: `No event-stack handler for ${method} ${url.pathname}`,
         });
     }
   } catch (error) {
-    send(res, 500, {
+    send(req, res, 500, {
       message: error instanceof Error ? error.message : 'event-stack server error',
     });
   }

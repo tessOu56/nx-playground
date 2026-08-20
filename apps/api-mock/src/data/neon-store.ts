@@ -269,6 +269,32 @@ export function createNeonStore(databaseUrl: string): EventStackRepo {
       `;
       return order;
     },
+    async listOrders(query) {
+      await ready();
+      const page = Number(query.page) || 1;
+      const limit = Number(query.limit) || 10;
+      const userId = query.userId;
+      const rows = userId
+        ? ((await sql`
+            SELECT * FROM event_stack_orders
+            WHERE user_id = ${userId}
+            ORDER BY created_at DESC
+          `) as Record<string, unknown>[])
+        : ((await sql`
+            SELECT * FROM event_stack_orders
+            ORDER BY created_at DESC
+          `) as Record<string, unknown>[]);
+      const items = rows.map(mapOrder);
+      const total = items.length;
+      const start = (page - 1) * limit;
+      return {
+        items: items.slice(start, start + limit),
+        total,
+        page,
+        limit,
+        totalPages: Math.max(1, Math.ceil(total / limit)),
+      };
+    },
     async getOrder(id) {
       await ready();
       const rows = (await sql`

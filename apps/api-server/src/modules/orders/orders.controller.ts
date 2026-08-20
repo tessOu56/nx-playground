@@ -1,12 +1,14 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
 import {
   ApiOperation,
   ApiParam,
+  ApiQuery,
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
 
 import { CreateOrderDto } from './dto/create-order.dto';
+import { OrderListResponse } from './dto/order-list-response.dto';
 import { Order } from './entities/order.entity';
 import { OrdersService } from './orders.service';
 
@@ -21,6 +23,20 @@ export class OrdersController {
   @ApiResponse({ status: 400, description: 'Invalid event or user' })
   async create(@Body() dto: CreateOrderDto) {
     return this.ordersService.create(dto);
+  }
+
+  @Get()
+  @ApiOperation({ summary: 'List orders' })
+  @ApiQuery({ name: 'userId', required: false })
+  @ApiQuery({ name: 'page', required: false, type: Number })
+  @ApiQuery({ name: 'limit', required: false, type: Number })
+  @ApiResponse({ status: 200, type: OrderListResponse })
+  async findAll(
+    @Query('userId') userId?: string,
+    @Query('page') page?: number,
+    @Query('limit') limit?: number
+  ) {
+    return this.ordersService.findAll({ userId, page, limit });
   }
 
   @Get(':id')

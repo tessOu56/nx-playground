@@ -47,3 +47,11 @@ export interface EventStackOrder {
   createdAt: string;
   updatedAt: string;
 }
+
+export interface OrderListResponse {
+  items: EventStackOrder[];
+  total: number;
+  page: number;
+  limit: number;
+  totalPages: number;
+}

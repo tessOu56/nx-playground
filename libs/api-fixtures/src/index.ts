@@ -4,6 +4,7 @@ export type {
   CreateOrderInput,
   EventListResponse,
   EventRecord,
+  OrderListResponse,
   OrderRecord,
   UserRecord,
 } from './types';

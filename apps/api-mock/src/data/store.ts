@@ -4,6 +4,7 @@ import type {
   CreateOrderInput,
   EventListResponse,
   EventRecord,
+  OrderListResponse,
   OrderRecord,
   UserRecord,
 } from './types.js';
@@ -101,6 +102,30 @@ export class EventStackStore {
 
   deleteEvent(id: string): boolean {
     return this.events.delete(id);
+  }
+
+  listOrders(query: {
+    userId?: string;
+    page?: number;
+    limit?: number;
+  }): OrderListResponse {
+    const page = Number(query.page) || 1;
+    const limit = Number(query.limit) || 10;
+    let items = [...this.orders.values()].sort((a, b) =>
+      a.createdAt < b.createdAt ? 1 : -1
+    );
+    if (query.userId) {
+      items = items.filter(order => order.userId === query.userId);
+    }
+    const total = items.length;
+    const start = (page - 1) * limit;
+    return {
+      items: items.slice(start, start + limit),
+      total,
+      page,
+      limit,
+      totalPages: Math.max(1, Math.ceil(total / limit)),
+    };
   }
 
   createOrder(input: CreateOrderInput): OrderRecord | { error: string } {

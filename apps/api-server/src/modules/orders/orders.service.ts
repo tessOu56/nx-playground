@@ -73,6 +73,32 @@ export class OrdersService {
     return toOrderEntity(row);
   }
 
+  async findAll(query: { userId?: string; page?: number; limit?: number }) {
+    const { userId, page = 1, limit = 10 } = query;
+    const pageNum = Number(page) || 1;
+    const limitNum = Number(limit) || 10;
+    const skip = (pageNum - 1) * limitNum;
+    const where = userId ? { userId } : {};
+
+    const [rows, total] = await Promise.all([
+      this.prisma.order.findMany({
+        where,
+        skip,
+        take: limitNum,
+        orderBy: { createdAt: 'desc' },
+      }),
+      this.prisma.order.count({ where }),
+    ]);
+
+    return {
+      items: rows.map(toOrderEntity),
+      total,
+      page: pageNum,
+      limit: limitNum,
+      totalPages: Math.max(1, Math.ceil(total / limitNum)),
+    };
+  }
+
   async findOne(id: string): Promise<Order> {
     const row = await this.prisma.order.findUnique({ where: { id } });
     if (!row) {

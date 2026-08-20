@@ -57,5 +57,7 @@ describe('event-stack fixtures', () => {
     if ('error' in created) return;
     const fetched = store.getOrder(created.id);
     assert.equal(fetched?.eventId, 'event_react19');
+    const listed = store.listOrders({ userId: created.userId, limit: 50 });
+    assert.ok(listed.items.some(order => order.id === created.id));
   });
 });

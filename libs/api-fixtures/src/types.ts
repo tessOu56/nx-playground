@@ -40,6 +40,14 @@ export interface EventListResponse {
   totalPages: number;
 }
 
+export interface OrderListResponse {
+  items: OrderRecord[];
+  total: number;
+  page: number;
+  limit: number;
+  totalPages: number;
+}
+
 export interface CreateEventInput {
   title: string;
   description?: string;

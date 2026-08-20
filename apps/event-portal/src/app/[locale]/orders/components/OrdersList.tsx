@@ -21,7 +21,7 @@ export function OrdersList() {
   const [searchTerm, setSearchTerm] = useState<string>('');
 
   // 使用新的聚合資料 hooks
-  const { data: orders, isLoading, error } = useOrdersListByUser('user-001');
+  const { data: orders, isLoading, error } = useOrdersListByUser('user_demo');
   const { data: users } = useUsers();
 
   // 使用工具函數創建用戶名稱查找函數
@@ -74,7 +74,11 @@ export function OrdersList() {
   // 處理錯誤狀態
   if (error) {
     return (
-      <div className='bg-white rounded-lg shadow-md p-6'>
+      <div
+        className='bg-white rounded-lg shadow-md p-6'
+        role='alert'
+        data-testid='event-stack-api-error'
+      >
         <div className='text-center'>
           <h3 className='text-xl font-semibold text-gray-900 mb-2'>載入失敗</h3>
           <p className='text-red-600 mb-4'>無法載入訂單資訊，請稍後再試</p>

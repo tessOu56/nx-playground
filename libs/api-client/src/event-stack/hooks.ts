@@ -10,6 +10,7 @@ import {
   getEvent,
   getOrder,
   listEvents,
+  listOrders,
   updateEvent,
 } from './operations';
 
@@ -81,6 +82,17 @@ export function useCreateOrderMutation() {
       queryClient.invalidateQueries({ queryKey: ['event-stack', 'orders'] });
       queryClient.setQueryData(['event-stack', 'order', order.id], order);
     },
+  });
+}
+
+export function useListOrders(query?: {
+  userId?: string;
+  page?: number;
+  limit?: number;
+}) {
+  return useQuery({
+    queryKey: ['event-stack', 'orders', query],
+    queryFn: () => listOrders(query),
   });
 }
 

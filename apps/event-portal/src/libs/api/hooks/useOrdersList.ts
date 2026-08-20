@@ -1,79 +1,84 @@
 import { useQuery } from '@tanstack/react-query';
+import { listEvents, listOrders } from '@nx-playground/api-client/event-stack';
+import type { EventStackOrder } from '@nx-playground/api-client/event-stack';
 
 import { mockBills } from '../../mock/bills';
-import { mockEvents } from '../../mock/events';
-import { mockOrderItems } from '../../mock/orderItems';
 import { mockOrders } from '../../mock/orders';
 import { mockPayments } from '../../mock/payments';
 
 import type { OrderListItem, OrdersStats } from '@/types/orderList';
+import type { PaymentMethod } from '@/types/bill';
+import type { OrderStatus } from '@/types/order';
 
-// 根據用戶 ID 獲取訂單列表（包含聚合資料）
-export function useOrdersListByUser(userId: string) {
+const DEMO_USER_ID = 'user_demo';
+
+function paymentMethodFromData(data: Record<string, unknown>): PaymentMethod {
+  return data.paymentMethod === 'atm' ? 'atm' : 'cash';
+}
+
+function orderStatusFromApi(status: string): OrderStatus {
+  if (
+    status === 'pending' ||
+    status === 'confirmed' ||
+    status === 'completed' ||
+    status === 'cancelled'
+  ) {
+    return status;
+  }
+  return 'pending';
+}
+
+function toListItem(
+  order: EventStackOrder,
+  event?: { title?: string; startDate?: string }
+): OrderListItem {
+  const quantity =
+    Number(order.data.totalTickets ?? order.data.quantity ?? 1) || 1;
+  const totalAmount = Number(order.data.totalAmount ?? 0) || 0;
+  return {
+    id: order.id,
+    eventId: order.eventId,
+    userId: order.userId,
+    quantity,
+    totalAmount,
+    status: orderStatusFromApi(order.status),
+    paymentMethod: paymentMethodFromData(order.data),
+    createdAt: order.createdAt,
+    updatedAt: order.updatedAt,
+    itemsCount: quantity,
+    eventTitle: event?.title,
+    eventDate: event?.startDate,
+    billStatus: order.status,
+    paymentRecords: 0,
+    orderItemsSummary: {
+      totalItems: quantity,
+      ticketTypes: [],
+    },
+  };
+}
+
+export function useOrdersListByUser(userId: string = DEMO_USER_ID) {
   return useQuery({
-    queryKey: ['ordersList', 'user', userId],
-    queryFn: (): OrderListItem[] => {
-      // 獲取用戶的訂單並聚合相關資料
-
-      // 1. 獲取用戶的訂單
-      const userOrders = mockOrders.filter(order => order.userId === userId);
-
-      // 2. 為每個訂單聚合相關資料
-      const ordersWithDetails: OrderListItem[] = userOrders.map(order => {
-        // 獲取訂單項目
-        const orderItems = mockOrderItems.filter(
-          item => item.orderId === order.id
-        );
-
-        // 獲取活動資訊
-        const event = mockEvents.find(e => e.id === order.eventId);
-
-        // 獲取帳單資訊
-        const bills = mockBills.filter(b => b.orderId === order.id);
-        const [primaryBill] = bills; // 主要帳單
-
-        // 獲取付款記錄
-        const payments =
-          mockPayments?.filter(p => p.orderId === order.id) || [];
-
-        // 統計訂單項目
-        const ticketTypes = [
-          ...new Set(orderItems.map(item => item.ticketTypeName)),
-        ];
-
-        return {
-          ...order,
-          // 統計資料
-          itemsCount: orderItems.length,
-          eventTitle: event?.title,
-          eventDate: event?.date,
-
-          // 帳單和付款狀態
-          billStatus: primaryBill?.status ?? 'unknown',
-          paymentRecords: payments.length,
-
-          // 訂單項目摘要
-          orderItemsSummary: {
-            totalItems: orderItems.length,
-            ticketTypes,
-          },
-        };
-      });
-
-      return ordersWithDetails;
+    queryKey: ['event-stack', 'ordersList', 'user', userId],
+    queryFn: async (): Promise<OrderListItem[]> => {
+      const [orders, events] = await Promise.all([
+        listOrders({ userId, limit: 50 }),
+        listEvents({ limit: 50 }),
+      ]);
+      const eventsById = new Map(events.items.map(event => [event.id, event]));
+      return orders.items.map(order =>
+        toListItem(order, eventsById.get(order.eventId))
+      );
     },
     staleTime: 5 * 60 * 1000,
     enabled: !!userId,
   });
 }
 
-// 獲取訂單統計資料
 export function useOrdersStats(userId: string) {
   return useQuery<OrdersStats>({
     queryKey: ['ordersStats', 'user', userId],
     queryFn: (): OrdersStats => {
-      // 計算用戶的訂單統計資料
-
       const userOrders = mockOrders.filter(order => order.userId === userId);
       const userBills = mockBills.filter(bill => bill.userId === userId);
       const userPayments = mockPayments?.filter(p => p.userId === userId) || [];

@@ -3,6 +3,7 @@ import type {
   CreateOrderInput,
   EventListResponse,
   EventRecord,
+  OrderListResponse,
   OrderRecord,
 } from './types.js';
 
@@ -24,6 +25,11 @@ export type EventStackRepo = {
   createOrder: (
     input: CreateOrderInput
   ) => Promise<OrderRecord | { error: string }>;
+  listOrders: (query: {
+    userId?: string;
+    page?: number;
+    limit?: number;
+  }) => Promise<OrderListResponse>;
   getOrder: (id: string) => Promise<OrderRecord | undefined>;
   confirmOrder: (id: string) => Promise<OrderRecord | undefined>;
 };

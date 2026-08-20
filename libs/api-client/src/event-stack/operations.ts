@@ -6,6 +6,7 @@ import type {
   EventListResponse,
   EventStackEvent,
   EventStackOrder,
+  OrderListResponse,
 } from './types';
 
 export function listEvents(query?: {
@@ -46,6 +47,14 @@ export function createOrder(body: CreateOrderDto): Promise<EventStackOrder> {
     method: 'POST',
     body: JSON.stringify(body),
   });
+}
+
+export function listOrders(query?: {
+  userId?: string;
+  page?: number;
+  limit?: number;
+}): Promise<OrderListResponse> {
+  return eventStackRequest(`/orders${toQuery(query ?? {})}`);
 }
 
 export function getOrder(id: string): Promise<EventStackOrder> {

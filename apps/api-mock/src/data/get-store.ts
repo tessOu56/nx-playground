@@ -13,6 +13,7 @@ function memoryRepo(): EventStackRepo {
     updateEvent: async (id, input) => store.updateEvent(id, input),
     deleteEvent: async id => store.deleteEvent(id),
     createOrder: async input => store.createOrder(input),
+    listOrders: async query => store.listOrders(query),
     getOrder: async id => store.getOrder(id),
     confirmOrder: async id => store.confirmOrder(id),
   };
