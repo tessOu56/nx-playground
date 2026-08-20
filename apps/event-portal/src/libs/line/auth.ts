@@ -1,7 +1,13 @@
 // LINE 認證服務 - 統一管理
 import liff from '@line/liff';
 
-import { LINE_CONSTANTS, OWNER_LINE_CLIENT_ID, hasOwnerLineLogin } from './constants';
+import {
+  LINE_CONSTANTS,
+  LINE_LOGIN_NOT_CONFIGURED,
+  OWNER_LINE_CLIENT_ID,
+  getLineRedirectUri,
+  hasOwnerLineLogin,
+} from './constants';
 import {
   saveLineLoginState,
   getLineLoginState,
@@ -10,23 +16,13 @@ import {
   isCallbackProcessed,
 } from './storage';
 
-// 檢查是否在 LIFF 環境中
+// 檢查是否在 LIFF 應用內。必須呼叫 isInClient()；typeof 永遠是非空字串。
 export const isLiffEnvironment = (): boolean => {
+  if (typeof window === 'undefined') return false;
   try {
-    // 在開發環境中，如果是 HTTPS 且不是 localhost，則跳過 LIFF 檢測
-    if (typeof window !== 'undefined') {
-      const isHttps = window.location.protocol === 'https:';
-      const isNotLocalhost = !window.location.hostname.includes('localhost');
-      const isDevelopment = process.env.NODE_ENV === 'development';
-
-      if (isHttps && isNotLocalhost && isDevelopment) {
-        // 在 HTTPS 開發環境中，暫時跳過 LIFF 檢測以避免安全錯誤
-        return false;
-      }
-    }
-
-    return Boolean(typeof liff?.isInClient());
-  } catch (_error) {
+    if (typeof liff?.isInClient !== 'function') return false;
+    return Boolean(liff.isInClient());
+  } catch {
     return false;
   }
 };
@@ -62,8 +58,7 @@ export const getLineLoginUrl = (): string => {
   const params = new URLSearchParams({
     response_type: 'code',
     client_id: OWNER_LINE_CLIENT_ID,
-    redirect_uri:
-      process.env.NEXT_PUBLIC_LINE_REDIRECT_URI ?? 'http://localhost:3000',
+    redirect_uri: getLineRedirectUri(),
     state,
     scope: 'profile openid',
   });
@@ -73,25 +68,31 @@ export const getLineLoginUrl = (): string => {
 
 // 統一的 LINE 登入函數
 export const lineLogin = (): void => {
+  if (typeof window === 'undefined') return;
+
   if (isLiffEnvironment()) {
     liff.login();
     return;
   }
+
   const loginUrl = getLineLoginUrl();
   if (!loginUrl) {
-    return;
+    throw new Error(LINE_LOGIN_NOT_CONFIGURED);
   }
   window.location.href = loginUrl;
 };
 
 // 統一的 LINE 登出函數
 export const lineLogout = (): void => {
-  if (isLiffEnvironment()) {
-    liff.logout();
-  } else {
-    clearLineLoginState();
-    localStorage.removeItem(LINE_CONSTANTS.LIFF_USER_INFO_KEY);
+  try {
+    if (isLiffEnvironment()) {
+      liff.logout();
+    }
+  } catch {
+    // LIFF 未初始化時仍清掉本機 OAuth session
   }
+  clearLineLoginState();
+  localStorage.removeItem(LINE_CONSTANTS.LIFF_USER_INFO_KEY);
 };
 
 // 從 LIFF 獲取完整用戶信息
@@ -218,9 +219,7 @@ export const handleLineCallback = async () => {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         code,
-        redirect_uri:
-          process.env.NEXT_PUBLIC_LINE_REDIRECT_URI ??
-          'http://localhost:3000',
+        redirect_uri: getLineRedirectUri(),
       }),
     });
 

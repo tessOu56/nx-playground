@@ -3,7 +3,12 @@
 import { useState, useEffect, useCallback } from 'react';
 
 import { Button, Image } from '@/components';
-import { useLiff, isLineEnvironment, isLiffEnvironment } from '@/libs';
+import {
+  canStartLineLogin,
+  isLineEnvironment,
+  isLiffEnvironment,
+  useLiff,
+} from '@/libs';
 import { useLocalizedRouter } from '@/libs/i18n';
 
 export function HomePageClient() {
@@ -19,10 +24,11 @@ export function HomePageClient() {
     [router]
   );
 
+  const lineLoginReady = canStartLineLogin();
+
   const handleLineLogin = () => {
-    if (isInitialized) {
-      login();
-    }
+    if (!lineLoginReady) return;
+    login();
   };
 
   // 使用 useState 來避免 Hydration 錯誤
@@ -44,13 +50,13 @@ export function HomePageClient() {
       } else if (isLineEnvironment()) {
         setEnvInfo({
           type: 'line',
-          label: '普通瀏覽器',
+          label: 'LINE 回調／瀏覽器',
           color: 'text-blue-600',
         });
       } else {
         setEnvInfo({
-          type: 'unknown',
-          label: '未知環境',
+          type: 'browser',
+          label: '一般瀏覽器',
           color: 'text-gray-600',
         });
       }
@@ -240,21 +246,39 @@ export function HomePageClient() {
           <h3 className='text-2xl font-bold text-green-900 mb-4'>LINE 登入</h3>
 
           <p className='text-gray-600 mb-8'>
-            使用您的 LINE 帳號登入，開始探索精彩活動
+            {lineLoginReady
+              ? '使用您的 LINE 帳號登入，開始探索精彩活動'
+              : '此公開示範尚未接 tessOu56 的 LINE Login。活動瀏覽、報名與 mock 付款請用標示示範身分 user_demo，不必綁 LINE。'}
           </p>
 
-          <Button
-            onClick={handleLineLogin}
-            disabled={!isInitialized}
-            className='w-full px-8 py-4 bg-green-600 text-white rounded-xl hover:bg-green-700 active:bg-green-800 transition-all duration-200 font-bold text-lg shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed transform hover:scale-105'
-          >
-            {isInitialized ? <>立即登入 LINE</> : <>初始化中...</>}
-          </Button>
+          {lineLoginReady ? (
+            <>
+              <Button
+                onClick={handleLineLogin}
+                disabled={!isInitialized}
+                className='w-full px-8 py-4 bg-green-600 text-white rounded-xl hover:bg-green-700 active:bg-green-800 transition-all duration-200 font-bold text-lg shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed transform hover:scale-105'
+              >
+                {isInitialized ? <>立即登入 LINE</> : <>初始化中...</>}
+              </Button>
 
-          {!isInitialized && (
-            <p className='text-sm text-gray-500 mt-4'>
-              正在準備登入環境，請稍候...
-            </p>
+              {!isInitialized && (
+                <p className='text-sm text-gray-500 mt-4'>
+                  正在準備登入環境，請稍候...
+                </p>
+              )}
+            </>
+          ) : (
+            <>
+              <Button
+                onClick={() => handleNavigation('/events')}
+                className='w-full px-8 py-4 bg-green-600 text-white rounded-xl hover:bg-green-700 active:bg-green-800 transition-all duration-200 font-bold text-lg shadow-lg hover:shadow-xl transform hover:scale-105'
+              >
+                瀏覽活動
+              </Button>
+              <p className='text-sm text-gray-500 mt-4'>
+                LINE 登入需 owner 在 LINE Developers 登記 callback（STOP-013），不可沿用其他公司 Channel。
+              </p>
+            </>
           )}
         </div>
       )}

@@ -123,8 +123,8 @@ export const LiffProvider: FC<LiffProviderProps> = ({ children }) => {
                 userInfo = await getFullUserInfo();
               }
             }
-          } else {
-            // 非 LIFF 環境，從本地儲存恢復資訊
+          }
+          if (!userInfo) {
             userInfo = restoreUserInfo();
           }
         }

@@ -27,8 +27,8 @@ export function HeroSection() {
             NX Playground Events
           </h1>
           <p className='mt-6 text-lg leading-8 text-gray-600'>
-            使用您的 LINE
-            帳號登入，連接活動主辦方與參與者，提供簡化的活動發現和報名體驗
+            活動發現與報名。公開示範可用標示身分走完整流程；LINE
+            登入僅在 tessOu56 自己的 LINE Developers 接好後才會跳轉授權。
           </p>
           <div className='mt-10 flex items-center justify-center gap-x-6'>
             <Button

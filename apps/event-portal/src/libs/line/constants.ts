@@ -31,6 +31,40 @@ export function hasOwnerLineLogin(): boolean {
   return OWNER_LINE_CLIENT_ID.length > 0;
 }
 
+export function canStartLineLogin(): boolean {
+  return hasOwnerLineLogin() || hasOwnerLiffId();
+}
+
+/**
+ * LINE Login `redirect_uri`. Hosted demo must not send localhost when the
+ * page is on Vercel — LINE Developers callback must still allowlist this origin.
+ */
+export function getLineRedirectUri(
+  location?: {
+    protocol: string;
+    hostname: string;
+    origin: string;
+  },
+  configuredEnv = process.env.NEXT_PUBLIC_LINE_REDIRECT_URI
+): string {
+  const configured = configuredEnv?.trim() ?? '';
+  const loc =
+    location ?? (typeof window !== 'undefined' ? window.location : undefined);
+  if (loc) {
+    const configuredIsLocal =
+      !configured || /localhost|127\.0\.0\.1/i.test(configured);
+    const pageIsHosted =
+      loc.protocol === 'https:' && !/localhost|127\.0\.0\.1/i.test(loc.hostname);
+    if (configuredIsLocal && pageIsHosted) {
+      return loc.origin;
+    }
+  }
+  return configured || 'http://localhost:3000';
+}
+
+export const LINE_LOGIN_NOT_CONFIGURED =
+  '此公開示範尚未接 tessOu56 的 LINE Login（STOP-013）。請改從「瀏覽活動」用標示示範身分 user_demo 完成流程。';
+
 // LINE 專用常數配置
 export const LINE_CONSTANTS = {
   // LIFF 配置 — owner STOP-013 env
