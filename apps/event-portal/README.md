@@ -64,11 +64,12 @@ cd apps/events
 ## ⚙️ 環境變數
 
 ```env
-# LINE LIFF 配置
-NEXT_PUBLIC_LIFF_ID=2007835339-AmngJedQ
-NEXT_PUBLIC_LINE_CLIENT_ID=2007835339
-NEXT_PUBLIC_LINE_REDIRECT_URI=https://frontend.nx-playground.local
-LINE_CLIENT_SECRET=your_line_client_secret
+# LINE — owner tessOu56 LINE Developers only (STOP-013). Leave empty until registered.
+# Never paste another company's Channel / LIFF ID here.
+NEXT_PUBLIC_LIFF_ID=
+NEXT_PUBLIC_LINE_CLIENT_ID=
+NEXT_PUBLIC_LINE_REDIRECT_URI=http://localhost:3000
+LINE_CLIENT_SECRET=
 
 # API 配置
 NEXT_PUBLIC_API_BASE_URL=https://api.nx-playground.local

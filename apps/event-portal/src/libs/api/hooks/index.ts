@@ -4,5 +4,6 @@ export * from './useUsers';
 export * from './useVendors';
 export * from './useOrders';
 export * from './useOrdersList';
+export * from './usePayments';
 export * from './useLineSettings';
 export * from './useVendorStore';

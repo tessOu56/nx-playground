@@ -7,6 +7,8 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 
+import { TicketsService } from '../tickets/tickets.service';
+import { TicketListResponse } from '../tickets/dto/ticket-list-response.dto';
 import { CreateOrderDto } from './dto/create-order.dto';
 import { OrderListResponse } from './dto/order-list-response.dto';
 import { Order } from './entities/order.entity';
@@ -15,7 +17,10 @@ import { OrdersService } from './orders.service';
 @Controller('orders')
 @ApiTags('orders')
 export class OrdersController {
-  constructor(private readonly ordersService: OrdersService) {}
+  constructor(
+    private readonly ordersService: OrdersService,
+    private readonly ticketsService: TicketsService
+  ) {}
 
   @Post()
   @ApiOperation({ summary: 'Create an order for an event' })
@@ -37,6 +42,15 @@ export class OrdersController {
     @Query('limit') limit?: number
   ) {
     return this.ordersService.findAll({ userId, page, limit });
+  }
+
+  @Get(':id/tickets')
+  @ApiOperation({ summary: 'List tickets issued for an order' })
+  @ApiParam({ name: 'id', type: String })
+  @ApiResponse({ status: 200, type: TicketListResponse })
+  @ApiResponse({ status: 404, description: 'Order not found' })
+  async listTickets(@Param('id') id: string) {
+    return this.ticketsService.listByOrder(id);
   }
 
   @Get(':id')

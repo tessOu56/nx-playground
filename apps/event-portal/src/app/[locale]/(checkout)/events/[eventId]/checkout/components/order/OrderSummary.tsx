@@ -2,7 +2,9 @@
 
 import { Button, useToast } from '@/components';
 import { useCreateOrder } from '@/libs/api/hooks/useOrders';
+import { useCreatePaymentIntent } from '@/libs/api/hooks/usePayments';
 import { useLocalizedRouter } from '@/libs/i18n';
+import { useAttendeeUserId } from '@/libs/line/useAttendeeUserId';
 import { useCheckoutStore } from '@/stores/checkoutStore';
 import { useOrderStore } from '@/stores/orderStore';
 import type { Event, PaymentMethod } from '@/types';
@@ -15,6 +17,8 @@ export function OrderSummary({ event }: OrderSummaryProps) {
   const router = useLocalizedRouter();
   const { addToast } = useToast();
   const createOrderMutation = useCreateOrder();
+  const createPaymentIntent = useCreatePaymentIntent();
+  const { isReady, isLiffIdentity } = useAttendeeUserId();
   const { setSelectedOrderId } = useOrderStore();
 
   // 使用 store 方法獲取所有需要的狀態和計算
@@ -61,13 +65,15 @@ export function OrderSummary({ event }: OrderSummaryProps) {
       // 使用 React Query mutation 創建訂單和帳單
       const result = await createOrderMutation.mutateAsync(orderData);
 
-      // 將訂單 ID 存儲到 order store
       setSelectedOrderId(result.order.id);
-
-      // 清空 checkout store
       clearCheckoutData();
 
-      // 導航到 P05 訂單頁
+      if (orderData.paymentMethod === 'third_party' && totalAmount > 0) {
+        const intent = await createPaymentIntent.mutateAsync(result.order.id);
+        window.location.assign(intent.checkoutUrl);
+        return;
+      }
+
       router.push(`/orders/${result.order.id}`);
     } catch (error) {
       console.error('創建訂單失敗:', error);
@@ -128,16 +134,24 @@ export function OrderSummary({ event }: OrderSummaryProps) {
         {/* 按鈕 */}
         <Button
           onClick={handleNextStep}
-          disabled={!canProceedToNext || hasError}
+          disabled={!canProceedToNext || hasError || !isReady}
           variant='primary'
           className='w-full h-11 text-base font-semibold'
         >
-          {hasError ? '無法結帳' : '參加'}
+          {hasError ? '無法結帳' : !isReady ? '載入身分中…' : '參加'}
         </Button>
 
         {hasError ? (
           <p className='text-xs text-red-500 mt-2 text-center'>
             活動資料異常，無法進行結帳
+          </p>
+        ) : !isReady ? (
+          <p className='text-xs text-gray-500 mt-2 text-center'>
+            正在確認參加者身分
+          </p>
+        ) : !isLiffIdentity ? (
+          <p className='text-xs text-amber-700 mt-2 text-center' data-testid='attendee-demo-identity'>
+            示範身分（未綁 LINE）
           </p>
         ) : !canProceedToNext ? (
           <p className='text-xs text-gray-500 mt-2 text-center'>

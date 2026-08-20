@@ -13,6 +13,8 @@ servers:
 tags:
   - name: events
   - name: orders
+  - name: tickets
+  - name: payments
 paths:
   /events:
     get:
@@ -202,6 +204,192 @@ paths:
                 $ref: '#/components/schemas/Order'
         '404':
           description: Order not found
+  /orders/{id}/tickets:
+    get:
+      tags: [tickets]
+      summary: List tickets issued for an order
+      operationId: listOrderTickets
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Tickets
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TicketListResponse'
+        '404':
+          description: Order not found
+  /tickets/{id}:
+    get:
+      tags: [tickets]
+      summary: Get ticket by ID
+      operationId: getTicket
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Ticket
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Ticket'
+        '404':
+          description: Ticket not found
+  /tickets/{id}/verify:
+    get:
+      tags: [tickets]
+      summary: Verify a ticket for check-in
+      operationId: verifyTicket
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Verification
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TicketVerifyResponse'
+        '404':
+          description: Ticket not found
+  /tickets/{id}/check-in:
+    post:
+      tags: [tickets]
+      summary: Check in a ticket
+      operationId: checkInTicket
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Checked in
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Ticket'
+        '400':
+          description: Ticket cannot be checked in
+        '404':
+          description: Ticket not found
+  /payments/intents:
+    get:
+      tags: [payments]
+      summary: List payment intents for an order
+      operationId: listPaymentIntents
+      parameters:
+        - in: query
+          name: orderId
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Intents
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaymentIntentListResponse'
+        '404':
+          description: Order not found
+    post:
+      tags: [payments]
+      summary: Create a payment intent (no card data in this API)
+      operationId: createPaymentIntent
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreatePaymentIntentDto'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaymentIntent'
+        '404':
+          description: Order not found
+  /payments/intents/{id}:
+    get:
+      tags: [payments]
+      summary: Get a payment intent
+      operationId: getPaymentIntent
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Intent
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaymentIntent'
+        '404':
+          description: Payment intent not found
+  /payments/webhook:
+    post:
+      tags: [payments]
+      summary: Payment webhook / callback (idempotent; no card data)
+      operationId: postPaymentWebhook
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PaymentWebhookDto'
+      responses:
+        '200':
+          description: Applied
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaymentWebhookResponse'
+        '404':
+          description: Payment intent not found
+  /payments/mock-complete/{id}:
+    get:
+      tags: [payments]
+      summary: Mock checkout chooser when ECPay sandbox keys are absent
+      operationId: mockCompletePayment
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: outcome
+          schema:
+            type: string
+            enum: [paid, failed]
+      responses:
+        '200':
+          description: HTML chooser
+        '302':
+          description: Redirect to portal order page after mock outcome
+        '400':
+          description: Not a mock intent
+        '404':
+          description: Payment intent not found
 components:
   schemas:
     CreateEventDto:
@@ -316,15 +504,131 @@ components:
       type: object
       required: [items, total, page, limit, totalPages]
       properties:
+        totalPages:
+          type: number
+    Ticket:
+      type: object
+      required: [id, orderId, eventId, type, status, createdAt, updatedAt]
+      properties:
+        id:
+          type: string
+        orderId:
+          type: string
+        eventId:
+          type: string
+        type:
+          type: string
+        status:
+          type: string
+          enum: [issued, used, cancelled]
+        checkedInAt:
+          type: string
+          format: date-time
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+    TicketListResponse:
+      type: object
+      required: [items]
+      properties:
         items:
           type: array
           items:
-            $ref: '#/components/schemas/Order'
-        total:
+            $ref: '#/components/schemas/Ticket'
+    TicketVerifyResponse:
+      type: object
+      required: [ticket, event, order, isValid, verificationTime]
+      properties:
+        ticket:
+          $ref: '#/components/schemas/Ticket'
+        event:
+          $ref: '#/components/schemas/Event'
+        order:
+          $ref: '#/components/schemas/Order'
+        isValid:
+          type: boolean
+        verificationTime:
+          type: string
+          format: date-time
+    CreatePaymentIntentDto:
+      type: object
+      required: [orderId]
+      additionalProperties: false
+      properties:
+        orderId:
+          type: string
+    PaymentIntent:
+      type: object
+      required:
+        - id
+        - orderId
+        - provider
+        - status
+        - merchantTradeNo
+        - amount
+        - checkoutUrl
+        - createdAt
+        - updatedAt
+      properties:
+        id:
+          type: string
+        orderId:
+          type: string
+        provider:
+          type: string
+          enum: [mock, ecpay-sandbox]
+        status:
+          type: string
+          enum: [created, paid, failed]
+        merchantTradeNo:
+          type: string
+        amount:
           type: number
-        page:
-          type: number
-        limit:
-          type: number
-        totalPages:
-          type: number
+        checkoutUrl:
+          type: string
+          description: Redirect target. Never a card form hosted by this API.
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+    PaymentIntentListResponse:
+      type: object
+      required: [items]
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/PaymentIntent'
+    PaymentWebhookDto:
+      type: object
+      properties:
+        merchantTradeNo:
+          type: string
+        MerchantTradeNo:
+          type: string
+        rtnCode:
+          description: '1 = paid, anything else = failed'
+          oneOf:
+            - type: string
+            - type: number
+        RtnCode:
+          description: ECPay form field
+          oneOf:
+            - type: string
+            - type: number
+        CheckMacValue:
+          type: string
+    PaymentWebhookResponse:
+      type: object
+      required: [intent, replayed]
+      properties:
+        intent:
+          $ref: '#/components/schemas/PaymentIntent'
+        replayed:
+          type: boolean
+

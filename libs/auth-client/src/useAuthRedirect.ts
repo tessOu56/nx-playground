@@ -2,24 +2,20 @@ import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 
 /**
- * useAuthRedirect
- * @param isAuthenticated 是否已登入
- * @param ssoUrl SSO 站台網址，預設為 apps/auth 部署的站台
+ * Redirect unauthenticated organizers to the auth app (Kratos UI).
+ * Attendee LIFF is event-portal (T-226), not this path.
  */
 export function useAuthRedirect(
   isAuthenticated: boolean,
-  ssoUrl = 'https://auth.nx-playground.local'
+  ssoUrl = 'http://localhost:3004/login',
+  isLoading = false,
 ) {
   const location = useLocation();
 
   useEffect(() => {
-    if (!isAuthenticated && typeof window !== 'undefined') {
-      // 將當前頁面網址編碼為 return_to 參數
-      const returnTo = encodeURIComponent(window.location.href);
-      const redirectUrl = `${ssoUrl}?return_to=${returnTo}`;
-
-      // 重定向到 SSO 站台
-      window.location.href = redirectUrl;
-    }
-  }, [isAuthenticated, ssoUrl, location]);
+    if (isLoading || isAuthenticated || typeof window === 'undefined') return;
+    const returnTo = encodeURIComponent(window.location.href);
+    const separator = ssoUrl.includes('?') ? '&' : '?';
+    window.location.href = `${ssoUrl}${separator}return_to=${returnTo}`;
+  }, [isAuthenticated, isLoading, ssoUrl, location]);
 }

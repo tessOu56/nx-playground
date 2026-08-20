@@ -26,7 +26,11 @@ export function PaymentStatus({ order, bill, scenario }: PaymentStatusProps) {
           <div>
             <h3 className='text-lg font-semibold text-gray-900'>付款追蹤</h3>
             <p className='text-sm text-gray-600'>
-              {order.paymentMethod === 'cash' ? '現金付款' : 'ATM 轉帳'}
+              {order.paymentMethod === 'cash'
+                ? '現金付款'
+                : order.paymentMethod === 'third_party'
+                ? '第三方支付'
+                : 'ATM 轉帳'}
             </p>
           </div>
         </div>

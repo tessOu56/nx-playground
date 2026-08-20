@@ -6,3 +6,9 @@ export * from './share';
 export * from './auth';
 export * from './storage';
 export { LiffProvider, useLiff } from './LiffProvider';
+export { useAttendeeUserId } from './useAttendeeUserId';
+export {
+  DEMO_ATTENDEE_USER_ID,
+  attendeeUserIdFromLine,
+  isLineAttendeeUserId,
+} from './attendee-user-id';

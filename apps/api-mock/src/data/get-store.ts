@@ -18,6 +18,21 @@ function memoryRepo(): EventStackRepo {
     listOrders: async query => store.listOrders(query),
     getOrder: async id => store.getOrder(id),
     confirmOrder: async id => store.confirmOrder(id),
+    listTicketsByOrder: async orderId => {
+      if (!store.getOrder(orderId)) return { error: 'not_found' };
+      return { items: store.listTicketsByOrder(orderId) };
+    },
+    getTicket: async id => store.getTicket(id),
+    verifyTicket: async id => store.verifyTicket(id),
+    checkInTicket: async id => store.checkInTicket(id),
+    listPaymentIntentsByOrder: async orderId => {
+      if (!store.getOrder(orderId)) return { error: 'not_found' };
+      return { items: store.listPaymentIntentsByOrder(orderId) };
+    },
+    getPaymentIntent: async id => store.getPaymentIntent(id),
+    createPaymentIntent: async (orderId, options) =>
+      store.createPaymentIntent(orderId, options),
+    applyPaymentWebhook: async input => store.applyPaymentWebhook(input),
   };
 }
 

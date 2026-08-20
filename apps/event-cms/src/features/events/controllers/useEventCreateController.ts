@@ -4,6 +4,7 @@
  * 集中管理活動創建頁面的業務邏輯
  */
 
+import { useAuth } from '@nx-playground/auth-client';
 import { useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -20,6 +21,7 @@ import { type EventFormValue } from '../types';
 
 export function useEventCreateController() {
   const goToEvents = useNavigate();
+  const { isAuthenticated } = useAuth();
   // Stores
   const { navigate, setNavigate } = useNavigateStore();
   const { editingBlock, setEditingBlock } = useEventStore();
@@ -33,6 +35,10 @@ export function useEventCreateController() {
    * 處理表單提交
    */
   const handleSubmit = useCallback(async (data: EventFormValue) => {
+    if (!isAuthenticated) {
+      window.alert('請先以主辦身份登入（Kratos）。參加者請走 portal／LIFF，不要用這頁註冊。');
+      return;
+    }
     try {
       await EventsService.createEvent(data);
       goToEvents('/events');
@@ -42,7 +48,7 @@ export function useEventCreateController() {
         '無法連線活動 API，活動未寫入。請確認 API 網址（VITE_API_BASE_URL）可連線。'
       );
     }
-  }, [goToEvents]);
+  }, [goToEvents, isAuthenticated]);
 
   /**
    * 處理圖片上傳

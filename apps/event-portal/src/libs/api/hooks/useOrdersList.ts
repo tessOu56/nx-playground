@@ -7,10 +7,12 @@ import { mockOrders } from '../../mock/orders';
 import { mockPayments } from '../../mock/payments';
 
 import type { OrderListItem, OrdersStats } from '@/types/orderList';
+import { DEMO_ATTENDEE_USER_ID } from '@/libs/line/attendee-user-id';
 
-const DEMO_USER_ID = 'user_demo';
-
-export function useOrdersListByUser(userId: string = DEMO_USER_ID) {
+export function useOrdersListByUser(
+  userId: string = DEMO_ATTENDEE_USER_ID,
+  options?: { enabled?: boolean }
+) {
   return useQuery({
     queryKey: ['event-stack', 'ordersList', 'user', userId],
     queryFn: async (): Promise<OrderListItem[]> => {
@@ -24,7 +26,7 @@ export function useOrdersListByUser(userId: string = DEMO_USER_ID) {
       );
     },
     staleTime: 5 * 60 * 1000,
-    enabled: !!userId,
+    enabled: !!userId && (options?.enabled ?? true),
   });
 }
 

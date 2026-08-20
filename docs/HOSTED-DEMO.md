@@ -28,6 +28,10 @@ VITE_API_BASE_URL=http://localhost:3001/api
 
 Do not name a Vercel project `platform-command`, `platform-api`, `plinth`, or `metalcraft-platform`.
 
+Hosted portal without owner LIFF env is a **labelled demo** (`user_demo`). Binding real LINE attendees needs STOP-013 on **tessOu56** LINE Developers — never another company's channel. Nest does not host LINE webhooks.
+
+Payments: mock `paymentIntent` until ECPay sandbox keys exist. Do not point hosted portal at Hobby api-mock for money. Live merchant is STOP-014 / T-244.
+
 ## Reset
 
 - Local Nest: `make db-up && ./scripts/env-setup.sh && make seed`

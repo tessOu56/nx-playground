@@ -6,10 +6,14 @@ import { RouterProvider } from 'react-router-dom';
 
 import { router } from './router';
 
+const KRATOS_PUBLIC_URL =
+  (typeof process !== 'undefined' && process.env.VITE_KRATOS_PUBLIC_URL) ||
+  'http://localhost:4433';
+
 function App() {
   return (
     <I18nProvider>
-      <AuthProvider>
+      <AuthProvider kratosPublicUrl={KRATOS_PUBLIC_URL}>
         <QueryProvider>
           <ToastProvider>
             <RouterProvider router={router} />

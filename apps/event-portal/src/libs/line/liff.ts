@@ -1,6 +1,6 @@
 // 條件導入 LIFF，避免 SSR 問題
 import { logger } from '@nx-playground/logger';
-import { LINE_CONSTANTS, liffConfig } from './constants';
+import { LINE_CONSTANTS, hasOwnerLiffId, liffConfig } from './constants';
 import { restoreLiffState, saveLiffState } from './storage';
 
 let liff: unknown = null;
@@ -55,6 +55,11 @@ const isLiffModuleAvailable = async (): Promise<boolean> => {
 
 // LIFF 初始化函數 - 可選初始化，失敗時不阻礙應用運行
 export const initializeLiff = async (): Promise<boolean> => {
+  if (!hasOwnerLiffId()) {
+    logger.debug('Skipping LIFF init — no owner NEXT_PUBLIC_LIFF_ID (STOP-013)');
+    return false;
+  }
+
   // 在開發環境中，如果是 HTTPS 且不是 localhost，則跳過 LIFF 初始化
   if (typeof window !== 'undefined') {
     const isHttps = window.location.protocol === 'https:';

@@ -3,6 +3,7 @@ import { observer } from 'mobx-react-lite';
 import { useSearchParams } from 'react-router-dom';
 import SignInForm from './form';
 import { getOryFlow } from '../../services/orySdk';
+import { startKratosBrowserFlow } from '../../services/handleDomain';
 import stores from '../../stores';
 import { toast } from 'sonner';
 
@@ -37,7 +38,9 @@ function SignInPage() {
     const urlFlowId = searchParams.get('flow');
     if (urlFlowId) {
       setFlowId(urlFlowId);
+      return;
     }
+    startKratosBrowserFlow('login');
   }, [searchParams]);
 
   if (isLoading) {

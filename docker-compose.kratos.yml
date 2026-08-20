@@ -1,0 +1,30 @@
+# Local Ory Kratos for organizer CMS sessions (T-241).
+# Public :4433  Admin :4434. Not a production host. Not attendee LIFF.
+name: nx-event-kratos
+services:
+  kratos-migrate:
+    image: oryd/kratos:v1.3.1
+    user: ory
+    volumes:
+      - ./apps/auth/kratos:/etc/config/kratos:ro
+      - kratos-sqlite:/home/ory
+    command: -c /etc/config/kratos/kratos.yml migrate sql -e --yes
+    restart: on-failure
+
+  kratos:
+    image: oryd/kratos:v1.3.1
+    user: ory
+    depends_on:
+      kratos-migrate:
+        condition: service_completed_successfully
+    ports:
+      - '4433:4433'
+      - '4434:4434'
+    volumes:
+      - ./apps/auth/kratos:/etc/config/kratos:ro
+      - kratos-sqlite:/home/ory
+    command: serve -c /etc/config/kratos/kratos.yml --dev
+    restart: unless-stopped
+
+volumes:
+  kratos-sqlite:

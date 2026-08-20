@@ -11,6 +11,7 @@ import {
   useLocalizedRouter,
   useOrdersListByUser,
   createGetUserName,
+  useAttendeeUserId,
 } from '@/libs';
 import type { OrderListItem } from '@/types';
 
@@ -19,9 +20,11 @@ export function OrdersList() {
   const [filteredOrders, setFilteredOrders] = useState<OrderListItem[]>([]);
   const [selectedStatus, setSelectedStatus] = useState<string>('all');
   const [searchTerm, setSearchTerm] = useState<string>('');
+  const { userId, isReady, isLiffIdentity } = useAttendeeUserId();
 
-  // 使用新的聚合資料 hooks
-  const { data: orders, isLoading, error } = useOrdersListByUser('user_demo');
+  const { data: orders, isLoading, error } = useOrdersListByUser(userId, {
+    enabled: isReady,
+  });
   const { data: users } = useUsers();
 
   // 使用工具函數創建用戶名稱查找函數
@@ -57,7 +60,7 @@ export function OrdersList() {
   }, [orders, selectedStatus, searchTerm, getUserName]);
 
   // 處理載入狀態
-  if (isLoading) {
+  if (!isReady || isLoading) {
     return (
       <div className='bg-white rounded-lg shadow-md p-6'>
         <div className='text-center'>
@@ -123,6 +126,11 @@ export function OrdersList() {
       <p className='text-gray-600 my-0 text-center'>
         歡迎回來，{getUserName(orders[0].userId)}！這裡是您的所有活動訂單
       </p>
+      {!isLiffIdentity ? (
+        <p className='text-sm text-amber-700 text-center' data-testid='attendee-demo-identity'>
+          示範身分（未綁 LINE）。真實參加者需 owner 自己的 LINE Developers／LIFF（STOP-013），不可用其他公司帳號。
+        </p>
+      ) : null}
 
       {/* 篩選和搜尋 */}
       <div className='bg-white rounded-lg shadow-md p-6'>

@@ -2,6 +2,7 @@ import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { logger } from '@nx-playground/logger';
+import { json, urlencoded } from 'express';
 
 import { AppModule } from './app.module';
 import { loadRootEnv } from './common/prisma/load-root-env';
@@ -19,6 +20,8 @@ async function bootstrap() {
   assertPostgresUrl(process.env.DATABASE_URL);
 
   const app = await NestFactory.create(AppModule);
+  app.use(json());
+  app.use(urlencoded({ extended: true }));
 
   // Global prefix
   app.setGlobalPrefix('api');

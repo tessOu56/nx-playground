@@ -67,4 +67,18 @@ describe('event-stack fixtures', () => {
     assert.equal(fetched?.id, 'order_demo_1');
     assert.equal(fetched?.userId, 'user_demo');
   });
+
+  it('createOrder stubs a LINE attendee instead of requiring a seeded user', () => {
+    const store = new EventStackStore();
+    const created = store.createOrder({
+      eventId: 'event_react19',
+      userId: 'line_Uabc123',
+      data: { paymentMethod: 'cash', totalTickets: 1 },
+    });
+    assert.ok(!('error' in created));
+    if ('error' in created) return;
+    assert.equal(created.userId, 'line_Uabc123');
+    const listed = store.listOrders({ userId: 'line_Uabc123', limit: 50 });
+    assert.ok(listed.items.some(order => order.id === created.id));
+  });
 });

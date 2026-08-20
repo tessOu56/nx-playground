@@ -8,7 +8,11 @@ function isEventStackPath(path) {
     path === '/events' ||
     path.startsWith('/events/') ||
     path === '/orders' ||
-    path.startsWith('/orders/')
+    path.startsWith('/orders/') ||
+    path === '/tickets' ||
+    path.startsWith('/tickets/') ||
+    path === '/payments' ||
+    path.startsWith('/payments/')
   );
 }
 
@@ -30,6 +34,8 @@ async function generate() {
       .setVersion('1.0')
       .addTag('events', 'Events management')
       .addTag('orders', 'Orders management')
+      .addTag('tickets', 'Tickets issue / verify / check-in')
+      .addTag('payments', 'PaymentIntent + webhook (mock or ECPay sandbox)')
       .addServer('http://localhost:3001/api', 'live Nest + Prisma')
       .addServer('http://localhost:3011/api', 'stateful contract mock')
       .build();

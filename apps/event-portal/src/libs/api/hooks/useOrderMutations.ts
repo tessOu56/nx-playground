@@ -4,7 +4,12 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import {
   confirmOrder as confirmOrderApi,
   createOrder,
+  listOrderTickets,
 } from '@nx-playground/api-client/event-stack';
+
+import { toPortalTicket } from '../map-event-stack-ticket';
+
+import { useAttendeeUserId } from '@/libs/line/useAttendeeUserId';
 
 import type {
   Order,
@@ -30,6 +35,7 @@ const confirmOrder = async (
 // 創建訂單和帳單 (mutation)
 export function useCreateOrder() {
   const queryClient = useQueryClient();
+  const { userId, isReady } = useAttendeeUserId();
 
   return useMutation({
     mutationFn: async (orderData: {
@@ -40,9 +46,12 @@ export function useCreateOrder() {
       totalAmount: number;
       totalTickets: number;
     }) => {
+      if (!isReady) {
+        throw new Error('Attendee identity is not ready');
+      }
       const apiOrder = await createOrder({
         eventId: orderData.eventId,
-        userId: 'user_demo',
+        userId,
         data: {
           sessionId: orderData.sessionId,
           tickets: orderData.tickets,
@@ -52,30 +61,39 @@ export function useCreateOrder() {
         },
       });
 
-      const orderId = apiOrder.id;
-      const billId = `bill-${apiOrder.id}`;
-      const now = apiOrder.createdAt;
+      const skipPsp =
+        orderData.paymentMethod === 'cash' || orderData.totalAmount === 0;
+      const confirmed = skipPsp
+        ? await confirmOrderApi(apiOrder.id)
+        : apiOrder;
+      const listed = skipPsp
+        ? await listOrderTickets(confirmed.id)
+        : { items: [] };
+
+      const orderId = confirmed.id;
+      const billId = `bill-${confirmed.id}`;
+      const now = confirmed.createdAt;
       const dueDate = new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString();
 
       const order: Order = {
         id: orderId,
         eventId: orderData.eventId,
-        userId: apiOrder.userId,
+        userId: confirmed.userId,
         quantity: orderData.totalTickets,
         totalAmount: orderData.totalAmount,
-        status: 'pending',
+        status: skipPsp ? 'confirmed' : 'pending',
         paymentMethod: orderData.paymentMethod,
         createdAt: now,
-        updatedAt: now,
+        updatedAt: confirmed.updatedAt,
       };
 
       const bill: Bill = {
         id: billId,
         orderId,
         eventId: orderData.eventId,
-        userId: apiOrder.userId,
+        userId: confirmed.userId,
         amount: orderData.totalAmount,
-        status: 'pending',
+        status: skipPsp ? 'paid' : 'pending',
         paymentMethod: orderData.paymentMethod,
         dueDate,
         createdAt: now,
@@ -89,10 +107,12 @@ export function useCreateOrder() {
         }),
       };
 
-      return { order, bill };
+      return { order, bill, tickets: listed.items.map(toPortalTicket) };
     },
-    onSuccess: ({ order, bill }, variables) => {
+    onSuccess: ({ order, bill, tickets }, variables) => {
       console.log('useCreateOrder onSuccess:', { order, bill });
+      const skipPsp =
+        variables.paymentMethod === 'cash' || variables.totalAmount === 0;
 
       // 更新訂單 cache
       queryClient.setQueryData(['orders'], (oldOrders: Order[] = []) => [
@@ -100,9 +120,8 @@ export function useCreateOrder() {
         order,
       ]);
 
-      // 為新創建的訂單生成票券和訂單項目
+      // 為新創建的訂單生成訂單項目；票券來自 confirm 契約
       const orderItems: OrderItem[] = [];
-      const tickets: Ticket[] = [];
 
       // 根據購買的票券類型生成訂單項目和票券
       Object.entries(variables.tickets).forEach(([ticketTypeId, quantity]) => {
@@ -134,29 +153,18 @@ export function useCreateOrder() {
           // ticketId 會在生成票券時設置
         };
 
-        // 生成票券 - 根據數量生成對應的 OrderItems 和 Tickets
+        // 對齊 API 出票；不另造 mock ticket id
         for (let i = 1; i <= qty; i++) {
-          const ticketId = `${order.id}-ticket-${ticketTypeId}-${i}`;
-          const ticket: Ticket = {
-            id: ticketId,
-            orderId: order.id,
-            eventId: variables.eventId,
-            type: ticketTypeId,
-            status: 'issued',
-            createdAt: order.createdAt,
-            updatedAt: order.updatedAt,
-          };
-
-          // 為每張票建立一個 OrderItem
+          const issued = tickets[orderItems.length];
+          const ticketId = issued?.id ?? `${order.id}-ticket-${ticketTypeId}-${i}`;
           const itemForTicket: OrderItem = {
             ...orderItem,
             id: `${orderItem.id}-${i}`,
-            quantity: 1, // 每個 OrderItem 都是 1 張票
+            quantity: 1,
             totalPrice: ticketType?.price ?? 0,
             ticketId,
           };
 
-          tickets.push(ticket);
           orderItems.push(itemForTicket);
         }
       });
@@ -164,7 +172,7 @@ export function useCreateOrder() {
       // 更新訂單狀態為已確認（因為已出票）
       const updatedOrder = {
         ...order,
-        status: 'confirmed' as const,
+        status: skipPsp ? ('confirmed' as const) : order.status,
         orderItems,
         tickets,
       };
@@ -172,6 +180,10 @@ export function useCreateOrder() {
       queryClient.setQueryData(['order', order.id], updatedOrder);
       queryClient.setQueryData(['orderItems', order.id], orderItems);
       queryClient.setQueryData(['tickets', 'order', order.id], tickets);
+      queryClient.setQueryData(
+        ['event-stack', 'tickets', 'order', order.id],
+        tickets
+      );
       queryClient.setQueryData(['bill', 'order', order.id], bill);
 
       console.log('Order stored in cache with key:', ['order', order.id]);

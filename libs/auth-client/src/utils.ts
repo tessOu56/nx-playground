@@ -1,24 +1,18 @@
 /**
- * 跳轉到 SSO 站台
- * @param ssoUrl SSO 站台網址
- * @param returnTo 登入成功後要跳轉的網址
+ * Jump to the organizer auth app (Kratos UI on :3004).
  */
 export function redirectToSSO(
-  ssoUrl = 'https://auth.nx-playground.local',
-  returnTo?: string
+  ssoUrl = 'http://localhost:3004/login',
+  returnTo?: string,
 ) {
   if (typeof window === 'undefined') return;
 
   const targetUrl = returnTo ?? window.location.href;
   const encodedReturnTo = encodeURIComponent(targetUrl);
-  const redirectUrl = `${ssoUrl}?return_to=${encodedReturnTo}`;
-
-  window.location.href = redirectUrl;
+  const separator = ssoUrl.includes('?') ? '&' : '?';
+  window.location.href = `${ssoUrl}${separator}return_to=${encodedReturnTo}`;
 }
 
-/**
- * 從 URL 參數中取得 return_to 值
- */
 export function getReturnToFromUrl(): string | null {
   if (typeof window === 'undefined') return null;
 
@@ -26,9 +20,6 @@ export function getReturnToFromUrl(): string | null {
   return urlParams.get('return_to');
 }
 
-/**
- * 清除 URL 中的 return_to 參數
- */
 export function clearReturnToFromUrl() {
   if (typeof window === 'undefined') return;
 

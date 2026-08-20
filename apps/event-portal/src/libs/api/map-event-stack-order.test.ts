@@ -32,6 +32,13 @@ describe('map-event-stack-order', () => {
     assert.equal(order.paymentMethod, 'atm');
   });
 
+  it('maps third_party from checkout data', () => {
+    assert.equal(
+      paymentMethodFromData({ paymentMethod: 'third_party' }),
+      'third_party'
+    );
+  });
+
   it('defaults unknown status and missing amounts without using mockOrders', () => {
     assert.equal(orderStatusFromApi('paid'), 'pending');
     assert.equal(paymentMethodFromData({}), 'cash');

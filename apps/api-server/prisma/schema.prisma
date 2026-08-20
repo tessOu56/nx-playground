@@ -49,6 +49,7 @@ model Event {
   // 關聯
   form   Form?   @relation(fields: [formId], references: [id])
   orders Order[]
+  tickets Ticket[]
 
   @@map("events")
 }
@@ -82,8 +83,43 @@ model Order {
   // 關聯
   event Event @relation(fields: [eventId], references: [id], onDelete: Cascade)
   user  User  @relation(fields: [userId], references: [id])
+  tickets Ticket[]
+  paymentIntents PaymentIntent[]
 
   @@map("orders")
+}
+
+model PaymentIntent {
+  id              String   @id @default(cuid())
+  orderId         String
+  provider        String
+  status          String   @default("created")
+  merchantTradeNo String   @unique
+  amount          Int
+  checkoutUrl     String
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  order Order @relation(fields: [orderId], references: [id], onDelete: Cascade)
+
+  @@index([orderId])
+  @@map("payment_intents")
+}
+
+model Ticket {
+  id          String    @id @default(cuid())
+  orderId     String
+  eventId     String
+  type        String    @default("general")
+  status      String    @default("issued")
+  checkedInAt DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  order Order @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  event Event @relation(fields: [eventId], references: [id], onDelete: Cascade)
+
+  @@map("tickets")
 }
 
 // ==================== 會話模組 ====================

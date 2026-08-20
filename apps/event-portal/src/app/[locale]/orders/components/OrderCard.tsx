@@ -35,7 +35,9 @@ export function OrderCard({ order, getUserName }: OrderCardProps) {
   };
 
   const getPaymentMethodText = (method: string) => {
-    return method === 'cash' ? '現金付款' : 'ATM 轉帳';
+    if (method === 'cash') return '現金付款';
+    if (method === 'third_party') return '第三方支付';
+    return 'ATM 轉帳';
   };
 
   const getBillStatusText = (status: string) => {

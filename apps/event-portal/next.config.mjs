@@ -1,11 +1,13 @@
 //@ts-check
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { loadEnvConfig } from '@next/env';
 import { createVanillaExtractPlugin } from '@vanilla-extract/next-plugin';
 import createNextIntlPlugin from 'next-intl/plugin';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+loadEnvConfig(path.resolve(__dirname, '../..'));
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {

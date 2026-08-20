@@ -65,3 +65,5 @@ export interface CreateOrderInput {
   status?: string;
   data?: Record<string, unknown>;
 }
+
+export type { TicketRecord } from './ticket';

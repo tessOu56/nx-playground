@@ -1,53 +1,91 @@
-import { type ReactNode, createContext, useContext, useState } from 'react';
+import {
+  type ReactNode,
+  createContext,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
 
-interface User {
-  id: string;
-  email: string;
-  name?: string;
-}
+import {
+  type AuthUser,
+  createKratosLogoutUrl,
+  fetchKratosSession,
+} from './kratos-session';
 
 interface AuthContextType {
-  user: User | null;
+  user: AuthUser | null;
   isAuthenticated: boolean;
-  login: (user: User) => void;
-  logout: () => void;
-  updateUser: (user: Partial<User>) => void;
+  isLoading: boolean;
+  login: (user: AuthUser) => void;
+  logout: () => Promise<void>;
+  updateUser: (user: Partial<AuthUser>) => void;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 interface AuthProviderProps {
   children: ReactNode;
-  initialUser?: User | null;
+  initialUser?: AuthUser | null;
+  kratosPublicUrl?: string;
 }
 
 export function AuthProvider({
   children,
   initialUser = null,
+  kratosPublicUrl = 'http://localhost:4433',
 }: AuthProviderProps) {
-  const [user, setUser] = useState<User | null>(initialUser);
+  const [user, setUser] = useState<AuthUser | null>(initialUser);
+  const [isLoading, setIsLoading] = useState(!initialUser);
 
-  const login = (userData: User) => {
+  useEffect(() => {
+    if (initialUser) {
+      setIsLoading(false);
+      return;
+    }
+    let cancelled = false;
+    fetchKratosSession(kratosPublicUrl)
+      .then(sessionUser => {
+        if (!cancelled) setUser(sessionUser);
+      })
+      .catch(() => {
+        if (!cancelled) setUser(null);
+      })
+      .finally(() => {
+        if (!cancelled) setIsLoading(false);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [initialUser, kratosPublicUrl]);
+
+  const login = (userData: AuthUser) => {
     setUser(userData);
   };
 
-  const logout = () => {
+  const logout = async () => {
+    const logoutUrl = await createKratosLogoutUrl(kratosPublicUrl);
     setUser(null);
-  };
-
-  const updateUser = (userData: Partial<User>) => {
-    if (user) {
-      setUser({ ...user, ...userData });
+    if (logoutUrl) {
+      window.location.href = logoutUrl;
     }
   };
 
-  const value: AuthContextType = {
-    user,
-    isAuthenticated: !!user,
-    login,
-    logout,
-    updateUser,
+  const updateUser = (userData: Partial<AuthUser>) => {
+    setUser(current => (current ? { ...current, ...userData } : current));
   };
+
+  const value = useMemo<AuthContextType>(
+    () => ({
+      user,
+      isAuthenticated: !!user,
+      isLoading,
+      login,
+      logout,
+      updateUser,
+    }),
+    [user, isLoading],
+  );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }

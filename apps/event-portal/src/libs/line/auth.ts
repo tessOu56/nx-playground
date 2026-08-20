@@ -1,7 +1,7 @@
 // LINE 認證服務 - 統一管理
 import liff from '@line/liff';
 
-import { LINE_CONSTANTS } from './constants';
+import { LINE_CONSTANTS, OWNER_LINE_CLIENT_ID, hasOwnerLineLogin } from './constants';
 import {
   saveLineLoginState,
   getLineLoginState,
@@ -48,7 +48,7 @@ export const isLineEnvironment = (): boolean => {
 
 // 獲取 LINE 登入 URL（用於一般瀏覽器）
 export const getLineLoginUrl = (): string => {
-  if (typeof window === 'undefined') return '';
+  if (typeof window === 'undefined' || !hasOwnerLineLogin()) return '';
 
   // 生成 state
   const state =
@@ -61,9 +61,9 @@ export const getLineLoginUrl = (): string => {
 
   const params = new URLSearchParams({
     response_type: 'code',
-    client_id: process.env.NEXT_PUBLIC_LINE_CLIENT_ID ?? '2007835339',
+    client_id: OWNER_LINE_CLIENT_ID,
     redirect_uri:
-      process.env.NEXT_PUBLIC_LINE_REDIRECT_URI ?? 'https://frontend.nx-playground.local',
+      process.env.NEXT_PUBLIC_LINE_REDIRECT_URI ?? 'http://localhost:3000',
     state,
     scope: 'profile openid',
   });
@@ -75,10 +75,13 @@ export const getLineLoginUrl = (): string => {
 export const lineLogin = (): void => {
   if (isLiffEnvironment()) {
     liff.login();
-  } else {
-    const loginUrl = getLineLoginUrl();
-    window.location.href = loginUrl;
+    return;
   }
+  const loginUrl = getLineLoginUrl();
+  if (!loginUrl) {
+    return;
+  }
+  window.location.href = loginUrl;
 };
 
 // 統一的 LINE 登出函數
@@ -202,82 +205,47 @@ export const handleLineCallback = async () => {
   markCallbackProcessed(state);
 
   try {
-    const currentPath = window.location.pathname;
-    const isP01Page = currentPath === '/' || currentPath === '/home';
-
-    if (isP01Page) {
-      // P01 頁面：優先使用 LIFF SDK
-      if (liff?.isInClient()) {
-        return await getFullUserInfoFromLiff();
-      }
-
-      // 使用後端 API 處理 OAuth 流程
-      const tokenResponse = await fetch('/api/line/auth/token', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          code,
-          redirect_uri:
-            process.env.NEXT_PUBLIC_LINE_REDIRECT_URI ??
-            'https://frontend.nx-playground.local',
-        }),
-      });
-
-      if (!tokenResponse.ok) {
-        throw new Error('獲取 access token 失敗');
-      }
-
-      const tokenData = await tokenResponse.json();
-      const realUserInfo = {
-        profile: tokenData.profile,
-        idToken: tokenData.idToken,
-        accessToken: tokenData.accessToken,
-        decodedIdToken: tokenData.decodedIdToken,
-        lineId: tokenData.lineId,
-        tokenType: tokenData.tokenType,
-        expiresIn: tokenData.expiresIn,
-        refreshToken: tokenData.refreshToken,
-      };
-
-      localStorage.setItem(
-        LINE_CONSTANTS.LIFF_USER_INFO_KEY,
-        JSON.stringify(realUserInfo)
-      );
-      clearLineLoginState();
-      return realUserInfo;
-    } else {
-      // 其他頁面：使用 mock 數據
-      // 使用 mock 用戶資料
-      const { getFullUserInfoByLineId } = await import('../mock/users');
-      const mockLineId = 'U1234567890abcdef1234567890abcdef1'; // 張小明的 LINE ID
-      const mockUser = getFullUserInfoByLineId(mockLineId);
-
-      const mockUserInfo = {
-        profile: {
-          userId: mockLineId,
-          displayName:
-            mockUser?.lineInfo?.profile?.displayName ?? 'Mock LINE 用戶',
-          pictureUrl:
-            mockUser?.lineInfo?.profile?.pictureUrl ??
-            'https://via.placeholder.com/150',
-          statusMessage:
-            mockUser?.lineInfo?.profile?.statusMessage ?? 'Mock 用戶狀態',
-        },
-        idToken: `mock_id_token_${Date.now()}`,
-        accessToken: `mock_access_token_${Date.now()}`,
-        decodedIdToken: {
-          sub: mockLineId,
-          name: mockUser?.name ?? 'Mock LINE 用戶',
-          picture:
-            mockUser?.lineInfo?.profile?.pictureUrl ??
-            'https://via.placeholder.com/150',
-        },
-        lineId: mockLineId,
-      };
-
-      clearLineLoginState();
-      return mockUserInfo;
+    if (!hasOwnerLineLogin()) {
+      return null;
     }
+
+    if (liff?.isInClient()) {
+      return await getFullUserInfoFromLiff();
+    }
+
+    const tokenResponse = await fetch('/api/line/auth/token', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        code,
+        redirect_uri:
+          process.env.NEXT_PUBLIC_LINE_REDIRECT_URI ??
+          'http://localhost:3000',
+      }),
+    });
+
+    if (!tokenResponse.ok) {
+      throw new Error('獲取 access token 失敗');
+    }
+
+    const tokenData = await tokenResponse.json();
+    const realUserInfo = {
+      profile: tokenData.profile,
+      idToken: tokenData.idToken,
+      accessToken: tokenData.accessToken,
+      decodedIdToken: tokenData.decodedIdToken,
+      lineId: tokenData.lineId,
+      tokenType: tokenData.tokenType,
+      expiresIn: tokenData.expiresIn,
+      refreshToken: tokenData.refreshToken,
+    };
+
+    localStorage.setItem(
+      LINE_CONSTANTS.LIFF_USER_INFO_KEY,
+      JSON.stringify(realUserInfo)
+    );
+    clearLineLoginState();
+    return realUserInfo;
   } catch (error) {
     clearLineLoginState();
     throw error;

@@ -64,10 +64,9 @@ function SignUpForm({ flowId, onSuccess }: SignUpFormProps) {
         '/self-service/registration',
         {
           method: 'password',
-          'traits.name': data.name,
           'traits.email': data.email,
+          'traits.name': data.name,
           password: data.password,
-          'traits.username': data.email,
           csrf_token: stores.token,
         },
         {

@@ -26,8 +26,8 @@ export function OrderInfoHeader({
         return '現金付款';
       case 'atm':
         return 'ATM 轉帳';
-      case 'session':
-        return '第三第三方';
+      case 'third_party':
+        return '第三方支付';
       default:
         return '未知付款方式';
     }

@@ -70,8 +70,9 @@ pnpm dev
 
 ```env
 VITE_ORY_PUBLIC_API=http://localhost:4433
-VITE_SITE_KEY=your-cloudflare-turnstile-sitekey
 ```
+
+Local Kratos: `make kratos-up` then `make dev-auth`. Demo organizer `organizer@nx-playground.local` / `Organizer123!` (local only). Production Kratos host is out of scope. LINE OIDC needs STOP-013.
 
 ## 📂 專案結構
 

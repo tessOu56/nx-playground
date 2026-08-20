@@ -75,7 +75,7 @@ export function generateLiffUserInfo(
       name: displayName,
       picture: pictureUrl,
       iss: 'https://access.line.me',
-      aud: '2007835339',
+      aud: 'demo-channel',
       exp: Math.floor(Date.now() / 1000) + 3600,
       iat: Math.floor(Date.now() / 1000),
     },

@@ -8,7 +8,7 @@ export class CreateOrderDto {
 
   @ApiProperty({
     required: false,
-    description: 'Defaults to the demo user from shared fixtures',
+    description: 'LIFF/LINE attendee id (`line_<LINE userId>`) or demo `user_demo`',
   })
   @IsString()
   @IsOptional()

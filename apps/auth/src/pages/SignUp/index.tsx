@@ -4,6 +4,7 @@ import { useSearchParams } from 'react-router-dom';
 import SignUpForm from './form';
 import SignUpVerification from './verification';
 import { getOryFlow } from '../../services/orySdk';
+import { startKratosBrowserFlow } from '../../services/handleDomain';
 import stores from '../../stores';
 import { toast } from 'sonner';
 
@@ -40,7 +41,9 @@ function SignUpPage() {
     const urlFlowId = searchParams.get('flow');
     if (urlFlowId) {
       setFlowId(urlFlowId);
+      return;
     }
+    startKratosBrowserFlow('registration');
   }, [searchParams]);
 
   const handleSuccess = (registrationEmail: string) => {

@@ -9,6 +9,20 @@ import type {
   UserRecord,
 } from './types.js';
 import { DEMO_USER_ID } from './types.js';
+import { isLineAttendeeUserId, stubLineAttendeeUser } from './attendee-user.js';
+import {
+  amountFromOrderData,
+  checkoutUrlForProvider,
+  newMerchantTradeNo,
+  paymentProviderFromEnv,
+  webhookStatusFromRtnCode,
+  type PaymentIntentRecord,
+} from './payments.js';
+import {
+  ticketIsValidForCheckIn,
+  ticketSpecsFromOrderData,
+  type TicketRecord,
+} from './tickets.js';
 
 function nowIso(): string {
   return new Date().toISOString();
@@ -24,6 +38,8 @@ export class EventStackStore {
   events = new Map<string, EventRecord>();
   orders = new Map<string, OrderRecord>();
   users = new Map<string, UserRecord>();
+  tickets = new Map<string, TicketRecord>();
+  paymentIntents = new Map<string, PaymentIntentRecord>();
 
   constructor() {
     const stamped = nowIso();
@@ -133,6 +149,9 @@ export class EventStackStore {
       return { error: `Event ${input.eventId} not found` };
     }
     const userId = input.userId ?? DEMO_USER_ID;
+    if (!this.users.has(userId) && isLineAttendeeUserId(userId)) {
+      this.users.set(userId, stubLineAttendeeUser(userId));
+    }
     if (!this.users.has(userId)) {
       return { error: `User ${userId} not found` };
     }
@@ -157,12 +176,138 @@ export class EventStackStore {
   confirmOrder(id: string): OrderRecord | undefined {
     const existing = this.orders.get(id);
     if (!existing) return undefined;
+    if (existing.status === 'confirmed') return existing;
+    const stamped = nowIso();
     const updated = {
       ...existing,
       status: 'confirmed',
-      updatedAt: nowIso(),
+      updatedAt: stamped,
     };
     this.orders.set(id, updated);
+    for (const spec of ticketSpecsFromOrderData(existing.data ?? {})) {
+      for (let i = 0; i < spec.quantity; i += 1) {
+        const ticket: TicketRecord = {
+          id: newId('ticket'),
+          orderId: existing.id,
+          eventId: existing.eventId,
+          type: spec.type,
+          status: 'issued',
+          createdAt: stamped,
+          updatedAt: stamped,
+        };
+        this.tickets.set(ticket.id, ticket);
+      }
+    }
     return updated;
+  }
+
+  listTicketsByOrder(orderId: string): TicketRecord[] {
+    return [...this.tickets.values()].filter(ticket => ticket.orderId === orderId);
+  }
+
+  getTicket(id: string): TicketRecord | undefined {
+    return this.tickets.get(id);
+  }
+
+  verifyTicket(id: string) {
+    const ticket = this.tickets.get(id);
+    if (!ticket) return undefined;
+    const order = this.orders.get(ticket.orderId);
+    const event = this.events.get(ticket.eventId);
+    if (!order || !event) return undefined;
+    return {
+      ticket,
+      event,
+      order,
+      isValid: ticketIsValidForCheckIn(ticket, order.status),
+      verificationTime: nowIso(),
+    };
+  }
+
+  checkInTicket(id: string): TicketRecord | { error: string } | undefined {
+    const ticket = this.tickets.get(id);
+    if (!ticket) return undefined;
+    const order = this.orders.get(ticket.orderId);
+    if (!order || !ticketIsValidForCheckIn(ticket, order.status)) {
+      return { error: `Ticket ${id} cannot be checked in` };
+    }
+    const stamped = nowIso();
+    const updated: TicketRecord = {
+      ...ticket,
+      status: 'used',
+      checkedInAt: stamped,
+      updatedAt: stamped,
+    };
+    this.tickets.set(id, updated);
+    return updated;
+  }
+
+  listPaymentIntentsByOrder(orderId: string): PaymentIntentRecord[] {
+    return [...this.paymentIntents.values()]
+      .filter(intent => intent.orderId === orderId)
+      .sort((a, b) => (a.createdAt < b.createdAt ? 1 : -1));
+  }
+
+  getPaymentIntent(id: string): PaymentIntentRecord | undefined {
+    return this.paymentIntents.get(id);
+  }
+
+  createPaymentIntent(
+    orderId: string,
+    options: { publicApiBase: string }
+  ): PaymentIntentRecord | { error: string } {
+    const order = this.orders.get(orderId);
+    if (!order) return { error: `Order ${orderId} not found` };
+    const existing = this.listPaymentIntentsByOrder(orderId);
+    const reusable = existing.find(
+      intent => intent.status === 'created' || intent.status === 'paid'
+    );
+    if (reusable) return reusable;
+
+    const stamped = nowIso();
+    const id = newId('pay');
+    const provider = paymentProviderFromEnv();
+    const intent: PaymentIntentRecord = {
+      id,
+      orderId,
+      provider,
+      status: 'created',
+      merchantTradeNo: newMerchantTradeNo(),
+      amount: amountFromOrderData(order.data ?? {}),
+      checkoutUrl: checkoutUrlForProvider(provider, options.publicApiBase, id),
+      createdAt: stamped,
+      updatedAt: stamped,
+    };
+    this.paymentIntents.set(id, intent);
+    return intent;
+  }
+
+  applyPaymentWebhook(input: {
+    merchantTradeNo: string;
+    rtnCode?: string | number;
+  }):
+    | { intent: PaymentIntentRecord; replayed: boolean }
+    | { error: string } {
+    const intent = [...this.paymentIntents.values()].find(
+      row => row.merchantTradeNo === input.merchantTradeNo
+    );
+    if (!intent) {
+      return { error: `Payment intent ${input.merchantTradeNo} not found` };
+    }
+    const nextStatus = webhookStatusFromRtnCode(input.rtnCode);
+    if (intent.status === nextStatus || intent.status === 'paid') {
+      return { intent, replayed: true };
+    }
+    const stamped = nowIso();
+    const updated: PaymentIntentRecord = {
+      ...intent,
+      status: nextStatus,
+      updatedAt: stamped,
+    };
+    this.paymentIntents.set(intent.id, updated);
+    if (nextStatus === 'paid') {
+      this.confirmOrder(intent.orderId);
+    }
+    return { intent: updated, replayed: false };
   }
 }

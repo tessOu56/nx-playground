@@ -3,7 +3,7 @@
 import { useEffect, useRef } from 'react';
 
 import { OrderInfoHeader } from '../order';
-import { PaymentStatus } from '../payment';
+import { PaymentIntentPanel, PaymentStatus } from '../payment';
 
 import {
   useOrder,
@@ -11,6 +11,7 @@ import {
   useOrderTickets,
   useBillByOrder,
 } from '@/libs';
+import { usePaymentIntents } from '@/libs/api/hooks/usePayments';
 import { getOrderScenario } from '@/libs/utils/orderUtils';
 
 interface OrderDetailProps {
@@ -28,9 +29,19 @@ export function OrderDetail({ orderId }: OrderDetailProps) {
   const { data: orderItems, isLoading: itemsLoading } = useOrderItems(orderId);
   const { data: tickets, isLoading: ticketsLoading } = useOrderTickets(orderId);
   const { data: bill, isLoading: billLoading } = useBillByOrder(orderId);
+  const usesPsp = order?.paymentMethod === 'third_party';
+  const { data: intents, isLoading: intentsLoading } = usePaymentIntents(
+    orderId,
+    Boolean(usesPsp)
+  );
+  const latestIntent = intents?.items[0];
 
   const isLoading =
-    orderLoading || itemsLoading || ticketsLoading || billLoading;
+    orderLoading ||
+    itemsLoading ||
+    ticketsLoading ||
+    billLoading ||
+    (usesPsp && intentsLoading);
   const error = orderError;
 
   const scenario =
@@ -102,11 +113,15 @@ export function OrderDetail({ orderId }: OrderDetailProps) {
         />
       </div>
 
-      {bill ? (
+      {usesPsp ? (
+        <div ref={paymentSectionRef} className='space-y-4'>
+          <PaymentIntentPanel orderId={order.id} intent={latestIntent} />
+        </div>
+      ) : bill ? (
         <div ref={paymentSectionRef} className='space-y-4'>
           <PaymentStatus order={order} bill={bill} scenario={scenario} />
         </div>
-      ) : (
+      ) : order.paymentMethod === 'cash' || order.status === 'confirmed' ? null : (
         <div
           className='bg-white rounded-lg shadow-md p-6 text-center'
           role='note'

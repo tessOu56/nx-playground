@@ -7,7 +7,9 @@ import type { OrderListItem } from '../../types/orderList';
 export function paymentMethodFromData(
   data: Record<string, unknown>
 ): PaymentMethod {
-  return data.paymentMethod === 'atm' ? 'atm' : 'cash';
+  if (data.paymentMethod === 'atm') return 'atm';
+  if (data.paymentMethod === 'third_party') return 'third_party';
+  return 'cash';
 }
 
 export function orderStatusFromApi(status: string): OrderStatus {

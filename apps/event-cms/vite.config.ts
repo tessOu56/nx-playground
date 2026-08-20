@@ -9,6 +9,14 @@ export default defineConfig(({ mode }) => {
   const envDir = resolve(__dirname, '../..');
   const fileEnv = loadEnv(mode, envDir, '');
   const viteApiBaseUrl = fileEnv.VITE_API_BASE_URL ?? process.env.VITE_API_BASE_URL ?? '';
+  const kratosPublicUrl =
+    fileEnv.VITE_KRATOS_PUBLIC_URL ??
+    process.env.VITE_KRATOS_PUBLIC_URL ??
+    'http://localhost:4433';
+  const authAppUrl =
+    fileEnv.VITE_AUTH_APP_URL ??
+    process.env.VITE_AUTH_APP_URL ??
+    'http://localhost:3004';
 
   return {
   root: __dirname,
@@ -24,6 +32,8 @@ export default defineConfig(({ mode }) => {
   plugins: [react(), vanillaExtractPlugin()],
   define: {
     'process.env.VITE_API_BASE_URL': JSON.stringify(viteApiBaseUrl),
+    'process.env.VITE_KRATOS_PUBLIC_URL': JSON.stringify(kratosPublicUrl),
+    'process.env.VITE_AUTH_APP_URL': JSON.stringify(authAppUrl),
     'process.env.NODE_ENV': JSON.stringify(mode),
   },
 

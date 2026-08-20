@@ -26,7 +26,8 @@ export type BillStatus =
 
 export type PaymentMethod =
   | 'cash' // 現金付款
-  | 'atm'; // ATM 轉帳
+  | 'atm' // ATM 轉帳
+  | 'third_party'; // 綠界 sandbox／模擬金流
 
 export interface BillWithDetails extends Bill {
   order?: import('./order').Order;

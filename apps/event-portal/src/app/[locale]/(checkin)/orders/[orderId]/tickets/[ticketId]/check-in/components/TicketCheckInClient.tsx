@@ -60,7 +60,11 @@ export function TicketCheckInClient({ params }: TicketCheckInClientProps) {
   // 錯誤狀態
   if (hasError) {
     return (
-      <div className='bg-white rounded-lg shadow-md p-6'>
+      <div
+        className='bg-white rounded-lg shadow-md p-6'
+        role='alert'
+        data-testid='event-stack-api-error'
+      >
         <div className='text-center'>
           <h3 className='text-xl font-semibold text-gray-900 mb-2'>載入失敗</h3>
           <p className='text-gray-600 mb-4'>無法載入票券資訊</p>

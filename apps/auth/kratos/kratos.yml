@@ -1,0 +1,103 @@
+# Local organizer identity only (T-241). Not a production Kratos host.
+# Attendees stay on LIFF (T-226). Do not replace polyglot-labs Go WebAuthn.
+
+version: v1.3.1
+
+dsn: sqlite:///home/ory/db.sqlite?_fk=true&mode=rwc
+
+serve:
+  public:
+    base_url: http://localhost:4433/
+    cors:
+      enabled: true
+      allowed_origins:
+        - http://localhost:3002
+        - http://localhost:3004
+        - http://127.0.0.1:3002
+        - http://127.0.0.1:3004
+      allowed_methods:
+        - GET
+        - POST
+        - PUT
+        - PATCH
+        - DELETE
+      allowed_headers:
+        - Authorization
+        - Content-Type
+        - X-Session-Token
+        - Cookie
+      exposed_headers:
+        - Content-Type
+        - Set-Cookie
+      allow_credentials: true
+  admin:
+    base_url: http://localhost:4434/
+
+selfservice:
+  default_browser_return_url: http://localhost:3002/events
+  allowed_return_urls:
+    - http://localhost:3002
+    - http://localhost:3004
+    - http://127.0.0.1:3002
+    - http://127.0.0.1:3004
+  methods:
+    password:
+      enabled: true
+  flows:
+    error:
+      ui_url: http://localhost:3004/error
+    settings:
+      ui_url: http://localhost:3004/settings
+      privileged_session_max_age: 15m
+    recovery:
+      enabled: false
+    verification:
+      enabled: false
+    logout:
+      after:
+        default_browser_return_url: http://localhost:3004/login
+    login:
+      ui_url: http://localhost:3004/login
+      lifespan: 10m
+    registration:
+      lifespan: 10m
+      ui_url: http://localhost:3004/registration
+      after:
+        password:
+          hooks:
+            - hook: session
+
+log:
+  level: info
+  format: text
+  leak_sensitive_values: true
+
+secrets:
+  cookie:
+    - nxlcldevcookie32byteslongsecret
+  cipher:
+    - nxlcldevcipher32byteslongsecret!
+
+ciphers:
+  algorithm: xchacha20-poly1305
+
+hashers:
+  algorithm: bcrypt
+  bcrypt:
+    cost: 8
+
+identity:
+  default_schema_id: organizer
+  schemas:
+    - id: organizer
+      url: file:///etc/config/kratos/identity.schema.json
+
+session:
+  cookie:
+    domain: localhost
+    path: /
+    same_site: Lax
+
+courier:
+  smtp:
+    connection_uri: smtp://localhost:1025/?disable_starttls=true

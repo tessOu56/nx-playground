@@ -11,12 +11,16 @@ interface ProtectedRouteProps {
 
 export function ProtectedRoute({
   children,
-  ssoUrl = 'https://auth.nx-playground.local',
+  ssoUrl = 'http://localhost:3004/login',
   fallback = null,
 }: ProtectedRouteProps) {
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, isLoading } = useAuth();
 
-  useAuthRedirect(isAuthenticated, ssoUrl);
+  useAuthRedirect(isAuthenticated, ssoUrl, isLoading);
+
+  if (isLoading) {
+    return fallback ?? <p>Loading organizer session…</p>;
+  }
 
   if (!isAuthenticated) {
     return fallback;

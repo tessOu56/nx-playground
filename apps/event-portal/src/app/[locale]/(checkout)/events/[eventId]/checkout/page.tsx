@@ -37,8 +37,8 @@ const paymentMethods = [
   {
     value: 'third_party' as PaymentMethod,
     label: '第三方支付',
-    description: '使用信用卡或其他第三方支付平台進行付款。',
-    disabled: true, // 活動不支援此付款方式
+    description:
+      '導向金流頁完成付款。本機無綠界商家時走模擬流程，不會在本站輸入卡號。',
   },
 ];
 

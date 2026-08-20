@@ -8,6 +8,8 @@ import { PrismaService } from '../../common/prisma/prisma.service';
 
 import { CreateOrderDto } from './dto/create-order.dto';
 import { Order } from './entities/order.entity';
+import { isLineAttendeeUserId, stubLineAttendeeUser } from './attendee-user';
+import { ticketSpecsFromOrderData } from '../tickets/issue-tickets';
 
 const DEMO_USER_ID = 'user_demo';
 
@@ -56,7 +58,13 @@ export class OrdersService {
     }
 
     const userId = dto.userId ?? DEMO_USER_ID;
-    const user = await this.prisma.user.findUnique({ where: { id: userId } });
+    let user = isLineAttendeeUserId(userId)
+      ? await this.prisma.user.upsert({
+          where: { id: userId },
+          create: stubLineAttendeeUser(userId),
+          update: {},
+        })
+      : await this.prisma.user.findUnique({ where: { id: userId } });
     if (!user) {
       throw new BadRequestException(`User ${userId} not found`);
     }
@@ -108,10 +116,33 @@ export class OrdersService {
   }
 
   async confirm(id: string): Promise<Order> {
-    await this.findOne(id);
-    const row = await this.prisma.order.update({
-      where: { id },
-      data: { status: 'confirmed' },
+    const existing = await this.prisma.order.findUnique({ where: { id } });
+    if (!existing) {
+      throw new NotFoundException(`Order ${id} not found`);
+    }
+    if (existing.status === 'confirmed') {
+      return toOrderEntity(existing);
+    }
+
+    const specs = ticketSpecsFromOrderData(parseOrderData(existing.data));
+    const row = await this.prisma.$transaction(async tx => {
+      const updated = await tx.order.update({
+        where: { id },
+        data: { status: 'confirmed' },
+      });
+      for (const spec of specs) {
+        for (let i = 0; i < spec.quantity; i += 1) {
+          await tx.ticket.create({
+            data: {
+              orderId: existing.id,
+              eventId: existing.eventId,
+              type: spec.type,
+              status: 'issued',
+            },
+          });
+        }
+      }
+      return updated;
     });
     return toOrderEntity(row);
   }

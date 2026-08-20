@@ -1,14 +1,29 @@
 import { type NextRequest, NextResponse } from 'next/server';
 
-// Configure for static export
-export const dynamic = 'force-static';
-export const revalidate = false;
+export const dynamic = 'force-dynamic';
 
-// LINE OAuth 配置
+const LEFTOVER_CHANNEL_IDS = new Set(['2007835339']);
+const PLACEHOLDER_SECRETS = new Set([
+  'your_line_client_secret_here',
+  'your_line_client_secret',
+]);
+
+function ownerChannelId(value: string | undefined): string {
+  const trimmed = value?.trim() ?? '';
+  if (!trimmed || LEFTOVER_CHANNEL_IDS.has(trimmed)) return '';
+  return trimmed;
+}
+
+function ownerSecret(value: string | undefined): string {
+  const trimmed = value?.trim() ?? '';
+  if (!trimmed || PLACEHOLDER_SECRETS.has(trimmed)) return '';
+  return trimmed;
+}
+
 const LINE_OAUTH_CONFIG = {
-  clientId: process.env.NEXT_PUBLIC_LINE_CLIENT_ID!,
-  clientSecret: process.env.LINE_CLIENT_SECRET!,
-  redirectUri: process.env.NEXT_PUBLIC_LINE_REDIRECT_URI!,
+  clientId: ownerChannelId(process.env.NEXT_PUBLIC_LINE_CLIENT_ID),
+  clientSecret: ownerSecret(process.env.LINE_CLIENT_SECRET),
+  redirectUri: process.env.NEXT_PUBLIC_LINE_REDIRECT_URI?.trim() ?? '',
   tokenEndpoint: 'https://api.line.me/oauth2/v2.1/token',
   profileEndpoint: 'https://api.line.me/v2/profile',
 };
@@ -39,7 +54,7 @@ export async function POST(request: NextRequest) {
         {
           error: 'Missing environment variables',
           details:
-            '請檢查 LINE_CLIENT_ID, LINE_CLIENT_SECRET, LINE_REDIRECT_URI 是否正確設置',
+            'Owner LINE Login channel is not configured (STOP-013). Do not use another organisation’s credentials.',
         },
         { status: 500 }
       );

@@ -3,6 +3,7 @@ import { Menu } from 'lucide-react';
 import React, { useState } from 'react';
 import { Outlet } from 'react-router-dom';
 
+import { OrganizerGate } from '../auth/OrganizerGate';
 import { Sidebar } from '../components';
 
 export const DashboardLayout: React.FC = () => {
@@ -18,6 +19,7 @@ export const DashboardLayout: React.FC = () => {
   };
 
   return (
+    <OrganizerGate>
     <div className='flex h-screen bg-background-primary'>
       {/* Desktop Sidebar */}
       <div className='hidden md:block'>
@@ -55,5 +57,6 @@ export const DashboardLayout: React.FC = () => {
         </main>
       </div>
     </div>
+    </OrganizerGate>
   );
 };

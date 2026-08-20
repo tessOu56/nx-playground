@@ -1,7 +1,42 @@
+/** Leftover public IDs from another org — never use as product defaults. */
+const LEFTOVER_LIFF_IDS = new Set(['2007835339-AmngJedQ']);
+const LEFTOVER_CHANNEL_IDS = new Set(['2007835339']);
+
+function ownerEnv(
+  value: string | undefined,
+  leftovers: Set<string>
+): string {
+  const trimmed = value?.trim() ?? '';
+  if (!trimmed || leftovers.has(trimmed)) return '';
+  return trimmed;
+}
+
+export const OWNER_LIFF_ID = ownerEnv(
+  process.env.NEXT_PUBLIC_LIFF_ID,
+  LEFTOVER_LIFF_IDS
+);
+export const OWNER_LINE_CLIENT_ID = ownerEnv(
+  process.env.NEXT_PUBLIC_LINE_CLIENT_ID,
+  LEFTOVER_CHANNEL_IDS
+);
+export const OWNER_LINE_PROVIDER_ID =
+  process.env.NEXT_PUBLIC_LINE_PROVIDER_ID?.trim() ?? '';
+export const OWNER_LIFF_URL = process.env.NEXT_PUBLIC_LIFF_URL?.trim() ?? '';
+
+export function hasOwnerLiffId(): boolean {
+  return OWNER_LIFF_ID.length > 0;
+}
+
+export function hasOwnerLineLogin(): boolean {
+  return OWNER_LINE_CLIENT_ID.length > 0;
+}
+
 // LINE 專用常數配置
 export const LINE_CONSTANTS = {
-  // LIFF 配置
-  LIFF_ID: process.env.NEXT_PUBLIC_LIFF_ID || '2007835339-AmngJedQ',
+  // LIFF 配置 — owner STOP-013 env
+  LIFF_ID: OWNER_LIFF_ID,
+  LIFF_URL: OWNER_LIFF_URL,
+  PROVIDER_ID: OWNER_LINE_PROVIDER_ID,
 
   // 官方帳號配置
   OFFICIAL_ACCOUNT_ID: '@your-official-account-id',

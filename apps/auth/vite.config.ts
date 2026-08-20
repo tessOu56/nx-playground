@@ -1,10 +1,14 @@
-import { defineConfig } from 'vite';
+import { resolve } from 'path';
+import { defineConfig, loadEnv } from 'vite';
 import react from '@vitejs/plugin-react';
-import path from 'path';
 
-export default defineConfig({
+export default defineConfig(({ mode }) => {
+  const envDir = resolve(__dirname, '../..');
+  loadEnv(mode, envDir, '');
+  return {
   plugins: [react()],
   root: __dirname,
+  envDir,
   define: {
     'process.env': process.env,
   },
@@ -15,21 +19,21 @@ export default defineConfig({
   },
   resolve: {
     alias: {
-      '@': path.resolve(__dirname, './src'),
+      '@': resolve(__dirname, './src'),
       // Point to src/ directory for CSS imports to work
-      '@nx-playground/design-system': path.resolve(
+      '@nx-playground/design-system': resolve(
         __dirname,
         '../../libs/design-system/src'
       ),
-      '@nx-playground/ui-components': path.resolve(
+      '@nx-playground/ui-components': resolve(
         __dirname,
         '../../libs/ui-components/src/index.ts'
       ),
-      '@nx-playground/api-client': path.resolve(
+      '@nx-playground/api-client': resolve(
         __dirname,
         '../../libs/api-client/src/index.ts'
       ),
-      '@nx-playground/logger': path.resolve(
+      '@nx-playground/logger': resolve(
         __dirname,
         '../../libs/logger/src/index.ts'
       ),
@@ -38,4 +42,5 @@ export default defineConfig({
   build: {
     chunkSizeWarningLimit: 2048,
   },
+  };
 });

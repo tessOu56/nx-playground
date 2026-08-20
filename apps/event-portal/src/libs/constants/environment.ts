@@ -1,3 +1,10 @@
+import {
+  OWNER_LIFF_ID,
+  OWNER_LIFF_URL,
+  OWNER_LINE_CLIENT_ID,
+  OWNER_LINE_PROVIDER_ID,
+} from '../line/constants';
+
 // 環境變數配置
 export const ENV_CONFIG = {
   // API 相關
@@ -5,11 +12,13 @@ export const ENV_CONFIG = {
     process.env.NEXT_PUBLIC_API_BASE_URL ?? 'http://localhost:3001/api',
   API_TIMEOUT: parseInt(process.env.NEXT_PUBLIC_API_TIMEOUT ?? '10000', 10),
 
-  // LINE 相關（基本配置，詳細配置在 lib/line/constants.ts）
-  LIFF_ID: process.env.NEXT_PUBLIC_LIFF_ID ?? '2007835339-AmngJedQ',
-  LINE_CLIENT_ID: process.env.NEXT_PUBLIC_LINE_CLIENT_ID ?? '2007835339',
+  // LINE（owner STOP-013 only; leftover third-party IDs are treated as unset）
+  LIFF_ID: OWNER_LIFF_ID,
+  LIFF_URL: OWNER_LIFF_URL,
+  LINE_CLIENT_ID: OWNER_LINE_CLIENT_ID,
+  LINE_PROVIDER_ID: OWNER_LINE_PROVIDER_ID,
   LINE_REDIRECT_URI:
-    process.env.NEXT_PUBLIC_LINE_REDIRECT_URI ?? 'https://frontend.nx-playground.local',
+    process.env.NEXT_PUBLIC_LINE_REDIRECT_URI ?? 'http://localhost:3000',
 
   // 域名相關
   PRODUCTION_DOMAIN:
