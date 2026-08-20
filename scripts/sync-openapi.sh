@@ -5,8 +5,10 @@ set -e
 
 echo "🔄 Syncing OpenAPI spec..."
 
-# 設置資料庫 URL（絕對路徑）
-export DATABASE_URL="file:$(pwd)/apps/api-server/prisma/dev.db"
+if [ -z "${DATABASE_URL:-}" ] || [[ "${DATABASE_URL}" == file:* ]]; then
+  echo "❌ DATABASE_URL must be postgresql (make db-up or Neon). SQLite is not allowed."
+  exit 1
+fi
 
 # 1. 構建 API server
 echo "📦 Building API server..."

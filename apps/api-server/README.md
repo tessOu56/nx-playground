@@ -23,7 +23,7 @@ lastUpdated: '2025-10-21'
 # API Server - NestJS Backend
 
 > **定位**: Demo API Server for NX Playground
-> **技術**: NestJS 10 + Prisma 5 + SQLite/PostgreSQL
+> **技術**: NestJS 10 + Prisma 5 + PostgreSQL
 > **Port**: 3001
 
 ## 📋 專案概覽
@@ -50,10 +50,11 @@ pnpm install
 
 ### 2. 設置環境變數
 
-複製 `.env.example` 到 `.env`:
+複製 repo 根 `.env.example` 值到 gitignored `.env`（或 `make db-up` + `./scripts/env-setup.sh`）:
 
 ```bash
-cp apps/api-server/.env.example apps/api-server/.env
+# repo root .env — never sqlite
+DATABASE_URL=postgresql://event:event@127.0.0.1:5433/event_stack
 ```
 
 ### 3. 初始化資料庫
@@ -233,7 +234,7 @@ apps/api-server/
 │
 ├── prisma/
 │   ├── schema.prisma            # Database schema
-│   ├── seed.ts                  # Seed data
+│   ├── seed.cjs                 # Seed data (node; postgres only)
 │   └── migrations/              # Migration files
 │
 ├── scripts/

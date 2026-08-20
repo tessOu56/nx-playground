@@ -4,6 +4,8 @@ import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { logger } from '@nx-playground/logger';
 
 import { AppModule } from './app.module';
+import { loadRootEnv } from './common/prisma/load-root-env';
+import { assertPostgresUrl } from './common/prisma/postgres-url';
 
 // Initialize logger for API Server
 logger.setContext({
@@ -12,7 +14,9 @@ logger.setContext({
 });
 
 async function bootstrap() {
+  loadRootEnv();
   logger.info('API Server starting');
+  assertPostgresUrl(process.env.DATABASE_URL);
 
   const app = await NestFactory.create(AppModule);
 
@@ -44,6 +48,7 @@ async function bootstrap() {
     .setTitle('NX Playground API')
     .setDescription('Demo API for NX Playground')
     .setVersion('1.0')
+    .addTag('health', 'Health')
     .addTag('events', 'Events management')
     .addTag('users', 'Users management')
     .addTag('forms', 'Forms management')
@@ -57,6 +62,10 @@ async function bootstrap() {
   // Expose OpenAPI JSON endpoint
   app.getHttpAdapter().get('/api-json', (_req, res) => {
     res.json(document);
+  });
+
+  app.getHttpAdapter().get('/health', (_req, res) => {
+    res.json({ status: 'ok', service: 'api-server', storage: 'postgres' });
   });
 
   app.getHttpAdapter().get('/', (_req, res) => {

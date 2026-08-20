@@ -26,8 +26,8 @@ Angular / Vue / profile / mobile-approvals are leaving or already have independe
 ## Bootstrap
 
 1. `pnpm install --no-frozen-lockfile` (first clone) or `make setup`
-2. `.env`: `DATABASE_URL=file:./apps/api-server/prisma/dev.db` and `NEXT_PUBLIC_API_BASE_URL=http://localhost:3001/api` (mock: `http://localhost:3011/api`). `scripts/env-setup.sh` writes these defaults.
-3. `npx prisma generate --schema=apps/api-server/prisma/schema.prisma` + `db push` + `nx run @nx-playground/api-server:prisma-seed`
+2. `.env`: `DATABASE_URL=postgresql://…` (Neon event-stack or `make db-up` → `postgresql://event:event@127.0.0.1:5433/event_stack`) and `NEXT_PUBLIC_API_BASE_URL=http://localhost:3001/api` (mock-only: `http://localhost:3011/api`). `scripts/env-setup.sh` writes these defaults. SQLite is not allowed.
+3. `make seed` (`prisma migrate deploy` + fixtures)
 4. API live: `pnpm dev:api`. Contract mock: `pnpm dev:api-mock`.
 5. Frontends: `pnpm dev:event-portal`, `pnpm dev:event-cms`, `pnpm dev:auth`
 

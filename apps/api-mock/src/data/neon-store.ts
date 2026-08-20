@@ -1,3 +1,4 @@
+/** Hobby persist tables (`event_stack_*`). Nest Prisma uses `users`/`events`/`orders` on the same Neon if shared. */
 import { neon } from '@neondatabase/serverless';
 
 import { eventsSeed, ordersSeed, usersSeed } from './seed.js';

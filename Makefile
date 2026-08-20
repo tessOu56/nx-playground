@@ -1,6 +1,6 @@
 # ==================== NX Playground 本地開發環境管理 Makefile ====================
 
-.PHONY: help dev dev-event-portal dev-event-cms dev-api dev-api-mock dev-auth setup seed stop restart logs clean build status prod test test-mock test-react test-i18n test-coverage test-watch test-affected
+.PHONY: help dev dev-event-portal dev-event-cms dev-api dev-api-mock dev-auth setup seed db-up stop restart logs clean build status prod test test-mock test-react test-i18n test-coverage test-watch test-affected
 
 # 預設目標
 .DEFAULT_GOAL := help
@@ -28,7 +28,8 @@ help: ## 顯示此幫助信息
 	@echo "  dev-enterprise    僅啟動 Enterprise Admin 服務 (http://localhost:4200)"
 	@echo "  dev-api           僅啟動 API Server 服務 (http://localhost:3001)"
 	@echo "  setup        設置開發環境 (安裝依賴、環境變數)"
-	@echo "  seed         Prisma seed from libs/api-fixtures"
+	@echo "  seed         Prisma migrate deploy + seed from libs/api-fixtures"
+	@echo "  db-up        Start local Postgres on :5433 (docker compose.event-db)"
 	@echo "  stop         停止當前開發站台"
 	@echo "  restart      重啟所有開發服務"
 	@echo "  logs         查看服務日誌"
@@ -141,12 +142,17 @@ setup: ## 設置開發環境
 	@./scripts/env-setup.sh
 	@echo "$(GREEN)[SUCCESS]$(NC) 開發環境設置完成！"
 
-seed: ## Prisma seed from libs/api-fixtures (no hand-editing the DB)
-	@echo "$(BLUE)[INFO]$(NC) prisma generate + db push + seed..."
+seed: ## Prisma migrate deploy + seed from libs/api-fixtures (postgres only)
+	@echo "$(BLUE)[INFO]$(NC) prisma generate + migrate deploy + seed..."
 	@npx prisma generate --schema=apps/api-server/prisma/schema.prisma
-	@npx prisma db push --schema=apps/api-server/prisma/schema.prisma --accept-data-loss
+	@npx prisma migrate deploy --schema=apps/api-server/prisma/schema.prisma
 	@pnpm exec nx run @nx-playground/api-server:prisma-seed
 	@echo "$(GREEN)[SUCCESS]$(NC) seed from libs/api-fixtures"
+
+db-up: ## Local Postgres for Nest (port 5433). Hosted product DB is existing Neon.
+	@echo "$(BLUE)[INFO]$(NC) starting event-stack-db on :5433..."
+	@docker compose -f docker-compose.event-db.yml up -d
+	@echo "$(GREEN)[SUCCESS]$(NC) DATABASE_URL=postgresql://event:event@127.0.0.1:5433/event_stack"
 
 setup-lockfile-only: ## Windows 完整 install 失敗（深層 node_modules ENOENT）時：只刷新 lockfile 再安裝
 	@echo "$(BLUE)[INFO]$(NC) pnpm install --lockfile-only（不落地 node_modules）..."

@@ -1,0 +1,18 @@
+# Local Postgres for Nest (T-240). Does not use the leftover Docker network.
+# Product hosted DB remains the existing Neon event-stack project.
+services:
+  event-stack-db:
+    image: postgres:16-alpine
+    container_name: nx-event-stack-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: event
+      POSTGRES_PASSWORD: event
+      POSTGRES_DB: event_stack
+    ports:
+      - '5433:5432'
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U event -d event_stack']
+      interval: 5s
+      timeout: 5s
+      retries: 10

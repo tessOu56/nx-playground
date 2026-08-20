@@ -1,0 +1,22 @@
+# Nest event-stack API — public funds/tickets path (T-240).
+# Human: apply Blueprint after STOP-015 (see platform-command MANUAL-NOW).
+# Do not create a fifth Vercel project. Hobby nx-event-stack-api stays api-mock only.
+
+services:
+  - type: web
+    name: nx-event-stack-nest
+    runtime: node
+    plan: free
+    region: oregon
+    branch: main
+    autoDeployTrigger: commit
+    healthCheckPath: /health
+    buildCommand: bash scripts/render-event-stack-api.sh build
+    startCommand: bash scripts/render-event-stack-api.sh start
+    envVars:
+      - key: NODE_VERSION
+        value: "20"
+      - key: CORS_ORIGIN
+        value: "https://nx-event-portal.vercel.app,http://localhost:3000,http://localhost:3002,http://localhost:3004"
+      - key: DATABASE_URL
+        sync: false

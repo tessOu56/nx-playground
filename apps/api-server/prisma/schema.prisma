@@ -6,12 +6,11 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite" // 開發用 SQLite
-  // provider = "postgresql"  // 生產用 PostgreSQL
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
-// Note: Database file will be created at apps/api-server/prisma/dev.db
+// Product path is Postgres (Neon hosted / local docker). SQLite is not allowed.
 
 // ==================== 用戶模組 ====================
 

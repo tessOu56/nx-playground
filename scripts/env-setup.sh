@@ -2,47 +2,84 @@
 
 # --- 環境變數設置腳本 ---
 # 統一管理所有環境變數，避免重複維護
+# Parses existing .env without `source` (unquoted values like APP_NAME=NX Playground Events would break bash).
 
-# 設置預設環境變數 (這些變數設定將會被 Docker Compose 讀取)
-export NEXT_PUBLIC_API_BASE_URL=${NEXT_PUBLIC_API_BASE_URL:-http://localhost:3001/api}
-export NEXT_PUBLIC_API_TIMEOUT=${NEXT_PUBLIC_API_TIMEOUT:-10000}
-export NEXT_PUBLIC_LIFF_ID=${NEXT_PUBLIC_LIFF_ID:-2007835339-AmngJedQ}
-export NEXT_PUBLIC_LINE_CLIENT_ID=${NEXT_PUBLIC_LINE_CLIENT_ID:-2007835339}
-export NEXT_PUBLIC_LINE_REDIRECT_URI=${NEXT_PUBLIC_LINE_REDIRECT_URI:-https://frontend.nx-playground.local}
-export LINE_CLIENT_SECRET=${LINE_CLIENT_SECRET:-your_line_client_secret_here}
-export NEXT_PUBLIC_PRODUCTION_DOMAIN=${NEXT_PUBLIC_PRODUCTION_DOMAIN:-https://frontend.nx-playground.local}
-export NEXT_PUBLIC_DEVELOPMENT_DOMAIN=${NEXT_PUBLIC_DEVELOPMENT_DOMAIN:-http://localhost:3000}
-export NEXT_PUBLIC_APP_NAME=${NEXT_PUBLIC_APP_NAME:-NX Playground Events}
-export NEXT_PUBLIC_APP_VERSION=${NEXT_PUBLIC_APP_VERSION:-1.0.0}
-export NEXT_PUBLIC_ENABLE_DEVTOOLS=${NEXT_PUBLIC_ENABLE_DEVTOOLS:-true}
-export NEXT_PUBLIC_ENABLE_MOCK_DATA=${NEXT_PUBLIC_ENABLE_MOCK_DATA:-false}
-export VITE_API_BASE_URL=${VITE_API_BASE_URL:-http://localhost:3001/api}
-export DATABASE_URL=${DATABASE_URL:-file:./apps/api-server/prisma/dev.db}
-export VITE_APP_NAME=${VITE_APP_NAME:-NX Playground Console}
-export VITE_APP_VERSION=${VITE_APP_VERSION:-1.0.0}
+set -euo pipefail
+ROOT="$(cd "$(dirname "$0")/.." && pwd)"
+cd "$ROOT"
 
-# 新增這行：動態設定 Next.js 開發環境使用 HTTPS
-export HTTPS=true
+python3 - <<'PY'
+from pathlib import Path
+import os
+import re
 
-# 生成 .env 文件供 Next.js 和 Docker 使用
-cat > .env << EOF
-# Events 專案的環境變數
-NEXT_PUBLIC_LIFF_ID=${NEXT_PUBLIC_LIFF_ID:-2007835339-AmngJedQ}
-NEXT_PUBLIC_LINE_CLIENT_ID=${NEXT_PUBLIC_LINE_CLIENT_ID:-2007835339}
-LINE_CLIENT_SECRET=${LINE_CLIENT_SECRET:-your_line_client_secret_here}
-NEXT_PUBLIC_LINE_REDIRECT_URI=${NEXT_PUBLIC_LINE_REDIRECT_URI:-https://frontend.nx-playground.local}
-NEXT_PUBLIC_API_BASE_URL=${NEXT_PUBLIC_API_BASE_URL:-http://localhost:3001/api}
-NEXT_PUBLIC_API_TIMEOUT=${NEXT_PUBLIC_API_TIMEOUT:-10000}
-NEXT_PUBLIC_PRODUCTION_DOMAIN=${NEXT_PUBLIC_PRODUCTION_DOMAIN:-https://frontend.nx-playground.local}
-NEXT_PUBLIC_DEVELOPMENT_DOMAIN=${NEXT_PUBLIC_DEVELOPMENT_DOMAIN:-http://localhost:3000}
-NEXT_PUBLIC_APP_NAME=${NEXT_PUBLIC_APP_NAME:-NX Playground Events}
-NEXT_PUBLIC_APP_VERSION=${NEXT_PUBLIC_APP_VERSION:-1.0.0}
-NEXT_PUBLIC_ENABLE_DEVTOOLS=${NEXT_PUBLIC_ENABLE_DEVTOOLS:-true}
-NEXT_PUBLIC_ENABLE_MOCK_DATA=${NEXT_PUBLIC_ENABLE_MOCK_DATA:-false}
-VITE_API_BASE_URL=${VITE_API_BASE_URL:-http://localhost:3001/api}
-DATABASE_URL=${DATABASE_URL:-file:./apps/api-server/prisma/dev.db}
+root = Path(".")
+env_path = root / ".env"
+existing: dict[str, str] = {}
+if env_path.exists():
+    for raw in env_path.read_text().splitlines():
+        line = raw.strip()
+        if not line or line.startswith("#"):
+            continue
+        m = re.match(r"^([A-Za-z_][A-Za-z0-9_]*)=(.*)$", line)
+        if not m:
+            continue
+        existing[m.group(1)] = m.group(2)
 
-# Console 專案的環境變數
-VITE_APP_NAME=${VITE_APP_NAME:-NX Playground Console}
-VITE_APP_VERSION=${VITE_APP_VERSION:-1.0.0}
-EOF
+def pick(key: str, default: str) -> str:
+    if os.environ.get(key):
+        return os.environ[key]
+    if key in existing and existing[key] != "":
+        return existing[key]
+    return default
+
+local_postgres = "postgresql://event:event@127.0.0.1:5433/event_stack"
+database_url = pick("DATABASE_URL", local_postgres)
+if (
+    not database_url
+    or database_url.startswith("file:")
+    or "sqlite" in database_url.lower()
+):
+    database_url = local_postgres
+
+values = {
+    "NEXT_PUBLIC_LIFF_ID": pick("NEXT_PUBLIC_LIFF_ID", "2007835339-AmngJedQ"),
+    "NEXT_PUBLIC_LINE_CLIENT_ID": pick("NEXT_PUBLIC_LINE_CLIENT_ID", "2007835339"),
+    "LINE_CLIENT_SECRET": pick("LINE_CLIENT_SECRET", "your_line_client_secret_here"),
+    "NEXT_PUBLIC_LINE_REDIRECT_URI": pick(
+        "NEXT_PUBLIC_LINE_REDIRECT_URI", "https://frontend.nx-playground.local"
+    ),
+    "NEXT_PUBLIC_API_BASE_URL": pick(
+        "NEXT_PUBLIC_API_BASE_URL", "http://localhost:3001/api"
+    ),
+    "NEXT_PUBLIC_API_TIMEOUT": pick("NEXT_PUBLIC_API_TIMEOUT", "10000"),
+    "NEXT_PUBLIC_PRODUCTION_DOMAIN": pick(
+        "NEXT_PUBLIC_PRODUCTION_DOMAIN", "https://frontend.nx-playground.local"
+    ),
+    "NEXT_PUBLIC_DEVELOPMENT_DOMAIN": pick(
+        "NEXT_PUBLIC_DEVELOPMENT_DOMAIN", "http://localhost:3000"
+    ),
+    "NEXT_PUBLIC_APP_NAME": pick("NEXT_PUBLIC_APP_NAME", "NX Playground Events"),
+    "NEXT_PUBLIC_APP_VERSION": pick("NEXT_PUBLIC_APP_VERSION", "1.0.0"),
+    "NEXT_PUBLIC_ENABLE_DEVTOOLS": pick("NEXT_PUBLIC_ENABLE_DEVTOOLS", "true"),
+    "NEXT_PUBLIC_ENABLE_MOCK_DATA": pick("NEXT_PUBLIC_ENABLE_MOCK_DATA", "false"),
+    "VITE_API_BASE_URL": pick("VITE_API_BASE_URL", "http://localhost:3001/api"),
+    "DATABASE_URL": database_url,
+    "VITE_APP_NAME": pick("VITE_APP_NAME", "NX Playground Console"),
+    "VITE_APP_VERSION": pick("VITE_APP_VERSION", "1.0.0"),
+    "HTTPS": pick("HTTPS", "true"),
+}
+
+lines = [
+    "# Events 專案的環境變數",
+    *[f"{k}={v}" for k, v in values.items() if k.startswith("NEXT_") or k in ("LINE_CLIENT_SECRET", "VITE_API_BASE_URL", "DATABASE_URL")],
+    "",
+    "# Console 專案的環境變數",
+    f"VITE_APP_NAME={values['VITE_APP_NAME']}",
+    f"VITE_APP_VERSION={values['VITE_APP_VERSION']}",
+    f"HTTPS={values['HTTPS']}",
+    "",
+]
+env_path.write_text("\n".join(lines))
+print("Wrote .env (DATABASE_URL is postgres; secrets preserved when already set).")
+PY

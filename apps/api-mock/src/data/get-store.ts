@@ -2,6 +2,8 @@ import { EventStackStore } from './store.js';
 import { createNeonStore } from './neon-store.js';
 import type { EventStackRepo } from './repo.js';
 
+/** Hobby/CI mock store. Not the Nest funds path (Prisma `users`/`events`/`orders`). */
+
 function memoryRepo(): EventStackRepo {
   const store = new EventStackStore();
   return {

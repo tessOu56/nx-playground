@@ -1,30 +1,34 @@
 # Hosted event stack
 
-Public C-end and API. Planning and hosting policy live in private **platform-command**.
+Public C-end is Vercel Hobby. **Product API (orders / future tickets) is Nest + Postgres**, not Hobby `nx-event-stack-api` (api-mock).
 
 ## Public URLs
 
-| Piece | URL |
-| --- | --- |
-| Event portal | https://nx-event-portal.vercel.app/zh-TW/events |
-| Event API | https://nx-event-stack-api.vercel.app/api |
-
-Portal env: `NEXT_PUBLIC_API_BASE_URL=https://nx-event-stack-api.vercel.app/api`
-
-Local CMS can publish to the hosted API with `VITE_API_BASE_URL` set to the same origin. Persistence uses `DATABASE_URL` on the API project.
-
-## Vercel projects
-
-| Project | Root Directory | Role |
+| Piece | URL | Role |
 | --- | --- | --- |
-| `nx-event-portal` | `apps/event-portal` | Public Next list/detail/register |
-| `nx-event-stack-api` | `apps/api-mock` | Event-stack API (same OpenAPI as Nest) |
+| Event portal | https://nx-event-portal.vercel.app/zh-TW/events | C-end |
+| Nest API (STOP-015 Render) | set after Blueprint apply (`nx-event-stack-nest`) | **Funds / tickets path** |
+| Hobby api-mock | https://nx-event-stack-api.vercel.app/api | CI / preview only — **not funds** |
 
-Do not name a project `platform-command`, `platform-api`, `plinth`, or `metalcraft-platform`.
+Portal/CMS already switch on `NEXT_PUBLIC_API_BASE_URL` / `VITE_API_BASE_URL` (default local Nest `http://localhost:3001/api`). After Render is up, point those at the Nest origin + `/api`. Do not create a fifth Vercel project.
 
-This slice is published with **CLI prebuilt** from the nx monorepo (`nx build` → `vercel build` → deploy `--prebuilt`). Git auto-deploy is not the source of truth yet.
+Local CMS → Nest:
+
+```
+VITE_API_BASE_URL=http://localhost:3001/api
+```
+
+## Vercel vs Render
+
+| Project | Root | Role |
+| --- | --- | --- |
+| `nx-event-portal` | monorepo (`vercel.event-portal.json`) | Public Next |
+| `nx-event-stack-api` | `apps/api-mock` | Mock only |
+| `nx-event-stack-nest` | repo `render.yaml` | Nest + Prisma + Neon `DATABASE_URL` |
+
+Do not name a Vercel project `platform-command`, `platform-api`, `plinth`, or `metalcraft-platform`.
 
 ## Reset
 
-- Local Nest: `make seed`
-- Hosted API: seed runs when the events table is empty; CMS creates persist in Postgres (`DATABASE_URL`)
+- Local Nest: `make db-up && ./scripts/env-setup.sh && make seed`
+- Hosted Nest: Prisma `migrate deploy` on Render build; seed separately if tables are empty
