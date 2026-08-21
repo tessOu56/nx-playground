@@ -32,7 +32,7 @@ export class Event {
     required: false,
     type: 'object',
     additionalProperties: true,
-    description: 'Catalog extras. Mock demo fills this; Nest may omit.',
+    description: 'Catalog extras (sessions, tickets, content, speakers, venue). Nest persists JSON.',
   })
   data?: Record<string, unknown>;
 

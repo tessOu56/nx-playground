@@ -17,4 +17,6 @@ export interface CreateEventDto {
   maxAttendees?: number;
   status?: CreateEventDtoStatus;
   formId?: string;
+  /** Catalog extras (sessions, tickets, content, speakers, venue). */
+  data?: Record<string, unknown>;
 }

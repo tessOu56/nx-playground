@@ -39,12 +39,23 @@ describe('event-stack fixtures', () => {
       startDate: '2026-10-01T10:00:00.000Z',
       endDate: '2026-10-01T12:00:00.000Z',
       status: 'published',
+      data: {
+        speakers: [{ name: '測試講者', title: '工程師', bio: '一句介紹' }],
+        venue: { mapQuery: '台北', transport: '捷運' },
+        sessions: [],
+        faq: [],
+        content: [],
+      },
     };
     assert.equal(validateCreate(payload), true, ajv.errorsText(validateCreate.errors));
     const created = store.createEvent(payload);
     const listed = store.listEvents({ status: 'published', limit: 50 });
     assert.ok(listed.items.some(event => event.id === created.id));
     assert.deepEqual(store.getEvent(created.id)?.title, 'CMS created event');
+    const speakers = store.getEvent(created.id)?.data?.speakers as
+      | { name?: string }[]
+      | undefined;
+    assert.equal(speakers?.[0]?.name, '測試講者');
   });
 
   it('createOrder persists and can be read back', () => {
@@ -73,6 +84,12 @@ describe('event-stack fixtures', () => {
     const catalog = react?.data as { sessions?: { tickets?: { price?: number }[] }[] };
     assert.ok(catalog?.sessions && catalog.sessions.length >= 2);
     assert.equal(catalog.sessions[0]?.tickets?.[0]?.price, 800);
+    const catalogRich = react?.data as {
+      speakers?: { name?: string }[];
+      venue?: { mapQuery?: string };
+    };
+    assert.equal(catalogRich.speakers?.[0]?.name, '林可');
+    assert.ok(catalogRich.venue?.mapQuery);
     const archived = loadFixtureEvents().find(
       event => event.id === 'event_archived'
     );

@@ -26,7 +26,7 @@ export function EventStackCards({
           <li key={event.id}>
             <Link
               href={`/${locale}/events/${event.id}`}
-              className='block w-full overflow-hidden rounded-lg bg-white text-left shadow-md hover:shadow-lg'
+              className='block w-full overflow-hidden rounded-lg bg-white text-left shadow-md hover:shadow-lg transition-shadow duration-[var(--motion-duration-fast,150ms)]'
             >
               <div
                 className='h-40 bg-cover bg-center'

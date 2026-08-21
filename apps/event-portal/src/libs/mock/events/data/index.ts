@@ -196,5 +196,23 @@ export const mockEventDetails: EventDetail[] = mockEvents.map(event => {
     lineSettings,
     content: mockContent,
     faq: mockFAQ,
+    startsAt: `${event.date}T00:00:00.000Z`,
+    endsAt: `${event.date}T23:59:59.000Z`,
+    startTime: event.sessions[0]?.time ?? '00:00',
+    organizerName: lineSettings.displayName,
+    remainingSeats: event.sessions.reduce(
+      (sum, session) =>
+        sum +
+        session.tickets.reduce(
+          (ticketSum, ticket) => ticketSum + (ticket.availableQuantity || 0),
+          0
+        ),
+      0
+    ),
+    speakers: [],
+    venue: {
+      address: event.location,
+      mapQuery: event.location,
+    },
   };
 });

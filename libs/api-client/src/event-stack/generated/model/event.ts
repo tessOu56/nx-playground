@@ -18,6 +18,8 @@ export interface Event {
   maxAttendees?: number;
   status: EventStatus;
   formId?: string;
+  /** Catalog extras. */
+  data?: Record<string, unknown>;
   createdAt: string;
   updatedAt: string;
 }

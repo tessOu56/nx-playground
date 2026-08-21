@@ -44,4 +44,13 @@ export class CreateEventDto {
   @IsString()
   @IsOptional()
   formId?: string;
+
+  @ApiProperty({
+    required: false,
+    type: 'object',
+    additionalProperties: true,
+    description: 'Catalog extras (sessions, tickets, content, speakers, venue).',
+  })
+  @IsOptional()
+  data?: Record<string, unknown>;
 }

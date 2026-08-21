@@ -73,7 +73,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html lang='zh-TW'>
+    <html lang='zh-TW' data-app='nx-event'>
       <head>
         <link rel='icon' href='/icon.svg' type='image/svg+xml' />
         <link rel='apple-touch-icon' href='/apple-icon.svg' />

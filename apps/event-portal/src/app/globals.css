@@ -1,6 +1,7 @@
 /* Import design system - 使用 webpack alias 自動處理環境路徑 */
 @import '@design-system/tokens/generated/tailwind-variables.css';
 @import '@design-system/index.css';
+@import './styles/tokens.nx-event.css';
 
 @tailwind base;
 @tailwind components;

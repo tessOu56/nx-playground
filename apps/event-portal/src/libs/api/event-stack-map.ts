@@ -5,6 +5,8 @@ import type {
   EventContentBlock,
   EventDetail,
   EventFAQ,
+  EventSpeaker,
+  EventVenue,
   LineSettings,
   Session,
   SessionTicket,
@@ -276,23 +278,77 @@ export function toPortalEvent(api: EventStackEvent): Event {
   };
 }
 
+function mapSpeakers(raw: unknown): EventSpeaker[] {
+  if (!Array.isArray(raw)) return [];
+  return raw
+    .map(item => asRecord(item))
+    .filter((item): item is Record<string, unknown> => Boolean(item))
+    .map(row => ({
+      name: String(row.name ?? '').trim(),
+      title: typeof row.title === 'string' ? row.title : undefined,
+      bio: typeof row.bio === 'string' ? row.bio : undefined,
+      avatarUrl: typeof row.avatarUrl === 'string' ? row.avatarUrl : undefined,
+    }))
+    .filter(row => row.name.length > 0);
+}
+
+function mapVenue(
+  raw: unknown,
+  location: string
+): EventVenue {
+  const record = asRecord(raw);
+  const lat = record && typeof record.lat === 'number' ? record.lat : undefined;
+  const lng = record && typeof record.lng === 'number' ? record.lng : undefined;
+  return {
+    address:
+      (record && typeof record.address === 'string' && record.address) ||
+      location,
+    transport:
+      record && typeof record.transport === 'string'
+        ? record.transport
+        : undefined,
+    mapQuery:
+      record && typeof record.mapQuery === 'string'
+        ? record.mapQuery.trim() || undefined
+        : location.trim() || undefined,
+    lat,
+    lng,
+  };
+}
+
+function remainingSeatsOf(sessions: Session[]): number {
+  return sessions.reduce(
+    (sum, session) =>
+      sum +
+      session.tickets.reduce(
+        (ticketSum, ticket) => ticketSum + (ticket.availableQuantity || 0),
+        0
+      ),
+    0
+  );
+}
+
 export function toPortalEventDetail(api: EventStackEvent): EventDetail {
   const catalog = catalogOf(api);
+  const event = toPortalEvent(api);
   const content = mapContent(catalog.content);
+  const organizer =
+    typeof catalog.organizer === 'string' && catalog.organizer.trim()
+      ? catalog.organizer.trim()
+      : STACK_LINE.displayName;
   return {
-    ...toPortalEvent(api),
+    ...event,
     vendor: STACK_VENDOR,
     lineSettings: STACK_LINE,
-    content:
-      content.length > 0
-        ? content
-        : [
-            {
-              type: 'text',
-              text_data: api.description ?? '',
-            },
-          ],
+    content,
     faq: mapFaq(catalog.faq),
+    startsAt: api.startDate,
+    endsAt: api.endDate,
+    startTime: event.sessions[0]?.time ?? isoTime(api.startDate),
+    organizerName: organizer,
+    remainingSeats: remainingSeatsOf(event.sessions),
+    speakers: mapSpeakers(catalog.speakers),
+    venue: mapVenue(catalog.venue, api.location ?? ''),
   };
 }
 

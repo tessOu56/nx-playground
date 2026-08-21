@@ -23,21 +23,7 @@ export function EventFAQ({ faq }: EventFAQProps) {
   };
 
   if (!faq || faq.length === 0) {
-    return (
-      <Card className='p-6'>
-        <h2 className='text-xl font-semibold text-gray-900 mb-4'>常見問題</h2>
-        <div className='text-center py-8'>
-          <span
-            className='text-gray-400 text-4xl mb-4 block'
-            role='img'
-            aria-label='問號'
-          >
-            ❓
-          </span>
-          <p className='text-gray-500'>該活動無 FAQ</p>
-        </div>
-      </Card>
-    );
+    return null;
   }
 
   return (

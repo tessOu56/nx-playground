@@ -61,6 +61,21 @@ export interface EventFAQ {
   answer: string;
 }
 
+export interface EventSpeaker {
+  name: string;
+  title?: string;
+  bio?: string;
+  avatarUrl?: string;
+}
+
+export interface EventVenue {
+  address: string;
+  transport?: string;
+  mapQuery?: string;
+  lat?: number;
+  lng?: number;
+}
+
 // 系統本身的 Event 類型（基本資料）
 export interface Event {
   id: string;
@@ -88,4 +103,11 @@ export interface EventDetail extends Event {
   lineSettings: LineSettings; // LINE 設定資訊
   content: EventContentBlock[]; // 活動內容（編輯器內容）
   faq: EventFAQ[]; // 常見問題
+  startsAt: string;
+  endsAt: string;
+  startTime: string;
+  organizerName: string;
+  remainingSeats: number;
+  speakers: EventSpeaker[];
+  venue: EventVenue;
 }

@@ -203,7 +203,7 @@
       "tmp@<=0.2.3": ">=0.2.4",
       "next": "15.5.9",
       "react-hook-form": "7.62.0",
-      "@is_tess/tokens": "^0.1.0"
+      "@is_tess/tokens": "^0.1.2"
     }
   },
   "devDependencies": {

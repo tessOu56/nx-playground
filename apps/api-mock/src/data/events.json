@@ -4,10 +4,30 @@
     "name": "基本報名表單",
     "schema": {
       "fields": [
-        { "id": "name", "type": "text", "label": "姓名", "required": true },
-        { "id": "email", "type": "email", "label": "Email", "required": true },
-        { "id": "phone", "type": "tel", "label": "電話", "required": false },
-        { "id": "note", "type": "textarea", "label": "備註", "required": false }
+        {
+          "id": "name",
+          "type": "text",
+          "label": "姓名",
+          "required": true
+        },
+        {
+          "id": "email",
+          "type": "email",
+          "label": "Email",
+          "required": true
+        },
+        {
+          "id": "phone",
+          "type": "tel",
+          "label": "電話",
+          "required": false
+        },
+        {
+          "id": "note",
+          "type": "textarea",
+          "label": "備註",
+          "required": false
+        }
       ]
     }
   },
@@ -25,7 +45,10 @@
       "data": {
         "image": "https://picsum.photos/seed/event_react19/1200/640",
         "category": "前端",
-        "tags": ["React", "Next.js"],
+        "tags": [
+          "React",
+          "Next.js"
+        ],
         "saleStart": "2026-08-01T00:00:00.000Z",
         "saleEnd": "2026-11-14T16:00:00.000Z",
         "content": [
@@ -104,7 +127,28 @@
               }
             ]
           }
-        ]
+        ],
+        "organizer": "Event Stack 社群",
+        "speakers": [
+          {
+            "name": "林可",
+            "title": "前端工程師",
+            "bio": "把 React 19 compiler 接到現有 Next 報名頁。",
+            "avatarUrl": "https://picsum.photos/seed/speaker-lin/256/256"
+          },
+          {
+            "name": "周寧",
+            "title": "設計系統",
+            "bio": "維護活動頁資訊層與元件邊界。",
+            "avatarUrl": "https://picsum.photos/seed/speaker-chou/256/256"
+          }
+        ],
+        "venue": {
+          "transport": "捷運市政府站 2 號出口，步行約 5 分鐘。",
+          "mapQuery": "台北市信義區松高路 1 號",
+          "lat": 25.03396,
+          "lng": 121.56447
+        }
       }
     },
     {
@@ -120,7 +164,10 @@
       "data": {
         "image": "https://picsum.photos/seed/event_nestjs/1200/640",
         "category": "後端",
-        "tags": ["NestJS", "Prisma"],
+        "tags": [
+          "NestJS",
+          "Prisma"
+        ],
         "saleStart": "2026-06-01T00:00:00.000Z",
         "saleEnd": "2026-08-01T16:00:00.000Z",
         "content": [
@@ -156,7 +203,22 @@
               }
             ]
           }
-        ]
+        ],
+        "organizer": "Event Stack 後端小組",
+        "speakers": [
+          {
+            "name": "何澄",
+            "title": "後端工程師",
+            "bio": "Nest 模組邊界、OpenAPI 與 Prisma 實作。",
+            "avatarUrl": "https://picsum.photos/seed/speaker-he/256/256"
+          }
+        ],
+        "venue": {
+          "transport": "捷運忠孝復興站 5 號出口，步行約 8 分鐘。",
+          "mapQuery": "台北市大安區復興南路一段 390 號",
+          "lat": 25.0418,
+          "lng": 121.5439
+        }
       }
     },
     {
@@ -172,7 +234,9 @@
       "data": {
         "image": "https://picsum.photos/seed/event_summer/1200/640",
         "category": "社群",
-        "tags": ["開源"],
+        "tags": [
+          "開源"
+        ],
         "saleStart": "2026-05-01T00:00:00.000Z",
         "saleEnd": "2026-07-11T16:00:00.000Z",
         "content": [
@@ -208,7 +272,22 @@
               }
             ]
           }
-        ]
+        ],
+        "organizer": "台中開源社群",
+        "speakers": [
+          {
+            "name": "張予",
+            "title": "社群志工",
+            "bio": "主持開源小聚與新參者導引。",
+            "avatarUrl": "https://picsum.photos/seed/speaker-chang/256/256"
+          }
+        ],
+        "venue": {
+          "transport": "公車公益路站步行 3 分鐘。",
+          "mapQuery": "台中市西區公益路 130 號",
+          "lat": 24.1506,
+          "lng": 120.662
+        }
       }
     },
     {
@@ -224,7 +303,9 @@
       "data": {
         "image": "https://picsum.photos/seed/event_archived/1200/640",
         "category": "戶外",
-        "tags": ["路跑"],
+        "tags": [
+          "路跑"
+        ],
         "saleStart": "2026-08-01T00:00:00.000Z",
         "saleEnd": "2026-09-01T16:00:00.000Z",
         "content": [
@@ -254,7 +335,15 @@
               }
             ]
           }
-        ]
+        ],
+        "organizer": "高雄路跑協會",
+        "speakers": [],
+        "venue": {
+          "transport": "輕軌鹽埕埔站步行 10 分鐘。",
+          "mapQuery": "高雄市鹽埕區",
+          "lat": 22.624,
+          "lng": 120.284
+        }
       }
     },
     {
@@ -270,8 +359,23 @@
       "data": {
         "image": "https://picsum.photos/seed/event_nx/1200/640",
         "category": "工程",
-        "tags": ["Nx"],
-        "sessions": []
+        "tags": [
+          "Nx"
+        ],
+        "sessions": [],
+        "organizer": "Event Stack",
+        "speakers": [
+          {
+            "name": "吳航",
+            "title": "平台工程",
+            "bio": "Nx 邊界與 CI 快取（草稿場，不公開）。",
+            "avatarUrl": "https://picsum.photos/seed/speaker-wu/256/256"
+          }
+        ],
+        "venue": {
+          "transport": "線上會議，報名後寄連結。",
+          "mapQuery": ""
+        }
       }
     }
   ]

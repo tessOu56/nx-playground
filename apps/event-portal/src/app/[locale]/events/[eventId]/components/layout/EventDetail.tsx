@@ -106,7 +106,12 @@ export function EventDetail({ eventId }: EventDetailProps) {
       ) : !event ? (
         <EventInfoHeaderError kind='not-found' />
       ) : (
-        <EventInfoHeader event={event} eventId={eventId} />
+        <>
+          <EventInfoHeader event={event} eventId={eventId} />
+          <p className='text-sm text-gray-500'>
+            示範身分即可報名，無需登入。
+          </p>
+        </>
       )}
 
       {/* 活動內容 */}

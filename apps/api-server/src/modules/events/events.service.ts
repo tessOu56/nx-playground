@@ -52,9 +52,18 @@ export class EventsService {
   async create(createEventDto: CreateEventDto) {
     return this.prisma.event.create({
       data: {
-        ...createEventDto,
+        title: createEventDto.title,
+        description: createEventDto.description,
+        location: createEventDto.location,
         startDate: new Date(createEventDto.startDate),
         endDate: new Date(createEventDto.endDate),
+        maxAttendees: createEventDto.maxAttendees,
+        status: createEventDto.status,
+        formId: createEventDto.formId,
+        data:
+          createEventDto.data === undefined
+            ? undefined
+            : (createEventDto.data as object),
       },
     });
   }
@@ -72,6 +81,10 @@ export class EventsService {
         endDate: updateEventDto.endDate
           ? new Date(updateEventDto.endDate)
           : undefined,
+        data:
+          updateEventDto.data === undefined
+            ? undefined
+            : (updateEventDto.data as object),
       },
     });
   }

@@ -27,22 +27,12 @@ interface EventContentProps {
 }
 
 export function EventContent({ content }: EventContentProps) {
-  if (!content || content.length === 0) {
-    return (
-      <Card className='p-6'>
-        <h2 className='text-xl font-semibold text-gray-900 mb-4'>活動內容</h2>
-        <div className='text-center py-8'>
-          <span
-            className='text-gray-400 text-4xl mb-4 block'
-            role='img'
-            aria-label='文件'
-          >
-            📄
-          </span>
-          <p className='text-gray-500'>該活動沒有詳細內容</p>
-        </div>
-      </Card>
-    );
+  const hasVisibleContent = (content ?? []).some(
+    block =>
+      Boolean(block.text_data?.trim()) || Boolean(block.image_data?.trim())
+  );
+  if (!hasVisibleContent) {
+    return null;
   }
 
   // 渲染內容區塊的函式 - 匹配後端數據結構
