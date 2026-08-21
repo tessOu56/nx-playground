@@ -1,5 +1,7 @@
 import { type MetadataRoute } from 'next';
 
+import { publicSiteUrl } from '../libs/seo/public-site-url';
+
 export const dynamic = 'force-static';
 
 export default function robots(): MetadataRoute.Robots {
@@ -17,6 +19,6 @@ export default function robots(): MetadataRoute.Robots {
         ],
       },
     ],
-    sitemap: 'https://events.nx-playground.local/sitemap.xml',
+    sitemap: `${publicSiteUrl()}/sitemap.xml`,
   };
 }

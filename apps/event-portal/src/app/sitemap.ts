@@ -1,11 +1,12 @@
 import { type MetadataRoute } from 'next';
 
 import { pageNumbers } from '../libs';
+import { publicSiteUrl } from '../libs/seo/public-site-url';
 
 export const dynamic = 'force-static';
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = 'https://events.nx-playground.local';
+  const baseUrl = publicSiteUrl();
 
   // 從頁面配置生成 sitemap 條目
   const pages = Object.values(pageNumbers)
