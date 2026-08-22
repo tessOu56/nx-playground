@@ -38,13 +38,28 @@ function memoryRepo(): EventStackRepo {
 
 let cached: EventStackRepo | undefined;
 
+function useMemoryStore(): boolean {
+  const explicit = process.env.EVENT_STACK_STORE?.trim().toLowerCase();
+  if (explicit === 'memory' || explicit === '1' || explicit === 'true') {
+    return true;
+  }
+  if (explicit === 'postgres' || explicit === 'neon') {
+    return false;
+  }
+  // Hobby C-end demo must not silently use Neon when DATABASE_URL leaks in.
+  if (process.env.VERCEL === '1') {
+    if (process.env.DATABASE_URL) {
+      console.warn(
+        '[event-stack-api] VERCEL + DATABASE_URL ignored; using memory fixtures. Set EVENT_STACK_STORE=postgres to override.'
+      );
+    }
+    return true;
+  }
+  return !process.env.DATABASE_URL;
+}
+
 export function getEventStackRepo(): EventStackRepo {
   if (cached) return cached;
-  const forceMemory =
-    process.env.EVENT_STACK_STORE === 'memory' ||
-    process.env.EVENT_STACK_STORE === '1';
-  const databaseUrl = process.env.DATABASE_URL;
-  cached =
-    !forceMemory && databaseUrl ? createNeonStore(databaseUrl) : memoryRepo();
+  cached = useMemoryStore() ? memoryRepo() : createNeonStore(process.env.DATABASE_URL!);
   return cached;
 }

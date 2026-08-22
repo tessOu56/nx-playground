@@ -167,9 +167,15 @@ export async function handleEventStackHttp(
 
   try {
     switch (route.name) {
-      case 'health':
-        send(req, res, 200, { status: 'ok', storage: store.storage });
+      case 'health': {
+        const listed = await store.listEvents({ limit: 1 });
+        send(req, res, 200, {
+          status: 'ok',
+          storage: store.storage,
+          catalogEvents: listed.total,
+        });
         return;
+      }
       case 'listEvents':
         send(
           req,
