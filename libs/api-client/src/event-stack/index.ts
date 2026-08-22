@@ -4,6 +4,7 @@
  * (http://localhost:3001/api live, http://localhost:3011/api mock).
  */
 export { getEventStackBaseUrl, eventStackRequest } from './http';
+export { setEventStackOrganizerAuth } from './auth';
 export * from './types';
 export * from './operations';
 // Hooks stay off this entry so Next.js Server Components can import fetch ops.

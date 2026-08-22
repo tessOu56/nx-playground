@@ -15,6 +15,8 @@ tags:
   - name: orders
   - name: tickets
   - name: payments
+  - name: users
+  - name: stats
 paths:
   /events:
     get:
@@ -120,6 +122,47 @@ paths:
           description: Deleted
         '404':
           description: Event not found
+  /users:
+    get:
+      tags: [users]
+      summary: List users (CMS organizer auth)
+      operationId: listUsers
+      parameters:
+        - in: query
+          name: role
+          schema:
+            type: string
+        - in: query
+          name: status
+          schema:
+            type: string
+        - in: query
+          name: page
+          schema:
+            type: number
+        - in: query
+          name: limit
+          schema:
+            type: number
+      responses:
+        '200':
+          description: Paginated users
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserListResponse'
+  /stats:
+    get:
+      tags: [stats]
+      summary: Dashboard aggregate counts
+      operationId: getStats
+      responses:
+        '200':
+          description: Counts from Postgres
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EventStackStats'
   /orders:
     get:
       tags: [orders]
@@ -639,4 +682,59 @@ components:
           $ref: '#/components/schemas/PaymentIntent'
         replayed:
           type: boolean
+    EventStackUser:
+      type: object
+      required: [id, email, name, role, status, createdAt, updatedAt]
+      properties:
+        id:
+          type: string
+        email:
+          type: string
+        name:
+          type: string
+        avatar:
+          type: string
+          nullable: true
+        role:
+          type: string
+          enum: [admin, organizer, user]
+        status:
+          type: string
+          enum: [active, inactive, suspended]
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+    UserListResponse:
+      type: object
+      required: [items, total, page, limit, totalPages]
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/EventStackUser'
+        total:
+          type: integer
+        page:
+          type: integer
+        limit:
+          type: integer
+        totalPages:
+          type: integer
+    EventStackStats:
+      type: object
+      required: [events, users, activeUsers, orders, ticketsSold]
+      properties:
+        events:
+          type: integer
+        users:
+          type: integer
+        activeUsers:
+          type: integer
+        orders:
+          type: integer
+        ticketsSold:
+          type: integer
 

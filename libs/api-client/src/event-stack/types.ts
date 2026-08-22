@@ -101,3 +101,30 @@ export interface PaymentWebhookResponse {
   intent: EventStackPaymentIntent;
   replayed: boolean;
 }
+
+export interface EventStackUser {
+  id: string;
+  email: string;
+  name: string;
+  avatar?: string | null;
+  role: 'admin' | 'organizer' | 'user';
+  status: 'active' | 'inactive' | 'suspended';
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface UserListResponse {
+  items: EventStackUser[];
+  total: number;
+  page: number;
+  limit: number;
+  totalPages: number;
+}
+
+export interface EventStackStats {
+  events: number;
+  users: number;
+  activeUsers: number;
+  orders: number;
+  ticketsSold: number;
+}

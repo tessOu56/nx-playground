@@ -13,6 +13,7 @@ import {
   Badge,
   Progress,
 } from '@nx-playground/ui-components';
+import { useGetStats } from '@nx-playground/api-client';
 import {
   Calendar,
   Users,
@@ -26,8 +27,9 @@ import {
   PieChart,
   ArrowUpRight,
   ArrowDownRight,
+  Ticket,
 } from 'lucide-react';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 
 import { SEO } from '../../../components/SEO';
 import { useDashboardTranslation } from '../hooks/useDashboardTranslation';
@@ -40,10 +42,8 @@ import {
   StatusDistributionChart,
 } from '../components/charts';
 
-// Mock data for dashboard
+// Mock data for dashboard charts and revenue (T-245 allows shells)
 const mockStats = {
-  totalEvents: 24,
-  activeUsers: 1234,
   monthlyRevenue: 12800,
   systemStatus: 'normal',
   eventGrowth: 12.5,
@@ -92,11 +92,11 @@ const mockSystemHealth = [
 export const DashboardPage = () => {
   const { t } = useDashboardTranslation();
   const [selectedTimeRange, setSelectedTimeRange] = useState('7d');
+  const { data: stats, isLoading: statsLoading } = useGetStats();
 
-  // Simulate data loading
-  useEffect(() => {
-    // Data loading simulation can be added here if needed
-  }, [selectedTimeRange]);
+  const totalEvents = stats?.events ?? 0;
+  const activeUsers = stats?.activeUsers ?? 0;
+  const ticketsSold = stats?.ticketsSold ?? 0;
 
   const getStatusIcon = (status: string) => {
     switch (status) {
@@ -184,7 +184,7 @@ export const DashboardPage = () => {
                       {t('dashboard.stats.totalEvents') as string}
                     </p>
                     <p className='text-2xl font-bold text-text-primary'>
-                      {mockStats.totalEvents}
+                      {statsLoading ? '…' : totalEvents}
                     </p>
                   </div>
                 </div>
@@ -215,7 +215,9 @@ export const DashboardPage = () => {
                       {t('dashboard.stats.activeUsers') as string}
                     </p>
                     <p className='text-2xl font-bold text-text-primary'>
-                      {mockStats.activeUsers.toLocaleString()}
+                      {statsLoading
+                        ? '…'
+                        : activeUsers.toLocaleString()}
                     </p>
                   </div>
                 </div>
@@ -233,32 +235,22 @@ export const DashboardPage = () => {
             </CardContent>
           </Card>
 
-          {/* 本月收入 */}
+          {/* 已售出票券（Nest） */}
           <Card>
             <CardContent className='p-6'>
               <div className='flex items-center justify-between'>
                 <div className='flex items-center'>
                   <div className='p-2 bg-warning-100 rounded-lg'>
-                    <DollarSign className='w-6 h-6 text-warning-600' />
+                    <Ticket className='w-6 h-6 text-warning-600' />
                   </div>
                   <div className='ml-4'>
                     <p className='text-sm font-medium text-text-secondary'>
-                      {t('dashboard.stats.monthlyRevenue') as string}
+                      {t('dashboard.stats.ticketsSold') as string}
                     </p>
                     <p className='text-2xl font-bold text-text-primary'>
-                      ${mockStats.monthlyRevenue.toLocaleString()}
+                      {statsLoading ? '…' : ticketsSold.toLocaleString()}
                     </p>
                   </div>
-                </div>
-                <div
-                  className={`flex items-center gap-1 ${getGrowthColor(
-                    mockStats.revenueGrowth
-                  )}`}
-                >
-                  {getGrowthIcon(mockStats.revenueGrowth)}
-                  <span className='text-sm font-medium'>
-                    {Math.abs(mockStats.revenueGrowth)}%
-                  </span>
                 </div>
               </div>
             </CardContent>

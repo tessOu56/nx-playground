@@ -9,8 +9,10 @@ import {
   deleteEvent,
   getEvent,
   getOrder,
+  getStats,
   listEvents,
   listOrders,
+  listUsers,
   updateEvent,
 } from './operations';
 
@@ -111,5 +113,24 @@ export function useConfirmOrderMutation() {
     onSuccess: order => {
       queryClient.setQueryData(['event-stack', 'order', order.id], order);
     },
+  });
+}
+
+export function useListUsers(query?: {
+  role?: string;
+  status?: string;
+  page?: number;
+  limit?: number;
+}) {
+  return useQuery({
+    queryKey: ['event-stack', 'users', query],
+    queryFn: () => listUsers(query),
+  });
+}
+
+export function useGetStats() {
+  return useQuery({
+    queryKey: ['event-stack', 'stats'],
+    queryFn: () => getStats(),
   });
 }

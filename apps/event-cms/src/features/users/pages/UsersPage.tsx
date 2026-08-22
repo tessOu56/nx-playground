@@ -7,15 +7,16 @@ import {
   Badge,
 } from '@nx-playground/ui-components';
 import { Plus, Edit, Eye } from 'lucide-react';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 
 import { DataTable, type Column } from '../../../components/DataTable';
 import { UserDetailDialog } from '../components/UserDetailDialog';
 import { UserEditDialog } from '../components/UserEditDialog';
 import { UserRoleManager } from '../components/UserRoleManager';
-import { mockUsers } from '../mock/userData';
+import { useUsersQuery } from '../hooks/useUsersQuery';
 import type { User, UserFormData } from '../types';
 import { ROLES, STATUSES } from '../types';
+import { mapNestUserToCms } from '../utils/mapNestUser';
 
 const formatDate = (dateString: string | null) => {
   if (!dateString) return '從未登入';
@@ -29,12 +30,19 @@ const formatDate = (dateString: string | null) => {
 };
 
 export function UsersPage() {
-  const [users, setUsers] = useState<User[]>(mockUsers);
-  const [isLoading, setIsLoading] = useState(false);
+  const { data, isLoading, isFetching, refetch } = useUsersQuery();
+  const [localOverrides, setLocalOverrides] = useState<
+    Record<string, Partial<User>>
+  >({});
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
   const [isDetailOpen, setIsDetailOpen] = useState(false);
   const [isEditOpen, setIsEditOpen] = useState(false);
   const [editingUser, setEditingUser] = useState<User | null>(null);
+
+  const users = useMemo(() => {
+    const base = (data?.items ?? []).map(mapNestUserToCms);
+    return base.map(user => ({ ...user, ...localOverrides[user.id] }));
+  }, [data, localOverrides]);
 
   // Define columns for the DataTable
   const columns: Column<User>[] = [
@@ -127,8 +135,7 @@ export function UsersPage() {
   ];
 
   const handleRefresh = () => {
-    setIsLoading(true);
-    setTimeout(() => setIsLoading(false), 1000);
+    void refetch();
   };
 
   const handleExport = () => {
@@ -140,27 +147,25 @@ export function UsersPage() {
     setIsDetailOpen(true);
   };
 
-  const handleSaveUser = (data: UserFormData) => {
+  const handleSaveUser = (formData: UserFormData) => {
     if (editingUser) {
-      // Update existing user
-      setUsers(
-        users.map(u =>
-          u.id === editingUser.id
-            ? { ...u, ...data }
-            : u
-        )
-      );
+      setLocalOverrides(prev => ({
+        ...prev,
+        [editingUser.id]: { ...prev[editingUser.id], ...formData },
+      }));
     } else {
-      // Create new user
       const newUser: User = {
-        ...data,
-        id: String(users.length + 1),
+        ...formData,
+        id: `local_${Date.now()}`,
         avatar: null,
         lastLogin: null,
         createdAt: new Date().toISOString(),
         permissions: ['events.read'],
       };
-      setUsers([...users, newUser]);
+      setLocalOverrides(prev => ({
+        ...prev,
+        [newUser.id]: newUser,
+      }));
     }
     setIsEditOpen(false);
     setEditingUser(null);
@@ -168,11 +173,10 @@ export function UsersPage() {
 
   const handleUpdatePermissions = (permissions: string[]) => {
     if (selectedUser) {
-      setUsers(
-        users.map(u =>
-          u.id === selectedUser.id ? { ...u, permissions } : u
-        )
-      );
+      setLocalOverrides(prev => ({
+        ...prev,
+        [selectedUser.id]: { ...prev[selectedUser.id], permissions },
+      }));
       setSelectedUser({ ...selectedUser, permissions });
     }
   };
@@ -214,7 +218,7 @@ export function UsersPage() {
           <DataTable
             data={users}
             columns={columns}
-            loading={isLoading}
+            loading={isLoading || isFetching}
             searchable={true}
             filterable={true}
             pagination={true}

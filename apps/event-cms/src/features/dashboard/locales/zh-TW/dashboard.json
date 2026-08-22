@@ -5,6 +5,7 @@
     "stats": {
       "totalEvents": "總活動數",
       "activeUsers": "活躍用戶",
+      "ticketsSold": "已售出票券",
       "monthlyRevenue": "本月收入",
       "systemStatus": "系統狀態",
       "normal": "正常"

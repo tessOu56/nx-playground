@@ -1,0 +1,46 @@
+name: Deploy nx-event-stack-api
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'apps/api-mock/**'
+      - 'libs/api-fixtures/**'
+      - 'libs/api-client/specs/event-stack.openapi.yaml'
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-api-mock
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    if: ${{ secrets.VERCEL_TOKEN != '' && secrets.VERCEL_API_MOCK_PROJECT_ID != '' }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10.13.1
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      - name: Deploy api-mock to Vercel production
+        working-directory: apps/api-mock
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_API_MOCK_PROJECT_ID }}
+        run: |
+          npx vercel@latest deploy --prod --yes --token "$VERCEL_TOKEN"
+
+      - name: Verify health
+        run: |
+          curl -sfS 'https://nx-event-stack-api.vercel.app/api/health' | tee /tmp/health.json
+          grep -q '"storage":"memory"' /tmp/health.json

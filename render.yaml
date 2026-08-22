@@ -20,3 +20,9 @@ services:
         value: "https://nx-event-portal.vercel.app,http://localhost:3000,http://localhost:3002,http://localhost:3004"
       - key: DATABASE_URL
         sync: false
+      - key: CMS_ORGANIZER_API_TOKEN
+        sync: false
+      - key: ALLOWED_ORGANIZER_EMAILS
+        sync: false
+      - key: EVENT_STACK_CMS_DEV_AUTH
+        value: "false"

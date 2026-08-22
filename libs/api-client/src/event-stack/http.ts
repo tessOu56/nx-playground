@@ -1,3 +1,5 @@
+import { getEventStackOrganizerHeaders } from './auth';
+
 export function getEventStackBaseUrl(): string {
   const fromEnv =
     (typeof process !== 'undefined' &&
@@ -18,6 +20,7 @@ export async function eventStackRequest<T>(
     ...init,
     headers: {
       'Content-Type': 'application/json',
+      ...getEventStackOrganizerHeaders(),
       ...(init?.headers ?? {}),
     },
   });

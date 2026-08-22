@@ -13,6 +13,10 @@ export default defineConfig(({ mode }) => {
     fileEnv.VITE_KRATOS_PUBLIC_URL ??
     process.env.VITE_KRATOS_PUBLIC_URL ??
     'http://localhost:4433';
+  const cmsOrganizerToken =
+    fileEnv.VITE_CMS_ORGANIZER_API_TOKEN ??
+    process.env.VITE_CMS_ORGANIZER_API_TOKEN ??
+    '';
   const authAppUrl =
     fileEnv.VITE_AUTH_APP_URL ??
     process.env.VITE_AUTH_APP_URL ??
@@ -34,6 +38,7 @@ export default defineConfig(({ mode }) => {
     'process.env.VITE_API_BASE_URL': JSON.stringify(viteApiBaseUrl),
     'process.env.VITE_KRATOS_PUBLIC_URL': JSON.stringify(kratosPublicUrl),
     'process.env.VITE_AUTH_APP_URL': JSON.stringify(authAppUrl),
+    'process.env.VITE_CMS_ORGANIZER_API_TOKEN': JSON.stringify(cmsOrganizerToken),
     'process.env.NODE_ENV': JSON.stringify(mode),
   },
 

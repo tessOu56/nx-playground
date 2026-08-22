@@ -9,7 +9,7 @@ import { OrdersService } from '../orders/orders.service';
 
 import {
   amountFromOrderData,
-  assertSandboxCheckoutUrl,
+  assertCheckoutUrlAllowed,
   checkoutUrlForProvider,
   newMerchantTradeNo,
   paymentProviderFromEnv,
@@ -103,7 +103,7 @@ export class PaymentsService {
       .toString(36)
       .slice(2, 8)}`;
     const checkoutUrl = checkoutUrlForProvider(provider, publicApiBase, id);
-    assertSandboxCheckoutUrl(checkoutUrl);
+    assertCheckoutUrlAllowed(checkoutUrl, provider);
 
     const row = await this.prisma.paymentIntent.create({
       data: {

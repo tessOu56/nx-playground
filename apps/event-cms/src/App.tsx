@@ -4,6 +4,7 @@ import { I18nProvider } from '@nx-playground/i18n';
 import { ToastProvider } from '@nx-playground/ui-components';
 import { RouterProvider } from 'react-router-dom';
 
+import { OrganizerApiAuthSync } from './auth/OrganizerApiAuthSync';
 import { router } from './router';
 
 const KRATOS_PUBLIC_URL =
@@ -14,6 +15,7 @@ function App() {
   return (
     <I18nProvider>
       <AuthProvider kratosPublicUrl={KRATOS_PUBLIC_URL}>
+        <OrganizerApiAuthSync />
         <QueryProvider>
           <ToastProvider>
             <RouterProvider router={router} />

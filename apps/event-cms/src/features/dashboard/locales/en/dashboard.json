@@ -5,6 +5,7 @@
     "stats": {
       "totalEvents": "Total Events",
       "activeUsers": "Active Users",
+      "ticketsSold": "Tickets Sold",
       "monthlyRevenue": "Monthly Revenue",
       "systemStatus": "System Status",
       "normal": "Normal"

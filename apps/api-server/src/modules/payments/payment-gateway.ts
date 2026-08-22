@@ -1,15 +1,23 @@
 export const ECPAY_SANDBOX_CHECKOUT =
   'https://payment-stage.ecpay.com.tw/Cashier/AioCheckOut/V5';
+export const ECPAY_LIVE_CHECKOUT =
+  'https://payment.ecpay.com.tw/Cashier/AioCheckOut/V5';
 export const ECPAY_LIVE_HOST = 'payment.ecpay.com.tw';
 
-export type PaymentProvider = 'mock' | 'ecpay-sandbox';
+export type PaymentProvider = 'mock' | 'ecpay-sandbox' | 'ecpay-live';
 
-export function paymentProviderFromEnv(): PaymentProvider {
+function hasEcpayKeys(): boolean {
   const merchantId = process.env.ECPAY_MERCHANT_ID?.trim() ?? '';
   const hashKey = process.env.ECPAY_HASH_KEY?.trim() ?? '';
   const hashIV = process.env.ECPAY_HASH_IV?.trim() ?? '';
-  if (merchantId && hashKey && hashIV) return 'ecpay-sandbox';
-  return 'mock';
+  return Boolean(merchantId && hashKey && hashIV);
+}
+
+export function paymentProviderFromEnv(): PaymentProvider {
+  if (!hasEcpayKeys()) return 'mock';
+  const mode = (process.env.ECPAY_MODE ?? 'sandbox').trim().toLowerCase();
+  if (mode === 'live') return 'ecpay-live';
+  return 'ecpay-sandbox';
 }
 
 export function amountFromOrderData(data: Record<string, unknown>): number {
@@ -34,13 +42,19 @@ export function checkoutUrlForProvider(
   publicApiBase: string,
   intentId: string
 ): string {
+  if (provider === 'ecpay-live') return ECPAY_LIVE_CHECKOUT;
   if (provider === 'ecpay-sandbox') return ECPAY_SANDBOX_CHECKOUT;
   return mockCheckoutUrl(publicApiBase, intentId);
 }
 
-export function assertSandboxCheckoutUrl(url: string): void {
+/** Block accidental live checkout until STOP-014 / T-244 explicitly enables it. */
+export function assertCheckoutUrlAllowed(
+  url: string,
+  provider: PaymentProvider
+): void {
+  if (provider === 'ecpay-live') return;
   if (url.includes(ECPAY_LIVE_HOST) && !url.includes('payment-stage')) {
-    throw new Error('Live ECPay is T-244 / STOP-014');
+    throw new Error('Live ECPay requires ECPAY_MODE=live (T-244 / STOP-014)');
   }
 }
 
@@ -90,4 +104,9 @@ export function mockCompleteHtml(input: {
     <p><a href="?outcome=failed">模擬付款失敗</a></p>
   </body>
 </html>`;
+}
+
+/** Documented manual refund path until ECPay refund API is wired (T-244). */
+export function refundPathNote(): string {
+  return 'Manual refund via ECPay merchant portal or support ticket; API refund endpoint not implemented in Wave I.';
 }

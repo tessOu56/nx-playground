@@ -8,11 +8,14 @@ import type {
   EventStackOrder,
   EventStackPaymentIntent,
   EventStackTicket,
+  EventStackStats,
+  EventStackUser,
   OrderListResponse,
   PaymentIntentListResponse,
   PaymentWebhookResponse,
   TicketListResponse,
   TicketVerifyResponse,
+  UserListResponse,
 } from './types';
 
 export function listEvents(query?: {
@@ -114,4 +117,17 @@ export function postPaymentWebhook(body: {
     method: 'POST',
     body: JSON.stringify(body),
   });
+}
+
+export function listUsers(query?: {
+  role?: string;
+  status?: string;
+  page?: number;
+  limit?: number;
+}): Promise<UserListResponse> {
+  return eventStackRequest(`/users${toQuery(query ?? {})}`);
+}
+
+export function getStats(): Promise<EventStackStats> {
+  return eventStackRequest('/stats');
 }
