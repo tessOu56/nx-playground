@@ -93,6 +93,11 @@ export interface Event {
   tags: string[];
   status: 'upcoming' | 'ongoing' | 'completed' | 'cancelled';
   sessions: Session[]; // 活動場次陣列
+  /** ISO end — list cards date range */
+  endsAt?: string;
+  organizerName?: string;
+  speakerCount?: number;
+  venueHint?: string;
 
   registrationFormTemplate?: import('./registrationForm').EventRegistrationTemplate;
 }

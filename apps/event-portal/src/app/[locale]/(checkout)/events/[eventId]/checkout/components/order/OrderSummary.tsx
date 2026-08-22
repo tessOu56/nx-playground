@@ -90,14 +90,20 @@ export function OrderSummary({ event }: OrderSummaryProps) {
       <div className='max-w-4xl mx-auto'>
         {/* 訂單詳情 */}
         <div className='mb-3'>
-          <h3 className='text-lg font-semibold text-gray-900 mb-2'>訂單總計</h3>
+          <h3 className='text-lg font-semibold text-gray-900 mb-1'>訂單總計</h3>
+          <p className='text-xs text-gray-500 mb-2'>{event.title}</p>
 
           {/* 場次資訊 */}
           {selectedSessionData && (
-            <div className='text-sm text-gray-600 mb-2'>
-              <span className='font-medium'>{selectedSessionData.name}</span>
-              <span className='mx-2'>•</span>
-              <span>{selectedSessionData.time}</span>
+            <div className='text-sm text-gray-600 mb-2 rounded-md bg-gray-50 px-3 py-2'>
+              <p className='text-xs uppercase tracking-wide text-gray-400 mb-0.5'>
+                場次
+              </p>
+              <p>
+                <span className='font-medium'>{selectedSessionData.name}</span>
+                <span className='mx-2'>•</span>
+                <span>{selectedSessionData.time}</span>
+              </p>
             </div>
           )}
 

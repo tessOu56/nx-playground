@@ -255,6 +255,17 @@ export function toPortalEvent(api: EventStackEvent): Event {
   const tags = Array.isArray(catalog.tags)
     ? catalog.tags.filter((tag): tag is string => typeof tag === 'string')
     : [];
+  const speakers = mapSpeakers(catalog.speakers);
+  const organizer =
+    typeof catalog.organizer === 'string' && catalog.organizer.trim()
+      ? catalog.organizer.trim()
+      : undefined;
+  const venueRecord = asRecord(catalog.venue);
+  const venueHint =
+    (venueRecord &&
+      typeof venueRecord.transport === 'string' &&
+      venueRecord.transport.trim()) ||
+    undefined;
 
   return {
     id: api.id,
@@ -262,6 +273,7 @@ export function toPortalEvent(api: EventStackEvent): Event {
     title: api.title,
     description: api.description ?? '',
     date: isoDate(api.startDate),
+    endsAt: api.endDate,
     location: api.location ?? '',
     price: prices.length > 0 ? Math.min(...prices) : 0,
     image:
@@ -275,6 +287,9 @@ export function toPortalEvent(api: EventStackEvent): Event {
     tags,
     status: portalStatus(kind),
     sessions,
+    organizerName: organizer,
+    speakerCount: speakers.length > 0 ? speakers.length : undefined,
+    venueHint,
   };
 }
 

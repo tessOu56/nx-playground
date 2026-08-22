@@ -35,6 +35,15 @@ export default async function CheckoutLayout({
           {/* 頁面標題 - 結帳專用 */}
           <div className='mb-8'>
             <BackLink href={`/${locale}/events/${eventId}`} />
+            <div
+              className='mb-4 rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900'
+              role='note'
+              data-testid='checkout-mock-payment-banner'
+            >
+              <strong className='font-semibold'>示範結帳</strong>
+              <span className='mx-1'>—</span>
+              付款與金流為 mock，不會扣款；完成後可在訂單頁查看狀態與後續步驟。
+            </div>
             <div className='text-center'>
               <h1 className='text-3xl font-bold text-gray-900 mb-2'>選擇票券</h1>
               <p className='text-gray-600'>請選擇您想要的票券類型和付款方式</p>

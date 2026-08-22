@@ -81,8 +81,34 @@ export function OrderInfoHeader({
     orderItems.reduce((sum, item) => sum + item.totalPrice, 0) ||
     order.totalAmount;
 
+  const nextStepMessage = (() => {
+    if (order.status === 'cancelled') {
+      return '此訂單已取消，無需進一步動作。';
+    }
+    if (order.status === 'completed') {
+      return '活動當天請出示票券 QR 或訂單編號報到。';
+    }
+    if (bill?.status === 'pending' || bill?.status === 'verifying') {
+      return '請依帳單指示完成 mock 付款；核帳後票券會出現在訂單明細。';
+    }
+    if (order.status === 'confirmed' || bill?.status === 'paid') {
+      return '付款已確認。若尚未填寫報名表，請從票券明細進入；活動前會收到提醒（示範）。';
+    }
+    return '這是示範訂單：選擇票券後可在本頁追蹤狀態，不會實際扣款。';
+  })();
+
   return (
     <div className='bg-white rounded-lg shadow-md p-6'>
+      <div
+        className='mb-4 rounded-lg border border-blue-100 bg-blue-50 px-4 py-3'
+        role='status'
+        data-testid='order-next-steps'
+      >
+        <p className='text-xs font-semibold uppercase tracking-wide text-blue-800'>
+          接下來
+        </p>
+        <p className='mt-1 text-sm text-blue-900'>{nextStepMessage}</p>
+      </div>
       <div className='flex items-center justify-between mb-4'>
         <h2 className='text-xl font-semibold text-gray-900'>
           訂單編號: {order.id}
