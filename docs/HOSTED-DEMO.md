@@ -14,6 +14,8 @@ Local Nest + Postgres remains the interview / future money spine. Do not point l
 
 Public portal `NEXT_PUBLIC_API_BASE_URL` = Hobby `/api`. Local CMS still uses Nest (`VITE_API_BASE_URL=http://localhost:3001/api`). Do not create a fifth Vercel project.
 
+**Fixture updates:** edit `libs/api-fixtures/src/events.json` (and keep `apps/api-mock/src/data/events.json` in sync), then **redeploy `nx-event-stack-api`** (separate Vercel project under `apps/api-mock`). Pushing `nx-event-portal` alone does not refresh the API catalog. Check `GET /api/health` for `catalogEvents` after deploy. Until the API redeploys, event-portal merges thin API payloads with bundled fixtures for labelled demo fields (speakers, venue, organizer).
+
 Local CMS → Nest:
 
 ```

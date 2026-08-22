@@ -11,6 +11,7 @@
     "@line/liff": "2.27.1",
     "@next/env": "15.5.9",
     "@nx-playground/api-client": "workspace:*",
+    "@nx-playground/api-fixtures": "workspace:*",
     "@nx-playground/auth-client": "workspace:*",
     "@nx-playground/design-system": "workspace:*",
     "@nx-playground/i18n": "workspace:*",

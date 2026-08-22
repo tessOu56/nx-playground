@@ -517,7 +517,7 @@ importers:
         version: 3.2.4(vitest@3.2.4)
       '@vue/cli-plugin-babel':
         specifier: ~5.0.0
-        version: 5.0.9(@swc/core@1.13.5(@swc/helpers@0.5.17))(@vue/cli-service@5.0.9(@rspack/core@1.5.8(@swc/helpers@0.5.17))(@swc/core@1.13.5(@swc/helpers@0.5.17))(@vue/compiler-sfc@3.5.22)(ejs@3.1.10)(encoding@0.1.13)(esbuild@0.25.10)(handlebars@4.7.8)(lodash@4.17.21)(prettier@2.8.8)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(vue@3.5.22(typescript@5.8.2))(webpack-sources@3.3.3))(encoding@0.1.13)(esbuild@0.25.10)(vue@3.5.22(typescript@5.8.2))
+        version: 5.0.9(@swc/core@1.13.5(@swc/helpers@0.5.17))(@vue/cli-service@5.0.9(@rspack/core@1.5.8(@swc/helpers@0.5.17))(@swc/core@1.13.5(@swc/helpers@0.5.17))(@vue/compiler-sfc@3.5.22)(ejs@3.1.10)(encoding@0.1.13)(esbuild@0.25.10)(handlebars@4.7.8)(lodash@4.17.21)(prettier@2.8.8)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(vue@3.5.22(typescript@5.8.2))(webpack-sources@3.3.3))(core-js@3.45.1)(encoding@0.1.13)(esbuild@0.25.10)(vue@3.5.22(typescript@5.8.2))
       '@vue/cli-plugin-eslint':
         specifier: ~5.0.0
         version: 5.0.9(@swc/core@1.13.5(@swc/helpers@0.5.17))(@vue/cli-service@5.0.9(@rspack/core@1.5.8(@swc/helpers@0.5.17))(@swc/core@1.13.5(@swc/helpers@0.5.17))(@vue/compiler-sfc@3.5.22)(ejs@3.1.10)(encoding@0.1.13)(esbuild@0.25.10)(handlebars@4.7.8)(lodash@4.17.21)(prettier@2.8.8)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(vue@3.5.22(typescript@5.8.2))(webpack-sources@3.3.3))(encoding@0.1.13)(esbuild@0.25.10)(eslint@9.37.0(jiti@2.4.2))
@@ -780,6 +780,9 @@ importers:
       '@nx-playground/api-client':
         specifier: workspace:*
         version: link:../../libs/api-client
+      '@nx-playground/api-fixtures':
+        specifier: workspace:*
+        version: link:../../libs/api-fixtures
       '@nx-playground/auth-client':
         specifier: workspace:*
         version: link:../../libs/auth-client
@@ -1003,7 +1006,7 @@ importers:
         version: 7.28.4(@babel/core@7.28.4)(eslint@7.32.0)
       '@vue/cli-plugin-babel':
         specifier: ~5.0.0
-        version: 5.0.9(@swc/core@1.13.5(@swc/helpers@0.5.17))(@vue/cli-service@5.0.9(@rspack/core@1.5.8(@swc/helpers@0.5.17))(@swc/core@1.13.5(@swc/helpers@0.5.17))(@vue/compiler-sfc@3.5.22)(ejs@3.1.10)(encoding@0.1.13)(esbuild@0.25.10)(handlebars@4.7.8)(lodash@4.17.21)(prettier@2.8.8)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(vue@3.5.22(typescript@5.9.3))(webpack-sources@3.3.3))(encoding@0.1.13)(esbuild@0.25.10)(vue@3.5.22(typescript@5.9.3))
+        version: 5.0.9(@swc/core@1.13.5(@swc/helpers@0.5.17))(@vue/cli-service@5.0.9(@rspack/core@1.5.8(@swc/helpers@0.5.17))(@swc/core@1.13.5(@swc/helpers@0.5.17))(@vue/compiler-sfc@3.5.22)(ejs@3.1.10)(encoding@0.1.13)(esbuild@0.25.10)(handlebars@4.7.8)(lodash@4.17.21)(prettier@2.8.8)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(vue@3.5.22(typescript@5.9.3))(webpack-sources@3.3.3))(core-js@3.45.1)(encoding@0.1.13)(esbuild@0.25.10)(vue@3.5.22(typescript@5.9.3))
       '@vue/cli-plugin-eslint':
         specifier: ~5.0.0
         version: 5.0.9(@swc/core@1.13.5(@swc/helpers@0.5.17))(@vue/cli-service@5.0.9(@rspack/core@1.5.8(@swc/helpers@0.5.17))(@swc/core@1.13.5(@swc/helpers@0.5.17))(@vue/compiler-sfc@3.5.22)(ejs@3.1.10)(encoding@0.1.13)(esbuild@0.25.10)(handlebars@4.7.8)(lodash@4.17.21)(prettier@2.8.8)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(vue@3.5.22(typescript@5.9.3))(webpack-sources@3.3.3))(encoding@0.1.13)(esbuild@0.25.10)(eslint@7.32.0)
@@ -7610,8 +7613,11 @@ packages:
     resolution: {integrity: sha512-0rKOF4s/AhaRMJLybxOCgXfwtYhO3pwDSL/q/W8wRs1LzmHAc77FyTXWlun6VyKiSKwSdtH7CvOiWqq+DfofdA==}
     peerDependencies:
       '@babel/core': '*'
+      core-js: ^3
       vue: ^2 || ^3.2.13
     peerDependenciesMeta:
+      core-js:
+        optional: true
       vue:
         optional: true
 
@@ -26529,7 +26535,6 @@ snapshots:
     optionalDependencies:
       msw: 2.10.4(@types/node@22.18.8)(typescript@5.9.3)
       vite: 6.3.6(@types/node@22.18.8)(jiti@2.4.2)(less@4.4.2)(lightningcss@1.27.0)(sass-embedded@1.93.2)(sass@1.93.2)(terser@5.44.0)(tsx@4.20.6)(yaml@2.9.0)
-    optional: true
 
   '@vitest/pretty-format@2.0.5':
     dependencies:
@@ -26572,7 +26577,7 @@ snapshots:
       sirv: 3.0.2
       tinyglobby: 0.2.15
       tinyrainbow: 2.0.0
-      vitest: 3.2.4(@types/debug@4.1.12)(@types/node@22.18.8)(@vitest/ui@3.2.4)(jiti@2.4.2)(jsdom@26.1.0)(less@4.4.2)(lightningcss@1.27.0)(msw@2.10.4(@types/node@22.18.8)(typescript@5.8.2))(sass-embedded@1.93.2)(sass@1.93.2)(terser@5.44.0)(tsx@4.20.6)(yaml@2.9.0)
+      vitest: 3.2.4(@types/debug@4.1.12)(@types/node@22.18.8)(@vitest/ui@3.2.4)(jiti@2.6.1)(jsdom@26.1.0)(less@4.4.2)(lightningcss@1.27.0)(msw@2.10.4(@types/node@22.18.8)(typescript@5.9.3))(sass-embedded@1.93.2)(sass@1.93.2)(terser@5.44.0)(tsx@4.20.6)(yaml@2.9.0)
 
   '@vitest/utils@2.0.5':
     dependencies:
@@ -26648,7 +26653,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@vue/babel-preset-app@5.0.9(@babel/core@7.28.4)(vue@3.5.22(typescript@5.8.2))':
+  '@vue/babel-preset-app@5.0.9(@babel/core@7.28.4)(core-js@3.45.1)(vue@3.5.22(typescript@5.8.2))':
     dependencies:
       '@babel/core': 7.28.4
       '@babel/helper-compilation-targets': 7.27.2
@@ -26663,15 +26668,15 @@ snapshots:
       '@vue/babel-plugin-jsx': 1.5.0(@babel/core@7.28.4)
       '@vue/babel-preset-jsx': 1.4.0(@babel/core@7.28.4)(vue@3.5.22(typescript@5.8.2))
       babel-plugin-dynamic-import-node: 2.3.3
-      core-js: 3.45.1
       core-js-compat: 3.45.1
       semver: 7.8.5
     optionalDependencies:
+      core-js: 3.45.1
       vue: 3.5.22(typescript@5.8.2)
     transitivePeerDependencies:
       - supports-color
 
-  '@vue/babel-preset-app@5.0.9(@babel/core@7.28.4)(vue@3.5.22(typescript@5.9.3))':
+  '@vue/babel-preset-app@5.0.9(@babel/core@7.28.4)(core-js@3.45.1)(vue@3.5.22(typescript@5.9.3))':
     dependencies:
       '@babel/core': 7.28.4
       '@babel/helper-compilation-targets': 7.27.2
@@ -26686,10 +26691,10 @@ snapshots:
       '@vue/babel-plugin-jsx': 1.5.0(@babel/core@7.28.4)
       '@vue/babel-preset-jsx': 1.4.0(@babel/core@7.28.4)(vue@3.5.22(typescript@5.9.3))
       babel-plugin-dynamic-import-node: 2.3.3
-      core-js: 3.45.1
       core-js-compat: 3.45.1
       semver: 7.8.5
     optionalDependencies:
+      core-js: 3.45.1
       vue: 3.5.22(typescript@5.9.3)
     transitivePeerDependencies:
       - supports-color
@@ -26769,10 +26774,10 @@ snapshots:
 
   '@vue/cli-overlay@5.0.9': {}
 
-  '@vue/cli-plugin-babel@5.0.9(@swc/core@1.13.5(@swc/helpers@0.5.17))(@vue/cli-service@5.0.9(@rspack/core@1.5.8(@swc/helpers@0.5.17))(@swc/core@1.13.5(@swc/helpers@0.5.17))(@vue/compiler-sfc@3.5.22)(ejs@3.1.10)(encoding@0.1.13)(esbuild@0.25.10)(handlebars@4.7.8)(lodash@4.17.21)(prettier@2.8.8)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(vue@3.5.22(typescript@5.8.2))(webpack-sources@3.3.3))(encoding@0.1.13)(esbuild@0.25.10)(vue@3.5.22(typescript@5.8.2))':
+  '@vue/cli-plugin-babel@5.0.9(@swc/core@1.13.5(@swc/helpers@0.5.17))(@vue/cli-service@5.0.9(@rspack/core@1.5.8(@swc/helpers@0.5.17))(@swc/core@1.13.5(@swc/helpers@0.5.17))(@vue/compiler-sfc@3.5.22)(ejs@3.1.10)(encoding@0.1.13)(esbuild@0.25.10)(handlebars@4.7.8)(lodash@4.17.21)(prettier@2.8.8)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(vue@3.5.22(typescript@5.8.2))(webpack-sources@3.3.3))(core-js@3.45.1)(encoding@0.1.13)(esbuild@0.25.10)(vue@3.5.22(typescript@5.8.2))':
     dependencies:
       '@babel/core': 7.28.4
-      '@vue/babel-preset-app': 5.0.9(@babel/core@7.28.4)(vue@3.5.22(typescript@5.8.2))
+      '@vue/babel-preset-app': 5.0.9(@babel/core@7.28.4)(core-js@3.45.1)(vue@3.5.22(typescript@5.8.2))
       '@vue/cli-service': 5.0.9(@rspack/core@1.5.8(@swc/helpers@0.5.17))(@swc/core@1.13.5(@swc/helpers@0.5.17))(@vue/compiler-sfc@3.5.22)(ejs@3.1.10)(encoding@0.1.13)(esbuild@0.25.10)(handlebars@4.7.8)(lodash@4.17.21)(prettier@2.8.8)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(vue@3.5.22(typescript@5.8.2))(webpack-sources@3.3.3)
       '@vue/cli-shared-utils': 5.0.9(encoding@0.1.13)
       babel-loader: 8.4.1(@babel/core@7.28.4)(webpack@5.102.1(@swc/core@1.13.5(@swc/helpers@0.5.17))(esbuild@0.25.10))
@@ -26780,6 +26785,7 @@ snapshots:
       webpack: 5.102.1(@swc/core@1.13.5(@swc/helpers@0.5.17))(esbuild@0.25.10)
     transitivePeerDependencies:
       - '@swc/core'
+      - core-js
       - encoding
       - esbuild
       - supports-color
@@ -26787,10 +26793,10 @@ snapshots:
       - vue
       - webpack-cli
 
-  '@vue/cli-plugin-babel@5.0.9(@swc/core@1.13.5(@swc/helpers@0.5.17))(@vue/cli-service@5.0.9(@rspack/core@1.5.8(@swc/helpers@0.5.17))(@swc/core@1.13.5(@swc/helpers@0.5.17))(@vue/compiler-sfc@3.5.22)(ejs@3.1.10)(encoding@0.1.13)(esbuild@0.25.10)(handlebars@4.7.8)(lodash@4.17.21)(prettier@2.8.8)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(vue@3.5.22(typescript@5.9.3))(webpack-sources@3.3.3))(encoding@0.1.13)(esbuild@0.25.10)(vue@3.5.22(typescript@5.9.3))':
+  '@vue/cli-plugin-babel@5.0.9(@swc/core@1.13.5(@swc/helpers@0.5.17))(@vue/cli-service@5.0.9(@rspack/core@1.5.8(@swc/helpers@0.5.17))(@swc/core@1.13.5(@swc/helpers@0.5.17))(@vue/compiler-sfc@3.5.22)(ejs@3.1.10)(encoding@0.1.13)(esbuild@0.25.10)(handlebars@4.7.8)(lodash@4.17.21)(prettier@2.8.8)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(vue@3.5.22(typescript@5.9.3))(webpack-sources@3.3.3))(core-js@3.45.1)(encoding@0.1.13)(esbuild@0.25.10)(vue@3.5.22(typescript@5.9.3))':
     dependencies:
       '@babel/core': 7.28.4
-      '@vue/babel-preset-app': 5.0.9(@babel/core@7.28.4)(vue@3.5.22(typescript@5.9.3))
+      '@vue/babel-preset-app': 5.0.9(@babel/core@7.28.4)(core-js@3.45.1)(vue@3.5.22(typescript@5.9.3))
       '@vue/cli-service': 5.0.9(@rspack/core@1.5.8(@swc/helpers@0.5.17))(@swc/core@1.13.5(@swc/helpers@0.5.17))(@vue/compiler-sfc@3.5.22)(ejs@3.1.10)(encoding@0.1.13)(esbuild@0.25.10)(handlebars@4.7.8)(lodash@4.17.21)(prettier@2.8.8)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(vue@3.5.22(typescript@5.9.3))(webpack-sources@3.3.3)
       '@vue/cli-shared-utils': 5.0.9(encoding@0.1.13)
       babel-loader: 8.4.1(@babel/core@7.28.4)(webpack@5.102.1(@swc/core@1.13.5(@swc/helpers@0.5.17))(esbuild@0.25.10))
@@ -26798,6 +26804,7 @@ snapshots:
       webpack: 5.102.1(@swc/core@1.13.5(@swc/helpers@0.5.17))(esbuild@0.25.10)
     transitivePeerDependencies:
       - '@swc/core'
+      - core-js
       - encoding
       - esbuild
       - supports-color
@@ -38643,7 +38650,6 @@ snapshots:
       - terser
       - tsx
       - yaml
-    optional: true
 
   vite-plugin-dts@4.5.4(@types/node@22.18.8)(rollup@4.52.4)(typescript@5.8.2)(vite@6.3.6(@types/node@22.18.8)(jiti@2.4.2)(less@4.4.2)(lightningcss@1.27.0)(sass-embedded@1.93.2)(sass@1.93.2)(terser@5.44.0)(tsx@4.20.6)(yaml@2.9.0)):
     dependencies:
@@ -38703,7 +38709,6 @@ snapshots:
       terser: 5.44.0
       tsx: 4.20.6
       yaml: 2.9.0
-    optional: true
 
   vite@7.1.5(@types/node@22.18.8)(jiti@2.4.2)(less@4.4.2)(lightningcss@1.27.0)(sass-embedded@1.93.2)(sass@1.90.0)(terser@5.44.0)(tsx@4.20.6)(yaml@2.9.0):
     dependencies:
@@ -38832,7 +38837,6 @@ snapshots:
       - terser
       - tsx
       - yaml
-    optional: true
 
   vlq@1.0.1: {}
 
