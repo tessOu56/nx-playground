@@ -73,6 +73,22 @@ function catalogTicketsForSession(
   });
 }
 
+function parseSpeakers(text?: string): Array<{ name: string; title?: string }> {
+  if (!text?.trim()) return [];
+  return text
+    .split('\n')
+    .map(line => line.trim())
+    .filter(Boolean)
+    .map(line => {
+      const [name, ...rest] = line.split('—');
+      const trimmedName = name?.trim() ?? line;
+      const title = rest.join('—').trim();
+      return title.length > 0
+        ? { name: trimmedName, title }
+        : { name: trimmedName };
+    });
+}
+
 export function toCatalogData(data: EventFormValue): Record<string, unknown> {
   const sessions = data.sessionBlock.map(session => ({
     id: session.id,
@@ -83,13 +99,17 @@ export function toCatalogData(data: EventFormValue): Record<string, unknown> {
     tickets: catalogTicketsForSession(data, session.id),
   }));
 
+  const lat = data.venueLat?.trim();
+  const lng = data.venueLng?.trim();
+
   return {
     category: '活動',
-    organizer: '活動主辦',
-    speakers: [],
+    organizer: data.organizerName.trim(),
+    speakers: parseSpeakers(data.speakersText),
     venue: {
       address: data.eventLocation,
       mapQuery: data.eventLocation,
+      ...(lat && lng ? { lat: Number(lat), lng: Number(lng) } : {}),
     },
     content: catalogContent(data.eventContentBlocks),
     faq: catalogFaq(data.faqBlocks),

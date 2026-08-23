@@ -241,6 +241,10 @@ export const eventFormSchema = z.object({
   eventName: z.string().min(1, '活動名稱不能為空'),
   eventDescription: z.string().min(1, '活動描述不能為空'),
   eventLocation: z.string().min(1, '活動地點不能為空'),
+  organizerName: z.string().min(1, '主辦單位不能為空'),
+  speakersText: z.string().optional(),
+  venueLat: z.string().optional(),
+  venueLng: z.string().optional(),
   eventContentBlocks: z.array(contentBlockSchema).optional(),
   faqBlocks: z.array(faqBlockSchema).optional(),
 

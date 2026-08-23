@@ -19,6 +19,8 @@ export function EventIntroduction() {
   const eventName = watch('eventName');
   const eventDescription = watch('eventDescription');
   const eventLocation = watch('eventLocation');
+  const organizerName = watch('organizerName');
+  const speakersText = watch('speakersText');
 
   return (
     <Card
@@ -49,6 +51,32 @@ export function EventIntroduction() {
             )}
             <Text variant='note' className='w-full text-start'>
               請輸入清晰且具描述性的活動名稱，讓參與者能立即了解活動主題。
+            </Text>
+          </div>
+
+          {/* 主辦單位 */}
+          <div className='w-full flex flex-col gap-2'>
+            <Text variant='content'>主辦單位 ＊</Text>
+            <Input
+              {...register('organizerName')}
+              placeholder='例如：Explore Events 協會'
+            />
+            {errors.organizerName?.message && (
+              <Text variant='content' color='red'>
+                {errors.organizerName.message.toString()}
+              </Text>
+            )}
+          </div>
+
+          {/* 講者（每行一位，可用 — 分隔職稱） */}
+          <div className='w-full flex flex-col gap-2'>
+            <Text variant='content'>講者</Text>
+            <Input
+              {...register('speakersText')}
+              placeholder={'Jane Doe — 前端架構\nJohn Smith — 產品設計'}
+            />
+            <Text variant='note' className='w-full text-start'>
+              每行一位講者；可用全形或半形破折號附加職稱。
             </Text>
           </div>
 
@@ -99,6 +127,20 @@ export function EventIntroduction() {
               <Text variant='note' className='w-full text-start'>
                 請輸入完整的活動地點名稱與地址，方便參與者找到活動會場
               </Text>
+              <div className='flex w-full gap-2'>
+                <Input
+                  {...register('venueLat')}
+                  type='text'
+                  placeholder='緯度 lat（選填）'
+                  className='flex-1'
+                />
+                <Input
+                  {...register('venueLng')}
+                  type='text'
+                  placeholder='經度 lng（選填）'
+                  className='flex-1'
+                />
+              </div>
             </div>
             <div className='w-1/2 flex items-center justify-center'>
               <img
@@ -115,6 +157,14 @@ export function EventIntroduction() {
           <Text variant='title' className='text-start w-full py-4 px-6'>
             {eventName === '' ? '活動名稱' : eventName}
           </Text>
+          <Text variant='content' className='text-start w-full py-2 px-6 text-text-secondary'>
+            {organizerName ? `主辦：${organizerName}` : '主辦單位'}
+          </Text>
+          {speakersText?.trim() ? (
+            <Text variant='note' className='text-start w-full px-6 whitespace-pre-line'>
+              講者：{speakersText}
+            </Text>
+          ) : null}
           <Text variant='content' className='text-start w-full py-4 px-6'>
             {eventDescription === ''
               ? '請簡單說明活動主題與特色，幫助大家快速了解活動內容，並吸引更多人來參與。'

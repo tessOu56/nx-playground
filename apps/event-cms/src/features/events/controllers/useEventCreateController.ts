@@ -19,6 +19,16 @@ import {
 } from '../stores';
 import { type EventFormValue } from '../types';
 
+const portalBaseUrl =
+  (import.meta.env.VITE_EVENT_PORTAL_URL as string | undefined)?.replace(
+    /\/$/,
+    ''
+  ) ?? 'http://localhost:3000';
+
+function portalEventUrl(eventId: string, locale = 'zh-TW') {
+  return `${portalBaseUrl}/${locale}/events/${eventId}`;
+}
+
 export function useEventCreateController() {
   const goToEvents = useNavigate();
   const { isAuthenticated } = useAuth();
@@ -40,7 +50,11 @@ export function useEventCreateController() {
       return;
     }
     try {
-      await EventsService.createEvent(data);
+      const created = await EventsService.createEvent(data);
+      const preview = portalEventUrl(created.id);
+      window.alert(
+        `活動已寫入 Nest。\n\n公開預覽：\n${preview}\n\n（本機 portal 預設 ${portalBaseUrl}）`
+      );
       goToEvents('/events');
     } catch (error) {
       console.error('Failed to create event:', error);

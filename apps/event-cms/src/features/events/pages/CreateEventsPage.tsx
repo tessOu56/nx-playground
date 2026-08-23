@@ -49,23 +49,15 @@ export function CreateEventsPage() {
     mode: 'onChange',
     defaultValues: {
       eventCoverImage: null,
-      eventName: 'i am title ',
-      eventDescription: 'i am descripttion',
-      eventLocation: 'i am location',
-      eventContentBlocks: [
-        {
-          id: '123',
-          type: 'text',
-          content: 'content',
-        },
-      ],
-      faqBlocks: [
-        {
-          id: '123',
-          question: 'i am question',
-          answer: 'i am answer',
-        },
-      ],
+      eventName: '',
+      eventDescription: '',
+      eventLocation: '',
+      organizerName: '',
+      speakersText: '',
+      venueLat: '',
+      venueLng: '',
+      eventContentBlocks: [],
+      faqBlocks: [],
       sessionBlock: [
         {
           id: 'session_001',

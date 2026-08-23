@@ -9,6 +9,10 @@ const form: EventFormValue = {
   eventName: 'CMS 新建場',
   eventDescription: '主辦從 CMS 建立',
   eventLocation: '台北市信義區',
+  organizerName: '示範主辦單位',
+  speakersText: 'Jane Doe — 前端架構\nJohn Smith — 產品設計',
+  venueLat: '25.033',
+  venueLng: '121.565',
   eventContentBlocks: [
     { id: 'c1', type: 'text', content: '這場會講什麼' },
   ],
@@ -85,8 +89,14 @@ describe('CMS catalog DTO', () => {
     assert.deepEqual(catalog.content, [
       { type: 'text', text_data: '這場會講什麼' },
     ]);
-    assert.deepEqual(catalog.speakers, []);
-    const venue = catalog.venue as { mapQuery?: string };
+    assert.deepEqual(catalog.speakers, [
+      { name: 'Jane Doe', title: '前端架構' },
+      { name: 'John Smith', title: '產品設計' },
+    ]);
+    const venue = catalog.venue as { mapQuery?: string; lat?: number; lng?: number };
     assert.equal(venue.mapQuery, '台北市信義區');
+    assert.equal(venue.lat, 25.033);
+    assert.equal(venue.lng, 121.565);
+    assert.equal(catalog.organizer, '示範主辦單位');
   });
 });

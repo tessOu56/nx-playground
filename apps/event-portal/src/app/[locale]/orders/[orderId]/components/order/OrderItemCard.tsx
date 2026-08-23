@@ -97,7 +97,8 @@ export function OrderItemCard({ item }: OrderItemCardProps) {
   // 檢查是否可以填寫/修改報名表（只要訂單項目存在就可以填寫）
   const canFillRegistration = true;
   // 檢查是否可以報到（已出票且有實際票券）
-  const canCheckIn = item.status === 'issued' && ticket;
+  const canCheckIn =
+    item.status === 'issued' && Boolean(ticket?.id ?? item.ticketId);
   // 檢查是否可以分享報名表（訂單項目存在即可分享連結）
   const canShareRegistration = true;
   // 檢查是否可以分享票券（已出票且有實際票券）
@@ -173,7 +174,7 @@ export function OrderItemCard({ item }: OrderItemCardProps) {
             variant='primary'
             size='sm'
             className='bg-green-600 hover:bg-green-700 text-white'
-            disabled={!canShareTicket}
+            disabled={!canCheckIn}
           >
             前往報到
           </Button>
