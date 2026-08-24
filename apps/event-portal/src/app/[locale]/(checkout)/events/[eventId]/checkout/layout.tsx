@@ -44,10 +44,10 @@ export default async function CheckoutLayout({
               <span className='mx-1'>—</span>
               付款與金流為 mock，不會扣款；完成後可在訂單頁查看狀態與後續步驟。
             </div>
-            <div className='text-center'>
-              <h1 className='text-3xl font-bold text-gray-900 mb-2'>選擇票券</h1>
-              <p className='text-gray-600'>請選擇您想要的票券類型和付款方式</p>
-            </div>
+            <h1 className='text-2xl font-semibold text-gray-900'>選擇票券</h1>
+            <p className='mt-1 text-sm text-gray-600'>
+              請選擇場次、票種與付款方式
+            </p>
           </div>
 
           {/* 子頁面內容 */}

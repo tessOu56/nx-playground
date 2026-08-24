@@ -98,9 +98,9 @@ export function OrderInfoHeader({
   })();
 
   return (
-    <div className='bg-white rounded-lg shadow-md p-6'>
+    <div className='bg-white rounded-lg shadow-md p-5 space-y-5'>
       <div
-        className='mb-4 rounded-lg border border-blue-100 bg-blue-50 px-4 py-3'
+        className='rounded-lg border border-blue-100 bg-blue-50 px-4 py-3'
         role='status'
         data-testid='order-next-steps'
       >
@@ -109,99 +109,93 @@ export function OrderInfoHeader({
         </p>
         <p className='mt-1 text-sm text-blue-900'>{nextStepMessage}</p>
       </div>
-      <div className='flex items-center justify-between mb-4'>
-        <h2 className='text-xl font-semibold text-gray-900'>
-          訂單編號: {order.id}
-        </h2>
-        {scenario !== 'unknown' ? (
-          <span className='px-3 py-1 bg-blue-100 text-blue-800 text-sm font-medium rounded-full'>
-            {scenario}
+
+      <div className='flex flex-wrap items-center justify-between gap-2'>
+        <div>
+          <p className='text-xs uppercase tracking-wide text-gray-500'>
+            訂單編號
+          </p>
+          <h2 className='text-lg font-semibold text-gray-900'>{order.id}</h2>
+        </div>
+        <div className='flex items-center gap-2'>
+          <span
+            className={`px-3 py-1 rounded-full text-sm font-medium ${getStatusColor(
+              order.status
+            )}`}
+          >
+            {getStatusText(order.status)}
           </span>
-        ) : null}
+          {scenario !== 'unknown' ? (
+            <span className='px-3 py-1 bg-blue-100 text-blue-800 text-sm font-medium rounded-full'>
+              {scenario}
+            </span>
+          ) : null}
+        </div>
       </div>
 
-      <div className='grid grid-cols-1 md:grid-cols-2 gap-4 mb-4'>
+      <div className='grid grid-cols-2 gap-3 text-sm'>
         <div>
-          <p className='text-sm text-gray-600'>客戶姓名</p>
+          <p className='text-xs text-gray-500'>客戶</p>
           <p className='font-medium text-gray-900'>
             {user?.name ?? order.userId}
           </p>
         </div>
         <div>
-          <p className='text-sm text-gray-600'>訂單狀態</p>
-          <p className='font-medium text-gray-900'>
-            <span
-              className={`px-3 py-1 rounded-full text-sm font-medium ${getStatusColor(
-                order.status
-              )}`}
-            >
-              {getStatusText(order.status)}
-            </span>
-          </p>
-        </div>
-        <div>
-          <p className='text-sm text-gray-600'>付款方式</p>
+          <p className='text-xs text-gray-500'>付款方式</p>
           <p className='font-medium text-gray-900'>
             {getPaymentMethodText(order.paymentMethod)}
           </p>
         </div>
-
         <div>
-          <p className='text-sm text-gray-600'>轉帳帳號</p>
-          <p className='font-medium text-gray-900'>
-            {order.paymentMethod === 'atm' ? bill?.transferAccount ?? '—' : '-'}
-          </p>
-        </div>
-
-        <div>
-          <p className='text-sm text-gray-600'>繳款期限</p>
-          <p className='font-medium text-gray-900'>
-            {bill?.dueDate
-              ? new Date(bill.dueDate).toLocaleDateString('zh-TW')
-              : '—'}
-          </p>
-        </div>
-
-        <div>
-          <p className='text-sm text-gray-600'>繳款狀況</p>
+          <p className='text-xs text-gray-500'>繳款狀況</p>
           <p className='font-medium text-gray-900'>
             {bill?.id
-              ? `${bill.id} -${getBillStatusLabel(bill.status)}`
-              : '付款仍是示範殼'}
+              ? getBillStatusLabel(bill.status)
+              : '付款仍是示範殼（mock）'}
           </p>
         </div>
-
         <div>
-          <p className='text-sm text-gray-600'>付款時間</p>
+          <p className='text-xs text-gray-500'>付款時間</p>
           <p className='font-medium text-gray-900'>
-            {bill?.paidAt ? new Date(bill.paidAt).toLocaleString('zh-TW') : '-'}
+            {bill?.paidAt ? new Date(bill.paidAt).toLocaleString('zh-TW') : '—'}
           </p>
         </div>
       </div>
 
-      <h3 className='text-lg font-semibold text-gray-600 pb-4'>票券明細</h3>
-
-      {/* 訂單明細 */}
-      <div className='space-y-3'>
-        {orderItems.map(item => (
-          <OrderItemCard key={item.id} item={item} />
-        ))}
-      </div>
-
-      {/* 總計 */}
-      <div className='flex items-center justify-between pt-4'>
-        <div>
+      <div>
+        <div className='mb-3 flex items-center justify-between'>
+          <h3 className='text-base font-semibold text-gray-900'>票券明細</h3>
           <p className='text-sm text-blue-700'>
             {orderItems.length > 0
-              ? `共 ${orderItems.length} 種票券，總計 ${totalQuantity} 張`
-              : `總計 ${totalQuantity} 張（票項明細仍是殼）`}
+              ? `${orderItems.length} 張`
+              : `${totalQuantity} 張`}
           </p>
         </div>
-        <div className='text-right'>
-          <p className='text-2xl font-bold text-blue-900'>
-            NT$ {totalAmount.toLocaleString()}
-          </p>
-        </div>
+
+        {orderItems.length === 0 ? (
+          <div
+            className='rounded-md border border-dashed border-gray-200 bg-gray-50 px-4 py-6 text-center'
+            data-testid='order-tickets-empty'
+          >
+            <p className='text-sm font-medium text-gray-800'>尚無票券明細</p>
+            <p className='mt-1 text-xs text-gray-500'>
+              確認付款或出票後，票券與報到／核銷 CTA 會出現在此。
+            </p>
+          </div>
+        ) : (
+          <div className='space-y-3'>
+            {orderItems.map(item => (
+              <OrderItemCard key={item.id} item={item} />
+            ))}
+          </div>
+        )}
+      </div>
+
+      <div className='flex items-center justify-between border-t border-gray-100 pt-4'>
+        <p className='text-sm text-gray-600'>應付金額</p>
+        <p className='text-2xl font-bold tabular-nums text-blue-900'>
+          NT$ {totalAmount.toLocaleString()}
+        </p>
       </div>
     </div>
   );

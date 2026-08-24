@@ -55,14 +55,9 @@ export function EventSessionCard({
             )}
           </div>
 
-          <div className='space-y-1 text-sm text-gray-600'>
-            <p className='flex items-center'>
-              <span className='w-4 h-4 mr-2' role='img' aria-label='日曆'>
-                📅
-              </span>
-              {session.date} {session.time}
-            </p>
-          </div>
+          <p className='text-sm text-gray-600'>
+            {session.date} {session.time}
+          </p>
         </div>
 
         {/* 場次選擇按鈕 - 只在未選中且有 onSessionSelect 時顯示 */}
@@ -77,11 +72,10 @@ export function EventSessionCard({
         )}
       </div>
 
-      {/* 票券選擇 - 只在選中的場次顯示 */}
-      {isSelected && session.tickets && session.tickets.length > 0 && (
+      {session.tickets && session.tickets.length > 0 && (
         <div className='mb-4'>
-          <h4 className='text-md font-medium text-gray-900 mb-3'>選擇票券</h4>
-          <div className='space-y-3'>
+          <h4 className='text-sm font-medium text-gray-900 mb-2'>票種</h4>
+          <div className='space-y-2'>
             {session.tickets.map(ticket => (
               <TicketButton
                 key={ticket.id}
@@ -96,24 +90,21 @@ export function EventSessionCard({
         </div>
       )}
 
-      {/* 場次報名按鈕 - 只在選中的場次顯示 */}
-      {isSelected && (
-        <div className='pt-4 border-t border-gray-200'>
-          <Button
-            onClick={() => onRegisterClick(session.id)}
-            variant='primary'
-            className='w-full h-12'
-            disabled={!hasAvailableTickets}
-          >
-            {hasAvailableTickets ? '場次報名' : '無法報名'}
-          </Button>
-          {!hasAvailableTickets && (
-            <p className='text-sm text-gray-500 text-center mt-2'>
-              此場次已舉辦、已下架或報名截止
-            </p>
-          )}
-        </div>
-      )}
+      <div className='pt-3 border-t border-gray-200'>
+        <Button
+          onClick={() => onRegisterClick(session.id)}
+          variant='primary'
+          className='w-full h-11'
+          disabled={!hasAvailableTickets}
+        >
+          {hasAvailableTickets ? '立即報名' : '無法報名'}
+        </Button>
+        {!hasAvailableTickets && (
+          <p className='text-sm text-gray-500 text-center mt-2'>
+            此場次已舉辦、已下架或報名截止
+          </p>
+        )}
+      </div>
     </div>
   );
 }

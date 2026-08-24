@@ -55,17 +55,17 @@ export function TicketButton({
       )}
     >
       <div className='flex flex-col w-full'>
-        <div className='flex justify-between items-center mb-2'>
+        <div className='flex justify-between items-baseline gap-3 mb-1'>
           <span className='text-sm font-medium text-gray-800'>
             {ticket.name}
           </span>
-          <span className='text-sm text-gray-600'>
+          <span className='shrink-0 text-sm font-semibold tabular-nums text-gray-900'>
             NT$ {ticket.price.toLocaleString()}
           </span>
         </div>
         <div className='flex justify-between items-center text-xs'>
-          <span className='text-gray-500'>
-            剩餘 {ticket.availableQuantity} 張
+          <span className='rounded-full bg-gray-200 px-2 py-0.5 font-medium text-gray-700'>
+            剩 {ticket.availableQuantity}
           </span>
           <span className={cn('font-medium', getStatusColor())}>
             {getStatusText()}

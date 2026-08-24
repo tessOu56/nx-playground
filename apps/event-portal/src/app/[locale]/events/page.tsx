@@ -22,13 +22,22 @@ export default async function EventsIndexPage({
   }
 
   return (
-    <div className='mx-auto max-w-5xl px-4 py-10'>
-      <h1 className='mb-2 text-2xl font-semibold text-gray-900 eds-enter'>
-        即將舉辦
-      </h1>
-      <p className='mb-8 text-sm text-gray-600'>
-        查看場次、講者與票價後報名。無需登入，示範身分即可完成。
-      </p>
+    <div className='mx-auto max-w-6xl px-4 py-8'>
+      <header className='mb-6 flex flex-wrap items-end justify-between gap-3'>
+        <div>
+          <h1 className='text-2xl font-semibold text-gray-900 eds-enter'>
+            即將舉辦
+          </h1>
+          <p className='mt-1 text-sm text-gray-600'>
+            查看場次與票價後報名。無需登入，示範身分即可完成。
+          </p>
+        </div>
+        {!loadError ? (
+          <p className='rounded-full bg-gray-100 px-3 py-1 text-xs font-medium text-gray-700'>
+            {events.length} 場活動
+          </p>
+        ) : null}
+      </header>
       {loadError ? (
         <EventListError />
       ) : (

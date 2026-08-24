@@ -10,7 +10,7 @@ interface OrderCardProps {
   getUserName: (userId: string) => string;
 }
 
-export function OrderCard({ order, getUserName }: OrderCardProps) {
+export function OrderCard({ order }: OrderCardProps) {
   const router = useLocalizedRouter();
 
   const getStatusBadge = (status: string) => {
@@ -34,144 +34,36 @@ export function OrderCard({ order, getUserName }: OrderCardProps) {
     );
   };
 
-  const getPaymentMethodText = (method: string) => {
-    if (method === 'cash') return '現金付款';
-    if (method === 'third_party') return '第三方支付';
-    return 'ATM 轉帳';
-  };
-
-  const getBillStatusText = (status: string) => {
-    const statusMap = {
-      pending: '待付款',
-      verifying: '核帳中',
-      paid: '已付款',
-      overdue: '逾期',
-      cancelled: '已取消',
-    };
-    return statusMap[status as keyof typeof statusMap] || status;
-  };
-
-  const handleOrderClick = (orderId: string) => {
-    router.push(`/orders/${orderId}`);
-  };
-
-  const handleCheckinClick = (orderId: string) => {
-    router.push(`/orders/${orderId}/check-in`);
-  };
-
-  const handleRegistrationClick = (orderId: string) => {
-    // 導向訂單詳情頁面，用戶可以從那裡選擇要填寫的票券報名表
-    router.push(`/orders/${orderId}`);
-  };
-
   return (
-    <div className='border border-gray-200 rounded-lg p-4 hover:border-gray-300 transition-colors'>
-      <div className='flex flex-col lg:flex-row lg:items-center justify-between gap-4'>
-        {/* 訂單基本資訊 */}
-        <div className='flex-1'>
-          <div className='flex items-center justify-between mb-2'>
-            <h3 className='text-lg font-semibold text-gray-900'>
-              訂單 #{order.id}
+    <div className='rounded-lg border border-gray-200 p-4 hover:border-gray-300 transition-colors'>
+      <div className='flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between'>
+        <div className='min-w-0 flex-1'>
+          <div className='flex flex-wrap items-center gap-2'>
+            <h3 className='truncate text-base font-semibold text-gray-900'>
+              {order.eventTitle ?? order.eventId}
             </h3>
             {getStatusBadge(order.status)}
           </div>
-
-          <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 text-sm'>
-            <div>
-              <span className='text-gray-600'>活動:</span>
-              <span className='ml-2 font-medium'>
-                {order.eventTitle ?? order.eventId}
-              </span>
-            </div>
-            <div>
-              <span className='text-gray-600'>客戶姓名:</span>
-              <span className='ml-2 font-medium'>
-                {getUserName(order.userId)}
-              </span>
-            </div>
-            <div>
-              <span className='text-gray-600'>票券項目:</span>
-              <span className='ml-2 font-medium'>
-                {order.itemsCount} 項 ({order.quantity} 張票)
-              </span>
-            </div>
-            <div>
-              <span className='text-gray-600'>票券類型:</span>
-              <span className='ml-2 font-medium'>
-                {order.orderItemsSummary.ticketTypes.join(', ') ?? '無'}
-              </span>
-            </div>
-            <div>
-              <span className='text-gray-600'>付款金額:</span>
-              <span className='ml-2 font-medium text-red-600'>
-                NT$ {order.totalAmount.toLocaleString()}
-              </span>
-            </div>
-            <div>
-              <span className='text-gray-600'>付款方式:</span>
-              <span className='ml-2 font-medium'>
-                {getPaymentMethodText(order.paymentMethod)}
-              </span>
-            </div>
-            <div>
-              <span className='text-gray-600'>帳單狀態:</span>
-              <span className='ml-2 font-medium'>
-                {getBillStatusText(order.billStatus)}
-              </span>
-            </div>
-            <div>
-              <span className='text-gray-600'>建立時間:</span>
-              <span className='ml-2 font-medium'>
-                {new Date(order.createdAt).toLocaleDateString('zh-TW')}
-              </span>
-            </div>
-            {order.eventDate && (
-              <div>
-                <span className='text-gray-600'>活動日期:</span>
-                <span className='ml-2 font-medium'>
-                  {new Date(order.eventDate).toLocaleDateString('zh-TW')}
-                </span>
-              </div>
-            )}
-          </div>
+          <p className='mt-1 text-sm text-gray-600'>
+            <span className='tabular-nums'>
+              NT$ {order.totalAmount.toLocaleString()}
+            </span>
+            <span className='mx-2 text-gray-300'>·</span>
+            <span>
+              {order.itemsCount} 項 / {order.quantity} 張
+            </span>
+            <span className='mx-2 text-gray-300'>·</span>
+            <span className='text-xs text-gray-500'>{order.id}</span>
+          </p>
         </div>
-
-        {/* 操作按鈕 */}
-        <div className='flex flex-col sm:flex-row gap-2 lg:flex-col lg:w-48'>
-          <Button
-            onClick={() => handleOrderClick(order.id)}
-            variant='primary'
-            size='sm'
-            className='w-full'
-          >
-            查看詳情
-          </Button>
-
-          <Button
-            onClick={() => handleCheckinClick(order.id)}
-            variant='primary'
-            size='sm'
-            className='w-full bg-green-600 hover:bg-green-700'
-            disabled={
-              !(order.status === 'confirmed' || order.billStatus === 'paid')
-            }
-          >
-            報到
-          </Button>
-
-          <Button
-            onClick={() => handleRegistrationClick(order.id)}
-            variant='primary'
-            size='sm'
-            className='w-full bg-purple-600 hover:bg-purple-700'
-            disabled={
-              !(order.status === 'confirmed' || order.billStatus === 'paid') ||
-              order.itemsCount === 0
-            }
-          >
-            報名表
-          </Button>
-        </div>
+        <Button
+          onClick={() => router.push(`/orders/${order.id}`)}
+          variant='primary'
+          size='sm'
+          className='w-full sm:w-auto shrink-0'
+        >
+          查看詳情
+        </Button>
       </div>
     </div>
   );

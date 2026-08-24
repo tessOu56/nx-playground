@@ -49,14 +49,9 @@ export default async function EventDetailLayout({
         <div className='page-container'>
           {/* 頁面標題 - 只在非 checkout 頁面顯示 */}
           {!isCheckoutPage && (
-            <div className='mb-8'>
+            <div className='mb-4'>
               <BackLink href={`/${locale}/events`} />
-              <div className='text-center'>
-                <h1 className='text-3xl font-bold text-gray-900 mb-2'>
-                  活動詳情
-                </h1>
-                <p className='text-gray-600'>查看活動資訊和報名詳情</p>
-              </div>
+              <p className='mt-1 text-xs text-gray-500'>活動 / 詳情</p>
             </div>
           )}
 

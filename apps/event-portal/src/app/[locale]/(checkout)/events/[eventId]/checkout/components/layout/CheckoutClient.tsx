@@ -129,7 +129,10 @@ export function CheckoutClient({
 
   if (!canRegister) {
     return (
-      <div className='rounded-lg bg-white p-6 text-center shadow-md'>
+      <div
+        className='rounded-lg bg-white p-6 text-center shadow-md'
+        data-testid='checkout-unavailable'
+      >
         <h2 className='text-lg font-semibold text-gray-900'>目前無法報名</h2>
         <p className='mt-2 text-sm text-gray-600'>
           這場活動已舉辦、已下架，或售票已截止。請回到列表選其他場次。
@@ -139,18 +142,15 @@ export function CheckoutClient({
   }
 
   return (
-    <div className='space-y-6 pb-24'>
-      {/* 場次選擇 */}
-      <SessionSelector event={event} />
-
-      {/* 票卷選擇 */}
-      <TicketSelector event={event} />
-
-      {/* 付款方式選擇 */}
-      <PaymentMethodSelector paymentMethods={paymentMethods} />
-
-      {/* 訂單總計 */}
-      <OrderSummary event={event} />
+    <div className='lg:grid lg:grid-cols-[minmax(0,1fr)_20rem] lg:items-start lg:gap-8 pb-28 lg:pb-8'>
+      <div className='space-y-6'>
+        <SessionSelector event={event} />
+        <TicketSelector event={event} />
+        <PaymentMethodSelector paymentMethods={paymentMethods} />
+      </div>
+      <aside className='mt-6 lg:mt-0 lg:sticky lg:top-24'>
+        <OrderSummary event={event} />
+      </aside>
     </div>
   );
 }

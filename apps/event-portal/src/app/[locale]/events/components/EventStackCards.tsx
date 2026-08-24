@@ -43,15 +43,18 @@ export function EventStackCards({
   locale: string;
 }) {
   if (!events.length) {
-    return <NoEvents />;
+    return <NoEvents variant='catalog' />;
   }
 
   return (
-    <ul className='grid grid-cols-1 gap-4 md:grid-cols-2'>
+    <ul className='grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3'>
       {events.map(event => {
         const kind = eventListKind(event);
         const dateRange = formatListDateRange(event);
         const venueLine = [event.location, event.venueHint]
+          .filter(Boolean)
+          .join(' · ');
+        const meta = [dateRange, venueLine, priceFromLabel(event.price)]
           .filter(Boolean)
           .join(' · ');
 
@@ -62,10 +65,10 @@ export function EventStackCards({
               className='block w-full overflow-hidden rounded-lg bg-white text-left shadow-md hover:shadow-lg transition-shadow duration-[var(--motion-duration-fast,150ms)]'
             >
               <div
-                className='h-40 bg-cover bg-center'
+                className='aspect-[16/9] bg-cover bg-center'
                 style={{ backgroundImage: `url(${event.image})` }}
               />
-              <div className='p-5'>
+              <div className='p-4'>
                 <div className='mb-2 flex items-center justify-between gap-2'>
                   <span className='text-xs font-medium text-gray-500'>
                     {event.category}
@@ -74,50 +77,23 @@ export function EventStackCards({
                     {eventDisplayLabel(kind)}
                   </span>
                 </div>
-                <h2 className='text-lg font-semibold text-gray-900'>
+                <h2 className='line-clamp-2 text-base font-semibold text-gray-900'>
                   {event.title}
                 </h2>
-                <dl className='mt-3 space-y-1.5 text-sm text-gray-600'>
-                  <div className='flex flex-wrap gap-x-2'>
-                    <dt className='sr-only'>時間</dt>
-                    <dd>{dateRange}</dd>
-                  </div>
-                  {event.organizerName ? (
-                    <div>
-                      <dt className='text-xs uppercase tracking-wide text-gray-400'>
-                        主辦
-                      </dt>
-                      <dd>{event.organizerName}</dd>
-                    </div>
-                  ) : null}
-                  {venueLine ? (
-                    <div>
-                      <dt className='text-xs uppercase tracking-wide text-gray-400'>
-                        地點
-                      </dt>
-                      <dd className='line-clamp-1'>{venueLine}</dd>
-                    </div>
-                  ) : null}
-                  {typeof event.speakerCount === 'number' &&
-                  event.speakerCount > 0 ? (
-                    <div>
-                      <dt className='text-xs uppercase tracking-wide text-gray-400'>
-                        講者
-                      </dt>
-                      <dd>{event.speakerCount} 位</dd>
-                    </div>
-                  ) : null}
-                  <div>
-                    <dt className='text-xs uppercase tracking-wide text-gray-400'>
-                      票價
-                    </dt>
-                    <dd className='font-medium text-blue-700'>
-                      {priceFromLabel(event.price)}
-                    </dd>
-                  </div>
-                </dl>
-                <p className='mt-2 line-clamp-2 text-sm text-gray-500'>
-                  {event.description}
+                <p className='mt-2 line-clamp-1 text-sm text-gray-600'>
+                  {meta}
+                </p>
+                {event.organizerName ? (
+                  <p className='mt-1 line-clamp-1 text-xs text-gray-500'>
+                    {event.organizerName}
+                    {typeof event.speakerCount === 'number' &&
+                    event.speakerCount > 0
+                      ? ` · ${event.speakerCount} 位講者`
+                      : ''}
+                  </p>
+                ) : null}
+                <p className='mt-3 text-sm font-medium text-blue-700'>
+                  查看場次
                 </p>
               </div>
             </Link>

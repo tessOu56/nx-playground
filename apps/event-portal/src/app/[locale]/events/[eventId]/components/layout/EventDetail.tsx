@@ -10,8 +10,6 @@ import {
   EventFAQ,
   EventInfoHeaderSkeleton,
   EventInfoHeaderError,
-  EventContentSkeleton,
-  EventFAQSkeleton,
 } from '..';
 
 import { Button, Card } from '@/components';
@@ -97,6 +95,18 @@ export function EventDetail({ eventId }: EventDetailProps) {
     }
   };
 
+  const sessionList =
+    event && !isLoading ? (
+      <EventSessionList
+        event={event}
+        eventId={eventId}
+        selectedSessionId={currentSessionId}
+        onSessionSelect={handleSessionSelect}
+        onTicketClick={handleTicketClick}
+        onRegisterClick={handleRegisterClick}
+      />
+    ) : null;
+
   return (
     <div className='space-y-6'>
       {isLoading ? (
@@ -106,41 +116,22 @@ export function EventDetail({ eventId }: EventDetailProps) {
       ) : !event ? (
         <EventInfoHeaderError kind='not-found' />
       ) : (
-        <>
-          <EventInfoHeader event={event} eventId={eventId} />
-          <p className='text-sm text-gray-500'>
-            示範身分即可報名，無需登入。
-          </p>
-        </>
+        <div className='lg:grid lg:grid-cols-[minmax(0,1fr)_20rem] lg:items-start lg:gap-8'>
+          <div className='space-y-6'>
+            <EventInfoHeader event={event} eventId={eventId} />
+            <p className='text-sm text-gray-500'>
+              示範身分即可報名，無需登入。
+            </p>
+            <div className='lg:hidden'>{sessionList}</div>
+            <EventContent content={event.content} />
+            <EventFAQ faq={event.faq} />
+          </div>
+          <aside className='hidden lg:block lg:sticky lg:top-24'>
+            {sessionList}
+          </aside>
+        </div>
       )}
 
-      {/* 活動內容 */}
-      {isLoading ? (
-        <EventContentSkeleton />
-      ) : event ? (
-        <EventContent content={event.content} />
-      ) : null}
-
-      {/* 常見問題 */}
-      {isLoading ? (
-        <EventFAQSkeleton />
-      ) : event ? (
-        <EventFAQ faq={event.faq} />
-      ) : null}
-
-      {/* 活動場次列表 */}
-      {event && !isLoading && (
-        <EventSessionList
-          event={event}
-          eventId={eventId}
-          selectedSessionId={currentSessionId}
-          onSessionSelect={handleSessionSelect}
-          onTicketClick={handleTicketClick}
-          onRegisterClick={handleRegisterClick}
-        />
-      )}
-
-      {/* 活動不存在時顯示返回按鈕 */}
       {error || (!event && !isLoading) ? (
         <Card className='p-6 text-center'>
           <Button onClick={handleEventNotFound} variant='primary' size='lg'>
