@@ -11,6 +11,7 @@ import {
   Workflow,
   X,
   Bell,
+  ShieldAlert,
 } from 'lucide-react';
 import * as React from 'react';
 import { NavLink } from 'react-router-dom';
@@ -58,6 +59,11 @@ export const Sidebar: React.FC<SidebarProps> = ({
       path: '/forms',
       label: t('sidebar.navigation.forms') as string,
       icon: FileText,
+    },
+    {
+      path: '/ops',
+      label: t('sidebar.navigation.ops') as string,
+      icon: ShieldAlert,
     },
     {
       path: '/components',

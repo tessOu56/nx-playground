@@ -6,7 +6,8 @@ When owner reports STOP-015 with `https://<service>.onrender.com/health`:
 
 - Blueprint: [`render.yaml`](../render.yaml)
 - Build/start: [`scripts/render-event-stack-api.sh`](../scripts/render-event-stack-api.sh)
-- Env (Dashboard, never commit): `DATABASE_URL` (Neon event-stack), `CORS_ORIGIN`, optional `CMS_ORGANIZER_API_TOKEN`, `ALLOWED_ORGANIZER_EMAILS`, `EVENT_STACK_CMS_DEV_AUTH=false`
+- Env (Dashboard, never commit): `DATABASE_URL` (existing Neon **event-stack** / `snowy-bird-20372699`, **direct/unpooled**), `CORS_ORIGIN`, optional `CMS_ORGANIZER_API_TOKEN`, `ALLOWED_ORGANIZER_EMAILS`, `EVENT_STACK_CMS_DEV_AUTH=false`
+- Do **not** create a new Neon project. Copy DSN from Neon Console → Connect, or from Vercel `nx-event-stack-api` → `DATABASE_URL`. `render.yaml` has `sync: false` so Blueprint leaves the field empty until you paste it.
 
 ## Vercel `nx-event-portal`
 

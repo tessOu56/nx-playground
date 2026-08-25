@@ -21,6 +21,7 @@ export function EventIntroduction() {
   const eventLocation = watch('eventLocation');
   const organizerName = watch('organizerName');
   const speakersText = watch('speakersText');
+  const eventKind = watch('eventKind');
 
   return (
     <Card
@@ -67,6 +68,35 @@ export function EventIntroduction() {
               </Text>
             )}
           </div>
+
+          {/* 活動類型 kind */}
+          <div className='w-full flex flex-col gap-2'>
+            <Text variant='content'>活動類型 ＊</Text>
+            <select
+              {...register('eventKind')}
+              className='w-full rounded-md border border-gray-200 bg-white px-3 py-2 text-sm'
+            >
+              <option value='talk'>講座／工作坊（talk）</option>
+              <option value='auction'>拍賣導覽（auction → Plinth）</option>
+              <option value='line_commerce'>LINE 商務（line_commerce）</option>
+            </select>
+            <Text variant='note' className='w-full text-start'>
+              寫入 event.data.kind。拍賣結算留在 Plinth，不在本 CMS。
+            </Text>
+          </div>
+
+          {watch('eventKind') === 'auction' ? (
+            <div className='w-full flex flex-col gap-2'>
+              <Text variant='content'>Plinth 拍品深鏈</Text>
+              <Input
+                {...register('plinthLotUrl')}
+                placeholder='https://metalcraft-storefront-eta.vercel.app/en/lots/lot-1'
+              />
+              <Text variant='note' className='w-full text-start'>
+                mock URL 可。參加者從 portal 點過去；不在 nx 出價。
+              </Text>
+            </div>
+          ) : null}
 
           {/* 講者（每行一位，可用 — 分隔職稱） */}
           <div className='w-full flex flex-col gap-2'>
@@ -159,6 +189,7 @@ export function EventIntroduction() {
           </Text>
           <Text variant='content' className='text-start w-full py-2 px-6 text-text-secondary'>
             {organizerName ? `主辦：${organizerName}` : '主辦單位'}
+            {eventKind ? ` · ${eventKind}` : ''}
           </Text>
           {speakersText?.trim() ? (
             <Text variant='note' className='text-start w-full px-6 whitespace-pre-line'>

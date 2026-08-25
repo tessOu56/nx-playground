@@ -1,7 +1,7 @@
 import { Injectable, CanActivate, ExecutionContext } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
-import { hasPermission } from '@nx-playground/permissions';
-import type { Permission } from '@nx-playground/permissions';
+import { hasPermission } from '@nx-playground/permissions/server';
+import type { Permission } from '@nx-playground/permissions/server';
 
 @Injectable()
 export class PermissionsGuard implements CanActivate {

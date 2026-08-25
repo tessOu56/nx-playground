@@ -31,6 +31,52 @@ const STACK_LINE: LineSettings = {
   displayName: 'Event Stack',
 };
 
+export type EventDomainKind = 'talk' | 'auction' | 'line_commerce';
+
+export function eventDomainLabel(kind: EventDomainKind): string {
+  switch (kind) {
+    case 'auction':
+      return '拍賣';
+    case 'line_commerce':
+      return 'LINE 商務';
+    default:
+      return '講座';
+  }
+}
+
+/** HTTPS Plinth / local only — blocks javascript: and arbitrary phishing hosts. */
+export function sanitizePlinthLotUrl(raw: unknown): string | undefined {
+  if (typeof raw !== 'string' || !raw.trim()) return undefined;
+  try {
+    const url = new URL(raw.trim());
+    if (url.protocol !== 'https:' && url.protocol !== 'http:') return undefined;
+    const host = url.hostname.toLowerCase();
+    const allowed =
+      host === 'localhost' ||
+      host === '127.0.0.1' ||
+      (host.endsWith('.vercel.app') &&
+        (host.includes('metalcraft') || host.includes('plinth')));
+    if (!allowed) return undefined;
+    if (
+      url.protocol === 'http:' &&
+      host !== 'localhost' &&
+      host !== '127.0.0.1'
+    ) {
+      return undefined;
+    }
+    return url.toString();
+  } catch {
+    return undefined;
+  }
+}
+
+export function parseEventDomainKind(raw: unknown): EventDomainKind {
+  if (raw === 'auction' || raw === 'line_commerce' || raw === 'talk') {
+    return raw;
+  }
+  return 'talk';
+}
+
 export type EventDisplayKind =
   | 'upcoming'
   | 'ongoing'
@@ -266,6 +312,8 @@ export function toPortalEvent(api: EventStackEvent): Event {
       typeof venueRecord.transport === 'string' &&
       venueRecord.transport.trim()) ||
     undefined;
+  const domainKind = parseEventDomainKind(catalog.kind);
+  const plinthLotUrl = sanitizePlinthLotUrl(catalog.plinthLotUrl);
 
   return {
     id: api.id,
@@ -290,6 +338,8 @@ export function toPortalEvent(api: EventStackEvent): Event {
     organizerName: organizer,
     speakerCount: speakers.length > 0 ? speakers.length : undefined,
     venueHint,
+    domainKind,
+    plinthLotUrl,
   };
 }
 

@@ -4,6 +4,7 @@ export { componentsRoutes } from './components';
 export { eventsRoutes } from './events';
 export { usersRoutes } from './users';
 export { formsRoutes } from './forms';
+export { opsRoutes } from './ops';
 export { settingsRoutes } from './settings';
 export { demoRoutes } from './demo';
 export { systemRoutes } from './system';

@@ -245,6 +245,8 @@ export const eventFormSchema = z.object({
   speakersText: z.string().optional(),
   venueLat: z.string().optional(),
   venueLng: z.string().optional(),
+  eventKind: z.enum(['talk', 'auction', 'line_commerce']).default('talk'),
+  plinthLotUrl: z.string().optional(),
   eventContentBlocks: z.array(contentBlockSchema).optional(),
   faqBlocks: z.array(faqBlockSchema).optional(),
 

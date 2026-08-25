@@ -13,6 +13,8 @@ const form: EventFormValue = {
   speakersText: 'Jane Doe — 前端架構\nJohn Smith — 產品設計',
   venueLat: '25.033',
   venueLng: '121.565',
+  eventKind: 'talk',
+  plinthLotUrl: '',
   eventContentBlocks: [
     { id: 'c1', type: 'text', content: '這場會講什麼' },
   ],
@@ -98,5 +100,32 @@ describe('CMS catalog DTO', () => {
     assert.equal(venue.lat, 25.033);
     assert.equal(venue.lng, 121.565);
     assert.equal(catalog.organizer, '示範主辦單位');
+    assert.equal(catalog.kind, 'talk');
+  });
+
+  it('writes auction kind and Plinth deep link into data', () => {
+    const auction: EventFormValue = {
+      ...form,
+      eventKind: 'auction',
+      plinthLotUrl: 'https://metalcraft-storefront-eta.vercel.app/en/lots/lot-1',
+    };
+    const catalog = toCatalogData(auction);
+    assert.equal(catalog.kind, 'auction');
+    assert.equal(
+      catalog.plinthLotUrl,
+      'https://metalcraft-storefront-eta.vercel.app/en/lots/lot-1'
+    );
+  });
+
+  it('allows empty session and ticket blocks on create DTO', () => {
+    const empty: EventFormValue = {
+      ...form,
+      sessionBlock: [],
+      ticketBlock: [],
+    };
+    const dto = toCreateEventDto(empty);
+    const catalog = toCatalogData(empty);
+    assert.ok(dto.startDate);
+    assert.deepEqual(catalog.sessions, []);
   });
 });

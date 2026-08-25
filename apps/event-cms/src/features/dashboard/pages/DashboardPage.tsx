@@ -30,6 +30,7 @@ import {
   Ticket,
 } from 'lucide-react';
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import { SEO } from '../../../components/SEO';
 import { useDashboardTranslation } from '../hooks/useDashboardTranslation';
@@ -91,6 +92,7 @@ const mockSystemHealth = [
 
 export const DashboardPage = () => {
   const { t } = useDashboardTranslation();
+  const navigate = useNavigate();
   const [selectedTimeRange, setSelectedTimeRange] = useState('7d');
   const { data: stats, isLoading: statsLoading } = useGetStats();
 
@@ -139,17 +141,16 @@ export const DashboardPage = () => {
   return (
     <>
       <SEO config={dashboardMetaData} />
-      <div className='p-6'>
-        <div className='mb-6'>
-          <div className='flex justify-between items-center'>
-            <div>
-              <h1 className='text-3xl font-bold text-text-primary mb-2'>
-                {t('dashboard.title') as string}
-              </h1>
-              <p className='text-text-secondary'>
-                {t('dashboard.welcome') as string}
-              </p>
-            </div>
+      <div className='p-4 lg:p-6'>
+        <div className='mb-4 flex flex-wrap items-end justify-between gap-3'>
+          <div>
+            <h1 className='text-2xl font-bold text-text-primary'>
+              {t('dashboard.title') as string}
+            </h1>
+            <p className='text-sm text-text-secondary mt-1'>
+              {t('dashboard.welcome') as string}
+            </p>
+          </div>
             <div className='flex items-center gap-4'>
               <Select
                 value={selectedTimeRange}
@@ -166,14 +167,13 @@ export const DashboardPage = () => {
                 </SelectContent>
               </Select>
             </div>
-          </div>
         </div>
 
         {/* Enhanced Stats Cards */}
-        <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8'>
+        <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6'>
           {/* 總活動數 */}
           <Card>
-            <CardContent className='p-6'>
+            <CardContent className='p-4'>
               <div className='flex items-center justify-between'>
                 <div className='flex items-center'>
                   <div className='p-2 bg-primary-100 rounded-lg'>
@@ -204,7 +204,7 @@ export const DashboardPage = () => {
 
           {/* 活躍用戶 */}
           <Card>
-            <CardContent className='p-6'>
+            <CardContent className='p-4'>
               <div className='flex items-center justify-between'>
                 <div className='flex items-center'>
                   <div className='p-2 bg-success-100 rounded-lg'>
@@ -237,7 +237,7 @@ export const DashboardPage = () => {
 
           {/* 已售出票券（Nest） */}
           <Card>
-            <CardContent className='p-6'>
+            <CardContent className='p-4'>
               <div className='flex items-center justify-between'>
                 <div className='flex items-center'>
                   <div className='p-2 bg-warning-100 rounded-lg'>
@@ -258,7 +258,7 @@ export const DashboardPage = () => {
 
           {/* 系統狀態 */}
           <Card>
-            <CardContent className='p-6'>
+            <CardContent className='p-4'>
               <div className='flex items-center justify-between'>
                 <div className='flex items-center'>
                   <div className='p-2 bg-green-100 rounded-lg'>
@@ -282,13 +282,14 @@ export const DashboardPage = () => {
         </div>
 
         {/* Recent Events and System Health */}
-        <div className='grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8'>
+        <div className='grid grid-cols-1 lg:grid-cols-2 gap-4 mb-6'>
           {/* 最近活動 */}
           <Card>
             <CardHeader>
               <CardTitle className='flex items-center gap-2'>
                 <Calendar className='w-5 h-5' />
                 最近活動
+                <Badge className='bg-amber-100 text-amber-800'>列表 mock</Badge>
               </CardTitle>
             </CardHeader>
             <CardContent>
@@ -325,6 +326,7 @@ export const DashboardPage = () => {
               <CardTitle className='flex items-center gap-2'>
                 <Activity className='w-5 h-5' />
                 系統健康狀態
+                <Badge className='bg-amber-100 text-amber-800'>mock</Badge>
               </CardTitle>
             </CardHeader>
             <CardContent>
@@ -365,7 +367,7 @@ export const DashboardPage = () => {
         </div>
 
         {/* Quick Actions and Analytics */}
-        <div className='grid grid-cols-1 lg:grid-cols-2 gap-8'>
+        <div className='grid grid-cols-1 lg:grid-cols-2 gap-4'>
           {/* 快速操作 */}
           <Card>
             <CardHeader>
@@ -380,6 +382,7 @@ export const DashboardPage = () => {
                   variant='primary'
                   size='default'
                   className='flex items-center gap-2'
+                  onClick={() => navigate('/events')}
                 >
                   <Calendar className='w-4 h-4' />
                   {t('dashboard.quickActions.createEvent') as string}
@@ -388,6 +391,7 @@ export const DashboardPage = () => {
                   variant='secondary'
                   size='default'
                   className='flex items-center gap-2'
+                  onClick={() => navigate('/users')}
                 >
                   <Users className='w-4 h-4' />
                   {t('dashboard.quickActions.manageUsers') as string}
@@ -492,9 +496,10 @@ export const DashboardPage = () => {
         </div>
 
         {/* Charts Section */}
-        <div className='mt-8'>
-          <h2 className='text-2xl font-bold text-text-primary mb-6'>
-            📊 數據分析
+        <div className='mt-6'>
+          <h2 className='text-xl font-bold text-text-primary mb-3 flex items-center gap-2'>
+            數據分析
+            <Badge className='bg-amber-100 text-amber-800'>圖表 mock</Badge>
           </h2>
           <div className='grid grid-cols-1 lg:grid-cols-2 gap-6'>
             <EventTrendChart />

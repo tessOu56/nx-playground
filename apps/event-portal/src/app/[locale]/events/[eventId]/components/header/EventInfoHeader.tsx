@@ -3,6 +3,7 @@
 import { Image } from '@/components';
 import {
   eventDisplayLabel,
+  eventDomainLabel,
   eventListKind,
 } from '@/libs/api/event-stack-map';
 import type { EventDetail, EventSpeaker, EventVenue } from '@/types';
@@ -146,6 +147,7 @@ function EventVenueBlock({
 
 export function EventInfoHeader({ event }: EventInfoHeaderProps) {
   const kind = eventListKind(event);
+  const domain = event.domainKind ?? 'talk';
 
   return (
     <div className='space-y-6'>
@@ -159,9 +161,9 @@ export function EventInfoHeader({ event }: EventInfoHeaderProps) {
             className='w-full h-full object-cover'
             fallback='/placeholder-event.jpg'
           />
-          <div className='absolute top-4 left-4 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full'>
-            <span className='text-sm font-medium text-gray-700'>
-              {event.category}
+          <div className='absolute top-4 left-4 bg-indigo-600/90 backdrop-blur-sm px-3 py-1 rounded-full'>
+            <span className='text-sm font-medium text-white'>
+              {eventDomainLabel(domain)}
             </span>
           </div>
           <div className='absolute top-4 right-4 bg-black/70 px-3 py-1 rounded-full'>
@@ -175,6 +177,18 @@ export function EventInfoHeader({ event }: EventInfoHeaderProps) {
           <h1 className='text-3xl font-bold text-gray-900 mb-4'>
             {event.title}
           </h1>
+          {event.plinthLotUrl ? (
+            <p className='mb-4'>
+              <a
+                href={event.plinthLotUrl}
+                target='_blank'
+                rel='noreferrer'
+                className='text-sm font-medium text-indigo-700 underline'
+              >
+                在 Plinth 看拍品（結算在 Plinth）
+              </a>
+            </p>
+          ) : null}
           <p className='text-gray-600 mb-6 text-lg leading-relaxed'>
             {event.description}
           </p>

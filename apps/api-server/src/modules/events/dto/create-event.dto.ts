@@ -49,7 +49,8 @@ export class CreateEventDto {
     required: false,
     type: 'object',
     additionalProperties: true,
-    description: 'Catalog extras (sessions, tickets, content, speakers, venue).',
+    description:
+      'Catalog extras. kind: talk | auction | line_commerce; auction may include plinthLotUrl. Also sessions, tickets, content, speakers, venue.',
   })
   @IsOptional()
   data?: Record<string, unknown>;

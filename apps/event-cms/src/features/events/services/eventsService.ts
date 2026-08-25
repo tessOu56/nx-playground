@@ -103,6 +103,10 @@ export function toCatalogData(data: EventFormValue): Record<string, unknown> {
   const lng = data.venueLng?.trim();
 
   return {
+    kind: data.eventKind ?? 'talk',
+    ...(data.eventKind === 'auction' && data.plinthLotUrl?.trim()
+      ? { plinthLotUrl: data.plinthLotUrl.trim() }
+      : {}),
     category: '活動',
     organizer: data.organizerName.trim(),
     speakers: parseSpeakers(data.speakersText),

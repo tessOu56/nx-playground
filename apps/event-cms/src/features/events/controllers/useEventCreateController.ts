@@ -6,7 +6,6 @@
 
 import { useAuth } from '@nx-playground/auth-client';
 import { useCallback } from 'react';
-import { useNavigate } from 'react-router-dom';
 
 import { EventsService } from '../services';
 import {
@@ -18,19 +17,9 @@ import {
   useTicketStore,
 } from '../stores';
 import { type EventFormValue } from '../types';
-
-const portalBaseUrl =
-  (import.meta.env.VITE_EVENT_PORTAL_URL as string | undefined)?.replace(
-    /\/$/,
-    ''
-  ) ?? 'http://localhost:3000';
-
-function portalEventUrl(eventId: string, locale = 'zh-TW') {
-  return `${portalBaseUrl}/${locale}/events/${eventId}`;
-}
+import { getPortalBaseUrl, portalEventUrl } from '../utils/portalEventUrl';
 
 export function useEventCreateController() {
-  const goToEvents = useNavigate();
   const { isAuthenticated } = useAuth();
   // Stores
   const { navigate, setNavigate } = useNavigateStore();
@@ -47,22 +36,24 @@ export function useEventCreateController() {
   const handleSubmit = useCallback(async (data: EventFormValue) => {
     if (!isAuthenticated) {
       window.alert('請先以主辦身份登入（Kratos）。參加者請走 portal／LIFF，不要用這頁註冊。');
-      return;
+      return null;
     }
     try {
       const created = await EventsService.createEvent(data);
-      const preview = portalEventUrl(created.id);
-      window.alert(
-        `活動已寫入 Nest。\n\n公開預覽：\n${preview}\n\n（本機 portal 預設 ${portalBaseUrl}）`
-      );
-      goToEvents('/events');
+      return {
+        eventId: created.id,
+        previewUrl: portalEventUrl(created.id),
+        title: created.title ?? data.eventName,
+        portalBase: getPortalBaseUrl(),
+      };
     } catch (error) {
       console.error('Failed to create event:', error);
       window.alert(
         '無法連線活動 API，活動未寫入。請確認 API 網址（VITE_API_BASE_URL）可連線。'
       );
+      return null;
     }
-  }, [goToEvents, isAuthenticated]);
+  }, [isAuthenticated]);
 
   /**
    * 處理圖片上傳

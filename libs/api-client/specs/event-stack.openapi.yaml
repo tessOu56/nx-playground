@@ -462,7 +462,7 @@ components:
         data:
           type: object
           additionalProperties: true
-          description: Catalog extras (sessions, tickets, content, speakers, venue). Mock demo fills this; Nest persists JSON.
+          description: Catalog extras. kind is talk | auction | line_commerce; auction may include plinthLotUrl (Plinth deep link). Sessions, tickets, content, speakers, venue. Mock demo fills this; Nest persists JSON.
     Event:
       type: object
       required: [id, title, startDate, endDate, status, createdAt, updatedAt]
@@ -491,7 +491,7 @@ components:
         data:
           type: object
           additionalProperties: true
-          description: Catalog extras (sessions, tickets, content, speakers, venue). Mock demo fills this; Nest persists JSON.
+          description: Catalog extras. kind is talk | auction | line_commerce; auction may include plinthLotUrl (Plinth deep link). Sessions, tickets, content, speakers, venue. Mock demo fills this; Nest persists JSON.
         createdAt:
           type: string
           format: date-time

@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
@@ -16,6 +17,7 @@ import {
   FormMainBlock,
   PaymentBlock,
   PreviewSideBar,
+  PublishSuccessBanner,
   SessionEditBlock,
   SessionHeaderBlock,
   SessionMainBlock,
@@ -23,8 +25,10 @@ import {
   TicketHeaderBlock,
   TicketMainBlock,
   VisibilityBlock,
+  type PublishSuccess,
 } from '../components';
 import { FormModal } from '../components/composite/FormModal';
+import { emptyEventFormDefaults } from '../constants/emptyEventFormDefaults';
 import { useEventCreateController } from '../controllers';
 import {
   useFormStore,
@@ -36,6 +40,7 @@ import { type EventFormValue, eventFormSchema } from '../types';
 export function CreateEventsPage() {
   const { handleSubmit: persistEvent } = useEventCreateController();
   const { navigate } = useNavigateStore();
+  const [published, setPublished] = useState<PublishSuccess | null>(null);
   const formSaveTemplate = useFormStore(state => state.openSaveTemplate);
   const formApplyTemplate = useFormStore(state => state.openApplyTemplate);
   const {
@@ -47,77 +52,9 @@ export function CreateEventsPage() {
   const methods = useForm<EventFormValue>({
     resolver: zodResolver(eventFormSchema),
     mode: 'onChange',
-    defaultValues: {
-      eventCoverImage: null,
-      eventName: '',
-      eventDescription: '',
-      eventLocation: '',
-      organizerName: '',
-      speakersText: '',
-      venueLat: '',
-      venueLng: '',
-      eventContentBlocks: [],
-      faqBlocks: [],
-      sessionBlock: [
-        {
-          id: 'session_001',
-          name: '台北場早場',
-          date: '2025-01-01',
-          startTime: '08:00:00+08:00',
-          endTime: '23:00:00+08:00',
-          capacityLimit: 10,
-        },
-        {
-          id: 'session_002',
-          name: '台北場晚場',
-          date: '2025-12-31',
-          startTime: '12:00:00+08:00',
-          endTime: '20:00:00+08:00',
-          capacityLimit: 10,
-        },
-      ],
-      ticketBlock: [
-        {
-          id: 't-1',
-          name: 'name',
-          count: 50,
-          price: 200,
-          saleTime: [
-            {
-              sessionId: 'session_001',
-              startTime: '2025-02-20T08:00:00+08:00',
-              endTime: '2025-02-21T08:00:00+08:00',
-            },
-          ],
-          saleTimeType: true,
-          state: true,
-          offset: {
-            startOffset: 1,
-            startOffsetBase: 1440,
-            endOffset: 1,
-            endOffsetBase: 1440,
-          },
-          globalTime: {
-            commonEndTime: '2025-02-21T08:00:00+08:00',
-            commonStartTime: '2025-02-20T08:00:00+08:00',
-          },
-        },
-      ],
-      // ticketBlock: [],
-      bankTransfer: {
-        id: '',
-        enable: false,
-        type: 'ATM',
-        bankName: '',
-        branchName: '',
-        accountName: '',
-        account: '',
-        description: '',
-      },
-      visibility: 'public',
-    },
+    defaultValues: emptyEventFormDefaults,
   });
-  const { getValues } = methods;
+  const { getValues, reset } = methods;
 
   const handleBlockClick = async (type: string) => {
     switch (type) {
@@ -152,9 +89,24 @@ export function CreateEventsPage() {
         <div className='w-full h-full '>
           <EventCreateTopbar
             handleSaveEvent={() => {
-              void persistEvent(getValues());
+              void (async () => {
+                const result = await persistEvent(getValues());
+                if (!result) return;
+                setPublished({
+                  eventId: result.eventId,
+                  previewUrl: result.previewUrl,
+                  title: result.title,
+                });
+                reset(emptyEventFormDefaults);
+              })();
             }}
           />
+          {published ? (
+            <PublishSuccessBanner
+              published={published}
+              onDismiss={() => setPublished(null)}
+            />
+          ) : null}
 
           <div className='flex'>
             {/* sidebar - tab */}

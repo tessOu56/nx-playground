@@ -1,5 +1,9 @@
 # T-244 live ECPay (after STOP-014)
 
+**Sandbox now (no KYC uploads):** use ECPay’s published stage shop from [測試介接資訊](https://developers.ecpay.com.tw/) (`MerchantID` `2000132` + matching HashKey/HashIV). Set `ECPAY_MODE=sandbox` on Nest. Do not use those keys with `ECPAY_MODE=live`. Report「STOP-014 sandbox 已開（官方測試特店）」.
+
+**Live later:** real merchant 特約 (ID / bank docs) only when collecting TWD. Then:
+
 When owner reports「STOP-014 特約核准」or sandbox shop keys for production testing:
 
 ## Nest env (Render + local)

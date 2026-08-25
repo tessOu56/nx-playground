@@ -1,0 +1,25 @@
+import { createFeatureTranslation } from '@nx-playground/i18n';
+
+export const useOpsTranslation = createFeatureTranslation('ops', [
+  'ops.title',
+  'ops.desc',
+  'ops.mockBadge',
+  'ops.alerts.title',
+  'ops.alerts.desc',
+  'ops.alerts.info.title',
+  'ops.alerts.info.body',
+  'ops.alerts.warning.title',
+  'ops.alerts.warning.body',
+  'ops.alerts.error.title',
+  'ops.alerts.error.body',
+  'ops.apps.title',
+  'ops.apps.desc',
+  'ops.apps.col.requester',
+  'ops.apps.col.purpose',
+  'ops.apps.col.asset',
+  'ops.apps.col.status',
+  'ops.apps.col.submitted',
+  'ops.apps.status.pending',
+  'ops.apps.status.approved',
+  'ops.apps.status.rejected',
+]);

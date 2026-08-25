@@ -1,0 +1,23 @@
+{
+  "ops.title": "Organizer ops",
+  "ops.desc": "Labelled demo chrome for alerts and data applications. No blob upload pipeline, Nest file microservice, or quota product.",
+  "ops.mockBadge": "mock",
+  "ops.alerts.title": "Alert patterns",
+  "ops.alerts.desc": "Use these labelled states on organizer ops screens. Attendee errors stay on event-portal.",
+  "ops.alerts.info.title": "Info · next session",
+  "ops.alerts.info.body": "Tomorrow 14:00 talk still has 12 unsold labelled-demo tickets. This is not a live sell-out.",
+  "ops.alerts.warning.title": "Warning · cover image local only",
+  "ops.alerts.warning.body": "Cover preview uses a local file URL. There is no blob quota or Nest upload service on this path.",
+  "ops.alerts.error.title": "Error · payment still mock",
+  "ops.alerts.error.body": "Checkout cannot take live money until STOP-014. Do not treat Hobby api-mock as the funds API.",
+  "ops.apps.title": "Data applications",
+  "ops.apps.desc": "In-memory fake list. Approve/reject here does not write Nest or start a file job.",
+  "ops.apps.col.requester": "Requester",
+  "ops.apps.col.purpose": "Purpose",
+  "ops.apps.col.asset": "Asset",
+  "ops.apps.col.status": "Status",
+  "ops.apps.col.submitted": "Submitted",
+  "ops.apps.status.pending": "Pending",
+  "ops.apps.status.approved": "Approved",
+  "ops.apps.status.rejected": "Rejected"
+}

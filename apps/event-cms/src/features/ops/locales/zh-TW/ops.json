@@ -1,0 +1,23 @@
+{
+  "ops.title": "主辦營運殼",
+  "ops.desc": "標示為示範的警示樣式與資料申請列表。沒有 blob 上傳管線、Nest 檔案微服務或額度產品。",
+  "ops.mockBadge": "mock",
+  "ops.alerts.title": "警示樣式",
+  "ops.alerts.desc": "主辦營運畫面用這些標示狀態。參加者錯誤狀態留在 event-portal。",
+  "ops.alerts.info.title": "Info · 下一場次",
+  "ops.alerts.info.body": "明日 14:00 講座仍有 12 張未售出的 labelled demo 票。這不是真實售罄。",
+  "ops.alerts.warning.title": "Warning · 封面圖僅本機",
+  "ops.alerts.warning.body": "封面預覽用本機檔案 URL。這條路徑沒有 blob 額度或 Nest 上傳服務。",
+  "ops.alerts.error.title": "Error · 金流仍是 mock",
+  "ops.alerts.error.body": "checkout 在 STOP-014 前不能收真錢。不要把 Hobby api-mock 當成金流 API。",
+  "ops.apps.title": "資料申請",
+  "ops.apps.desc": "記憶體假列表。這裡核准／駁回不會寫 Nest，也不會啟動檔案工作。",
+  "ops.apps.col.requester": "申請人",
+  "ops.apps.col.purpose": "用途",
+  "ops.apps.col.asset": "資產",
+  "ops.apps.col.status": "狀態",
+  "ops.apps.col.submitted": "送出時間",
+  "ops.apps.status.pending": "待審",
+  "ops.apps.status.approved": "已核准",
+  "ops.apps.status.rejected": "已駁回"
+}

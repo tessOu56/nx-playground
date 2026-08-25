@@ -44,6 +44,7 @@
       "formId": "form_basic",
       "data": {
         "image": "https://picsum.photos/seed/event_react19/1200/640",
+        "kind": "talk",
         "category": "前端",
         "tags": [
           "React",
@@ -163,6 +164,7 @@
       "formId": "form_basic",
       "data": {
         "image": "https://picsum.photos/seed/event_nestjs/1200/640",
+        "kind": "talk",
         "category": "後端",
         "tags": [
           "NestJS",
@@ -233,6 +235,7 @@
       "formId": "form_basic",
       "data": {
         "image": "https://picsum.photos/seed/event_summer/1200/640",
+        "kind": "line_commerce",
         "category": "社群",
         "tags": [
           "開源"
@@ -302,6 +305,7 @@
       "formId": "form_basic",
       "data": {
         "image": "https://picsum.photos/seed/event_archived/1200/640",
+        "kind": "talk",
         "category": "戶外",
         "tags": [
           "路跑"
@@ -358,6 +362,8 @@
       "formId": "form_basic",
       "data": {
         "image": "https://picsum.photos/seed/event_nx/1200/640",
+        "kind": "auction",
+        "plinthLotUrl": "https://metalcraft-storefront-eta.vercel.app/en/lots/lot-1",
         "category": "工程",
         "tags": [
           "Nx"

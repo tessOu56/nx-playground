@@ -98,6 +98,10 @@ export interface Event {
   organizerName?: string;
   speakerCount?: number;
   venueHint?: string;
+  /** Domain kind from event.data.kind — talk | auction | line_commerce */
+  domainKind?: 'talk' | 'auction' | 'line_commerce';
+  /** Auction deep link to Plinth; settlement stays on Plinth */
+  plinthLotUrl?: string;
 
   registrationFormTemplate?: import('./registrationForm').EventRegistrationTemplate;
 }

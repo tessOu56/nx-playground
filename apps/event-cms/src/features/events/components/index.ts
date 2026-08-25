@@ -34,3 +34,5 @@ export { FormEditBlock } from './composite/FormEditBlock';
 export { VisibilityBlock } from './composite/VisibilityBlock';
 export { PaymentBlock } from './composite/PaymentBlock';
 export { PreviewSideBar } from './composite/PreviewSideBar';
+export { PublishSuccessBanner } from './composite/PublishSuccessBanner';
+export type { PublishSuccess } from './composite/PublishSuccessBanner';

@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { NoEvents } from '@/app/[locale]/vendors/[vendorId]/components/events/NoEvents';
 import {
   eventDisplayLabel,
+  eventDomainLabel,
   eventListKind,
 } from '@/libs/api/event-stack-map';
 import type { Event } from '@/types';
@@ -50,6 +51,7 @@ export function EventStackCards({
     <ul className='grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3'>
       {events.map(event => {
         const kind = eventListKind(event);
+        const domain = event.domainKind ?? 'talk';
         const dateRange = formatListDateRange(event);
         const venueLine = [event.location, event.venueHint]
           .filter(Boolean)
@@ -70,8 +72,8 @@ export function EventStackCards({
               />
               <div className='p-4'>
                 <div className='mb-2 flex items-center justify-between gap-2'>
-                  <span className='text-xs font-medium text-gray-500'>
-                    {event.category}
+                  <span className='rounded-full bg-indigo-50 px-2 py-0.5 text-xs font-medium text-indigo-800'>
+                    {eventDomainLabel(domain)}
                   </span>
                   <span className='rounded-full bg-gray-100 px-2 py-0.5 text-xs font-medium text-gray-700'>
                     {eventDisplayLabel(kind)}

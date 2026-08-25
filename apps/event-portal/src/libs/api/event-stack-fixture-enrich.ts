@@ -31,7 +31,15 @@ export function enrichEventStackEvent(event: EventStackEvent): EventStackEvent {
   const fixtureData = asRecord(fixture.data) ?? {};
   const merged: Record<string, unknown> = { ...apiData };
 
-  for (const key of ['speakers', 'venue', 'organizer', 'content', 'faq'] as const) {
+  for (const key of [
+    'speakers',
+    'venue',
+    'organizer',
+    'content',
+    'faq',
+    'kind',
+    'plinthLotUrl',
+  ] as const) {
     if (isMissingExtra(merged[key]) && !isMissingExtra(fixtureData[key])) {
       merged[key] = fixtureData[key];
     }

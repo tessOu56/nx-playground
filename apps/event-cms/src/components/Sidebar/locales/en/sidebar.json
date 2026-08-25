@@ -5,6 +5,7 @@
   "sidebar.navigation.events": "Events",
   "sidebar.navigation.users": "Users",
   "sidebar.navigation.forms": "Form Templates",
+  "sidebar.navigation.ops": "Ops (mock)",
   "sidebar.navigation.components": "Components",
   "sidebar.navigation.settings": "Settings"
 }
