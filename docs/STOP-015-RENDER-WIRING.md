@@ -8,6 +8,7 @@ When owner reports STOP-015 with `https://<service>.onrender.com/health`:
 - Build/start: [`scripts/render-event-stack-api.sh`](../scripts/render-event-stack-api.sh)
 - Env (Dashboard, never commit): `DATABASE_URL` (existing Neon **event-stack** / `snowy-bird-20372699`, **direct/unpooled**), `CORS_ORIGIN`, optional `CMS_ORGANIZER_API_TOKEN`, `ALLOWED_ORGANIZER_EMAILS`, `EVENT_STACK_CMS_DEV_AUTH=false`
 - Do **not** create a new Neon project. Copy DSN from Neon Console → Connect, or from Vercel `nx-event-stack-api` → `DATABASE_URL`. `render.yaml` has `sync: false` so Blueprint leaves the field empty until you paste it.
+- **Build** = `pnpm install` + Nest webpack only (`HUSKY=0`). **Start** = `prisma migrate deploy` then `node dist/apps/api-server/main.js`. Empty `DATABASE_URL` fails at **start** with a clear message (not a cryptic webpack exit).
 
 ## Vercel `nx-event-portal`
 
