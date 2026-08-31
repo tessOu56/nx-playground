@@ -5,6 +5,18 @@
 > Local run: [`docs/EVENT-STACK-DEMO.md`](./docs/EVENT-STACK-DEMO.md). Hosted: [`docs/HOSTED-DEMO.md`](./docs/HOSTED-DEMO.md).  
 > Angular / Vue live in [angular-dashboard-sandbox](https://github.com/tessOu56/angular-dashboard-sandbox) and [vue-motion-sandbox](https://github.com/tessOu56/vue-motion-sandbox) (canonical after mirror inversion). Design tokens: [explore-design-sdk](https://github.com/tessOu56/explore-design-sdk).
 
+## What this proves
+
+Taiwan **event product slice** in one Nx repo: public C-end (Next.js) + organizer CMS (React) + shared OpenAPI + Nest/Prisma spine.
+
+| Proof | Honest bound |
+|-------|----------------|
+| **Hosted C-end** | [https://nx-event-portal.vercel.app/zh-TW/events](https://nx-event-portal.vercel.app/zh-TW/events) — **labelled demo**. Catalog/orders talk to Hobby **api-mock memory**; not the funds path. |
+| **Contracts** | Same OpenAPI for mock and Nest; Orval client; confirm → ticket → check-in on the Nest path locally. |
+| **Not claimed** | Hosted Nest + Postgres is **not** live until STOP-015 (`/health` green). Live ECPay is STOP-014. LIFF attendees need STOP-013. |
+
+Interview second case after [AI Search Portal](https://github.com/tessOu56/ai-search-portal). Do not describe Hobby mock as production money API.
+
 [![Nx](https://img.shields.io/badge/Nx-21.4-blue.svg)](https://nx.dev)
 [![React](https://img.shields.io/badge/React-19-cyan.svg)](https://react.dev)
 [![Next.js](https://img.shields.io/badge/Next.js-15-black.svg)](https://nextjs.org)
