@@ -4,14 +4,23 @@ import { HeroSection } from './components/HeroSection';
 import { UserFlowSection } from './components/UserFlowSection';
 
 import { PageConfigs } from '@/libs';
+import { demoCopy } from '@/libs/i18n/demo-copy';
 
 export const { dynamic, revalidate, fetchCache, ssr } = PageConfigs.home;
 
-export const metadata: Metadata = {
-  title: 'NX Playground Events | 活動發現與報名',
-  description: '發現活動、用 LINE 登入報名，票券與訂單綁在您的帳號。',
-  keywords: ['LINE 登入', '活動平台', '報名', '票券', 'NX Playground Events'],
-};
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  const copy = demoCopy(locale);
+  return {
+    title: copy.metaTitle,
+    description: copy.metaDescription,
+    keywords: ['labelled demo', 'event stack', 'NX Playground Events'],
+  };
+}
 
 export default function HomePage() {
   return (

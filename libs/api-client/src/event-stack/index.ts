@@ -3,7 +3,12 @@
  * Switch runtime with NEXT_PUBLIC_API_BASE_URL | VITE_API_BASE_URL
  * (http://localhost:3001/api live, http://localhost:3011/api mock).
  */
-export { getEventStackBaseUrl, eventStackRequest } from './http';
+export {
+  getEventStackBaseUrl,
+  eventStackRequest,
+  shouldUseLabelledDemoBff,
+  labelledDemoBffBaseUrl,
+} from './http';
 export { setEventStackOrganizerAuth } from './auth';
 export * from './types';
 export * from './operations';

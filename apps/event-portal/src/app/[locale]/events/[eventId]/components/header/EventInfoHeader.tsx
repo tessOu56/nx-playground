@@ -1,33 +1,35 @@
 'use client';
 
 import { Image } from '@/components';
-import {
-  eventDisplayLabel,
-  eventDomainLabel,
-  eventListKind,
-} from '@/libs/api/event-stack-map';
+import { eventListKind } from '@/libs/api/event-stack-map';
+import { demoCopy, priceFromLabel } from '@/libs/i18n/demo-copy';
 import type { EventDetail, EventSpeaker, EventVenue } from '@/types';
 
 interface EventInfoHeaderProps {
   event: EventDetail;
   eventId: string;
+  locale?: string;
 }
 
-const taipeiDate = new Intl.DateTimeFormat('zh-TW', {
-  year: 'numeric',
-  month: 'long',
-  day: 'numeric',
-  timeZone: 'Asia/Taipei',
-});
-
-const taipeiTime = new Intl.DateTimeFormat('zh-TW', {
-  hour: '2-digit',
-  minute: '2-digit',
-  hour12: false,
-  timeZone: 'Asia/Taipei',
-});
-
-function formatDateRange(startsAt: string, endsAt: string, startTime: string): string {
+function formatDateRange(
+  startsAt: string,
+  endsAt: string,
+  startTime: string,
+  locale: string
+): string {
+  const dateLocale = locale === 'en' ? 'en-US' : 'zh-TW';
+  const taipeiDate = new Intl.DateTimeFormat(dateLocale, {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+    timeZone: 'Asia/Taipei',
+  });
+  const taipeiTime = new Intl.DateTimeFormat(dateLocale, {
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: false,
+    timeZone: 'Asia/Taipei',
+  });
   const start = new Date(startsAt);
   const end = new Date(endsAt);
   if (Number.isNaN(start.getTime())) {
@@ -43,10 +45,6 @@ function formatDateRange(startsAt: string, endsAt: string, startTime: string): s
   return `${taipeiDate.format(start)} ${taipeiTime.format(start)} – ${taipeiDate.format(end)} ${taipeiTime.format(end)}`;
 }
 
-function priceFromLabel(price: number): string {
-  return price > 0 ? `NT$ ${price.toLocaleString('zh-TW')} 起` : '免費';
-}
-
 function osmEmbedSrc(lat: number, lng: number): string {
   const delta = 0.008;
   const bbox = `${lng - delta},${lat - delta},${lng + delta},${lat + delta}`;
@@ -57,11 +55,18 @@ function osmSearchHref(query: string): string {
   return `https://www.openstreetmap.org/search?query=${encodeURIComponent(query)}`;
 }
 
-function EventSpeakers({ speakers }: { speakers: EventSpeaker[] }) {
+function EventSpeakers({
+  speakers,
+  locale,
+}: {
+  speakers: EventSpeaker[];
+  locale: string;
+}) {
+  const copy = demoCopy(locale);
   if (speakers.length === 0) return null;
   return (
     <div className='mt-8'>
-      <h2 className='text-lg font-semibold text-gray-900 mb-4'>講者</h2>
+      <h2 className='text-lg font-semibold text-gray-900 mb-4'>{copy.speakers}</h2>
       <ul className='grid grid-cols-1 sm:grid-cols-2 gap-4'>
         {speakers.map(speaker => (
           <li
@@ -100,9 +105,12 @@ function EventSpeakers({ speakers }: { speakers: EventSpeaker[] }) {
 
 function EventVenueBlock({
   venue,
+  locale,
 }: {
   venue: EventVenue;
+  locale: string;
 }) {
+  const copy = demoCopy(locale);
   const query = venue.mapQuery;
   const canEmbed =
     typeof venue.lat === 'number' &&
@@ -113,7 +121,7 @@ function EventVenueBlock({
 
   return (
     <div className='mt-8 space-y-3'>
-      <h2 className='text-lg font-semibold text-gray-900'>場地</h2>
+      <h2 className='text-lg font-semibold text-gray-900'>{copy.venue}</h2>
       {venue.address ? (
         <p className='text-gray-700'>{venue.address}</p>
       ) : null}
@@ -122,7 +130,7 @@ function EventVenueBlock({
       ) : null}
       {canEmbed ? (
         <iframe
-          title='場地地圖'
+          title={copy.mapTitle}
           className='h-56 w-full rounded-lg border border-gray-200'
           src={osmEmbedSrc(venue.lat as number, venue.lng as number)}
           loading='lazy'
@@ -137,7 +145,7 @@ function EventVenueBlock({
             target='_blank'
             rel='noreferrer'
           >
-            在 OpenStreetMap 開啟
+            {copy.openOsm}
           </a>
         </p>
       ) : null}
@@ -145,7 +153,11 @@ function EventVenueBlock({
   );
 }
 
-export function EventInfoHeader({ event }: EventInfoHeaderProps) {
+export function EventInfoHeader({
+  event,
+  locale = 'zh-TW',
+}: EventInfoHeaderProps) {
+  const copy = demoCopy(locale);
   const kind = eventListKind(event);
   const domain = event.domainKind ?? 'talk';
 
@@ -163,12 +175,12 @@ export function EventInfoHeader({ event }: EventInfoHeaderProps) {
           />
           <div className='absolute top-4 left-4 bg-indigo-600/90 backdrop-blur-sm px-3 py-1 rounded-full'>
             <span className='text-sm font-medium text-white'>
-              {eventDomainLabel(domain)}
+              {copy.domain[domain]}
             </span>
           </div>
           <div className='absolute top-4 right-4 bg-black/70 px-3 py-1 rounded-full'>
             <span className='text-sm font-medium text-white'>
-              {eventDisplayLabel(kind)}
+              {copy.status[kind]}
             </span>
           </div>
         </div>
@@ -185,7 +197,7 @@ export function EventInfoHeader({ event }: EventInfoHeaderProps) {
                 rel='noreferrer'
                 className='text-sm font-medium text-indigo-700 underline'
               >
-                在 Plinth 看拍品（結算在 Plinth）
+                {copy.plinthLot}
               </a>
             </p>
           ) : null}
@@ -195,37 +207,44 @@ export function EventInfoHeader({ event }: EventInfoHeaderProps) {
           <dl className='grid grid-cols-1 sm:grid-cols-2 gap-3 text-gray-700'>
             <div>
               <dt className='text-xs uppercase tracking-wide text-gray-500'>
-                時間
+                {copy.when}
               </dt>
-              <dd>{formatDateRange(event.startsAt, event.endsAt, event.startTime)}</dd>
+              <dd>
+                {formatDateRange(
+                  event.startsAt,
+                  event.endsAt,
+                  event.startTime,
+                  locale
+                )}
+              </dd>
             </div>
             <div>
               <dt className='text-xs uppercase tracking-wide text-gray-500'>
-                票價
+                {copy.price}
               </dt>
-              <dd>{priceFromLabel(event.price)}</dd>
+              <dd>{priceFromLabel(event.price, locale)}</dd>
             </div>
             <div>
               <dt className='text-xs uppercase tracking-wide text-gray-500'>
-                主辦
+                {copy.organizer}
               </dt>
               <dd>{event.organizerName}</dd>
             </div>
             <div>
               <dt className='text-xs uppercase tracking-wide text-gray-500'>
-                剩餘名額
+                {copy.seatsLeft}
               </dt>
               <dd>{event.remainingSeats.toLocaleString('zh-TW')}</dd>
             </div>
             <div className='sm:col-span-2'>
               <dt className='text-xs uppercase tracking-wide text-gray-500'>
-                地點
+                {copy.location}
               </dt>
               <dd>{event.location}</dd>
             </div>
           </dl>
-          <EventSpeakers speakers={event.speakers} />
-          <EventVenueBlock venue={event.venue} />
+          <EventSpeakers speakers={event.speakers} locale={locale} />
+          <EventVenueBlock venue={event.venue} locale={locale} />
         </div>
       </div>
     </div>

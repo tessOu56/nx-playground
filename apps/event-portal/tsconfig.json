@@ -24,6 +24,7 @@
       "@nx-playground/api-client/event-stack": [
         "../../libs/api-client/src/event-stack/index.ts"
       ],
+      "@nx-playground/api-fixtures": ["../../libs/api-fixtures/src/index.ts"],
       "@nx-playground/auth-client": ["../../libs/auth-client/src"],
       "@nx-playground/hooks": ["../../libs/hooks/src"],
       "@nx-playground/logger": ["../../libs/logger/src"],

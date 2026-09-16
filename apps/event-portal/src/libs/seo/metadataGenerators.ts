@@ -3,7 +3,9 @@
  */
 
 import type { Metadata } from 'next';
-import { getEvent, getOrder } from '@nx-playground/api-client/event-stack';
+
+import { fetchPortalEvent } from '@/libs/api/event-stack-fetch';
+import { getOrder } from '@nx-playground/api-client/event-stack';
 
 export async function generateEventMetadata({
   params,
@@ -12,7 +14,7 @@ export async function generateEventMetadata({
 }): Promise<Metadata> {
   const { eventId } = await params;
   try {
-    const event = await getEvent(eventId);
+    const event = await fetchPortalEvent(eventId);
     return {
       title: `${event.title} - 活動詳情 - NX Playground Events`,
       description: `查看 ${event.title} 活動詳情和報名資訊`,
@@ -39,7 +41,7 @@ export async function generateOrderMetadata({
   const { orderId } = await params;
   try {
     const order = await getOrder(orderId);
-    const event = await getEvent(order.eventId);
+    const event = await fetchPortalEvent(order.eventId);
     return {
       title: `訂單 ${orderId} - NX Playground Events`,
       description: `訂單 ${orderId} - ${event.title}`,

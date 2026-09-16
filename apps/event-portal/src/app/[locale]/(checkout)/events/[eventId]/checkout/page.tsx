@@ -5,49 +5,55 @@ import { CheckoutLayoutSkeleton } from './components';
 import { CheckoutClient } from './components/layout/CheckoutClient';
 
 import { eventStaticParams } from '@/libs/api/event-static-params';
+import { demoCopy } from '@/libs/i18n/demo-copy';
 import type { PaymentMethod } from '@/types';
 
+export const dynamic = 'force-dynamic';
 export const dynamicParams = true;
 
 export async function generateStaticParams() {
   return eventStaticParams();
 }
 
-// 固定 metadata
-export const metadata: Metadata = {
-  title: '選擇票券 | NX Playground',
-  description: '選擇您想要的票券類型和付款方式',
-  robots: 'noindex, nofollow',
-};
-
-// 靜態付款方式配置
-const paymentMethods = [
-  {
-    value: 'cash' as PaymentMethod,
-    label: '現場付款',
-    description:
-      '選擇現場付款後，系統會生成 QR Code。請到現場出示給店員掃描並支付現金。',
-  },
-  {
-    value: 'atm' as PaymentMethod,
-    label: 'ATM 轉帳',
-    description:
-      '選擇 ATM 轉帳後，系統會提供轉帳帳號和金額。請在 24 小時內完成轉帳。',
-  },
-  {
-    value: 'third_party' as PaymentMethod,
-    label: '第三方支付',
-    description:
-      '導向金流頁完成付款。本機無綠界商家時走模擬流程，不會在本站輸入卡號。',
-  },
-];
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  const copy = demoCopy(locale);
+  return {
+    title: `${copy.checkoutTitle} | NX Playground`,
+    description: copy.checkoutLead,
+    robots: 'noindex, nofollow',
+  };
+}
 
 export default async function CheckoutPage({
   params,
 }: {
-  params: Promise<{ eventId: string }>;
+  params: Promise<{ locale: string; eventId: string }>;
 }) {
-  const { eventId } = await params;
+  const { locale, eventId } = await params;
+  const copy = demoCopy(locale);
+
+  const paymentMethods = [
+    {
+      value: 'cash' as PaymentMethod,
+      label: copy.cash,
+      description: copy.cashHint,
+    },
+    {
+      value: 'atm' as PaymentMethod,
+      label: copy.atm,
+      description: copy.atmHint,
+    },
+    {
+      value: 'third_party' as PaymentMethod,
+      label: copy.thirdParty,
+      description: copy.thirdPartyHint,
+    },
+  ];
 
   return (
     <>

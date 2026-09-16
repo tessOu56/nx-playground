@@ -1,6 +1,7 @@
 'use client';
 
 import { useSearchParams } from 'next/navigation';
+import { useLocale } from 'next-intl';
 import { useState, useEffect } from 'react';
 
 import {
@@ -19,7 +20,7 @@ import {
   useVendorData,
   useVendorStoreActions,
 } from '@/libs';
-import { useLocalizedRouter } from '@/libs/i18n';
+import { demoCopy, useLocalizedRouter } from '@/libs/i18n';
 import { canSellTicket } from '@/libs/utils/eventUtils';
 
 interface EventDetailProps {
@@ -28,6 +29,8 @@ interface EventDetailProps {
 
 export function EventDetail({ eventId }: EventDetailProps) {
   const router = useLocalizedRouter();
+  const locale = useLocale();
+  const copy = demoCopy(locale);
   const searchParams = useSearchParams();
   const [selectedSessionId, setSelectedSessionId] = useState<string>('');
 
@@ -112,19 +115,17 @@ export function EventDetail({ eventId }: EventDetailProps) {
       {isLoading ? (
         <EventInfoHeaderSkeleton />
       ) : error ? (
-        <EventInfoHeaderError kind='api' />
+        <EventInfoHeaderError kind='api' locale={locale} />
       ) : !event ? (
-        <EventInfoHeaderError kind='not-found' />
+        <EventInfoHeaderError kind='not-found' locale={locale} />
       ) : (
         <div className='lg:grid lg:grid-cols-[minmax(0,1fr)_20rem] lg:items-start lg:gap-8'>
           <div className='space-y-6'>
-            <EventInfoHeader event={event} eventId={eventId} />
-            <p className='text-sm text-gray-500'>
-              示範身分即可報名，無需登入。
-            </p>
+            <EventInfoHeader event={event} eventId={eventId} locale={locale} />
+            <p className='text-sm text-gray-500'>{copy.guestSignup}</p>
             <div className='lg:hidden'>{sessionList}</div>
             <EventContent content={event.content} />
-            <EventFAQ faq={event.faq} />
+            <EventFAQ faq={event.faq} locale={locale} />
           </div>
           <aside className='hidden lg:block lg:sticky lg:top-24'>
             {sessionList}
@@ -135,7 +136,7 @@ export function EventDetail({ eventId }: EventDetailProps) {
       {error || (!event && !isLoading) ? (
         <Card className='p-6 text-center'>
           <Button onClick={handleEventNotFound} variant='primary' size='lg'>
-            瀏覽其他活動
+            {copy.browseOthers}
           </Button>
         </Card>
       ) : null}

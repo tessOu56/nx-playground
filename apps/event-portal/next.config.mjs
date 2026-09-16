@@ -18,6 +18,7 @@ const nextConfig = {
     '@nx-playground/design-system',
     '@nx-playground/i18n',
     '@nx-playground/api-client',
+    '@nx-playground/api-fixtures',
     '@nx-playground/auth-client',
     '@nx-playground/hooks',
     '@nx-playground/logger',
@@ -87,6 +88,14 @@ const nextConfig = {
       ),
       '@nx-playground/logger': path.resolve(__dirname, '../../libs/logger/src/index.ts'),
       '@nx-playground/validation': path.resolve(__dirname, '../../libs/validation/src/index.ts'),
+      '@nx-playground/i18n': path.resolve(
+        __dirname,
+        '../../libs/i18n/src/index.ts'
+      ),
+      '@nx-playground/api-fixtures': path.resolve(
+        __dirname,
+        '../../libs/api-fixtures/src/index.ts'
+      ),
     };
 
     // 根據環境動態設置設計系統路徑

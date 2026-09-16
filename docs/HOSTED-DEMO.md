@@ -12,9 +12,9 @@ Local Nest + Postgres remains the interview / future money spine. Do not point l
 | Hobby api-mock | https://nx-event-stack-api.vercel.app/api | Memory catalog + mock pay / tickets |
 | Nest API (STOP-015 Render) | set after Blueprint apply (`nx-event-stack-nest`) | Interview / funds path (not the public URL) |
 
-Public portal `NEXT_PUBLIC_API_BASE_URL` = Hobby `/api`. Local CMS still uses Nest (`VITE_API_BASE_URL=http://localhost:3001/api`). Do not create a fifth Vercel project.
+Public portal `NEXT_PUBLIC_API_BASE_URL` = Hobby `/api` when that project is a real mock. If `nx-event-stack-api.vercel.app` is serving the Next portal instead of api-mock, event-portal uses a **same-origin labelled-demo BFF** (`/api/events`, memory `api-fixtures`). That BFF is **not** the Nest funds path and must not be described as a money API. Local CMS still uses Nest (`VITE_API_BASE_URL=http://localhost:3001/api`). Do not create a fifth Vercel project.
 
-**Fixture updates:** edit `libs/api-fixtures/src/events.json` (and keep `apps/api-mock/src/data/events.json` in sync), then **redeploy `nx-event-stack-api`** (separate Vercel project under `apps/api-mock`; CLI: `npx vercel deploy --prod --yes --scope tess-projects-3856348b` from that folder). Pushing `nx-event-portal` alone does not refresh the API catalog. Check `GET /api/health` for `catalogEvents` after deploy. Until the API redeploys, event-portal merges thin API payloads with bundled fixtures for labelled demo fields (speakers, venue, organizer).
+**Fixture updates:** edit `libs/api-fixtures/src/events.json` (and keep `apps/api-mock/src/data/events.json` in sync). Redeploying `nx-event-stack-api` refreshes the dedicated mock; the portal BFF reads bundled fixtures on the next portal deploy. Check portal `GET /api/health` for `catalogEvents` + `labelledDemo: true`. Until the dedicated mock is a real api-mock, event-portal merges / falls back to bundled fixtures for labelled demo fields (speakers, venue, organizer).
 
 Local CMS → Nest:
 
