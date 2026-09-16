@@ -9,7 +9,7 @@
     "@is_tess/sdk": "0.1.0",
     "@is_tess/tokens": "^0.1.2",
     "@line/liff": "2.27.1",
-    "@next/env": "15.5.9",
+    "@next/env": "15.5.25",
     "@nx-playground/api-client": "workspace:*",
     "@nx-playground/api-fixtures": "workspace:*",
     "@nx-playground/auth-client": "workspace:*",
@@ -35,7 +35,7 @@
     "i18next": "25.5.2",
     "i18next-browser-languagedetector": "8.2.0",
     "lucide-react": "0.525.0",
-    "next": "15.5.9",
+    "next": "15.5.25",
     "next-intl": "4.3.6",
     "pino": "10.1.0",
     "qr-code-styling": "1.9.2",
@@ -58,7 +58,7 @@
       "react": "19.0.0",
       "react-dom": "19.0.0",
       "tmp@<=0.2.3": ">=0.2.4",
-      "next": "15.5.9",
+      "next": "15.5.25",
       "react-hook-form": "7.62.0",
       "@is_tess/tokens": "^0.1.2"
     }

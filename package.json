@@ -158,7 +158,7 @@
     "marked": "^16.4.1",
     "mobx": "^6.13.5",
     "mobx-react-lite": "^4.1.0",
-    "next": "15.5.9",
+    "next": "15.5.25",
     "next-intl": "^4.3.6",
     "openapi-types": "^7.2.3",
     "pino": "^10.1.0",
@@ -203,7 +203,7 @@
       "react": "19.0.0",
       "react-dom": "19.0.0",
       "tmp@<=0.2.3": ">=0.2.4",
-      "next": "15.5.9",
+      "next": "15.5.25",
       "react-hook-form": "7.62.0",
       "@is_tess/tokens": "^0.1.2"
     }
