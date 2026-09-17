@@ -6,6 +6,30 @@ Nx Monorepo 後端架構設計（Mode S: Supabase-led）
 
 ## 🏗️ 架構概覽
 
+```mermaid
+flowchart TB
+  subgraph fe [Frontend Apps]
+    Profile["Profile (React 19)"]
+    Portal["Event Portal (Next.js 15)"]
+    CMS["Event CMS (React 19)"]
+  end
+  subgraph sb [Supabase - Mode S]
+    PG[("PostgreSQL (SSOT) + RLS + Migrations")]
+    Auth["Supabase Auth (JWT, OAuth)"]
+    RT["Realtime (WebSocket)"]
+    Edge["Edge Functions (Deno)"]
+  end
+  Profile --> PG
+  Portal --> PG
+  CMS --> PG
+  Portal --> Auth
+  CMS --> Auth
+  Portal --> RT
+  Edge --> PG
+```
+
+詳細分層（下方 ASCII 保留完整細節）：
+
 ```
 ┌─────────────────────────────────────────────────────────────────┐
 │                         Frontend Apps                            │
