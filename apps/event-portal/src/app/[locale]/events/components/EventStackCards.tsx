@@ -1,39 +1,31 @@
 import Link from 'next/link';
 
 import { NoEvents } from '@/app/[locale]/vendors/[vendorId]/components/events/NoEvents';
-import {
-  eventDisplayLabel,
-  eventDomainLabel,
-  eventListKind,
-} from '@/libs/api/event-stack-map';
+import { eventListKind } from '@/libs/api/event-stack-map';
+import { demoCopy, priceFromLabel } from '@/libs/i18n/demo-copy';
 import type { Event } from '@/types';
 
-const taipeiDate = new Intl.DateTimeFormat('zh-TW', {
-  year: 'numeric',
-  month: 'short',
-  day: 'numeric',
-  timeZone: 'Asia/Taipei',
-});
-
-function formatListDateRange(event: Event): string {
+function formatListDateRange(event: Event, locale: string): string {
   const start = new Date(`${event.date}T00:00:00.000Z`);
+  const fmt = new Intl.DateTimeFormat(locale === 'en' ? 'en-US' : 'zh-TW', {
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric',
+    timeZone: 'Asia/Taipei',
+  });
   if (Number.isNaN(start.getTime())) {
     return event.date;
   }
   if (!event.endsAt) {
-    return taipeiDate.format(start);
+    return fmt.format(start);
   }
   const end = new Date(event.endsAt);
   if (Number.isNaN(end.getTime())) {
-    return taipeiDate.format(start);
+    return fmt.format(start);
   }
-  const startLabel = taipeiDate.format(start);
-  const endLabel = taipeiDate.format(end);
+  const startLabel = fmt.format(start);
+  const endLabel = fmt.format(end);
   return startLabel === endLabel ? startLabel : `${startLabel} – ${endLabel}`;
-}
-
-function priceFromLabel(price: number): string {
-  return price > 0 ? `NT$ ${price.toLocaleString('zh-TW')} 起` : '免費';
 }
 
 export function EventStackCards({
@@ -43,8 +35,10 @@ export function EventStackCards({
   events: Event[];
   locale: string;
 }) {
+  const copy = demoCopy(locale);
+
   if (!events.length) {
-    return <NoEvents variant='catalog' />;
+    return <NoEvents variant='catalog' locale={locale} />;
   }
 
   return (
@@ -52,11 +46,11 @@ export function EventStackCards({
       {events.map(event => {
         const kind = eventListKind(event);
         const domain = event.domainKind ?? 'talk';
-        const dateRange = formatListDateRange(event);
+        const dateRange = formatListDateRange(event, locale);
         const venueLine = [event.location, event.venueHint]
           .filter(Boolean)
           .join(' · ');
-        const meta = [dateRange, venueLine, priceFromLabel(event.price)]
+        const meta = [dateRange, venueLine, priceFromLabel(event.price, locale)]
           .filter(Boolean)
           .join(' · ');
 
@@ -73,10 +67,10 @@ export function EventStackCards({
               <div className='p-4'>
                 <div className='mb-2 flex items-center justify-between gap-2'>
                   <span className='rounded-full bg-indigo-50 px-2 py-0.5 text-xs font-medium text-indigo-800'>
-                    {eventDomainLabel(domain)}
+                    {copy.domain[domain]}
                   </span>
                   <span className='rounded-full bg-gray-100 px-2 py-0.5 text-xs font-medium text-gray-700'>
-                    {eventDisplayLabel(kind)}
+                    {copy.status[kind]}
                   </span>
                 </div>
                 <h2 className='line-clamp-2 text-base font-semibold text-gray-900'>
@@ -90,12 +84,12 @@ export function EventStackCards({
                     {event.organizerName}
                     {typeof event.speakerCount === 'number' &&
                     event.speakerCount > 0
-                      ? ` · ${event.speakerCount} 位講者`
+                      ? ` · ${copy.speakerCount(event.speakerCount)}`
                       : ''}
                   </p>
                 ) : null}
                 <p className='mt-3 text-sm font-medium text-blue-700'>
-                  查看場次
+                  {copy.viewSessions}
                 </p>
               </div>
             </Link>

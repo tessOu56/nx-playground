@@ -2,3 +2,4 @@
 export * from './localeRoutes';
 export * from './hooks';
 export * from './mockRoutes';
+export * from './demo-copy';

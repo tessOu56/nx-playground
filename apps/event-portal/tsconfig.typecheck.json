@@ -28,6 +28,7 @@
       "@nx-playground/design-system": ["../../libs/design-system/src"],
       "@nx-playground/i18n": ["../../libs/i18n/src"],
       "@nx-playground/api-client": ["../../libs/api-client/src"],
+      "@nx-playground/api-fixtures": ["../../libs/api-fixtures/src/index.ts"],
       "@nx-playground/auth-client": ["../../libs/auth-client/src"],
       "@nx-playground/hooks": ["../../libs/hooks/src"]
     }

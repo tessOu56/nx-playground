@@ -6,10 +6,11 @@ import {
 import { headers } from 'next/headers';
 
 import { BackLink } from '@/components/nav/BackLink';
-import { PageConfigs, prefetchEventPage, generateEventMetadata } from '@/libs';
+import { LabelledDemoBanner } from '@/components/demo/LabelledDemoBanner';
+import { prefetchEventPage, generateEventMetadata } from '@/libs';
+import { demoCopy } from '@/libs/i18n/demo-copy';
 
-// 使用活動詳情頁面配置，包含動態 metadata 生成
-export const { dynamic, revalidate, fetchCache, ssr } = PageConfigs.eventDetail;
+export const dynamic = 'force-dynamic';
 export const generateMetadata = generateEventMetadata;
 
 export default async function EventDetailLayout({
@@ -20,6 +21,7 @@ export default async function EventDetailLayout({
   params: Promise<{ locale: string; eventId: string }>;
 }) {
   const { locale, eventId } = await params;
+  const copy = demoCopy(locale);
 
   // 檢查當前路由是否為 checkout
   // 使用更簡單的方法：直接檢查 URL 中的路徑段
@@ -51,7 +53,10 @@ export default async function EventDetailLayout({
           {!isCheckoutPage && (
             <div className='mb-4'>
               <BackLink href={`/${locale}/events`} />
-              <p className='mt-1 text-xs text-gray-500'>活動 / 詳情</p>
+              <p className='mt-1 text-xs text-gray-500'>{copy.breadcrumb}</p>
+              <div className='mt-3'>
+                <LabelledDemoBanner locale={locale} />
+              </div>
             </div>
           )}
 

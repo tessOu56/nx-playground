@@ -1,15 +1,21 @@
 import { NextResponse } from 'next/server';
+import { loadFixtureEvents } from '@nx-playground/api-fixtures';
 
-// Configure for static export
-export const dynamic = 'force-static';
-export const revalidate = false;
+export const dynamic = 'force-dynamic';
 
 export async function GET() {
+  const catalogEvents = loadFixtureEvents().filter(
+    event => event.status !== 'draft'
+  ).length;
+
   return NextResponse.json(
     {
-      status: 'healthy',
-      service: 'nx-playground-events',
-      version: process.env.NEXT_PUBLIC_APP_VERSION ?? '1.0.0',
+      status: 'ok',
+      service: 'event-portal',
+      labelledDemo: true,
+      catalogSource: 'api-fixtures',
+      catalogEvents,
+      fundsPath: false,
     },
     { status: 200 }
   );

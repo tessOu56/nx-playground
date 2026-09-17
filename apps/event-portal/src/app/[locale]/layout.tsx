@@ -1,5 +1,6 @@
 import { notFound } from 'next/navigation';
 import { NextIntlClientProvider } from 'next-intl';
+import { getMessages } from 'next-intl/server';
 
 import { Header, EventsSidebar, ToastProvider } from '@/components';
 import { PublicSiteHeader } from '@/components/header/PublicSiteHeader';
@@ -20,28 +21,18 @@ export default async function LocaleLayout({
 }) {
   const { locale } = await params;
 
-  // Ensure that the incoming `locale` is valid
-  if (!locales.includes(locale as any)) {
+  if (!locales.includes(locale as (typeof locales)[number])) {
     notFound();
   }
 
-  // 條件性使用 getMessages：只在非靜態導出時使用
-  let messages = {};
-  if (
-    process.env.NODE_ENV !== 'production' ||
-    !process.env.NEXT_PUBLIC_STATIC_EXPORT
-  ) {
-    try {
-      const { getMessages } = await import('next-intl/server');
-      messages = await getMessages();
-    } catch (error) {
-      console.warn('Failed to load messages:', error);
-      messages = {};
-    }
-  }
+  const messages = await getMessages();
 
   return (
-    <NextIntlClientProvider messages={messages}>
+    <NextIntlClientProvider
+      locale={locale}
+      messages={messages}
+      timeZone='Asia/Taipei'
+    >
       <QueryProvider>
         <ErrorBoundary>
           <ToastProvider>

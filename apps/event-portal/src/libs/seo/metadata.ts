@@ -7,8 +7,9 @@ export function generateMetadata(pathname: string): Metadata {
 
   if (!pageInfo?.seo) {
     return {
-      title: 'NX Playground Events - 活動管理平台',
-      description: '基於 LIFF 的活動管理平台，提供豐富的活動體驗',
+      title: 'NX Playground Events — labelled Hobby demo',
+      description:
+        'Taiwan event-stack C-end labelled demo. Catalog and mock tickets use in-memory fixtures. Not the Nest funds API.',
     };
   }
 

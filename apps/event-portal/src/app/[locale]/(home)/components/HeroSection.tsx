@@ -4,12 +4,12 @@ import { useLocale } from 'next-intl';
 
 import { Badge, Button } from '@/components';
 import { canStartLineLogin, useLiff } from '@/libs';
-import { useLocalizedRouter } from '@/libs/i18n';
+import { demoCopy, useLocalizedRouter } from '@/libs/i18n';
 
 export function HeroSection() {
   const router = useLocalizedRouter();
   const locale = useLocale();
-  const isEn = locale === 'en';
+  const copy = demoCopy(locale);
   const { isInitialized, login, error, isLoggedIn, profile } = useLiff();
   const lineLoginReady = canStartLineLogin();
   const displayName = profile?.displayName?.trim() || '';
@@ -32,9 +32,7 @@ export function HeroSection() {
       <div className='mx-auto max-w-7xl px-4 sm:px-6 lg:px-8'>
         <div className='relative z-10 mx-auto max-w-2xl text-center py-24'>
           <div className='mb-8'>
-            <Badge className='mb-4'>
-              {isEn ? 'Events · LINE login' : '活動發現與報名'}
-            </Badge>
+            <Badge className='mb-4'>{copy.homeBadge}</Badge>
           </div>
           <h1 className='text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl'>
             NX Playground Events
@@ -43,9 +41,7 @@ export function HeroSection() {
           {isLoggedIn ? (
             <>
               <p className='mt-6 text-lg leading-8 text-gray-600'>
-                {isEn
-                  ? `Welcome back${displayName ? `, ${displayName}` : ''}. Browse events or open your tickets.`
-                  : `歡迎回來${displayName ? `，${displayName}` : ''}。繼續瀏覽活動，或查看您的訂單與票券。`}
+                {copy.welcomeBack(displayName)}
               </p>
               <div className='mt-10 flex items-center justify-center gap-x-6'>
                 <Button
@@ -54,19 +50,17 @@ export function HeroSection() {
                   className='bg-green-600 hover:bg-green-700 text-white font-semibold'
                   onClick={goToEvents}
                 >
-                  {isEn ? 'Browse events' : '瀏覽活動'}
+                  {copy.browse}
                 </Button>
                 <Button variant='outline' size='lg' onClick={goToOrders}>
-                  {isEn ? 'My orders' : '我的訂單'}
+                  {copy.myOrders}
                 </Button>
               </div>
             </>
           ) : (
             <>
               <p className='mt-6 text-lg leading-8 text-gray-600'>
-                {isEn
-                  ? 'Find events, sign in with LINE to register, and keep tickets on your account.'
-                  : '發現活動、用 LINE 登入報名，票券與訂單會綁在您的帳號。'}
+                {copy.homeLead}
               </p>
               <div className='mt-10 flex items-center justify-center gap-x-6'>
                 <Button
@@ -75,7 +69,7 @@ export function HeroSection() {
                   className='bg-green-600 hover:bg-green-700 text-white font-semibold'
                   onClick={goToEvents}
                 >
-                  {isEn ? 'Browse events' : '瀏覽活動'}
+                  {copy.browse}
                 </Button>
                 {lineLoginReady ? (
                   <Button
@@ -85,10 +79,10 @@ export function HeroSection() {
                     disabled={!isInitialized}
                   >
                     {isInitialized
-                      ? isEn
+                      ? locale === 'en'
                         ? 'Sign in with LINE'
                         : 'LINE 登入'
-                      : isEn
+                      : locale === 'en'
                         ? 'Preparing…'
                         : '準備中…'}
                   </Button>
@@ -96,7 +90,9 @@ export function HeroSection() {
               </div>
               {error ? (
                 <p className='mt-4 text-sm text-red-700' role='alert'>
-                  {isEn ? 'LINE sign-in failed. Please try again.' : 'LINE 登入失敗，請再試一次。'}
+                  {locale === 'en'
+                    ? 'LINE sign-in failed. Please try again.'
+                    : 'LINE 登入失敗，請再試一次。'}
                 </p>
               ) : null}
             </>

@@ -27,7 +27,8 @@ export const WebApplicationJsonLd = () => {
     '@context': 'https://schema.org',
     '@type': 'WebApplication',
     name: 'NX Playground Events',
-    description: '基於 LIFF 的活動管理平台',
+    description:
+      'Labelled Hobby demo of the Taiwan event stack. In-memory fixtures, not the Nest funds API.',
     url: 'https://events.nx-playground.local',
     applicationCategory: 'BusinessApplication',
     operatingSystem: 'Web Browser',
@@ -119,7 +120,8 @@ export const WebsiteJsonLd = () => {
     '@type': 'WebSite',
     name: 'NX Playground Events',
     url: 'https://events.nx-playground.local',
-    description: '基於 LIFF 的活動管理平台',
+    description:
+      'Labelled Hobby demo of the Taiwan event stack. In-memory fixtures, not the Nest funds API.',
     potentialAction: {
       '@type': 'SearchAction',
       target: 'https://events.nx-playground.local/search?q={search_term_string}',

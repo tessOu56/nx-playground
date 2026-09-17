@@ -1,11 +1,18 @@
 'use client';
 
+import { demoCopy } from '@/libs/i18n/demo-copy';
+
 interface EventListErrorProps {
   onRetry?: () => void;
+  locale?: string;
 }
 
-/** Shown when the event-stack API is unreachable — never fall back to inlined mock arrays. */
-export function EventListError({ onRetry }: EventListErrorProps) {
+/** Shown when catalog fetch throws after fixture fallback also failed. */
+export function EventListError({
+  onRetry,
+  locale = 'zh-TW',
+}: EventListErrorProps) {
+  const copy = demoCopy(locale);
   return (
     <div
       className='rounded-lg bg-white p-6 shadow-md'
@@ -14,8 +21,8 @@ export function EventListError({ onRetry }: EventListErrorProps) {
     >
       <div className='flex flex-col items-center justify-center space-y-4 py-12'>
         <div className='space-y-2 text-center'>
-          <div className='font-medium text-red-600'>目前無法載入活動</div>
-          <div className='text-sm text-gray-500'>請稍後再試。</div>
+          <div className='font-medium text-red-600'>{copy.loadError}</div>
+          <div className='text-sm text-gray-500'>{copy.loadErrorHint}</div>
         </div>
         {onRetry ? (
           <button
@@ -23,7 +30,7 @@ export function EventListError({ onRetry }: EventListErrorProps) {
             className='rounded-md bg-slate-900 px-4 py-2 text-sm text-white'
             onClick={onRetry}
           >
-            重試
+            {copy.retry}
           </button>
         ) : null}
       </div>

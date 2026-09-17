@@ -3,62 +3,26 @@
 import { useLocale } from 'next-intl';
 
 import { Button, Card, CardContent } from '@/components';
-import { useLocalizedRouter } from '@/libs/i18n';
-
-const STEPS_ZH = [
-  {
-    n: '1',
-    title: '瀏覽活動',
-    body: '查看場次、票種與報名狀態。',
-  },
-  {
-    n: '2',
-    title: 'LINE 登入報名',
-    body: '用 LINE 帳號報名，訂單會綁在您身上。',
-  },
-  {
-    n: '3',
-    title: '出示票券',
-    body: '報名完成後到「我的訂單」查看與核銷票券。',
-  },
-] as const;
-
-const STEPS_EN = [
-  {
-    n: '1',
-    title: 'Browse events',
-    body: 'Check sessions, ticket types, and whether registration is open.',
-  },
-  {
-    n: '2',
-    title: 'Sign in with LINE',
-    body: 'Register with your LINE account so orders stay with you.',
-  },
-  {
-    n: '3',
-    title: 'Show your ticket',
-    body: 'Open My orders after signup to view and check in.',
-  },
-] as const;
+import { demoCopy, useLocalizedRouter } from '@/libs/i18n';
 
 export function UserFlowSection() {
   const locale = useLocale();
   const router = useLocalizedRouter();
-  const isEn = locale === 'en';
-  const steps = isEn ? STEPS_EN : STEPS_ZH;
+  const copy = demoCopy(locale);
+  const steps = [
+    { n: '1', title: copy.step1Title, body: copy.step1Body },
+    { n: '2', title: copy.step2Title, body: copy.step2Body },
+    { n: '3', title: copy.step3Title, body: copy.step3Body },
+  ];
 
   return (
     <section className='py-24 bg-gray-50'>
       <div className='mx-auto max-w-7xl px-4 sm:px-6 lg:px-8'>
         <div className='mx-auto max-w-2xl text-center'>
           <h2 className='text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl'>
-            {isEn ? 'How it works' : '怎麼參加'}
+            {copy.howTitle}
           </h2>
-          <p className='mt-4 text-lg leading-8 text-gray-600'>
-            {isEn
-              ? 'From finding an event to showing your ticket at the door.'
-              : '從發現活動到入場出示票券。'}
-          </p>
+          <p className='mt-4 text-lg leading-8 text-gray-600'>{copy.howLead}</p>
         </div>
 
         <div className='mt-16 grid gap-6 sm:grid-cols-3'>
@@ -84,7 +48,7 @@ export function UserFlowSection() {
             className='bg-green-600 hover:bg-green-700 text-white font-semibold'
             onClick={() => router.push('/events')}
           >
-            {isEn ? 'See events' : '查看活動'}
+            {copy.seeEvents}
           </Button>
         </div>
       </div>

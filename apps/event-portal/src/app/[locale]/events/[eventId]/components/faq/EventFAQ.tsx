@@ -3,14 +3,17 @@
 import { useState } from 'react';
 
 import { Textarea, Card, Button } from '@/components';
+import { demoCopy } from '@/libs/i18n/demo-copy';
 import type { EventFAQ as FAQItem } from '@/types';
 
 interface EventFAQProps {
   faq: FAQItem[];
+  locale?: string;
 }
 
-export function EventFAQ({ faq }: EventFAQProps) {
+export function EventFAQ({ faq, locale = 'zh-TW' }: EventFAQProps) {
   const [openItems, setOpenItems] = useState<Set<number>>(new Set());
+  const copy = demoCopy(locale);
 
   const toggleItem = (index: number) => {
     const newOpenItems = new Set(openItems);
@@ -28,7 +31,7 @@ export function EventFAQ({ faq }: EventFAQProps) {
 
   return (
     <Card className='p-6'>
-      <h2 className='text-xl font-semibold text-gray-900 mb-6'>常見問題</h2>
+      <h2 className='text-xl font-semibold text-gray-900 mb-6'>{copy.faq}</h2>
       <div className='space-y-4'>
         {faq.map((item, index) => (
           <div key={index} className='border border-gray-200 rounded-lg'>

@@ -1,10 +1,11 @@
 'use client';
 
+import { demoCopy } from '@/libs/i18n/demo-copy';
 import { useLiff } from '@/libs';
 
 export function PublicSiteAccount({ locale }: { locale: string }) {
   const { isLoggedIn, profile, logout } = useLiff();
-  const isEn = locale === 'en';
+  const copy = demoCopy(locale);
 
   if (!isLoggedIn) {
     return null;
@@ -22,7 +23,7 @@ export function PublicSiteAccount({ locale }: { locale: string }) {
         onClick={() => logout()}
         className='text-gray-700 hover:text-gray-900'
       >
-        {isEn ? 'Log out' : '登出'}
+        {copy.logout}
       </button>
     </div>
   );
