@@ -23,6 +23,6 @@ export function labelledDemoPortalEvent(eventId: string) {
   return toPortalEventDetail(event);
 }
 
-export function useFixtureCatalog(): boolean {
+export function isFixtureCatalogEnabled(): boolean {
   return shouldUseLabelledDemoBff();
 }

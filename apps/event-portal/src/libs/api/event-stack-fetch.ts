@@ -3,7 +3,7 @@ import { getEvent, listEvents } from '@nx-playground/api-client/event-stack';
 import {
   labelledDemoPortalEvent,
   labelledDemoPortalEvents,
-  useFixtureCatalog,
+  isFixtureCatalogEnabled,
 } from './labelled-demo-catalog';
 import {
   enrichEventStackEvent,
@@ -14,7 +14,7 @@ import { toPortalEvent, toPortalEventDetail } from './event-stack-map';
 /** Server-safe fetchers — no React Query, so RSC / prefetch can import this module. */
 
 export async function fetchPortalEvents() {
-  if (useFixtureCatalog()) {
+  if (isFixtureCatalogEnabled()) {
     return labelledDemoPortalEvents();
   }
   try {
@@ -28,7 +28,7 @@ export async function fetchPortalEvents() {
 }
 
 export async function fetchPortalEvent(eventId: string) {
-  if (useFixtureCatalog()) {
+  if (isFixtureCatalogEnabled()) {
     return labelledDemoPortalEvent(eventId);
   }
   try {
