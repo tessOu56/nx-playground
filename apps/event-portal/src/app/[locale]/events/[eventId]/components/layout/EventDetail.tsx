@@ -14,12 +14,12 @@ import {
 } from '..';
 
 import { Button, Card } from '@/components';
+import { useEvent } from '@/libs/api/hooks/useEvents';
 import {
-  useEvent,
   useCurrentVendor,
   useVendorData,
   useVendorStoreActions,
-} from '@/libs';
+} from '@/libs/api/hooks/useVendorStore';
 import { demoCopy, useLocalizedRouter } from '@/libs/i18n';
 import { canSellTicket } from '@/libs/utils/eventUtils';
 
