@@ -2,9 +2,10 @@ import { notFound } from 'next/navigation';
 import { NextIntlClientProvider } from 'next-intl';
 import { getMessages } from 'next-intl/server';
 
-import { Header, EventsSidebar, ToastProvider } from '@/components';
+import { EventsSidebar, ToastProvider } from '@/components';
 import { PublicSiteHeader } from '@/components/header/PublicSiteHeader';
 import { LiffProvider, ErrorBoundary, QueryProvider } from '@/libs';
+import { demoCopy } from '@/libs/i18n/demo-copy';
 
 const locales = ['zh-TW', 'en'] as const;
 
@@ -26,6 +27,8 @@ export default async function LocaleLayout({
   }
 
   const messages = await getMessages();
+  const copy = demoCopy(locale);
+  const showDevSidebar = process.env.NODE_ENV !== 'production';
 
   return (
     <NextIntlClientProvider
@@ -37,18 +40,14 @@ export default async function LocaleLayout({
         <ErrorBoundary>
           <ToastProvider>
             <LiffProvider>
-              {process.env.NODE_ENV !== 'production' ? (
-                <>
-                  <Header />
-                  <main className='min-h-screen bg-gray-50'>{children}</main>
-                  <EventsSidebar />
-                </>
-              ) : (
-                <>
-                  <PublicSiteHeader locale={locale} />
-                  <main className='min-h-screen bg-gray-50'>{children}</main>
-                </>
-              )}
+              <a href='#main-content' className='skip-link'>
+                {copy.skipToContent}
+              </a>
+              <PublicSiteHeader locale={locale} />
+              <main id='main-content' className='min-h-screen bg-gray-50'>
+                {children}
+              </main>
+              {showDevSidebar ? <EventsSidebar /> : null}
             </LiffProvider>
           </ToastProvider>
         </ErrorBoundary>

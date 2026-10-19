@@ -41,7 +41,7 @@ export function EventDetail({ eventId }: EventDetailProps) {
   const { vendor: currentVendor } = useCurrentVendor();
 
   // 獲取 vendor 資料和 store 操作函數
-  const { vendor, vendorLoading } = useVendorData(event?.vendorId ?? '');
+  const { vendor } = useVendorData(event?.vendorId ?? '');
   const { setCurrentVendor } = useVendorStoreActions();
 
   // 當 vendor 資料載入完成時，更新 store
@@ -103,6 +103,7 @@ export function EventDetail({ eventId }: EventDetailProps) {
       <EventSessionList
         event={event}
         eventId={eventId}
+        locale={locale}
         selectedSessionId={currentSessionId}
         onSessionSelect={handleSessionSelect}
         onTicketClick={handleTicketClick}
@@ -122,7 +123,6 @@ export function EventDetail({ eventId }: EventDetailProps) {
         <div className='lg:grid lg:grid-cols-[minmax(0,1fr)_20rem] lg:items-start lg:gap-8'>
           <div className='space-y-6'>
             <EventInfoHeader event={event} eventId={eventId} locale={locale} />
-            <p className='text-sm text-gray-500'>{copy.guestSignup}</p>
             <div className='lg:hidden'>{sessionList}</div>
             <EventContent content={event.content} />
             <EventFAQ faq={event.faq} locale={locale} />

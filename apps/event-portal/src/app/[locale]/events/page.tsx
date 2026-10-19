@@ -4,7 +4,7 @@ import { EdsReveal } from '@/components/motion/EdsReveal';
 import { LabelledDemoBanner } from '@/components/demo/LabelledDemoBanner';
 import { demoCopy } from '@/libs/i18n/demo-copy';
 
-import { EventStackCards } from './components/EventStackCards';
+import { EventCatalog } from './components/EventCatalog';
 
 export const dynamic = 'force-dynamic';
 
@@ -44,7 +44,7 @@ export default async function EventsIndexPage({
         <EventListError locale={locale} />
       ) : (
         <EdsReveal>
-          <EventStackCards events={events} locale={locale} />
+          <EventCatalog events={events} locale={locale} />
         </EdsReveal>
       )}
     </div>

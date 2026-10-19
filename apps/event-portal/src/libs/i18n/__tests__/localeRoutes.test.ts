@@ -3,6 +3,7 @@ import {
   withoutLocale,
   hasLocale,
   extractLocale,
+  replaceLocale,
 } from '../localeRoutes';
 
 describe('localeRoutes', () => {
@@ -35,6 +36,11 @@ describe('localeRoutes', () => {
     it('should return original path if no locale', () => {
       expect(withoutLocale('/events')).toBe('/events');
     });
+
+    it('should treat a locale-only path as home', () => {
+      expect(withoutLocale('/zh-TW')).toBe('/');
+      expect(withoutLocale('/en')).toBe('/');
+    });
   });
 
   describe('hasLocale', () => {
@@ -47,6 +53,11 @@ describe('localeRoutes', () => {
       expect(hasLocale('/events')).toBe(false);
       expect(hasLocale('/orders')).toBe(false);
     });
+
+    it('should detect locale-only paths', () => {
+      expect(hasLocale('/zh-TW')).toBe(true);
+      expect(hasLocale('/en')).toBe(true);
+    });
   });
 
   describe('extractLocale', () => {
@@ -58,6 +69,25 @@ describe('localeRoutes', () => {
     it('should return null for paths without locale', () => {
       expect(extractLocale('/events')).toBe(null);
       expect(extractLocale('/orders')).toBe(null);
+    });
+
+    it('should extract locale from locale-only paths', () => {
+      expect(extractLocale('/zh-TW')).toBe('zh-TW');
+      expect(extractLocale('/en')).toBe('en');
+    });
+  });
+
+  describe('replaceLocale', () => {
+    it('should swap locale and keep the rest of the path', () => {
+      expect(replaceLocale('/zh-TW/events', 'en')).toBe('/en/events');
+      expect(replaceLocale('/en/events/event_react19', 'zh-TW')).toBe(
+        '/zh-TW/events/event_react19'
+      );
+    });
+
+    it('should keep query-free home on locale-only paths', () => {
+      expect(replaceLocale('/zh-TW', 'en')).toBe('/en');
+      expect(replaceLocale('/en', 'zh-TW')).toBe('/zh-TW');
     });
   });
 });

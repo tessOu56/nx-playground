@@ -28,6 +28,9 @@ export function withoutLocale(path: string): string {
   const cleanPath = path.startsWith('/') ? path.slice(1) : path;
 
   // 移除 locale 前綴
+  if (cleanPath === 'zh-TW' || cleanPath === 'en') {
+    return '/';
+  }
   if (cleanPath.startsWith('zh-TW/')) {
     return `/${cleanPath.slice(6)}`;
   }
@@ -45,7 +48,12 @@ export function withoutLocale(path: string): string {
  */
 export function hasLocale(path: string): boolean {
   const cleanPath = path.startsWith('/') ? path.slice(1) : path;
-  return cleanPath.startsWith('zh-TW/') || cleanPath.startsWith('en/');
+  return (
+    cleanPath === 'zh-TW' ||
+    cleanPath === 'en' ||
+    cleanPath.startsWith('zh-TW/') ||
+    cleanPath.startsWith('en/')
+  );
 }
 
 /**
@@ -56,12 +64,21 @@ export function hasLocale(path: string): boolean {
 export function extractLocale(path: string): string | null {
   const cleanPath = path.startsWith('/') ? path.slice(1) : path;
 
-  if (cleanPath.startsWith('zh-TW/')) {
+  if (cleanPath === 'zh-TW' || cleanPath.startsWith('zh-TW/')) {
     return 'zh-TW';
   }
-  if (cleanPath.startsWith('en/')) {
+  if (cleanPath === 'en' || cleanPath.startsWith('en/')) {
     return 'en';
   }
 
   return null;
+}
+
+/** Swap the locale prefix while keeping the rest of the path. */
+export function replaceLocale(path: string, locale: string): string {
+  const rest = withoutLocale(path);
+  if (rest === '/') {
+    return `/${locale}`;
+  }
+  return withLocale(rest, locale);
 }

@@ -13,6 +13,7 @@ export function EventListError({
   locale = 'zh-TW',
 }: EventListErrorProps) {
   const copy = demoCopy(locale);
+  const retry = onRetry ?? (() => window.location.reload());
   return (
     <div
       className='rounded-lg bg-white p-6 shadow-md'
@@ -21,18 +22,16 @@ export function EventListError({
     >
       <div className='flex flex-col items-center justify-center space-y-4 py-12'>
         <div className='space-y-2 text-center'>
-          <div className='font-medium text-red-600'>{copy.loadError}</div>
-          <div className='text-sm text-gray-500'>{copy.loadErrorHint}</div>
+          <h2 className='font-medium text-red-600'>{copy.loadError}</h2>
+          <p className='text-sm text-gray-500'>{copy.loadErrorHint}</p>
         </div>
-        {onRetry ? (
-          <button
-            type='button'
-            className='rounded-md bg-slate-900 px-4 py-2 text-sm text-white'
-            onClick={onRetry}
-          >
-            {copy.retry}
-          </button>
-        ) : null}
+        <button
+          type='button'
+          className='rounded-md bg-slate-900 px-4 py-2 text-sm text-white'
+          onClick={retry}
+        >
+          {copy.retry}
+        </button>
       </div>
     </div>
   );

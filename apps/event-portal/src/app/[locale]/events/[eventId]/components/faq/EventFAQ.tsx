@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 
-import { Textarea, Card, Button } from '@/components';
+import { Card } from '@/components';
 import { demoCopy } from '@/libs/i18n/demo-copy';
 import type { EventFAQ as FAQItem } from '@/types';
 
@@ -16,13 +16,13 @@ export function EventFAQ({ faq, locale = 'zh-TW' }: EventFAQProps) {
   const copy = demoCopy(locale);
 
   const toggleItem = (index: number) => {
-    const newOpenItems = new Set(openItems);
-    if (newOpenItems.has(index)) {
-      newOpenItems.delete(index);
+    const next = new Set(openItems);
+    if (next.has(index)) {
+      next.delete(index);
     } else {
-      newOpenItems.add(index);
+      next.add(index);
     }
-    setOpenItems(newOpenItems);
+    setOpenItems(next);
   };
 
   if (!faq || faq.length === 0) {
@@ -33,40 +33,37 @@ export function EventFAQ({ faq, locale = 'zh-TW' }: EventFAQProps) {
     <Card className='p-6'>
       <h2 className='text-xl font-semibold text-gray-900 mb-6'>{copy.faq}</h2>
       <div className='space-y-4'>
-        {faq.map((item, index) => (
-          <div key={index} className='border border-gray-200 rounded-lg'>
-            <Button
-              onClick={() => toggleItem(index)}
-              variant='ghost'
-              className='w-full px-4 py-3 text-left flex items-center justify-between hover:bg-gray-50 transition-colors'
-            >
-              <span className='font-medium text-gray-900 pr-4'>
-                {item.question}
-              </span>
-              <span className='text-gray-500 flex-shrink-0'>
-                {openItems.has(index) ? '−' : '+'}
-              </span>
-            </Button>
-            {openItems.has(index) && (
-              <div className='px-4 pb-4'>
-                <div className='pt-2 border-t border-gray-100'>
-                  {/* 判斷是否為多行文本，如果是則使用 textarea，否則使用 p */}
-                  {item.answer && item.answer.length > 100 ? (
-                    <Textarea
-                      value={item.answer}
-                      readOnly
-                      className='w-full min-h-[100px] resize-none border-none bg-transparent text-gray-700 leading-relaxed p-0 focus:ring-0 focus:outline-none'
-                    />
-                  ) : (
+        {faq.map((item, index) => {
+          const panelId = `event-faq-panel-${index}`;
+          const isOpen = openItems.has(index);
+          return (
+            <div key={index} className='border border-gray-200 rounded-lg'>
+              <button
+                type='button'
+                onClick={() => toggleItem(index)}
+                aria-expanded={isOpen}
+                aria-controls={panelId}
+                className='flex w-full items-center justify-between px-4 py-3 text-left transition-colors hover:bg-gray-50'
+              >
+                <span className='pr-4 font-medium text-gray-900'>
+                  {item.question}
+                </span>
+                <span className='flex-shrink-0 text-gray-500' aria-hidden>
+                  {isOpen ? '−' : '+'}
+                </span>
+              </button>
+              {isOpen ? (
+                <div id={panelId} className='px-4 pb-4'>
+                  <div className='pt-2 border-t border-gray-100'>
                     <p className='text-gray-700 leading-relaxed whitespace-pre-wrap'>
                       {item.answer}
                     </p>
-                  )}
+                  </div>
                 </div>
-              </div>
-            )}
-          </div>
-        ))}
+              ) : null}
+            </div>
+          );
+        })}
       </div>
     </Card>
   );

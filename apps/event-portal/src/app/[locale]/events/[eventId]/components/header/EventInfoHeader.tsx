@@ -116,12 +116,18 @@ function EventVenueBlock({
     typeof venue.lat === 'number' &&
     typeof venue.lng === 'number' &&
     Number.isFinite(venue.lat) &&
-    Number.isFinite(venue.lng);
+    Number.isFinite(venue.lng) &&
+    !(venue.lat === 0 && venue.lng === 0);
   if (!query && !venue.transport && !canEmbed && !venue.address) return null;
 
   return (
-    <div className='mt-8 space-y-3'>
-      <h2 className='text-lg font-semibold text-gray-900'>{copy.venue}</h2>
+    <section className='mt-8 space-y-3' aria-labelledby='event-venue-heading'>
+      <h2
+        id='event-venue-heading'
+        className='text-lg font-semibold text-gray-900'
+      >
+        {copy.venue}
+      </h2>
       {venue.address ? (
         <p className='text-gray-700'>{venue.address}</p>
       ) : null}
@@ -131,7 +137,7 @@ function EventVenueBlock({
       {canEmbed ? (
         <iframe
           title={copy.mapTitle}
-          className='h-56 w-full rounded-lg border border-gray-200'
+          className='h-56 w-full rounded-lg border border-gray-200 bg-gray-100'
           src={osmEmbedSrc(venue.lat as number, venue.lng as number)}
           loading='lazy'
           referrerPolicy='no-referrer-when-downgrade'
@@ -143,13 +149,13 @@ function EventVenueBlock({
             href={osmSearchHref(query)}
             className='text-sm font-medium text-blue-700 hover:underline'
             target='_blank'
-            rel='noreferrer'
+            rel='noopener noreferrer'
           >
             {copy.openOsm}
           </a>
         </p>
       ) : null}
-    </div>
+    </section>
   );
 }
 
@@ -164,13 +170,13 @@ export function EventInfoHeader({
   return (
     <div className='space-y-6'>
       <div className='bg-white rounded-lg shadow-md overflow-hidden'>
-        <div className='h-64 relative'>
+        <div className='relative aspect-[16/9] bg-gray-100 sm:aspect-auto sm:h-64'>
           <Image
             src={event.image}
             alt={event.title}
             width={800}
             height={256}
-            className='w-full h-full object-cover'
+            className='h-full w-full object-cover'
             fallback='/placeholder-event.jpg'
           />
           <div className='absolute top-4 left-4 bg-indigo-600/90 backdrop-blur-sm px-3 py-1 rounded-full'>

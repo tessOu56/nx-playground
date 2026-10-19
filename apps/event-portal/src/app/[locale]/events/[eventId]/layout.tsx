@@ -39,10 +39,11 @@ export default async function EventDetailLayout({
   // 1. 創建 QueryClient 實例
   const queryClient = new QueryClient();
 
-  // 2. 預取頁面所需的資料
-  await prefetchEventPage(queryClient, eventId);
-
-  // 3. 序列化資料
+  try {
+    await prefetchEventPage(queryClient, eventId);
+  } catch {
+    // Missing or failed events still render the not-found / error UI.
+  }
   const dehydratedState = dehydrate(queryClient);
 
   return (
@@ -52,8 +53,10 @@ export default async function EventDetailLayout({
           {/* 頁面標題 - 只在非 checkout 頁面顯示 */}
           {!isCheckoutPage && (
             <div className='mb-4'>
-              <BackLink href={`/${locale}/events`} />
-              <p className='mt-1 text-xs text-gray-500'>{copy.breadcrumb}</p>
+              <BackLink
+                href={`/${locale}/events`}
+                label={copy.backToEvents}
+              />
               <div className='mt-3'>
                 <LabelledDemoBanner locale={locale} />
               </div>

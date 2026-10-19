@@ -45,7 +45,6 @@ export function UserFlowSection() {
           <Button
             variant='primary'
             size='lg'
-            className='bg-green-600 hover:bg-green-700 text-white font-semibold'
             onClick={() => router.push('/events')}
           >
             {copy.seeEvents}
