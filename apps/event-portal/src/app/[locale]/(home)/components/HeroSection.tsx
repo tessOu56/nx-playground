@@ -43,13 +43,8 @@ export function HeroSection() {
               <p className='mt-6 text-lg leading-8 text-gray-600'>
                 {copy.welcomeBack(displayName)}
               </p>
-              <div className='mt-10 flex items-center justify-center gap-x-6'>
-                <Button
-                  size='lg'
-                  variant='primary'
-                  className='bg-green-600 hover:bg-green-700 text-white font-semibold'
-                  onClick={goToEvents}
-                >
+              <div className='mt-10 flex flex-wrap items-center justify-center gap-3'>
+                <Button size='lg' variant='primary' onClick={goToEvents}>
                   {copy.browse}
                 </Button>
                 <Button variant='outline' size='lg' onClick={goToOrders}>
@@ -62,13 +57,8 @@ export function HeroSection() {
               <p className='mt-6 text-lg leading-8 text-gray-600'>
                 {copy.homeLead}
               </p>
-              <div className='mt-10 flex items-center justify-center gap-x-6'>
-                <Button
-                  size='lg'
-                  variant='primary'
-                  className='bg-green-600 hover:bg-green-700 text-white font-semibold'
-                  onClick={goToEvents}
-                >
+              <div className='mt-10 flex flex-wrap items-center justify-center gap-3'>
+                <Button size='lg' variant='primary' onClick={goToEvents}>
                   {copy.browse}
                 </Button>
                 {lineLoginReady ? (
@@ -78,21 +68,13 @@ export function HeroSection() {
                     onClick={handleLineLogin}
                     disabled={!isInitialized}
                   >
-                    {isInitialized
-                      ? locale === 'en'
-                        ? 'Sign in with LINE'
-                        : 'LINE 登入'
-                      : locale === 'en'
-                        ? 'Preparing…'
-                        : '準備中…'}
+                    {isInitialized ? copy.lineLogin : copy.linePreparing}
                   </Button>
                 ) : null}
               </div>
               {error ? (
                 <p className='mt-4 text-sm text-red-700' role='alert'>
-                  {locale === 'en'
-                    ? 'LINE sign-in failed. Please try again.'
-                    : 'LINE 登入失敗，請再試一次。'}
+                  {copy.lineLoginError}
                 </p>
               ) : null}
             </>

@@ -1,63 +1,97 @@
+import assert from 'node:assert/strict';
+import { describe, it } from 'node:test';
+
 import {
   withLocale,
   withoutLocale,
   hasLocale,
   extractLocale,
+  replaceLocale,
 } from '../localeRoutes';
 
 describe('localeRoutes', () => {
   describe('withLocale', () => {
     it('should add locale prefix to path', () => {
-      expect(withLocale('/events', 'zh-TW')).toBe('/zh-TW/events');
-      expect(withLocale('/orders', 'en')).toBe('/en/orders');
+      assert.equal(withLocale('/events', 'zh-TW'), '/zh-TW/events');
+      assert.equal(withLocale('/orders', 'en'), '/en/orders');
     });
 
     it('should use default locale when not provided', () => {
-      expect(withLocale('/events')).toBe('/zh-TW/events');
+      assert.equal(withLocale('/events'), '/zh-TW/events');
     });
 
     it('should not add locale if already present', () => {
-      expect(withLocale('/zh-TW/events', 'en')).toBe('/zh-TW/events');
-      expect(withLocale('/en/orders', 'zh-TW')).toBe('/en/orders');
+      assert.equal(withLocale('/zh-TW/events', 'en'), '/zh-TW/events');
+      assert.equal(withLocale('/en/orders', 'zh-TW'), '/en/orders');
     });
 
     it('should handle root path', () => {
-      expect(withLocale('/', 'zh-TW')).toBe('/zh-TW/');
+      assert.equal(withLocale('/', 'zh-TW'), '/zh-TW/');
     });
   });
 
   describe('withoutLocale', () => {
     it('should remove locale prefix', () => {
-      expect(withoutLocale('/zh-TW/events')).toBe('/events');
-      expect(withoutLocale('/en/orders')).toBe('/orders');
+      assert.equal(withoutLocale('/zh-TW/events'), '/events');
+      assert.equal(withoutLocale('/en/orders'), '/orders');
     });
 
     it('should return original path if no locale', () => {
-      expect(withoutLocale('/events')).toBe('/events');
+      assert.equal(withoutLocale('/events'), '/events');
+    });
+
+    it('should treat a locale-only path as home', () => {
+      assert.equal(withoutLocale('/zh-TW'), '/');
+      assert.equal(withoutLocale('/en'), '/');
     });
   });
 
   describe('hasLocale', () => {
     it('should detect locale in path', () => {
-      expect(hasLocale('/zh-TW/events')).toBe(true);
-      expect(hasLocale('/en/orders')).toBe(true);
+      assert.equal(hasLocale('/zh-TW/events'), true);
+      assert.equal(hasLocale('/en/orders'), true);
     });
 
     it('should return false for paths without locale', () => {
-      expect(hasLocale('/events')).toBe(false);
-      expect(hasLocale('/orders')).toBe(false);
+      assert.equal(hasLocale('/events'), false);
+      assert.equal(hasLocale('/orders'), false);
+    });
+
+    it('should detect locale-only paths', () => {
+      assert.equal(hasLocale('/zh-TW'), true);
+      assert.equal(hasLocale('/en'), true);
     });
   });
 
   describe('extractLocale', () => {
     it('should extract locale from path', () => {
-      expect(extractLocale('/zh-TW/events')).toBe('zh-TW');
-      expect(extractLocale('/en/orders')).toBe('en');
+      assert.equal(extractLocale('/zh-TW/events'), 'zh-TW');
+      assert.equal(extractLocale('/en/orders'), 'en');
     });
 
     it('should return null for paths without locale', () => {
-      expect(extractLocale('/events')).toBe(null);
-      expect(extractLocale('/orders')).toBe(null);
+      assert.equal(extractLocale('/events'), null);
+      assert.equal(extractLocale('/orders'), null);
+    });
+
+    it('should extract locale from locale-only paths', () => {
+      assert.equal(extractLocale('/zh-TW'), 'zh-TW');
+      assert.equal(extractLocale('/en'), 'en');
+    });
+  });
+
+  describe('replaceLocale', () => {
+    it('should swap locale and keep the rest of the path', () => {
+      assert.equal(replaceLocale('/zh-TW/events', 'en'), '/en/events');
+      assert.equal(
+        replaceLocale('/en/events/event_react19', 'zh-TW'),
+        '/zh-TW/events/event_react19'
+      );
+    });
+
+    it('should keep query-free home on locale-only paths', () => {
+      assert.equal(replaceLocale('/zh-TW', 'en'), '/en');
+      assert.equal(replaceLocale('/en', 'zh-TW'), '/zh-TW');
     });
   });
 });

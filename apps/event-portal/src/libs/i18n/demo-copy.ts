@@ -89,6 +89,34 @@ export function demoCopy(locale: string | undefined) {
       ? 'Orders stay in Hobby memory and reset on a cold start. Not the funds path.'
       : '訂單留在 Hobby 記憶體，冷啟動會清空。不是資金路徑。',
     seeEvents: en ? 'See events' : '查看活動',
+    skipToContent: en ? 'Skip to content' : '跳到主要內容',
+    mainNav: en ? 'Main' : '主要選單',
+    langZh: '中文',
+    langEn: 'EN',
+    language: en ? 'Language' : '語言',
+    searchEvents: en ? 'Search events' : '搜尋活動',
+    searchEventsPlaceholder: en
+      ? 'Search by title, venue, or organizer'
+      : '搜尋活動名稱、地點或主辦',
+    filterStatus: en ? 'Filter' : '篩選',
+    allEvents: en ? 'All' : '全部',
+    pastEvents: en ? 'Past' : '過往',
+    viewDetails: en ? 'View details' : '查看詳情',
+    emptySearch: en ? 'No events match this search' : '沒有符合的活動',
+    emptySearchHint: en
+      ? 'Try another keyword, or clear filters.'
+      : '試試其他關鍵字，或清除篩選。',
+    backToEvents: en ? 'Back to events' : '回到活動列表',
+    sessions: en ? 'Sessions' : '場次',
+    noSessions: en ? 'No sessions yet' : '尚無場次',
+    noSessionsHint: en
+      ? 'Try again later, or contact the organizer.'
+      : '請稍後再試，或聯絡主辦。',
+    lineLogin: en ? 'Sign in with LINE' : 'LINE 登入',
+    linePreparing: en ? 'Preparing…' : '準備中…',
+    lineLoginError: en
+      ? 'LINE sign-in failed. Please try again.'
+      : 'LINE 登入失敗，請再試一次。',
     welcomeBack: (name: string) =>
       en
         ? `Welcome back${name ? `, ${name}` : ''}. Browse events or open your tickets.`

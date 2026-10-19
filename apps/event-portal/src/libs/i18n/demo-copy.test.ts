@@ -10,5 +10,8 @@ describe('demo-copy', () => {
     assert.equal(priceFromLabel(0, 'en'), 'Free');
     assert.match(demoCopy('en').homeLead, /user_demo/);
     assert.match(demoCopy('zh-TW').demoBannerBody, /不是 Nest 資金 API/);
+    assert.equal(demoCopy('en').searchEvents, 'Search events');
+    assert.equal(demoCopy('zh-TW').backToEvents, '回到活動列表');
+    assert.equal(demoCopy('en').sessions, 'Sessions');
   });
 });

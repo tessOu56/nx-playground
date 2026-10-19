@@ -19,12 +19,12 @@ export function EventInfoHeaderError({
     >
       <div className='flex flex-col items-center justify-center py-12 space-y-4'>
         <div className='text-center space-y-2'>
-          <div className='text-red-600 font-medium'>
+          <h2 className='text-red-600 font-medium'>
             {isApi ? copy.loadError : copy.notFound}
-          </div>
-          <div className='text-gray-500 text-sm'>
+          </h2>
+          <p className='text-gray-500 text-sm'>
             {isApi ? copy.loadErrorHint : copy.notFoundHint}
-          </div>
+          </p>
         </div>
       </div>
     </div>

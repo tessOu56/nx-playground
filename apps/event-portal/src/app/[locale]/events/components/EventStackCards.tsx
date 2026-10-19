@@ -31,13 +31,26 @@ function formatListDateRange(event: Event, locale: string): string {
 export function EventStackCards({
   events,
   locale,
+  empty = 'catalog',
 }: {
   events: Event[];
   locale: string;
+  empty?: 'catalog' | 'search';
 }) {
   const copy = demoCopy(locale);
 
   if (!events.length) {
+    if (empty === 'search') {
+      return (
+        <div
+          className='rounded-lg border border-dashed border-gray-200 bg-white px-6 py-12 text-center'
+          data-testid='events-search-empty'
+        >
+          <h3 className='text-lg font-medium text-gray-900'>{copy.emptySearch}</h3>
+          <p className='mt-2 text-sm text-gray-500'>{copy.emptySearchHint}</p>
+        </div>
+      );
+    }
     return <NoEvents variant='catalog' locale={locale} />;
   }
 
@@ -53,17 +66,19 @@ export function EventStackCards({
         const meta = [dateRange, venueLine, priceFromLabel(event.price, locale)]
           .filter(Boolean)
           .join(' · ');
-
         return (
           <li key={event.id}>
             <Link
               href={`/${locale}/events/${event.id}`}
-              className='block w-full overflow-hidden rounded-lg bg-white text-left shadow-md hover:shadow-lg transition-shadow duration-[var(--motion-duration-fast,150ms)]'
+              className='block w-full overflow-hidden rounded-lg bg-white text-left shadow-md transition-shadow duration-[var(--motion-duration-fast,150ms)] hover:shadow-lg focus-visible:shadow-lg'
             >
-              <div
-                className='aspect-[16/9] bg-cover bg-center'
-                style={{ backgroundImage: `url(${event.image})` }}
-              />
+              <div className='aspect-[16/9] overflow-hidden bg-gray-100'>
+                <img
+                  src={event.image}
+                  alt=''
+                  className='h-full w-full object-cover'
+                />
+              </div>
               <div className='p-4'>
                 <div className='mb-2 flex items-center justify-between gap-2'>
                   <span className='rounded-full bg-indigo-50 px-2 py-0.5 text-xs font-medium text-indigo-800'>
@@ -89,7 +104,7 @@ export function EventStackCards({
                   </p>
                 ) : null}
                 <p className='mt-3 text-sm font-medium text-blue-700'>
-                  {copy.viewSessions}
+                  {copy.viewDetails}
                 </p>
               </div>
             </Link>
