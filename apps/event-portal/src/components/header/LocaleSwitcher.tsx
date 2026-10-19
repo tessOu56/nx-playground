@@ -17,7 +17,7 @@ export function LocaleSwitcher({ locale }: { locale: string }) {
       href={href}
       hrefLang={nextLocale}
       lang={nextLocale}
-      className='rounded-md px-2 py-1 text-sm font-medium text-gray-800 hover:bg-gray-100 hover:text-gray-900'
+      className='rounded-md px-1.5 py-1 text-xs font-medium text-gray-800 hover:bg-gray-100 hover:text-gray-900 sm:px-2 sm:text-sm'
       aria-label={`${copy.language}: ${nextLocale === 'en' ? copy.langEn : copy.langZh}`}
     >
       {nextLocale === 'en' ? copy.langEn : copy.langZh}
