@@ -5,6 +5,7 @@ import type {
   CreateOrderDto,
   EventListResponse,
   EventStackEvent,
+  ExhibitionRegion,
   EventStackOrder,
   EventStackPaymentIntent,
   EventStackTicket,
@@ -20,6 +21,7 @@ import type {
 
 export function listEvents(query?: {
   status?: string;
+  region?: ExhibitionRegion;
   page?: number;
   limit?: number;
 }): Promise<EventListResponse> {

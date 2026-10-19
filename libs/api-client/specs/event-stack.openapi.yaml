@@ -29,6 +29,10 @@ paths:
           schema:
             type: string
         - in: query
+          name: region
+          schema:
+            $ref: '#/components/schemas/ExhibitionRegion'
+        - in: query
           name: page
           schema:
             type: number
@@ -462,7 +466,35 @@ components:
         data:
           type: object
           additionalProperties: true
-          description: Catalog extras. kind is talk | auction | line_commerce; auction may include plinthLotUrl (Plinth deep link). Sessions, tickets, content, speakers, venue. Mock demo fills this; Nest persists JSON.
+          description: Catalog extras. kind is talk | auction | line_commerce | exhibition; auction may include plinthLotUrl (Plinth deep link). Sessions, tickets, content, speakers, venue. Mock demo fills this; Nest persists JSON.
+        region:
+          $ref: '#/components/schemas/ExhibitionRegion'
+        timezone:
+          type: string
+          description: IANA timezone (e.g. Asia/Taipei, Asia/Tokyo)
+          example: Asia/Taipei
+        source:
+          type: string
+        sourceUrl:
+          type: string
+        externalId:
+          type: string
+          description: Unique together with source
+        contentHash:
+          type: string
+        tags:
+          type: array
+          items:
+            type: string
+        priceText:
+          type: string
+          description: Free-text price (currency varies by region)
+        lastSeenAt:
+          type: string
+          format: date-time
+    ExhibitionRegion:
+      type: string
+      enum: [TAIPEI, TOKYO]
     Event:
       type: object
       required: [id, title, startDate, endDate, status, createdAt, updatedAt]
@@ -491,7 +523,32 @@ components:
         data:
           type: object
           additionalProperties: true
-          description: Catalog extras. kind is talk | auction | line_commerce; auction may include plinthLotUrl (Plinth deep link). Sessions, tickets, content, speakers, venue. Mock demo fills this; Nest persists JSON.
+          description: Catalog extras. kind is talk | auction | line_commerce | exhibition; auction may include plinthLotUrl (Plinth deep link). Sessions, tickets, content, speakers, venue. Mock demo fills this; Nest persists JSON.
+        region:
+          $ref: '#/components/schemas/ExhibitionRegion'
+        timezone:
+          type: string
+          description: IANA timezone (e.g. Asia/Taipei, Asia/Tokyo)
+          example: Asia/Tokyo
+        source:
+          type: string
+        sourceUrl:
+          type: string
+        externalId:
+          type: string
+          description: Unique together with source
+        contentHash:
+          type: string
+        tags:
+          type: array
+          items:
+            type: string
+        priceText:
+          type: string
+          description: Free-text price (currency varies by region)
+        lastSeenAt:
+          type: string
+          format: date-time
         createdAt:
           type: string
           format: date-time
@@ -655,6 +712,11 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/PaymentIntent'
+    PaymentWebhookCode:
+      description: '1 = paid, anything else = failed'
+      oneOf:
+        - type: string
+        - type: number
     PaymentWebhookDto:
       type: object
       properties:
@@ -664,14 +726,10 @@ components:
           type: string
         rtnCode:
           description: '1 = paid, anything else = failed'
-          oneOf:
-            - type: string
-            - type: number
+          $ref: '#/components/schemas/PaymentWebhookCode'
         RtnCode:
           description: ECPay form field
-          oneOf:
-            - type: string
-            - type: number
+          $ref: '#/components/schemas/PaymentWebhookCode'
         CheckMacValue:
           type: string
     PaymentWebhookResponse:

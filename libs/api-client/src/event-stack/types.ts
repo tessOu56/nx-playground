@@ -1,3 +1,5 @@
+export type ExhibitionRegion = 'TAIPEI' | 'TOKYO';
+
 export interface CreateEventDto {
   title: string;
   description?: string;
@@ -8,6 +10,15 @@ export interface CreateEventDto {
   status?: 'draft' | 'published';
   formId?: string;
   data?: Record<string, unknown>;
+  region?: ExhibitionRegion;
+  timezone?: string;
+  source?: string;
+  sourceUrl?: string;
+  externalId?: string;
+  contentHash?: string;
+  tags?: string[];
+  priceText?: string;
+  lastSeenAt?: string;
 }
 
 export interface EventStackEvent {
@@ -21,6 +32,15 @@ export interface EventStackEvent {
   status: string;
   formId?: string;
   data?: Record<string, unknown>;
+  region?: ExhibitionRegion | null;
+  timezone?: string | null;
+  source?: string | null;
+  sourceUrl?: string | null;
+  externalId?: string | null;
+  contentHash?: string | null;
+  tags?: string[];
+  priceText?: string | null;
+  lastSeenAt?: string | null;
   createdAt: string;
   updatedAt: string;
 }

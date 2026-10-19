@@ -12,6 +12,11 @@ datasource db {
 
 // Product path is Postgres (Neon hosted / local docker). SQLite is not allowed.
 
+enum ExhibitionRegion {
+  TAIPEI
+  TOKYO
+}
+
 // ==================== 用戶模組 ====================
 
 model User {
@@ -34,24 +39,36 @@ model User {
 // ==================== 活動模組 ====================
 
 model Event {
-  id           String   @id @default(cuid())
+  id           String             @id @default(cuid())
   title        String
   description  String?
   location     String?
   startDate    DateTime
   endDate      DateTime
   maxAttendees Int?
-  status       String   @default("draft")
+  status       String             @default("draft")
   formId       String?
   data         Json?
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
+  region       ExhibitionRegion?
+  timezone     String?
+  source       String?
+  sourceUrl    String?
+  externalId   String?
+  contentHash  String?
+  tags         String[]           @default([])
+  priceText    String?
+  lastSeenAt   DateTime?
+  createdAt    DateTime           @default(now())
+  updatedAt    DateTime           @updatedAt
 
   // 關聯
-  form   Form?   @relation(fields: [formId], references: [id])
-  orders Order[]
+  form    Form?    @relation(fields: [formId], references: [id])
+  orders  Order[]
   tickets Ticket[]
 
+  @@unique([source, externalId])
+  @@index([region])
+  @@index([lastSeenAt])
   @@map("events")
 }
 

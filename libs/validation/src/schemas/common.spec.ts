@@ -98,6 +98,7 @@ describe('Common Schemas', () => {
     it('should accept valid locales', () => {
       expect(localeSchema.parse('en')).toBe('en');
       expect(localeSchema.parse('zh-TW')).toBe('zh-TW');
+      expect(localeSchema.parse('ja')).toBe('ja');
     });
 
     it('should reject invalid locales', () => {

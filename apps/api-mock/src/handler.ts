@@ -183,6 +183,7 @@ export async function handleEventStackHttp(
           200,
           await store.listEvents({
             status: url.searchParams.get('status') ?? undefined,
+            region: url.searchParams.get('region') ?? undefined,
             page: url.searchParams.get('page')
               ? Number(url.searchParams.get('page'))
               : undefined,

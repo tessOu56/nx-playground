@@ -99,6 +99,15 @@ async function main() {
           maxAttendees: event.maxAttendees,
           status: event.status,
           formId: event.formId,
+          region: event.region ?? null,
+          timezone: event.timezone ?? null,
+          source: event.source ?? null,
+          sourceUrl: event.sourceUrl ?? null,
+          externalId: event.externalId ?? null,
+          contentHash: event.contentHash ?? null,
+          tags: Array.isArray(event.tags) ? event.tags : [],
+          priceText: event.priceText ?? null,
+          lastSeenAt: event.lastSeenAt ? new Date(event.lastSeenAt) : null,
         },
       });
     }

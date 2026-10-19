@@ -100,10 +100,12 @@ export const paginationLimitSchema = z
 export const paginationOffsetSchema = z.number().int().nonnegative('Offset must be non-negative').default(0);
 
 /**
- * Locale validation (en, zh-TW)
+ * Locale validation (en, zh-TW, ja)
  */
-export const localeSchema = z.enum(['en', 'zh-TW'], {
-  errorMap: () => ({ message: 'Invalid locale (must be "en" or "zh-TW")' }),
+export const localeSchema = z.enum(['en', 'zh-TW', 'ja'], {
+  errorMap: () => ({
+    message: 'Invalid locale (must be "en", "zh-TW", or "ja")',
+  }),
 });
 
 /**

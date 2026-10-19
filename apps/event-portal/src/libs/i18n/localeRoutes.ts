@@ -1,3 +1,14 @@
+import { DEFAULT_LOCALE, SUPPORTED_LOCALES } from '../constants/i18n';
+
+function matchLocalePrefix(cleanPath: string): string | null {
+  for (const locale of SUPPORTED_LOCALES) {
+    if (cleanPath === locale || cleanPath.startsWith(`${locale}/`)) {
+      return locale;
+    }
+  }
+  return null;
+}
+
 /**
  * 為路徑加上 locale 前綴
  * @param path 原始路徑
@@ -5,16 +16,13 @@
  * @returns 包含 locale 的完整路徑
  */
 export function withLocale(path: string, locale?: string): string {
-  // 移除開頭的斜線
   const cleanPath = path.startsWith('/') ? path.slice(1) : path;
 
-  // 如果路徑已經包含 locale，直接返回
-  if (cleanPath.startsWith('zh-TW/') || cleanPath.startsWith('en/')) {
+  if (matchLocalePrefix(cleanPath)) {
     return `/${cleanPath}`;
   }
 
-  // 加上 locale 前綴
-  const localePrefix = locale ?? 'zh-TW'; // 預設使用 zh-TW
+  const localePrefix = locale ?? DEFAULT_LOCALE;
   return `/${localePrefix}/${cleanPath}`;
 }
 
@@ -24,21 +32,11 @@ export function withLocale(path: string, locale?: string): string {
  * @returns 移除 locale 後的原始路徑
  */
 export function withoutLocale(path: string): string {
-  // 移除開頭的斜線
   const cleanPath = path.startsWith('/') ? path.slice(1) : path;
-
-  // 移除 locale 前綴
-  if (cleanPath === 'zh-TW' || cleanPath === 'en') {
-    return '/';
-  }
-  if (cleanPath.startsWith('zh-TW/')) {
-    return `/${cleanPath.slice(6)}`;
-  }
-  if (cleanPath.startsWith('en/')) {
-    return `/${cleanPath.slice(3)}`;
-  }
-
-  return `/${cleanPath}`;
+  const locale = matchLocalePrefix(cleanPath);
+  if (!locale) return `/${cleanPath}`;
+  const rest = cleanPath.slice(locale.length);
+  return rest.startsWith('/') ? rest : `/${rest}`;
 }
 
 /**
@@ -48,12 +46,7 @@ export function withoutLocale(path: string): string {
  */
 export function hasLocale(path: string): boolean {
   const cleanPath = path.startsWith('/') ? path.slice(1) : path;
-  return (
-    cleanPath === 'zh-TW' ||
-    cleanPath === 'en' ||
-    cleanPath.startsWith('zh-TW/') ||
-    cleanPath.startsWith('en/')
-  );
+  return matchLocalePrefix(cleanPath) !== null;
 }
 
 /**
@@ -63,15 +56,7 @@ export function hasLocale(path: string): boolean {
  */
 export function extractLocale(path: string): string | null {
   const cleanPath = path.startsWith('/') ? path.slice(1) : path;
-
-  if (cleanPath === 'zh-TW' || cleanPath.startsWith('zh-TW/')) {
-    return 'zh-TW';
-  }
-  if (cleanPath === 'en' || cleanPath.startsWith('en/')) {
-    return 'en';
-  }
-
-  return null;
+  return matchLocalePrefix(cleanPath);
 }
 
 /** Swap the locale prefix while keeping the rest of the path. */

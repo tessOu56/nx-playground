@@ -12,6 +12,7 @@ export type EventStackRepo = {
   storage: 'postgres' | 'memory';
   listEvents: (query: {
     status?: string;
+    region?: string;
     page?: number;
     limit?: number;
   }) => Promise<EventListResponse>;

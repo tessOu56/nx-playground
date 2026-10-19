@@ -20,10 +20,25 @@ import type {
 import type {
   CreateEventDto,
   CreateOrderDto,
+  CreatePaymentIntentDto,
   Event,
   EventListResponse,
+  EventStackStats,
   ListEventsParams,
+  ListOrdersParams,
+  ListPaymentIntentsParams,
+  ListUsersParams,
+  MockCompletePaymentParams,
   Order,
+  OrderListResponse,
+  PaymentIntent,
+  PaymentIntentListResponse,
+  PaymentWebhookDto,
+  PaymentWebhookResponse,
+  Ticket,
+  TicketListResponse,
+  TicketVerifyResponse,
+  UserListResponse,
 } from './model';
 
 import { customInstance } from '../../lib/api-client';
@@ -450,6 +465,234 @@ export const useDeleteEvent = <TError = void, TContext = unknown>(options?: {
 };
 
 /**
+ * @summary List users (CMS organizer auth)
+ */
+export const listUsers = (
+  params?: ListUsersParams,
+  options?: SecondParameter<typeof customInstance>,
+  signal?: AbortSignal
+) => {
+  return customInstance<UserListResponse>(
+    { url: `/users`, method: 'GET', params, signal },
+    options
+  );
+};
+
+export const getListUsersQueryKey = (params?: ListUsersParams) => {
+  return [`/users`, ...(params ? [params] : [])] as const;
+};
+
+export const getListUsersQueryOptions = <
+  TData = Awaited<ReturnType<typeof listUsers>>,
+  TError = unknown
+>(
+  params?: ListUsersParams,
+  options?: {
+    query?: UseQueryOptions<
+      Awaited<ReturnType<typeof listUsers>>,
+      TError,
+      TData
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  }
+) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+
+  const queryKey = queryOptions?.queryKey ?? getListUsersQueryKey(params);
+
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof listUsers>>> = ({
+    signal,
+  }) => listUsers(params, requestOptions, signal);
+
+  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof listUsers>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
+
+export type ListUsersQueryResult = NonNullable<
+  Awaited<ReturnType<typeof listUsers>>
+>;
+export type ListUsersQueryError = unknown;
+
+/**
+ * @summary List users (CMS organizer auth)
+ */
+
+export function useListUsers<
+  TData = Awaited<ReturnType<typeof listUsers>>,
+  TError = unknown
+>(
+  params?: ListUsersParams,
+  options?: {
+    query?: UseQueryOptions<
+      Awaited<ReturnType<typeof listUsers>>,
+      TError,
+      TData
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  }
+): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+  const queryOptions = getListUsersQueryOptions(params, options);
+
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
+    queryKey: QueryKey;
+  };
+
+  query.queryKey = queryOptions.queryKey;
+
+  return query;
+}
+
+/**
+ * @summary Dashboard aggregate counts
+ */
+export const getStats = (
+  options?: SecondParameter<typeof customInstance>,
+  signal?: AbortSignal
+) => {
+  return customInstance<EventStackStats>(
+    { url: `/stats`, method: 'GET', signal },
+    options
+  );
+};
+
+export const getGetStatsQueryKey = () => {
+  return [`/stats`] as const;
+};
+
+export const getGetStatsQueryOptions = <
+  TData = Awaited<ReturnType<typeof getStats>>,
+  TError = unknown
+>(options?: {
+  query?: UseQueryOptions<Awaited<ReturnType<typeof getStats>>, TError, TData>;
+  request?: SecondParameter<typeof customInstance>;
+}) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+
+  const queryKey = queryOptions?.queryKey ?? getGetStatsQueryKey();
+
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getStats>>> = ({
+    signal,
+  }) => getStats(requestOptions, signal);
+
+  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof getStats>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
+
+export type GetStatsQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getStats>>
+>;
+export type GetStatsQueryError = unknown;
+
+/**
+ * @summary Dashboard aggregate counts
+ */
+
+export function useGetStats<
+  TData = Awaited<ReturnType<typeof getStats>>,
+  TError = unknown
+>(options?: {
+  query?: UseQueryOptions<Awaited<ReturnType<typeof getStats>>, TError, TData>;
+  request?: SecondParameter<typeof customInstance>;
+}): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+  const queryOptions = getGetStatsQueryOptions(options);
+
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
+    queryKey: QueryKey;
+  };
+
+  query.queryKey = queryOptions.queryKey;
+
+  return query;
+}
+
+/**
+ * @summary List orders
+ */
+export const listOrders = (
+  params?: ListOrdersParams,
+  options?: SecondParameter<typeof customInstance>,
+  signal?: AbortSignal
+) => {
+  return customInstance<OrderListResponse>(
+    { url: `/orders`, method: 'GET', params, signal },
+    options
+  );
+};
+
+export const getListOrdersQueryKey = (params?: ListOrdersParams) => {
+  return [`/orders`, ...(params ? [params] : [])] as const;
+};
+
+export const getListOrdersQueryOptions = <
+  TData = Awaited<ReturnType<typeof listOrders>>,
+  TError = unknown
+>(
+  params?: ListOrdersParams,
+  options?: {
+    query?: UseQueryOptions<
+      Awaited<ReturnType<typeof listOrders>>,
+      TError,
+      TData
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  }
+) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+
+  const queryKey = queryOptions?.queryKey ?? getListOrdersQueryKey(params);
+
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof listOrders>>> = ({
+    signal,
+  }) => listOrders(params, requestOptions, signal);
+
+  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof listOrders>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
+
+export type ListOrdersQueryResult = NonNullable<
+  Awaited<ReturnType<typeof listOrders>>
+>;
+export type ListOrdersQueryError = unknown;
+
+/**
+ * @summary List orders
+ */
+
+export function useListOrders<
+  TData = Awaited<ReturnType<typeof listOrders>>,
+  TError = unknown
+>(
+  params?: ListOrdersParams,
+  options?: {
+    query?: UseQueryOptions<
+      Awaited<ReturnType<typeof listOrders>>,
+      TError,
+      TData
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  }
+): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+  const queryOptions = getListOrdersQueryOptions(params, options);
+
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
+    queryKey: QueryKey;
+  };
+
+  query.queryKey = queryOptions.queryKey;
+
+  return query;
+}
+
+/**
  * @summary Create an order for an event
  */
 export const createOrder = (
@@ -698,3 +941,786 @@ export const useConfirmOrder = <TError = void, TContext = unknown>(options?: {
 
   return useMutation(mutationOptions);
 };
+
+/**
+ * @summary List tickets issued for an order
+ */
+export const listOrderTickets = (
+  id: string,
+  options?: SecondParameter<typeof customInstance>,
+  signal?: AbortSignal
+) => {
+  return customInstance<TicketListResponse>(
+    { url: `/orders/${id}/tickets`, method: 'GET', signal },
+    options
+  );
+};
+
+export const getListOrderTicketsQueryKey = (id?: string) => {
+  return [`/orders/${id}/tickets`] as const;
+};
+
+export const getListOrderTicketsQueryOptions = <
+  TData = Awaited<ReturnType<typeof listOrderTickets>>,
+  TError = void
+>(
+  id: string,
+  options?: {
+    query?: UseQueryOptions<
+      Awaited<ReturnType<typeof listOrderTickets>>,
+      TError,
+      TData
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  }
+) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+
+  const queryKey = queryOptions?.queryKey ?? getListOrderTicketsQueryKey(id);
+
+  const queryFn: QueryFunction<
+    Awaited<ReturnType<typeof listOrderTickets>>
+  > = ({ signal }) => listOrderTickets(id, requestOptions, signal);
+
+  return {
+    queryKey,
+    queryFn,
+    enabled: !!id,
+    ...queryOptions,
+  } as UseQueryOptions<
+    Awaited<ReturnType<typeof listOrderTickets>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
+
+export type ListOrderTicketsQueryResult = NonNullable<
+  Awaited<ReturnType<typeof listOrderTickets>>
+>;
+export type ListOrderTicketsQueryError = void;
+
+/**
+ * @summary List tickets issued for an order
+ */
+
+export function useListOrderTickets<
+  TData = Awaited<ReturnType<typeof listOrderTickets>>,
+  TError = void
+>(
+  id: string,
+  options?: {
+    query?: UseQueryOptions<
+      Awaited<ReturnType<typeof listOrderTickets>>,
+      TError,
+      TData
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  }
+): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+  const queryOptions = getListOrderTicketsQueryOptions(id, options);
+
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
+    queryKey: QueryKey;
+  };
+
+  query.queryKey = queryOptions.queryKey;
+
+  return query;
+}
+
+/**
+ * @summary Get ticket by ID
+ */
+export const getTicket = (
+  id: string,
+  options?: SecondParameter<typeof customInstance>,
+  signal?: AbortSignal
+) => {
+  return customInstance<Ticket>(
+    { url: `/tickets/${id}`, method: 'GET', signal },
+    options
+  );
+};
+
+export const getGetTicketQueryKey = (id?: string) => {
+  return [`/tickets/${id}`] as const;
+};
+
+export const getGetTicketQueryOptions = <
+  TData = Awaited<ReturnType<typeof getTicket>>,
+  TError = void
+>(
+  id: string,
+  options?: {
+    query?: UseQueryOptions<
+      Awaited<ReturnType<typeof getTicket>>,
+      TError,
+      TData
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  }
+) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+
+  const queryKey = queryOptions?.queryKey ?? getGetTicketQueryKey(id);
+
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getTicket>>> = ({
+    signal,
+  }) => getTicket(id, requestOptions, signal);
+
+  return {
+    queryKey,
+    queryFn,
+    enabled: !!id,
+    ...queryOptions,
+  } as UseQueryOptions<Awaited<ReturnType<typeof getTicket>>, TError, TData> & {
+    queryKey: QueryKey;
+  };
+};
+
+export type GetTicketQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getTicket>>
+>;
+export type GetTicketQueryError = void;
+
+/**
+ * @summary Get ticket by ID
+ */
+
+export function useGetTicket<
+  TData = Awaited<ReturnType<typeof getTicket>>,
+  TError = void
+>(
+  id: string,
+  options?: {
+    query?: UseQueryOptions<
+      Awaited<ReturnType<typeof getTicket>>,
+      TError,
+      TData
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  }
+): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+  const queryOptions = getGetTicketQueryOptions(id, options);
+
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
+    queryKey: QueryKey;
+  };
+
+  query.queryKey = queryOptions.queryKey;
+
+  return query;
+}
+
+/**
+ * @summary Verify a ticket for check-in
+ */
+export const verifyTicket = (
+  id: string,
+  options?: SecondParameter<typeof customInstance>,
+  signal?: AbortSignal
+) => {
+  return customInstance<TicketVerifyResponse>(
+    { url: `/tickets/${id}/verify`, method: 'GET', signal },
+    options
+  );
+};
+
+export const getVerifyTicketQueryKey = (id?: string) => {
+  return [`/tickets/${id}/verify`] as const;
+};
+
+export const getVerifyTicketQueryOptions = <
+  TData = Awaited<ReturnType<typeof verifyTicket>>,
+  TError = void
+>(
+  id: string,
+  options?: {
+    query?: UseQueryOptions<
+      Awaited<ReturnType<typeof verifyTicket>>,
+      TError,
+      TData
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  }
+) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+
+  const queryKey = queryOptions?.queryKey ?? getVerifyTicketQueryKey(id);
+
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof verifyTicket>>> = ({
+    signal,
+  }) => verifyTicket(id, requestOptions, signal);
+
+  return {
+    queryKey,
+    queryFn,
+    enabled: !!id,
+    ...queryOptions,
+  } as UseQueryOptions<
+    Awaited<ReturnType<typeof verifyTicket>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
+
+export type VerifyTicketQueryResult = NonNullable<
+  Awaited<ReturnType<typeof verifyTicket>>
+>;
+export type VerifyTicketQueryError = void;
+
+/**
+ * @summary Verify a ticket for check-in
+ */
+
+export function useVerifyTicket<
+  TData = Awaited<ReturnType<typeof verifyTicket>>,
+  TError = void
+>(
+  id: string,
+  options?: {
+    query?: UseQueryOptions<
+      Awaited<ReturnType<typeof verifyTicket>>,
+      TError,
+      TData
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  }
+): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+  const queryOptions = getVerifyTicketQueryOptions(id, options);
+
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
+    queryKey: QueryKey;
+  };
+
+  query.queryKey = queryOptions.queryKey;
+
+  return query;
+}
+
+/**
+ * @summary Check in a ticket
+ */
+export const checkInTicket = (
+  id: string,
+  options?: SecondParameter<typeof customInstance>,
+  signal?: AbortSignal
+) => {
+  return customInstance<Ticket>(
+    { url: `/tickets/${id}/check-in`, method: 'POST', signal },
+    options
+  );
+};
+
+export const getCheckInTicketMutationOptions = <
+  TError = void | void,
+  TContext = unknown
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof checkInTicket>>,
+    TError,
+    { id: string },
+    TContext
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof checkInTicket>>,
+  TError,
+  { id: string },
+  TContext
+> => {
+  const mutationKey = ['checkInTicket'];
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation &&
+      'mutationKey' in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof checkInTicket>>,
+    { id: string }
+  > = props => {
+    const { id } = props ?? {};
+
+    return checkInTicket(id, requestOptions);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type CheckInTicketMutationResult = NonNullable<
+  Awaited<ReturnType<typeof checkInTicket>>
+>;
+
+export type CheckInTicketMutationError = void | void;
+
+/**
+ * @summary Check in a ticket
+ */
+export const useCheckInTicket = <
+  TError = void | void,
+  TContext = unknown
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof checkInTicket>>,
+    TError,
+    { id: string },
+    TContext
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseMutationResult<
+  Awaited<ReturnType<typeof checkInTicket>>,
+  TError,
+  { id: string },
+  TContext
+> => {
+  const mutationOptions = getCheckInTicketMutationOptions(options);
+
+  return useMutation(mutationOptions);
+};
+
+/**
+ * @summary List payment intents for an order
+ */
+export const listPaymentIntents = (
+  params: ListPaymentIntentsParams,
+  options?: SecondParameter<typeof customInstance>,
+  signal?: AbortSignal
+) => {
+  return customInstance<PaymentIntentListResponse>(
+    { url: `/payments/intents`, method: 'GET', params, signal },
+    options
+  );
+};
+
+export const getListPaymentIntentsQueryKey = (
+  params?: ListPaymentIntentsParams
+) => {
+  return [`/payments/intents`, ...(params ? [params] : [])] as const;
+};
+
+export const getListPaymentIntentsQueryOptions = <
+  TData = Awaited<ReturnType<typeof listPaymentIntents>>,
+  TError = void
+>(
+  params: ListPaymentIntentsParams,
+  options?: {
+    query?: UseQueryOptions<
+      Awaited<ReturnType<typeof listPaymentIntents>>,
+      TError,
+      TData
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  }
+) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+
+  const queryKey =
+    queryOptions?.queryKey ?? getListPaymentIntentsQueryKey(params);
+
+  const queryFn: QueryFunction<
+    Awaited<ReturnType<typeof listPaymentIntents>>
+  > = ({ signal }) => listPaymentIntents(params, requestOptions, signal);
+
+  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof listPaymentIntents>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
+
+export type ListPaymentIntentsQueryResult = NonNullable<
+  Awaited<ReturnType<typeof listPaymentIntents>>
+>;
+export type ListPaymentIntentsQueryError = void;
+
+/**
+ * @summary List payment intents for an order
+ */
+
+export function useListPaymentIntents<
+  TData = Awaited<ReturnType<typeof listPaymentIntents>>,
+  TError = void
+>(
+  params: ListPaymentIntentsParams,
+  options?: {
+    query?: UseQueryOptions<
+      Awaited<ReturnType<typeof listPaymentIntents>>,
+      TError,
+      TData
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  }
+): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+  const queryOptions = getListPaymentIntentsQueryOptions(params, options);
+
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
+    queryKey: QueryKey;
+  };
+
+  query.queryKey = queryOptions.queryKey;
+
+  return query;
+}
+
+/**
+ * @summary Create a payment intent (no card data in this API)
+ */
+export const createPaymentIntent = (
+  createPaymentIntentDto: CreatePaymentIntentDto,
+  options?: SecondParameter<typeof customInstance>,
+  signal?: AbortSignal
+) => {
+  return customInstance<PaymentIntent>(
+    {
+      url: `/payments/intents`,
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      data: createPaymentIntentDto,
+      signal,
+    },
+    options
+  );
+};
+
+export const getCreatePaymentIntentMutationOptions = <
+  TError = void,
+  TContext = unknown
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof createPaymentIntent>>,
+    TError,
+    { data: CreatePaymentIntentDto },
+    TContext
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof createPaymentIntent>>,
+  TError,
+  { data: CreatePaymentIntentDto },
+  TContext
+> => {
+  const mutationKey = ['createPaymentIntent'];
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation &&
+      'mutationKey' in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof createPaymentIntent>>,
+    { data: CreatePaymentIntentDto }
+  > = props => {
+    const { data } = props ?? {};
+
+    return createPaymentIntent(data, requestOptions);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type CreatePaymentIntentMutationResult = NonNullable<
+  Awaited<ReturnType<typeof createPaymentIntent>>
+>;
+export type CreatePaymentIntentMutationBody = CreatePaymentIntentDto;
+export type CreatePaymentIntentMutationError = void;
+
+/**
+ * @summary Create a payment intent (no card data in this API)
+ */
+export const useCreatePaymentIntent = <
+  TError = void,
+  TContext = unknown
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof createPaymentIntent>>,
+    TError,
+    { data: CreatePaymentIntentDto },
+    TContext
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseMutationResult<
+  Awaited<ReturnType<typeof createPaymentIntent>>,
+  TError,
+  { data: CreatePaymentIntentDto },
+  TContext
+> => {
+  const mutationOptions = getCreatePaymentIntentMutationOptions(options);
+
+  return useMutation(mutationOptions);
+};
+
+/**
+ * @summary Get a payment intent
+ */
+export const getPaymentIntent = (
+  id: string,
+  options?: SecondParameter<typeof customInstance>,
+  signal?: AbortSignal
+) => {
+  return customInstance<PaymentIntent>(
+    { url: `/payments/intents/${id}`, method: 'GET', signal },
+    options
+  );
+};
+
+export const getGetPaymentIntentQueryKey = (id?: string) => {
+  return [`/payments/intents/${id}`] as const;
+};
+
+export const getGetPaymentIntentQueryOptions = <
+  TData = Awaited<ReturnType<typeof getPaymentIntent>>,
+  TError = void
+>(
+  id: string,
+  options?: {
+    query?: UseQueryOptions<
+      Awaited<ReturnType<typeof getPaymentIntent>>,
+      TError,
+      TData
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  }
+) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+
+  const queryKey = queryOptions?.queryKey ?? getGetPaymentIntentQueryKey(id);
+
+  const queryFn: QueryFunction<
+    Awaited<ReturnType<typeof getPaymentIntent>>
+  > = ({ signal }) => getPaymentIntent(id, requestOptions, signal);
+
+  return {
+    queryKey,
+    queryFn,
+    enabled: !!id,
+    ...queryOptions,
+  } as UseQueryOptions<
+    Awaited<ReturnType<typeof getPaymentIntent>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
+
+export type GetPaymentIntentQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getPaymentIntent>>
+>;
+export type GetPaymentIntentQueryError = void;
+
+/**
+ * @summary Get a payment intent
+ */
+
+export function useGetPaymentIntent<
+  TData = Awaited<ReturnType<typeof getPaymentIntent>>,
+  TError = void
+>(
+  id: string,
+  options?: {
+    query?: UseQueryOptions<
+      Awaited<ReturnType<typeof getPaymentIntent>>,
+      TError,
+      TData
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  }
+): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+  const queryOptions = getGetPaymentIntentQueryOptions(id, options);
+
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
+    queryKey: QueryKey;
+  };
+
+  query.queryKey = queryOptions.queryKey;
+
+  return query;
+}
+
+/**
+ * @summary Payment webhook / callback (idempotent; no card data)
+ */
+export const postPaymentWebhook = (
+  paymentWebhookDto: PaymentWebhookDto,
+  options?: SecondParameter<typeof customInstance>,
+  signal?: AbortSignal
+) => {
+  return customInstance<PaymentWebhookResponse>(
+    {
+      url: `/payments/webhook`,
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      data: paymentWebhookDto,
+      signal,
+    },
+    options
+  );
+};
+
+export const getPostPaymentWebhookMutationOptions = <
+  TError = void,
+  TContext = unknown
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof postPaymentWebhook>>,
+    TError,
+    { data: PaymentWebhookDto },
+    TContext
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof postPaymentWebhook>>,
+  TError,
+  { data: PaymentWebhookDto },
+  TContext
+> => {
+  const mutationKey = ['postPaymentWebhook'];
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation &&
+      'mutationKey' in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof postPaymentWebhook>>,
+    { data: PaymentWebhookDto }
+  > = props => {
+    const { data } = props ?? {};
+
+    return postPaymentWebhook(data, requestOptions);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type PostPaymentWebhookMutationResult = NonNullable<
+  Awaited<ReturnType<typeof postPaymentWebhook>>
+>;
+export type PostPaymentWebhookMutationBody = PaymentWebhookDto;
+export type PostPaymentWebhookMutationError = void;
+
+/**
+ * @summary Payment webhook / callback (idempotent; no card data)
+ */
+export const usePostPaymentWebhook = <
+  TError = void,
+  TContext = unknown
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof postPaymentWebhook>>,
+    TError,
+    { data: PaymentWebhookDto },
+    TContext
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseMutationResult<
+  Awaited<ReturnType<typeof postPaymentWebhook>>,
+  TError,
+  { data: PaymentWebhookDto },
+  TContext
+> => {
+  const mutationOptions = getPostPaymentWebhookMutationOptions(options);
+
+  return useMutation(mutationOptions);
+};
+
+/**
+ * @summary Mock checkout chooser when ECPay sandbox keys are absent
+ */
+export const mockCompletePayment = (
+  id: string,
+  params?: MockCompletePaymentParams,
+  options?: SecondParameter<typeof customInstance>,
+  signal?: AbortSignal
+) => {
+  return customInstance<void>(
+    { url: `/payments/mock-complete/${id}`, method: 'GET', params, signal },
+    options
+  );
+};
+
+export const getMockCompletePaymentQueryKey = (
+  id?: string,
+  params?: MockCompletePaymentParams
+) => {
+  return [
+    `/payments/mock-complete/${id}`,
+    ...(params ? [params] : []),
+  ] as const;
+};
+
+export const getMockCompletePaymentQueryOptions = <
+  TData = Awaited<ReturnType<typeof mockCompletePayment>>,
+  TError = void | void | void
+>(
+  id: string,
+  params?: MockCompletePaymentParams,
+  options?: {
+    query?: UseQueryOptions<
+      Awaited<ReturnType<typeof mockCompletePayment>>,
+      TError,
+      TData
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  }
+) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+
+  const queryKey =
+    queryOptions?.queryKey ?? getMockCompletePaymentQueryKey(id, params);
+
+  const queryFn: QueryFunction<
+    Awaited<ReturnType<typeof mockCompletePayment>>
+  > = ({ signal }) => mockCompletePayment(id, params, requestOptions, signal);
+
+  return {
+    queryKey,
+    queryFn,
+    enabled: !!id,
+    ...queryOptions,
+  } as UseQueryOptions<
+    Awaited<ReturnType<typeof mockCompletePayment>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
+
+export type MockCompletePaymentQueryResult = NonNullable<
+  Awaited<ReturnType<typeof mockCompletePayment>>
+>;
+export type MockCompletePaymentQueryError = void | void | void;
+
+/**
+ * @summary Mock checkout chooser when ECPay sandbox keys are absent
+ */
+
+export function useMockCompletePayment<
+  TData = Awaited<ReturnType<typeof mockCompletePayment>>,
+  TError = void | void | void
+>(
+  id: string,
+  params?: MockCompletePaymentParams,
+  options?: {
+    query?: UseQueryOptions<
+      Awaited<ReturnType<typeof mockCompletePayment>>,
+      TError,
+      TData
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  }
+): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+  const queryOptions = getMockCompletePaymentQueryOptions(id, params, options);
+
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
+    queryKey: QueryKey;
+  };
+
+  query.queryKey = queryOptions.queryKey;
+
+  return query;
+}

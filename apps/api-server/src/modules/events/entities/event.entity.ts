@@ -1,5 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 
+import { EXHIBITION_REGIONS } from '../exhibition-region';
+
 export class Event {
   @ApiProperty()
   id: string;
@@ -35,6 +37,33 @@ export class Event {
     description: 'Catalog extras (sessions, tickets, content, speakers, venue). Nest persists JSON.',
   })
   data?: Record<string, unknown>;
+
+  @ApiProperty({ enum: EXHIBITION_REGIONS, required: false })
+  region?: (typeof EXHIBITION_REGIONS)[number];
+
+  @ApiProperty({ required: false, example: 'Asia/Tokyo' })
+  timezone?: string;
+
+  @ApiProperty({ required: false })
+  source?: string;
+
+  @ApiProperty({ required: false })
+  sourceUrl?: string;
+
+  @ApiProperty({ required: false })
+  externalId?: string;
+
+  @ApiProperty({ required: false })
+  contentHash?: string;
+
+  @ApiProperty({ required: false, type: [String] })
+  tags?: string[];
+
+  @ApiProperty({ required: false })
+  priceText?: string;
+
+  @ApiProperty({ required: false })
+  lastSeenAt?: Date;
 
   @ApiProperty()
   createdAt: Date;
