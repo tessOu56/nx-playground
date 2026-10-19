@@ -400,6 +400,19 @@ export function toPortalEvent(api: EventStackEvent): Event {
   };
 }
 
+export function isPublicCatalogEvent(
+  event: Pick<Event, 'domainKind'>
+): boolean {
+  return event.domainKind === 'exhibition';
+}
+
+export function toPublicCatalogEvents(apiEvents: EventStackEvent[]): Event[] {
+  return apiEvents
+    .filter(event => event.status !== 'draft')
+    .map(toPortalEvent)
+    .filter(isPublicCatalogEvent);
+}
+
 function mapSpeakers(raw: unknown): EventSpeaker[] {
   if (!Array.isArray(raw)) return [];
   return raw

@@ -28,7 +28,6 @@ export function demoCopy(locale: string | undefined) {
       'NX Playground 展覧会'
     ),
     navEvents: t(locale, '展覽', 'Exhibitions', '展覧会'),
-    navOrders: t(locale, '訂單', 'Orders', '注文'),
     navLine: t(locale, 'LINE', 'LINE', 'LINE'),
     logout: t(locale, '登出', 'Log out', 'ログアウト'),
     upcoming: t(locale, '即將開始', 'Upcoming', '開催予定'),
@@ -48,7 +47,6 @@ export function demoCopy(locale: string | undefined) {
     when: t(locale, '會期', 'Dates', '会期'),
     price: t(locale, '入場', 'Admission', '料金'),
     organizer: t(locale, '主辦', 'Organizer', '主催'),
-    seatsLeft: t(locale, '剩餘名額', 'Seats left', '残席'),
     location: t(locale, '地點', 'Location', '場所'),
     city: t(locale, '城市', 'City', '都市'),
     faq: t(locale, '常見問題', 'FAQ', 'よくある質問'),
@@ -104,8 +102,6 @@ export function demoCopy(locale: string | undefined) {
       'This address does not exist, or it was removed from the public site.',
       'この URL は存在しないか、公開サイトから削除されています。'
     ),
-    goHome: t(locale, '回到首頁', 'Back to home', 'ホームへ戻る'),
-    goBack: t(locale, '上一頁', 'Go back', '前のページ'),
     retry: t(locale, '重試', 'Retry', '再試行'),
     emptyCatalog: t(
       locale,
@@ -118,13 +114,6 @@ export function demoCopy(locale: string | undefined) {
       '稍後再回來，或在 LINE 問最近的檔期。',
       'Check back later, or ask on LINE for current dates.',
       'あとでもう一度確認するか、LINE で会期を聞いてください。'
-    ),
-    vendorEmpty: t(locale, '暫無展覽', 'No exhibitions yet', '展覧会はまだありません'),
-    vendorEmptyHint: t(
-      locale,
-      '此主辦方目前沒有公開的展覽。',
-      'This organizer has no published exhibitions.',
-      'この主催者の公開中の展覧会はありません。'
     ),
     demoBannerTitle: t(
       locale,
@@ -187,7 +176,6 @@ export function demoCopy(locale: string | undefined) {
       '台北と東京の展覧会を、都市・会期・キーワードで探します。詳細を開き、公式ページか LINE で確認してください。'
     ),
     browse: t(locale, '瀏覽展覽', 'Browse exhibitions', '展覧会を見る'),
-    myOrders: t(locale, '我的訂單', 'My orders', '注文'),
     howTitle: t(locale, '怎麼用', 'How it works', '使い方'),
     howLead: t(
       locale,

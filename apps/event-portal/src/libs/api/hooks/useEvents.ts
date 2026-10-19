@@ -24,15 +24,3 @@ export function useEvent(eventId: string) {
     retry: 1,
   });
 }
-
-export function useEventsByVendor(vendorId: string) {
-  return useQuery({
-    queryKey: ['events', 'vendor', vendorId],
-    queryFn: async () => {
-      const events = await fetchPortalEvents();
-      return events.filter(event => event.vendorId === vendorId);
-    },
-    staleTime: 5 * 60 * 1000,
-    enabled: !!vendorId,
-  });
-}

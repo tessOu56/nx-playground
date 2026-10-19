@@ -1,1 +1,0 @@
-export { VendorDetailSkeleton } from './VendorDetailSkeleton';

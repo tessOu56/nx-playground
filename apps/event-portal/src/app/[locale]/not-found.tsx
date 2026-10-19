@@ -1,12 +1,16 @@
-'use client';
-
 import Link from 'next/link';
-import { useLocale } from 'next-intl';
+import { getLocale } from 'next-intl/server';
 
+import { DEFAULT_LOCALE } from '@/libs/constants';
 import { demoCopy } from '@/libs/i18n/demo-copy';
 
-export default function LocaleNotFound() {
-  const locale = useLocale();
+export default async function LocaleNotFound() {
+  let locale: string = DEFAULT_LOCALE;
+  try {
+    locale = await getLocale();
+  } catch {
+    locale = DEFAULT_LOCALE;
+  }
   const copy = demoCopy(locale);
 
   return (

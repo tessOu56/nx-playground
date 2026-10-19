@@ -1,13 +1,6 @@
 import { demoCopy } from '@/libs/i18n/demo-copy';
 
-export function NoEvents({
-  variant = 'vendor',
-  locale = 'zh-TW',
-}: {
-  variant?: 'vendor' | 'catalog';
-  locale?: string;
-}) {
-  const isCatalog = variant === 'catalog';
+export function NoEvents({ locale = 'zh-TW' }: { locale?: string }) {
   const copy = demoCopy(locale);
 
   return (
@@ -16,10 +9,10 @@ export function NoEvents({
       data-testid='events-empty'
     >
       <h3 className='text-lg font-semibold text-gray-900'>
-        {isCatalog ? copy.emptyCatalog : copy.vendorEmpty}
+        {copy.emptyCatalog}
       </h3>
       <p className='mx-auto mt-2 max-w-md text-sm text-gray-600'>
-        {isCatalog ? copy.emptyCatalogHint : copy.vendorEmptyHint}
+        {copy.emptyCatalogHint}
       </p>
     </div>
   );

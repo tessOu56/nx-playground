@@ -1,6 +1,6 @@
 import Link from 'next/link';
 
-import { NoEvents } from '@/app/[locale]/vendors/[vendorId]/components/events/NoEvents';
+import { NoEvents } from './NoEvents';
 import { Image } from '@/components';
 import { eventListKind, regionTimeZone } from '@/libs/api/event-stack-map';
 import { catalogPriceLabel, demoCopy } from '@/libs/i18n/demo-copy';
@@ -70,14 +70,14 @@ export function EventStackCards({
         </div>
       );
     }
-    return <NoEvents variant='catalog' locale={locale} />;
+    return <NoEvents locale={locale} />;
   }
 
   return (
     <ul className='grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-3'>
       {events.map(event => {
         const kind = eventListKind(event);
-        const domain = event.domainKind ?? 'talk';
+        const domain = event.domainKind ?? 'exhibition';
         const dateRange = formatListDateRange(event, locale);
         const venueLine = [event.location, event.venueHint]
           .filter(Boolean)

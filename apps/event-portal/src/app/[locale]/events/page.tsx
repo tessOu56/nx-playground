@@ -1,6 +1,6 @@
 import { EventCatalog } from './components/EventCatalog';
+import { EventListError } from './components/EventListError';
 
-import { EventListError } from '@/app/[locale]/vendors/[vendorId]/components/events/EventListError';
 import { LabelledDemoBanner } from '@/components/demo/LabelledDemoBanner';
 import { LineOfficialCta } from '@/components/line/LineOfficialCta';
 import { EdsReveal } from '@/components/motion/EdsReveal';

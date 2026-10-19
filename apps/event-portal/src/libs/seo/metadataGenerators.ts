@@ -61,22 +61,3 @@ export async function generateOrderMetadata({
     };
   }
 }
-
-export async function generateVendorMetadata({
-  params,
-}: {
-  params: Promise<{ vendorId: string }>;
-}): Promise<Metadata> {
-  const { vendorId } = await params;
-
-  return {
-    title: `主辦方 ${vendorId} - NX Playground Events`,
-    description: '查看主辦方詳情和相關活動',
-    keywords: ['主辦方', '活動', 'NX Playground', 'Events'],
-    openGraph: {
-      title: `主辦方 ${vendorId} - NX Playground Events`,
-      description: '查看主辦方詳情和相關活動',
-      type: 'website',
-    },
-  };
-}

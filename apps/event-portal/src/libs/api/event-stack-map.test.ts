@@ -8,6 +8,7 @@ import {
   sanitizeSourceUrl,
   toPortalEvent,
   toPortalEventDetail,
+  toPublicCatalogEvents,
 } from './event-stack-map';
 
 describe('event-stack catalog map', () => {
@@ -159,5 +160,47 @@ describe('event-stack catalog map', () => {
     assert.equal(event.sample, true);
     assert.equal(event.sessions.length, 0);
     assert.equal(sanitizeSourceUrl('javascript:alert(1)'), undefined);
+  });
+
+  it('keeps only exhibition listings on the public catalog', () => {
+    const listed = toPublicCatalogEvents([
+      {
+        id: 'event_react19',
+        title: 'React 19 技術分享會',
+        startDate: '2026-11-15T14:00:00.000Z',
+        endDate: '2026-11-15T17:00:00.000Z',
+        status: 'published',
+        createdAt: '2026-08-20T00:00:00.000Z',
+        updatedAt: '2026-08-20T00:00:00.000Z',
+        data: { kind: 'talk' },
+      },
+      {
+        id: 'event_sample_tfam',
+        title: '[Sample] TFAM — Contemporary Taiwan',
+        startDate: '2026-10-04T01:00:00.000Z',
+        endDate: '2026-12-27T10:00:00.000Z',
+        status: 'published',
+        createdAt: '2026-08-20T00:00:00.000Z',
+        updatedAt: '2026-08-20T00:00:00.000Z',
+        source: 'sample',
+        data: { kind: 'exhibition', sample: true },
+      },
+      {
+        id: 'event_nx',
+        title: 'Nx draft',
+        startDate: '2026-12-20T19:00:00.000Z',
+        endDate: '2026-12-20T21:00:00.000Z',
+        status: 'draft',
+        createdAt: '2026-08-20T00:00:00.000Z',
+        updatedAt: '2026-08-20T00:00:00.000Z',
+        data: { kind: 'exhibition' },
+      },
+    ]);
+    assert.deepEqual(
+      listed.map(event => event.id),
+      ['event_sample_tfam']
+    );
+    assert.equal(listed[0]?.sample, true);
+    assert.equal(listed[0]?.domainKind, 'exhibition');
   });
 });
