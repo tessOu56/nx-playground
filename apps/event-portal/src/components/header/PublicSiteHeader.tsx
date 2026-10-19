@@ -5,6 +5,7 @@ import { usePathname } from 'next/navigation';
 
 import { LocaleSwitcher } from './LocaleSwitcher';
 import { PublicSiteAccount } from './PublicSiteAccount';
+
 import { demoCopy } from '@/libs/i18n/demo-copy';
 
 function navClass(active: boolean) {

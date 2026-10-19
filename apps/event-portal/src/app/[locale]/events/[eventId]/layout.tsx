@@ -5,8 +5,8 @@ import {
 } from '@tanstack/react-query';
 import { headers } from 'next/headers';
 
-import { BackLink } from '@/components/nav/BackLink';
 import { LabelledDemoBanner } from '@/components/demo/LabelledDemoBanner';
+import { BackLink } from '@/components/nav/BackLink';
 import { prefetchEventPage, generateEventMetadata } from '@/libs';
 import { demoCopy } from '@/libs/i18n/demo-copy';
 
