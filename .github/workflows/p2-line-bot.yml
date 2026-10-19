@@ -32,3 +32,6 @@ jobs:
 
       - name: Taipei collector normalization tests
         run: node --import tsx --test tools/collectors/moc-taipei/*.test.ts
+
+      - name: Nest mutating API and payment callback tests
+        run: pnpm exec nx test @nx-playground/api-server --skip-nx-cache

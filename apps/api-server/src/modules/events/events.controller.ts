@@ -8,6 +8,7 @@ import {
   Param,
   Query,
   BadRequestException,
+  UseGuards,
 } from '@nestjs/common';
 import {
   ApiTags,
@@ -17,6 +18,7 @@ import {
   ApiQuery,
 } from '@nestjs/swagger';
 
+import { AdminBearerGuard } from '../../guards/admin-bearer.guard';
 import { CreateEventDto } from './dto/create-event.dto';
 import { EventListResponse } from './dto/event-list-response.dto';
 import { UpdateEventDto } from './dto/update-event.dto';
@@ -70,6 +72,7 @@ export class EventsController {
   }
 
   @Post()
+  @UseGuards(AdminBearerGuard)
   @ApiOperation({ summary: 'Create new event' })
   @ApiResponse({ status: 201, type: Event })
   @ApiResponse({ status: 400, description: 'Invalid input' })
@@ -78,6 +81,7 @@ export class EventsController {
   }
 
   @Put(':id')
+  @UseGuards(AdminBearerGuard)
   @ApiOperation({ summary: 'Update event' })
   @ApiParam({ name: 'id', type: String })
   @ApiResponse({ status: 200, type: Event })
@@ -90,6 +94,7 @@ export class EventsController {
   }
 
   @Delete(':id')
+  @UseGuards(AdminBearerGuard)
   @ApiOperation({ summary: 'Delete event' })
   @ApiParam({ name: 'id', type: String })
   @ApiResponse({ status: 200, description: 'Event deleted' })

@@ -5,9 +5,11 @@ import {
   Headers,
   HttpCode,
   HttpStatus,
+  NotFoundException,
   Param,
   Post,
   Query,
+  Req,
   Res,
 } from '@nestjs/common';
 import {
@@ -17,7 +19,7 @@ import {
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
-import type { Response } from 'express';
+import type { Request, Response } from 'express';
 
 import { CreatePaymentIntentDto } from './dto/create-payment-intent.dto';
 import {
@@ -25,8 +27,10 @@ import {
   PaymentWebhookResponse,
 } from './dto/payment-intent-list-response.dto';
 import { PaymentWebhookDto } from './dto/payment-webhook.dto';
+import { assertEcpayWebhookMac } from './ecpay-check-mac';
 import { PaymentIntent } from './entities/payment-intent.entity';
 import {
+  isPaymentCallbackEnabled,
   mockCompleteHtml,
   portalOrderReturnUrl,
   publicApiBaseFromRequest,
@@ -73,11 +77,18 @@ export class PaymentsController {
   }
 
   @Post('webhook')
+  @HttpCode(HttpStatus.OK)
   @ApiOperation({
     summary: 'Payment webhook / callback (idempotent; no card data)',
   })
   @ApiResponse({ status: 200, type: PaymentWebhookResponse })
-  async webhook(@Body() dto: PaymentWebhookDto) {
+  @ApiResponse({ status: 404, description: 'Not found in production' })
+  async webhook(@Req() req: Request) {
+    if (!isPaymentCallbackEnabled()) {
+      throw new NotFoundException();
+    }
+    assertEcpayWebhookMac(req.body);
+    const dto = (req.body ?? {}) as PaymentWebhookDto;
     return this.paymentsService.applyWebhook({
       merchantTradeNo: dto.merchantTradeNo || dto.MerchantTradeNo,
       rtnCode: dto.rtnCode ?? dto.RtnCode,
@@ -94,6 +105,13 @@ export class PaymentsController {
     @Query('outcome') outcome: string | undefined,
     @Res() res: Response
   ) {
+    if (!isPaymentCallbackEnabled()) {
+      res.status(HttpStatus.NOT_FOUND).json({
+        statusCode: HttpStatus.NOT_FOUND,
+        message: 'Not Found',
+      });
+      return;
+    }
     const intent = await this.paymentsService.findOne(id);
     if (intent.provider !== 'mock') {
       res.status(400).json({

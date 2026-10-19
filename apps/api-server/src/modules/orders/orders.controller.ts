@@ -1,4 +1,12 @@
-import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Post,
+  Query,
+  UseGuards,
+} from '@nestjs/common';
 import {
   ApiOperation,
   ApiParam,
@@ -7,6 +15,7 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 
+import { AdminBearerGuard } from '../../guards/admin-bearer.guard';
 import { TicketsService } from '../tickets/tickets.service';
 import { TicketListResponse } from '../tickets/dto/ticket-list-response.dto';
 import { CreateOrderDto } from './dto/create-order.dto';
@@ -63,6 +72,7 @@ export class OrdersController {
   }
 
   @Post(':id/confirm')
+  @UseGuards(AdminBearerGuard)
   @ApiOperation({ summary: 'Confirm an order' })
   @ApiParam({ name: 'id', type: String })
   @ApiResponse({ status: 200, type: Order })
