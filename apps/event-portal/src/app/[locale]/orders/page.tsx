@@ -1,12 +1,27 @@
-import { Suspense } from 'react';
+import { type Metadata } from 'next';
 
-import { OrdersList } from './components/OrdersList';
-import { OrdersSkeleton } from './components/OrdersSkeleton';
+import { RetiredFlow } from '@/app/[locale]/events/components/RetiredFlow';
+import { demoCopy } from '@/libs/i18n/demo-copy';
 
-export default function OrdersPage() {
-  return (
-    <Suspense fallback={<OrdersSkeleton />}>
-      <OrdersList />
-    </Suspense>
-  );
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  const copy = demoCopy(locale);
+  return {
+    title: `${copy.retiredOrdersTitle} | NX Playground`,
+    description: copy.retiredOrdersLead,
+    robots: 'noindex, nofollow',
+  };
+}
+
+export default async function OrdersPage({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}) {
+  const { locale } = await params;
+  return <RetiredFlow locale={locale} variant='orders' />;
 }

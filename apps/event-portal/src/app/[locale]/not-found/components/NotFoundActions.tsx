@@ -1,38 +1,30 @@
 'use client';
 
-import { useLocalizedRouter } from '@/libs/i18n';
+import { useLocale } from 'next-intl';
+import Link from 'next/link';
+
+import { demoCopy, useLocalizedRouter } from '@/libs/i18n';
 
 export function NotFoundActions() {
   const router = useLocalizedRouter();
-
-  const handleGoHome = () => {
-    router.push('/');
-  };
-
-  const handleGoBack = () => {
-    router.back();
-  };
+  const locale = useLocale();
+  const copy = demoCopy(locale);
 
   return (
-    <div className='space-y-4'>
-      <div className='flex flex-col sm:flex-row gap-3 justify-center'>
-        <button
-          onClick={handleGoHome}
-          className='flex-1 sm:flex-none px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors'
-        >
-          回到首頁
-        </button>
-        <button
-          onClick={handleGoBack}
-          className='flex-1 sm:flex-none px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors'
-        >
-          ← 返回上一頁
-        </button>
-      </div>
-
-      <div className='text-sm text-gray-500 mt-6'>
-        <p>如果您認為這是一個錯誤，請聯繫我們</p>
-      </div>
+    <div className='flex flex-col justify-center gap-3 sm:flex-row'>
+      <Link
+        href={`/${locale}/events`}
+        className='inline-flex items-center justify-center rounded-md bg-gray-900 px-4 py-2.5 text-sm font-medium text-white hover:bg-gray-800'
+      >
+        {copy.backToEvents}
+      </Link>
+      <button
+        type='button'
+        onClick={() => router.back()}
+        className='inline-flex items-center justify-center rounded-md border border-gray-300 bg-white px-4 py-2.5 text-sm font-medium text-gray-800 hover:bg-gray-50'
+      >
+        {copy.goBack}
+      </button>
     </div>
   );
 }

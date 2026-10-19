@@ -1,12 +1,20 @@
 'use client';
 
-import { EventInfoHeaderSkeleton, EventSessionListSkeleton } from '..';
+import { EventInfoHeaderSkeleton } from '..';
+import { Skeleton } from '@/components/core';
 
 export function EventDetailSkeleton() {
   return (
-    <div className='space-y-6'>
-      <EventInfoHeaderSkeleton />
-      <EventSessionListSkeleton />
+    <div className='space-y-6' aria-busy='true'>
+      <div className='lg:grid lg:grid-cols-[minmax(0,1fr)_20rem] lg:items-start lg:gap-8'>
+        <EventInfoHeaderSkeleton />
+        <div className='hidden rounded-xl border border-gray-200 bg-white p-5 lg:block'>
+          <Skeleton className='mb-3 h-5 w-32' />
+          <Skeleton className='mb-4 h-4 w-full' />
+          <Skeleton className='mb-2 h-10 w-full' />
+          <Skeleton className='h-10 w-full' />
+        </div>
+      </div>
     </div>
   );
 }

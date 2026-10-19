@@ -1,36 +1,44 @@
 import { type Metadata } from 'next';
 
 import { PageConfigs } from '@/libs';
+import { demoCopy } from '@/libs/i18n/demo-copy';
 
-// 使用靜態頁面配置，404 頁面不需要動態渲染
 export const { dynamic, revalidate, fetchCache, ssr } = PageConfigs.static;
 
-export const metadata: Metadata = {
-  title: '頁面未找到 - NX Playground Events',
-  description: '抱歉，您訪問的頁面不存在',
-  keywords: ['404', '頁面未找到', 'NX Playground', 'Events'],
-};
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  const copy = demoCopy(locale);
+  return {
+    title: `${copy.pageNotFound} — NX Playground`,
+    description: copy.pageNotFoundHint,
+  };
+}
 
-export default function NotFoundLayout({
+export default async function NotFoundLayout({
   children,
+  params,
 }: {
   children: React.ReactNode;
+  params: Promise<{ locale: string }>;
 }) {
-  return (
-    <div className='min-h-screen bg-gray-50 flex items-center justify-center'>
-      <div className='max-w-md w-full mx-auto px-4'>
-        <div className='text-center'>
-          <h1 className='text-6xl font-bold text-gray-900 mb-4'>404</h1>
-          <h2 className='text-2xl font-semibold text-gray-700 mb-6'>
-            頁面未找到
-          </h2>
-          <p className='text-gray-600 mb-8'>
-            抱歉，您訪問的頁面不存在或已被移除
-          </p>
+  const { locale } = await params;
+  const copy = demoCopy(locale);
 
-          {/* 子頁面內容 */}
-          {children}
-        </div>
+  return (
+    <div className='flex min-h-[70vh] items-center justify-center bg-gray-50'>
+      <div className='mx-auto w-full max-w-md px-4 text-center'>
+        <p className='text-sm font-medium text-gray-500'>404</p>
+        <h1 className='mt-2 text-3xl font-semibold tracking-tight text-gray-900'>
+          {copy.pageNotFound}
+        </h1>
+        <p className='mt-3 text-sm leading-6 text-gray-600'>
+          {copy.pageNotFoundHint}
+        </p>
+        <div className='mt-8'>{children}</div>
       </div>
     </div>
   );

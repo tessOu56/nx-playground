@@ -1,27 +1,20 @@
 'use client';
 
-import { useSearchParams } from 'next/navigation';
 import { useLocale } from 'next-intl';
-import { useState, useEffect } from 'react';
 
 import {
   EventInfoHeader,
-  EventSessionList,
   EventContent,
   EventFAQ,
   EventInfoHeaderSkeleton,
   EventInfoHeaderError,
 } from '..';
+import { ExhibitionActions } from '../actions/ExhibitionActions';
+import { EventSchedule } from '../sessions/EventSchedule';
 
 import { Button, Card } from '@/components';
 import { useEvent } from '@/libs/api/hooks/useEvents';
-import {
-  useCurrentVendor,
-  useVendorData,
-  useVendorStoreActions,
-} from '@/libs/api/hooks/useVendorStore';
 import { demoCopy, useLocalizedRouter } from '@/libs/i18n';
-import { canSellTicket } from '@/libs/utils/eventUtils';
 
 interface EventDetailProps {
   eventId: string;
@@ -31,85 +24,11 @@ export function EventDetail({ eventId }: EventDetailProps) {
   const router = useLocalizedRouter();
   const locale = useLocale();
   const copy = demoCopy(locale);
-  const searchParams = useSearchParams();
-  const [selectedSessionId, setSelectedSessionId] = useState<string>('');
-
-  // 使用 React Query 獲取活動資料
   const { data: event, isLoading, error } = useEvent(eventId);
-
-  // 從 store 獲取當前 vendor 資料
-  const { vendor: currentVendor } = useCurrentVendor();
-
-  // 獲取 vendor 資料和 store 操作函數
-  const { vendor } = useVendorData(event?.vendorId ?? '');
-  const { setCurrentVendor } = useVendorStoreActions();
-
-  // 當 vendor 資料載入完成時，更新 store
-  useEffect(() => {
-    if (vendor && (!currentVendor || currentVendor.id !== vendor.id)) {
-      setCurrentVendor(vendor);
-    }
-  }, [vendor, currentVendor?.id, setCurrentVendor]);
-
-  // 從 URL 參數中獲取預選的場次
-  useEffect(() => {
-    const sessionParam = searchParams.get('session');
-    if (sessionParam && event?.sessions?.some(s => s.id === sessionParam)) {
-      setSelectedSessionId(sessionParam);
-    } else if (event?.sessions?.[0]?.id) {
-      setSelectedSessionId(event.sessions[0].id);
-    }
-  }, [searchParams, event?.sessions]);
-
-  // 初始化選中的場次
-  const currentSessionId = selectedSessionId ?? event?.sessions?.[0]?.id ?? '';
 
   const handleEventNotFound = () => {
     router.push('/events');
   };
-
-  const handleSessionSelect = (sessionId: string) => {
-    setSelectedSessionId(sessionId);
-  };
-
-  const handleTicketClick = (
-    eventId: string,
-    sessionId: string,
-    ticketId: string
-  ) => {
-    router.push(
-      `/events/${eventId}/checkout?session=${sessionId}&ticket=${ticketId}&quantity=1`
-    );
-  };
-
-  const handleRegisterClick = (sessionId: string) => {
-    if (!event) return;
-    const session = event.sessions?.find(s => s.id === sessionId);
-    if (session) {
-      const availableTicket = session.tickets?.find(ticket =>
-        canSellTicket(event.date, ticket.availableQuantity, ticket)
-      );
-
-      if (availableTicket) {
-        router.push(
-          `/events/${eventId}/checkout?session=${sessionId}&ticket=${availableTicket.id}&quantity=1`
-        );
-      }
-    }
-  };
-
-  const sessionList =
-    event && !isLoading ? (
-      <EventSessionList
-        event={event}
-        eventId={eventId}
-        locale={locale}
-        selectedSessionId={currentSessionId}
-        onSessionSelect={handleSessionSelect}
-        onTicketClick={handleTicketClick}
-        onRegisterClick={handleRegisterClick}
-      />
-    ) : null;
 
   return (
     <div className='space-y-6'>
@@ -123,12 +42,15 @@ export function EventDetail({ eventId }: EventDetailProps) {
         <div className='lg:grid lg:grid-cols-[minmax(0,1fr)_20rem] lg:items-start lg:gap-8'>
           <div className='space-y-6'>
             <EventInfoHeader event={event} eventId={eventId} locale={locale} />
-            <div className='lg:hidden'>{sessionList}</div>
-            <EventContent content={event.content} />
+            <div className='lg:hidden'>
+              <ExhibitionActions event={event} locale={locale} />
+            </div>
+            <EventSchedule event={event} locale={locale} />
+            <EventContent content={event.content} locale={locale} />
             <EventFAQ faq={event.faq} locale={locale} />
           </div>
-          <aside className='hidden lg:block lg:sticky lg:top-24'>
-            {sessionList}
+          <aside className='hidden lg:sticky lg:top-24 lg:block'>
+            <ExhibitionActions event={event} locale={locale} />
           </aside>
         </div>
       )}

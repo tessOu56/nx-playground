@@ -98,10 +98,20 @@ export interface Event {
   organizerName?: string;
   speakerCount?: number;
   venueHint?: string;
-  /** Domain kind from event.data.kind — talk | auction | line_commerce */
-  domainKind?: 'talk' | 'auction' | 'line_commerce';
+  /** Domain kind from event.data.kind — talk | auction | line_commerce | exhibition */
+  domainKind?: 'talk' | 'auction' | 'line_commerce' | 'exhibition';
   /** Auction deep link to Plinth; settlement stays on Plinth */
   plinthLotUrl?: string;
+  /** Catalog city — Taipei or Tokyo exhibition discovery */
+  region?: 'TAIPEI' | 'TOKYO';
+  /** IANA timezone for list/detail dates (Asia/Taipei, Asia/Tokyo) */
+  timezone?: string;
+  /** Official listing URL when the catalog has one */
+  sourceUrl?: string;
+  /** Free-text admission as published by the source */
+  priceText?: string;
+  /** Fixture / sample row — not an official listing */
+  sample?: boolean;
 
   registrationFormTemplate?: import('./registrationForm').EventRegistrationTemplate;
 }

@@ -7,9 +7,9 @@ export function generateMetadata(pathname: string): Metadata {
 
   if (!pageInfo?.seo) {
     return {
-      title: 'NX Playground Events — labelled Hobby demo',
+      title: 'NX Playground — exhibitions in Taipei and Tokyo',
       description:
-        'Taiwan event-stack C-end labelled demo. Catalog and mock tickets use in-memory fixtures. Not the Nest funds API.',
+        'Search exhibitions in Taipei and Tokyo, then confirm on the official page or LINE.',
     };
   }
 

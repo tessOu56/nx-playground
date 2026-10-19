@@ -18,13 +18,13 @@ export async function generateMetadata({
   return {
     title: copy.metaTitle,
     description: copy.metaDescription,
-    keywords: ['labelled demo', 'event stack', 'NX Playground Events'],
+    keywords: ['Taipei', 'Tokyo', 'exhibition', 'LINE', 'NX Playground'],
   };
 }
 
 export default function HomePage() {
   return (
-    <div className='min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50'>
+    <div className='min-h-screen bg-gray-50'>
       <HeroSection />
       <UserFlowSection />
     </div>

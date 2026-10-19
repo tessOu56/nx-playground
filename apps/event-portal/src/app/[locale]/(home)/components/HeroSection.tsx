@@ -3,6 +3,7 @@
 import { useLocale } from 'next-intl';
 
 import { Badge, Button } from '@/components';
+import { LineOfficialCta } from '@/components/line/LineOfficialCta';
 import { canStartLineLogin, useLiff } from '@/libs';
 import { demoCopy, useLocalizedRouter } from '@/libs/i18n';
 
@@ -12,14 +13,10 @@ export function HeroSection() {
   const copy = demoCopy(locale);
   const { isInitialized, login, error, isLoggedIn, profile } = useLiff();
   const lineLoginReady = canStartLineLogin();
-  const displayName = profile?.displayName?.trim() || '';
+  const displayName = profile?.displayName?.trim() ?? '';
 
   const goToEvents = () => {
     router.push('/events');
-  };
-
-  const goToOrders = () => {
-    router.push('/orders');
   };
 
   const handleLineLogin = () => {
@@ -28,14 +25,12 @@ export function HeroSection() {
   };
 
   return (
-    <section className='relative overflow-hidden bg-white'>
-      <div className='mx-auto max-w-7xl px-4 sm:px-6 lg:px-8'>
-        <div className='relative z-10 mx-auto max-w-2xl text-center py-24'>
-          <div className='mb-8'>
-            <Badge className='mb-4'>{copy.homeBadge}</Badge>
-          </div>
-          <h1 className='text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl'>
-            NX Playground Events
+    <section className='relative overflow-hidden border-b border-gray-200 bg-white'>
+      <div className='mx-auto max-w-6xl px-4 sm:px-6 lg:px-8'>
+        <div className='relative z-10 mx-auto max-w-2xl py-16 text-center sm:py-24'>
+          <Badge className='mb-5'>{copy.homeBadge}</Badge>
+          <h1 className='text-4xl font-semibold tracking-tight text-gray-900 sm:text-5xl'>
+            {copy.homeTitle}
           </h1>
 
           {isLoggedIn ? (
@@ -47,9 +42,7 @@ export function HeroSection() {
                 <Button size='lg' variant='primary' onClick={goToEvents}>
                   {copy.browse}
                 </Button>
-                <Button variant='outline' size='lg' onClick={goToOrders}>
-                  {copy.myOrders}
-                </Button>
+                <LineOfficialCta locale={locale} />
               </div>
             </>
           ) : (
@@ -71,6 +64,7 @@ export function HeroSection() {
                     {isInitialized ? copy.lineLogin : copy.linePreparing}
                   </Button>
                 ) : null}
+                <LineOfficialCta locale={locale} />
               </div>
               {error ? (
                 <p className='mt-4 text-sm text-red-700' role='alert'>

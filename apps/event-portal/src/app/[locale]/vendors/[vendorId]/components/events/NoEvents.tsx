@@ -12,13 +12,13 @@ export function NoEvents({
 
   return (
     <div
-      className='rounded-lg border border-dashed border-gray-200 bg-white px-6 py-12 text-center'
+      className='rounded-xl border border-dashed border-gray-200 bg-white px-6 py-14 text-center'
       data-testid='events-empty'
     >
-      <h3 className='text-lg font-medium text-gray-900'>
+      <h3 className='text-lg font-semibold text-gray-900'>
         {isCatalog ? copy.emptyCatalog : copy.vendorEmpty}
       </h3>
-      <p className='mt-2 text-sm text-gray-500'>
+      <p className='mx-auto mt-2 max-w-md text-sm text-gray-600'>
         {isCatalog ? copy.emptyCatalogHint : copy.vendorEmptyHint}
       </p>
     </div>
