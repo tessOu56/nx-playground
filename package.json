@@ -25,6 +25,8 @@
     "dev:profile": "NX_CLOUD_NO_TIMEOUTS=true nx serve @nx-playground/profile",
     "dev:api": "nx serve @nx-playground/api-server",
     "dev:api-mock": "nx serve @nx-playground/api-mock",
+    "collect:taipei": "pnpm exec tsx tools/collectors/moc-taipei/run.ts",
+    "test:line-bot": "node --import tsx --test apps/event-portal/src/libs/line/bot/*.test.ts apps/event-portal/src/app/api/line/webhook/route.test.ts tools/collectors/moc-taipei/normalize.test.ts",
     "build:safe": "NX_CLOUD_NO_TIMEOUTS=true nx run-many -t build",
     "build:affected": "nx affected --target=build",
     "test": "jest",

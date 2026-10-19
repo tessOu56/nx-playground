@@ -53,6 +53,12 @@
         "buildTarget": "@nx-playground/event-portal:build:production"
       }
     },
+    "test-line-bot": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "node --import tsx --test apps/event-portal/src/libs/line/bot/*.test.ts apps/event-portal/src/app/api/line/webhook/route.test.ts"
+      }
+    },
     "test": {
       "executor": "@nx/jest:jest",
       "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],

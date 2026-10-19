@@ -24,6 +24,7 @@ const nextConfig = {
     '@nx-playground/logger',
     '@nx-playground/validation',
   ],
+  serverExternalPackages: ['@neondatabase/serverless'],
   typescript: {
     ignoreBuildErrors: false,
   },

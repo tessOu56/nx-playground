@@ -778,6 +778,9 @@ importers:
       '@line/liff':
         specifier: 2.27.1
         version: 2.27.1
+      '@neondatabase/serverless':
+        specifier: ^1.1.0
+        version: 1.1.0
       '@next/env':
         specifier: 15.5.28
         version: 15.5.28
@@ -19004,7 +19007,7 @@ snapshots:
     dependencies:
       '@babel/core': 7.28.4
       '@babel/helper-plugin-utils': 7.27.1
-      '@babel/types': 7.28.4
+      '@babel/types': 7.29.8
       esutils: 2.0.3
 
   '@babel/preset-react@7.27.1(@babel/core@7.28.4)':

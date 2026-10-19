@@ -20,3 +20,5 @@ export {
   attendeeUserIdFromLine,
   isLineAttendeeUserId,
 } from './attendee-user-id';
+// Messaging webhook helpers live under ./bot and must stay server-only
+// (Neon + HMAC). Do not re-export them here — LiffProvider is a client module.

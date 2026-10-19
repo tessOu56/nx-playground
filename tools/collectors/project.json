@@ -1,0 +1,21 @@
+{
+  "name": "collectors",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "tools/collectors",
+  "projectType": "library",
+  "tags": ["type:tool", "scope:event-stack"],
+  "targets": {
+    "collect-taipei": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "pnpm exec tsx tools/collectors/moc-taipei/run.ts"
+      }
+    },
+    "test": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "node --import tsx --test tools/collectors/moc-taipei/normalize.test.ts"
+      }
+    }
+  }
+}

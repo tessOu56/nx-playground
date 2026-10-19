@@ -9,6 +9,7 @@
     "@is_tess/sdk": "0.1.0",
     "@is_tess/tokens": "^0.1.2",
     "@line/liff": "2.27.1",
+    "@neondatabase/serverless": "^1.1.0",
     "@next/env": "15.5.28",
     "@nx-playground/api-client": "workspace:*",
     "@nx-playground/api-fixtures": "workspace:*",
