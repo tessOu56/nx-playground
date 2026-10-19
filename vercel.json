@@ -1,9 +1,16 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "framework": "nextjs",
-  "installCommand": "pnpm install --no-frozen-lockfile",
+  "installCommand": "HUSKY=0 pnpm install --frozen-lockfile",
   "buildCommand": "pnpm exec nx build @nx-playground/event-portal --skip-nx-cache",
   "outputDirectory": "apps/event-portal/.next",
+  "ignoreCommand": "bash scripts/vercel-ignore.sh",
+  "git": {
+    "deploymentEnabled": {
+      "dependabot/**": false,
+      "ci/**": false
+    }
+  },
   "headers": [
     {
       "source": "/(.*)",

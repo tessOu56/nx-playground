@@ -1,5 +1,4 @@
 import type { EventStackEvent } from '@nx-playground/api-client/event-stack';
-import { shouldUseLabelledDemoBff } from '@nx-playground/api-client/event-stack';
 import { loadFixtureEvents } from '@nx-playground/api-fixtures';
 
 import { enrichEventStackEvent } from './event-stack-fixture-enrich';
@@ -21,8 +20,4 @@ export function labelledDemoPortalEvent(eventId: string) {
     throw new Error(`labelled-demo event ${eventId} not found`);
   }
   return toPortalEventDetail(event);
-}
-
-export function useFixtureCatalog(): boolean {
-  return shouldUseLabelledDemoBff();
 }

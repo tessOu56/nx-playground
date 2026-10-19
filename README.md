@@ -11,11 +11,22 @@ Taiwan **event product slice** in one Nx repo: public C-end (Next.js) + organize
 
 | Proof | Honest bound |
 |-------|----------------|
-| **Hosted C-end** | [https://nx-event-portal.vercel.app/zh-TW/events](https://nx-event-portal.vercel.app/zh-TW/events) — **labelled demo**. Catalog/orders use Hobby **memory fixtures** (dedicated api-mock when that host is healthy; otherwise same-origin portal BFF). **Not** the Nest funds path. |
+| **Hosted C-end** | [https://nx-event-portal.vercel.app/zh-TW/events](https://nx-event-portal.vercel.app/zh-TW/events) — **labelled demo**. Catalog/orders use the portal same-origin BFF (memory fixtures). **Not** the Nest funds path. |
 | **Contracts** | Same OpenAPI for mock and Nest; Orval client; confirm → ticket → check-in on the Nest path locally. |
 | **Not claimed** | Hosted Nest + Postgres is **not** live until STOP-015 (`/health` green). Live ECPay is STOP-014. LIFF attendees need STOP-013. |
 
 Interview second case after [AI Search Portal](https://github.com/tessOu56/ai-search-portal). Do not describe Hobby mock as production money API.
+
+## Hosted deploy (Vercel)
+
+One live frontend. Repo-root [`vercel.json`](./vercel.json) is the Nx Next.js portal (Root Directory empty — do not set it to `apps/event-portal`). [`scripts/vercel-ignore.sh`](./scripts/vercel-ignore.sh) + `git.deploymentEnabled` skip Dependabot/CI-only previews and the second Git-connected project.
+
+| Project | What it builds | Git deploys |
+| --- | --- | --- |
+| **`nx-event-portal`** | `event-portal` (Next.js 15) via `pnpm exec nx build @nx-playground/event-portal` | `main` and non-CI branches. Live: [nx-event-portal.vercel.app](https://nx-event-portal.vercel.app/zh-TW/events) |
+| **`nx-event-stack-api`** | Nothing useful while Root Directory is empty (same portal `vercel.json`) | **Skipped.** Nest API is Render `nx-event-stack-nest`. Portal labelled demo uses the same-origin BFF. Optional CLI mock: [`apps/api-mock/vercel.json`](./apps/api-mock/vercel.json) (`git.deploymentEnabled: false`). |
+
+Details: [`docs/HOSTED-DEMO.md`](./docs/HOSTED-DEMO.md).
 
 [![Nx](https://img.shields.io/badge/Nx-21.4-blue.svg)](https://nx.dev)
 [![React](https://img.shields.io/badge/React-19-cyan.svg)](https://react.dev)

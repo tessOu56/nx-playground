@@ -1,7 +1,10 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
-  "installCommand": "cd ../.. && pnpm install --no-frozen-lockfile",
+  "installCommand": "cd ../.. && HUSKY=0 pnpm install --frozen-lockfile",
   "rewrites": [{ "source": "/(.*)", "destination": "/api" }],
+  "git": {
+    "deploymentEnabled": false
+  },
   "env": {
     "EVENT_STACK_STORE": "memory"
   }
