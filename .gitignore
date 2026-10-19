@@ -63,6 +63,7 @@ out
 .env.*
 .env.local
 .env.*.local
+!.env.example
 
 # Docker 開發環境覆蓋配置
 docker-compose.override.yml

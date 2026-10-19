@@ -79,14 +79,14 @@ Auth stays on **3004** if you start it; this script does not require it.
 
 ## Attendee identity (LIFF)
 
-There is **no Nest LINE Official Account / Messaging API**. Organizer SSO is local **Ory Kratos** (password). LINE for attendees is the portal `LiffProvider` plus optional Next BFF `POST /api/line/auth/token`.
+Organizer SSO is local **Ory Kratos** (password). LINE for attendees is the portal `LiffProvider` plus optional Next BFF `POST /api/line/auth/token`. Exhibition discovery chat is a **portal** Messaging webhook (`POST /api/line/webhook`) that queries Neon directly — not Nest, not the Render API. Setup: [`docs/runbooks/line-bot.md`](./runbooks/line-bot.md).
 
 | Browser | `userId` on orders |
 | --- | --- |
 | No owner LIFF / LINE Login env | labelled demo `user_demo` |
 | Owner STOP-013 LIFF or LINE Login | `line_<LINE userId>` |
 
-Real LINE users need **your** LINE Developers provider + Official Account + LIFF + LINE Login. Put IDs only in gitignored `.env` / Vercel `nx-event-portal`. Never use employer or leftover `2007835339*` channels.
+Real LINE users need Tess’s two channels — Messaging API `2012101436` (OA `@006dcvmv`) and Login/LIFF `2011182044` (`2011182044-WawDftvY`). Put **secrets** only in gitignored `.env` / Vercel `nx-event-portal`. Never use employer or leftover `2007835339*` channels. See [`docs/runbooks/line-bot.md`](./runbooks/line-bot.md).
 
 Cash / free checkout calls `POST /orders/{id}/confirm`, which **issues tickets**. Verify `GET /tickets/{id}/verify` and check-in `POST /tickets/{id}/check-in`. No live PSP in this path.
 

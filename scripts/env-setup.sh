@@ -59,6 +59,8 @@ values = {
     "NEXT_PUBLIC_LINE_PROVIDER_ID": pick("NEXT_PUBLIC_LINE_PROVIDER_ID", ""),
     "NEXT_PUBLIC_LIFF_URL": pick("NEXT_PUBLIC_LIFF_URL", ""),
     "LINE_CLIENT_SECRET": pick("LINE_CLIENT_SECRET", "your_line_client_secret_here"),
+    "LINE_CHANNEL_SECRET": pick("LINE_CHANNEL_SECRET", ""),
+    "LINE_CHANNEL_ACCESS_TOKEN": pick("LINE_CHANNEL_ACCESS_TOKEN", ""),
     "PUBLIC_API_BASE_URL": pick("PUBLIC_API_BASE_URL", "http://localhost:3001/api"),
     "PORTAL_PUBLIC_URL": pick("PORTAL_PUBLIC_URL", "http://localhost:3000"),
     "ECPAY_MERCHANT_ID": pick("ECPAY_MERCHANT_ID", ""),
@@ -93,7 +95,7 @@ values = {
 
 lines = [
     "# Events 專案的環境變數",
-    *[f"{k}={v}" for k, v in values.items() if k.startswith("NEXT_") or k in ("LINE_CLIENT_SECRET", "PUBLIC_API_BASE_URL", "PORTAL_PUBLIC_URL", "ECPAY_MERCHANT_ID", "ECPAY_HASH_KEY", "ECPAY_HASH_IV", "VITE_API_BASE_URL", "VITE_ORY_PUBLIC_API", "VITE_KRATOS_PUBLIC_URL", "VITE_AUTH_APP_URL", "DATABASE_URL")],
+    *[f"{k}={v}" for k, v in values.items() if k.startswith("NEXT_") or k in ("LINE_CLIENT_SECRET", "LINE_CHANNEL_SECRET", "LINE_CHANNEL_ACCESS_TOKEN", "PUBLIC_API_BASE_URL", "PORTAL_PUBLIC_URL", "ECPAY_MERCHANT_ID", "ECPAY_HASH_KEY", "ECPAY_HASH_IV", "VITE_API_BASE_URL", "VITE_ORY_PUBLIC_API", "VITE_KRATOS_PUBLIC_URL", "VITE_AUTH_APP_URL", "DATABASE_URL")],
     "",
     "# Console 專案的環境變數",
     f"VITE_APP_NAME={values['VITE_APP_NAME']}",

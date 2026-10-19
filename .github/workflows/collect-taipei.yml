@@ -1,0 +1,56 @@
+name: Taipei exhibition collector
+
+on:
+  schedule:
+    # 03:00 Asia/Taipei = 19:00 UTC
+    - cron: '0 19 * * *'
+  workflow_dispatch:
+
+jobs:
+  collect:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Check DATABASE_URL secret
+        id: check
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+        run: |
+          if [ -z "$DATABASE_URL" ]; then
+            echo "DATABASE_URL repo secret is not set; skipping Taipei collector."
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "skip=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - uses: pnpm/action-setup@0977fd99725f1db4007ccb2928dbb4e90d06cc86 # v6.0.10
+        if: steps.check.outputs.skip != 'true'
+        with:
+          version: 10.13.1
+
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        if: steps.check.outputs.skip != 'true'
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - name: Install
+        if: steps.check.outputs.skip != 'true'
+        run: pnpm install --frozen-lockfile
+
+      - name: Generate Prisma client
+        if: steps.check.outputs.skip != 'true'
+        run: pnpm exec prisma generate --schema=apps/api-server/prisma/schema.prisma
+
+      - name: Apply migrations
+        if: steps.check.outputs.skip != 'true'
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+        run: pnpm exec prisma migrate deploy --schema=apps/api-server/prisma/schema.prisma
+
+      - name: Collect Taipei exhibitions
+        if: steps.check.outputs.skip != 'true'
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+        run: pnpm exec tsx tools/collectors/moc-taipei/run.ts

@@ -32,7 +32,9 @@ VITE_API_BASE_URL=http://localhost:3001/api
 
 Do not name a Vercel project `platform-command`, `platform-api`, `plinth`, or `metalcraft-platform`.
 
-Hosted portal without owner LIFF env is a **labelled demo** (`user_demo`). Binding real LINE attendees needs STOP-013 on **tessOu56** LINE Developers — never another company's channel. Nest does not host LINE webhooks.
+Hosted portal without owner LIFF env is a **labelled demo** (`user_demo`). Binding real LINE attendees needs STOP-013 on **tessOu56** LINE Developers — never another company's channel. Nest does not host LINE webhooks. The Official Account Messaging webhook lives on **event-portal** (`/api/line/webhook`) and reads Neon with `DATABASE_URL` — see [`docs/runbooks/line-bot.md`](./runbooks/line-bot.md).
+
+Taipei catalog rows are collected from [文化部開放資料](https://cloud.culture.tw/) exhibition JSON (Taipei City only; summary + link, not full copyrighted text). Cron: `.github/workflows/collect-taipei.yml`.
 
 Payments: mock `paymentIntent` until ECPay sandbox keys exist. Public C-end (T-258) uses Hobby **memory** api-mock, not Neon and not Nest funds. Live merchant is STOP-014 / T-244.
 
