@@ -4,17 +4,31 @@ import { describe, it } from 'node:test';
 import { fetchPortalEvent, fetchPortalEvents } from './event-stack-fetch';
 
 describe('labelled-demo catalog fallback', () => {
-  it('lists published fixture events with price-from and speakers', async () => {
+  it('lists only labelled exhibition samples, not leftover talks', async () => {
     const previous = process.env.EVENT_STACK_LABELLED_DEMO_BFF;
     process.env.EVENT_STACK_LABELLED_DEMO_BFF = '1';
     try {
       const events = await fetchPortalEvents();
-      assert.equal(events.some(event => event.id === 'event_react19'), true);
+      assert.equal(
+        events.every(event => event.domainKind === 'exhibition'),
+        true
+      );
+      assert.equal(
+        events.every(event => event.sample === true),
+        true
+      );
+      assert.equal(
+        events.every(event => event.title.includes('[Sample]')),
+        true
+      );
+      assert.equal(
+        events.some(event => event.id === 'event_react19'),
+        false
+      );
       assert.equal(events.some(event => event.id === 'event_nx'), false);
-      const react = events.find(event => event.id === 'event_react19');
-      assert.ok((react?.price ?? 0) > 0);
-      assert.ok((react?.speakerCount ?? 0) > 0);
-      assert.ok(react?.organizerName);
+      const tfam = events.find(event => event.id === 'event_sample_tfam');
+      assert.equal(tfam?.priceText, 'NT$30');
+      assert.equal(tfam?.region, 'TAIPEI');
     } finally {
       if (previous === undefined) delete process.env.EVENT_STACK_LABELLED_DEMO_BFF;
       else process.env.EVENT_STACK_LABELLED_DEMO_BFF = previous;

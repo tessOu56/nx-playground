@@ -20,13 +20,15 @@ import {
   detectOrderedList,
   parseListItemStyle,
 } from '@/components/editor/utils';
+import { demoCopy } from '@/libs/i18n/demo-copy';
 import type { EventContentBlock } from '@/types';
 
 interface EventContentProps {
   content: EventContentBlock[];
+  locale?: string;
 }
 
-export function EventContent({ content }: EventContentProps) {
+export function EventContent({ content, locale = 'zh-TW' }: EventContentProps) {
   const hasVisibleContent = (content ?? []).some(
     block =>
       Boolean(block.text_data?.trim()) || Boolean(block.image_data?.trim())
@@ -109,7 +111,7 @@ export function EventContent({ content }: EventContentProps) {
           <CoverImage
             key={key}
             src={block.image_data ?? ''}
-            alt={block.text_data ?? '活動圖片'}
+            alt={block.text_data ?? demoCopy(locale).about}
             caption={block.text_data}
           />
         );
@@ -121,7 +123,9 @@ export function EventContent({ content }: EventContentProps) {
 
   return (
     <Card className='p-6'>
-      <h2 className='text-xl font-semibold text-gray-900 mb-6'>活動內容</h2>
+      <h2 className='mb-6 text-xl font-semibold text-gray-900'>
+        {demoCopy(locale).about}
+      </h2>
       <Prose>
         {content.map((block, index) => renderContentBlock(block, index))}
       </Prose>

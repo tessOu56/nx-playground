@@ -13,19 +13,17 @@ export function EventInfoHeaderError({
   const copy = demoCopy(locale);
   return (
     <div
-      className='bg-white rounded-lg shadow-md p-6'
+      className='rounded-xl border border-gray-200 bg-white p-6 shadow-sm'
       role='alert'
       data-testid={isApi ? 'event-stack-api-error' : 'event-not-found'}
     >
-      <div className='flex flex-col items-center justify-center py-12 space-y-4'>
-        <div className='text-center space-y-2'>
-          <h2 className='text-red-600 font-medium'>
-            {isApi ? copy.loadError : copy.notFound}
-          </h2>
-          <p className='text-gray-500 text-sm'>
-            {isApi ? copy.loadErrorHint : copy.notFoundHint}
-          </p>
-        </div>
+      <div className='flex flex-col items-center justify-center space-y-2 py-12 text-center'>
+        <h2 className='font-semibold text-gray-900'>
+          {isApi ? copy.loadError : copy.notFound}
+        </h2>
+        <p className='text-sm text-gray-600'>
+          {isApi ? copy.loadErrorHint : copy.notFoundHint}
+        </p>
       </div>
     </div>
   );

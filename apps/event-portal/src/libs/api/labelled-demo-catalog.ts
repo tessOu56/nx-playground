@@ -3,16 +3,14 @@ import { shouldUseLabelledDemoBff } from '@nx-playground/api-client/event-stack'
 import { loadFixtureEvents } from '@nx-playground/api-fixtures';
 
 import { enrichEventStackEvent } from './event-stack-fixture-enrich';
-import { toPortalEvent, toPortalEventDetail } from './event-stack-map';
+import { toPortalEventDetail, toPublicCatalogEvents } from './event-stack-map';
 
 export function labelledDemoEventRecords(): EventStackEvent[] {
   return loadFixtureEvents().map(event => enrichEventStackEvent(event));
 }
 
 export function labelledDemoPortalEvents() {
-  return labelledDemoEventRecords()
-    .filter(event => event.status !== 'draft')
-    .map(toPortalEvent);
+  return toPublicCatalogEvents(labelledDemoEventRecords());
 }
 
 export function labelledDemoPortalEvent(eventId: string) {

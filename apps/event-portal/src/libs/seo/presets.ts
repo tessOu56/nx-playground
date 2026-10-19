@@ -5,7 +5,6 @@
 import {
   generateEventMetadata,
   generateOrderMetadata,
-  generateVendorMetadata,
 } from './metadataGenerators';
 
 import type { PageConfig } from '@/types';
@@ -99,27 +98,8 @@ export const PAGE_CONFIG_PRESETS = {
     generateMetadata: generateOrderMetadata,
   },
 
-  /** 主辦方詳情頁面 - 帶動態 metadata */
-  vendorDetail: {
-    dynamic: 'force-static' as const,
-    revalidate: false,
-    fetchCache: 'force-cache' as const,
-    ssr: true,
-    isr: false,
-    generateMetadata: generateVendorMetadata,
-  },
-
   /** 結帳頁面 - 帶動態 metadata */
   checkout: {
-    dynamic: 'auto' as const,
-    revalidate: 0, // 不緩存，每次都重新驗證
-    fetchCache: 'force-no-store' as const,
-    ssr: true,
-    isr: false,
-  },
-
-  /** 報名表單頁面 - 帶動態 metadata */
-  registration: {
     dynamic: 'auto' as const,
     revalidate: 0, // 不緩存，每次都重新驗證
     fetchCache: 'force-no-store' as const,

@@ -16,30 +16,34 @@ export function UserFlowSection() {
   ];
 
   return (
-    <section className='py-24 bg-gray-50'>
-      <div className='mx-auto max-w-7xl px-4 sm:px-6 lg:px-8'>
+    <section className='bg-gray-50 py-16 sm:py-20'>
+      <div className='mx-auto max-w-6xl px-4 sm:px-6 lg:px-8'>
         <div className='mx-auto max-w-2xl text-center'>
-          <h2 className='text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl'>
+          <h2 className='text-3xl font-semibold tracking-tight text-gray-900'>
             {copy.howTitle}
           </h2>
           <p className='mt-4 text-lg leading-8 text-gray-600'>{copy.howLead}</p>
         </div>
 
-        <div className='mt-16 grid gap-6 sm:grid-cols-3'>
+        <ol className='mt-12 grid gap-5 sm:grid-cols-3'>
           {steps.map(step => (
-            <Card key={step.n} className='border-0 shadow-md'>
-              <CardContent className='p-6'>
-                <div className='mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-green-100 text-lg font-bold text-green-700'>
-                  {step.n}
-                </div>
-                <h3 className='text-xl font-semibold text-gray-900'>
-                  {step.title}
-                </h3>
-                <p className='mt-2 text-gray-600'>{step.body}</p>
-              </CardContent>
-            </Card>
+            <li key={step.n}>
+              <Card className='h-full border border-gray-200 shadow-sm'>
+                <CardContent className='p-6'>
+                  <p className='mb-4 text-sm font-medium text-gray-500'>
+                    {step.n}
+                  </p>
+                  <h3 className='text-lg font-semibold text-gray-900'>
+                    {step.title}
+                  </h3>
+                  <p className='mt-2 text-sm leading-6 text-gray-600'>
+                    {step.body}
+                  </p>
+                </CardContent>
+              </Card>
+            </li>
           ))}
-        </div>
+        </ol>
 
         <div className='mt-12 text-center'>
           <Button
