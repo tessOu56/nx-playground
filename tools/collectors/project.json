@@ -14,7 +14,7 @@
     "test": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "node --import tsx --test tools/collectors/moc-taipei/normalize.test.ts"
+        "command": "node --import tsx --test tools/collectors/moc-taipei/*.test.ts"
       }
     }
   }

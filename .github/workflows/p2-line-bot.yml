@@ -29,4 +29,4 @@ jobs:
             apps/event-portal/src/app/api/line/webhook/route.test.ts
 
       - name: Taipei collector normalization tests
-        run: node --import tsx --test tools/collectors/moc-taipei/normalize.test.ts
+        run: node --import tsx --test tools/collectors/moc-taipei/*.test.ts

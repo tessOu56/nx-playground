@@ -1,4 +1,5 @@
 import { contentHash } from './content-hash';
+import { htmlToPlainText } from './html-to-plain-text';
 
 export const MOC_SOURCE = 'moc-opendata';
 export const MOC_TIMEZONE = 'Asia/Taipei';
@@ -74,22 +75,8 @@ function showList(value: unknown): MocShowInfo[] {
   return Array.isArray(value) ? value.filter(item => item && typeof item === 'object') : [];
 }
 
-function stripHtml(html: string): string {
-  return html
-    .replace(/<script[\s\S]*?<\/script>/gi, ' ')
-    .replace(/<style[\s\S]*?<\/style>/gi, ' ')
-    .replace(/<[^>]+>/g, ' ')
-    .replace(/&nbsp;/gi, ' ')
-    .replace(/&amp;/gi, '&')
-    .replace(/&lt;/gi, '<')
-    .replace(/&gt;/gi, '>')
-    .replace(/&quot;/gi, '"')
-    .replace(/\s+/g, ' ')
-    .trim();
-}
-
 export function summarize(html: string, sourceUrl: string): string {
-  const plain = stripHtml(html);
+  const plain = htmlToPlainText(html);
   if (!plain) {
     return `文化部開放資料展覽摘要。詳情：${sourceUrl}`;
   }
