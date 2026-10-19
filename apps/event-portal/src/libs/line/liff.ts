@@ -2,6 +2,7 @@
 import { logger } from '@nx-playground/logger';
 import { LINE_CONSTANTS, hasOwnerLiffId, liffConfig } from './constants';
 import { restoreLiffState, saveLiffState } from './storage';
+import { verifyLiffIdToken } from './verify-id-token-client';
 
 let liff: unknown = null;
 
@@ -330,17 +331,6 @@ export const getAccessToken = async () => {
   }
 };
 
-// 解析 ID Token
-export const decodeIdToken = (idToken: string) => {
-  try {
-    const [, payload] = idToken.split('.');
-    const decoded = JSON.parse(atob(payload));
-    return decoded;
-  } catch (_error) {
-    return null;
-  }
-};
-
 // LIFF 登入
 export const login = async () => {
   if (!(await isLiffModuleAvailable())) {
@@ -435,8 +425,10 @@ export const getFullUserInfo = async () => {
     ]);
 
     const _context = await getLiffContext();
-    const decodedIdToken = idToken ? decodeIdToken(idToken) : null;
-    const lineId = decodedIdToken?.sub ?? null;
+    if (!idToken) return null;
+    const decodedIdToken = await verifyLiffIdToken(idToken);
+    if (!decodedIdToken) return null;
+    const lineId = decodedIdToken.sub;
 
     return {
       profile,

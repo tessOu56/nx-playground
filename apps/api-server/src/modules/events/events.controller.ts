@@ -7,6 +7,7 @@ import {
   Body,
   Param,
   Query,
+  BadRequestException,
 } from '@nestjs/common';
 import {
   ApiTags,
@@ -21,6 +22,7 @@ import { EventListResponse } from './dto/event-list-response.dto';
 import { UpdateEventDto } from './dto/update-event.dto';
 import { Event } from './entities/event.entity';
 import { EventsService } from './events.service';
+import { EXHIBITION_REGIONS, parseExhibitionRegion } from './exhibition-region';
 
 @Controller('events')
 @ApiTags('events')
@@ -30,15 +32,32 @@ export class EventsController {
   @Get()
   @ApiOperation({ summary: 'Get all events' })
   @ApiQuery({ name: 'status', required: false })
+  @ApiQuery({
+    name: 'region',
+    required: false,
+    enum: EXHIBITION_REGIONS,
+  })
   @ApiQuery({ name: 'page', required: false, type: Number })
   @ApiQuery({ name: 'limit', required: false, type: Number })
   @ApiResponse({ status: 200, type: EventListResponse })
   async findAll(
     @Query('status') status?: string,
+    @Query('region') region?: string,
     @Query('page') page?: number,
     @Query('limit') limit?: number
   ) {
-    return this.eventsService.findAll({ status, page, limit });
+    const parsedRegion = parseExhibitionRegion(region);
+    if (parsedRegion === null) {
+      throw new BadRequestException(
+        `Invalid region. Expected ${EXHIBITION_REGIONS.join(' | ')}.`
+      );
+    }
+    return this.eventsService.findAll({
+      status,
+      region: parsedRegion,
+      page,
+      limit,
+    });
   }
 
   @Get(':id')

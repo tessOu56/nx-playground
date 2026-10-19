@@ -5,6 +5,8 @@ import { initReactI18next } from 'react-i18next';
 // Import translation files
 import enCommon from '../locales/en/common.json';
 import enUI from '../locales/en/ui.json';
+import jaCommon from '../locales/ja/common.json';
+import jaUI from '../locales/ja/ui.json';
 import zhTWCommon from '../locales/zh-TW/common.json';
 import zhTWUI from '../locales/zh-TW/ui.json';
 
@@ -12,6 +14,7 @@ import zhTWUI from '../locales/zh-TW/ui.json';
 export const SUPPORTED_LANGUAGES = {
   'zh-TW': '繁體中文',
   en: 'English',
+  ja: '日本語',
 } as const;
 
 export type SupportedLanguage = keyof typeof SUPPORTED_LANGUAGES;
@@ -76,6 +79,10 @@ const createI18nConfig = (initialLanguage?: SupportedLanguage) => {
       en: {
         common: enCommon,
         ui: enUI,
+      },
+      ja: {
+        common: jaCommon,
+        ui: jaUI,
       },
     },
 

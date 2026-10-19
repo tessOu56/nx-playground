@@ -1,6 +1,8 @@
 // 將現有的 locales 結構轉換為 next-intl 格式
 import enCommon from '../../locales/en/common.json';
 import enUI from '../../locales/en/ui.json';
+import jaCommon from '../../locales/ja/common.json';
+import jaUI from '../../locales/ja/ui.json';
 import zhTWCommon from '../../locales/zh-TW/common.json';
 import zhTWUI from '../../locales/zh-TW/ui.json';
 
@@ -13,5 +15,9 @@ export const messages = {
   en: {
     ...enCommon,
     ...enUI,
+  },
+  ja: {
+    ...jaCommon,
+    ...jaUI,
   },
 } as const;

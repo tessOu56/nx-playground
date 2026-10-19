@@ -7,6 +7,8 @@
  * OpenAPI spec version: 1.0.0
  */
 import type { CreateEventDtoStatus } from './createEventDtoStatus';
+import type { CreateEventDtoData } from './createEventDtoData';
+import type { ExhibitionRegion } from './exhibitionRegion';
 
 export interface CreateEventDto {
   title: string;
@@ -17,6 +19,18 @@ export interface CreateEventDto {
   maxAttendees?: number;
   status?: CreateEventDtoStatus;
   formId?: string;
-  /** Catalog extras (sessions, tickets, content, speakers, venue). */
-  data?: Record<string, unknown>;
+  /** Catalog extras. kind is talk | auction | line_commerce | exhibition; auction may include plinthLotUrl (Plinth deep link). Sessions, tickets, content, speakers, venue. Mock demo fills this; Nest persists JSON. */
+  data?: CreateEventDtoData;
+  region?: ExhibitionRegion;
+  /** IANA timezone (e.g. Asia/Taipei, Asia/Tokyo) */
+  timezone?: string;
+  source?: string;
+  sourceUrl?: string;
+  /** Unique together with source */
+  externalId?: string;
+  contentHash?: string;
+  tags?: string[];
+  /** Free-text price (currency varies by region) */
+  priceText?: string;
+  lastSeenAt?: string;
 }

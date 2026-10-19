@@ -2,7 +2,7 @@
  * i18n 相關配置
  */
 
-export const SUPPORTED_LOCALES = ['zh-TW', 'en'] as const;
+export const SUPPORTED_LOCALES = ['zh-TW', 'en', 'ja'] as const;
 export const DEFAULT_LOCALE = 'zh-TW' as const;
 
 export type SupportedLocale = typeof SUPPORTED_LOCALES[number];

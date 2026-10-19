@@ -38,6 +38,14 @@
             }
           },
           {
+            "name": "region",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/ExhibitionRegion"
+            }
+          },
+          {
             "name": "page",
             "required": false,
             "in": "query",
@@ -348,6 +356,38 @@
           "formId": {
             "type": "string"
           },
+          "region": {
+            "$ref": "#/components/schemas/ExhibitionRegion"
+          },
+          "timezone": {
+            "type": "string",
+            "example": "Asia/Taipei"
+          },
+          "source": {
+            "type": "string"
+          },
+          "sourceUrl": {
+            "type": "string"
+          },
+          "externalId": {
+            "type": "string"
+          },
+          "contentHash": {
+            "type": "string"
+          },
+          "tags": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "priceText": {
+            "type": "string"
+          },
+          "lastSeenAt": {
+            "format": "date-time",
+            "type": "string"
+          },
           "createdAt": {
             "format": "date-time",
             "type": "string"
@@ -428,6 +468,37 @@
           },
           "formId": {
             "type": "string"
+          },
+          "region": {
+            "$ref": "#/components/schemas/ExhibitionRegion"
+          },
+          "timezone": {
+            "type": "string"
+          },
+          "source": {
+            "type": "string"
+          },
+          "sourceUrl": {
+            "type": "string"
+          },
+          "externalId": {
+            "type": "string"
+          },
+          "contentHash": {
+            "type": "string"
+          },
+          "tags": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "priceText": {
+            "type": "string"
+          },
+          "lastSeenAt": {
+            "type": "string",
+            "format": "date-time"
           }
         },
         "required": [
@@ -436,6 +507,10 @@
           "endDate",
           "status"
         ]
+      },
+      "ExhibitionRegion": {
+        "type": "string",
+        "enum": ["TAIPEI", "TOKYO"]
       },
       "UpdateEventDto": {
         "type": "object",

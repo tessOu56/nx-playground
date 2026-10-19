@@ -42,8 +42,21 @@
       "maxAttendees": 80,
       "status": "published",
       "formId": "form_basic",
+      "region": "TAIPEI",
+      "timezone": "Asia/Taipei",
+      "source": "legacy-seed",
+      "sourceUrl": null,
+      "externalId": "event_react19",
+      "contentHash": "legacy:event_react19",
+      "tags": [
+        "React",
+        "Next.js"
+      ],
+      "priceText": "NT$800",
+      "lastSeenAt": "2026-10-19T00:00:00.000Z",
       "data": {
         "image": "https://picsum.photos/seed/event_react19/1200/640",
+        "kind": "talk",
         "category": "前端",
         "tags": [
           "React",
@@ -161,8 +174,21 @@
       "maxAttendees": 30,
       "status": "published",
       "formId": "form_basic",
+      "region": "TAIPEI",
+      "timezone": "Asia/Taipei",
+      "source": "legacy-seed",
+      "sourceUrl": null,
+      "externalId": "event_nestjs",
+      "contentHash": "legacy:event_nestjs",
+      "tags": [
+        "NestJS",
+        "Prisma"
+      ],
+      "priceText": "NT$3,200",
+      "lastSeenAt": "2026-10-19T00:00:00.000Z",
       "data": {
         "image": "https://picsum.photos/seed/event_nestjs/1200/640",
+        "kind": "talk",
         "category": "後端",
         "tags": [
           "NestJS",
@@ -231,8 +257,19 @@
       "maxAttendees": 40,
       "status": "published",
       "formId": "form_basic",
+      "timezone": "Asia/Taipei",
+      "source": "legacy-seed",
+      "sourceUrl": null,
+      "externalId": "event_summer",
+      "contentHash": "legacy:event_summer",
+      "tags": [
+        "開源"
+      ],
+      "priceText": "Free",
+      "lastSeenAt": "2026-10-19T00:00:00.000Z",
       "data": {
         "image": "https://picsum.photos/seed/event_summer/1200/640",
+        "kind": "line_commerce",
         "category": "社群",
         "tags": [
           "開源"
@@ -300,8 +337,19 @@
       "maxAttendees": 200,
       "status": "cancelled",
       "formId": "form_basic",
+      "timezone": "Asia/Taipei",
+      "source": "legacy-seed",
+      "sourceUrl": null,
+      "externalId": "event_archived",
+      "contentHash": "legacy:event_archived",
+      "tags": [
+        "路跑"
+      ],
+      "priceText": "NT$350",
+      "lastSeenAt": "2026-10-19T00:00:00.000Z",
       "data": {
         "image": "https://picsum.photos/seed/event_archived/1200/640",
+        "kind": "talk",
         "category": "戶外",
         "tags": [
           "路跑"
@@ -356,8 +404,20 @@
       "maxAttendees": 100,
       "status": "draft",
       "formId": "form_basic",
+      "timezone": "Asia/Taipei",
+      "source": "legacy-seed",
+      "sourceUrl": null,
+      "externalId": "event_nx",
+      "contentHash": "legacy:event_nx",
+      "tags": [
+        "Nx"
+      ],
+      "priceText": null,
+      "lastSeenAt": "2026-10-19T00:00:00.000Z",
       "data": {
         "image": "https://picsum.photos/seed/event_nx/1200/640",
+        "kind": "auction",
+        "plinthLotUrl": "https://metalcraft-storefront-eta.vercel.app/en/lots/lot-1",
         "category": "工程",
         "tags": [
           "Nx"
@@ -375,6 +435,232 @@
         "venue": {
           "transport": "線上會議，報名後寄連結。",
           "mapQuery": ""
+        }
+      }
+    },
+    {
+      "id": "event_sample_tfam",
+      "title": "[Sample] TFAM — Contemporary Taiwan",
+      "description": "Sample catalog data — not an official listing. Taipei Fine Arts Museum contemporary galleries. 【樣本資料 / Sample data】目錄展示用，非正式售票資訊。",
+      "location": "台北市中山區中山北路三段181號",
+      "startDate": "2026-10-04T01:00:00.000Z",
+      "endDate": "2026-12-27T10:00:00.000Z",
+      "status": "published",
+      "formId": "form_basic",
+      "region": "TAIPEI",
+      "timezone": "Asia/Taipei",
+      "source": "sample",
+      "sourceUrl": "https://www.tfam.museum/",
+      "externalId": "sample-tfam-2026",
+      "contentHash": "sample:tfam:2026-10",
+      "tags": [
+        "art",
+        "museum",
+        "taipei",
+        "sample"
+      ],
+      "priceText": "NT$30",
+      "lastSeenAt": "2026-10-19T00:00:00.000Z",
+      "data": {
+        "sample": true,
+        "kind": "exhibition",
+        "image": "https://picsum.photos/seed/event_sample_tfam/1200/640",
+        "category": "展覽",
+        "tags": [
+          "art",
+          "museum",
+          "taipei",
+          "sample"
+        ],
+        "organizer": "台北市立美術館（樣本）",
+        "content": [
+          {
+            "type": "text",
+            "text_data": "【樣本資料 / Sample data】目錄展示用，非正式售票資訊。"
+          },
+          {
+            "type": "text",
+            "text_data": "Sample listing modelled on a TFAM-style contemporary exhibition in Taipei."
+          }
+        ],
+        "faq": [
+          {
+            "question": "這是真的展覽嗎？",
+            "answer": "這筆是樣本資料，方便 Tess 預覽台北＋東京目錄。"
+          }
+        ],
+        "sessions": [],
+        "speakers": [],
+        "venue": {
+          "transport": "捷運中山國小站步行約 10 分鐘。",
+          "mapQuery": "台北市立美術館",
+          "lat": 25.0726,
+          "lng": 121.5248
+        }
+      }
+    },
+    {
+      "id": "event_sample_huashan",
+      "title": "[Sample] Huashan 1914 — Graphic Design",
+      "description": "Sample catalog data — not an official listing. Huashan 1914 Creative Park design exhibition. 【樣本資料 / Sample data】目錄展示用，非正式售票資訊。",
+      "location": "台北市中正區八德路一段1號",
+      "startDate": "2026-11-01T02:00:00.000Z",
+      "endDate": "2026-11-30T10:00:00.000Z",
+      "status": "published",
+      "formId": "form_basic",
+      "region": "TAIPEI",
+      "timezone": "Asia/Taipei",
+      "source": "sample",
+      "sourceUrl": "https://www.huashan1914.com/",
+      "externalId": "sample-huashan-2026",
+      "contentHash": "sample:huashan:2026-11",
+      "tags": [
+        "design",
+        "huashan",
+        "taipei",
+        "sample"
+      ],
+      "priceText": "Free",
+      "lastSeenAt": "2026-10-19T00:00:00.000Z",
+      "data": {
+        "sample": true,
+        "kind": "exhibition",
+        "image": "https://picsum.photos/seed/event_sample_huashan/1200/640",
+        "category": "設計",
+        "tags": [
+          "design",
+          "huashan",
+          "taipei",
+          "sample"
+        ],
+        "organizer": "華山1914文化創意產業園區（樣本）",
+        "content": [
+          {
+            "type": "text",
+            "text_data": "【樣本資料 / Sample data】目錄展示用，非正式售票資訊。"
+          }
+        ],
+        "faq": [],
+        "sessions": [],
+        "speakers": [],
+        "venue": {
+          "transport": "捷運忠孝新生站步行約 5 分鐘。",
+          "mapQuery": "華山1914文化創意產業園區",
+          "lat": 25.044,
+          "lng": 121.5293
+        }
+      }
+    },
+    {
+      "id": "event_sample_nact",
+      "title": "[Sample] NACT Tokyo — International Exhibition",
+      "description": "Sample catalog data — not an official listing. The National Art Center, Tokyo. 【サンプルデータ】カタログ表示用。公式の販売情報ではありません。",
+      "location": "東京都港区六本木7-22-2",
+      "startDate": "2026-10-22T01:00:00.000Z",
+      "endDate": "2027-01-12T10:00:00.000Z",
+      "status": "published",
+      "formId": "form_basic",
+      "region": "TOKYO",
+      "timezone": "Asia/Tokyo",
+      "source": "sample",
+      "sourceUrl": "https://www.nact.jp/",
+      "externalId": "sample-nact-2026",
+      "contentHash": "sample:nact:2026-10",
+      "tags": [
+        "art",
+        "museum",
+        "tokyo",
+        "sample"
+      ],
+      "priceText": "¥1,800",
+      "lastSeenAt": "2026-10-19T00:00:00.000Z",
+      "data": {
+        "sample": true,
+        "kind": "exhibition",
+        "image": "https://picsum.photos/seed/event_sample_nact/1200/640",
+        "category": "展覧会",
+        "tags": [
+          "art",
+          "museum",
+          "tokyo",
+          "sample"
+        ],
+        "organizer": "国立新美術館（サンプル）",
+        "content": [
+          {
+            "type": "text",
+            "text_data": "【サンプルデータ】カタログ表示用。公式の販売情報ではありません。"
+          },
+          {
+            "type": "text",
+            "text_data": "Sample listing modelled on a National Art Center, Tokyo special exhibition."
+          }
+        ],
+        "faq": [
+          {
+            "question": "これは実在の展覧会ですか？",
+            "answer": "サンプルデータです。台北＋東京の発見カタログ用です。"
+          }
+        ],
+        "sessions": [],
+        "speakers": [],
+        "venue": {
+          "transport": "乃木坂駅 6 番出口直結。",
+          "mapQuery": "国立新美術館",
+          "lat": 35.6653,
+          "lng": 139.7264
+        }
+      }
+    },
+    {
+      "id": "event_sample_mori",
+      "title": "[Sample] Mori Art Museum — Roppongi",
+      "description": "Sample catalog data — not an official listing. Mori Art Museum, Roppongi Hills. 【サンプルデータ】カタログ表示用。公式の販売情報ではありません。",
+      "location": "東京都港区六本木6-10-1",
+      "startDate": "2026-09-17T01:00:00.000Z",
+      "endDate": "2027-01-04T10:00:00.000Z",
+      "status": "published",
+      "formId": "form_basic",
+      "region": "TOKYO",
+      "timezone": "Asia/Tokyo",
+      "source": "sample",
+      "sourceUrl": "https://www.mori.art.museum/",
+      "externalId": "sample-mori-2026",
+      "contentHash": "sample:mori:2026-09",
+      "tags": [
+        "contemporary",
+        "mori",
+        "tokyo",
+        "sample"
+      ],
+      "priceText": "¥2,000",
+      "lastSeenAt": "2026-10-19T00:00:00.000Z",
+      "data": {
+        "sample": true,
+        "kind": "exhibition",
+        "image": "https://picsum.photos/seed/event_sample_mori/1200/640",
+        "category": "現代美術",
+        "tags": [
+          "contemporary",
+          "mori",
+          "tokyo",
+          "sample"
+        ],
+        "organizer": "森美術館（サンプル）",
+        "content": [
+          {
+            "type": "text",
+            "text_data": "【サンプルデータ】カタログ表示用。公式の販売情報ではありません。"
+          }
+        ],
+        "faq": [],
+        "sessions": [],
+        "speakers": [],
+        "venue": {
+          "transport": "六本木駅 出口 1C、東京メトロ日比谷線。",
+          "mapQuery": "森美術館",
+          "lat": 35.6606,
+          "lng": 139.7292
         }
       }
     }

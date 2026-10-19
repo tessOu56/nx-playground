@@ -27,12 +27,14 @@ export interface LiffUserInfo {
   accessToken: string | null;
   decodedIdToken: {
     sub: string; // LINE ID
-    name: string;
+    name?: string;
     picture?: string;
+    email?: string;
     iss?: string;
     aud?: string;
     exp?: number;
     iat?: number;
+    nonce?: string;
   } | null;
   lineId: string | null;
 }

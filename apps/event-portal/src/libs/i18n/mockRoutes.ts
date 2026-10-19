@@ -395,6 +395,9 @@ export const getPageInfoByPath = (
   } else if (cleanPath.startsWith('en/')) {
     pathWithoutLocale = cleanPath.slice(3);
     detectedLocale = 'en';
+  } else if (cleanPath.startsWith('ja/')) {
+    pathWithoutLocale = cleanPath.slice(3);
+    detectedLocale = 'ja';
   }
 
   // 處理動態路由
@@ -412,7 +415,7 @@ export const getPageInfoByPath = (
   ]) {
     // 從 pageInfo.path 中移除 locale 前綴進行比較
     const pagePathWithoutLocale = pageInfo.path
-      .replace(/^\/(zh-TW|en)\//, '/')
+      .replace(/^\/(zh-TW|en|ja)\//, '/')
       .replace(/^\//, '')
       .replace(/\/\[.*?\]/g, '/[id]')
       .replace(/\/$/, '');

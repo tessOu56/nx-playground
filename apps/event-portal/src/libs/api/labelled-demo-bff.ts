@@ -137,6 +137,7 @@ export async function handleLabelledDemoRequest(
         200,
         demoStore.listEvents({
           status: url.searchParams.get('status') ?? undefined,
+          region: url.searchParams.get('region') ?? undefined,
           page: url.searchParams.get('page')
             ? Number(url.searchParams.get('page'))
             : undefined,

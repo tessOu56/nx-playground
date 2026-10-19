@@ -56,6 +56,7 @@ export class EventStackStore {
 
   listEvents(query: {
     status?: string;
+    region?: string;
     page?: number;
     limit?: number;
   }): EventListResponse {
@@ -66,6 +67,9 @@ export class EventStackStore {
     );
     if (query.status) {
       items = items.filter(event => event.status === query.status);
+    }
+    if (query.region) {
+      items = items.filter(event => event.region === query.region);
     }
     const total = items.length;
     const start = (page - 1) * limit;
@@ -95,6 +99,15 @@ export class EventStackStore {
       status: input.status ?? 'draft',
       formId: input.formId,
       data: input.data,
+      region: input.region,
+      timezone: input.timezone,
+      source: input.source,
+      sourceUrl: input.sourceUrl,
+      externalId: input.externalId,
+      contentHash: input.contentHash,
+      tags: input.tags ?? [],
+      priceText: input.priceText,
+      lastSeenAt: input.lastSeenAt,
       createdAt: stamped,
       updatedAt: stamped,
     };

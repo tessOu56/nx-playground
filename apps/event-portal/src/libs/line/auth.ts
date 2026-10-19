@@ -15,6 +15,7 @@ import {
   markCallbackProcessed,
   isCallbackProcessed,
 } from './storage';
+import { verifyLiffIdToken } from './verify-id-token-client';
 
 // 檢查是否在 LIFF 應用內。必須呼叫 isInClient()；typeof 永遠是非空字串。
 export const isLiffEnvironment = (): boolean => {
@@ -104,8 +105,10 @@ export const getFullUserInfoFromLiff = async () => {
       liff.getAccessToken(),
     ]);
 
-    const decodedIdToken = idToken ? decodeIdToken(idToken) : null;
-    const lineId = decodedIdToken?.sub ?? null;
+    if (!idToken) return null;
+    const decodedIdToken = await verifyLiffIdToken(idToken);
+    if (!decodedIdToken) return null;
+    const lineId = decodedIdToken.sub;
 
     const userInfo = {
       profile,
@@ -251,13 +254,3 @@ export const handleLineCallback = async () => {
   }
 };
 
-// 輔助函數：解析 ID Token
-function decodeIdToken(idToken: string) {
-  try {
-    const [, payload] = idToken.split('.');
-    if (!payload) return null;
-    return JSON.parse(atob(payload));
-  } catch (_error) {
-    return null;
-  }
-}

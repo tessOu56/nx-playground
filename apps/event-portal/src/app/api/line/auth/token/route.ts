@@ -1,5 +1,10 @@
 import { type NextRequest, NextResponse } from 'next/server';
 
+import {
+  LineIdTokenVerificationError,
+  verifyLineIdToken,
+} from '../../../../../libs/line/verify-id-token';
+
 export const dynamic = 'force-dynamic';
 
 const LEFTOVER_CHANNEL_IDS = new Set(['2007835339']);
@@ -20,30 +25,19 @@ function ownerSecret(value: string | undefined): string {
   return trimmed;
 }
 
-const LINE_OAUTH_CONFIG = {
-  clientId: ownerChannelId(process.env.NEXT_PUBLIC_LINE_CLIENT_ID),
-  clientSecret: ownerSecret(process.env.LINE_CLIENT_SECRET),
-  redirectUri: process.env.NEXT_PUBLIC_LINE_REDIRECT_URI?.trim() ?? '',
-  tokenEndpoint: 'https://api.line.me/oauth2/v2.1/token',
-  profileEndpoint: 'https://api.line.me/v2/profile',
-};
-
-// 驗證 JWT ID Token 的函數
-function decodeIdToken(idToken: string) {
-  try {
-    // 簡單的 base64 解碼（實際生產環境應使用 JWT 庫驗證簽名）
-    const payload = idToken.split('.')[1];
-    if (!payload) return null;
-
-    const decoded = JSON.parse(Buffer.from(payload, 'base64').toString());
-    return decoded;
-  } catch (error) {
-    return null;
-  }
+function lineOauthConfig() {
+  return {
+    clientId: ownerChannelId(process.env.NEXT_PUBLIC_LINE_CLIENT_ID),
+    clientSecret: ownerSecret(process.env.LINE_CLIENT_SECRET),
+    redirectUri: process.env.NEXT_PUBLIC_LINE_REDIRECT_URI?.trim() ?? '',
+    tokenEndpoint: 'https://api.line.me/oauth2/v2.1/token',
+    profileEndpoint: 'https://api.line.me/v2/profile',
+  };
 }
 
 export async function POST(request: NextRequest) {
   try {
+    const LINE_OAUTH_CONFIG = lineOauthConfig();
     // 驗證環境變數
     if (
       !LINE_OAUTH_CONFIG.clientId ||
@@ -70,14 +64,15 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // 準備 token 交換請求
-    const tokenRequestBody = new URLSearchParams({
-      grant_type: 'authorization_code',
-      code,
-      redirect_uri: redirect_uri || LINE_OAUTH_CONFIG.redirectUri,
-      client_id: LINE_OAUTH_CONFIG.clientId,
-      client_secret: LINE_OAUTH_CONFIG.clientSecret,
-    });
+    const tokenRequestBody = new URLSearchParams();
+    tokenRequestBody.set('grant_type', 'authorization_code');
+    tokenRequestBody.set('code', code);
+    tokenRequestBody.set(
+      'redirect_uri',
+      redirect_uri ?? LINE_OAUTH_CONFIG.redirectUri
+    );
+    tokenRequestBody.set('client_id', LINE_OAUTH_CONFIG.clientId);
+    tokenRequestBody.set('client_secret', LINE_OAUTH_CONFIG.clientSecret);
 
     // 交換 authorization code 獲取 access token
     const tokenResponse = await fetch(LINE_OAUTH_CONFIG.tokenEndpoint, {
@@ -96,7 +91,7 @@ export async function POST(request: NextRequest) {
       try {
         const errorData = JSON.parse(errorText);
         errorDetails =
-          errorData.error_description || errorData.error || errorText;
+          errorData.error_description ?? errorData.error ?? errorText;
       } catch {
         errorDetails = errorText;
       }
@@ -135,11 +130,33 @@ export async function POST(request: NextRequest) {
 
     const profile = await profileResponse.json();
 
-    // 解析 ID token（如果有的話）
-    const decodedIdToken = tokenData.id_token
-      ? decodeIdToken(tokenData.id_token)
-      : null;
-    const lineId = decodedIdToken?.sub || profile.userId || null;
+    if (typeof tokenData.id_token !== 'string' || !tokenData.id_token.trim()) {
+      return NextResponse.json(
+        { error: 'Missing ID token from LINE token endpoint' },
+        { status: 401 }
+      );
+    }
+
+    let decodedIdToken;
+    try {
+      decodedIdToken = await verifyLineIdToken({
+        idToken: tokenData.id_token,
+        clientId: LINE_OAUTH_CONFIG.clientId,
+      });
+    } catch (error) {
+      if (error instanceof LineIdTokenVerificationError) {
+        return NextResponse.json(
+          { error: error.message, code: error.code },
+          { status: error.status }
+        );
+      }
+      return NextResponse.json(
+        { error: 'ID token verification failed' },
+        { status: 401 }
+      );
+    }
+
+    const lineId = decodedIdToken.sub;
 
     // 構建完整的用戶信息
     const userInfo = {

@@ -7,6 +7,8 @@
  * OpenAPI spec version: 1.0.0
  */
 import type { EventStatus } from './eventStatus';
+import type { EventData } from './eventData';
+import type { ExhibitionRegion } from './exhibitionRegion';
 
 export interface Event {
   id: string;
@@ -18,8 +20,20 @@ export interface Event {
   maxAttendees?: number;
   status: EventStatus;
   formId?: string;
-  /** Catalog extras. */
-  data?: Record<string, unknown>;
+  /** Catalog extras. kind is talk | auction | line_commerce | exhibition; auction may include plinthLotUrl (Plinth deep link). Sessions, tickets, content, speakers, venue. Mock demo fills this; Nest persists JSON. */
+  data?: EventData;
+  region?: ExhibitionRegion;
+  /** IANA timezone (e.g. Asia/Taipei, Asia/Tokyo) */
+  timezone?: string;
+  source?: string;
+  sourceUrl?: string;
+  /** Unique together with source */
+  externalId?: string;
+  contentHash?: string;
+  tags?: string[];
+  /** Free-text price (currency varies by region) */
+  priceText?: string;
+  lastSeenAt?: string;
   createdAt: string;
   updatedAt: string;
 }

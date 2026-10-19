@@ -1055,9 +1055,12 @@ importers:
       '@typespec/http':
         specifier: ^1.13.0
         version: 1.13.0(@typespec/compiler@1.13.0(@types/node@22.18.8))
+      '@typespec/openapi':
+        specifier: 1.13.0
+        version: 1.13.0(@typespec/compiler@1.13.0(@types/node@22.18.8))(@typespec/http@1.13.0(@typespec/compiler@1.13.0(@types/node@22.18.8)))
       '@typespec/openapi3':
         specifier: ^1.13.0
-        version: 1.13.0(@typespec/compiler@1.13.0(@types/node@22.18.8))(@typespec/http@1.13.0(@typespec/compiler@1.13.0(@types/node@22.18.8)))
+        version: 1.13.0(@typespec/compiler@1.13.0(@types/node@22.18.8))(@typespec/http@1.13.0(@typespec/compiler@1.13.0(@types/node@22.18.8)))(@typespec/openapi@1.13.0(@typespec/compiler@1.13.0(@types/node@22.18.8))(@typespec/http@1.13.0(@typespec/compiler@1.13.0(@types/node@22.18.8))))
 
   libs/design-system:
     dependencies:
@@ -3959,6 +3962,7 @@ packages:
 
   '@line/liff@2.27.1':
     resolution: {integrity: sha512-8rBGOFQa+CPZkiVjddBnrzKhg6wGhty989n1d5juX47JmDAyTudHv1Br6EAoI7EncSxPcdPgYhLMXOm1yamF5Q==}
+    deprecated: This version has been deprecated because an issue with potential security implications was identified. Update to LIFF v2.31.1 immediately. See https://developers.line.biz/en/docs/liff/release-notes/#liff-v2-31-1
 
   '@listr2/prompt-adapter-inquirer@3.0.1':
     resolution: {integrity: sha512-3XFmGwm3u6ioREG+ynAQB7FoxfajgQnMhIu8wC5eo/Lsih4aKDg0VuIMGaOsYn7hJSJagSeaD4K8yfpkEoDEmA==}
@@ -7307,6 +7311,13 @@ packages:
         optional: true
       '@typespec/xml':
         optional: true
+
+  '@typespec/openapi@1.13.0':
+    resolution: {integrity: sha512-omPc9n+LM2WvjYwnIf31RCxmG17fFUOVLBRsWg4T1mbcsNCj4grnNP7Lwt+irIZCiKtmLKxq3ViE7jYixCkZ3g==}
+    engines: {node: '>=22.0.0'}
+    peerDependencies:
+      '@typespec/compiler': ^1.13.0
+      '@typespec/http': ^1.13.0
 
   '@ungap/structured-clone@1.3.0':
     resolution: {integrity: sha512-WmoN8qaIAo7WTYWbAZuG8PYEhn5fkz7dZrqTBZ7dtt//lL2Gwms1IcnQ5yHqjDfX8Ft5j4YzDM23f87zBfDe9g==}
@@ -26154,7 +26165,7 @@ snapshots:
     dependencies:
       '@typespec/compiler': 1.13.0(@types/node@22.18.8)
 
-  '@typespec/openapi3@1.13.0(@typespec/compiler@1.13.0(@types/node@22.18.8))(@typespec/http@1.13.0(@typespec/compiler@1.13.0(@types/node@22.18.8)))':
+  '@typespec/openapi3@1.13.0(@typespec/compiler@1.13.0(@types/node@22.18.8))(@typespec/http@1.13.0(@typespec/compiler@1.13.0(@types/node@22.18.8)))(@typespec/openapi@1.13.0(@typespec/compiler@1.13.0(@types/node@22.18.8))(@typespec/http@1.13.0(@typespec/compiler@1.13.0(@types/node@22.18.8))))':
     dependencies:
       '@scalar/json-magic': 0.12.17
       '@scalar/openapi-parser': 0.28.8
@@ -26162,7 +26173,13 @@ snapshots:
       '@typespec/asset-emitter': 0.79.1(@typespec/compiler@1.13.0(@types/node@22.18.8))
       '@typespec/compiler': 1.13.0(@types/node@22.18.8)
       '@typespec/http': 1.13.0(@typespec/compiler@1.13.0(@types/node@22.18.8))
+      '@typespec/openapi': 1.13.0(@typespec/compiler@1.13.0(@types/node@22.18.8))(@typespec/http@1.13.0(@typespec/compiler@1.13.0(@types/node@22.18.8)))
       yaml: 2.9.0
+
+  '@typespec/openapi@1.13.0(@typespec/compiler@1.13.0(@types/node@22.18.8))(@typespec/http@1.13.0(@typespec/compiler@1.13.0(@types/node@22.18.8)))':
+    dependencies:
+      '@typespec/compiler': 1.13.0(@types/node@22.18.8)
+      '@typespec/http': 1.13.0(@typespec/compiler@1.13.0(@types/node@22.18.8))
 
   '@ungap/structured-clone@1.3.0': {}
 

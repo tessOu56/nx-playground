@@ -79,6 +79,29 @@ describe('event-stack fixtures', () => {
     assert.equal(fetched?.userId, 'user_demo');
   });
 
+  it('filters the catalog by exhibition region', () => {
+    const store = new EventStackStore();
+    const tokyo = store.listEvents({ region: 'TOKYO', limit: 50 });
+    assert.ok(tokyo.items.length >= 2);
+    assert.ok(tokyo.items.every(event => event.region === 'TOKYO'));
+    assert.ok(tokyo.items.some(event => event.id === 'event_sample_nact'));
+    const taipei = store.listEvents({ region: 'TAIPEI', status: 'published', limit: 50 });
+    assert.ok(taipei.items.some(event => event.id === 'event_sample_tfam'));
+    assert.ok(taipei.items.every(event => event.region === 'TAIPEI'));
+  });
+
+  it('sample exhibitions are labelled as sample data', () => {
+    const samples = loadFixtureEvents().filter(event =>
+      event.id.startsWith('event_sample_')
+    );
+    assert.equal(samples.length, 4);
+    for (const event of samples) {
+      assert.match(event.title, /\[Sample\]/);
+      assert.equal(event.source, 'sample');
+      assert.ok(event.timezone === 'Asia/Taipei' || event.timezone === 'Asia/Tokyo');
+    }
+  });
+
   it('published catalog events carry sessions and prices in data', () => {
     const react = loadFixtureEvents().find(event => event.id === 'event_react19');
     const catalog = react?.data as { sessions?: { tickets?: { price?: number }[] }[] };

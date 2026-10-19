@@ -6,9 +6,11 @@
 
  * OpenAPI spec version: 1.0.0
  */
+import type { ExhibitionRegion } from './exhibitionRegion';
 
 export type ListEventsParams = {
   status?: string;
+  region?: ExhibitionRegion;
   page?: number;
   limit?: number;
 };

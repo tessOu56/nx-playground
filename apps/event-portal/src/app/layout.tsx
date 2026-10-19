@@ -71,7 +71,10 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function RootLayout({ children }: { children: ReactNode }) {
   const locale = (await cookies()).get('NEXT_LOCALE')?.value ?? 'zh-TW';
   return (
-    <html lang={locale === 'en' ? 'en' : 'zh-TW'} data-app='nx-event'>
+    <html
+      lang={locale === 'en' ? 'en' : locale === 'ja' ? 'ja' : 'zh-TW'}
+      data-app='nx-event'
+    >
       <head>
         <link rel='icon' href='/icon.svg' type='image/svg+xml' />
         <link rel='apple-touch-icon' href='/apple-icon.svg' />

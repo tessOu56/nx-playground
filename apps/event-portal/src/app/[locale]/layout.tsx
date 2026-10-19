@@ -5,12 +5,11 @@ import { getMessages } from 'next-intl/server';
 import { EventsSidebar, ToastProvider } from '@/components';
 import { PublicSiteHeader } from '@/components/header/PublicSiteHeader';
 import { LiffProvider, ErrorBoundary, QueryProvider } from '@/libs';
+import { SUPPORTED_LOCALES } from '@/libs/constants';
 import { demoCopy } from '@/libs/i18n/demo-copy';
 
-const locales = ['zh-TW', 'en'] as const;
-
 export function generateStaticParams() {
-  return locales.map(locale => ({ locale }));
+  return SUPPORTED_LOCALES.map(locale => ({ locale }));
 }
 
 export default async function LocaleLayout({
@@ -22,7 +21,7 @@ export default async function LocaleLayout({
 }) {
   const { locale } = await params;
 
-  if (!locales.includes(locale as (typeof locales)[number])) {
+  if (!SUPPORTED_LOCALES.includes(locale as (typeof SUPPORTED_LOCALES)[number])) {
     notFound();
   }
 
@@ -34,7 +33,7 @@ export default async function LocaleLayout({
     <NextIntlClientProvider
       locale={locale}
       messages={messages}
-      timeZone='Asia/Taipei'
+      timeZone={locale === 'ja' ? 'Asia/Tokyo' : 'Asia/Taipei'}
     >
       <QueryProvider>
         <ErrorBoundary>

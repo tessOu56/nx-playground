@@ -8,11 +8,12 @@
 export const LOCALE = {
   EN: 'en',
   ZH_TW: 'zh-TW',
+  JA: 'ja',
 } as const;
 
 export type Locale = (typeof LOCALE)[keyof typeof LOCALE];
 
-export const SUPPORTED_LOCALES: Locale[] = [LOCALE.EN, LOCALE.ZH_TW];
+export const SUPPORTED_LOCALES: Locale[] = [LOCALE.EN, LOCALE.ZH_TW, LOCALE.JA];
 
 /**
  * Theme modes
