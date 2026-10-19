@@ -1,6 +1,7 @@
 import Link from 'next/link';
 
 import { NoEvents } from '@/app/[locale]/vendors/[vendorId]/components/events/NoEvents';
+import { Image } from '@/components';
 import { eventListKind, regionTimeZone } from '@/libs/api/event-stack-map';
 import { catalogPriceLabel, demoCopy } from '@/libs/i18n/demo-copy';
 import type { Event } from '@/types';
@@ -88,10 +89,13 @@ export function EventStackCards({
               className='catalog-card group block h-full overflow-hidden rounded-xl border border-gray-200 bg-white text-left shadow-sm transition-[box-shadow,transform] duration-[var(--motion-duration-fast,150ms)] hover:shadow-md focus-visible:shadow-md'
             >
               <div className='aspect-[16/9] overflow-hidden bg-gray-100'>
-                <img
+                <Image
                   src={event.image}
                   alt={event.title}
+                  width={640}
+                  height={360}
                   className='h-full w-full object-cover'
+                  fallback='/placeholder-event.jpg'
                 />
               </div>
               <div className='flex h-[calc(100%-56.25%)] flex-col p-4'>
