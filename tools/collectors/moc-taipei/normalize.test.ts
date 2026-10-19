@@ -92,6 +92,19 @@ describe('httpsImageUrl', () => {
     assert.equal(httpsImageUrl('http://www.nmns.edu.tw/img.jpg'), undefined);
     assert.equal(httpsImageUrl(''), undefined);
   });
+
+  it('rejects localhost, link-local metadata, and credentialed URLs', () => {
+    assert.equal(httpsImageUrl('https://127.0.0.1/img.jpg'), undefined);
+    assert.equal(
+      httpsImageUrl('https://169.254.169.254/latest/meta-data/'),
+      undefined
+    );
+    assert.equal(
+      httpsImageUrl('https://user:pass@cloud.culture.tw/e_new_upload/x.jpg'),
+      undefined
+    );
+    assert.equal(httpsImageUrl('https://localhost/img.jpg'), undefined);
+  });
 });
 
 describe('parseTaipeiDateTime', () => {

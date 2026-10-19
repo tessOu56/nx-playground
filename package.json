@@ -26,7 +26,7 @@
     "dev:api": "nx serve @nx-playground/api-server",
     "dev:api-mock": "nx serve @nx-playground/api-mock",
     "collect:taipei": "pnpm exec tsx tools/collectors/moc-taipei/run.ts",
-    "test:line-bot": "node --import tsx --test apps/event-portal/src/libs/line/bot/*.test.ts apps/event-portal/src/app/api/line/webhook/route.test.ts tools/collectors/moc-taipei/*.test.ts",
+    "test:line-bot": "node --import tsx --test apps/event-portal/src/libs/line/*.test.ts apps/event-portal/src/libs/line/bot/*.test.ts apps/event-portal/src/app/api/line/webhook/route.test.ts apps/event-portal/src/app/api/line/auth/token/route.test.ts tools/collectors/moc-taipei/*.test.ts",
     "build:safe": "NX_CLOUD_NO_TIMEOUTS=true nx run-many -t build",
     "build:affected": "nx affected --target=build",
     "test": "jest",
@@ -139,7 +139,7 @@
     "@vueuse/core": "^13.9.0",
     "@vueuse/motion": "^3.0.3",
     "@xyflow/react": "^12.11.0",
-    "axios": "^1.11.0",
+    "axios": "1.20.0",
     "big.js": "7.0.1",
     "buffer": "^6.0.3",
     "chart.js": "^4.5.0",
@@ -188,7 +188,7 @@
     "sharp": "0.35.5",
     "sonner": "^2.0.1",
     "style-dictionary": "5.0.1",
-    "swiper": "^12.0.1",
+    "swiper": "12.1.2",
     "tailwind-merge": "3.3.1",
     "tailwindcss-animate": "1.0.7",
     "three": "^0.180.0",
@@ -208,7 +208,9 @@
       "next": "15.5.28",
       "sharp": "0.35.5",
       "react-hook-form": "7.62.0",
-      "@is_tess/tokens": "^0.1.2"
+      "@is_tess/tokens": "^0.1.2",
+      "axios": "1.20.0",
+      "swiper": "12.1.2"
     }
   },
   "devDependencies": {

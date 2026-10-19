@@ -1,5 +1,8 @@
 import { type NextRequest, NextResponse } from 'next/server';
 
+import { getLineRedirectUri } from '../../../../../libs/line/constants';
+import { isLinePkceVerifier } from '../../../../../libs/line/pkce';
+import { isAllowedPortalOrigin } from '../../../../../libs/line/request-origin';
 import {
   LineIdTokenVerificationError,
   verifyLineIdToken,
@@ -25,11 +28,15 @@ function ownerSecret(value: string | undefined): string {
   return trimmed;
 }
 
-function lineOauthConfig() {
+function lineOauthConfig(request: NextRequest) {
   return {
     clientId: ownerChannelId(process.env.NEXT_PUBLIC_LINE_CLIENT_ID),
     clientSecret: ownerSecret(process.env.LINE_CLIENT_SECRET),
-    redirectUri: process.env.NEXT_PUBLIC_LINE_REDIRECT_URI?.trim() ?? '',
+    redirectUri: getLineRedirectUri({
+      protocol: request.nextUrl.protocol,
+      hostname: request.nextUrl.hostname,
+      origin: request.nextUrl.origin,
+    }),
     tokenEndpoint: 'https://api.line.me/oauth2/v2.1/token',
     profileEndpoint: 'https://api.line.me/v2/profile',
   };
@@ -37,8 +44,11 @@ function lineOauthConfig() {
 
 export async function POST(request: NextRequest) {
   try {
-    const LINE_OAUTH_CONFIG = lineOauthConfig();
-    // 驗證環境變數
+    if (!isAllowedPortalOrigin(request)) {
+      return NextResponse.json({ error: 'Invalid origin' }, { status: 403 });
+    }
+
+    const LINE_OAUTH_CONFIG = lineOauthConfig(request);
     if (
       !LINE_OAUTH_CONFIG.clientId ||
       !LINE_OAUTH_CONFIG.clientSecret ||
@@ -54,9 +64,18 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // 解析請求體
-    const { code, redirect_uri } = await request.json();
+    let body: {
+      code?: unknown;
+      redirect_uri?: unknown;
+      code_verifier?: unknown;
+    };
+    try {
+      body = await request.json();
+    } catch {
+      return NextResponse.json({ error: 'Invalid JSON body' }, { status: 400 });
+    }
 
+    const code = typeof body.code === 'string' ? body.code.trim() : '';
     if (!code) {
       return NextResponse.json(
         { error: 'Missing authorization code' },
@@ -64,66 +83,49 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    if (!isLinePkceVerifier(body.code_verifier)) {
+      return NextResponse.json(
+        { error: 'Missing PKCE verifier' },
+        { status: 400 }
+      );
+    }
+
     const tokenRequestBody = new URLSearchParams();
     tokenRequestBody.set('grant_type', 'authorization_code');
     tokenRequestBody.set('code', code);
-    tokenRequestBody.set(
-      'redirect_uri',
-      redirect_uri ?? LINE_OAUTH_CONFIG.redirectUri
-    );
+    tokenRequestBody.set('redirect_uri', LINE_OAUTH_CONFIG.redirectUri);
     tokenRequestBody.set('client_id', LINE_OAUTH_CONFIG.clientId);
     tokenRequestBody.set('client_secret', LINE_OAUTH_CONFIG.clientSecret);
+    tokenRequestBody.set('code_verifier', body.code_verifier);
 
-    // 交換 authorization code 獲取 access token
     const tokenResponse = await fetch(LINE_OAUTH_CONFIG.tokenEndpoint, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
       },
       body: tokenRequestBody.toString(),
+      signal: AbortSignal.timeout(10_000),
     });
 
     if (!tokenResponse.ok) {
-      const errorText = await tokenResponse.text();
-
-      // 嘗試解析錯誤響應
-      let errorDetails = 'Unknown error';
-      try {
-        const errorData = JSON.parse(errorText);
-        errorDetails =
-          errorData.error_description ?? errorData.error ?? errorText;
-      } catch {
-        errorDetails = errorText;
-      }
-
       return NextResponse.json(
-        {
-          error: 'Failed to exchange authorization code for token',
-          status: tokenResponse.status,
-          details: errorDetails,
-        },
+        { error: 'Failed to exchange authorization code for token' },
         { status: 400 }
       );
     }
 
     const tokenData = await tokenResponse.json();
 
-    // 使用 access token 獲取用戶資料
     const profileResponse = await fetch(LINE_OAUTH_CONFIG.profileEndpoint, {
       headers: {
         Authorization: `Bearer ${tokenData.access_token}`,
       },
+      signal: AbortSignal.timeout(10_000),
     });
 
     if (!profileResponse.ok) {
-      const profileErrorText = await profileResponse.text();
-
       return NextResponse.json(
-        {
-          error: 'Failed to get user profile',
-          status: profileResponse.status,
-          details: profileErrorText,
-        },
+        { error: 'Failed to get user profile' },
         { status: 400 }
       );
     }
@@ -158,8 +160,7 @@ export async function POST(request: NextRequest) {
 
     const lineId = decodedIdToken.sub;
 
-    // 構建完整的用戶信息
-    const userInfo = {
+    return NextResponse.json({
       profile,
       idToken: tokenData.id_token,
       accessToken: tokenData.access_token,
@@ -167,16 +168,10 @@ export async function POST(request: NextRequest) {
       lineId,
       tokenType: tokenData.token_type,
       expiresIn: tokenData.expires_in,
-      refreshToken: tokenData.refresh_token,
-    };
-
-    return NextResponse.json(userInfo);
-  } catch (error) {
+    });
+  } catch {
     return NextResponse.json(
-      {
-        error: 'Internal server error',
-        details: error instanceof Error ? error.message : 'Unknown error',
-      },
+      { error: 'Internal server error' },
       { status: 500 }
     );
   }

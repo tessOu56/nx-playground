@@ -59,11 +59,28 @@ function asTags(value: unknown): string[] {
   return [];
 }
 
+function publicHttpsImage(value: unknown): string | null {
+  if (typeof value !== 'string' || !value.startsWith('https://')) return null;
+  try {
+    const url = new URL(value);
+    if (url.username || url.password) return null;
+    const host = url.hostname.toLowerCase();
+    if (
+      host === 'localhost' ||
+      host.endsWith('.localhost') ||
+      /^\d{1,3}(?:\.\d{1,3}){3}$/.test(host) ||
+      host.includes(':')
+    ) {
+      return null;
+    }
+    return url.toString();
+  } catch {
+    return null;
+  }
+}
+
 function mapRow(row: Record<string, unknown>): CatalogEvent {
-  const image =
-    typeof row.imageUrl === 'string' && row.imageUrl.startsWith('https://')
-      ? row.imageUrl
-      : null;
+  const image = publicHttpsImage(row.imageUrl);
   return {
     id: String(row.id),
     title: String(row.title),

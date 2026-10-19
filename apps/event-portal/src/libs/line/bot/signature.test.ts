@@ -37,4 +37,11 @@ describe('verifyLineSignature', () => {
     const signature = lineSignatureHeader(BODY, SECRET);
     assert.equal(verifyLineSignature(BODY, signature.slice(0, 8), SECRET), false);
   });
+
+  it('accepts the same HMAC over raw bytes as over the UTF-8 string', () => {
+    const raw = Buffer.from(BODY, 'utf8');
+    const signature = lineSignatureHeader(raw, SECRET);
+    assert.equal(verifyLineSignature(raw, signature, SECRET), true);
+    assert.equal(verifyLineSignature(BODY, signature, SECRET), true);
+  });
 });

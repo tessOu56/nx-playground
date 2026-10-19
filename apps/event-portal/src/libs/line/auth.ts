@@ -8,9 +8,11 @@ import {
   getLineRedirectUri,
   hasOwnerLineLogin,
 } from './constants';
+import { createLineLoginPkce } from './pkce';
 import {
   saveLineLoginState,
   getLineLoginState,
+  getLineLoginCodeVerifier,
   clearLineLoginState,
   markCallbackProcessed,
   isCallbackProcessed,
@@ -43,18 +45,11 @@ export const isLineEnvironment = (): boolean => {
   return hasLineParams || isLineApp;
 };
 
-// 獲取 LINE 登入 URL（用於一般瀏覽器）
-export const getLineLoginUrl = (): string => {
+export const getLineLoginUrl = async (): Promise<string> => {
   if (typeof window === 'undefined' || !hasOwnerLineLogin()) return '';
 
-  // 生成 state
-  const state =
-    Math.random().toString(36).substring(2, 15) +
-    Math.random().toString(36).substring(2, 15) +
-    Date.now().toString(36);
-
-  // 保存 state 到 localStorage
-  saveLineLoginState(state);
+  const { state, codeVerifier, codeChallenge } = await createLineLoginPkce();
+  saveLineLoginState(state, codeVerifier);
 
   const params = new URLSearchParams({
     response_type: 'code',
@@ -62,13 +57,14 @@ export const getLineLoginUrl = (): string => {
     redirect_uri: getLineRedirectUri(),
     state,
     scope: 'profile openid',
+    code_challenge: codeChallenge,
+    code_challenge_method: 'S256',
   });
 
   return `${LINE_CONSTANTS.SHARE_URLS.OAUTH_AUTHORIZE}?${params.toString()}`;
 };
 
-// 統一的 LINE 登入函數
-export const lineLogin = (): void => {
+export const lineLogin = async (): Promise<void> => {
   if (typeof window === 'undefined') return;
 
   if (isLiffEnvironment()) {
@@ -76,7 +72,7 @@ export const lineLogin = (): void => {
     return;
   }
 
-  const loginUrl = getLineLoginUrl();
+  const loginUrl = await getLineLoginUrl();
   if (!loginUrl) {
     throw new Error(LINE_LOGIN_NOT_CONFIGURED);
   }
@@ -217,12 +213,17 @@ export const handleLineCallback = async () => {
       return await getFullUserInfoFromLiff();
     }
 
+    const codeVerifier = getLineLoginCodeVerifier();
+    if (!codeVerifier) {
+      throw new Error('State 驗證失敗');
+    }
+
     const tokenResponse = await fetch('/api/line/auth/token', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         code,
-        redirect_uri: getLineRedirectUri(),
+        code_verifier: codeVerifier,
       }),
     });
 
@@ -239,7 +240,6 @@ export const handleLineCallback = async () => {
       lineId: tokenData.lineId,
       tokenType: tokenData.tokenType,
       expiresIn: tokenData.expiresIn,
-      refreshToken: tokenData.refreshToken,
     };
 
     localStorage.setItem(

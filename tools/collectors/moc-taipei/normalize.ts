@@ -87,29 +87,66 @@ export function summarize(html: string, sourceUrl: string): string {
   return `${clipped} 詳情：${sourceUrl}`;
 }
 
-export function httpsImageUrl(raw: unknown): string | undefined {
-  let value = asText(raw);
-  if (!value) return undefined;
-  value = value.replace(/^https:\/\/cloud\.culture\.twhttps:\/\//i, 'https://');
+function isBlockedHostname(hostname: string): boolean {
+  const host = hostname.replace(/^\[|\]$/g, '').toLowerCase();
+  if (
+    host === 'localhost' ||
+    host.endsWith('.localhost') ||
+    host.endsWith('.local') ||
+    host.endsWith('.internal') ||
+    host.endsWith('.arpa')
+  ) {
+    return true;
+  }
+
+  const ipv4 = /^(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})$/.exec(host);
+  if (ipv4) {
+    const [a, b] = [Number(ipv4[1]), Number(ipv4[2])];
+    if (a === 0 || a === 10 || a === 127) return true;
+    if (a === 169 && b === 254) return true;
+    if (a === 172 && b >= 16 && b <= 31) return true;
+    if (a === 192 && b === 168) return true;
+    if (a === 100 && b >= 64 && b <= 127) return true;
+    if (a === 198 && (b === 18 || b === 19)) return true;
+  }
+
+  if (host.includes(':')) {
+    if (host === '::1' || host === '::') return true;
+    if (
+      host.startsWith('fe80:') ||
+      host.startsWith('fc') ||
+      host.startsWith('fd')
+    ) {
+      return true;
+    }
+  }
+  return false;
+}
+
+function publicWebUrl(
+  raw: string,
+  protocols: Set<string>
+): string | undefined {
   try {
-    const url = new URL(value);
-    if (url.protocol !== 'https:') return undefined;
+    const url = new URL(raw);
+    if (!protocols.has(url.protocol)) return undefined;
+    if (url.username || url.password) return undefined;
+    if (isBlockedHostname(url.hostname)) return undefined;
     return url.toString();
   } catch {
     return undefined;
   }
 }
 
-function httpUrl(raw: unknown): string | undefined {
-  const value = asText(raw);
+export function httpsImageUrl(raw: unknown): string | undefined {
+  let value = asText(raw);
   if (!value) return undefined;
-  try {
-    const url = new URL(value);
-    if (url.protocol !== 'http:' && url.protocol !== 'https:') return undefined;
-    return url.toString();
-  } catch {
-    return undefined;
-  }
+  value = value.replace(/^https:\/\/cloud\.culture\.twhttps:\/\//i, 'https://');
+  return publicWebUrl(value, new Set(['https:']));
+}
+
+function httpUrl(raw: unknown): string | undefined {
+  return publicWebUrl(asText(raw), new Set(['http:', 'https:']));
 }
 
 export function pickSourceUrl(record: MocRecord): string {

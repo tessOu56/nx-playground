@@ -8,6 +8,8 @@ export const dynamic = 'force-dynamic';
 export const maxDuration = 10;
 
 const UNAUTHORIZED = 'Invalid LINE signature';
+/** LINE webhook JSON is small; cap before HMAC to bound memory. */
+export const MAX_LINE_WEBHOOK_BYTES = 256 * 1024;
 
 export async function GET() {
   return new Response('OK', { status: 200 });
@@ -16,15 +18,20 @@ export async function GET() {
 export async function POST(request: NextRequest) {
   const secret = process.env.LINE_CHANNEL_SECRET?.trim() ?? '';
   if (!secret) {
-    return new Response('LINE_CHANNEL_SECRET is not configured', { status: 500 });
+    return new Response('Webhook is not configured', { status: 500 });
   }
 
-  const rawBody = await request.text();
+  const rawBuffer = Buffer.from(await request.arrayBuffer());
+  if (rawBuffer.byteLength > MAX_LINE_WEBHOOK_BYTES) {
+    return new Response('Payload too large', { status: 413 });
+  }
+
   const signature = request.headers.get('x-line-signature');
-  if (!verifyLineSignature(rawBody, signature, secret)) {
+  if (!verifyLineSignature(rawBuffer, signature, secret)) {
     return new Response(UNAUTHORIZED, { status: 401 });
   }
 
+  const rawBody = rawBuffer.toString('utf8');
   try {
     after(() => handleLineWebhookBody(rawBody));
   } catch {

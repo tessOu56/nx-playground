@@ -38,4 +38,34 @@ describe('searchCatalog', () => {
     assert.equal(results[0].rank, 0.9);
     assert.equal(results[0].imageUrl, 'https://example.com/a.jpg');
   });
+
+  it('drops localhost and IP image URLs from Flex cards', async () => {
+    const sql = (async () => [
+      {
+        id: 'evt1',
+        title: 'Show',
+        location: '台北市',
+        startDate: new Date('2026-10-20T00:00:00.000Z'),
+        endDate: new Date('2026-11-01T00:00:00.000Z'),
+        timezone: 'Asia/Taipei',
+        priceText: null,
+        region: 'TAIPEI',
+        sourceUrl: null,
+        tags: [],
+        imageUrl: 'https://127.0.0.1/img.jpg',
+        rank: 0.5,
+      },
+    ]) as Parameters<typeof searchCatalog>[1];
+
+    const now = new Date('2026-10-19T02:00:00.000Z');
+    const results = await searchCatalog(
+      {
+        region: 'TAIPEI',
+        keyword: '',
+        windows: { TAIPEI: defaultCatalogWindow(now) },
+      },
+      sql
+    );
+    assert.equal(results[0]?.imageUrl, null);
+  });
 });
