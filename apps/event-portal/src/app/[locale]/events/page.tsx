@@ -10,7 +10,7 @@ import { LabelledDemoBanner } from '@/components/demo/LabelledDemoBanner';
 import { LineOfficialCta } from '@/components/line/LineOfficialCta';
 import { EdsReveal } from '@/components/motion/EdsReveal';
 import { parseCatalogQuery } from '@/libs/api/catalog-query';
-import { fetchPortalEvents } from '@/libs/api/event-stack-fetch';
+import { loadPortalCatalog } from '@/libs/exhibition-search/load-portal';
 import { demoCopy } from '@/libs/i18n/demo-copy';
 
 export const dynamic = 'force-dynamic';
@@ -52,8 +52,8 @@ export default async function EventsIndexPage({
   const copy = demoCopy(locale);
   const filters = parseCatalogQuery(await searchParams);
 
-  let events: Awaited<ReturnType<typeof fetchPortalEvents>> = [];
-  let catalog: Awaited<ReturnType<typeof fetchPortalEvents>> = [];
+  let events: Awaited<ReturnType<typeof loadPortalCatalog>> = [];
+  let catalog: Awaited<ReturnType<typeof loadPortalCatalog>> = [];
   let loadError = false;
   try {
     const hasFilters =
@@ -61,8 +61,8 @@ export default async function EventsIndexPage({
       filters.city !== 'all' ||
       filters.dates !== 'all' ||
       filters.category.length > 0;
-    catalog = await fetchPortalEvents();
-    events = hasFilters ? await fetchPortalEvents(filters) : catalog;
+    catalog = await loadPortalCatalog();
+    events = hasFilters ? await loadPortalCatalog(filters) : catalog;
   } catch {
     loadError = true;
   }

@@ -5,7 +5,7 @@ import { FeaturedCities } from './components/FeaturedCities';
 import { HeroSection } from './components/HeroSection';
 import { UserFlowSection } from './components/UserFlowSection';
 
-import { fetchPortalEvents } from '@/libs/api/event-stack-fetch';
+import { loadPortalCatalog } from '@/libs/exhibition-search/load-portal';
 import { demoCopy } from '@/libs/i18n/demo-copy';
 
 export const dynamic = 'force-dynamic';
@@ -44,9 +44,9 @@ export default async function HomePage({
 }) {
   await connection();
   const { locale } = await params;
-  let events: Awaited<ReturnType<typeof fetchPortalEvents>> = [];
+  let events: Awaited<ReturnType<typeof loadPortalCatalog>> = [];
   try {
-    events = await fetchPortalEvents();
+    events = await loadPortalCatalog();
   } catch {
     events = [];
   }
