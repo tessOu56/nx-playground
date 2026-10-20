@@ -25,10 +25,12 @@ jobs:
       - name: LINE bot unit tests
         run: |
           node --import tsx --test \
+            apps/event-portal/src/libs/http/*.test.ts \
             apps/event-portal/src/libs/line/*.test.ts \
             apps/event-portal/src/libs/line/bot/*.test.ts \
             apps/event-portal/src/app/api/line/webhook/route.test.ts \
-            apps/event-portal/src/app/api/line/auth/token/route.test.ts
+            apps/event-portal/src/app/api/line/auth/token/route.test.ts \
+            apps/event-portal/src/app/api/line/auth/id-token/route.test.ts
 
       - name: Collector tests (Taipei + Tokyo)
         run: |

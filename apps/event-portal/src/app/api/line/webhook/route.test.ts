@@ -4,6 +4,7 @@ import { afterEach, describe, it } from 'node:test';
 import { NextRequest } from 'next/server';
 
 import { lineSignatureHeader } from '../../../../libs/line/bot/signature';
+import { resetLineRateLimit } from '../../../../libs/line/rate-limit';
 
 import { GET, MAX_LINE_WEBHOOK_BYTES, POST } from './route';
 
@@ -15,6 +16,7 @@ describe('POST /api/line/webhook', () => {
 
   afterEach(() => {
     process.env = { ...env };
+    resetLineRateLimit();
   });
 
   it('rejects an invalid signature with 401', async () => {
@@ -95,7 +97,33 @@ describe('POST /api/line/webhook', () => {
   });
 
   it('accepts GET for console connectivity checks', async () => {
-    const response = await GET();
+    const response = await GET(
+      new NextRequest('http://localhost/api/line/webhook')
+    );
     assert.equal(response.status, 200);
+  });
+
+  it('returns 429 with Retry-After after the webhook window is exhausted', async () => {
+    process.env.LINE_CHANNEL_SECRET = SECRET;
+    const signature = lineSignatureHeader(BODY, SECRET);
+    const request = () =>
+      new NextRequest('http://localhost/api/line/webhook', {
+        method: 'POST',
+        headers: {
+          'x-line-signature': signature,
+          'x-forwarded-for': '203.0.113.40',
+        },
+        body: BODY,
+      });
+
+    let lastStatus = 0;
+    for (let i = 0; i < 181; i += 1) {
+      lastStatus = (await POST(request())).status;
+    }
+    assert.equal(lastStatus, 429);
+    const blocked = await POST(request());
+    assert.equal(blocked.status, 429);
+    assert.ok(Number(blocked.headers.get('retry-after')) >= 1);
+    assert.equal(await blocked.text(), 'Too many requests');
   });
 });
