@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>参加・体験 – アーツカウンシル東京</title>
+    <item>
+      <title>【作品展示】ファンタジスタ：海の生物の表現</title>
+      <link>https://www.artscouncil-tokyo.jp/news/30131/</link>
+      <guid>https://www.artscouncil-tokyo.jp/?post_type=news&amp;p=30131</guid>
+      <pubDate>Wed, 30 Sep 2026 01:33:46 +0000</pubDate>
+      <description><![CDATA[<p>小学生の作品を国際美術展TOKYO ATLASの関連企画として展示します。</p>]]></description>
+      <content:encoded><![CDATA[
+        <p>開催時期 2026年10月10日（土）～12月20日（日）10時～17時</p>
+        <p>開催場所 テレコムセンタービル5階アトリウム（東京都江東区青海2-5-10）</p>
+      ]]></content:encoded>
+    </item>
+    <item>
+      <title>【開催】Shibuya StreetDance Week 2026</title>
+      <link>https://www.artscouncil-tokyo.jp/news/30183/</link>
+      <guid>https://www.artscouncil-tokyo.jp/?post_type=news&amp;p=30183</guid>
+      <pubDate>Thu, 01 Oct 2026 05:00:00 +0000</pubDate>
+      <description><![CDATA[<p>開催時期 2026年11月23日（月・祝） 開催場所 代々木公園</p>]]></description>
+    </item>
+    <item>
+      <title>【作品展示】日付のない展示</title>
+      <link>https://www.artscouncil-tokyo.jp/news/1/</link>
+      <guid>https://www.artscouncil-tokyo.jp/?post_type=news&amp;p=1</guid>
+      <description><![CDATA[<p>会期未定の作品展示です。</p>]]></description>
+    </item>
+  </channel>
+</rss>

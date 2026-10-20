@@ -71,7 +71,7 @@ Workflow: `.github/workflows/collect-taipei.yml`
 - Also **workflow_dispatch** (Actions → “Taipei exhibition collector” → Run workflow)
 - If the secret is missing, the job **exits 0** and prints a skip notice (no failed red X).
 
-The collector applies Prisma migrations (including `pg_trgm` and CJK FTS `search_tsv` / `event_embeddings` stub) then upserts Ministry of Culture open data for **Taipei City** (`source = moc-opendata`).
+The collector applies Prisma migrations (including `pg_trgm` and CJK FTS `search_tsv` / `event_embeddings` stub) then upserts Ministry of Culture open data for **Taipei City** (`source = moc-opendata`). Tokyo collectors are a separate workflow (`.github/workflows/collect-tokyo.yml`) and do not enable `pgvector`.
 
 ## 3b. Exhibition search (Phase 3 step 1)
 
@@ -96,6 +96,7 @@ Local dry run (after `make db-up` and `make seed`):
 
 ```bash
 pnpm exec tsx tools/collectors/moc-taipei/run.ts
+pnpm exec tsx tools/collectors/tokyo/run.ts
 ```
 
 ## 4. How to test
@@ -112,4 +113,14 @@ If Verify fails: confirm Production env vars are the **Messaging** secret/token 
 
 Taipei listings come from [文化部開放資料](https://cloud.culture.tw/) exhibition JSON (`SearchShowAction.do?method=doFindTypeJ&category=6`). We keep **Taipei City** rows only, store a **short summary + link** (not the full `descriptionFilterHtml` copy), and upsert on `(source, externalId)`. Respect the source’s published terms and attribution; do not republish full copyrighted exhibition text.
 
-Tokyo collectors are out of scope for P2.
+## Source terms (Tokyo collectors)
+
+Tokyo listings come from official RSS/APIs and TMG open data only. Each source, robots.txt note, and licence is in [`tools/collectors/tokyo/SOURCES.md`](../../tools/collectors/tokyo/SOURCES.md). We store a **short summary + link**, upsert on `(source, externalId)`, and fill `data.i18n` (ja/en/zh) when the publisher provides those languages.
+
+| Cron | Workflow |
+| --- | --- |
+| `0 18 * * *` (03:00 Asia/Tokyo) | `.github/workflows/collect-tokyo.yml` |
+
+Same `DATABASE_URL` secret as Taipei. Missing secret → skip with exit 0.
+
+Sources in this phase: Tokyo Metropolitan Teien Art Museum exhibition REST (ja/en/zh-tw), Arts Council Tokyo festivals RSS, CCBT events RSS, TMG recommended event CSV (CC BY 4.0; live file is still the 2018–19 snapshot).

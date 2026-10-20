@@ -11,10 +11,16 @@
         "command": "pnpm exec tsx tools/collectors/moc-taipei/run.ts"
       }
     },
+    "collect-tokyo": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "pnpm exec tsx tools/collectors/tokyo/run.ts"
+      }
+    },
     "test": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "node --import tsx --test tools/collectors/moc-taipei/*.test.ts"
+        "command": "node --import tsx --test tools/collectors/shared/*.test.ts tools/collectors/moc-taipei/*.test.ts tools/collectors/tokyo/*.test.ts"
       }
     }
   }

@@ -1,0 +1,63 @@
+{
+  "ja": [
+    {
+      "id": 52436,
+      "slug": "20261003-1220_marimekko",
+      "status": "publish",
+      "link": "https://www.teien-art-museum.ne.jp/exhibition/20261003-1220_marimekko/",
+      "title": { "rendered": "マリメッコ展　模様のちから" },
+      "excerpt": { "rendered": "", "protected": false },
+      "lang": "ja",
+      "translations": { "ja": 52436, "en": 52438, "zh-tw": 64735 }
+    },
+    {
+      "id": 52210,
+      "slug": "270116-0328_lithuania",
+      "status": "publish",
+      "link": "https://www.teien-art-museum.ne.jp/exhibition/270116-0328_lithuania/",
+      "title": { "rendered": "愛を紡ぎ、祈りを刻む―リトアニアの手仕事―" },
+      "excerpt": { "rendered": "", "protected": false },
+      "lang": "ja"
+    },
+    {
+      "id": 51896,
+      "slug": "lucie-rie",
+      "status": "publish",
+      "link": "https://www.teien-art-museum.ne.jp/exhibition/lucie-rie/",
+      "title": { "rendered": "ルーシー・リー展―東西をつなぐ優美のうつわ―" },
+      "excerpt": { "rendered": "", "protected": false },
+      "lang": "ja"
+    },
+    {
+      "id": 1,
+      "slug": "240601-0825_yumeji",
+      "status": "publish",
+      "link": "https://www.teien-art-museum.ne.jp/exhibition/240601-0825_yumeji/",
+      "title": { "rendered": "生誕140年 YUMEJI展" },
+      "excerpt": { "rendered": "", "protected": false },
+      "lang": "ja"
+    }
+  ],
+  "en": [
+    {
+      "id": 52438,
+      "slug": "20261003-1220_marimekko",
+      "status": "publish",
+      "link": "https://www.teien-art-museum.ne.jp/en/exhibition/20261003-1220_marimekko/",
+      "title": { "rendered": "Marimekko: The Power of Prints" },
+      "excerpt": { "rendered": "", "protected": false },
+      "lang": "en"
+    }
+  ],
+  "zh": [
+    {
+      "id": 64735,
+      "slug": "20261003-1220_marimekko",
+      "status": "publish",
+      "link": "https://www.teien-art-museum.ne.jp/zh-tw/exhibition/20261003-1220_marimekko/",
+      "title": { "rendered": "Marimekko展　圖案的力量" },
+      "excerpt": { "rendered": "", "protected": false },
+      "lang": "zh-tw"
+    }
+  ]
+}

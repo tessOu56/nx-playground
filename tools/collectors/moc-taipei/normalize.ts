@@ -1,9 +1,12 @@
-import { contentHash } from './content-hash';
-import { htmlToPlainText } from './html-to-plain-text';
+import { contentHash } from '../shared/content-hash';
+import { htmlToPlainText } from '../shared/html-to-plain-text';
+import { publicWebUrl } from '../shared/ssrf';
+import { SUMMARY_MAX_CHARS } from '../shared/summarize';
+import type { NormalizedExhibition } from '../shared/types';
 
 export const MOC_SOURCE = 'moc-opendata';
 export const MOC_TIMEZONE = 'Asia/Taipei';
-export const SUMMARY_MAX_CHARS = 180;
+export { SUMMARY_MAX_CHARS };
 
 export type MocShowInfo = {
   time?: unknown;
@@ -31,30 +34,10 @@ export type MocRecord = {
   endDate?: unknown;
 };
 
-export type NormalizedTaipeiEvent = {
-  id: string;
-  title: string;
-  description: string;
-  location: string;
-  startDate: Date;
-  endDate: Date;
-  status: 'published';
+export type NormalizedTaipeiEvent = NormalizedExhibition & {
   region: 'TAIPEI';
   timezone: typeof MOC_TIMEZONE;
   source: typeof MOC_SOURCE;
-  sourceUrl: string;
-  externalId: string;
-  contentHash: string;
-  tags: string[];
-  priceText: string | null;
-  lastSeenAt: Date;
-  data: {
-    kind: 'exhibition';
-    image?: string;
-    source: typeof MOC_SOURCE;
-    summaryOnly: true;
-    venueName?: string;
-  };
 };
 
 const TAIPEI_CITY = /臺北市|台北市|Taipei\s*City/i;
@@ -85,57 +68,6 @@ export function summarize(html: string, sourceUrl: string): string {
       ? plain
       : `${plain.slice(0, SUMMARY_MAX_CHARS - 1).trimEnd()}…`;
   return `${clipped} 詳情：${sourceUrl}`;
-}
-
-function isBlockedHostname(hostname: string): boolean {
-  const host = hostname.replace(/^\[|\]$/g, '').toLowerCase();
-  if (
-    host === 'localhost' ||
-    host.endsWith('.localhost') ||
-    host.endsWith('.local') ||
-    host.endsWith('.internal') ||
-    host.endsWith('.arpa')
-  ) {
-    return true;
-  }
-
-  const ipv4 = /^(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})$/.exec(host);
-  if (ipv4) {
-    const [a, b] = [Number(ipv4[1]), Number(ipv4[2])];
-    if (a === 0 || a === 10 || a === 127) return true;
-    if (a === 169 && b === 254) return true;
-    if (a === 172 && b >= 16 && b <= 31) return true;
-    if (a === 192 && b === 168) return true;
-    if (a === 100 && b >= 64 && b <= 127) return true;
-    if (a === 198 && (b === 18 || b === 19)) return true;
-  }
-
-  if (host.includes(':')) {
-    if (host === '::1' || host === '::') return true;
-    if (
-      host.startsWith('fe80:') ||
-      host.startsWith('fc') ||
-      host.startsWith('fd')
-    ) {
-      return true;
-    }
-  }
-  return false;
-}
-
-function publicWebUrl(
-  raw: string,
-  protocols: Set<string>
-): string | undefined {
-  try {
-    const url = new URL(raw);
-    if (!protocols.has(url.protocol)) return undefined;
-    if (url.username || url.password) return undefined;
-    if (isBlockedHostname(url.hostname)) return undefined;
-    return url.toString();
-  } catch {
-    return undefined;
-  }
 }
 
 export function httpsImageUrl(raw: unknown): string | undefined {
@@ -220,6 +152,11 @@ export function normalizeMocRecord(
   const venueName = asText(show.locationName);
   if (venueName) tags.push(venueName);
 
+  const i18n = {
+    title: { zh: title },
+    description: { zh: description },
+    location: { zh: location },
+  };
   const normalizedCore = {
     title,
     location,
@@ -229,6 +166,7 @@ export function normalizeMocRecord(
     sourceUrl,
     description,
     image: image ?? null,
+    i18n,
   };
 
   return {
@@ -253,6 +191,7 @@ export function normalizeMocRecord(
       ...(image ? { image } : {}),
       source: MOC_SOURCE,
       summaryOnly: true,
+      i18n,
       ...(venueName ? { venueName } : {}),
     },
   };

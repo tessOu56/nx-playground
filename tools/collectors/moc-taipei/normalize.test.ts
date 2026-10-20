@@ -45,6 +45,7 @@ describe('normalizeMocRecords', () => {
       assert.equal(event.id, `moc-${event.externalId}`);
       assert.equal(event.lastSeenAt.toISOString(), NOW.toISOString());
       assert.equal(event.data.summaryOnly, true);
+      assert.equal(event.data.i18n.title.zh, event.title);
       assert.ok(event.contentHash.length === 64);
     }
   });
