@@ -29,18 +29,18 @@ export function FeaturedCities({
   ];
 
   return (
-    <section className='border-t border-gray-200 bg-white py-14 sm:py-16'>
+    <section className='border-t border-border bg-card py-14 sm:py-16'>
       <div className='mx-auto max-w-6xl px-4 sm:px-6 lg:px-8'>
         <div className='grid gap-12 lg:grid-cols-2'>
           {cities.map(city => (
             <div key={city.id}>
               <div className='mb-5 flex items-end justify-between gap-3'>
-                <h2 className='font-display text-2xl font-semibold tracking-tight text-gray-900'>
+                <h2 className='font-display text-2xl font-semibold tracking-tight text-foreground'>
                   {city.title}
                 </h2>
                 <Link
                   href={catalogHref(locale, { city: city.id })}
-                  className='shrink-0 text-sm font-medium text-gray-800 underline-offset-2 hover:underline'
+                  className='shrink-0 text-sm font-medium text-foreground underline-offset-2 hover:underline'
                 >
                   {copy.seeCity(city.id)}
                 </Link>

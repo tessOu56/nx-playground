@@ -39,7 +39,7 @@ export function Heading3({ children, className = '' }: Heading3Props) {
 
   return (
     <h3
-      className={`text-xl font-semibold text-gray-900 mt-4 mb-2 ${className}`}
+      className={`text-xl font-semibold text-foreground mt-4 mb-2 ${className}`}
     >
       {content}
     </h3>

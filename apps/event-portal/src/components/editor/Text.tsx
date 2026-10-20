@@ -39,7 +39,7 @@ export function Text({ children, className = '' }: TextProps) {
 
   return (
     <p
-      className={`text-gray-700 leading-relaxed mb-4 whitespace-pre-wrap ${className}`}
+      className={`text-foreground leading-relaxed mb-4 whitespace-pre-wrap ${className}`}
     >
       {content}
     </p>

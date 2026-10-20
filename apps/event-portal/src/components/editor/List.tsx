@@ -51,7 +51,7 @@ export function List({
 
   return (
     <ListTag
-      className={`text-gray-700 mb-4 ${listClass} space-y-1 ${className}`}
+      className={`text-foreground mb-4 ${listClass} space-y-1 ${className}`}
     >
       <li>{content}</li>
     </ListTag>

@@ -15,7 +15,7 @@ export default async function EventDetailLayout({
   const copy = demoCopy(locale);
 
   return (
-    <div className='min-h-screen bg-gray-50'>
+    <div className='min-h-screen bg-background'>
       <div className='page-container'>
         <div className='mb-4'>
           <CatalogBackLink locale={locale} label={copy.backToEvents} />

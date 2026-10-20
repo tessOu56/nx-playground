@@ -27,23 +27,23 @@ export function AppErrorFallback({
     });
 
   return (
-    <div className='flex min-h-[60vh] items-center justify-center bg-gray-50 px-4'>
+    <div className='flex min-h-[60vh] items-center justify-center bg-background px-4'>
       <div className='mx-auto w-full max-w-md text-center'>
-        <h1 className='font-display text-2xl font-semibold tracking-tight text-gray-900'>
+        <h1 className='font-display text-2xl font-semibold tracking-tight text-foreground'>
           {copy.appError}
         </h1>
-        <p className='mt-3 text-sm leading-6 text-gray-600'>{copy.appErrorHint}</p>
+        <p className='mt-3 text-sm leading-6 text-muted-foreground'>{copy.appErrorHint}</p>
         <div className='mt-8 flex flex-wrap items-center justify-center gap-3'>
           <button
             type='button'
             onClick={retry}
-            className='inline-flex items-center justify-center rounded-md bg-gray-900 px-4 py-2.5 text-sm font-medium text-white hover:bg-gray-800'
+            className='inline-flex items-center justify-center rounded-md bg-foreground px-4 py-2.5 text-sm font-medium text-background hover:opacity-90'
           >
             {copy.reloadPage}
           </button>
           <Link
             href={catalogHref(resolved)}
-            className='inline-flex items-center justify-center rounded-md px-4 py-2.5 text-sm font-medium text-gray-800 ring-1 ring-inset ring-gray-300 hover:bg-gray-50'
+            className='inline-flex items-center justify-center rounded-md px-4 py-2.5 text-sm font-medium text-foreground ring-1 ring-inset ring-border hover:bg-muted'
           >
             {copy.backToEvents}
           </Link>

@@ -37,17 +37,17 @@ export function CatalogSearchStatus({
   if (error) {
     return (
       <div
-        className='flex flex-col gap-3 rounded-lg border border-gray-200 bg-white px-4 py-3 sm:flex-row sm:items-center sm:justify-between'
+        className='flex flex-col gap-3 rounded-lg border border-border bg-card px-4 py-3 sm:flex-row sm:items-center sm:justify-between'
         role='alert'
         data-testid='catalog-search-error'
       >
-        <p className='text-sm leading-6 text-gray-800'>
+        <p className='text-sm leading-6 text-foreground'>
           {errorCopy(copy, error, retryAfterSec)}
         </p>
         <button
           type='button'
           onClick={onRetry}
-          className='inline-flex min-h-11 items-center justify-center rounded-md bg-gray-900 px-3 py-2 text-sm font-medium text-white hover:bg-gray-800 sm:min-h-9'
+          className='inline-flex min-h-11 items-center justify-center rounded-md bg-foreground px-3 py-2 text-sm font-medium text-background hover:opacity-90 sm:min-h-9'
         >
           {copy.retry}
         </button>
@@ -59,7 +59,7 @@ export function CatalogSearchStatus({
 
   return (
     <p
-      className='text-sm text-gray-600'
+      className='text-sm text-muted-foreground'
       role='status'
       aria-live='polite'
       data-testid='catalog-search-status'

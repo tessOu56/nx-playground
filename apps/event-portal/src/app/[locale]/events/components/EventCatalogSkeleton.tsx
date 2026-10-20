@@ -22,7 +22,7 @@ export function EventCatalogSkeleton({
         {Array.from({ length: 6 }, (_, index) => (
           <div
             key={`catalog-skeleton-${index}`}
-            className='overflow-hidden rounded-xl border border-gray-200 bg-white'
+            className='overflow-hidden rounded-xl border border-border bg-card'
           >
             <Skeleton className='aspect-[16/9] w-full' />
             <div className='space-y-2 p-4'>

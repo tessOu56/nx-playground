@@ -258,7 +258,7 @@ export function EventCatalog({
         <div>
           <label
             htmlFor='event-search'
-            className='mb-1.5 block text-sm font-medium text-gray-800'
+            className='mb-1.5 block text-sm font-medium text-foreground'
           >
             {copy.searchEvents}
           </label>
@@ -299,7 +299,7 @@ export function EventCatalog({
               <button
                 type='button'
                 onClick={clearSearch}
-                className='absolute right-1.5 top-1/2 min-h-9 min-w-9 -translate-y-1/2 rounded-md text-sm font-medium text-gray-600 hover:bg-gray-100 hover:text-gray-900'
+                className='absolute right-1.5 top-1/2 min-h-9 min-w-9 -translate-y-1/2 rounded-md text-sm font-medium text-muted-foreground hover:bg-muted hover:text-foreground'
                 aria-label={copy.clearSearch}
               >
                 ×
@@ -309,7 +309,7 @@ export function EventCatalog({
           <div className='mt-1.5 flex items-start justify-between gap-3'>
             <p
               id='event-search-hint'
-              className='text-xs leading-5 text-gray-500'
+              className='text-xs leading-5 text-muted-foreground'
             >
               {copy.searchHint}
             </p>
@@ -317,7 +317,7 @@ export function EventCatalog({
               {copy.searchKeyboardHint}
             </p>
             {draftQ.length >= 64 ? (
-              <p className='shrink-0 text-xs tabular-nums text-gray-500'>
+              <p className='shrink-0 text-xs tabular-nums text-muted-foreground'>
                 {copy.queryLimit(draftQ.length, MAX_QUERY_TEXT)}
               </p>
             ) : null}
@@ -325,7 +325,7 @@ export function EventCatalog({
         </div>
 
         <fieldset className='space-y-2'>
-          <legend className='text-sm font-medium text-gray-800'>
+          <legend className='text-sm font-medium text-foreground'>
             {copy.filterCity}
           </legend>
           <div className='flex flex-wrap gap-2'>
@@ -353,7 +353,7 @@ export function EventCatalog({
           <div>
             <label
               htmlFor='event-dates'
-              className='mb-1.5 block text-sm font-medium text-gray-800'
+              className='mb-1.5 block text-sm font-medium text-foreground'
             >
               {copy.filterStatus}
             </label>
@@ -363,7 +363,7 @@ export function EventCatalog({
               onChange={event =>
                 setFilters({ dates: event.target.value as DateFilter }, 'push')
               }
-              className='flex h-11 w-full rounded-md border border-gray-300 bg-white px-3 text-base text-gray-800 sm:h-10 sm:text-sm'
+              className='flex h-11 w-full rounded-md border border-border bg-card px-3 text-base text-foreground sm:h-10 sm:text-sm'
             >
               <option value='all'>{copy.allEvents}</option>
               <option value='now'>{copy.nowShowing}</option>
@@ -376,7 +376,7 @@ export function EventCatalog({
             <div>
               <label
                 htmlFor='event-category'
-                className='mb-1.5 block text-sm font-medium text-gray-800'
+                className='mb-1.5 block text-sm font-medium text-foreground'
               >
                 {copy.filterCategory}
               </label>
@@ -386,7 +386,7 @@ export function EventCatalog({
                 onChange={event =>
                   setFilters({ category: event.target.value }, 'push')
                 }
-                className='flex h-11 w-full rounded-md border border-gray-300 bg-white px-3 text-base text-gray-800 sm:h-10 sm:text-sm'
+                className='flex h-11 w-full rounded-md border border-border bg-card px-3 text-base text-foreground sm:h-10 sm:text-sm'
               >
                 <option value=''>{copy.allCategories}</option>
                 {categories.map(item => (
@@ -400,13 +400,13 @@ export function EventCatalog({
         </div>
       </form>
 
-      <div className='flex flex-wrap items-center justify-between gap-2 text-sm text-gray-600'>
+      <div className='flex flex-wrap items-center justify-between gap-2 text-sm text-muted-foreground'>
         <p aria-live='polite'>{copy.eventCount(results.length)}</p>
         {hasActiveFilters ? (
           <button
             type='button'
             onClick={clearFilters}
-            className='min-h-9 font-medium text-gray-800 underline-offset-2 hover:underline'
+            className='min-h-9 font-medium text-foreground underline-offset-2 hover:underline'
           >
             {copy.clearFilters}
           </button>

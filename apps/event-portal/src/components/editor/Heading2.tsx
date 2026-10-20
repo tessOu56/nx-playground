@@ -38,7 +38,7 @@ export function Heading2({ children, className = '' }: Heading2Props) {
   );
 
   return (
-    <h2 className={`text-2xl font-bold text-gray-900 mt-6 mb-3 ${className}`}>
+    <h2 className={`text-2xl font-bold text-foreground mt-6 mb-3 ${className}`}>
       {content}
     </h2>
   );

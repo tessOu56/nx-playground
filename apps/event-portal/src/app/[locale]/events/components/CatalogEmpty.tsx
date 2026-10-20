@@ -35,12 +35,12 @@ export function CatalogEmpty({
 
   return (
     <div
-      className='rounded-xl border border-dashed border-gray-200 bg-white px-6 py-14 text-center'
+      className='rounded-xl border border-dashed border-border bg-card px-6 py-14 text-center'
       role='status'
       data-testid={testId}
     >
-      <h2 className='text-lg font-semibold text-gray-900'>{title}</h2>
-      <p className='mx-auto mt-2 max-w-md text-sm leading-6 text-gray-600'>
+      <h2 className='text-lg font-semibold text-foreground'>{title}</h2>
+      <p className='mx-auto mt-2 max-w-md text-sm leading-6 text-muted-foreground'>
         {hint}
       </p>
       <div className='mt-5 flex flex-wrap items-center justify-center gap-3'>
@@ -48,7 +48,7 @@ export function CatalogEmpty({
           <button
             type='button'
             onClick={onClearFilters}
-            className='rounded-md bg-gray-900 px-4 py-2 text-sm font-medium text-white hover:bg-gray-800'
+            className='rounded-md bg-foreground px-4 py-2 text-sm font-medium text-background hover:opacity-90'
           >
             {copy.clearFilters}
           </button>

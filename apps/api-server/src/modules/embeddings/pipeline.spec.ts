@@ -1,5 +1,6 @@
+import type { EmbeddingProvider } from '@nx-playground/exhibition-embeddings';
+
 import { backfillExhibitionEmbeddings, upsertEventEmbedding } from './pipeline';
-import type { EmbeddingProvider } from './types';
 
 function fakeProvider(impl: EmbeddingProvider['embed']): EmbeddingProvider {
   return {

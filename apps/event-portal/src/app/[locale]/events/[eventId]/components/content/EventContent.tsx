@@ -123,7 +123,7 @@ export function EventContent({ content, locale = 'zh-TW' }: EventContentProps) {
 
   return (
     <Card className='p-6'>
-      <h2 className='mb-6 text-xl font-semibold text-gray-900'>
+      <h2 className='mb-6 text-xl font-semibold text-foreground'>
         {demoCopy(locale).about}
       </h2>
       <Prose>
