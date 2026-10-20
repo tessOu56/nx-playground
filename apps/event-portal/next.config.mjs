@@ -28,11 +28,12 @@ const nextConfig = {
   typescript: {
     ignoreBuildErrors: false,
   },
-  eslint: {
-    ignoreDuringBuilds: false,
-  },
   images: {
-    domains: ['images.unsplash.com', 'via.placeholder.com', 'picsum.photos'],
+    remotePatterns: [
+      { protocol: 'https', hostname: 'images.unsplash.com' },
+      { protocol: 'https', hostname: 'via.placeholder.com' },
+      { protocol: 'https', hostname: 'picsum.photos' },
+    ],
   },
   // 配置開發環境指示器
   devIndicators: {

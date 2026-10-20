@@ -5,19 +5,11 @@
   "projectType": "application",
   "targets": {
     "build": {
-      "executor": "@nx/next:build",
-      "outputs": ["{options.outputPath}"],
-      "defaultConfiguration": "production",
+      "executor": "nx:run-commands",
+      "outputs": ["{projectRoot}/.next"],
       "options": {
-        "outputPath": "dist/apps/event-portal"
-      },
-      "configurations": {
-        "development": {
-          "outputPath": "apps/event-portal"
-        },
-        "production": {
-          "outputPath": "apps/event-portal"
-        }
+        "command": "pnpm exec next build --webpack",
+        "cwd": "apps/event-portal"
       },
       "dependsOn": [
         {
@@ -27,30 +19,27 @@
       ]
     },
     "serve": {
-      "executor": "@nx/next:server",
+      "executor": "nx:run-commands",
       "defaultConfiguration": "development",
       "options": {
-        "buildTarget": "@nx-playground/event-portal:build",
-        "dev": true,
-        "port": 3000
+        "command": "pnpm exec next dev --webpack --port 3000",
+        "cwd": "apps/event-portal"
       },
       "configurations": {
         "development": {
-          "buildTarget": "@nx-playground/event-portal:build:development",
-          "dev": true,
-          "port": 3000
+          "command": "pnpm exec next dev --webpack --port 3000",
+          "cwd": "apps/event-portal"
         },
         "production": {
-          "buildTarget": "@nx-playground/event-portal:build:production",
-          "dev": false,
-          "port": 3000
+          "command": "pnpm exec next start --port 3000",
+          "cwd": "apps/event-portal"
         }
       }
     },
     "export": {
       "executor": "@nx/next:export",
       "options": {
-        "buildTarget": "@nx-playground/event-portal:build:production"
+        "buildTarget": "@nx-playground/event-portal:build"
       }
     },
     "test-line-bot": {

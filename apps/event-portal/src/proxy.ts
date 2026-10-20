@@ -12,5 +12,4 @@ export default createMiddleware(routing);
 export const config = {
   // Match only internationalized pathnames
   matcher: ['/', '/(zh-TW|en|ja)/:path*'],
-  runtime: 'nodejs',
 };
