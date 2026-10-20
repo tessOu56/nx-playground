@@ -25,6 +25,7 @@ jobs:
       - name: Exhibition search unit tests
         run: |
           node --import tsx --test \
+            apps/event-portal/src/libs/http/*.test.ts \
             apps/event-portal/src/libs/exhibition-search/*.test.ts \
             apps/event-portal/src/app/api/exhibitions/search/route.test.ts \
             apps/event-portal/src/libs/line/bot/*.test.ts \

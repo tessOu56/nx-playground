@@ -1,4 +1,4 @@
-export default {
+module.exports = {
   displayName: 'api-server',
   testEnvironment: 'node',
   transform: {

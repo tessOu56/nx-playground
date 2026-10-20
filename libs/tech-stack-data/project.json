@@ -4,7 +4,6 @@
   "sourceRoot": "libs/tech-stack-data/src",
   "projectType": "library",
   "tags": ["npm:private"],
-  "// targets": "to see all targets run: nx show project tech-stack-data --web",
   "targets": {
     "collect": {
       "executor": "nx:run-commands",
@@ -31,7 +30,7 @@
       }
     },
     "test": {
-      "executor": "@nx/vite:test",
+      "executor": "@nx/vitest:test",
       "outputs": ["{options.reportsDirectory}"],
       "options": {
         "passWithNoTests": true,

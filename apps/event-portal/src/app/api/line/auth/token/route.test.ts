@@ -3,6 +3,7 @@ import { afterEach, describe, it } from 'node:test';
 
 import { NextRequest } from 'next/server';
 
+import { resetLineRateLimit } from '../../../../../libs/line/rate-limit';
 import { LINE_ID_TOKEN_ISSUER } from '../../../../../libs/line/verify-id-token';
 
 import { POST } from './route';
@@ -18,11 +19,16 @@ function jsonResponse(status: number, body: unknown) {
   });
 }
 
-function tokenRequest(body: Record<string, unknown>, origin?: string) {
+function tokenRequest(
+  body: Record<string, unknown>,
+  origin?: string,
+  forwardedFor?: string
+) {
   const headers: Record<string, string> = {
     'Content-Type': 'application/json',
   };
   if (origin) headers.origin = origin;
+  if (forwardedFor) headers['x-forwarded-for'] = forwardedFor;
   return new NextRequest('http://localhost:3000/api/line/auth/token', {
     method: 'POST',
     headers,
@@ -35,6 +41,7 @@ describe('POST /api/line/auth/token', () => {
 
   afterEach(() => {
     process.env = { ...env };
+    resetLineRateLimit();
   });
 
   it('uses LINE verify claims for lineId instead of unsigned JWT decode', async () => {
@@ -207,6 +214,38 @@ describe('POST /api/line/auth/token', () => {
       const body = (await response.json()) as { lineId?: string; code?: string };
       assert.equal(body.lineId, undefined);
       assert.equal(body.code, 'verify_rejected');
+    } finally {
+      globalThis.fetch = originalFetch;
+    }
+  });
+
+  it('returns 429 before calling LINE when the token window is exhausted', async () => {
+    process.env.NEXT_PUBLIC_LINE_CLIENT_ID = CLIENT_ID;
+    process.env.LINE_CLIENT_SECRET = 'line-secret';
+    process.env.NEXT_PUBLIC_LINE_REDIRECT_URI = 'http://localhost:3000';
+
+    const originalFetch = globalThis.fetch;
+    let lineCalls = 0;
+    globalThis.fetch = (async () => {
+      lineCalls += 1;
+      throw new Error('must not call LINE after rate limit');
+    }) as typeof fetch;
+
+    try {
+      for (let i = 0; i < 20; i += 1) {
+        const response = await POST(
+          tokenRequest({ code: 'auth-code' }, undefined, '203.0.113.50')
+        );
+        assert.equal(response.status, 400);
+      }
+      const blocked = await POST(
+        tokenRequest({ code: 'auth-code' }, undefined, '203.0.113.50')
+      );
+      assert.equal(blocked.status, 429);
+      assert.equal(lineCalls, 0);
+      const body = (await blocked.json()) as { error?: string };
+      assert.equal(body.error, 'Too many requests');
+      assert.ok(Number(blocked.headers.get('retry-after')) >= 1);
     } finally {
       globalThis.fetch = originalFetch;
     }

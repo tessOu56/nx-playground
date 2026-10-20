@@ -2,6 +2,10 @@ import { type NextRequest, NextResponse } from 'next/server';
 
 import { getLineRedirectUri } from '../../../../../libs/line/constants';
 import { isLinePkceVerifier } from '../../../../../libs/line/pkce';
+import {
+  consumeLineAuthTokenRateLimit,
+  enforceLineRateLimit,
+} from '../../../../../libs/line/rate-limit';
 import { isAllowedPortalOrigin } from '../../../../../libs/line/request-origin';
 import {
   LineIdTokenVerificationError,
@@ -44,6 +48,13 @@ function lineOauthConfig(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   try {
+    const limited = enforceLineRateLimit(
+      request,
+      consumeLineAuthTokenRateLimit,
+      'json'
+    );
+    if (limited) return limited;
+
     if (!isAllowedPortalOrigin(request)) {
       return NextResponse.json({ error: 'Invalid origin' }, { status: 403 });
     }

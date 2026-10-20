@@ -98,3 +98,7 @@ docs/platform-inbox/
 # Vercel CLI link state (T-233 Hobby demo)
 .vercel
 **/.vercel
+
+.claude/worktrees
+.nx/polygraph
+.nx/self-healing

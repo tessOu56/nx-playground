@@ -55,6 +55,8 @@ Use Tess’s Official Account **@006dcvmv** (Messaging API). The Login/LIFF chan
 
 The handler verifies `x-line-signature = base64(HMAC-SHA256(raw body, LINE_CHANNEL_SECRET))` with a timing-safe compare, then replies with the **Reply API** only (no Push in this phase).
 
+In-app fixed-window limits (per isolate, 60s) run **before** HMAC / LINE OAuth: webhook `180`, token exchange `20`, id-token verify `30`. Exceeded requests return **429** + `Retry-After`. Set `LINE_RATE_LIMIT=0` to disable locally. This is not a substitute for Vercel Firewall.
+
 LINE Login ID-token verification (P1) stays on `/api/line/auth/token` and `/api/line/auth/id-token` using `NEXT_PUBLIC_LINE_CLIENT_ID` = `2011182044`.
 
 ## 3. GitHub `DATABASE_URL` secret (Taipei collector)

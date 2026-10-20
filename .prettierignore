@@ -28,3 +28,4 @@ pnpm-lock.yaml
 
 # Documentation that should not be formatted
 CHANGELOG.md
+.nx/self-healing

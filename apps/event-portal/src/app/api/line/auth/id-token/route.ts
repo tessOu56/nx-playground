@@ -1,5 +1,9 @@
 import { type NextRequest, NextResponse } from 'next/server';
 
+import {
+  consumeLineAuthIdTokenRateLimit,
+  enforceLineRateLimit,
+} from '../../../../../libs/line/rate-limit';
 import { isAllowedPortalOrigin } from '../../../../../libs/line/request-origin';
 import {
   LineIdTokenVerificationError,
@@ -17,6 +21,13 @@ function ownerChannelId(value: string | undefined): string {
 }
 
 export async function POST(request: NextRequest) {
+  const limited = enforceLineRateLimit(
+    request,
+    consumeLineAuthIdTokenRateLimit,
+    'json'
+  );
+  if (limited) return limited;
+
   if (!isAllowedPortalOrigin(request)) {
     return NextResponse.json({ error: 'Invalid origin' }, { status: 403 });
   }
