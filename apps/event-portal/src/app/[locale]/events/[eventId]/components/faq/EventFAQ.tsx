@@ -31,31 +31,31 @@ export function EventFAQ({ faq, locale = 'zh-TW' }: EventFAQProps) {
 
   return (
     <Card className='p-6'>
-      <h2 className='text-xl font-semibold text-gray-900 mb-6'>{copy.faq}</h2>
+      <h2 className='text-xl font-semibold text-foreground mb-6'>{copy.faq}</h2>
       <div className='space-y-4'>
         {faq.map((item, index) => {
           const panelId = `event-faq-panel-${index}`;
           const isOpen = openItems.has(index);
           return (
-            <div key={index} className='border border-gray-200 rounded-lg'>
+            <div key={index} className='border border-border rounded-lg'>
               <button
                 type='button'
                 onClick={() => toggleItem(index)}
                 aria-expanded={isOpen}
                 aria-controls={panelId}
-                className='flex w-full items-center justify-between px-4 py-3 text-left transition-colors hover:bg-gray-50'
+                className='flex w-full items-center justify-between px-4 py-3 text-left transition-colors hover:bg-muted'
               >
-                <span className='pr-4 font-medium text-gray-900'>
+                <span className='pr-4 font-medium text-foreground'>
                   {item.question}
                 </span>
-                <span className='flex-shrink-0 text-gray-500' aria-hidden>
+                <span className='flex-shrink-0 text-muted-foreground' aria-hidden>
                   {isOpen ? '−' : '+'}
                 </span>
               </button>
               {isOpen ? (
                 <div id={panelId} className='px-4 pb-4'>
-                  <div className='pt-2 border-t border-gray-100'>
-                    <p className='text-gray-700 leading-relaxed whitespace-pre-wrap'>
+                  <div className='pt-2 border-t border-border'>
+                    <p className='text-foreground leading-relaxed whitespace-pre-wrap'>
                       {item.answer}
                     </p>
                   </div>

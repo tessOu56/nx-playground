@@ -56,12 +56,10 @@ async function main() {
   assertPostgresUrl(process.env.DATABASE_URL);
   const usersSeed = readJson('../../../libs/api-fixtures/src/users.json');
   const eventsSeed = readJson('../../../libs/api-fixtures/src/events.json');
-  const ordersSeed = readJson('../../../libs/api-fixtures/src/orders.json');
   const prisma = new PrismaClient();
   try {
     console.log('Resetting demo tables and seeding libs/api-fixtures...');
 
-    await prisma.order.deleteMany();
     await prisma.event.deleteMany();
     await prisma.form.deleteMany();
     await prisma.session.deleteMany();
@@ -108,18 +106,6 @@ async function main() {
           tags: Array.isArray(event.tags) ? event.tags : [],
           priceText: event.priceText ?? null,
           lastSeenAt: event.lastSeenAt ? new Date(event.lastSeenAt) : null,
-        },
-      });
-    }
-
-    for (const order of ordersSeed.orders) {
-      await prisma.order.create({
-        data: {
-          id: order.id,
-          eventId: order.eventId,
-          userId: order.userId,
-          status: order.status,
-          data: JSON.stringify(order.data),
         },
       });
     }

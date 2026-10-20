@@ -208,69 +208,6 @@ export const shareToLine = async (text: string, url?: string) => {
   }
 };
 
-// 分享內容到廠商 LINE Official
-export const shareQRCodeToVendor = async (
-  url: string,
-  type: 'order' | 'ticket' | 'registration' = 'order',
-  metadata?: {
-    orderId?: string;
-    ticketId?: string;
-    orderItemId?: string;
-    ticketType?: string;
-  }
-) => {
-  let text = '';
-
-  switch (type) {
-    case 'order':
-      text = `訂單 ${metadata?.orderId} 的 QR Code 已生成，請掃描完成付款`;
-      break;
-    case 'ticket':
-      text = `票券 ${metadata?.ticketType} 已出票，請查看票券詳情`;
-      break;
-    case 'registration':
-      text = `報名表連結已生成，請點擊填寫 ${metadata?.ticketType} 的報名資訊`;
-      break;
-    default:
-      text = '內容分享';
-  }
-
-  try {
-    if (
-      liffInitialized &&
-      (await isLiffModuleAvailable()) &&
-      liff &&
-      typeof liff === 'object' &&
-      'isInClient' in liff &&
-      (liff as any).isInClient()
-    ) {
-      // 在 LIFF 環境中，使用 liff.shareTargetPicker
-      (liff as any).shareTargetPicker([
-        {
-          type: 'text',
-          text,
-        },
-        {
-          type: 'text',
-          text: url,
-        },
-      ]);
-    } else {
-      // 在非 LIFF 環境中，使用 LINE 分享 URL
-      const shareUrl = `${
-        LINE_CONSTANTS.SHARE_URLS.TEXT_MESSAGE
-      }?${encodeURIComponent(`${text}\n${url}`)}`;
-      window.open(shareUrl, '_blank');
-    }
-  } catch (_error) {
-    // 降級到 LINE 分享 URL
-    const shareUrl = `${
-      LINE_CONSTANTS.SHARE_URLS.TEXT_MESSAGE
-    }?${encodeURIComponent(`${text}\n${url}`)}`;
-    window.open(shareUrl, '_blank');
-  }
-};
-
 // 獲取用戶資料
 export const getProfile = async () => {
   if (

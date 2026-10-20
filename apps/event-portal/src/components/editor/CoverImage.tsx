@@ -26,7 +26,7 @@ export function CoverImage({
         fallback='/placeholder-event.svg'
       />
       {caption && (
-        <p className='text-sm text-gray-500 mt-2 text-center'>{caption}</p>
+        <p className='text-sm text-muted-foreground mt-2 text-center'>{caption}</p>
       )}
     </div>
   );

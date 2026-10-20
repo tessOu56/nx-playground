@@ -52,7 +52,7 @@ export default async function LocaleLayout({
               <Suspense fallback={null}>
                 <LineAuthNotice locale={locale} />
               </Suspense>
-              <main id='main-content' className='min-h-screen bg-gray-50'>
+              <main id='main-content' className='min-h-screen bg-background'>
                 {children}
               </main>
               <SiteFooter locale={locale} />

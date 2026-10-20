@@ -1,7 +1,9 @@
 import { createHash } from 'node:crypto';
 
-import { MAX_EMBEDDING_INPUT_CHARS } from './config';
-import type { ExhibitionEmbeddingText } from './types';
+import {
+  MAX_EMBEDDING_INPUT_CHARS,
+  type ExhibitionEmbeddingText,
+} from '@nx-playground/exhibition-embeddings';
 
 function clip(value: string, max = MAX_EMBEDDING_INPUT_CHARS): string {
   if (value.length <= max) return value;

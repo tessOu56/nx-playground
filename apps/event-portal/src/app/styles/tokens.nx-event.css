@@ -1,3 +1,14 @@
-/* Wave G — mount EDS nx-event tokens + shared motion */
+/* EDS application tokens + portal LINE partner layer */
 @import '@is_tess/tokens/css/nx-event.css';
 @import '@is_tess/tokens/css/motion.css';
+
+[data-app='nx-event'] {
+  /* Official LINE green is #06C755; #047857 is the AA fill used on white text. */
+  --line: #06c755;
+  --line-strong: #047857;
+  --line-strong-hover: #065f46;
+  --line-foreground: #ffffff;
+  --partner-line: var(--line-strong);
+  --partner-line-hover: var(--line-strong-hover);
+  --partner-line-foreground: var(--line-foreground);
+}

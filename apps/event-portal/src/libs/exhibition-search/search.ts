@@ -1,5 +1,7 @@
-import { embedQueryFromEnv } from './embeddings/provider';
-import type { EmbeddingResult } from './embeddings/types';
+import {
+  embedQueryFromEnv,
+  type EmbeddingResult,
+} from '@nx-playground/exhibition-embeddings';
 import { rankDocuments } from './rank';
 import { sampleDocumentById, sampleDocuments } from './sample';
 import {

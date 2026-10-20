@@ -50,8 +50,8 @@ function LocaleSwitcherNav({
             className={[
               'rounded-md px-1.5 py-1 text-xs font-medium sm:px-2 sm:text-sm',
               active
-                ? 'bg-gray-100 text-gray-900'
-                : 'text-gray-800 hover:bg-gray-100 hover:text-gray-900',
+                ? 'bg-muted text-foreground'
+                : 'text-foreground hover:bg-muted',
             ].join(' ')}
           >
             {localeLabel(item, copy)}

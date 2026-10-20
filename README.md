@@ -11,9 +11,9 @@ Taiwan **event product slice** in one Nx repo: public C-end (Next.js) + organize
 
 | Proof | Honest bound |
 |-------|----------------|
-| **Hosted C-end** | [https://nx-event-portal.vercel.app/zh-TW/events](https://nx-event-portal.vercel.app/zh-TW/events) — **labelled demo**. Catalog/orders use Hobby **memory fixtures** (dedicated api-mock when that host is healthy; otherwise same-origin portal BFF). **Not** the Nest funds path. |
-| **Contracts** | Same OpenAPI for mock and Nest; Orval client; confirm → ticket → check-in on the Nest path locally. |
-| **Not claimed** | Hosted Nest + Postgres is **not** live until STOP-015 (`/health` green). Live ECPay is STOP-014. LIFF attendees need STOP-013. |
+| **Hosted C-end** | [https://nx-event-portal.vercel.app/zh-TW/events](https://nx-event-portal.vercel.app/zh-TW/events) — exhibition catalog. Hobby **memory fixtures** when that host is healthy; otherwise same-origin portal BFF. |
+| **Contracts** | Same OpenAPI for mock and Nest; Orval client for events. |
+| **Not claimed** | Hosted Nest + Postgres is the catalog write path, not a payments API. |
 
 Interview second case after [AI Search Portal](https://github.com/tessOu56/ai-search-portal). Do not describe Hobby mock as production money API.
 

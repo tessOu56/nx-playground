@@ -2,7 +2,6 @@ import {
   exhibitionEmbeddingContentHash,
   exhibitionEmbeddingText,
 } from './document-text';
-import { hybridScore, toVectorLiteral } from './vector';
 
 describe('exhibitionEmbeddingText', () => {
   it('joins title, venue, tags, and summary without HTML noise', () => {
@@ -31,22 +30,5 @@ describe('exhibitionEmbeddingText', () => {
     expect(exhibitionEmbeddingContentHash({ id: 'evt', title: 'A' })).toMatch(
       /^[a-f0-9]{64}$/
     );
-  });
-});
-
-describe('vector helpers', () => {
-  it('formats a pgvector literal and rejects non-finite values', () => {
-    expect(toVectorLiteral([0.1, -2, 3])).toBe('[0.1,-2,3]');
-    expect(toVectorLiteral([1.234567891])).toBe('[1.23456789]');
-    expect(() => toVectorLiteral([])).toThrow(/empty/);
-    expect(() => toVectorLiteral([Number.NaN])).toThrow(/non-finite/);
-  });
-
-  it('hybrid-ranks FTS above a weak semantic-only hit', () => {
-    const lexical = hybridScore(0.8, 0.2);
-    const semanticOnly = hybridScore(0, 0.9);
-    expect(lexical).toBeCloseTo(0.7 * 0.8 + 0.3 * 0.2);
-    expect(semanticOnly).toBeCloseTo(0.27);
-    expect(hybridScore(0.5, null)).toBe(0.5);
   });
 });

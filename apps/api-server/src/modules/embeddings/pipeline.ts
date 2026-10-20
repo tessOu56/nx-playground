@@ -1,10 +1,14 @@
 import {
+  embeddingProviderFromEnv,
+  toVectorLiteral,
+  type EmbeddingProvider,
+  type ExhibitionEmbeddingText,
+} from '@nx-playground/exhibition-embeddings';
+
+import {
   exhibitionEmbeddingContentHash,
   exhibitionEmbeddingText,
 } from './document-text';
-import { embeddingProviderFromEnv } from './provider';
-import type { EmbeddingProvider, ExhibitionEmbeddingText } from './types';
-import { toVectorLiteral } from './vector';
 
 export type EmbeddingPipelineCounts = {
   written: number;

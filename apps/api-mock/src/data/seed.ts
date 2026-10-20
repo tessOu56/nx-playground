@@ -1,7 +1,6 @@
-import type { EventRecord, OrderRecord, UserRecord } from './types.js';
+import type { EventRecord, UserRecord } from '@nx-playground/api-fixtures';
 import eventsJson from './events.json' with { type: 'json' };
 
-/** Fixtures loaded into memory (local) or Postgres (hosted `DATABASE_URL`). */
 export const usersSeed: { users: UserRecord[] } = {
   users: [
     {
@@ -32,8 +31,4 @@ export const eventsSeed: {
   events: Omit<EventRecord, 'createdAt' | 'updatedAt'>[];
 } = {
   events: eventsJson.events as Omit<EventRecord, 'createdAt' | 'updatedAt'>[],
-};
-
-export const ordersSeed: { orders: Omit<OrderRecord, 'createdAt' | 'updatedAt'>[] } = {
-  orders: [],
 };

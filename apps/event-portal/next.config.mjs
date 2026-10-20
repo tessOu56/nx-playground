@@ -19,6 +19,8 @@ const nextConfig = {
     '@nx-playground/i18n',
     '@nx-playground/api-client',
     '@nx-playground/api-fixtures',
+    '@nx-playground/exhibition-embeddings',
+    '@is_tess/components',
     '@nx-playground/auth-client',
     '@nx-playground/hooks',
     '@nx-playground/logger',
@@ -69,6 +71,7 @@ const nextConfig = {
     optimizePackageImports: [
       '@nx-playground/ui-components',
       '@nx-playground/design-system',
+      '@is_tess/components',
     ],
   },
   // 優化編譯設定
@@ -99,6 +102,10 @@ const nextConfig = {
       '@nx-playground/api-fixtures': path.resolve(
         __dirname,
         '../../libs/api-fixtures/src/index.ts'
+      ),
+      '@nx-playground/exhibition-embeddings': path.resolve(
+        __dirname,
+        '../../libs/exhibition-embeddings/src/index.ts'
       ),
     };
 

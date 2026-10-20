@@ -1,10 +1,6 @@
 import type { IncomingMessage, ServerResponse } from 'node:http';
 
 import { getEventStackRepo } from './data/get-store.js';
-import {
-  mockCompleteHtml,
-  portalOrderReturnUrl,
-} from './data/payments.js';
 
 const DEFAULT_CORS_ORIGINS = [
   'https://nx-event-portal.vercel.app',
@@ -48,31 +44,6 @@ export function send(
   res.end(body === undefined ? '' : JSON.stringify(body));
 }
 
-export function sendRedirect(
-  req: IncomingMessage,
-  res: ServerResponse,
-  location: string
-) {
-  res.writeHead(302, {
-    ...corsHeaders(req),
-    Location: location,
-  });
-  res.end();
-}
-
-export function sendHtml(
-  req: IncomingMessage,
-  res: ServerResponse,
-  status: number,
-  html: string
-) {
-  res.writeHead(status, {
-    ...corsHeaders(req),
-    'Content-Type': 'text/html; charset=utf-8',
-  });
-  res.end(html);
-}
-
 export async function readJson(req: IncomingMessage): Promise<Record<string, unknown>> {
   const chunks: Buffer[] = [];
   for await (const chunk of req) {
@@ -89,53 +60,12 @@ export function match(
   pathname: string
 ): { name: string; params: Record<string, string> } | null {
   const eventsId = pathname.match(/^\/api\/events\/([^/]+)$/);
-  const ordersConfirm = pathname.match(/^\/api\/orders\/([^/]+)\/confirm$/);
-  const ordersTickets = pathname.match(/^\/api\/orders\/([^/]+)\/tickets$/);
-  const ticketsCheckIn = pathname.match(/^\/api\/tickets\/([^/]+)\/check-in$/);
-  const ticketsVerify = pathname.match(/^\/api\/tickets\/([^/]+)\/verify$/);
-  const ticketsId = pathname.match(/^\/api\/tickets\/([^/]+)$/);
-  const ordersId = pathname.match(/^\/api\/orders\/([^/]+)$/);
-  const paymentIntentId = pathname.match(/^\/api\/payments\/intents\/([^/]+)$/);
-  const mockComplete = pathname.match(/^\/api\/payments\/mock-complete\/([^/]+)$/);
 
   if (method === 'GET' && pathname === '/api/events') return { name: 'listEvents', params: {} };
   if (method === 'POST' && pathname === '/api/events') return { name: 'createEvent', params: {} };
   if (eventsId && method === 'GET') return { name: 'getEvent', params: { id: eventsId[1] } };
   if (eventsId && method === 'PUT') return { name: 'updateEvent', params: { id: eventsId[1] } };
   if (eventsId && method === 'DELETE') return { name: 'deleteEvent', params: { id: eventsId[1] } };
-  if (method === 'GET' && pathname === '/api/orders') return { name: 'listOrders', params: {} };
-  if (method === 'POST' && pathname === '/api/orders') return { name: 'createOrder', params: {} };
-  if (ordersConfirm && method === 'POST') {
-    return { name: 'confirmOrder', params: { id: ordersConfirm[1] } };
-  }
-  if (ordersTickets && method === 'GET') {
-    return { name: 'listOrderTickets', params: { id: ordersTickets[1] } };
-  }
-  if (ticketsCheckIn && method === 'POST') {
-    return { name: 'checkInTicket', params: { id: ticketsCheckIn[1] } };
-  }
-  if (ticketsVerify && method === 'GET') {
-    return { name: 'verifyTicket', params: { id: ticketsVerify[1] } };
-  }
-  if (ticketsId && method === 'GET') {
-    return { name: 'getTicket', params: { id: ticketsId[1] } };
-  }
-  if (ordersId && method === 'GET') return { name: 'getOrder', params: { id: ordersId[1] } };
-  if (method === 'POST' && pathname === '/api/payments/intents') {
-    return { name: 'createPaymentIntent', params: {} };
-  }
-  if (method === 'GET' && pathname === '/api/payments/intents') {
-    return { name: 'listPaymentIntents', params: {} };
-  }
-  if (paymentIntentId && method === 'GET') {
-    return { name: 'getPaymentIntent', params: { id: paymentIntentId[1] } };
-  }
-  if (method === 'POST' && pathname === '/api/payments/webhook') {
-    return { name: 'paymentWebhook', params: {} };
-  }
-  if (mockComplete && method === 'GET') {
-    return { name: 'mockCompletePayment', params: { id: mockComplete[1] } };
-  }
   if (method === 'GET' && (pathname === '/' || pathname === '/api/health')) {
     return { name: 'health', params: {} };
   }
@@ -193,22 +123,6 @@ export async function handleEventStackHttp(
           })
         );
         return;
-      case 'listOrders':
-        send(
-          req,
-          res,
-          200,
-          await store.listOrders({
-            userId: url.searchParams.get('userId') ?? undefined,
-            page: url.searchParams.get('page')
-              ? Number(url.searchParams.get('page'))
-              : undefined,
-            limit: url.searchParams.get('limit')
-              ? Number(url.searchParams.get('limit'))
-              : undefined,
-          })
-        );
-        return;
       case 'getEvent': {
         const event = await store.getEvent(route.params.id);
         if (!event) {
@@ -251,162 +165,6 @@ export async function handleEventStackHttp(
           return;
         }
         send(req, res, 200, { message: 'Event deleted successfully', id: route.params.id });
-        return;
-      }
-      case 'createOrder': {
-        const body = await readJson(req);
-        const created = await store.createOrder({
-          eventId: String(body.eventId ?? ''),
-          userId: body.userId as string | undefined,
-          status: body.status as string | undefined,
-          data: (body.data as Record<string, unknown>) ?? {},
-        });
-        if ('error' in created) {
-          send(req, res, 400, { message: created.error });
-          return;
-        }
-        send(req, res, 201, created);
-        return;
-      }
-      case 'getOrder': {
-        const order = await store.getOrder(route.params.id);
-        if (!order) {
-          send(req, res, 404, { message: `Order ${route.params.id} not found` });
-          return;
-        }
-        send(req, res, 200, order);
-        return;
-      }
-      case 'confirmOrder': {
-        const order = await store.confirmOrder(route.params.id);
-        if (!order) {
-          send(req, res, 404, { message: `Order ${route.params.id} not found` });
-          return;
-        }
-        send(req, res, 200, order);
-        return;
-      }
-      case 'listOrderTickets': {
-        const listed = await store.listTicketsByOrder(route.params.id);
-        if ('error' in listed) {
-          send(req, res, 404, { message: `Order ${route.params.id} not found` });
-          return;
-        }
-        send(req, res, 200, listed);
-        return;
-      }
-      case 'getTicket': {
-        const ticket = await store.getTicket(route.params.id);
-        if (!ticket) {
-          send(req, res, 404, { message: `Ticket ${route.params.id} not found` });
-          return;
-        }
-        send(req, res, 200, ticket);
-        return;
-      }
-      case 'verifyTicket': {
-        const verified = await store.verifyTicket(route.params.id);
-        if (!verified) {
-          send(req, res, 404, { message: `Ticket ${route.params.id} not found` });
-          return;
-        }
-        send(req, res, 200, verified);
-        return;
-      }
-      case 'checkInTicket': {
-        const checked = await store.checkInTicket(route.params.id);
-        if (!checked) {
-          send(req, res, 404, { message: `Ticket ${route.params.id} not found` });
-          return;
-        }
-        if ('error' in checked) {
-          send(req, res, 400, { message: checked.error });
-          return;
-        }
-        send(req, res, 200, checked);
-        return;
-      }
-      case 'createPaymentIntent': {
-        const body = await readJson(req);
-        const host = req.headers.host ?? 'localhost:3011';
-        const protoHeader = req.headers['x-forwarded-proto'];
-        const proto =
-          typeof protoHeader === 'string' ? protoHeader.split(',')[0] : 'http';
-        const publicApiBase =
-          process.env.PUBLIC_API_BASE_URL?.replace(/\/$/, '') ||
-          `${proto}://${host}/api`;
-        const created = await store.createPaymentIntent(String(body.orderId ?? ''), {
-          publicApiBase,
-        });
-        if ('error' in created) {
-          send(req, res, 404, { message: created.error });
-          return;
-        }
-        send(req, res, 201, created);
-        return;
-      }
-      case 'listPaymentIntents': {
-        const orderId = url.searchParams.get('orderId') ?? '';
-        const listed = await store.listPaymentIntentsByOrder(orderId);
-        if ('error' in listed) {
-          send(req, res, 404, { message: `Order ${orderId} not found` });
-          return;
-        }
-        send(req, res, 200, listed);
-        return;
-      }
-      case 'getPaymentIntent': {
-        const intent = await store.getPaymentIntent(route.params.id);
-        if (!intent) {
-          send(req, res, 404, {
-            message: `Payment intent ${route.params.id} not found`,
-          });
-          return;
-        }
-        send(req, res, 200, intent);
-        return;
-      }
-      case 'paymentWebhook': {
-        const body = await readJson(req);
-        const merchantTradeNo = String(
-          body.merchantTradeNo ?? body.MerchantTradeNo ?? ''
-        );
-        const rtnCode = (body.rtnCode ?? body.RtnCode) as string | number | undefined;
-        const applied = await store.applyPaymentWebhook({
-          merchantTradeNo,
-          rtnCode,
-        });
-        if ('error' in applied) {
-          send(req, res, 404, { message: applied.error });
-          return;
-        }
-        send(req, res, 200, applied);
-        return;
-      }
-      case 'mockCompletePayment': {
-        const intent = await store.getPaymentIntent(route.params.id);
-        if (!intent) {
-          send(req, res, 404, {
-            message: `Payment intent ${route.params.id} not found`,
-          });
-          return;
-        }
-        if (intent.provider !== 'mock') {
-          send(req, res, 400, {
-            message: 'Mock checkout is only for the mock provider',
-          });
-          return;
-        }
-        const outcome = url.searchParams.get('outcome');
-        if (outcome === 'paid' || outcome === 'failed') {
-          await store.applyPaymentWebhook({
-            merchantTradeNo: intent.merchantTradeNo,
-            rtnCode: outcome === 'paid' ? '1' : '0',
-          });
-          sendRedirect(req, res, portalOrderReturnUrl(intent.orderId, outcome));
-          return;
-        }
-        sendHtml(req, res, 200, mockCompleteHtml(intent));
         return;
       }
       default:

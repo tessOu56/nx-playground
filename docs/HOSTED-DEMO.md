@@ -1,6 +1,6 @@
 # Hosted event stack
 
-Public C-end is a **labelled demo** on Vercel Hobby. The public portal talks to Hobby `nx-event-stack-api` in **memory** (`EVENT_STACK_STORE=memory`, no `DATABASE_URL`). Catalog comes from fixtures; orders and tickets do not survive a cold start. This is not the funds path.
+Public C-end is a **labelled demo** on Vercel Hobby. The public portal talks to Hobby `nx-event-stack-api` in **memory** (`EVENT_STACK_STORE=memory`, no `DATABASE_URL`). Catalog comes from fixtures.
 
 Local Nest + Postgres remains the interview / future money spine. Do not point live ECPay at Hobby mock.
 
@@ -36,7 +36,7 @@ Hosted portal without owner LIFF env is a **labelled demo** (`user_demo`). Bindi
 
 Taipei catalog rows are collected from [文化部開放資料](https://cloud.culture.tw/) exhibition JSON (Taipei City only; summary + link, not full copyrighted text). Cron: `.github/workflows/collect-taipei.yml`. Tokyo rows use official museum/RSS/open-data collectors (`.github/workflows/collect-tokyo.yml`; sources in `tools/collectors/tokyo/SOURCES.md`).
 
-Payments: mock `paymentIntent` until ECPay sandbox keys exist. Public C-end (T-258) uses Hobby **memory** api-mock, not Neon and not Nest funds. Live merchant is STOP-014 / T-244.
+Public C-end uses Hobby **memory** api-mock for the fixture catalog. Nest + Neon is the write path for CMS and collectors.
 
 ## Reset
 

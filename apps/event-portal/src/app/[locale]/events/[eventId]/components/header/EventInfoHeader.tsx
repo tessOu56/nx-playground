@@ -70,14 +70,14 @@ function EventSpeakers({
   if (speakers.length === 0) return null;
   return (
     <div className='mt-8'>
-      <h2 className='mb-4 text-lg font-semibold text-gray-900'>
+      <h2 className='mb-4 text-lg font-semibold text-foreground'>
         {copy.speakers}
       </h2>
       <ul className='grid grid-cols-1 gap-4 sm:grid-cols-2'>
         {speakers.map(speaker => (
           <li
             key={speaker.name}
-            className='flex gap-3 rounded-lg border border-gray-100 p-3'
+            className='flex gap-3 rounded-lg border border-border p-3'
           >
             {speaker.avatarUrl ? (
               <Image
@@ -89,17 +89,17 @@ function EventSpeakers({
                 fallback={PLACEHOLDER_EVENT_IMAGE}
               />
             ) : (
-              <span className='flex h-14 w-14 items-center justify-center rounded-full bg-gray-100 text-lg font-medium text-gray-600'>
+              <span className='flex h-14 w-14 items-center justify-center rounded-full bg-muted text-lg font-medium text-muted-foreground'>
                 {speaker.name.slice(0, 1)}
               </span>
             )}
             <div>
-              <p className='font-medium text-gray-900'>{speaker.name}</p>
+              <p className='font-medium text-foreground'>{speaker.name}</p>
               {speaker.title ? (
-                <p className='text-sm text-gray-500'>{speaker.title}</p>
+                <p className='text-sm text-muted-foreground'>{speaker.title}</p>
               ) : null}
               {speaker.bio ? (
-                <p className='mt-1 text-sm text-gray-600'>{speaker.bio}</p>
+                <p className='mt-1 text-sm text-muted-foreground'>{speaker.bio}</p>
               ) : null}
             </div>
           </li>
@@ -130,18 +130,18 @@ function EventVenueBlock({
     <section className='mt-8 space-y-3' aria-labelledby='event-venue-heading'>
       <h2
         id='event-venue-heading'
-        className='text-lg font-semibold text-gray-900'
+        className='text-lg font-semibold text-foreground'
       >
         {copy.venue}
       </h2>
-      {venue.address ? <p className='text-gray-700'>{venue.address}</p> : null}
+      {venue.address ? <p className='text-foreground'>{venue.address}</p> : null}
       {venue.transport ? (
-        <p className='text-sm text-gray-600'>{venue.transport}</p>
+        <p className='text-sm text-muted-foreground'>{venue.transport}</p>
       ) : null}
       {canEmbed ? (
         <iframe
           title={copy.mapTitle}
-          className='h-56 w-full rounded-lg border border-gray-200 bg-gray-100'
+          className='h-56 w-full rounded-lg border border-border bg-muted'
           src={osmEmbedSrc(venue.lat as number, venue.lng as number)}
           loading='lazy'
           referrerPolicy='no-referrer-when-downgrade'
@@ -151,7 +151,7 @@ function EventVenueBlock({
         <p>
           <a
             href={osmSearchHref(query)}
-            className='text-sm font-medium text-gray-800 underline underline-offset-2 hover:text-gray-950'
+            className='text-sm font-medium text-foreground underline underline-offset-2 hover:text-foreground'
             target='_blank'
             rel='noopener noreferrer'
           >
@@ -173,10 +173,10 @@ function Fact({
 }) {
   return (
     <div>
-      <dt className='text-xs font-medium uppercase tracking-wide text-gray-500'>
+      <dt className='text-xs font-medium uppercase tracking-wide text-muted-foreground'>
         {label}
       </dt>
-      <dd className='mt-1 text-sm leading-6 text-gray-900 sm:text-base'>{value}</dd>
+      <dd className='mt-1 text-sm leading-6 text-foreground sm:text-base'>{value}</dd>
     </div>
   );
 }
@@ -200,8 +200,8 @@ export function EventInfoHeader({
 
   return (
     <div className='space-y-6'>
-      <article className='overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm'>
-        <div className='relative aspect-[16/9] bg-gray-100 sm:aspect-auto sm:h-72'>
+      <article className='overflow-hidden rounded-xl border border-border bg-card shadow-sm'>
+        <div className='relative aspect-[16/9] bg-muted sm:aspect-auto sm:h-72'>
           <Image
             src={event.image}
             alt={event.title}
@@ -217,14 +217,14 @@ export function EventInfoHeader({
         <div className='p-5 sm:p-6'>
           <div className='mb-3 flex flex-wrap gap-1.5'>
             {event.region ? (
-              <span className='rounded-full bg-gray-900 px-2.5 py-0.5 text-xs font-medium text-white'>
+              <span className='rounded-full bg-foreground px-2.5 py-0.5 text-xs font-medium text-background'>
                 {copy.region[event.region]}
               </span>
             ) : null}
-            <span className='rounded-full bg-gray-100 px-2.5 py-0.5 text-xs font-medium text-gray-800'>
+            <span className='rounded-full bg-muted px-2.5 py-0.5 text-xs font-medium text-foreground'>
               {copy.domain[domain]}
             </span>
-            <span className='rounded-full bg-gray-100 px-2.5 py-0.5 text-xs font-medium text-gray-700'>
+            <span className='rounded-full bg-muted px-2.5 py-0.5 text-xs font-medium text-foreground'>
               {copy.status[kind]}
             </span>
             {event.sample ? (
@@ -233,10 +233,10 @@ export function EventInfoHeader({
               </span>
             ) : null}
           </div>
-          <h1 className='font-display text-2xl font-semibold tracking-tight text-gray-900 sm:text-3xl'>
+          <h1 className='font-display text-2xl font-semibold tracking-tight text-foreground sm:text-3xl'>
             {event.title}
           </h1>
-          <dl className='mt-4 grid grid-cols-1 gap-4 border-y border-gray-100 py-4 sm:grid-cols-2'>
+          <dl className='mt-4 grid grid-cols-1 gap-4 border-y border-border py-4 sm:grid-cols-2'>
             <Fact label={copy.when} value={dateLabel} />
             <Fact label={copy.price} value={catalogPriceLabel(event, locale)} />
             {event.location ? (
@@ -248,20 +248,20 @@ export function EventInfoHeader({
           </dl>
           {ended ? (
             <div
-              className='mt-4 rounded-lg border border-gray-200 bg-gray-50 px-4 py-3'
+              className='mt-4 rounded-lg border border-border bg-muted px-4 py-3'
               role='status'
               data-testid='exhibition-ended-notice'
             >
-              <p className='text-sm font-semibold text-gray-900'>
+              <p className='text-sm font-semibold text-foreground'>
                 {copy.endedNotice}
               </p>
-              <p className='mt-1 text-sm leading-6 text-gray-600'>
+              <p className='mt-1 text-sm leading-6 text-muted-foreground'>
                 {copy.endedNoticeHint}
               </p>
             </div>
           ) : null}
           {event.description ? (
-            <p className='mt-5 text-base leading-7 text-gray-700'>
+            <p className='mt-5 text-base leading-7 text-foreground'>
               {event.description}
             </p>
           ) : null}
@@ -271,7 +271,7 @@ export function EventInfoHeader({
                 href={event.sourceUrl}
                 target='_blank'
                 rel='noopener noreferrer'
-                className='text-sm font-medium text-gray-800 underline underline-offset-2 hover:text-gray-950'
+                className='text-sm font-medium text-foreground underline underline-offset-2 hover:text-foreground'
               >
                 {copy.officialSource}
                 <span className='sr-only'>（{copy.externalLink}）</span>
@@ -284,7 +284,7 @@ export function EventInfoHeader({
                 href={event.plinthLotUrl}
                 target='_blank'
                 rel='noreferrer'
-                className='text-sm font-medium text-gray-800 underline underline-offset-2'
+                className='text-sm font-medium text-foreground underline underline-offset-2'
               >
                 {copy.plinthLot}
               </a>

@@ -3,8 +3,7 @@ id: event-portal
 name: Event Platform
 version: 0.0.1
 description: >-
-  Event browsing and registration platform with LINE LIFF integration and QR
-  code ticketing
+  Exhibition catalog for Taipei and Tokyo with LINE discovery
 techStack:
   - Next.js 15
   - React 19
@@ -22,7 +21,7 @@ lastUpdated: '2025-10-21'
 ---
 # Events - 活動管理平台
 
-> 基於 LINE LIFF 的活動管理和報名平台，提供完整的活動瀏覽、報名、支付和票券管理功能
+> Exhibition catalog for Taipei and Tokyo, with LINE login and Messaging search.
 
 ## 🎯 專案簡介
 
@@ -92,12 +91,8 @@ src/
 ├── app/                    # Next.js App Router
 │   ├── [locale]/          # 語言路由
 │   │   ├── (home)/        # 首頁
-│   │   ├── events/        # 活動列表和詳情
-│   │   ├── (checkout)/    # 結帳流程
-│   │   ├── (registration)/ # 報名表單
-│   │   ├── (checkin)/     # 票券簽到
-│   │   ├── orders/        # 訂單管理
-│   │   └── vendors/       # 主辦方頁面
+│   │   ├── events/        # 展覽列表和詳情
+│   │   └── feedback/      # 回饋
 │   ├── api/               # API Routes
 │   ├── layout.tsx
 │   └── globals.css
@@ -121,36 +116,15 @@ src/
 
 ## 🎯 主要功能
 
-### 1. 活動瀏覽
-- 活動列表（支援分頁）
-- 活動詳情頁
-- 場次選擇
-- 票券選擇
-- FAQ 和活動內容展示
+### 1. Exhibition catalog
+- Taipei / Tokyo list and search
+- Exhibition detail
+- Official source and LINE CTAs
 
-### 2. 報名流程
-- 購物車管理
-- 票券選擇
-- 場次選擇
-- 動態報名表單
-- 支付方式選擇（現金/ATM轉帳）
-
-### 3. 訂單管理
-- 訂單列表
-- 訂單詳情
-- 付款狀態
-- 轉帳資訊
-- QR Code 顯示
-
-### 4. 票券功能
-- 票券 QR Code
-- 票券驗證
-- 簽到功能
-
-### 5. LINE 整合
-- LIFF 登入
-- LINE 分享
-- LINE 官方帳號連結
+### 2. LINE
+- LIFF / Login
+- Messaging catalog search
+- Official account link
 
 ### 6. 國際化
 - 繁體中文 (zh-TW)

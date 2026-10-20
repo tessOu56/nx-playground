@@ -1,3 +1,3 @@
 'use client';
 
-export { Input } from '@nx-playground/ui-components';
+export { Input } from '@is_tess/components/core';

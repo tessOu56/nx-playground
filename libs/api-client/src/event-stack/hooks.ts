@@ -3,20 +3,16 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
 import {
-  confirmOrder,
   createEvent,
-  createOrder,
   deleteEvent,
   getEvent,
-  getOrder,
   getStats,
   listEvents,
-  listOrders,
   listUsers,
   updateEvent,
 } from './operations';
 
-import type { CreateEventDto, CreateOrderDto } from './types';
+import type { CreateEventDto } from './types';
 
 export function useListEvents(query?: {
   status?: string;
@@ -72,46 +68,6 @@ export function useDeleteEvent() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['event-stack'] });
       queryClient.invalidateQueries({ queryKey: ['events'] });
-    },
-  });
-}
-
-export function useCreateOrderMutation() {
-  const queryClient = useQueryClient();
-  return useMutation({
-    mutationFn: (body: CreateOrderDto) => createOrder(body),
-    onSuccess: order => {
-      queryClient.invalidateQueries({ queryKey: ['event-stack', 'orders'] });
-      queryClient.setQueryData(['event-stack', 'order', order.id], order);
-    },
-  });
-}
-
-export function useListOrders(query?: {
-  userId?: string;
-  page?: number;
-  limit?: number;
-}) {
-  return useQuery({
-    queryKey: ['event-stack', 'orders', query],
-    queryFn: () => listOrders(query),
-  });
-}
-
-export function useGetOrder(id: string) {
-  return useQuery({
-    queryKey: ['event-stack', 'order', id],
-    queryFn: () => getOrder(id),
-    enabled: Boolean(id),
-  });
-}
-
-export function useConfirmOrderMutation() {
-  const queryClient = useQueryClient();
-  return useMutation({
-    mutationFn: (id: string) => confirmOrder(id),
-    onSuccess: order => {
-      queryClient.setQueryData(['event-stack', 'order', order.id], order);
     },
   });
 }

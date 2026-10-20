@@ -39,7 +39,7 @@ export function OrderedList({ children, className = '' }: OrderedListProps) {
 
   return (
     <ol
-      className={`text-gray-700 mb-4 list-decimal list-inside space-y-1 ${className}`}
+      className={`text-foreground mb-4 list-decimal list-inside space-y-1 ${className}`}
     >
       <li>{content}</li>
     </ol>

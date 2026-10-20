@@ -2,10 +2,7 @@
  * Next.js 頁面配置預設值
  */
 
-import {
-  generateEventMetadata,
-  generateOrderMetadata,
-} from './metadataGenerators';
+import { generateEventMetadata } from './metadataGenerators';
 
 import type { PageConfig } from '@/types';
 
@@ -88,22 +85,4 @@ export const PAGE_CONFIG_PRESETS = {
     generateMetadata: generateEventMetadata,
   },
 
-  /** 訂單詳情頁面 - 帶動態 metadata */
-  orderDetail: {
-    dynamic: 'auto' as const,
-    revalidate: 60, // 1分鐘重新驗證
-    fetchCache: 'auto' as const,
-    ssr: true,
-    isr: true,
-    generateMetadata: generateOrderMetadata,
-  },
-
-  /** 結帳頁面 - 帶動態 metadata */
-  checkout: {
-    dynamic: 'auto' as const,
-    revalidate: 0, // 不緩存，每次都重新驗證
-    fetchCache: 'force-no-store' as const,
-    ssr: true,
-    isr: false,
-  },
 } as const satisfies Record<string, PageConfig>;

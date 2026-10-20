@@ -1,12 +1,12 @@
 import { neon } from '@neondatabase/serverless';
 
-import type { EmbeddingResult } from './embeddings/types';
 import {
   HYBRID_FTS_WEIGHT,
   HYBRID_VECTOR_WEIGHT,
   VECTOR_RECALL_MIN_COSINE,
   toVectorLiteral,
-} from './embeddings/vector';
+  type EmbeddingResult,
+} from '@nx-playground/exhibition-embeddings';
 import { publicHttpsUrl } from './https-url';
 import type {
   ExhibitionDocument,

@@ -32,17 +32,17 @@ export function EventSchedule({
 
   return (
     <Card className='p-5'>
-      <h2 className='mb-4 text-base font-semibold text-gray-900'>
+      <h2 className='mb-4 text-base font-semibold text-foreground'>
         {copy.sessions}
       </h2>
       <ol className='space-y-3'>
         {event.sessions.map(session => (
           <li
             key={session.id}
-            className='rounded-lg border border-gray-200 px-4 py-3'
+            className='rounded-lg border border-border px-4 py-3'
           >
-            <p className='font-medium text-gray-900'>{session.name}</p>
-            <p className='mt-1 text-sm text-gray-600'>
+            <p className='font-medium text-foreground'>{session.name}</p>
+            <p className='mt-1 text-sm text-muted-foreground'>
               {formatSessionDate(session.date, locale, timeZone)}
               {session.time ? ` · ${session.time}` : ''}
             </p>

@@ -41,7 +41,7 @@ export function Quote({ children, className = '' }: QuoteProps) {
     <blockquote
       className={`border-l-4 border-blue-500 pl-4 py-2 my-4 bg-blue-50 rounded-r-lg ${className}`}
     >
-      <p className='text-gray-700 italic'>{content}</p>
+      <p className='text-foreground italic'>{content}</p>
     </blockquote>
   );
 }

@@ -27,7 +27,6 @@ import {
   PieChart,
   ArrowUpRight,
   ArrowDownRight,
-  Ticket,
 } from 'lucide-react';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -98,7 +97,7 @@ export const DashboardPage = () => {
 
   const totalEvents = stats?.events ?? 0;
   const activeUsers = stats?.activeUsers ?? 0;
-  const ticketsSold = stats?.ticketsSold ?? 0;
+  const totalUsers = stats?.users ?? 0;
 
   const getStatusIcon = (status: string) => {
     switch (status) {
@@ -235,20 +234,19 @@ export const DashboardPage = () => {
             </CardContent>
           </Card>
 
-          {/* 已售出票券（Nest） */}
           <Card>
             <CardContent className='p-4'>
               <div className='flex items-center justify-between'>
                 <div className='flex items-center'>
                   <div className='p-2 bg-warning-100 rounded-lg'>
-                    <Ticket className='w-6 h-6 text-warning-600' />
+                    <Users className='w-6 h-6 text-warning-600' />
                   </div>
                   <div className='ml-4'>
                     <p className='text-sm font-medium text-text-secondary'>
-                      {t('dashboard.stats.ticketsSold') as string}
+                      {t('dashboard.stats.totalUsers') as string}
                     </p>
                     <p className='text-2xl font-bold text-text-primary'>
-                      {statsLoading ? '…' : ticketsSold.toLocaleString()}
+                      {statsLoading ? '…' : totalUsers.toLocaleString()}
                     </p>
                   </div>
                 </div>

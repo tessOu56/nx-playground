@@ -1,10 +1,5 @@
 import { getEventCoverUrl } from '../../../utils/imageUtils';
 import { mockLineSettings } from '../../lineSettings/data';
-import { generateTemplateByEventType } from '../../registrationForms/generate/templates';
-import {
-  quickGenerateSessions,
-  generateFlexibleSessions,
-} from '../../sessions/generate';
 import { mockVendors } from '../../vendors/data';
 
 import type { Event, EventDetail } from '@/types';
@@ -97,13 +92,7 @@ export const mockEvents: Event[] = [
     category: '文化體驗',
     tags: ['澎湖', '花火節', '離島'],
     status: 'upcoming',
-    registrationFormTemplate: generateTemplateByEventType('cultural'),
-    sessions: generateFlexibleSessions('event-1', '2026-04-15', 2500, 120, {
-      sessionCount: 6,
-      ticketTypesPerSession: 3,
-      // 展示多種場次安排邏輯
-      sessionArrangement: 'mixed', // 混合安排：同天不同時段 + 不同天不同時段 + 不同天同一時段
-    }),
+    sessions: [],
   },
   // === 2025 年即將到來的活動 (10天內) ===
   {
@@ -122,12 +111,7 @@ export const mockEvents: Event[] = [
     category: '戶外活動',
     tags: ['海岸', '地質公園', '海鮮'],
     status: 'upcoming',
-    registrationFormTemplate: generateTemplateByEventType('outdoor'),
-    sessions: quickGenerateSessions('event-2', '2025-01-15', 1200, 45, {
-      sessionCount: 2,
-      eventType: 'single_day',
-      ticketTypesPerSession: 2,
-    }),
+    sessions: [],
   },
   // === 2025 年正常舉辦的活動 ===
   {
@@ -146,12 +130,7 @@ export const mockEvents: Event[] = [
     category: '戶外活動',
     tags: ['阿里山', '日出', '雲海'],
     status: 'upcoming',
-    registrationFormTemplate: generateTemplateByEventType('outdoor'),
-    sessions: quickGenerateSessions('event-3', '2025-03-20', 1500, 45, {
-      sessionCount: 3,
-      eventType: 'multi_day',
-      ticketTypesPerSession: 2,
-    }),
+    sessions: [],
   },
   // === 2024 年已完成的活動 ===
   {
@@ -170,12 +149,7 @@ export const mockEvents: Event[] = [
     category: '戶外活動',
     tags: ['健行', '自然', '陽明山'],
     status: 'completed',
-    registrationFormTemplate: generateTemplateByEventType('outdoor'),
-    sessions: quickGenerateSessions('event-4', '2025-03-20', 800, 50, {
-      sessionCount: 2,
-      eventType: 'single_day',
-      ticketTypesPerSession: 2,
-    }),
+    sessions: [],
   },
 ];
 

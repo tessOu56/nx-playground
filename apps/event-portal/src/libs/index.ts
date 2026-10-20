@@ -16,9 +16,6 @@ export * from './mock';
 // CSS 相關功能
 export * from './css';
 
-// QR Code 相關功能
-export * from './qrcode';
-
 // 錯誤處理
 export * from './error';
 

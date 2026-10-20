@@ -87,7 +87,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         <link rel='icon' href='/icon.svg' type='image/svg+xml' />
         <link rel='apple-touch-icon' href='/apple-icon.svg' />
       </head>
-      <body className={`${sans.className} bg-gray-50 text-gray-900`}>
+      <body className={`${sans.className} bg-background text-foreground`}>
         {children}
       </body>
     </html>

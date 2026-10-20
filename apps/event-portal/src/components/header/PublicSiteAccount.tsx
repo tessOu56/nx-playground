@@ -13,12 +13,12 @@ export function PublicSiteAccount({ locale }: { locale: string }) {
     return (
       <div className='flex items-center gap-2 text-sm'>
         {name ? (
-          <span className='max-w-[9rem] truncate text-gray-700'>{name}</span>
+          <span className='max-w-[9rem] truncate text-foreground'>{name}</span>
         ) : null}
         <button
           type='button'
           onClick={() => logout()}
-          className='rounded-md px-1.5 py-1 text-xs font-medium text-gray-800 hover:bg-gray-100 hover:text-gray-900 sm:px-2 sm:text-sm'
+          className='rounded-md px-1.5 py-1 text-xs font-medium text-foreground hover:bg-muted sm:px-2 sm:text-sm'
         >
           {copy.logout}
         </button>
@@ -36,7 +36,7 @@ export function PublicSiteAccount({ locale }: { locale: string }) {
         type='button'
         onClick={() => login()}
         disabled={!isInitialized}
-        className='rounded-md px-1.5 py-1 text-xs font-medium text-gray-800 hover:bg-gray-100 hover:text-gray-900 sm:px-2 sm:text-sm'
+        className='rounded-md px-1.5 py-1 text-xs font-medium text-foreground hover:bg-muted sm:px-2 sm:text-sm'
       >
         {error
           ? copy.retryLogin
