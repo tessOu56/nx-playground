@@ -39,12 +39,14 @@ export function EventStackCards({
   empty = 'catalog',
   emptyQuery,
   onClearFilters,
+  layout = 'grid',
 }: {
   events: Event[];
   locale: string;
   empty?: CatalogEmptyKind;
   emptyQuery?: CatalogQuery;
   onClearFilters?: () => void;
+  layout?: 'grid' | 'stack';
 }) {
   const copy = demoCopy(locale);
 
@@ -67,7 +69,13 @@ export function EventStackCards({
   }
 
   return (
-    <ul className='grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-3'>
+    <ul
+      className={
+        layout === 'stack'
+          ? 'grid grid-cols-1 gap-5'
+          : 'grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-3'
+      }
+    >
       {events.map(event => {
         const kind = eventListKind(event);
         const domain = event.domainKind ?? 'exhibition';

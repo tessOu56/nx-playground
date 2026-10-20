@@ -312,8 +312,8 @@ export function demoCopy(locale: string | undefined) {
       'This site does not sell tickets. Confirm hours and admission on the official page.',
       'このサイトではチケットを販売しません。開館と料金は公式ページで確認してください。'
     ),
-    featuredTaipei: t(locale, '台北現正展出', 'Now in Taipei', '台北で開催中'),
-    featuredTokyo: t(locale, '東京現正展出', 'Now in Tokyo', '東京で開催中'),
+    featuredTaipei: t(locale, '台北展覽', 'Taipei', '台北'),
+    featuredTokyo: t(locale, '東京展覽', 'Tokyo', '東京'),
     seeCity: (city: 'TAIPEI' | 'TOKYO') =>
       t(
         locale,

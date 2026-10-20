@@ -48,6 +48,7 @@ export function FeaturedCities({
               <EventStackCards
                 events={city.items}
                 locale={locale}
+                layout='stack'
                 empty='city'
                 emptyQuery={{
                   q: '',
