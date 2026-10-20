@@ -3,5 +3,11 @@
   "framework": "nextjs",
   "installCommand": "cd ../.. && pnpm install --no-frozen-lockfile",
   "buildCommand": "cd ../.. && pnpm exec nx build @nx-playground/event-portal --skip-nx-cache",
-  "outputDirectory": ".next"
+  "outputDirectory": ".next",
+  "crons": [
+    {
+      "path": "/api/cron/weekly-digest",
+      "schedule": "0 1 * * 1"
+    }
+  ]
 }

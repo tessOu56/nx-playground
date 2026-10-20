@@ -4,6 +4,12 @@
   "installCommand": "pnpm install --no-frozen-lockfile",
   "buildCommand": "pnpm exec nx build @nx-playground/event-portal --skip-nx-cache",
   "outputDirectory": "apps/event-portal/.next",
+  "crons": [
+    {
+      "path": "/api/cron/weekly-digest",
+      "schedule": "0 1 * * 1"
+    }
+  ],
   "headers": [
     {
       "source": "/(.*)",

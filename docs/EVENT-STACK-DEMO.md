@@ -79,7 +79,7 @@ Auth stays on **3004** if you start it; this script does not require it.
 
 ## Attendee identity (LIFF)
 
-Organizer SSO is local **Ory Kratos** (password). LINE for attendees is the portal `LiffProvider` plus optional Next BFF `POST /api/line/auth/token`. Exhibition discovery chat is a **portal** Messaging webhook (`POST /api/line/webhook`) that queries Neon directly — not Nest, not the Render API. Setup: [`docs/runbooks/line-bot.md`](./runbooks/line-bot.md).
+Organizer SSO is local **Ory Kratos** (password). LINE for attendees is the portal `LiffProvider` plus optional Next BFF `POST /api/line/auth/token`. Exhibition discovery chat is a **portal** Messaging webhook (`POST /api/line/webhook`) that queries Neon directly — not Nest, not the Render API. Setup: [`docs/runbooks/line-bot.md`](./runbooks/line-bot.md). Weekly digest (P4) is a Vercel cron on the portal: [`docs/runbooks/weekly-digest.md`](./runbooks/weekly-digest.md).
 
 | Browser | `userId` on orders |
 | --- | --- |
