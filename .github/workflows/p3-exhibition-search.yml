@@ -37,4 +37,7 @@ jobs:
             apps/event-portal/src/libs/api/event-stack-map.test.ts \
             apps/event-portal/src/libs/api/portal-event-error.test.ts \
             apps/event-portal/src/libs/i18n/demo-copy.test.ts \
-            apps/event-portal/src/components/editor/utils.test.ts
+            apps/event-portal/src/components/editor/utils.test.ts \
+            tools/collectors/shared/*.test.ts \
+            tools/collectors/moc-taipei/*.test.ts \
+            tools/collectors/tokyo/*.test.ts

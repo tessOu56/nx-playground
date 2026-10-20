@@ -30,8 +30,12 @@ jobs:
             apps/event-portal/src/app/api/line/webhook/route.test.ts \
             apps/event-portal/src/app/api/line/auth/token/route.test.ts
 
-      - name: Taipei collector normalization tests
-        run: node --import tsx --test tools/collectors/moc-taipei/*.test.ts
+      - name: Collector tests (Taipei + Tokyo)
+        run: |
+          node --import tsx --test \
+            tools/collectors/shared/*.test.ts \
+            tools/collectors/moc-taipei/*.test.ts \
+            tools/collectors/tokyo/*.test.ts
 
       - name: Nest mutating API and payment callback tests
         run: pnpm exec nx test @nx-playground/api-server --skip-nx-cache

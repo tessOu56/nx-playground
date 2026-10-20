@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>イベント - シビック・クリエイティブ・ベース東京 [CCBT]</title>
+    <item>
+      <title>CCBT オープンスタジオ展示 2026</title>
+      <link>https://ccbt.rekibun.or.jp/events/open-studio-exhibition-2026</link>
+      <guid>https://ccbt.rekibun.or.jp/?post_type=event&amp;p=99</guid>
+      <pubDate>Mon, 01 Jun 2026 00:00:00 +0000</pubDate>
+      <description><![CDATA[<p>開催時期 2026年6月27日～8月2日 開催場所 シビック・クリエイティブ・ベース東京［CCBT］</p>]]></description>
+    </item>
+    <item>
+      <title>カンファレンス アート&amp;テクノロジー</title>
+      <link>https://ccbt.rekibun.or.jp/events/conference</link>
+      <guid>https://ccbt.rekibun.or.jp/?post_type=event&amp;p=100</guid>
+      <description><![CDATA[<p>開催時期 2026年11月1日 カンファレンスです。</p>]]></description>
+    </item>
+  </channel>
+</rss>
