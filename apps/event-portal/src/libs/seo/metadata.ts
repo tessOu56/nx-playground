@@ -39,7 +39,7 @@ export function generatePageMetadata(pathname: string): Metadata {
   return {
     ...baseMetadata,
     alternates: {
-      canonical: `https://events.nx-playground.local${pathname}`,
+      canonical: `${process.env.NEXT_PUBLIC_SITE_URL ?? 'https://nx-event-portal.vercel.app'}${pathname}`,
     },
   };
 }

@@ -97,7 +97,11 @@ export const LiffProvider: FC<LiffProviderProps> = ({ children }) => {
 
       try {
         const urlParams = new URLSearchParams(window.location.search);
+        const oauthError = urlParams.get('error');
         const hasCallback = urlParams.has('code') && urlParams.has('state');
+        if (oauthError) {
+          finalState.error = oauthError;
+        }
 
         let userInfo: LiffUserInfo | null = null;
         let liffContext = null;

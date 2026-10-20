@@ -17,6 +17,10 @@ describe('demo-copy', () => {
     assert.equal(demoCopy('en').skipToContent, 'Skip to content');
     assert.equal(demoCopy('en').lineChat, 'Ask on LINE');
     assert.equal(demoCopy('zh-TW').officialSource, '官方頁面');
+    assert.equal(demoCopy('en').emptyCity('TOKYO'), 'No exhibitions listed in Tokyo');
+    assert.equal(demoCopy('zh-TW').endedNotice, '這檔展覽已結束');
+    assert.equal(demoCopy('en').lineLoginCancelled, 'LINE sign-in was cancelled');
+    assert.equal(demoCopy('ja').lineOutside, 'このページは LINE で開いてください');
   });
 
   it('localizes Japanese discovery copy and retired ticketing keys', () => {

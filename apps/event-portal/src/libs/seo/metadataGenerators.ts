@@ -17,6 +17,8 @@ export async function generateEventMetadata({
   const copy = demoCopy(locale);
   try {
     const event = await fetchPortalEvent(eventId);
+    const ogLocale =
+      locale === 'en' ? 'en_US' : locale === 'ja' ? 'ja_JP' : 'zh_TW';
     return {
       title: `${event.title} — ${copy.navEvents}`,
       description: event.description || copy.metaDescription,
@@ -25,12 +27,23 @@ export async function generateEventMetadata({
         title: event.title,
         description: event.description || copy.metaDescription,
         type: 'website',
+        locale: ogLocale,
+        images: event.image
+          ? [{ url: event.image, alt: event.title }]
+          : undefined,
+      },
+      twitter: {
+        card: 'summary_large_image',
+        title: event.title,
+        description: event.description || copy.metaDescription,
+        images: event.image ? [event.image] : undefined,
       },
     };
   } catch {
     return {
       title: `${copy.notFound} — NX Playground`,
       description: copy.notFoundHint,
+      robots: { index: false, follow: true },
     };
   }
 }

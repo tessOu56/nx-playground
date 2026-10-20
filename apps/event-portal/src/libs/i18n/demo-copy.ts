@@ -240,6 +240,87 @@ export function demoCopy(locale: string | undefined) {
       'Try another keyword, or clear filters.',
       '別のキーワードを試すか、絞り込みを解除してください。'
     ),
+    emptyCity: (city: 'TAIPEI' | 'TOKYO') =>
+      t(
+        locale,
+        city === 'TOKYO' ? '目前沒有東京的展覽' : '目前沒有台北的展覽',
+        city === 'TOKYO'
+          ? 'No exhibitions listed in Tokyo'
+          : 'No exhibitions listed in Taipei',
+        city === 'TOKYO'
+          ? '東京の展覧会はまだありません'
+          : '台北の展覧会はまだありません'
+      ),
+    emptyCityHint: t(
+      locale,
+      '改看全部城市，或在 LINE 問近期檔期。',
+      'See all cities, or ask on LINE for current dates.',
+      'すべての都市を見るか、LINE で会期を聞いてください。'
+    ),
+    emptyEnded: t(
+      locale,
+      '沒有已結束的展覽',
+      'No ended exhibitions',
+      '終了した展覧会はありません'
+    ),
+    emptyEndedHint: t(
+      locale,
+      '改看展出中或即將開始，或到 LINE 問近期檔期。',
+      'Switch to now showing or upcoming, or ask on LINE.',
+      '開催中や開催予定に切り替えるか、LINE で聞いてください。'
+    ),
+    endedNotice: t(
+      locale,
+      '這檔展覽已結束',
+      'This exhibition has ended',
+      'この展覧会は終了しました'
+    ),
+    endedNoticeHint: t(
+      locale,
+      '官方頁面仍可能有回顧或下一檔資訊。入場與開放時間以官方為準。',
+      'The official page may still have recap or next-show notes. Confirm hours there.',
+      '公式ページに振り返りや次回情報がある場合があります。開館は公式で確認してください。'
+    ),
+    lineLoginCancelled: t(
+      locale,
+      '已取消 LINE 登入',
+      'LINE sign-in was cancelled',
+      'LINE ログインをキャンセルしました'
+    ),
+    lineLoginCancelledHint: t(
+      locale,
+      '可以繼續逛目錄，或再試一次登入。',
+      'Keep browsing the catalog, or try signing in again.',
+      'カタログを続けるか、もう一度ログインしてください。'
+    ),
+    lineOutside: t(
+      locale,
+      '請在 LINE 裡打開這個頁面',
+      'Open this page in LINE',
+      'このページは LINE で開いてください'
+    ),
+    lineOutsideHint: t(
+      locale,
+      '對話搜尋要在 LINE 裡用。瀏覽器可以繼續看目錄，或先加入官方帳號。',
+      'Chat search works inside LINE. You can keep browsing here, or add the official account.',
+      '会話検索は LINE 内で使います。ブラウザではカタログを続けるか、公式アカウントを追加してください。'
+    ),
+    dismissNotice: t(locale, '關閉', 'Dismiss', '閉じる'),
+    footerNote: t(
+      locale,
+      '這個站不售票。入場與開放時間以官方頁面為準。',
+      'This site does not sell tickets. Confirm hours and admission on the official page.',
+      'このサイトではチケットを販売しません。開館と料金は公式ページで確認してください。'
+    ),
+    featuredTaipei: t(locale, '台北現正展出', 'Now in Taipei', '台北で開催中'),
+    featuredTokyo: t(locale, '東京現正展出', 'Now in Tokyo', '東京で開催中'),
+    seeCity: (city: 'TAIPEI' | 'TOKYO') =>
+      t(
+        locale,
+        city === 'TOKYO' ? '看東京展覽' : '看台北展覽',
+        city === 'TOKYO' ? 'See Tokyo' : 'See Taipei',
+        city === 'TOKYO' ? '東京の展覧会' : '台北の展覧会'
+      ),
     clearFilters: t(locale, '清除篩選', 'Clear filters', '絞り込みを解除'),
     backToEvents: t(locale, '回到展覽目錄', 'Back to exhibitions', '展覧会一覧へ戻る'),
     sessions: t(locale, '會期', 'Schedule', '会期'),

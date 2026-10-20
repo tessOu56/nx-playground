@@ -1,7 +1,8 @@
 import Link from 'next/link';
 
-import { NoEvents } from './NoEvents';
+import { CatalogEmpty } from './CatalogEmpty';
 import { Image } from '@/components';
+import type { CatalogEmptyKind, CatalogQuery } from '@/libs/api/catalog-query';
 import { eventListKind, regionTimeZone } from '@/libs/api/event-stack-map';
 import { catalogPriceLabel, demoCopy } from '@/libs/i18n/demo-copy';
 import type { Event } from '@/types';
@@ -36,41 +37,33 @@ export function EventStackCards({
   events,
   locale,
   empty = 'catalog',
+  emptyQuery,
   onClearFilters,
 }: {
   events: Event[];
   locale: string;
-  empty?: 'catalog' | 'search';
+  empty?: CatalogEmptyKind;
+  emptyQuery?: CatalogQuery;
   onClearFilters?: () => void;
 }) {
   const copy = demoCopy(locale);
 
   if (!events.length) {
-    if (empty === 'search') {
-      return (
-        <div
-          className='rounded-xl border border-dashed border-gray-200 bg-white px-6 py-14 text-center'
-          data-testid='events-search-empty'
-        >
-          <h3 className='text-lg font-semibold text-gray-900'>
-            {copy.emptySearch}
-          </h3>
-          <p className='mx-auto mt-2 max-w-md text-sm text-gray-600'>
-            {copy.emptySearchHint}
-          </p>
-          {onClearFilters ? (
-            <button
-              type='button'
-              onClick={onClearFilters}
-              className='mt-5 rounded-md bg-gray-900 px-4 py-2 text-sm font-medium text-white hover:bg-gray-800'
-            >
-              {copy.clearFilters}
-            </button>
-          ) : null}
-        </div>
-      );
-    }
-    return <NoEvents locale={locale} />;
+    return (
+      <CatalogEmpty
+        kind={empty}
+        locale={locale}
+        query={
+          emptyQuery ?? {
+            q: '',
+            city: 'all',
+            dates: 'all',
+            category: '',
+          }
+        }
+        onClearFilters={onClearFilters}
+      />
+    );
   }
 
   return (

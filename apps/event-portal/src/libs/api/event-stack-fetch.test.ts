@@ -48,6 +48,11 @@ describe('labelled-demo catalog fallback', () => {
       assert.equal(summer.speakers[0]?.name, '張予');
       assert.ok(summer.faq.length > 0);
       assert.equal(summer.price, 0);
+
+      await assert.rejects(
+        () => fetchPortalEvent('does-not-exist'),
+        /not found/i
+      );
     } finally {
       if (previous === undefined) delete process.env.EVENT_STACK_LABELLED_DEMO_BFF;
       else process.env.EVENT_STACK_LABELLED_DEMO_BFF = previous;

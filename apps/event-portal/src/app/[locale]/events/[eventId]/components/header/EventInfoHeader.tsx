@@ -170,8 +170,9 @@ export function EventInfoHeader({
 }: EventInfoHeaderProps) {
   const copy = demoCopy(locale);
   const kind = eventListKind(event);
-  const domain = event.domainKind ?? 'talk';
+  const domain = event.domainKind ?? 'exhibition';
   const timeZone = regionTimeZone(event.region, event.timezone);
+  const ended = kind === 'completed' || kind === 'sale_ended';
 
   return (
     <div className='space-y-6'>
@@ -206,9 +207,23 @@ export function EventInfoHeader({
               </span>
             ) : null}
           </div>
-          <h1 className='mb-4 text-3xl font-semibold tracking-tight text-gray-900'>
+          <h1 className='mb-4 font-display text-3xl font-semibold tracking-tight text-gray-900'>
             {event.title}
           </h1>
+          {ended ? (
+            <div
+              className='mb-4 rounded-lg border border-gray-200 bg-gray-50 px-4 py-3'
+              role='status'
+              data-testid='exhibition-ended-notice'
+            >
+              <p className='text-sm font-semibold text-gray-900'>
+                {copy.endedNotice}
+              </p>
+              <p className='mt-1 text-sm leading-6 text-gray-600'>
+                {copy.endedNoticeHint}
+              </p>
+            </div>
+          ) : null}
           {event.plinthLotUrl ? (
             <p className='mb-4'>
               <a

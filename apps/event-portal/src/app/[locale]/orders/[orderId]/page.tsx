@@ -1,25 +1,30 @@
-import { Suspense } from 'react';
+import { type Metadata } from 'next';
 
-import { OrderSkeleton, OrderDetail } from './components';
+import { RetiredFlow } from '@/app/[locale]/events/components/RetiredFlow';
+import { demoCopy } from '@/libs/i18n/demo-copy';
 
-import { orderStaticParams } from '@/libs/api/order-static-params';
-
+export const dynamic = 'force-dynamic';
 export const dynamicParams = true;
 
-export async function generateStaticParams() {
-  return orderStaticParams();
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  const copy = demoCopy(locale);
+  return {
+    title: `${copy.retiredOrdersTitle} | NX Playground`,
+    description: copy.retiredOrdersLead,
+    robots: 'noindex, nofollow',
+  };
 }
 
 export default async function OrderPage({
   params,
 }: {
-  params: Promise<{ orderId: string }>;
+  params: Promise<{ locale: string }>;
 }) {
-  const { orderId } = await params;
-
-  return (
-    <Suspense fallback={<OrderSkeleton />}>
-      <OrderDetail orderId={orderId} />
-    </Suspense>
-  );
+  const { locale } = await params;
+  return <RetiredFlow locale={locale} variant='orders' />;
 }
