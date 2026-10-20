@@ -43,12 +43,12 @@ const PROJECT_TAGS: Record<string, ProjectTags> = {
     tags: ['type:app', 'stack:nextjs', 'scope:hybrid', 'status:development'],
   },
   'vue-motion': {
-    path: 'apps/vue-motion/project.json',
-    tags: ['type:app', 'stack:vue', 'scope:secondary', 'status:demo'],
+    path: 'labs/vue-motion/project.json',
+    tags: ['type:app', 'stack:vue', 'legacy', 'scope:labs'],
   },
   'enterprise-admin': {
-    path: 'apps/enterprise-admin/project.json',
-    tags: ['type:app', 'stack:angular', 'scope:secondary', 'status:experimental'],
+    path: 'labs/enterprise-admin/project.json',
+    tags: ['type:app', 'stack:angular', 'legacy', 'scope:labs'],
   },
   'api-server': {
     path: 'apps/api-server/project.json',

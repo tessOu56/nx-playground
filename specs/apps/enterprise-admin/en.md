@@ -158,7 +158,7 @@ The design showcases **enterprise application architecture**, demonstrating comp
 **Configuration Summary**:
 
 - Build command: `nx build enterprise-admin --configuration=production`
-- Output: `dist/apps/enterprise-admin`
+- Output: `dist/labs/enterprise-admin` (archived — not a product target)
 - Node version: 20
 - Environment variables: API endpoint, SSE endpoint
 
@@ -202,7 +202,7 @@ MIT (Open for use and modification)
 
 - `specs/apps/enterprise-admin/en.md` - English specification (this file)
 - `specs/apps/enterprise-admin/zh-TW.md` - Traditional Chinese specification
-- `apps/enterprise-admin/README.md` - Developer documentation
-- `apps/enterprise-admin/ARCHITECTURE.md` - Architecture decisions
+- `labs/enterprise-admin/README.md` - Developer documentation (legacy mirror — do not extend)
+- `labs/enterprise-admin/ARCHITECTURE.md` - Architecture decisions
 
 Note: RBAC setup and approval workflow configuration can be found in the documentation files.

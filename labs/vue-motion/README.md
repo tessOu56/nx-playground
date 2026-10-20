@@ -20,6 +20,8 @@ features:
   - Export Presets
 lastUpdated: '2025-10-21'
 ---
+> **Legacy mirror — do not extend.** Canonical: [vue-motion-sandbox](https://github.com/tessOu56/vue-motion-sandbox). This copy lives under `labs/` and is off the event-portal + LINE product path. See [`labs/README.md`](../README.md).
+
 # @nx-playground/vue-motion
 
 > Vue 3 動畫效果實驗庫 - 展示各種動畫技術、3D 圖形和互動效果
@@ -78,27 +80,16 @@ NX Playground 中的 Vue 函式庫，用於實驗和展示各種動畫技術和�
 
 ## 🚀 快速開始
 
-### 在 Monorepo 中啟動
+### Archived — use the satellite repo
+
+This folder is a **legacy mirror**. Product demos do not start it.
 
 ```bash
-# 使用 Makefile
-make dev-vue
+# Canonical
+# https://github.com/tessOu56/vue-motion-sandbox
 
-# 或使用 pnpm
-pnpm dev:vue-motion
-
-# 或使用 Nx
-nx serve vue-motion
-```
-
-服務運行在: **http://localhost:8080**
-
-學習入口: **http://localhost:8080/vue-basics**（詳見 `docs/LEARNING-PATH.md`）
-
-### 獨立開發
-
-```bash
-cd libs/vue-motion
+# Optional local copy (not on the Nx / pnpm workspace product path)
+cd labs/vue-motion
 pnpm install
 pnpm serve
 ```

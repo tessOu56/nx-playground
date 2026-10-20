@@ -23,10 +23,6 @@ help: ## 顯示此幫助信息
 	@echo "  dev-api           僅啟動 API Server 服務 (http://localhost:3001)"
 	@echo "  dev-api-mock      僅啟動契約 mock (http://localhost:3011)"
 	@echo "  dev-auth          僅啟動 Auth 服務 (http://localhost:3004)"
-	@echo "  dev-profile       僅啟動 Profile 服務 (http://localhost:3003)"
-	@echo "  dev-vue           僅啟動 Vue Motion 服務 (http://localhost:8080)"
-	@echo "  dev-enterprise    僅啟動 Enterprise Admin 服務 (http://localhost:4200)"
-	@echo "  dev-api           僅啟動 API Server 服務 (http://localhost:3001)"
 	@echo "  setup        設置開發環境 (安裝依賴、環境變數)"
 	@echo "  seed         Prisma migrate deploy + seed from libs/api-fixtures"
 	@echo "  db-up        Start local Postgres on :5433 (docker compose.event-db)"
@@ -80,6 +76,7 @@ help: ## 顯示此幫助信息
 	@echo "  - 本地開發: 需要 Node.js 18+ 和 pnpm"
 	@echo "  - Docker 開發: 需要 Docker 和 Docker Compose (使用優化版本)"
 	@echo "  - 服務網址: Event Portal (http://localhost:3000), Event CMS (http://localhost:3002)"
+	@echo "  - Vue / Angular leftovers live under labs/ (not product). See labs/README.md."
 	@echo "  - Docker 版本: 已優化建構流程，支援靜態導出和智能啟動"
 
 # ==================== 本地開發命令 ====================
@@ -107,13 +104,15 @@ dev-event-cms: ## 僅啟動 Event CMS 服務
 	@echo "$(BLUE)[INFO]$(NC) 啟動 Event CMS 服務 (http://localhost:3002)..."
 	@pnpm exec nx serve @nx-playground/event-cms
 
-dev-vue: ## 僅啟動 Vue Motion 服務
-	@echo "$(BLUE)[INFO]$(NC) 啟動 Vue Motion 服務 (http://localhost:8080)..."
-	@pnpm exec nx serve vue-motion
+dev-vue: ## archived — vue-motion lives under labs/
+	@echo "$(YELLOW)[INFO]$(NC) vue-motion is archived under labs/ (legacy mirror — do not extend)."
+	@echo "$(YELLOW)[INFO]$(NC) Canonical: https://github.com/tessOu56/vue-motion-sandbox"
+	@echo "$(YELLOW)[INFO]$(NC) See labs/README.md"
 
-dev-enterprise: ## 僅啟動 Enterprise Admin 服務
-	@echo "$(BLUE)[INFO]$(NC) 啟動 Enterprise Admin 服務 (http://localhost:4200)..."
-	@pnpm exec nx serve enterprise-admin
+dev-enterprise: ## archived — enterprise-admin lives under labs/
+	@echo "$(YELLOW)[INFO]$(NC) enterprise-admin is archived under labs/ (legacy mirror — do not extend)."
+	@echo "$(YELLOW)[INFO]$(NC) Canonical: https://github.com/tessOu56/angular-dashboard-sandbox"
+	@echo "$(YELLOW)[INFO]$(NC) See labs/README.md"
 
 dev-profile: ## 僅啟動 Profile 服務
 	@echo "$(BLUE)[INFO]$(NC) 啟動 Profile 服務 (http://localhost:3003)..."
@@ -217,7 +216,7 @@ build: ## 清理、重新安裝依賴並建置所有專案
 	@echo "$(BLUE)[INFO]$(NC) 步驟 2/3: 重新安裝依賴..."
 	@pnpm install --no-frozen-lockfile
 	@echo "$(BLUE)[INFO]$(NC) 步驟 3/3: 建置所有專案..."
-	@pnpm exec nx run-many --target=build --all
+	@pnpm exec nx run-many --target=build --all --exclude=tag:legacy
 	@echo "$(GREEN)[SUCCESS]$(NC) 完整建置流程完成！"
 
 # ==================== Docker 環境命令 ====================

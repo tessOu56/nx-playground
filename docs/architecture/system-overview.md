@@ -63,7 +63,7 @@ flowchart LR
 
 - `api-mock`（:3011）是 CI / Nest-off 對照，**非金流路徑**；產品路徑一律 Nest（:3001）。
 - 真金流卡在 human STOP（ECPay 特約）；程式 `ECPAY_MODE=live` 僅在 STOP 清除後開。
-- 事件 stack 是主線；`profile`／`vue-motion`／`enterprise-admin`／`mobile-approvals` 仍在磁碟但不加新功能（見 AGENTS.md Forbidden）。
+- 事件 stack 是主線；`profile`／`mobile-approvals` 仍在 `apps/` 但不加新功能。Vue／Angular leftover 在 [`labs/`](../../labs/README.md)（legacy — do not extend）。見 AGENTS.md Forbidden。
 - 鏡像：Angular／Vue 獨立 repo，勿雙寫（見 [docs/ECOSYSTEM.md](../ECOSYSTEM.md)）。
 
 ## 相關

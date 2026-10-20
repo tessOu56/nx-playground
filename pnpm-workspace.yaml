@@ -1,10 +1,13 @@
 packages:
-  # Apps
+  # Product apps (event-portal + LINE, event-cms, api-server, api-mock, auth)
   - 'apps/*'
   - 'events'
 
   # Libraries
   - 'libs/*'
+
+  # labs/ (vue-motion, enterprise-admin) is archived — not a workspace package.
+  # See labs/README.md. Canonical Vue/Angular: vue-motion-sandbox / angular-dashboard-sandbox.
 
 # 禁用嚴格的對等依賴檢查
 strictPeerDependencies: false

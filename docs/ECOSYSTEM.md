@@ -4,7 +4,7 @@
 
 Public **event + commerce** monorepo (portal / cms / api / auth). Planning SSOT is **platform-command**, not this file.
 
-Angular and Vue slices are independent GitHub repos. Until mirror inversion (platform-command T-228), `apps/vue-motion` and `apps/enterprise-admin` still exist here as copies — **do not add features in both places**.
+Angular and Vue slices are independent GitHub repos. Copies in this monorepo live under [`labs/`](../labs/README.md) as **legacy mirrors — do not extend**. Do not add features in both places.
 
 | Repo | Today | After T-228 |
 |------|-------|-------------|

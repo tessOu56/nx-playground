@@ -21,6 +21,7 @@ export default [
       '**/.nx/**',
       '!**/src/**',
       'apps/auth/**',
+      'labs/**',
       'libs/api-client/src/generated/**',
     ],
   },

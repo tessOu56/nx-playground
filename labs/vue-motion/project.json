@@ -1,0 +1,32 @@
+{
+  "name": "vue-motion",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "labs/vue-motion/src",
+  "projectType": "application",
+  "tags": ["type:app", "stack:vue", "legacy", "scope:labs"],
+  "implicitDependencies": [],
+  "targets": {
+    "serve": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "vue-cli-service serve",
+        "cwd": "labs/vue-motion"
+      }
+    },
+    "build": {
+      "executor": "nx:run-commands",
+      "outputs": ["{workspaceRoot}/dist/labs/vue-motion"],
+      "options": {
+        "command": "vue-cli-service build",
+        "cwd": "labs/vue-motion"
+      }
+    },
+    "lint": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "vue-cli-service lint",
+        "cwd": "labs/vue-motion"
+      }
+    }
+  }
+}

@@ -27,7 +27,7 @@ pnpm dev:api-mock      # localhost:3011 (same OpenAPI, in-memory)
 pnpm dev:auth          # localhost:3004
 ```
 
-Profile / vue-motion / enterprise-admin / mobile-approvals still exist on disk; **no new features** there until graduate tickets (platform-command T-228–230).
+`profile` / `mobile-approvals` still exist under `apps/`; **no new features** until graduate tickets (platform-command T-228–230). Vue / Angular leftovers live under [`labs/`](labs/README.md) (legacy mirrors — do not extend).
 
 ## Allowed
 
