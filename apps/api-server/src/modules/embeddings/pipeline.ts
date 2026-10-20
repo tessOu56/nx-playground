@@ -1,5 +1,3 @@
-import type { PrismaClient } from '@prisma/client';
-
 import {
   exhibitionEmbeddingContentHash,
   exhibitionEmbeddingText,
@@ -26,7 +24,17 @@ const EMPTY_COUNTS: EmbeddingPipelineCounts = {
 
 const BACKFILL_BATCH = 32;
 
-type EmbeddingDb = Pick<PrismaClient, '$queryRaw' | '$executeRaw'>;
+/** Prisma-compatible tagged SQL surface — avoids importing generated PrismaClient in unit tests. */
+export type EmbeddingDb = {
+  $queryRaw: (
+    strings: TemplateStringsArray,
+    ...values: unknown[]
+  ) => Promise<unknown>;
+  $executeRaw: (
+    strings: TemplateStringsArray,
+    ...values: unknown[]
+  ) => Promise<unknown>;
+};
 
 type StaleRow = ExhibitionEmbeddingText & {
   storedHash: string | null;
@@ -44,18 +52,16 @@ export async function upsertEventEmbedding(
   const contentHash = exhibitionEmbeddingContentHash(doc);
 
   try {
-    const existing = await db.$queryRaw<
-      Array<{
-        content_hash: string | null;
-        model: string | null;
-        embedding: unknown;
-      }>
-    >`
+    const existing = (await db.$queryRaw`
       SELECT content_hash, model, embedding
       FROM event_embeddings
       WHERE event_id = ${doc.id}
       LIMIT 1
-    `;
+    `) as Array<{
+      content_hash: string | null;
+      model: string | null;
+      embedding: unknown;
+    }>;
     const [row] = existing;
     if (
       row?.embedding != null &&
@@ -121,7 +127,7 @@ export async function backfillExhibitionEmbeddings(
   }
 
   const limit = Math.min(Math.max(options.limit ?? 200, 1), 1000);
-  const stale = await db.$queryRaw<StaleRow[]>`
+  const stale = (await db.$queryRaw`
     SELECT
       e.id,
       e.title,
@@ -143,7 +149,7 @@ export async function backfillExhibitionEmbeddings(
       )
     ORDER BY e."updatedAt" DESC
     LIMIT ${limit}
-  `;
+  `) as StaleRow[];
 
   const counts: EmbeddingPipelineCounts = {
     written: 0,
@@ -154,10 +160,11 @@ export async function backfillExhibitionEmbeddings(
   };
 
   for (let i = 0; i < stale.length; i += BACKFILL_BATCH) {
-    const batch = stale.slice(i, i + BACKFILL_BATCH);
-    const outcomes = await Promise.all(
-      batch.map(row => upsertEventEmbedding(db, row, provider))
-    );
+    const batch: StaleRow[] = stale.slice(i, i + BACKFILL_BATCH);
+    const outcomes: Array<keyof Omit<EmbeddingPipelineCounts, 'configured'>> =
+      await Promise.all(
+        batch.map((row: StaleRow) => upsertEventEmbedding(db, row, provider))
+      );
     for (const outcome of outcomes) {
       counts[outcome] += 1;
     }
