@@ -42,5 +42,12 @@ export default defineConfig(({ mode }) => {
   build: {
     chunkSizeWarningLimit: 2048,
   },
+  test: {
+    watch: false,
+    globals: true,
+    environment: 'jsdom',
+    passWithNoTests: true,
+  },
   };
 });
+
