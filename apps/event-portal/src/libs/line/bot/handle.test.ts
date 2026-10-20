@@ -99,6 +99,39 @@ describe('handleLineWebhookBody', () => {
     }
   });
 
+  it('replies with sample Flex cards when DATABASE_URL is unset', async () => {
+    const previous = process.env.DATABASE_URL;
+    delete process.env.DATABASE_URL;
+    const sent: LineMessage[][] = [];
+    try {
+      await handleLineWebhookBody(
+        JSON.stringify({
+          events: [
+            {
+              type: 'message',
+              replyToken: 'sample-search',
+              message: { type: 'text', text: '台北 design' },
+            },
+          ],
+        }),
+        {
+          now: NOW,
+          reply: async (_token, messages) => {
+            sent.push(messages);
+          },
+          portalOrigin: 'https://nx-event-portal.vercel.app',
+        }
+      );
+      assert.equal(sent.length, 1);
+      assert.equal(sent[0][0].type, 'flex');
+      if (sent[0][0].type !== 'flex') return;
+      assert.match(JSON.stringify(sent[0][0]), /event_sample_huashan/);
+    } finally {
+      if (previous === undefined) delete process.env.DATABASE_URL;
+      else process.env.DATABASE_URL = previous;
+    }
+  });
+
   it('sends help on follow and ignores non-text messages', async () => {
     const tokens: string[] = [];
     await handleLineWebhookBody(

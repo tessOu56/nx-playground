@@ -5,7 +5,7 @@ import { EventInfoHeaderError } from './components';
 import { EventDetail } from './components/layout/EventDetail';
 
 import { LineOfficialCta } from '@/components/line/LineOfficialCta';
-import { fetchPortalEvent } from '@/libs/api/event-stack-fetch';
+import { loadPortalExhibition } from '@/libs/exhibition-search/load-portal';
 import { isMissingPortalEvent } from '@/libs/api/portal-event-error';
 import { catalogHref } from '@/libs/api/catalog-query';
 import { demoCopy } from '@/libs/i18n/demo-copy';
@@ -23,7 +23,7 @@ export default async function EventDetailPage({
   const copy = demoCopy(locale);
 
   try {
-    const event = await fetchPortalEvent(eventId);
+    const event = await loadPortalExhibition(eventId);
     return <EventDetail event={event} locale={locale} />;
   } catch (error) {
     const kind = isMissingPortalEvent(error) ? 'not-found' : 'api';

@@ -1,14 +1,13 @@
 'use client';
 
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import { useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 import { EventStackCards } from './EventStackCards';
 
 import { Input } from '@/components';
 import {
   type DateFilter,
-  filterCatalog,
   uniqueCategories,
 } from '@/libs/api/catalog-filters';
 import {
@@ -30,9 +29,11 @@ function chipClass(active: boolean): string {
 
 export function EventCatalog({
   events,
+  catalog,
   locale,
 }: {
   events: Event[];
+  catalog?: Event[];
   locale: string;
 }) {
   const copy = demoCopy(locale);
@@ -43,7 +44,38 @@ export function EventCatalog({
     () => parseCatalogQuery(searchParams),
     [searchParams]
   );
-  const categories = useMemo(() => uniqueCategories(events), [events]);
+  const source = catalog ?? events;
+  const categories = useMemo(() => uniqueCategories(source), [source]);
+  const [results, setResults] = useState(events);
+
+  useEffect(() => {
+    setResults(events);
+  }, [events]);
+
+  useEffect(() => {
+    const qs = catalogQueryString(filters);
+    const controller = new AbortController();
+    const delay = filters.q.length > 0 ? 250 : 0;
+    const timer = window.setTimeout(() => {
+      void (async () => {
+        try {
+          const response = await fetch(
+            `/api/exhibitions/search?${qs}${qs ? '&' : ''}limit=48`,
+            { signal: controller.signal, cache: 'no-store' }
+          );
+          if (!response.ok) return;
+          const body = (await response.json()) as { items?: Event[] };
+          if (Array.isArray(body.items)) setResults(body.items);
+        } catch {
+          /* keep SSR / last good results */
+        }
+      })();
+    }, delay);
+    return () => {
+      window.clearTimeout(timer);
+      controller.abort();
+    };
+  }, [filters]);
 
   const setFilters = (next: Partial<typeof filters>) => {
     const query = { ...filters, ...next };
@@ -51,20 +83,9 @@ export function EventCatalog({
     router.replace(qs ? `${pathname}?${qs}` : pathname, { scroll: false });
   };
 
-  const filtered = useMemo(
-    () =>
-      filterCatalog(events, {
-        query: filters.q,
-        city: filters.city,
-        dates: filters.dates,
-        category: filters.category,
-      }),
-    [events, filters]
-  );
-
   const emptyKind = catalogEmptyKind({
-    total: events.length,
-    filtered: filtered.length,
+    total: source.length,
+    filtered: results.length,
     query: filters,
   });
 
@@ -179,7 +200,7 @@ export function EventCatalog({
 
       {hasActiveFilters ? (
         <div className='flex flex-wrap items-center justify-between gap-2 text-sm text-gray-600'>
-          <p aria-live='polite'>{copy.eventCount(filtered.length)}</p>
+          <p aria-live='polite'>{copy.eventCount(results.length)}</p>
           <button
             type='button'
             onClick={clearFilters}
@@ -191,7 +212,7 @@ export function EventCatalog({
       ) : null}
 
       <EventStackCards
-        events={filtered}
+        events={results}
         locale={locale}
         empty={emptyKind ?? 'catalog'}
         emptyQuery={filters}

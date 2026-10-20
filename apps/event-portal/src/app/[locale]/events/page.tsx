@@ -9,7 +9,8 @@ import { EventListError } from './components/EventListError';
 import { LabelledDemoBanner } from '@/components/demo/LabelledDemoBanner';
 import { LineOfficialCta } from '@/components/line/LineOfficialCta';
 import { EdsReveal } from '@/components/motion/EdsReveal';
-import { fetchPortalEvents } from '@/libs/api/event-stack-fetch';
+import { parseCatalogQuery } from '@/libs/api/catalog-query';
+import { loadPortalCatalog } from '@/libs/exhibition-search/load-portal';
 import { demoCopy } from '@/libs/i18n/demo-copy';
 
 export const dynamic = 'force-dynamic';
@@ -41,17 +42,27 @@ export async function generateMetadata({
 
 export default async function EventsIndexPage({
   params,
+  searchParams,
 }: {
   params: Promise<{ locale: string }>;
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
 }) {
   await connection();
   const { locale } = await params;
   const copy = demoCopy(locale);
+  const filters = parseCatalogQuery(await searchParams);
 
-  let events: Awaited<ReturnType<typeof fetchPortalEvents>> = [];
+  let events: Awaited<ReturnType<typeof loadPortalCatalog>> = [];
+  let catalog: Awaited<ReturnType<typeof loadPortalCatalog>> = [];
   let loadError = false;
   try {
-    events = await fetchPortalEvents();
+    const hasFilters =
+      filters.q.length > 0 ||
+      filters.city !== 'all' ||
+      filters.dates !== 'all' ||
+      filters.category.length > 0;
+    catalog = await loadPortalCatalog();
+    events = hasFilters ? await loadPortalCatalog(filters) : catalog;
   } catch {
     loadError = true;
   }
@@ -71,7 +82,7 @@ export default async function EventsIndexPage({
         <div className='flex flex-wrap items-center gap-3'>
           {!loadError ? (
             <p className='rounded-full bg-white px-3 py-1 text-xs font-medium text-gray-700 ring-1 ring-inset ring-gray-200'>
-              {copy.eventCount(events.length)}
+              {copy.eventCount(catalog.length)}
             </p>
           ) : null}
           <LineOfficialCta locale={locale} />
@@ -82,7 +93,7 @@ export default async function EventsIndexPage({
       ) : (
         <EdsReveal>
           <Suspense fallback={<EventCatalogSkeleton />}>
-            <EventCatalog events={events} locale={locale} />
+            <EventCatalog events={events} catalog={catalog} locale={locale} />
           </Suspense>
         </EdsReveal>
       )}

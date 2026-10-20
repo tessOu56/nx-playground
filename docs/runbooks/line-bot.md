@@ -71,7 +71,26 @@ Workflow: `.github/workflows/collect-taipei.yml`
 - Also **workflow_dispatch** (Actions → “Taipei exhibition collector” → Run workflow)
 - If the secret is missing, the job **exits 0** and prints a skip notice (no failed red X).
 
-The collector applies Prisma migrations (including `pg_trgm`) then upserts Ministry of Culture open data for **Taipei City** (`source = moc-opendata`).
+The collector applies Prisma migrations (including `pg_trgm` and CJK FTS `search_tsv` / `event_embeddings` stub) then upserts Ministry of Culture open data for **Taipei City** (`source = moc-opendata`).
+
+## 3b. Exhibition search (Phase 3 step 1)
+
+Catalog (`/{locale}/events`) and the Messaging webhook share `searchExhibitions()` → `GET /api/exhibitions/search`.
+
+| Env | Behavior |
+| --- | --- |
+| `DATABASE_URL` set (Neon pooled URL, same as Nest) | Postgres FTS: generated `search_tsv` (CJK unigram+bigram tokens, `simple` config) plus existing `pg_trgm` indexes |
+| `DATABASE_URL` unset | Sample fixtures (`libs/api-fixtures`, titles tagged `[Sample]`) |
+
+No new Vercel secrets. Do **not** enable `pgvector` or call an LLM in this step; `event_embeddings` is an empty stub (`event_id`, `model`, `dimensions`, `content_hash`) for a later migration.
+
+Owner apply once on Neon (Render Nest start and the Taipei collector workflow already run `prisma migrate deploy`):
+
+```bash
+pnpm exec prisma migrate deploy --schema=apps/api-server/prisma/schema.prisma
+```
+
+Preview deployments without `DATABASE_URL` stay on sample data; set Preview `DATABASE_URL` to search the live catalog.
 
 Local dry run (after `make db-up` and `make seed`):
 
