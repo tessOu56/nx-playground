@@ -1,5 +1,6 @@
 import type { EventStackEvent } from '@nx-playground/api-client/event-stack';
 
+import { publicHttpsUrl } from '../exhibition-search/https-url';
 import type {
   Event,
   EventContentBlock,
@@ -95,16 +96,9 @@ export function parseExhibitionRegion(
   return undefined;
 }
 
-/** HTTPS/HTTP official listing only — blocks javascript: and other schemes. */
+/** Public https official listing only — blocks javascript:, http, IPs, localhost. */
 export function sanitizeSourceUrl(raw: unknown): string | undefined {
-  if (typeof raw !== 'string' || !raw.trim()) return undefined;
-  try {
-    const url = new URL(raw.trim());
-    if (url.protocol !== 'https:' && url.protocol !== 'http:') return undefined;
-    return url.toString();
-  } catch {
-    return undefined;
-  }
+  return publicHttpsUrl(raw) ?? undefined;
 }
 
 export function regionTimeZone(
@@ -295,8 +289,7 @@ function mapContent(raw: unknown): EventContentBlock[] {
     .map(block => ({
       type: (typeof block.type === 'string' ? block.type : 'text') as EventContentBlock['type'],
       text_data: typeof block.text_data === 'string' ? block.text_data : undefined,
-      image_data:
-        typeof block.image_data === 'string' ? block.image_data : undefined,
+      image_data: publicHttpsUrl(block.image_data) ?? undefined,
     }));
 }
 
@@ -377,9 +370,8 @@ export function toPortalEvent(api: EventStackEvent): Event {
     location: api.location ?? '',
     price: prices.length > 0 ? Math.min(...prices) : 0,
     image:
-      typeof catalog.image === 'string'
-        ? catalog.image
-        : `https://picsum.photos/seed/${encodeURIComponent(api.id)}/800/600`,
+      publicHttpsUrl(catalog.image) ??
+      `https://picsum.photos/seed/${encodeURIComponent(api.id)}/800/600`,
     likes: 0,
     attendees: 0,
     capacity,
@@ -422,7 +414,7 @@ function mapSpeakers(raw: unknown): EventSpeaker[] {
       name: String(row.name ?? '').trim(),
       title: typeof row.title === 'string' ? row.title : undefined,
       bio: typeof row.bio === 'string' ? row.bio : undefined,
-      avatarUrl: typeof row.avatarUrl === 'string' ? row.avatarUrl : undefined,
+      avatarUrl: publicHttpsUrl(row.avatarUrl) ?? undefined,
     }))
     .filter(row => row.name.length > 0);
 }

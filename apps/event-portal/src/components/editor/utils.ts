@@ -1,3 +1,5 @@
+import { publicHref } from '../../libs/exhibition-search/https-url';
+
 /**
  * 解析列表項目字符串
  * 使用 | 符號分隔多個列表項目
@@ -58,10 +60,17 @@ export function parseMarkdownStyle(text: string): {
   // 檢查是否為連結 [文字](URL)
   const linkMatch = text.match(/^\[(.+?)\]\((.+?)\)$/);
   if (linkMatch) {
+    const href = publicHref(linkMatch[2]);
+    if (!href) {
+      return {
+        content: linkMatch[1],
+        style: 'normal',
+      };
+    }
     return {
       content: linkMatch[1],
       style: 'link',
-      href: linkMatch[2],
+      href,
     };
   }
 

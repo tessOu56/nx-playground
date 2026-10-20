@@ -21,7 +21,8 @@ export async function loadPortalCatalog(query?: CatalogQuery) {
 }
 
 export async function loadPortalExhibition(eventId: string) {
-  const found = await getExhibitionById(eventId);
+  const safeId = eventId.trim().slice(0, 128);
+  const found = await getExhibitionById(safeId);
   if (found) return hitToPortalEventDetail(found.item);
-  return labelledDemoPortalEvent(eventId);
+  return labelledDemoPortalEvent(safeId);
 }

@@ -64,7 +64,7 @@ export function mapExhibitionRow(row: Record<string, unknown>): ExhibitionDocume
     timezone: row.timezone == null ? null : String(row.timezone),
     priceText: row.priceText == null ? null : String(row.priceText),
     region: row.region === 'TOKYO' || row.region === 'TAIPEI' ? row.region : null,
-    sourceUrl: row.sourceUrl == null ? null : String(row.sourceUrl),
+    sourceUrl: publicHttpsUrl(row.sourceUrl),
     source: row.source == null ? null : String(row.source),
     tags: asTags(row.tags),
     imageUrl: image,
@@ -101,9 +101,9 @@ export async function searchExhibitionsSql(
   sql: SqlFn
 ): Promise<ExhibitionHit[]> {
   const limit = Math.min(Math.max(input.limit ?? 20, 1), 50);
-  const keyword = input.keyword.trim();
+  const keyword = input.keyword.trim().slice(0, 80);
   const like = likePattern(keyword);
-  const category = input.category?.trim() ?? '';
+  const category = (input.category?.trim() ?? '').slice(0, 80);
   const now = input.now ?? new Date();
 
   if (input.windows) {
@@ -293,6 +293,8 @@ export async function getExhibitionSqlById(
   id: string,
   sql: SqlFn
 ): Promise<ExhibitionDocument | null> {
+  const safeId = id.trim().slice(0, 128);
+  if (!safeId) return null;
   const rows = await sql`
     SELECT
       id,
@@ -314,7 +316,8 @@ export async function getExhibitionSqlById(
       "createdAt",
       "updatedAt"
     FROM events
-    WHERE id = ${id}
+    WHERE id = ${safeId}
+      AND status = 'published'
     LIMIT 1
   `;
   const row = rows[0];

@@ -39,14 +39,16 @@ export async function searchExhibitions(
 export async function getExhibitionById(
   id: string
 ): Promise<{ source: 'postgres' | 'sample'; item: ExhibitionDocument } | null> {
+  const safeId = id.trim().slice(0, 128);
+  if (!safeId) return null;
   if (databaseUrl()) {
     try {
-      const item = await getExhibitionSqlById(id, getExhibitionSql());
+      const item = await getExhibitionSqlById(safeId, getExhibitionSql());
       if (item) return { source: 'postgres', item };
     } catch {
       /* fall through to sample */
     }
   }
-  const sample = sampleDocumentById(id);
+  const sample = sampleDocumentById(safeId);
   return sample ? { source: 'sample', item: sample } : null;
 }
