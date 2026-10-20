@@ -1,3 +1,5 @@
+import { searchExhibitions } from '../../exhibition-search';
+
 import { searchCatalog, type CatalogEvent } from './catalog-search';
 import {
   catalogUnavailableMessage,
@@ -54,7 +56,18 @@ async function messagesForText(
   }
 
   try {
-    const search = deps.search ?? searchCatalog;
+    const search =
+      deps.search ??
+      (async (input: Parameters<typeof searchCatalog>[0]) => {
+        const result = await searchExhibitions({
+          keyword: input.keyword,
+          region: input.region,
+          windows: input.windows,
+          dateMode: 'window',
+          limit: input.limit ?? 10,
+        });
+        return result.items;
+      });
     const events = await search({
       region: parsed.region,
       keyword: parsed.keyword,

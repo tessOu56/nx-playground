@@ -14,6 +14,7 @@ export async function GET() {
       service: 'event-portal',
       labelledDemo: true,
       catalogSource: 'api-fixtures',
+      searchSource: process.env.DATABASE_URL?.trim() ? 'postgres' : 'sample',
       catalogEvents,
       fundsPath: false,
     },
