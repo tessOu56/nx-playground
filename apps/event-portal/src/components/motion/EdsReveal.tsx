@@ -1,10 +1,10 @@
 'use client';
 
-import { useEffect, useRef, type ReactNode } from 'react';
+import { useLayoutEffect, useRef, type ReactNode } from 'react';
 
 /**
- * Section enter using EDS .eds-reveal / .eds-reveal-in (Wave G).
- * Purpose: list hierarchy when scrolling into view.
+ * Optional below-fold enter. Starts visible so a missed IntersectionObserver
+ * (headless, no-JS, above-the-fold) never blanks the public catalog.
  */
 export function EdsReveal({
   children,
@@ -15,28 +15,17 @@ export function EdsReveal({
 }) {
   const ref = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const el = ref.current;
     if (!el) return;
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      el.classList.add('eds-reveal-in');
-      return;
-    }
-    const io = new IntersectionObserver(
-      ([entry]) => {
-        if (entry?.isIntersecting) {
-          el.classList.add('eds-reveal-in');
-          io.disconnect();
-        }
-      },
-      { rootMargin: '0px 0px -8% 0px', threshold: 0.1 }
-    );
-    io.observe(el);
-    return () => io.disconnect();
+    el.classList.add('eds-reveal-in');
   }, []);
 
   return (
-    <div ref={ref} className={`eds-reveal ${className}`.trim()}>
+    <div
+      ref={ref}
+      className={`eds-reveal eds-reveal-in ${className}`.trim()}
+    >
       {children}
     </div>
   );

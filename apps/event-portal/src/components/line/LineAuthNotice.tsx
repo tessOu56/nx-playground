@@ -5,6 +5,7 @@ import { useMemo, useState } from 'react';
 
 import { LineOfficialCta } from './LineOfficialCta';
 import { demoCopy } from '@/libs/i18n/demo-copy';
+import { canStartLineLogin, useLiff } from '@/libs/line';
 import {
   lineAuthNoticeParams,
   parseLineAuthNotice,
@@ -20,7 +21,9 @@ export function LineAuthNotice({ locale }: { locale: string }) {
   const router = useRouter();
   const pathname = usePathname() || `/${locale}`;
   const searchParams = useSearchParams();
+  const { login, isInitialized } = useLiff();
   const [dismissed, setDismissed] = useState(false);
+  const lineLoginReady = canStartLineLogin();
 
   const kind = useMemo(
     () =>
@@ -55,6 +58,11 @@ export function LineAuthNotice({ locale }: { locale: string }) {
     router.replace(qs ? `${pathname}?${qs}` : pathname, { scroll: false });
   };
 
+  const retryLogin = () => {
+    dismiss();
+    login();
+  };
+
   return (
     <div
       className='border-b border-amber-200 bg-amber-50'
@@ -68,6 +76,16 @@ export function LineAuthNotice({ locale }: { locale: string }) {
         </div>
         <div className='flex flex-wrap items-center gap-2'>
           {kind !== 'cancelled' ? <LineOfficialCta locale={locale} /> : null}
+          {kind !== 'outside' && lineLoginReady ? (
+            <button
+              type='button'
+              onClick={retryLogin}
+              disabled={!isInitialized}
+              className='rounded-md px-3 py-2 text-sm font-medium text-amber-950 underline-offset-2 hover:underline disabled:opacity-60'
+            >
+              {copy.retryLogin}
+            </button>
+          ) : null}
           <button
             type='button'
             onClick={dismiss}

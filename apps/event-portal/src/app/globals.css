@@ -82,5 +82,15 @@
       transform: none;
       transition: none;
     }
+
+    .animate-pulse {
+      animation: none;
+    }
   }
+}
+
+/* Unlayered so it wins over @is_tess/tokens motion.css (.eds-reveal { opacity: 0 }). */
+.eds-reveal {
+  opacity: 1;
+  transform: none;
 }

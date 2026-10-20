@@ -27,7 +27,7 @@ export function PublicSiteHeader({ locale }: { locale: string }) {
 
   return (
     <header className='sticky top-0 z-40 border-b border-gray-200 bg-[color:var(--color-base-white,#fff)]/95 backdrop-blur'>
-      <div className='mx-auto flex min-h-16 max-w-6xl flex-wrap items-center justify-between gap-x-3 gap-y-2 px-3 py-2 sm:px-4'>
+      <div className='mx-auto flex min-h-14 max-w-6xl flex-wrap items-center justify-between gap-x-3 gap-y-2 px-3 py-2 sm:min-h-16 sm:px-4'>
         <Link
           href={home}
           className='min-w-0 truncate font-display text-sm font-semibold tracking-tight text-gray-900 sm:text-lg'

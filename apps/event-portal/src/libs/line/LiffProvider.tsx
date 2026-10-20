@@ -14,7 +14,6 @@ import React, {
 import {
   lineLogin,
   lineLogout,
-  getLineUserInfo,
   isLiffEnvironment,
   handleLineCallback,
 } from './auth';
@@ -24,6 +23,12 @@ import {
   getFullUserInfo,
   isLiffInitialized,
 } from './liff';
+import {
+  saveLineLoginReturnPath,
+  stripLineOauthCallbackParams,
+  takeLineLoginReturnPath,
+} from './login-return';
+import { extractLocale } from '../i18n/localeRoutes';
 import { saveUserInfo, restoreUserInfo, clearLiffState } from './storage';
 
 import type { LiffUserInfo, LiffContextType } from '@/types';
@@ -53,6 +58,22 @@ export const useLiff = (): LiffContextType => {
   }
   return context;
 };
+
+function finishLineOauthReturn(loggedIn: boolean) {
+  if (typeof window === 'undefined' || !loggedIn) return;
+  const locale = extractLocale(window.location.pathname) ?? 'zh-TW';
+  const returnPath = takeLineLoginReturnPath(locale);
+  const qs = stripLineOauthCallbackParams(window.location.search);
+  const next = qs ? `${returnPath}?${qs}` : returnPath;
+  if (returnPath !== window.location.pathname) {
+    window.location.replace(next);
+    return;
+  }
+  const currentQs = window.location.search.replace(/^\?/, '');
+  if (qs !== currentQs) {
+    window.history.replaceState({}, '', next);
+  }
+}
 
 interface LiffProviderProps {
   children: ReactNode;
@@ -150,6 +171,10 @@ export const LiffProvider: FC<LiffProviderProps> = ({ children }) => {
           ...prev,
           ...finalState,
         }));
+
+        if (hasCallback) {
+          finishLineOauthReturn(Boolean(userInfo));
+        }
       } catch (error) {
         setLiffState(prev => ({
           ...prev,
@@ -165,6 +190,7 @@ export const LiffProvider: FC<LiffProviderProps> = ({ children }) => {
   // 登入與登出處理函數
   const handleLogin = async () => {
     try {
+      saveLineLoginReturnPath(window.location.pathname);
       await lineLogin();
     } catch (error) {
       setLiffState(prev => ({ ...prev, error: (error as Error).message }));

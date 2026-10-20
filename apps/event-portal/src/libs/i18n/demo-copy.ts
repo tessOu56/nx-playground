@@ -353,6 +353,30 @@ export function demoCopy(locale: string | undefined) {
       '会話検索は LINE 内で使います。ブラウザではカタログを続けるか、公式アカウントを追加してください。'
     ),
     dismissNotice: t(locale, '關閉', 'Dismiss', '閉じる'),
+    retryLogin: t(
+      locale,
+      '再試一次登入',
+      'Try signing in again',
+      'もう一度ログイン'
+    ),
+    shareListing: t(locale, '分享這個展覽', 'Share this listing', 'この展覧会をシェア'),
+    copyLink: t(locale, '複製連結', 'Copy link', 'リンクをコピー'),
+    linkCopied: t(locale, '已複製連結', 'Link copied', 'リンクをコピーしました'),
+    shareFailed: t(
+      locale,
+      '無法分享，請稍後再試。',
+      'Could not share. Try again shortly.',
+      'シェアできませんでした。しばらくしてから再試行してください。'
+    ),
+    loadingLabel: t(locale, '載入中', 'Loading', '読み込み中'),
+    appError: t(locale, '頁面出了問題', 'This page hit a problem', 'ページで問題が起きました'),
+    appErrorHint: t(
+      locale,
+      '重新整理試試。目錄和 LINE 還可以用。',
+      'Reload the page. The catalog and LINE still work.',
+      '再読み込みしてください。カタログと LINE は使えます。'
+    ),
+    reloadPage: t(locale, '重新整理', 'Reload', '再読み込み'),
     footerNote: t(
       locale,
       '這個站不售票。入場與開放時間以官方頁面為準。',

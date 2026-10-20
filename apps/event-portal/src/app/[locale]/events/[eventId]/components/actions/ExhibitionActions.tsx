@@ -1,3 +1,4 @@
+import { ExhibitionShareButton } from '@/components/line/ExhibitionShareButton';
 import { LineOfficialCta } from '@/components/line/LineOfficialCta';
 import { eventListKind } from '@/libs/api/event-stack-map';
 import { demoCopy } from '@/libs/i18n/demo-copy';
@@ -15,7 +16,7 @@ export function ExhibitionActions({
   const ended = kind === 'completed' || kind === 'sale_ended';
 
   return (
-    <aside
+    <div
       className='rounded-xl border border-gray-200 bg-white p-5 shadow-sm'
       aria-label={copy.step3Title}
     >
@@ -41,11 +42,16 @@ export function ExhibitionActions({
             {copy.officialSource}
           </a>
         ) : null}
+        <ExhibitionShareButton
+          locale={locale}
+          eventId={event.id}
+          title={event.title}
+        />
         <LineOfficialCta locale={locale} variant='panel' />
       </div>
       {event.sample ? (
         <p className='mt-4 text-xs leading-5 text-amber-900'>{copy.sampleHint}</p>
       ) : null}
-    </aside>
+    </div>
   );
 }
