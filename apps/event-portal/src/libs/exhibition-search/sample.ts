@@ -37,7 +37,7 @@ export function documentFromRecord(event: EventRecord): ExhibitionDocument | nul
     timezone: event.timezone ?? null,
     priceText: event.priceText ?? null,
     region,
-    sourceUrl: event.sourceUrl ?? null,
+    sourceUrl: publicHttpsUrl(event.sourceUrl),
     source: event.source ?? null,
     tags,
     imageUrl: publicHttpsUrl(data.image),

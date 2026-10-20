@@ -5,6 +5,7 @@
 import type { Metadata } from 'next';
 
 import { fetchPortalEvent } from '@/libs/api/event-stack-fetch';
+import { loadPortalExhibition } from '@/libs/exhibition-search/load-portal';
 import { demoCopy } from '@/libs/i18n/demo-copy';
 import { getOrder } from '@nx-playground/api-client/event-stack';
 
@@ -16,7 +17,7 @@ export async function generateEventMetadata({
   const { eventId, locale = 'zh-TW' } = await params;
   const copy = demoCopy(locale);
   try {
-    const event = await fetchPortalEvent(eventId);
+    const event = await loadPortalExhibition(eventId);
     const ogLocale =
       locale === 'en' ? 'en_US' : locale === 'ja' ? 'ja_JP' : 'zh_TW';
     return {

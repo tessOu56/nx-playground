@@ -28,6 +28,11 @@ describe('catalog-query', () => {
         .city,
       'TAIPEI'
     );
+    const long = parseCatalogQuery(
+      new URLSearchParams(`q=${'a'.repeat(200)}&category=${'b'.repeat(200)}`)
+    );
+    assert.equal(long.q.length, 80);
+    assert.equal(long.category.length, 80);
   });
 
   it('serializes only active filters', () => {

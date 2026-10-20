@@ -9,6 +9,7 @@ export type CatalogQuery = {
 
 const CITIES: readonly CityFilter[] = ['all', 'TAIPEI', 'TOKYO'];
 const DATES: readonly DateFilter[] = ['all', 'now', 'upcoming', 'month', 'past'];
+const MAX_QUERY_TEXT = 80;
 
 export type CatalogEmptyKind = 'catalog' | 'search' | 'city' | 'ended';
 
@@ -54,10 +55,10 @@ export function parseCatalogQuery(
   };
 
   return {
-    q: read('q').trim(),
+    q: read('q').trim().slice(0, MAX_QUERY_TEXT),
     city: parseCityFilter(read('city')),
     dates: parseDateFilter(read('dates')),
-    category: read('category').trim(),
+    category: read('category').trim().slice(0, MAX_QUERY_TEXT),
   };
 }
 

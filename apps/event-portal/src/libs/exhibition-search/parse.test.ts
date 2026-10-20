@@ -79,4 +79,13 @@ describe('parseExhibitionSearchParams', () => {
     assert.equal(parsed.keyword, 'art');
     assert.equal(parsed.limit, 5);
   });
+
+  it('caps free-text q and category length', () => {
+    const parsed = parseExhibitionSearchParams(
+      new URLSearchParams(`q=${'攝影'.repeat(80)}&category=${'x'.repeat(200)}`),
+      NOW
+    );
+    assert.ok((parsed.keyword.length) <= 80);
+    assert.ok((parsed.category ?? '').length <= 80);
+  });
 });

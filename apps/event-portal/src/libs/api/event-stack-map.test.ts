@@ -160,6 +160,27 @@ describe('event-stack catalog map', () => {
     assert.equal(event.sample, true);
     assert.equal(event.sessions.length, 0);
     assert.equal(sanitizeSourceUrl('javascript:alert(1)'), undefined);
+    assert.equal(sanitizeSourceUrl('http://evil.example/'), undefined);
+    assert.equal(sanitizeSourceUrl('https://127.0.0.1/admin'), undefined);
+  });
+
+  it('does not render javascript or localhost images from catalog JSON', () => {
+    const event = toPortalEvent({
+      id: 'event_sample_tfam',
+      title: 'TFAM',
+      startDate: '2026-10-04T01:00:00.000Z',
+      endDate: '2026-12-27T10:00:00.000Z',
+      status: 'published',
+      createdAt: '2026-08-20T00:00:00.000Z',
+      updatedAt: '2026-08-20T00:00:00.000Z',
+      sourceUrl: 'https://user:pass@evil.example/phish',
+      data: {
+        kind: 'exhibition',
+        image: 'javascript:alert(1)',
+      },
+    });
+    assert.equal(event.sourceUrl, undefined);
+    assert.equal(event.image.startsWith('https://picsum.photos/'), true);
   });
 
   it('keeps only exhibition listings on the public catalog', () => {

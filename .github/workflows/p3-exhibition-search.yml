@@ -27,4 +27,7 @@ jobs:
           node --import tsx --test \
             apps/event-portal/src/libs/exhibition-search/*.test.ts \
             apps/event-portal/src/app/api/exhibitions/search/route.test.ts \
-            apps/event-portal/src/libs/line/bot/*.test.ts
+            apps/event-portal/src/libs/line/bot/*.test.ts \
+            apps/event-portal/src/libs/api/catalog-query.test.ts \
+            apps/event-portal/src/libs/api/event-stack-map.test.ts \
+            apps/event-portal/src/components/editor/utils.test.ts

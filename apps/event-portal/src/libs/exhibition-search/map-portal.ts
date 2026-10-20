@@ -3,11 +3,13 @@ import type { EventStackEvent } from '@nx-playground/api-client/event-stack';
 import { toPortalEvent, toPortalEventDetail } from '../api/event-stack-map';
 import type { Event, EventDetail } from '../../types';
 
+import { publicHttpsUrl } from './https-url';
 import type { ExhibitionDocument, ExhibitionHit } from './types';
 
 export function toEventStackEvent(doc: ExhibitionDocument): EventStackEvent {
   const data = { ...(doc.data ?? {}) };
-  if (doc.imageUrl && typeof data.image !== 'string') data.image = doc.imageUrl;
+  if (doc.imageUrl) data.image = doc.imageUrl;
+  else delete data.image;
   if (doc.category && typeof data.category !== 'string') {
     data.category = doc.category;
   }
@@ -25,7 +27,7 @@ export function toEventStackEvent(doc: ExhibitionDocument): EventStackEvent {
     region: doc.region,
     timezone: doc.timezone,
     source: doc.source,
-    sourceUrl: doc.sourceUrl,
+    sourceUrl: publicHttpsUrl(doc.sourceUrl),
     tags: doc.tags,
     priceText: doc.priceText,
     createdAt: (doc.createdAt ?? doc.startDate).toISOString(),
