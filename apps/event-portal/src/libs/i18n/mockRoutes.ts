@@ -327,7 +327,6 @@ export function getPageNumbersWithLocale(locale = 'zh-TW') {
       path: withLocale(basePaths[key as keyof typeof basePaths] || '/', locale),
       isPublic:
         key === 'home' ||
-        key === 'vendor-detail' ||
         key === 'event-detail' ||
         key === 'checkout' ||
         key === 'feedback',

@@ -27,13 +27,14 @@ Interview second case after [AI Search Portal](https://github.com/tessOu56/ai-se
 
 產品路徑（請優先跑這些）：
 
-- 🎫 **event-portal** — 公開活動（Next.js 15，:3000）
+- 🎫 **event-portal** — Taipei/Tokyo 展覽探索 + LINE（Next.js 15，:3000）
 - 📊 **event-cms** — 活動營運（React 19，:3002）
 - 🔧 **api-server** — NestJS + Prisma（:3001，Swagger `/api/docs`）
 - 🧪 **api-mock** — 同一份 event-stack OpenAPI 的 stateful mock（:3011）
 - 🔐 **auth** — Kratos + LINE（:3004）
 
-其餘 app（profile、vue-motion、enterprise-admin、mobile-approvals）仍在 repo 內，轉型完成前**不加功能**。
+其餘 leftover（`profile`、`mobile-approvals`）仍在 `apps/`，轉型完成前**不加功能**。  
+Vue / Angular 鏡像已移到 [`labs/`](./labs/README.md)（legacy — do not extend）；canonical 是 [vue-motion-sandbox](https://github.com/tessOu56/vue-motion-sandbox) 與 [angular-dashboard-sandbox](https://github.com/tessOu56/angular-dashboard-sandbox)。
 
 ## 🚀 快速開始
 
@@ -65,27 +66,24 @@ make seed
 | 命令                    | 說明                   |
 | ----------------------- | ---------------------- |
 | `make setup`            | 首次設置開發環境       |
-| `make dev`              | 啟動所有服務           |
+| `make dev`              | 啟動產品路徑服務       |
 | `make dev-event-portal` | 啟動 Event Portal 服務 |
 | `make dev-event-cms`    | 啟動 Event CMS 服務    |
-| `make dev-profile`      | 啟動 Profile 技術展示  |
-| `make dev-vue`          | 啟動 Vue Motion 服務   |
-| `make dev-angular`      | 啟動 Enterprise Admin  |
+| `make dev-api`          | 啟動 Nest API          |
+| `make dev-api-mock`     | 啟動契約 mock          |
+| `make dev-auth`         | 啟動 Auth              |
 | `make stop`             | 停止所有服務           |
 | `make logs`             | 查看日誌               |
-| `make help`             | 查看所有命令           |
+| `make help`             | 查看產品路徑命令       |
 
 ## 🌐 服務網址
 
 - **API Server** (live Nest): http://localhost:3001/api
   - Swagger Docs: http://localhost:3001/api/docs
 - **API mock** (same OpenAPI, in-memory): http://localhost:3011/api
-- **Event Portal** (活動展示): http://localhost:3000
+- **Event Portal** (展覽探索 + LINE): http://localhost:3000
 - **Event CMS** (活動管理): http://localhost:3002
 - **Auth**: http://localhost:3004
-- **Profile** (技術展示): http://localhost:3003
-- **Vue Motion** (動畫實驗): http://localhost:8080
-- **Enterprise Admin** (企業管理): http://localhost:4200
 
 ## 📦 專案結構
 
@@ -96,10 +94,10 @@ nx-playground/
 │   ├── api-mock/           # 🧪 event-stack mock (Port 3011)
 │   ├── auth/               # 🔐 認證服務 (React + Vite, Port 3004)
 │   ├── event-cms/          # 📊 活動 CMS (React + Vite, Port 3002)
-│   ├── event-portal/       # 🎫 活動展示 (Next.js 15, Port 3000)
-│   ├── profile/            # 🎯 技術展示 (React + Vite, Port 3003)
-│   ├── enterprise-admin/   # 📈 企業管理 (Angular 20, Port 4200)
-│   └── vue-motion/         # 🎨 動畫實驗 (Vue 3, Port 8080)
+│   ├── event-portal/       # 🎫 展覽探索 + LINE (Next.js 15, Port 3000)
+│   ├── profile/            # 🎯 技術展示 (React + Vite, Port 3003) — no new features
+│   └── mobile-approvals/   # leftover — no new features
+├── labs/                    # archived Vue / Angular mirrors — see labs/README.md
 ├── libs/                    # 共享函式庫
 │   ├── api-client/         # API 客戶端 (React Query + Orval)
 │   ├── auth-client/        # 認證客戶端 (SSO 整合)
@@ -119,10 +117,9 @@ nx-playground/
 ### 前後端框架
 
 - **NestJS 10** - api-server (後端 API)
-- **React 19** - auth, event-cms, profile
-- **Next.js 15** - event-portal (App Router + SSG)
-- **Angular 20** - enterprise-admin
-- **Vue 3** - vue-motion
+- **React 19** - auth, event-cms
+- **Next.js 15** - event-portal (App Router + LINE webhook)
+- **Angular / Vue** - satellite repos only (`labs/` holds archived mirrors)
 
 ### Monorepo 工具
 
@@ -186,7 +183,7 @@ pnpm dev:my-new-app
 - [apps/console/README.md](apps/console/README.md) - 控制台
 - [apps/events/README.md](apps/events/README.md) - 活動管理
 - [apps/profile/README.md](apps/profile/README.md) - 技術展示
-- [apps/angular-dashboard/README.md](apps/angular-dashboard/README.md) - Angular Dashboard
+- [labs/README.md](labs/README.md) - archived Vue / Angular mirrors
 
 ### 函式庫文檔
 

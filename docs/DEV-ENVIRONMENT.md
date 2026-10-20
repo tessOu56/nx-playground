@@ -27,10 +27,11 @@ Use this in install/setup scripts before choosing package manager flags or paths
 
 ## Contracts / TypeSpec
 
-**T-2026-028 (done 2026-08-11):** `pnpm-lock.yaml` is reconciled (includes `apps/vue-motion` pinia)
+**T-2026-028 (done 2026-08-11):** `pnpm-lock.yaml` is reconciled
 and `pnpm install --frozen-lockfile` passes on `ubuntu-latest`. `.github/workflows/contracts-ci.yml`
 now runs the standard root frozen install (via `pnpm/action-setup`) instead of an isolated
-per-package npm toolchain.
+per-package npm toolchain. `labs/vue-motion` / `labs/enterprise-admin` are archived and
+are not workspace packages.
 
 Fallback path — if a future lockfile drift blocks root install again, use the isolated toolchain
 until the lockfile is refreshed:

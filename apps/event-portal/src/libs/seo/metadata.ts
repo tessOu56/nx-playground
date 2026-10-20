@@ -7,9 +7,9 @@ export function generateMetadata(pathname: string): Metadata {
 
   if (!pageInfo?.seo) {
     return {
-      title: 'NX Playground Events — labelled Hobby demo',
+      title: 'NX Playground — exhibitions in Taipei and Tokyo',
       description:
-        'Taiwan event-stack C-end labelled demo. Catalog and mock tickets use in-memory fixtures. Not the Nest funds API.',
+        'Search exhibitions in Taipei and Tokyo, then confirm on the official page or LINE.',
     };
   }
 
@@ -39,7 +39,7 @@ export function generatePageMetadata(pathname: string): Metadata {
   return {
     ...baseMetadata,
     alternates: {
-      canonical: `https://events.nx-playground.local${pathname}`,
+      canonical: `${process.env.NEXT_PUBLIC_SITE_URL ?? 'https://nx-event-portal.vercel.app'}${pathname}`,
     },
   };
 }

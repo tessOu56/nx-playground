@@ -10,7 +10,8 @@
 /* 自定義樣式 */
 @layer base {
   html {
-    font-family: 'Inter', system-ui, sans-serif;
+    font-family: var(--font-sans), 'Noto Sans TC', 'Noto Sans JP', 'PingFang TC',
+      'Hiragino Sans', system-ui, sans-serif;
   }
 
   body {
@@ -24,7 +25,7 @@
   input:focus-visible,
   select:focus-visible,
   textarea:focus-visible {
-    outline: 2px solid var(--color-brand-600, #4f46e5);
+    outline: 2px solid var(--color-neutral-900, #111827);
     outline-offset: 2px;
   }
 }
@@ -54,11 +55,27 @@
 }
 
 @layer utilities {
+  .font-display {
+    font-family: 'Noto Serif TC', 'Noto Serif JP', 'Iowan Old Style',
+      'Palatino Linotype', serif;
+  }
+
   .text-gradient {
     @apply bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent;
   }
 
   .skip-link {
     @apply sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:rounded-md focus:bg-white focus:px-4 focus:py-2 focus:text-sm focus:font-medium focus:text-gray-900 focus:shadow-lg;
+  }
+
+  .catalog-card {
+    @apply motion-safe:hover:-translate-y-0.5;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .catalog-card {
+      transform: none;
+      transition: none;
+    }
   }
 }

@@ -5,9 +5,8 @@ import { ENV_CONFIG } from '../constants';
 import { mockBills } from '../mock/bills';
 import { mockOrders } from '../mock/orders';
 import { mockUsers } from '../mock/users';
-import { mockVendors } from '../mock/vendors';
 
-import type { Vendor, User, Order, Bill } from '@/types';
+import type { User, Order, Bill } from '@/types';
 
 /**
  * Server-side 資料預取函數
@@ -27,43 +26,6 @@ export async function prefetchEvent(queryClient: QueryClient, eventId: string) {
   await queryClient.prefetchQuery({
     queryKey: ['event', eventId],
     queryFn: () => fetchPortalEvent(eventId),
-    staleTime: 5 * 60 * 1000,
-  });
-}
-
-export async function prefetchEventsByVendor(
-  queryClient: QueryClient,
-  vendorId: string
-) {
-  await queryClient.prefetchQuery({
-    queryKey: ['events', 'vendor', vendorId],
-    queryFn: async () => {
-      const events = await fetchPortalEvents();
-      return events.filter(event => event.vendorId === vendorId);
-    },
-    staleTime: 5 * 60 * 1000,
-  });
-}
-
-export async function prefetchVendors(queryClient: QueryClient) {
-  if (!ENV_CONFIG.ENABLE_MOCK_DATA) return;
-
-  await queryClient.prefetchQuery({
-    queryKey: ['vendors'],
-    queryFn: () => mockVendors,
-    staleTime: 5 * 60 * 1000,
-  });
-}
-
-export async function prefetchVendor(
-  queryClient: QueryClient,
-  vendorId: string
-) {
-  if (!ENV_CONFIG.ENABLE_MOCK_DATA) return;
-
-  await queryClient.prefetchQuery({
-    queryKey: ['vendor', vendorId],
-    queryFn: () => mockVendors.find((vendor: Vendor) => vendor.id === vendorId),
     staleTime: 5 * 60 * 1000,
   });
 }
@@ -144,16 +106,6 @@ export async function prefetchEventPage(
   await Promise.all([
     prefetchEvent(queryClient, eventId),
     prefetchEvents(queryClient),
-  ]);
-}
-
-export async function prefetchVendorPage(
-  queryClient: QueryClient,
-  vendorId: string
-) {
-  await Promise.all([
-    prefetchVendor(queryClient, vendorId),
-    prefetchEventsByVendor(queryClient, vendorId),
   ]);
 }
 

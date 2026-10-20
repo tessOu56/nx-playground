@@ -1,8 +1,8 @@
 'use client';
 
 import { Image } from '@/components';
-import { eventListKind } from '@/libs/api/event-stack-map';
-import { demoCopy, priceFromLabel } from '@/libs/i18n/demo-copy';
+import { eventListKind, regionTimeZone } from '@/libs/api/event-stack-map';
+import { catalogPriceLabel, demoCopy } from '@/libs/i18n/demo-copy';
 import type { EventDetail, EventSpeaker, EventVenue } from '@/types';
 
 interface EventInfoHeaderProps {
@@ -15,20 +15,22 @@ function formatDateRange(
   startsAt: string,
   endsAt: string,
   startTime: string,
-  locale: string
+  locale: string,
+  timeZone: string
 ): string {
-  const dateLocale = locale === 'en' ? 'en-US' : 'zh-TW';
-  const taipeiDate = new Intl.DateTimeFormat(dateLocale, {
+  const dateLocale =
+    locale === 'en' ? 'en-US' : locale === 'ja' ? 'ja-JP' : 'zh-TW';
+  const localDate = new Intl.DateTimeFormat(dateLocale, {
     year: 'numeric',
     month: 'long',
     day: 'numeric',
-    timeZone: 'Asia/Taipei',
+    timeZone,
   });
-  const taipeiTime = new Intl.DateTimeFormat(dateLocale, {
+  const localTime = new Intl.DateTimeFormat(dateLocale, {
     hour: '2-digit',
     minute: '2-digit',
     hour12: false,
-    timeZone: 'Asia/Taipei',
+    timeZone,
   });
   const start = new Date(startsAt);
   const end = new Date(endsAt);
@@ -37,12 +39,14 @@ function formatDateRange(
   }
   const sameDay =
     !Number.isNaN(end.getTime()) &&
-    taipeiDate.format(start) === taipeiDate.format(end);
+    localDate.format(start) === localDate.format(end);
   if (Number.isNaN(end.getTime()) || sameDay) {
-    const endLabel = Number.isNaN(end.getTime()) ? '' : `–${taipeiTime.format(end)}`;
-    return `${taipeiDate.format(start)} ${taipeiTime.format(start)}${endLabel}`;
+    const endLabel = Number.isNaN(end.getTime())
+      ? ''
+      : `–${localTime.format(end)}`;
+    return `${localDate.format(start)} ${localTime.format(start)}${endLabel}`;
   }
-  return `${taipeiDate.format(start)} ${taipeiTime.format(start)} – ${taipeiDate.format(end)} ${taipeiTime.format(end)}`;
+  return `${localDate.format(start)} – ${localDate.format(end)}`;
 }
 
 function osmEmbedSrc(lat: number, lng: number): string {
@@ -66,8 +70,10 @@ function EventSpeakers({
   if (speakers.length === 0) return null;
   return (
     <div className='mt-8'>
-      <h2 className='text-lg font-semibold text-gray-900 mb-4'>{copy.speakers}</h2>
-      <ul className='grid grid-cols-1 sm:grid-cols-2 gap-4'>
+      <h2 className='mb-4 text-lg font-semibold text-gray-900'>
+        {copy.speakers}
+      </h2>
+      <ul className='grid grid-cols-1 gap-4 sm:grid-cols-2'>
         {speakers.map(speaker => (
           <li
             key={speaker.name}
@@ -128,9 +134,7 @@ function EventVenueBlock({
       >
         {copy.venue}
       </h2>
-      {venue.address ? (
-        <p className='text-gray-700'>{venue.address}</p>
-      ) : null}
+      {venue.address ? <p className='text-gray-700'>{venue.address}</p> : null}
       {venue.transport ? (
         <p className='text-sm text-gray-600'>{venue.transport}</p>
       ) : null}
@@ -147,11 +151,12 @@ function EventVenueBlock({
         <p>
           <a
             href={osmSearchHref(query)}
-            className='text-sm font-medium text-blue-700 hover:underline'
+            className='text-sm font-medium text-gray-800 underline underline-offset-2 hover:text-gray-950'
             target='_blank'
             rel='noopener noreferrer'
           >
             {copy.openOsm}
+            <span className='sr-only'>（{copy.externalLink}）</span>
           </a>
         </p>
       ) : null}
@@ -165,94 +170,117 @@ export function EventInfoHeader({
 }: EventInfoHeaderProps) {
   const copy = demoCopy(locale);
   const kind = eventListKind(event);
-  const domain = event.domainKind ?? 'talk';
+  const domain = event.domainKind ?? 'exhibition';
+  const timeZone = regionTimeZone(event.region, event.timezone);
+  const ended = kind === 'completed' || kind === 'sale_ended';
 
   return (
     <div className='space-y-6'>
-      <div className='bg-white rounded-lg shadow-md overflow-hidden'>
-        <div className='relative aspect-[16/9] bg-gray-100 sm:aspect-auto sm:h-64'>
+      <article className='overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm'>
+        <div className='relative aspect-[16/9] bg-gray-100 sm:aspect-auto sm:h-72'>
           <Image
             src={event.image}
             alt={event.title}
             width={800}
-            height={256}
+            height={288}
             className='h-full w-full object-cover'
             fallback='/placeholder-event.jpg'
           />
-          <div className='absolute top-4 left-4 bg-indigo-600/90 backdrop-blur-sm px-3 py-1 rounded-full'>
-            <span className='text-sm font-medium text-white'>
-              {copy.domain[domain]}
-            </span>
-          </div>
-          <div className='absolute top-4 right-4 bg-black/70 px-3 py-1 rounded-full'>
-            <span className='text-sm font-medium text-white'>
-              {copy.status[kind]}
-            </span>
-          </div>
         </div>
 
         <div className='p-6'>
-          <h1 className='text-3xl font-bold text-gray-900 mb-4'>
+          <div className='mb-4 flex flex-wrap gap-1.5'>
+            {event.region ? (
+              <span className='rounded-full bg-gray-900 px-2.5 py-0.5 text-xs font-medium text-white'>
+                {copy.region[event.region]}
+              </span>
+            ) : null}
+            <span className='rounded-full bg-gray-100 px-2.5 py-0.5 text-xs font-medium text-gray-800'>
+              {copy.domain[domain]}
+            </span>
+            <span className='rounded-full bg-gray-100 px-2.5 py-0.5 text-xs font-medium text-gray-700'>
+              {copy.status[kind]}
+            </span>
+            {event.sample ? (
+              <span className='rounded-full bg-amber-50 px-2.5 py-0.5 text-xs font-medium text-amber-900'>
+                {copy.sampleBadge}
+              </span>
+            ) : null}
+          </div>
+          <h1 className='mb-4 font-display text-3xl font-semibold tracking-tight text-gray-900'>
             {event.title}
           </h1>
+          {ended ? (
+            <div
+              className='mb-4 rounded-lg border border-gray-200 bg-gray-50 px-4 py-3'
+              role='status'
+              data-testid='exhibition-ended-notice'
+            >
+              <p className='text-sm font-semibold text-gray-900'>
+                {copy.endedNotice}
+              </p>
+              <p className='mt-1 text-sm leading-6 text-gray-600'>
+                {copy.endedNoticeHint}
+              </p>
+            </div>
+          ) : null}
           {event.plinthLotUrl ? (
             <p className='mb-4'>
               <a
                 href={event.plinthLotUrl}
                 target='_blank'
                 rel='noreferrer'
-                className='text-sm font-medium text-indigo-700 underline'
+                className='text-sm font-medium text-gray-800 underline underline-offset-2'
               >
                 {copy.plinthLot}
               </a>
             </p>
           ) : null}
-          <p className='text-gray-600 mb-6 text-lg leading-relaxed'>
+          <p className='mb-6 text-lg leading-relaxed text-gray-700'>
             {event.description}
           </p>
-          <dl className='grid grid-cols-1 sm:grid-cols-2 gap-3 text-gray-700'>
+          <dl className='grid grid-cols-1 gap-4 text-gray-700 sm:grid-cols-2'>
             <div>
-              <dt className='text-xs uppercase tracking-wide text-gray-500'>
+              <dt className='text-xs font-medium uppercase tracking-wide text-gray-500'>
                 {copy.when}
               </dt>
-              <dd>
+              <dd className='mt-1'>
                 {formatDateRange(
                   event.startsAt,
                   event.endsAt,
                   event.startTime,
-                  locale
+                  locale,
+                  timeZone
                 )}
               </dd>
             </div>
             <div>
-              <dt className='text-xs uppercase tracking-wide text-gray-500'>
+              <dt className='text-xs font-medium uppercase tracking-wide text-gray-500'>
                 {copy.price}
               </dt>
-              <dd>{priceFromLabel(event.price, locale)}</dd>
+              <dd className='mt-1'>{catalogPriceLabel(event, locale)}</dd>
             </div>
-            <div>
-              <dt className='text-xs uppercase tracking-wide text-gray-500'>
-                {copy.organizer}
-              </dt>
-              <dd>{event.organizerName}</dd>
-            </div>
-            <div>
-              <dt className='text-xs uppercase tracking-wide text-gray-500'>
-                {copy.seatsLeft}
-              </dt>
-              <dd>{event.remainingSeats.toLocaleString('zh-TW')}</dd>
-            </div>
-            <div className='sm:col-span-2'>
-              <dt className='text-xs uppercase tracking-wide text-gray-500'>
-                {copy.location}
-              </dt>
-              <dd>{event.location}</dd>
-            </div>
+            {event.organizerName ? (
+              <div>
+                <dt className='text-xs font-medium uppercase tracking-wide text-gray-500'>
+                  {copy.organizer}
+                </dt>
+                <dd className='mt-1'>{event.organizerName}</dd>
+              </div>
+            ) : null}
+            {event.location ? (
+              <div>
+                <dt className='text-xs font-medium uppercase tracking-wide text-gray-500'>
+                  {copy.location}
+                </dt>
+                <dd className='mt-1'>{event.location}</dd>
+              </div>
+            ) : null}
           </dl>
           <EventSpeakers speakers={event.speakers} locale={locale} />
           <EventVenueBlock venue={event.venue} locale={locale} />
         </div>
-      </div>
+      </article>
     </div>
   );
 }

@@ -1,5 +1,6 @@
 import type { EventStackEvent } from '@nx-playground/api-client/event-stack';
 
+import { publicHttpsUrl } from '../exhibition-search/https-url';
 import type {
   Event,
   EventContentBlock,
@@ -31,7 +32,11 @@ const STACK_LINE: LineSettings = {
   displayName: 'Event Stack',
 };
 
-export type EventDomainKind = 'talk' | 'auction' | 'line_commerce';
+export type EventDomainKind =
+  | 'talk'
+  | 'auction'
+  | 'line_commerce'
+  | 'exhibition';
 
 export function eventDomainLabel(kind: EventDomainKind): string {
   switch (kind) {
@@ -39,6 +44,8 @@ export function eventDomainLabel(kind: EventDomainKind): string {
       return '拍賣';
     case 'line_commerce':
       return 'LINE 商務';
+    case 'exhibition':
+      return '展覽';
     default:
       return '講座';
   }
@@ -71,10 +78,35 @@ export function sanitizePlinthLotUrl(raw: unknown): string | undefined {
 }
 
 export function parseEventDomainKind(raw: unknown): EventDomainKind {
-  if (raw === 'auction' || raw === 'line_commerce' || raw === 'talk') {
+  if (
+    raw === 'auction' ||
+    raw === 'line_commerce' ||
+    raw === 'talk' ||
+    raw === 'exhibition'
+  ) {
     return raw;
   }
   return 'talk';
+}
+
+export function parseExhibitionRegion(
+  raw: unknown
+): Event['region'] | undefined {
+  if (raw === 'TAIPEI' || raw === 'TOKYO') return raw;
+  return undefined;
+}
+
+/** Public https official listing only — blocks javascript:, http, IPs, localhost. */
+export function sanitizeSourceUrl(raw: unknown): string | undefined {
+  return publicHttpsUrl(raw) ?? undefined;
+}
+
+export function regionTimeZone(
+  region: Event['region'] | undefined,
+  timezone?: string
+): string {
+  if (timezone?.includes('/')) return timezone;
+  return region === 'TOKYO' ? 'Asia/Tokyo' : 'Asia/Taipei';
 }
 
 export type EventDisplayKind =
@@ -257,8 +289,7 @@ function mapContent(raw: unknown): EventContentBlock[] {
     .map(block => ({
       type: (typeof block.type === 'string' ? block.type : 'text') as EventContentBlock['type'],
       text_data: typeof block.text_data === 'string' ? block.text_data : undefined,
-      image_data:
-        typeof block.image_data === 'string' ? block.image_data : undefined,
+      image_data: publicHttpsUrl(block.image_data) ?? undefined,
     }));
 }
 
@@ -286,14 +317,18 @@ function portalStatus(
 export function toPortalEvent(api: EventStackEvent): Event {
   const catalog = catalogOf(api);
   const kind = eventDisplayKind(api);
+  const domainKind = parseEventDomainKind(catalog.kind);
   const sessionsRaw = Array.isArray(catalog.sessions) ? catalog.sessions : [];
+  const mappedSessions = sessionsRaw
+    .map(item => asRecord(item))
+    .filter((item): item is Record<string, unknown> => Boolean(item))
+    .map(session => mapSession(session, api.id, api.endDate, kind));
   const sessions =
-    sessionsRaw.length > 0
-      ? sessionsRaw
-          .map(item => asRecord(item))
-          .filter((item): item is Record<string, unknown> => Boolean(item))
-          .map(session => mapSession(session, api.id, api.endDate, kind))
-      : [fallbackSession(api, kind)];
+    mappedSessions.length > 0
+      ? mappedSessions
+      : domainKind === 'exhibition'
+        ? []
+        : [fallbackSession(api, kind)];
   const prices = sessions.flatMap(session =>
     session.tickets.map(ticket => ticket.price)
   );
@@ -307,13 +342,23 @@ export function toPortalEvent(api: EventStackEvent): Event {
       ? catalog.organizer.trim()
       : undefined;
   const venueRecord = asRecord(catalog.venue);
-  const venueHint =
-    (venueRecord &&
-      typeof venueRecord.transport === 'string' &&
-      venueRecord.transport.trim()) ||
-    undefined;
-  const domainKind = parseEventDomainKind(catalog.kind);
+  const transportHint =
+    venueRecord && typeof venueRecord.transport === 'string'
+      ? venueRecord.transport.trim()
+      : '';
+  const venueHint = transportHint.length > 0 ? transportHint : undefined;
   const plinthLotUrl = sanitizePlinthLotUrl(catalog.plinthLotUrl);
+  const region = parseExhibitionRegion(api.region);
+  const sourceUrl = sanitizeSourceUrl(api.sourceUrl);
+  const priceText =
+    typeof api.priceText === 'string' && api.priceText.trim()
+      ? api.priceText.trim()
+      : undefined;
+  const timezone =
+    typeof api.timezone === 'string' && api.timezone.trim()
+      ? api.timezone.trim()
+      : undefined;
+  const sample = catalog.sample === true || api.source === 'sample';
 
   return {
     id: api.id,
@@ -325,9 +370,8 @@ export function toPortalEvent(api: EventStackEvent): Event {
     location: api.location ?? '',
     price: prices.length > 0 ? Math.min(...prices) : 0,
     image:
-      typeof catalog.image === 'string'
-        ? catalog.image
-        : `https://picsum.photos/seed/${encodeURIComponent(api.id)}/800/600`,
+      publicHttpsUrl(catalog.image) ??
+      `https://picsum.photos/seed/${encodeURIComponent(api.id)}/800/600`,
     likes: 0,
     attendees: 0,
     capacity,
@@ -340,7 +384,25 @@ export function toPortalEvent(api: EventStackEvent): Event {
     venueHint,
     domainKind,
     plinthLotUrl,
+    region,
+    timezone,
+    sourceUrl,
+    priceText,
+    sample,
   };
+}
+
+export function isPublicCatalogEvent(
+  event: Pick<Event, 'domainKind'>
+): boolean {
+  return event.domainKind === 'exhibition';
+}
+
+export function toPublicCatalogEvents(apiEvents: EventStackEvent[]): Event[] {
+  return apiEvents
+    .filter(event => event.status !== 'draft')
+    .map(toPortalEvent)
+    .filter(isPublicCatalogEvent);
 }
 
 function mapSpeakers(raw: unknown): EventSpeaker[] {
@@ -352,7 +414,7 @@ function mapSpeakers(raw: unknown): EventSpeaker[] {
       name: String(row.name ?? '').trim(),
       title: typeof row.title === 'string' ? row.title : undefined,
       bio: typeof row.bio === 'string' ? row.bio : undefined,
-      avatarUrl: typeof row.avatarUrl === 'string' ? row.avatarUrl : undefined,
+      avatarUrl: publicHttpsUrl(row.avatarUrl) ?? undefined,
     }))
     .filter(row => row.name.length > 0);
 }
@@ -366,8 +428,9 @@ function mapVenue(
   const lng = record && typeof record.lng === 'number' ? record.lng : undefined;
   return {
     address:
-      (record && typeof record.address === 'string' && record.address) ||
-      location,
+      record && typeof record.address === 'string' && record.address.length > 0
+        ? record.address
+        : location,
     transport:
       record && typeof record.transport === 'string'
         ? record.transport
@@ -386,7 +449,7 @@ function remainingSeatsOf(sessions: Session[]): number {
     (sum, session) =>
       sum +
       session.tickets.reduce(
-        (ticketSum, ticket) => ticketSum + (ticket.availableQuantity || 0),
+        (ticketSum, ticket) => ticketSum + (ticket.availableQuantity ?? 0),
         0
       ),
     0

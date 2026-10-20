@@ -6,6 +6,7 @@ import { usePathname } from 'next/navigation';
 import { LocaleSwitcher } from './LocaleSwitcher';
 import { PublicSiteAccount } from './PublicSiteAccount';
 
+import { LineOfficialCta } from '@/components/line/LineOfficialCta';
 import { demoCopy } from '@/libs/i18n/demo-copy';
 
 function navClass(active: boolean) {
@@ -21,45 +22,34 @@ export function PublicSiteHeader({ locale }: { locale: string }) {
   const pathname = usePathname() || `/${locale}`;
   const home = `/${locale}`;
   const events = `/${locale}/events`;
-  const orders = `/${locale}/orders`;
   const copy = demoCopy(locale);
   const onEvents = pathname === events || pathname.startsWith(`${events}/`);
-  const onOrders = pathname === orders || pathname.startsWith(`${orders}/`);
 
   return (
-    <>
-      <header className='fixed inset-x-0 top-0 z-40 border-b border-gray-200 bg-white/95 backdrop-blur'>
-        <div className='mx-auto flex h-16 max-w-5xl items-center justify-between gap-2 px-3 sm:gap-3 sm:px-4'>
+    <header className='sticky top-0 z-40 border-b border-gray-200 bg-[color:var(--color-base-white,#fff)]/95 backdrop-blur'>
+      <div className='mx-auto flex min-h-16 max-w-6xl flex-wrap items-center justify-between gap-x-3 gap-y-2 px-3 py-2 sm:px-4'>
+        <Link
+          href={home}
+          className='min-w-0 truncate font-display text-sm font-semibold tracking-tight text-gray-900 sm:text-lg'
+        >
+          {copy.siteName}
+        </Link>
+        <nav
+          className='flex min-w-0 flex-wrap items-center gap-0.5 text-sm sm:gap-2'
+          aria-label={copy.mainNav}
+        >
           <Link
-            href={home}
-            className='min-w-0 flex-1 truncate text-sm font-semibold text-gray-900 sm:text-lg'
+            href={events}
+            className={navClass(onEvents)}
+            aria-current={onEvents ? 'page' : undefined}
           >
-            {copy.siteName}
+            {copy.navEvents}
           </Link>
-          <nav
-            className='flex shrink-0 items-center gap-0.5 overflow-x-auto text-sm sm:gap-2'
-            aria-label={copy.mainNav}
-          >
-            <Link
-              href={events}
-              className={navClass(onEvents)}
-              aria-current={onEvents ? 'page' : undefined}
-            >
-              {copy.navEvents}
-            </Link>
-            <Link
-              href={orders}
-              className={navClass(onOrders)}
-              aria-current={onOrders ? 'page' : undefined}
-            >
-              {copy.navOrders}
-            </Link>
-            <LocaleSwitcher locale={locale} />
-            <PublicSiteAccount locale={locale} />
-          </nav>
-        </div>
-      </header>
-      <div className='h-16' aria-hidden />
-    </>
+          <LineOfficialCta locale={locale} variant='nav' />
+          <LocaleSwitcher locale={locale} />
+          <PublicSiteAccount locale={locale} />
+        </nav>
+      </div>
+    </header>
   );
 }

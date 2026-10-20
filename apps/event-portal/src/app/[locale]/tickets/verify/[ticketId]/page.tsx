@@ -1,41 +1,30 @@
 import { type Metadata } from 'next';
-import { Suspense } from 'react';
 
-import { TicketVerifyClient } from './components/TicketVerifyClient';
-import { VerifySkeleton } from './components/VerifySkeleton';
+import { RetiredFlow } from '@/app/[locale]/events/components/RetiredFlow';
+import { demoCopy } from '@/libs/i18n/demo-copy';
 
-import { PageConfigs } from '@/libs';
-import { mockTickets } from '@/libs/mock/tickets';
+export const dynamic = 'force-dynamic';
+export const dynamicParams = true;
 
-// 使用動態頁面配置，票券驗證需要即時數據
-export const { dynamic, revalidate, fetchCache, ssr } = PageConfigs.dynamic;
-
-// 生成靜態參數
-export async function generateStaticParams() {
-  return mockTickets.map(ticket => ({
-    ticketId: ticket.id,
-  }));
-}
-
-// 固定 metadata
-export const metadata: Metadata = {
-  title: '票券驗證 | NX Playground',
-  description: '驗證票券有效性',
-  robots: 'noindex, nofollow',
-};
-
-export default function TicketVerifyPage({
+export async function generateMetadata({
   params,
 }: {
-  params: Promise<{ ticketId: string }>;
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  const copy = demoCopy(locale);
+  return {
+    title: `${copy.checkoutTitle} | NX Playground`,
+    description: copy.checkoutLead,
+    robots: 'noindex, nofollow',
+  };
+}
+
+export default async function TicketVerifyPage({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
 }) {
-  return (
-    <div className='min-h-screen bg-gray-50'>
-      <div className='page-container'>
-        <Suspense fallback={<VerifySkeleton />}>
-          <TicketVerifyClient params={params} />
-        </Suspense>
-      </div>
-    </div>
-  );
+  const { locale } = await params;
+  return <RetiredFlow locale={locale} variant='checkout' />;
 }

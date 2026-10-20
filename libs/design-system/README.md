@@ -310,7 +310,7 @@ pnpm design:tokens:explore-sdk   # from repo root, or:
 pnpm --filter @nx-playground/design-system run tokens:explore-sdk
 ```
 
-This resolves the `enterprise` application map (matches `apps/enterprise-admin` +
+This resolves the `enterprise` application map (matches archived `labs/enterprise-admin` +
 `src/tokens/raw/enterprise-tokens.json`) through `@is_tess/sdk`'s
 `createExploreSdk().resolveAll('enterprise')` and writes
 `src/tokens/generated/explore-sdk-resolved.json` — useful for diffing "what the SDK says an

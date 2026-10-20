@@ -61,15 +61,33 @@ model Event {
   createdAt    DateTime           @default(now())
   updatedAt    DateTime           @updatedAt
 
-  // 關聯
-  form    Form?    @relation(fields: [formId], references: [id])
-  orders  Order[]
-  tickets Ticket[]
+  // search_document / search_tsv are SQL-generated (CJK bigrams + simple FTS).
+  // See migration 20261020020000_exhibition_fts_embeddings. Not Prisma-managed
+  // so inserts from Nest / collectors do not have to supply them.
+  // pgvector: add CREATE EXTENSION vector + EventEmbedding.embedding later.
+
+  form       Form?            @relation(fields: [formId], references: [id])
+  orders     Order[]
+  tickets    Ticket[]
+  embedding  EventEmbedding?
 
   @@unique([source, externalId])
   @@index([region])
   @@index([lastSeenAt])
   @@map("events")
+}
+
+// Stub for later pgvector rows. No embedding column and no LLM calls in step 1.
+model EventEmbedding {
+  eventId     String   @id @map("event_id")
+  event       Event    @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  model       String?
+  dimensions  Int?
+  contentHash String?  @map("content_hash")
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  @@map("event_embeddings")
 }
 
 // ==================== 表單模組 ====================

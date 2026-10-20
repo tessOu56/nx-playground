@@ -4,8 +4,11 @@ import { describe, it } from 'node:test';
 import {
   eventDisplayKind,
   eventDisplayLabel,
+  parseEventDomainKind,
+  sanitizeSourceUrl,
   toPortalEvent,
   toPortalEventDetail,
+  toPublicCatalogEvents,
 } from './event-stack-map';
 
 describe('event-stack catalog map', () => {
@@ -124,5 +127,101 @@ describe('event-stack catalog map', () => {
     assert.equal(detail.remainingSeats, 12);
     assert.equal(detail.content.length, 0);
     assert.equal(detail.faq.length, 0);
+  });
+
+  it('maps exhibition catalog fields and does not invent tickets', () => {
+    const event = toPortalEvent({
+      id: 'event_sample_tfam',
+      title: '[Sample] TFAM — Contemporary Taiwan',
+      description: 'Sample catalog data',
+      location: '台北市中山區中山北路三段181號',
+      startDate: '2026-10-04T01:00:00.000Z',
+      endDate: '2026-12-27T10:00:00.000Z',
+      status: 'published',
+      createdAt: '2026-08-20T00:00:00.000Z',
+      updatedAt: '2026-08-20T00:00:00.000Z',
+      region: 'TAIPEI',
+      timezone: 'Asia/Taipei',
+      source: 'sample',
+      sourceUrl: 'https://www.tfam.museum/',
+      priceText: 'NT$30',
+      data: {
+        sample: true,
+        kind: 'exhibition',
+        category: '展覽',
+        sessions: [],
+      },
+    });
+    assert.equal(parseEventDomainKind('exhibition'), 'exhibition');
+    assert.equal(event.domainKind, 'exhibition');
+    assert.equal(event.region, 'TAIPEI');
+    assert.equal(event.sourceUrl, 'https://www.tfam.museum/');
+    assert.equal(event.priceText, 'NT$30');
+    assert.equal(event.sample, true);
+    assert.equal(event.sessions.length, 0);
+    assert.equal(sanitizeSourceUrl('javascript:alert(1)'), undefined);
+    assert.equal(sanitizeSourceUrl('http://evil.example/'), undefined);
+    assert.equal(sanitizeSourceUrl('https://127.0.0.1/admin'), undefined);
+  });
+
+  it('does not render javascript or localhost images from catalog JSON', () => {
+    const event = toPortalEvent({
+      id: 'event_sample_tfam',
+      title: 'TFAM',
+      startDate: '2026-10-04T01:00:00.000Z',
+      endDate: '2026-12-27T10:00:00.000Z',
+      status: 'published',
+      createdAt: '2026-08-20T00:00:00.000Z',
+      updatedAt: '2026-08-20T00:00:00.000Z',
+      sourceUrl: 'https://user:pass@evil.example/phish',
+      data: {
+        kind: 'exhibition',
+        image: 'javascript:alert(1)',
+      },
+    });
+    assert.equal(event.sourceUrl, undefined);
+    assert.equal(event.image.startsWith('https://picsum.photos/'), true);
+  });
+
+  it('keeps only exhibition listings on the public catalog', () => {
+    const listed = toPublicCatalogEvents([
+      {
+        id: 'event_react19',
+        title: 'React 19 技術分享會',
+        startDate: '2026-11-15T14:00:00.000Z',
+        endDate: '2026-11-15T17:00:00.000Z',
+        status: 'published',
+        createdAt: '2026-08-20T00:00:00.000Z',
+        updatedAt: '2026-08-20T00:00:00.000Z',
+        data: { kind: 'talk' },
+      },
+      {
+        id: 'event_sample_tfam',
+        title: '[Sample] TFAM — Contemporary Taiwan',
+        startDate: '2026-10-04T01:00:00.000Z',
+        endDate: '2026-12-27T10:00:00.000Z',
+        status: 'published',
+        createdAt: '2026-08-20T00:00:00.000Z',
+        updatedAt: '2026-08-20T00:00:00.000Z',
+        source: 'sample',
+        data: { kind: 'exhibition', sample: true },
+      },
+      {
+        id: 'event_nx',
+        title: 'Nx draft',
+        startDate: '2026-12-20T19:00:00.000Z',
+        endDate: '2026-12-20T21:00:00.000Z',
+        status: 'draft',
+        createdAt: '2026-08-20T00:00:00.000Z',
+        updatedAt: '2026-08-20T00:00:00.000Z',
+        data: { kind: 'exhibition' },
+      },
+    ]);
+    assert.deepEqual(
+      listed.map(event => event.id),
+      ['event_sample_tfam']
+    );
+    assert.equal(listed[0]?.sample, true);
+    assert.equal(listed[0]?.domainKind, 'exhibition');
   });
 });

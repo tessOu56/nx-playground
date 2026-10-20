@@ -72,29 +72,17 @@
 
 ---
 
-### 5. ⏳ Enterprise Admin
+### 5. Enterprise Admin — ARCHIVED (moved to `labs/`)
 
-- **Project Name**: `nx-playground-enterprise-admin`
-- **Build Command**: `pnpm nx build enterprise-admin --configuration=production`
-- **Build Output**: `dist/apps/enterprise-admin/browser`
-- **Domain**: `admin.yourdomain.com`
-- **Framework**: Angular 20
-- **Environment Variables**:
-  ```
-  NG_API_URL=https://api.yourdomain.com
-  ```
-- **Note**: Angular output directory 通常是 `browser` subfolder
+Canonical: [angular-dashboard-sandbox](https://github.com/tessOu56/angular-dashboard-sandbox).
+Do not deploy from this monorepo. See [`labs/README.md`](labs/README.md).
 
 ---
 
-### 6. ⏳ Vue Motion
+### 6. Vue Motion — ARCHIVED (moved to `labs/`)
 
-- **Project Name**: `nx-playground-vue-motion`
-- **Build Command**: `pnpm nx build vue-motion --configuration=production`
-- **Build Output**: `dist/apps/vue-motion`
-- **Domain**: `motion.yourdomain.com`
-- **Framework**: Vue 3 + Vite
-- **Environment Variables**: (暫無)
+Canonical: [vue-motion-sandbox](https://github.com/tessOu56/vue-motion-sandbox) (GitHub Pages).
+Do not deploy from this monorepo. See [`labs/README.md`](labs/README.md).
 
 ---
 
@@ -151,13 +139,9 @@ pnpm nx build event-cms --configuration=production
 
 # Event Portal
 pnpm nx build event-portal --configuration=production
-
-# Enterprise Admin
-pnpm nx build enterprise-admin --configuration=production
-
-# Vue Motion
-pnpm nx build vue-motion --configuration=production
 ```
+
+Vue / Angular leftovers are under `labs/` and are not product deploy targets.
 
 ---
 

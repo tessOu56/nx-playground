@@ -154,7 +154,7 @@ The design serves as a **creative showcase** demonstrating Vue framework experti
 **Configuration Summary**:
 
 - Build command: `nx build vue-motion --configuration=production`
-- Output: `dist/apps/vue-motion`
+- Output: `dist/labs/vue-motion` (archived — not a product target)
 - Node version: 20
 
 **Features**:
@@ -196,6 +196,6 @@ MIT (Open for use and modification)
 
 - `specs/apps/vue-motion/en.md` - English specification (this file)
 - `specs/apps/vue-motion/zh-TW.md` - Traditional Chinese specification
-- `apps/vue-motion/README.md` - Developer documentation
+- `labs/vue-motion/README.md` - Developer documentation (legacy mirror — do not extend)
 
 Note: Animation examples and configuration details can be found in the README.md.

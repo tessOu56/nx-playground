@@ -21,8 +21,8 @@ Angular / Vue / profile / mobile-approvals are leaving or already have independe
 | api-mock | 3011 | Stateful mock of the Nest event-stack OpenAPI |
 | event-cms | 3002 | React ops console |
 | profile | 3003 | Personal site — no new features (graduate) |
-| vue-motion | 8080 | Mirror of `vue-motion-sandbox` until inversion |
-| enterprise-admin | 4200 | Mirror of `angular-dashboard-sandbox` until inversion |
+
+Archived (not product): `labs/vue-motion` and `labs/enterprise-admin` — see [`labs/README.md`](../labs/README.md). Canonical Vue/Angular is the satellite sandboxes.
 
 ## Bootstrap
 

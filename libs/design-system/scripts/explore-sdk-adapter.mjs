@@ -29,7 +29,7 @@ const generatedDir = join(here, '../src/tokens/generated');
 
 // nx-playground app -> explore-design-sdk application map id.
 // "enterprise" already exists in explore-design-sdk/packages/tokens/applications/
-// and maps 1:1 onto apps/enterprise-admin + libs/design-system's own
+// and maps 1:1 onto labs/enterprise-admin (archived) + libs/design-system's own
 // src/tokens/raw/enterprise-tokens.json Style Dictionary theme.
 const APP_MAP_IDS = ['enterprise'];
 

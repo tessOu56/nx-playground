@@ -5,30 +5,46 @@
 import type { Metadata } from 'next';
 
 import { fetchPortalEvent } from '@/libs/api/event-stack-fetch';
+import { loadPortalExhibition } from '@/libs/exhibition-search/load-portal';
+import { demoCopy } from '@/libs/i18n/demo-copy';
 import { getOrder } from '@nx-playground/api-client/event-stack';
 
 export async function generateEventMetadata({
   params,
 }: {
-  params: Promise<{ eventId: string }>;
+  params: Promise<{ eventId: string; locale?: string }>;
 }): Promise<Metadata> {
-  const { eventId } = await params;
+  const { eventId, locale = 'zh-TW' } = await params;
+  const copy = demoCopy(locale);
   try {
-    const event = await fetchPortalEvent(eventId);
+    const event = await loadPortalExhibition(eventId);
+    const ogLocale =
+      locale === 'en' ? 'en_US' : locale === 'ja' ? 'ja_JP' : 'zh_TW';
     return {
-      title: `${event.title} - 活動詳情 - NX Playground Events`,
-      description: `查看 ${event.title} 活動詳情和報名資訊`,
-      keywords: ['活動詳情', '活動報名', event.title, 'NX Playground', 'Events'],
+      title: `${event.title} — ${copy.navEvents}`,
+      description: event.description || copy.metaDescription,
+      keywords: [copy.navEvents, event.title, 'Taipei', 'Tokyo', 'LINE'],
       openGraph: {
-        title: `${event.title} - 活動詳情`,
-        description: `查看 ${event.title} 活動詳情和報名資訊`,
+        title: event.title,
+        description: event.description || copy.metaDescription,
         type: 'website',
+        locale: ogLocale,
+        images: event.image
+          ? [{ url: event.image, alt: event.title }]
+          : undefined,
+      },
+      twitter: {
+        card: 'summary_large_image',
+        title: event.title,
+        description: event.description || copy.metaDescription,
+        images: event.image ? [event.image] : undefined,
       },
     };
   } catch {
     return {
-      title: '活動未找到 - NX Playground Events',
-      description: '您要查找的活動不存在或已被移除。',
+      title: `${copy.notFound} — NX Playground`,
+      description: copy.notFoundHint,
+      robots: { index: false, follow: true },
     };
   }
 }
@@ -58,23 +74,4 @@ export async function generateOrderMetadata({
       description: '查看訂單詳情和付款資訊',
     };
   }
-}
-
-export async function generateVendorMetadata({
-  params,
-}: {
-  params: Promise<{ vendorId: string }>;
-}): Promise<Metadata> {
-  const { vendorId } = await params;
-
-  return {
-    title: `主辦方 ${vendorId} - NX Playground Events`,
-    description: '查看主辦方詳情和相關活動',
-    keywords: ['主辦方', '活動', 'NX Playground', 'Events'],
-    openGraph: {
-      title: `主辦方 ${vendorId} - NX Playground Events`,
-      description: '查看主辦方詳情和相關活動',
-      type: 'website',
-    },
-  };
 }

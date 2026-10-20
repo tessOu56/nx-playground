@@ -1,5 +1,6 @@
 import { neon } from '@neondatabase/serverless';
 
+import { publicHttpsUrl } from '../../exhibition-search/https-url';
 import type { ExhibitionRegion, UtcRange } from './time-window';
 
 export type CatalogEvent = {
@@ -59,28 +60,7 @@ function asTags(value: unknown): string[] {
   return [];
 }
 
-function publicHttpsImage(value: unknown): string | null {
-  if (typeof value !== 'string' || !value.startsWith('https://')) return null;
-  try {
-    const url = new URL(value);
-    if (url.username || url.password) return null;
-    const host = url.hostname.toLowerCase();
-    if (
-      host === 'localhost' ||
-      host.endsWith('.localhost') ||
-      /^\d{1,3}(?:\.\d{1,3}){3}$/.test(host) ||
-      host.includes(':')
-    ) {
-      return null;
-    }
-    return url.toString();
-  } catch {
-    return null;
-  }
-}
-
 function mapRow(row: Record<string, unknown>): CatalogEvent {
-  const image = publicHttpsImage(row.imageUrl);
   return {
     id: String(row.id),
     title: String(row.title),
@@ -90,9 +70,9 @@ function mapRow(row: Record<string, unknown>): CatalogEvent {
     timezone: row.timezone == null ? null : String(row.timezone),
     priceText: row.priceText == null ? null : String(row.priceText),
     region: row.region === 'TOKYO' || row.region === 'TAIPEI' ? row.region : null,
-    sourceUrl: row.sourceUrl == null ? null : String(row.sourceUrl),
+    sourceUrl: publicHttpsUrl(row.sourceUrl),
     tags: asTags(row.tags),
-    imageUrl: image,
+    imageUrl: publicHttpsUrl(row.imageUrl),
     rank: Number(row.rank ?? 0),
   };
 }
