@@ -6,6 +6,18 @@ export const ECPAY_LIVE_HOST = 'payment.ecpay.com.tw';
 
 export type PaymentProvider = 'mock' | 'ecpay-sandbox' | 'ecpay-live';
 
+/**
+ * Mock-complete and the payment webhook are closed in production unless an
+ * explicit non-prod flag is set. Ticket checkout is retired (exhibition
+ * discovery); do not leave a public mark-paid surface on a shared Neon host.
+ */
+export function isPaymentCallbackEnabled(
+  env: NodeJS.ProcessEnv = process.env
+): boolean {
+  if (env.NODE_ENV !== 'production') return true;
+  return env.ALLOW_NONPROD_PAYMENTS === 'true';
+}
+
 function hasEcpayKeys(): boolean {
   const merchantId = process.env.ECPAY_MERCHANT_ID?.trim() ?? '';
   const hashKey = process.env.ECPAY_HASH_KEY?.trim() ?? '';

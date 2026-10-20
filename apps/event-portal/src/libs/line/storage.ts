@@ -78,24 +78,53 @@ export const clearLiffState = (): void => {
   } catch (error) {}
 };
 
-// 保存 LINE 登入 state
-export const saveLineLoginState = (state: string): void => {
+type LineLoginSession = {
+  state: string;
+  codeVerifier?: string;
+};
+
+function readLineLoginSession(): LineLoginSession | null {
+  try {
+    if (typeof window === 'undefined') return null;
+    const raw = localStorage.getItem('line_login_state');
+    if (!raw) return null;
+    if (raw.startsWith('{')) {
+      const parsed = JSON.parse(raw) as { state?: unknown; codeVerifier?: unknown };
+      if (typeof parsed.state !== 'string' || !parsed.state) return null;
+      return {
+        state: parsed.state,
+        codeVerifier:
+          typeof parsed.codeVerifier === 'string'
+            ? parsed.codeVerifier
+            : undefined,
+      };
+    }
+    return { state: raw };
+  } catch {
+    return null;
+  }
+}
+
+export const saveLineLoginState = (
+  state: string,
+  codeVerifier?: string
+): void => {
   try {
     if (typeof window === 'undefined') return;
-    localStorage.setItem('line_login_state', state);
-  } catch (error) {
+    const session: LineLoginSession = { state };
+    if (codeVerifier) session.codeVerifier = codeVerifier;
+    localStorage.setItem('line_login_state', JSON.stringify(session));
+  } catch {
     throw new Error('無法保存登入狀態');
   }
 };
 
-// 獲取 LINE 登入 state
 export const getLineLoginState = (): string | null => {
-  try {
-    if (typeof window === 'undefined') return null;
-    return localStorage.getItem('line_login_state');
-  } catch (error) {
-    return null;
-  }
+  return readLineLoginSession()?.state ?? null;
+};
+
+export const getLineLoginCodeVerifier = (): string | null => {
+  return readLineLoginSession()?.codeVerifier ?? null;
 };
 
 // 清除 LINE 登入 state

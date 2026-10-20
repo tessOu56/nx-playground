@@ -5,7 +5,7 @@ import { NextRequest } from 'next/server';
 
 import { lineSignatureHeader } from '../../../../libs/line/bot/signature';
 
-import { GET, POST } from './route';
+import { GET, MAX_LINE_WEBHOOK_BYTES, POST } from './route';
 
 const SECRET = 'webhook-test-secret';
 const BODY = JSON.stringify({ destination: 'U1', events: [] });
@@ -27,6 +27,44 @@ describe('POST /api/line/webhook', () => {
       })
     );
     assert.equal(response.status, 401);
+  });
+
+  it('rejects a missing signature header with 401', async () => {
+    process.env.LINE_CHANNEL_SECRET = SECRET;
+    const response = await POST(
+      new NextRequest('http://localhost/api/line/webhook', {
+        method: 'POST',
+        body: BODY,
+      })
+    );
+    assert.equal(response.status, 401);
+  });
+
+  it('rejects a valid signature computed for a different body', async () => {
+    process.env.LINE_CHANNEL_SECRET = SECRET;
+    const signature = lineSignatureHeader(BODY, SECRET);
+    const response = await POST(
+      new NextRequest('http://localhost/api/line/webhook', {
+        method: 'POST',
+        headers: { 'x-line-signature': signature },
+        body: JSON.stringify({ destination: 'U1', events: [{ type: 'x' }] }),
+      })
+    );
+    assert.equal(response.status, 401);
+  });
+
+  it('rejects an oversized payload before treating it as signed', async () => {
+    process.env.LINE_CHANNEL_SECRET = SECRET;
+    const huge = 'x'.repeat(MAX_LINE_WEBHOOK_BYTES + 1);
+    const signature = lineSignatureHeader(huge, SECRET);
+    const response = await POST(
+      new NextRequest('http://localhost/api/line/webhook', {
+        method: 'POST',
+        headers: { 'x-line-signature': signature },
+        body: huge,
+      })
+    );
+    assert.equal(response.status, 413);
   });
 
   it('returns 200 quickly when the HMAC matches the raw body', async () => {
@@ -53,6 +91,7 @@ describe('POST /api/line/webhook', () => {
       })
     );
     assert.equal(response.status, 500);
+    assert.equal(await response.text(), 'Webhook is not configured');
   });
 
   it('accepts GET for console connectivity checks', async () => {

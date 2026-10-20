@@ -11,9 +11,9 @@ Follow-up to PR #36 (`docs/security/audit-2026-10.md` on that branch). Scope is 
 
 SQL stays parameterized (`neon` tagged templates). ILIKE wildcards were already stripped.
 
-## Left to #36
+## Left to #36 (now rebased onto this)
 
-LINE token/PKCE, webhook raw HMAC + body cap, collector SSRF allowlist, Nest mutating Bearer, ECPay CheckMacValue, axios 1.20.0, swiper 12.1.2.
+LINE token/PKCE, webhook raw HMAC + body cap, collector SSRF allowlist, Nest mutating Bearer, ECPay CheckMacValue, axios 1.20.0, swiper 12.1.2. Catalog/detail URL sanitizing stays in `publicHttpsUrl` (#41); LINE `catalog-search` reuses that helper instead of a second copy.
 
 ## Remaining (this pass)
 

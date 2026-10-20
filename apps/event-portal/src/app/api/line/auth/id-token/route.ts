@@ -1,5 +1,6 @@
 import { type NextRequest, NextResponse } from 'next/server';
 
+import { isAllowedPortalOrigin } from '../../../../../libs/line/request-origin';
 import {
   LineIdTokenVerificationError,
   verifyLineIdToken,
@@ -16,6 +17,10 @@ function ownerChannelId(value: string | undefined): string {
 }
 
 export async function POST(request: NextRequest) {
+  if (!isAllowedPortalOrigin(request)) {
+    return NextResponse.json({ error: 'Invalid origin' }, { status: 403 });
+  }
+
   const clientId = ownerChannelId(process.env.NEXT_PUBLIC_LINE_CLIENT_ID);
   if (!clientId) {
     return NextResponse.json(

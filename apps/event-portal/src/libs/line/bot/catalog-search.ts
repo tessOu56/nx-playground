@@ -1,5 +1,6 @@
 import { neon } from '@neondatabase/serverless';
 
+import { publicHttpsUrl } from '../../exhibition-search/https-url';
 import type { ExhibitionRegion, UtcRange } from './time-window';
 
 export type CatalogEvent = {
@@ -60,10 +61,6 @@ function asTags(value: unknown): string[] {
 }
 
 function mapRow(row: Record<string, unknown>): CatalogEvent {
-  const image =
-    typeof row.imageUrl === 'string' && row.imageUrl.startsWith('https://')
-      ? row.imageUrl
-      : null;
   return {
     id: String(row.id),
     title: String(row.title),
@@ -73,9 +70,9 @@ function mapRow(row: Record<string, unknown>): CatalogEvent {
     timezone: row.timezone == null ? null : String(row.timezone),
     priceText: row.priceText == null ? null : String(row.priceText),
     region: row.region === 'TOKYO' || row.region === 'TAIPEI' ? row.region : null,
-    sourceUrl: row.sourceUrl == null ? null : String(row.sourceUrl),
+    sourceUrl: publicHttpsUrl(row.sourceUrl),
     tags: asTags(row.tags),
-    imageUrl: image,
+    imageUrl: publicHttpsUrl(row.imageUrl),
     rank: Number(row.rank ?? 0),
   };
 }

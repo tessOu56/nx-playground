@@ -8,7 +8,8 @@ const cmsBearerToken =
     : undefined;
 
 /**
- * Forwards organizer identity to Nest protected routes (users, stats).
+ * Forwards organizer identity to Nest. Set VITE_CMS_ORGANIZER_API_TOKEN to
+ * the same secret as Nest ADMIN_API_TOKEN for event writes / confirm / check-in.
  */
 export function OrganizerApiAuthSync() {
   const { user } = useAuth();

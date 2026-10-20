@@ -108,11 +108,15 @@ export async function verifyLineIdToken(
   const fetchImpl = deps.fetchImpl ?? fetch;
   let response: Response;
   try {
-    response = await fetchImpl(LINE_ID_TOKEN_VERIFY_URL, {
+    const init: RequestInit = {
       method: 'POST',
       headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
       body: body.toString(),
-    });
+    };
+    if (!deps.fetchImpl) {
+      init.signal = AbortSignal.timeout(8_000);
+    }
+    response = await fetchImpl(LINE_ID_TOKEN_VERIFY_URL, init);
   } catch {
     fail(
       'verify_unreachable',

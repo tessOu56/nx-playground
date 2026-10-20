@@ -16,6 +16,7 @@ describe('publicHttpsUrl', () => {
     assert.equal(publicHttpsUrl('http://www.tfam.museum/'), null);
     assert.equal(publicHttpsUrl('https://user:pass@evil.example/x'), null);
     assert.equal(publicHttpsUrl('https://localhost/secret'), null);
+    assert.equal(publicHttpsUrl('https://foo.localhost/secret'), null);
     assert.equal(publicHttpsUrl('https://169.254.169.254/latest'), null);
     assert.equal(publicHttpsUrl('https://metadata.google.internal/'), null);
   });

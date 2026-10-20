@@ -8,6 +8,7 @@ export function publicHttpsUrl(value: unknown): string | null {
     const host = url.hostname.toLowerCase();
     if (
       host === 'localhost' ||
+      host.endsWith('.localhost') ||
       host.endsWith('.local') ||
       host.endsWith('.internal') ||
       host === '::1'

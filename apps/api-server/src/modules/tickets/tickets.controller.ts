@@ -1,4 +1,4 @@
-import { Controller, Get, Param, Post } from '@nestjs/common';
+import { Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
 import {
   ApiOperation,
   ApiParam,
@@ -6,7 +6,8 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 
-import { TicketListResponse } from './dto/ticket-list-response.dto';
+import { AdminBearerGuard } from '../../guards/admin-bearer.guard';
+
 import { TicketVerifyResponse } from './dto/ticket-verify-response.dto';
 import { Ticket } from './entities/ticket.entity';
 import { TicketsService } from './tickets.service';
@@ -26,6 +27,7 @@ export class TicketsController {
   }
 
   @Post(':id/check-in')
+  @UseGuards(AdminBearerGuard)
   @ApiOperation({ summary: 'Check in a ticket' })
   @ApiParam({ name: 'id', type: String })
   @ApiResponse({ status: 200, type: Ticket })
