@@ -42,6 +42,12 @@
         "buildTarget": "@nx-playground/event-portal:build"
       }
     },
+    "test-weekly-digest": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "node --import tsx --test apps/event-portal/src/libs/digest/*.test.ts apps/event-portal/src/app/api/cron/weekly-digest/route.test.ts"
+      }
+    },
     "test-line-bot": {
       "executor": "nx:run-commands",
       "options": {
