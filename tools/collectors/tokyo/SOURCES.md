@@ -2,7 +2,7 @@
 
 Collectors fetch **allowlisted HTTPS URLs only** (`redirect: 'error'`, no credentials, 30s timeout). Rows upsert on `(source, externalId)`. Catalog fields are a **short summary + official link**, not full source HTML. `data.i18n` holds ja/en/zh when the source publishes them.
 
-This change does not enable `pgvector` or alter `event_embeddings`.
+Prisma migrations (including optional pgvector `event_embeddings.embedding`) run in the collector workflow. Embedding backfill is a no-op unless `EMBEDDING_PROVIDER` and `EMBEDDING_API_KEY` are set.
 
 ## Used
 

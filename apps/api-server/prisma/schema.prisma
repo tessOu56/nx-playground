@@ -1,13 +1,15 @@
 // apps/api-server/prisma/schema.prisma
 
 generator client {
-  provider = "prisma-client-js"
-  output   = "../../../node_modules/.prisma/client"
+  provider        = "prisma-client-js"
+  output          = "../../../node_modules/.prisma/client"
+  previewFeatures = ["postgresqlExtensions"]
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider   = "postgresql"
+  url        = env("DATABASE_URL")
+  extensions = [vector]
 }
 
 // Product path is Postgres (Neon hosted / local docker). SQLite is not allowed.
@@ -64,7 +66,7 @@ model Event {
   // search_document / search_tsv are SQL-generated (CJK bigrams + simple FTS).
   // See migration 20261020020000_exhibition_fts_embeddings. Not Prisma-managed
   // so inserts from Nest / collectors do not have to supply them.
-  // pgvector: add CREATE EXTENSION vector + EventEmbedding.embedding later.
+  // EventEmbedding.embedding is pgvector (migration 20261020090000).
 
   form       Form?            @relation(fields: [formId], references: [id])
   orders     Order[]
@@ -77,15 +79,17 @@ model Event {
   @@map("events")
 }
 
-// Stub for later pgvector rows. No embedding column and no LLM calls in step 1.
+// Document embeddings for hybrid FTS + cosine search. Written via raw SQL
+// (Prisma has no native vector writes). NULL embedding = not yet generated.
 model EventEmbedding {
-  eventId     String   @id @map("event_id")
-  event       Event    @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  eventId     String                    @id @map("event_id")
+  event       Event                     @relation(fields: [eventId], references: [id], onDelete: Cascade)
   model       String?
   dimensions  Int?
-  contentHash String?  @map("content_hash")
-  createdAt   DateTime @default(now()) @map("created_at")
-  updatedAt   DateTime @updatedAt @map("updated_at")
+  contentHash String?                   @map("content_hash")
+  embedding   Unsupported("vector")?
+  createdAt   DateTime                  @default(now()) @map("created_at")
+  updatedAt   DateTime                  @updatedAt @map("updated_at")
 
   @@map("event_embeddings")
 }

@@ -41,3 +41,6 @@ jobs:
             tools/collectors/shared/*.test.ts \
             tools/collectors/moc-taipei/*.test.ts \
             tools/collectors/tokyo/*.test.ts
+
+      - name: Embedding pipeline unit tests
+        run: pnpm exec nx test @nx-playground/api-server --skip-nx-cache

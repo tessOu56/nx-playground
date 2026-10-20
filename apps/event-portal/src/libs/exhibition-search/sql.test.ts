@@ -1,7 +1,11 @@
 import assert from 'node:assert/strict';
 import { describe, it } from 'node:test';
 
-import { getExhibitionSqlById, mapExhibitionRow } from './sql';
+import {
+  getExhibitionSqlById,
+  mapExhibitionRow,
+  searchExhibitionsSql,
+} from './sql';
 
 describe('mapExhibitionRow', () => {
   it('drops non-public source and image URLs', () => {
@@ -25,10 +29,7 @@ describe('getExhibitionSqlById', () => {
   it('requires published status and caps the id', async () => {
     let sqlText = '';
     let values: unknown[] = [];
-    const fakeSql = (
-      strings: TemplateStringsArray,
-      ...params: unknown[]
-    ) => {
+    const fakeSql = (strings: TemplateStringsArray, ...params: unknown[]) => {
       sqlText = strings.join('?');
       values = params;
       return Promise.resolve([]);
@@ -41,5 +42,55 @@ describe('getExhibitionSqlById', () => {
 
     const missing = await getExhibitionSqlById('   ', fakeSql);
     assert.equal(missing, null);
+  });
+});
+
+describe('searchExhibitionsSql hybrid ranking', () => {
+  function captureSql() {
+    let sqlText = '';
+    let values: unknown[] = [];
+    const fakeSql = (strings: TemplateStringsArray, ...params: unknown[]) => {
+      sqlText = strings.join('?');
+      values = params;
+      return Promise.resolve([]);
+    };
+    return {
+      fakeSql,
+      snapshot: () => ({ sqlText, values }),
+    };
+  }
+
+  it('keeps FTS-only SQL when no query embedding is provided', async () => {
+    const { fakeSql, snapshot } = captureSql();
+    await searchExhibitionsSql(
+      { keyword: '攝影', region: 'TAIPEI', dateMode: 'all' },
+      fakeSql
+    );
+    const { sqlText } = snapshot();
+    assert.match(sqlText, /search_tsv/);
+    assert.doesNotMatch(sqlText, /event_embeddings/);
+    assert.doesNotMatch(sqlText, /<=>/);
+  });
+
+  it('joins pgvector cosine into hybrid rank when a query embedding is present', async () => {
+    const { fakeSql, snapshot } = captureSql();
+    await searchExhibitionsSql(
+      { keyword: '攝影', region: 'TAIPEI', dateMode: 'all' },
+      fakeSql,
+      {
+        model: 'text-embedding-3-small',
+        dimensions: 3,
+        values: [0.1, 0.2, 0.3],
+      }
+    );
+    const { sqlText, values } = snapshot();
+    assert.match(sqlText, /event_embeddings/);
+    assert.match(sqlText, /<=>/);
+    assert.match(sqlText, /CAST\(\? AS vector\)/);
+    assert.equal(
+      values.some(value => value === '[0.1,0.2,0.3]'),
+      true
+    );
+    assert.equal(values.includes('text-embedding-3-small'), true);
   });
 });

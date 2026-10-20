@@ -1,6 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 
 import { PrismaService } from '../../common/prisma/prisma.service';
+import { scheduleEventEmbedding } from '../embeddings/pipeline';
 
 import { CreateEventDto } from './dto/create-event.dto';
 import { UpdateEventDto } from './dto/update-event.dto';
@@ -59,7 +60,7 @@ export class EventsService {
   }
 
   async create(createEventDto: CreateEventDto) {
-    return this.prisma.event.create({
+    const event = await this.prisma.event.create({
       data: {
         title: createEventDto.title,
         description: createEventDto.description,
@@ -86,12 +87,16 @@ export class EventsService {
           : undefined,
       },
     });
+    if (event.status === 'published') {
+      scheduleEventEmbedding(this.prisma, event);
+    }
+    return event;
   }
 
   async update(id: string, updateEventDto: UpdateEventDto) {
     await this.findOne(id); // 確保存在
 
-    return this.prisma.event.update({
+    const event = await this.prisma.event.update({
       where: { id },
       data: {
         ...updateEventDto,
@@ -110,6 +115,10 @@ export class EventsService {
           : undefined,
       },
     });
+    if (event.status === 'published') {
+      scheduleEventEmbedding(this.prisma, event);
+    }
+    return event;
   }
 
   async remove(id: string) {
