@@ -1,4 +1,5 @@
 import { type Metadata } from 'next';
+import { connection } from 'next/server';
 
 import { FeaturedCities } from './components/FeaturedCities';
 import { HeroSection } from './components/HeroSection';
@@ -41,6 +42,7 @@ export default async function HomePage({
 }: {
   params: Promise<{ locale: string }>;
 }) {
+  await connection();
   const { locale } = await params;
   let events: Awaited<ReturnType<typeof fetchPortalEvents>> = [];
   try {

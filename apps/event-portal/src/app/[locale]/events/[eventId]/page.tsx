@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { connection } from 'next/server';
 
 import { EventInfoHeaderError } from './components';
 import { EventDetail } from './components/layout/EventDetail';
@@ -17,6 +18,7 @@ export default async function EventDetailPage({
 }: {
   params: Promise<{ locale: string; eventId: string }>;
 }) {
+  await connection();
   const { locale, eventId } = await params;
   const copy = demoCopy(locale);
 

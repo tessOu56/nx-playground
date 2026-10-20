@@ -56,8 +56,8 @@
 
 @layer utilities {
   .font-display {
-    font-family: var(--font-display), 'Noto Serif TC', 'Noto Serif JP',
-      'Iowan Old Style', 'Palatino Linotype', serif;
+    font-family: 'Noto Serif TC', 'Noto Serif JP', 'Iowan Old Style',
+      'Palatino Linotype', serif;
   }
 
   .text-gradient {

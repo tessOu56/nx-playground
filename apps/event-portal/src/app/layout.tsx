@@ -1,21 +1,16 @@
 import type { Metadata } from 'next';
 import { cookies } from 'next/headers';
-import { Noto_Sans_TC, Noto_Serif_TC } from 'next/font/google';
+import { Inter } from 'next/font/google';
 import { type ReactNode } from 'react';
 import './globals.css';
 
-const sans = Noto_Sans_TC({
+// Inter is a handful of latin files. Noto Sans/Serif TC via next/font/google
+// expands to 200+ unicode-range woff2 fetches at build time; one failed
+// fonts.gstatic.com request fails the whole Vercel compile.
+const sans = Inter({
   subsets: ['latin'],
-  weight: ['400', '500', '600', '700'],
   display: 'swap',
   variable: '--font-sans',
-});
-
-const display = Noto_Serif_TC({
-  subsets: ['latin'],
-  weight: ['600', '700'],
-  display: 'swap',
-  variable: '--font-display',
 });
 
 const SITE_TITLE = 'NX Playground — exhibitions in Taipei and Tokyo';
@@ -87,7 +82,7 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
     <html
       lang={locale === 'en' ? 'en' : locale === 'ja' ? 'ja' : 'zh-TW'}
       data-app='nx-event'
-      className={`${sans.variable} ${display.variable}`}
+      className={sans.variable}
     >
       <head>
         <link rel='icon' href='/icon.svg' type='image/svg+xml' />

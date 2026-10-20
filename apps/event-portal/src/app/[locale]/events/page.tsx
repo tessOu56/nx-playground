@@ -1,5 +1,6 @@
 import { Suspense } from 'react';
 import { type Metadata } from 'next';
+import { connection } from 'next/server';
 
 import { EventCatalog } from './components/EventCatalog';
 import { EventCatalogSkeleton } from './components/EventCatalogSkeleton';
@@ -43,6 +44,7 @@ export default async function EventsIndexPage({
 }: {
   params: Promise<{ locale: string }>;
 }) {
+  await connection();
   const { locale } = await params;
   const copy = demoCopy(locale);
 
