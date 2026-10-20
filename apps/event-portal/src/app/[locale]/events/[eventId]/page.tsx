@@ -6,10 +6,11 @@ import { EventInfoHeaderError } from './components';
 import { EventDetail } from './components/layout/EventDetail';
 
 import { LineOfficialCta } from '@/components/line/LineOfficialCta';
-import { loadPortalExhibition } from '@/libs/exhibition-search/load-portal';
-import { isMissingPortalEvent } from '@/libs/api/portal-event-error';
 import { catalogHref } from '@/libs/api/catalog-query';
+import { isMissingPortalEvent } from '@/libs/api/portal-event-error';
+import { loadPortalExhibition } from '@/libs/exhibition-search/load-portal';
 import { demoCopy } from '@/libs/i18n/demo-copy';
+import type { EventDetail as EventDetailModel } from '@/types';
 
 export const dynamic = 'force-dynamic';
 export const dynamicParams = true;
@@ -23,11 +24,19 @@ export default async function EventDetailPage({
   const { locale, eventId } = await params;
   const copy = demoCopy(locale);
 
+  let event: EventDetailModel | null = null;
+  let apiError = false;
   try {
-    const event = await loadPortalExhibition(eventId);
-    return <EventDetail event={event} locale={locale} />;
+    event = await loadPortalExhibition(eventId);
   } catch (error) {
-    if (isMissingPortalEvent(error)) notFound();
+    if (isMissingPortalEvent(error)) {
+      event = null;
+    } else {
+      apiError = true;
+    }
+  }
+
+  if (apiError) {
     return (
       <div className='space-y-6'>
         <EventInfoHeaderError kind='api' locale={locale} />
@@ -43,4 +52,10 @@ export default async function EventDetailPage({
       </div>
     );
   }
+
+  if (!event) {
+    notFound();
+  }
+
+  return <EventDetail event={event} locale={locale} />;
 }

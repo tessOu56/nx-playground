@@ -220,9 +220,15 @@ export function demoCopy(locale: string | undefined) {
     ),
     searchHint: t(
       locale,
-      '輸入時會更新結果。Enter 立即搜尋，Esc 清除。',
-      'Results update as you type. Press Enter to search now, Escape to clear.',
-      '入力すると結果が更新されます。Enter で検索、Esc でクリア。'
+      '輸入時會更新結果。',
+      'Results update as you type.',
+      '入力すると結果が更新されます。'
+    ),
+    searchKeyboardHint: t(
+      locale,
+      'Enter 立即搜尋，Esc 清除。',
+      'Press Enter to search now, Escape to clear.',
+      'Enter で検索、Esc でクリア。'
     ),
     searching: t(locale, '搜尋中…', 'Searching…', '検索中…'),
     searchSlow: t(

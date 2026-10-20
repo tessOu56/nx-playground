@@ -78,6 +78,10 @@ export function EventCatalog({
 
   useEffect(() => {
     setResults(events);
+    lastOkQs.current = catalogQueryString(filtersRef.current);
+    setPending(false);
+    setSlow(false);
+    setError(null);
   }, [events]);
 
   useEffect(() => {
@@ -135,12 +139,15 @@ export function EventCatalog({
     let slowTimer: number | undefined;
     let cancelled = false;
 
-    pendingTimer = window.setTimeout(() => {
-      if (!cancelled) setPending(true);
-      slowTimer = window.setTimeout(() => {
-        if (!cancelled) setSlow(true);
-      }, SEARCH_SLOW_MS);
-    }, SEARCH_PENDING_MS);
+    const backgroundRefresh = lastOkQs.current === qs;
+    if (!backgroundRefresh) {
+      pendingTimer = window.setTimeout(() => {
+        if (!cancelled) setPending(true);
+        slowTimer = window.setTimeout(() => {
+          if (!cancelled) setSlow(true);
+        }, SEARCH_SLOW_MS);
+      }, SEARCH_PENDING_MS);
+    }
 
     void (async () => {
       try {
@@ -285,7 +292,7 @@ export function EventCatalog({
               enterKeyHint='search'
               maxLength={MAX_QUERY_TEXT}
               spellCheck={false}
-              aria-describedby='event-search-hint'
+              aria-describedby='event-search-hint event-search-kbd'
               aria-controls='catalog-results'
             />
             {draftQ ? (
@@ -305,6 +312,9 @@ export function EventCatalog({
               className='text-xs leading-5 text-gray-500'
             >
               {copy.searchHint}
+            </p>
+            <p id='event-search-kbd' className='sr-only'>
+              {copy.searchKeyboardHint}
             </p>
             {draftQ.length >= 64 ? (
               <p className='shrink-0 text-xs tabular-nums text-gray-500'>
