@@ -8,7 +8,6 @@ import { EventListError } from './components/EventListError';
 
 import { LabelledDemoBanner } from '@/components/demo/LabelledDemoBanner';
 import { LineOfficialCta } from '@/components/line/LineOfficialCta';
-import { EdsReveal } from '@/components/motion/EdsReveal';
 import { parseCatalogQuery } from '@/libs/api/catalog-query';
 import { loadPortalCatalog } from '@/libs/exhibition-search/load-portal';
 import { demoCopy } from '@/libs/i18n/demo-copy';
@@ -86,11 +85,9 @@ export default async function EventsIndexPage({
       {loadError ? (
         <EventListError locale={locale} />
       ) : (
-        <EdsReveal>
-          <Suspense fallback={<EventCatalogSkeleton />}>
-            <EventCatalog events={events} catalog={catalog} locale={locale} />
-          </Suspense>
-        </EdsReveal>
+        <Suspense fallback={<EventCatalogSkeleton />}>
+          <EventCatalog events={events} catalog={catalog} locale={locale} />
+        </Suspense>
       )}
     </div>
   );

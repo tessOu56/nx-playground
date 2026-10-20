@@ -21,7 +21,7 @@ export function EventDetail({
       <ExhibitionJsonLd event={event} locale={locale} />
       <div className='lg:grid lg:grid-cols-[minmax(0,1fr)_20rem] lg:items-start lg:gap-8'>
         <div className='space-y-6'>
-          <EventInfoHeader event={event} eventId={event.id} locale={locale} />
+          <EventInfoHeader event={event} locale={locale} />
           <div className='lg:hidden'>
             <ExhibitionActions event={event} locale={locale} />
           </div>

@@ -28,6 +28,8 @@ jobs:
             apps/event-portal/src/libs/exhibition-search/*.test.ts \
             apps/event-portal/src/app/api/exhibitions/search/route.test.ts \
             apps/event-portal/src/libs/line/bot/*.test.ts \
+            apps/event-portal/src/libs/line/exhibition-share.test.ts \
+            apps/event-portal/src/libs/line/login-return.test.ts \
             apps/event-portal/src/libs/api/catalog-query.test.ts \
             apps/event-portal/src/libs/api/catalog-search-ui.test.ts \
             apps/event-portal/src/libs/api/catalog-highlight.test.ts \

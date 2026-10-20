@@ -8,7 +8,6 @@ import type { EventDetail, EventSpeaker, EventVenue } from '@/types';
 
 interface EventInfoHeaderProps {
   event: EventDetail;
-  eventId: string;
   locale?: string;
 }
 
@@ -205,7 +204,7 @@ export function EventInfoHeader({
         <div className='relative aspect-[16/9] bg-gray-100 sm:aspect-auto sm:h-72'>
           <Image
             src={event.image}
-            alt=''
+            alt={event.title}
             width={1200}
             height={675}
             sizes='(max-width: 1024px) 100vw, 800px'

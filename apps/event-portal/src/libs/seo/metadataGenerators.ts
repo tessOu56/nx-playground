@@ -3,7 +3,6 @@
  */
 
 import type { Metadata } from 'next';
-import { notFound } from 'next/navigation';
 
 import { fetchPortalEvent } from '@/libs/api/event-stack-fetch';
 import { catalogImageSrc, PLACEHOLDER_EVENT_IMAGE } from '@/libs/api/catalog-image';
@@ -21,8 +20,14 @@ export async function generateEventMetadata({
   const copy = demoCopy(locale);
   const resolved = await resolvePortalExhibition(eventId);
 
+  // Missing listings 404 from the page, not metadata — a layout-level
+  // notFound() skipped the exhibition not-found UI.
   if (resolved.status === 'missing') {
-    notFound();
+    return {
+      title: `${copy.notFound} — NX Playground`,
+      description: copy.notFoundHint,
+      robots: { index: false, follow: true },
+    };
   }
 
   if (resolved.status === 'error') {

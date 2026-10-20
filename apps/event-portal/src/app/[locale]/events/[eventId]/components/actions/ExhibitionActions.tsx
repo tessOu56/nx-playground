@@ -16,7 +16,7 @@ export function ExhibitionActions({
   const ended = kind === 'completed' || kind === 'sale_ended';
 
   return (
-    <aside
+    <div
       className='rounded-xl border border-gray-200 bg-white p-5 shadow-sm'
       aria-label={copy.step3Title}
     >
@@ -52,6 +52,6 @@ export function ExhibitionActions({
       {event.sample ? (
         <p className='mt-4 text-xs leading-5 text-amber-900'>{copy.sampleHint}</p>
       ) : null}
-    </aside>
+    </div>
   );
 }

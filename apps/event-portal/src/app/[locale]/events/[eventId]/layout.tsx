@@ -1,10 +1,8 @@
 import { LabelledDemoBanner } from '@/components/demo/LabelledDemoBanner';
 import { CatalogBackLink } from '@/components/nav/CatalogBackLink';
 import { demoCopy } from '@/libs/i18n/demo-copy';
-import { generateEventMetadata } from '@/libs/seo/metadataGenerators';
 
 export const dynamic = 'force-dynamic';
-export const generateMetadata = generateEventMetadata;
 
 export default async function EventDetailLayout({
   children,

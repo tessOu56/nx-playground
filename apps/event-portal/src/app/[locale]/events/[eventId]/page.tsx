@@ -8,9 +8,11 @@ import { LineOfficialCta } from '@/components/line/LineOfficialCta';
 import { catalogHref } from '@/libs/api/catalog-query';
 import { resolvePortalExhibition } from '@/libs/exhibition-search/load-portal';
 import { demoCopy } from '@/libs/i18n/demo-copy';
+import { generateEventMetadata } from '@/libs/seo/metadataGenerators';
 
 export const dynamic = 'force-dynamic';
 export const dynamicParams = true;
+export const generateMetadata = generateEventMetadata;
 
 export default async function EventDetailPage({
   params,
