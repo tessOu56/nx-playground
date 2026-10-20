@@ -1,8 +1,8 @@
-# Local Postgres for Nest (T-240). Does not use the leftover Docker network.
+# Local Postgres for Nest (T-240). pgvector image so CREATE EXTENSION vector works.
 # Product hosted DB remains the existing Neon event-stack project.
 services:
   event-stack-db:
-    image: postgres:16-alpine
+    image: pgvector/pgvector:pg16
     container_name: nx-event-stack-db
     restart: unless-stopped
     environment:

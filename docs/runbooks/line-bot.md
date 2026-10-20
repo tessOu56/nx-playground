@@ -71,18 +71,17 @@ Workflow: `.github/workflows/collect-taipei.yml`
 - Also **workflow_dispatch** (Actions → “Taipei exhibition collector” → Run workflow)
 - If the secret is missing, the job **exits 0** and prints a skip notice (no failed red X).
 
-The collector applies Prisma migrations (including `pg_trgm` and CJK FTS `search_tsv` / `event_embeddings` stub) then upserts Ministry of Culture open data for **Taipei City** (`source = moc-opendata`). Tokyo collectors are a separate workflow (`.github/workflows/collect-tokyo.yml`) and do not enable `pgvector`.
+The collector applies Prisma migrations (including `pg_trgm`, CJK FTS `search_tsv`, and pgvector `event_embeddings.embedding`) then upserts Ministry of Culture open data for **Taipei City** (`source = moc-opendata`). When `EMBEDDING_PROVIDER` + `EMBEDDING_API_KEY` are set, it also backfills document embeddings; otherwise that step is a no-op. Tokyo collectors are a separate workflow (`.github/workflows/collect-tokyo.yml`); they apply the same Prisma migrations. Embedding backfill is optional and no-ops when provider env is unset.
 
-## 3b. Exhibition search (Phase 3 step 1)
+## 3b. Exhibition search (Phase 3)
 
 Catalog (`/{locale}/events`) and the Messaging webhook share `searchExhibitions()` → `GET /api/exhibitions/search`.
 
 | Env | Behavior |
 | --- | --- |
-| `DATABASE_URL` set (Neon pooled URL, same as Nest) | Postgres FTS: generated `search_tsv` (CJK unigram+bigram tokens, `simple` config) plus existing `pg_trgm` indexes |
+| `DATABASE_URL` set (Neon pooled URL, same as Nest) | Postgres FTS: generated `search_tsv` (CJK unigram+bigram tokens, `simple` config) plus `pg_trgm`. With embeddings present **and** query-time provider env on the portal, rank is hybrid FTS + cosine. |
 | `DATABASE_URL` unset | Sample fixtures (`libs/api-fixtures`, titles tagged `[Sample]`) |
-
-No new Vercel secrets. Do **not** enable `pgvector` or call an LLM in this step; `event_embeddings` is an empty stub (`event_id`, `model`, `dimensions`, `content_hash`) for a later migration.
+| Embedding provider unset / no key | FTS-only. No embedding HTTP calls. |
 
 Owner apply once on Neon (Render Nest start and the Taipei collector workflow already run `prisma migrate deploy`):
 
@@ -90,7 +89,25 @@ Owner apply once on Neon (Render Nest start and the Taipei collector workflow al
 pnpm exec prisma migrate deploy --schema=apps/api-server/prisma/schema.prisma
 ```
 
-Preview deployments without `DATABASE_URL` stay on sample data; set Preview `DATABASE_URL` to search the live catalog.
+That migration enables `vector` and adds `event_embeddings.embedding`. Local Docker must use `pgvector/pgvector:pg16` (`make db-up`).
+
+Optional semantic search (portal query embed + collector backfill). Set the same names on Vercel **nx-event-portal**, GitHub Actions (collector), and Render Nest if you want CMS writes to embed:
+
+| Name | Where | Notes |
+| --- | --- | --- |
+| `EMBEDDING_PROVIDER` | vars / env | `openai` or `openai-compatible` |
+| `EMBEDDING_API_KEY` | secret | never commit |
+| `EMBEDDING_API_BASE_URL` | vars | required for `openai-compatible`; defaults to OpenAI for `openai` |
+| `EMBEDDING_MODEL` | vars | default `text-embedding-3-small` |
+| `EMBEDDING_DIMENSIONS` | vars | optional; omit unless the model accepts it |
+
+Then backfill (or wait for the next collector run):
+
+```bash
+pnpm embed:exhibitions
+```
+
+Preview deployments without `DATABASE_URL` stay on sample data; set Preview `DATABASE_URL` to search the live catalog. Preview without embedding env stays on FTS.
 
 Local dry run (after `make db-up` and `make seed`):
 

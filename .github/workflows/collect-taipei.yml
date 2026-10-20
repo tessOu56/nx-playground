@@ -54,3 +54,14 @@ jobs:
         env:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
         run: pnpm exec tsx tools/collectors/moc-taipei/run.ts
+
+      - name: Backfill exhibition embeddings
+        if: steps.check.outputs.skip != 'true'
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          EMBEDDING_PROVIDER: ${{ vars.EMBEDDING_PROVIDER }}
+          EMBEDDING_API_KEY: ${{ secrets.EMBEDDING_API_KEY }}
+          EMBEDDING_API_BASE_URL: ${{ vars.EMBEDDING_API_BASE_URL }}
+          EMBEDDING_MODEL: ${{ vars.EMBEDDING_MODEL }}
+          EMBEDDING_DIMENSIONS: ${{ vars.EMBEDDING_DIMENSIONS }}
+        run: pnpm exec tsx apps/api-server/src/modules/embeddings/run-backfill.ts

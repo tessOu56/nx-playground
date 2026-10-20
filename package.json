@@ -25,6 +25,7 @@
     "dev:api-mock": "nx serve @nx-playground/api-mock",
     "collect:taipei": "pnpm exec tsx tools/collectors/moc-taipei/run.ts",
     "collect:tokyo": "pnpm exec tsx tools/collectors/tokyo/run.ts",
+    "embed:exhibitions": "pnpm exec tsx apps/api-server/src/modules/embeddings/run-backfill.ts",
     "test:line-bot": "node --import tsx --test apps/event-portal/src/libs/line/*.test.ts apps/event-portal/src/libs/line/bot/*.test.ts apps/event-portal/src/app/api/line/webhook/route.test.ts apps/event-portal/src/app/api/line/auth/token/route.test.ts tools/collectors/shared/*.test.ts tools/collectors/moc-taipei/*.test.ts tools/collectors/tokyo/*.test.ts",
     "build:safe": "NX_CLOUD_NO_TIMEOUTS=true nx run-many -t build --exclude=tag:legacy",
     "build:affected": "nx affected --target=build --exclude=tag:legacy",

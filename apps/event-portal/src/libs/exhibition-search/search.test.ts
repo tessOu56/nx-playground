@@ -57,4 +57,78 @@ describe('searchExhibitions sample fallback', () => {
     assert.equal(found?.item.title.includes('TFAM'), true);
     assert.equal(await getExhibitionById('missing-id'), null);
   });
+
+  it('does not embed a query when DATABASE_URL is unset', async () => {
+    delete process.env.DATABASE_URL;
+    let called = false;
+    await searchExhibitions(
+      { keyword: 'design', now: NOW },
+      {
+        embedQuery: async () => {
+          called = true;
+          return { model: 'x', dimensions: 3, values: [1, 0, 0] };
+        },
+      }
+    );
+    assert.equal(called, false);
+  });
+});
+
+describe('searchExhibitions postgres hybrid fallback', () => {
+  const previous = process.env.DATABASE_URL;
+
+  afterEach(() => {
+    if (previous === undefined) delete process.env.DATABASE_URL;
+    else process.env.DATABASE_URL = previous;
+  });
+
+  it('passes the query embedding into SQL when the provider returns one', async () => {
+    process.env.DATABASE_URL = 'postgresql://example/event_stack';
+    let received: unknown = 'unset';
+    const result = await searchExhibitions(
+      { keyword: '攝影', now: NOW },
+      {
+        exhibitionSql: (async () => []) as never,
+        embedQuery: async () => ({
+          model: 'text-embedding-3-small',
+          dimensions: 3,
+          values: [0.1, 0.2, 0.3],
+        }),
+        searchSql: async (_input, _sqlFn, embedding) => {
+          received = embedding ?? null;
+          return [];
+        },
+      }
+    );
+    assert.equal(result.source, 'postgres');
+    assert.deepEqual(received, {
+      model: 'text-embedding-3-small',
+      dimensions: 3,
+      values: [0.1, 0.2, 0.3],
+    });
+  });
+
+  it('retries FTS-only when hybrid SQL fails', async () => {
+    process.env.DATABASE_URL = 'postgresql://example/event_stack';
+    const calls: Array<unknown> = [];
+    const result = await searchExhibitions(
+      { keyword: '攝影', now: NOW },
+      {
+        exhibitionSql: (async () => []) as never,
+        embedQuery: async () => ({
+          model: 'text-embedding-3-small',
+          dimensions: 3,
+          values: [0.1, 0.2, 0.3],
+        }),
+        searchSql: async (_input, _sqlFn, embedding) => {
+          calls.push(embedding ?? null);
+          if (embedding) throw new Error('vector extension missing');
+          return [];
+        },
+      }
+    );
+    assert.equal(result.source, 'postgres');
+    assert.equal(calls.length, 2);
+    assert.equal(calls[1], null);
+  });
 });

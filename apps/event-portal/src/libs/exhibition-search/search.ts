@@ -1,9 +1,12 @@
+import { embedQueryFromEnv } from './embeddings/provider';
+import type { EmbeddingResult } from './embeddings/types';
 import { rankDocuments } from './rank';
 import { sampleDocumentById, sampleDocuments } from './sample';
 import {
   getExhibitionSql,
   getExhibitionSqlById,
   searchExhibitionsSql,
+  type QueryEmbedding,
 } from './sql';
 import type {
   ExhibitionDocument,
@@ -22,16 +25,48 @@ function sampleResult(input: ExhibitionSearchInput): ExhibitionSearchResult {
   };
 }
 
+export type SearchExhibitionsDeps = {
+  embedQuery?: (text: string) => Promise<QueryEmbedding | null>;
+  searchSql?: typeof searchExhibitionsSql;
+  exhibitionSql?: ReturnType<typeof getExhibitionSql>;
+};
+
+async function queryEmbeddingFor(
+  keyword: string,
+  deps?: SearchExhibitionsDeps
+): Promise<EmbeddingResult | null> {
+  const q = keyword.trim();
+  if (!q) return null;
+  const embed = deps?.embedQuery ?? embedQueryFromEnv;
+  try {
+    return (await embed(q)) ?? null;
+  } catch {
+    return null;
+  }
+}
+
 export async function searchExhibitions(
-  input: ExhibitionSearchInput
+  input: ExhibitionSearchInput,
+  deps?: SearchExhibitionsDeps
 ): Promise<ExhibitionSearchResult> {
   if (!databaseUrl()) {
     return sampleResult(input);
   }
+  const embedding = await queryEmbeddingFor(input.keyword, deps);
+  const runSql = deps?.searchSql ?? searchExhibitionsSql;
+  const sql = deps?.exhibitionSql ?? getExhibitionSql();
   try {
-    const items = await searchExhibitionsSql(input, getExhibitionSql());
+    const items = await runSql(input, sql, embedding);
     return { source: 'postgres', items };
   } catch {
+    if (embedding) {
+      try {
+        const items = await runSql(input, sql, null);
+        return { source: 'postgres', items };
+      } catch {
+        /* fall through to sample */
+      }
+    }
     return sampleResult(input);
   }
 }

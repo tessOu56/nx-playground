@@ -1,5 +1,12 @@
 import { neon } from '@neondatabase/serverless';
 
+import type { EmbeddingResult } from './embeddings/types';
+import {
+  HYBRID_FTS_WEIGHT,
+  HYBRID_VECTOR_WEIGHT,
+  VECTOR_RECALL_MIN_COSINE,
+  toVectorLiteral,
+} from './embeddings/vector';
 import { publicHttpsUrl } from './https-url';
 import type {
   ExhibitionDocument,
@@ -20,7 +27,9 @@ export function createExhibitionSql(databaseUrl: string): SqlFn {
   return neon(databaseUrl) as unknown as SqlFn;
 }
 
-export function getExhibitionSql(databaseUrl = process.env.DATABASE_URL): SqlFn {
+export function getExhibitionSql(
+  databaseUrl = process.env.DATABASE_URL
+): SqlFn {
   const url = databaseUrl?.trim();
   if (!url) {
     throw new Error('DATABASE_URL is not set');
@@ -50,7 +59,9 @@ function asRecord(value: unknown): Record<string, unknown> {
   return {};
 }
 
-export function mapExhibitionRow(row: Record<string, unknown>): ExhibitionDocument {
+export function mapExhibitionRow(
+  row: Record<string, unknown>
+): ExhibitionDocument {
   const data = asRecord(row.data);
   const image = publicHttpsUrl(row.imageUrl) ?? publicHttpsUrl(data.image);
   const venue = asRecord(data.venue);
@@ -63,7 +74,8 @@ export function mapExhibitionRow(row: Record<string, unknown>): ExhibitionDocume
     endDate: asDate(row.endDate),
     timezone: row.timezone == null ? null : String(row.timezone),
     priceText: row.priceText == null ? null : String(row.priceText),
-    region: row.region === 'TOKYO' || row.region === 'TAIPEI' ? row.region : null,
+    region:
+      row.region === 'TOKYO' || row.region === 'TAIPEI' ? row.region : null,
     sourceUrl: publicHttpsUrl(row.sourceUrl),
     source: row.source == null ? null : String(row.source),
     tags: asTags(row.tags),
@@ -72,8 +84,8 @@ export function mapExhibitionRow(row: Record<string, unknown>): ExhibitionDocume
       typeof row.category === 'string'
         ? row.category
         : typeof data.category === 'string'
-          ? data.category
-          : null,
+        ? data.category
+        : null,
     organizerName: typeof data.organizer === 'string' ? data.organizer : null,
     venueHint: typeof venue.transport === 'string' ? venue.transport : null,
     status: String(row.status ?? 'published'),
@@ -85,7 +97,10 @@ export function mapExhibitionRow(row: Record<string, unknown>): ExhibitionDocume
 }
 
 function likePattern(keyword: string): string {
-  const compact = keyword.replace(/[%_\\]/g, ' ').replace(/\s+/g, ' ').trim();
+  const compact = keyword
+    .replace(/[%_\\]/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
   return compact ? `%${compact}%` : '';
 }
 
@@ -96,15 +111,33 @@ function toHits(rows: Record<string, unknown>[]): ExhibitionHit[] {
   }));
 }
 
+export type QueryEmbedding = Pick<
+  EmbeddingResult,
+  'model' | 'dimensions' | 'values'
+>;
+
+function vectorLiteral(
+  embedding: QueryEmbedding | null | undefined
+): string | null {
+  if (!embedding?.values?.length) return null;
+  try {
+    return toVectorLiteral(embedding.values);
+  } catch {
+    return null;
+  }
+}
+
 export async function searchExhibitionsSql(
   input: ExhibitionSearchInput,
-  sql: SqlFn
+  sql: SqlFn,
+  queryEmbedding?: QueryEmbedding | null
 ): Promise<ExhibitionHit[]> {
   const limit = Math.min(Math.max(input.limit ?? 20, 1), 50);
   const keyword = input.keyword.trim().slice(0, 80);
   const like = likePattern(keyword);
   const category = (input.category?.trim() ?? '').slice(0, 80);
   const now = input.now ?? new Date();
+  const embedding = keyword ? queryEmbedding ?? null : null;
 
   if (input.windows) {
     const regions: ExhibitionRegion[] = input.region
@@ -122,6 +155,7 @@ export async function searchExhibitionsSql(
           like,
           category,
           limit,
+          embedding,
         });
       })
     );
@@ -146,21 +180,99 @@ export async function searchExhibitionsSql(
     category,
     now,
     limit,
+    embedding,
   });
 }
 
+type SharedQueryArgs = {
+  keyword: string;
+  like: string;
+  category: string;
+  limit: number;
+  embedding: QueryEmbedding | null;
+};
+
 async function queryWindow(
   sql: SqlFn,
-  args: {
+  args: SharedQueryArgs & {
     region: ExhibitionRegion;
     from: Date;
     to: Date;
-    keyword: string;
-    like: string;
-    category: string;
-    limit: number;
   }
 ): Promise<ExhibitionHit[]> {
+  const vec = vectorLiteral(args.embedding);
+  if (vec && args.embedding) {
+    const rows = await sql`
+      SELECT
+        events.id,
+        events.title,
+        events.description,
+        events.location,
+        events."startDate",
+        events."endDate",
+        events.timezone,
+        events."priceText",
+        events.region,
+        events."sourceUrl",
+        events.source,
+        events.tags,
+        events.status,
+        events.data,
+        events.data->>'image' AS "imageUrl",
+        events.data->>'category' AS category,
+        events."createdAt",
+        events."updatedAt",
+        (
+          ${HYBRID_FTS_WEIGHT} * (
+            CASE WHEN ${args.keyword} = '' THEN 0
+            ELSE GREATEST(
+              ts_rank_cd(events.search_tsv, plainto_tsquery('simple', exhibition_search_tokens(${args.keyword}))),
+              similarity(events.title, ${args.keyword}),
+              similarity(COALESCE(events.location, ''), ${args.keyword}) * 0.7,
+              similarity(array_to_string(events.tags, ' '), ${args.keyword}) * 0.6
+            )
+            END
+          )
+          + ${HYBRID_VECTOR_WEIGHT} * COALESCE(
+            1 - (ee.embedding <=> CAST(${vec} AS vector)),
+            0
+          )
+        ) AS rank
+      FROM events
+      LEFT JOIN event_embeddings ee
+        ON ee.event_id = events.id
+       AND ee.embedding IS NOT NULL
+       AND ee.model = ${args.embedding.model}
+       AND ee.dimensions = ${args.embedding.dimensions}
+      WHERE events.status = 'published'
+        AND events.region::text = ${args.region}
+        AND events."endDate" >= ${args.from}
+        AND events."startDate" <= ${args.to}
+        AND (
+          ${args.category} = ''
+          OR COALESCE(events.data->>'category', '') = ${args.category}
+          OR ${args.category} = ANY(events.tags)
+        )
+        AND (
+          ${args.keyword} = ''
+          OR events.search_tsv @@ plainto_tsquery('simple', exhibition_search_tokens(${args.keyword}))
+          OR events.title ILIKE ${args.like}
+          OR COALESCE(events.location, '') ILIKE ${args.like}
+          OR array_to_string(events.tags, ' ') ILIKE ${args.like}
+          OR similarity(events.title, ${args.keyword}) >= 0.12
+          OR similarity(COALESCE(events.location, ''), ${args.keyword}) >= 0.12
+          OR similarity(array_to_string(events.tags, ' '), ${args.keyword}) >= 0.12
+          OR (
+            ee.embedding IS NOT NULL
+            AND 1 - (ee.embedding <=> CAST(${vec} AS vector)) >= ${VECTOR_RECALL_MIN_COSINE}
+          )
+        )
+      ORDER BY rank DESC, events."startDate" ASC
+      LIMIT ${args.limit}
+    `;
+    return toHits(rows);
+  }
+
   const rows = await sql`
     SELECT
       id,
@@ -219,16 +331,89 @@ async function queryWindow(
 
 async function queryDateMode(
   sql: SqlFn,
-  args: {
+  args: SharedQueryArgs & {
     region: string;
     dateMode: string;
-    keyword: string;
-    like: string;
-    category: string;
     now: Date;
-    limit: number;
   }
 ): Promise<ExhibitionHit[]> {
+  const vec = vectorLiteral(args.embedding);
+  if (vec && args.embedding) {
+    const rows = await sql`
+      SELECT
+        events.id,
+        events.title,
+        events.description,
+        events.location,
+        events."startDate",
+        events."endDate",
+        events.timezone,
+        events."priceText",
+        events.region,
+        events."sourceUrl",
+        events.source,
+        events.tags,
+        events.status,
+        events.data,
+        events.data->>'image' AS "imageUrl",
+        events.data->>'category' AS category,
+        events."createdAt",
+        events."updatedAt",
+        (
+          ${HYBRID_FTS_WEIGHT} * (
+            CASE WHEN ${args.keyword} = '' THEN 0
+            ELSE GREATEST(
+              ts_rank_cd(events.search_tsv, plainto_tsquery('simple', exhibition_search_tokens(${args.keyword}))),
+              similarity(events.title, ${args.keyword}),
+              similarity(COALESCE(events.location, ''), ${args.keyword}) * 0.7,
+              similarity(array_to_string(events.tags, ' '), ${args.keyword}) * 0.6
+            )
+            END
+          )
+          + ${HYBRID_VECTOR_WEIGHT} * COALESCE(
+            1 - (ee.embedding <=> CAST(${vec} AS vector)),
+            0
+          )
+        ) AS rank
+      FROM events
+      LEFT JOIN event_embeddings ee
+        ON ee.event_id = events.id
+       AND ee.embedding IS NOT NULL
+       AND ee.model = ${args.embedding.model}
+       AND ee.dimensions = ${args.embedding.dimensions}
+      WHERE events.status = 'published'
+        AND (${args.region} = '' OR events.region::text = ${args.region})
+        AND (
+          ${args.dateMode} = 'all'
+          OR (${args.dateMode} = 'now' AND events."startDate" <= ${args.now} AND events."endDate" >= ${args.now})
+          OR (${args.dateMode} = 'upcoming' AND events."startDate" > ${args.now})
+          OR (${args.dateMode} = 'past' AND events."endDate" < ${args.now})
+        )
+        AND (
+          ${args.category} = ''
+          OR COALESCE(events.data->>'category', '') = ${args.category}
+          OR ${args.category} = ANY(events.tags)
+        )
+        AND (
+          ${args.keyword} = ''
+          OR events.search_tsv @@ plainto_tsquery('simple', exhibition_search_tokens(${args.keyword}))
+          OR events.title ILIKE ${args.like}
+          OR COALESCE(events.location, '') ILIKE ${args.like}
+          OR array_to_string(events.tags, ' ') ILIKE ${args.like}
+          OR similarity(events.title, ${args.keyword}) >= 0.12
+          OR similarity(COALESCE(events.location, ''), ${args.keyword}) >= 0.12
+          OR similarity(array_to_string(events.tags, ' '), ${args.keyword}) >= 0.12
+          OR (
+            ee.embedding IS NOT NULL
+            AND 1 - (ee.embedding <=> CAST(${vec} AS vector)) >= ${VECTOR_RECALL_MIN_COSINE}
+          )
+        )
+      ORDER BY rank DESC, events."startDate" ASC
+      LIMIT ${args.limit}
+    `;
+    return toHits(rows);
+  }
+
   const rows = await sql`
     SELECT
       id,
@@ -320,6 +505,6 @@ export async function getExhibitionSqlById(
       AND status = 'published'
     LIMIT 1
   `;
-  const row = rows[0];
+  const [row] = rows;
   return row ? mapExhibitionRow(row) : null;
 }
