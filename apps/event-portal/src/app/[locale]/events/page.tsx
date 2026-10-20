@@ -80,11 +80,6 @@ export default async function EventsIndexPage({
           </p>
         </div>
         <div className='flex flex-wrap items-center gap-3'>
-          {!loadError ? (
-            <p className='rounded-full bg-white px-3 py-1 text-xs font-medium text-gray-700 ring-1 ring-inset ring-gray-200'>
-              {copy.eventCount(catalog.length)}
-            </p>
-          ) : null}
           <LineOfficialCta locale={locale} />
         </div>
       </header>

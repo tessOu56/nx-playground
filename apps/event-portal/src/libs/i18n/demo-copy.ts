@@ -218,6 +218,53 @@ export function demoCopy(locale: string | undefined) {
       'Search by title, venue, or organizer',
       'タイトル・会場・主催で検索'
     ),
+    searchHint: t(
+      locale,
+      '輸入時會更新結果。',
+      'Results update as you type.',
+      '入力すると結果が更新されます。'
+    ),
+    searchKeyboardHint: t(
+      locale,
+      'Enter 立即搜尋，Esc 清除。',
+      'Press Enter to search now, Escape to clear.',
+      'Enter で検索、Esc でクリア。'
+    ),
+    searching: t(locale, '搜尋中…', 'Searching…', '検索中…'),
+    searchSlow: t(
+      locale,
+      '搜尋時間較長，仍在載入。',
+      'This is taking longer than usual.',
+      '検索に時間がかかっています。'
+    ),
+    searchErrorRateLimit: t(
+      locale,
+      '搜尋次數太多，請稍候再試。',
+      'Too many searches. Try again in a moment.',
+      '検索が多すぎます。しばらくしてから再試行してください。'
+    ),
+    searchErrorTooLong: t(
+      locale,
+      '關鍵字太長。請縮短後再搜尋。',
+      'That search is too long. Shorten it and try again.',
+      'キーワードが長すぎます。短くして再試行してください。'
+    ),
+    searchErrorNetwork: t(
+      locale,
+      '目前無法搜尋。請檢查網路後重試。',
+      'Search could not run. Check your connection and retry.',
+      '検索できません。接続を確認して再試行してください。'
+    ),
+    searchErrorGeneric: t(
+      locale,
+      '目前無法搜尋。請稍後再試。',
+      'Search could not run. Try again shortly.',
+      '検索できません。しばらくしてから再試行してください。'
+    ),
+    clearSearch: t(locale, '清除搜尋', 'Clear search', '検索をクリア'),
+    resultsLabel: t(locale, '展覽列表', 'Exhibition results', '展覧会の結果'),
+    queryLimit: (used: number, max: number) =>
+      t(locale, `${used}／${max}`, `${used}/${max}`, `${used}/${max}`),
     filterStatus: t(locale, '會期', 'Dates', '会期'),
     filterCity: t(locale, '城市', 'City', '都市'),
     filterCategory: t(locale, '類型', 'Category', 'ジャンル'),

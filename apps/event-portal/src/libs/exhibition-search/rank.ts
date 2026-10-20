@@ -1,5 +1,9 @@
 import { diceCoefficient, exhibitionSearchTokens } from './tokenize';
-import type { ExhibitionDocument, ExhibitionHit, ExhibitionSearchInput } from './types';
+import type {
+  ExhibitionDocument,
+  ExhibitionHit,
+  ExhibitionSearchInput,
+} from './types';
 
 const TITLE_EXACT = 100;
 const TITLE_PREFIX = 50;
@@ -12,6 +16,8 @@ const TOKEN_BIGRAM = 8;
 const TOKEN_UNIGRAM = 3;
 const DICE_WEIGHT = 24;
 const MIN_MATCH = 0.5;
+/** Dice dust on long titles is not a match — require a real overlap or a strong typo score. */
+const DICE_MATCH = 0.35;
 
 function haystack(doc: ExhibitionDocument): string {
   return [
@@ -28,7 +34,10 @@ function haystack(doc: ExhibitionDocument): string {
     .toLowerCase();
 }
 
-export function scoreDocument(doc: ExhibitionDocument, keyword: string): number {
+export function scoreDocument(
+  doc: ExhibitionDocument,
+  keyword: string
+): number {
   const q = keyword.normalize('NFKC').toLowerCase().trim();
   if (!q) return 0;
 
@@ -41,14 +50,12 @@ export function scoreDocument(doc: ExhibitionDocument, keyword: string): number 
   if (doc.location?.toLowerCase().includes(q)) score += LOCATION;
   if (doc.category?.toLowerCase().includes(q)) score += CATEGORY;
   if (doc.description?.toLowerCase().includes(q)) score += DESCRIPTION;
-  if (doc.tags.some(tag => tag.toLowerCase().includes(q) || q.includes(tag.toLowerCase()))) {
+  if (doc.tags.some(tag => tagMatchesQuery(tag, q))) {
     score += TAG;
   }
 
   const queryTokens = exhibitionSearchTokens(q);
-  const docTokens = new Set(
-    exhibitionSearchTokens(haystack(doc))
-  );
+  const docTokens = new Set(exhibitionSearchTokens(haystack(doc)));
   for (const token of queryTokens) {
     if (docTokens.has(token)) {
       score += token.length >= 2 ? TOKEN_BIGRAM : TOKEN_UNIGRAM;
@@ -57,6 +64,44 @@ export function scoreDocument(doc: ExhibitionDocument, keyword: string): number 
 
   score += DICE_WEIGHT * diceCoefficient(q, title);
   return score;
+}
+
+function tagMatchesQuery(tag: string, q: string): boolean {
+  const normalized = tag.toLowerCase();
+  if (!normalized) return false;
+  if (normalized === q || normalized.includes(q)) return true;
+  return q.includes(normalized) && normalized.length >= 4;
+}
+
+function fieldIncludes(value: string | null | undefined, q: string): boolean {
+  return !!value && value.toLowerCase().includes(q);
+}
+
+/** True when the keyword should keep the document — not dice-only noise. */
+export function hasKeywordMatch(
+  doc: ExhibitionDocument,
+  keyword: string
+): boolean {
+  const q = keyword.normalize('NFKC').toLowerCase().trim();
+  if (!q) return true;
+  if (doc.title.toLowerCase().includes(q)) return true;
+  if (fieldIncludes(doc.location, q)) return true;
+  if (fieldIncludes(doc.category, q)) return true;
+  if (fieldIncludes(doc.description, q)) return true;
+  if (fieldIncludes(doc.organizerName, q)) return true;
+  if (fieldIncludes(doc.venueHint, q)) return true;
+  if (fieldIncludes(doc.priceText, q)) return true;
+  if (doc.tags.some(tag => tagMatchesQuery(tag, q))) return true;
+
+  const queryTokens = exhibitionSearchTokens(q).filter(
+    token => token.length >= 2
+  );
+  if (queryTokens.length > 0) {
+    const docTokens = new Set(exhibitionSearchTokens(haystack(doc)));
+    if (queryTokens.some(token => docTokens.has(token))) return true;
+  }
+
+  return diceCoefficient(q, doc.title.toLowerCase()) >= DICE_MATCH;
 }
 
 function matchesCategory(doc: ExhibitionDocument, category: string): boolean {
@@ -72,7 +117,10 @@ function matchesRegion(
   return doc.region === region;
 }
 
-function matchesDate(doc: ExhibitionDocument, input: ExhibitionSearchInput): boolean {
+function matchesDate(
+  doc: ExhibitionDocument,
+  input: ExhibitionSearchInput
+): boolean {
   const now = input.now ?? new Date();
   const mode = input.dateMode ?? (input.windows ? 'window' : 'all');
   if (mode === 'all') return true;
@@ -105,6 +153,7 @@ export function rankDocuments(
     if (!matchesCategory(doc, input.category ?? '')) continue;
     if (!matchesDate(doc, input)) continue;
 
+    if (keyword && !hasKeywordMatch(doc, keyword)) continue;
     const rank = keyword ? scoreDocument(doc, keyword) : 0;
     if (keyword && rank < MIN_MATCH) continue;
     scored.push({ ...doc, rank });

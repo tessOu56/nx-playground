@@ -12,6 +12,10 @@ describe('demo-copy', () => {
     assert.match(demoCopy('en').homeLead, /Taipei and Tokyo/);
     assert.match(demoCopy('zh-TW').demoBannerBody, /官方頁面/);
     assert.equal(demoCopy('en').searchEvents, 'Search exhibitions');
+    assert.match(demoCopy('en').searchHint, /type/);
+    assert.match(demoCopy('en').searchKeyboardHint, /Enter/);
+    assert.equal(demoCopy('zh-TW').searchErrorRateLimit.includes('太多'), true);
+    assert.equal(demoCopy('ja').searching, '検索中…');
     assert.equal(demoCopy('zh-TW').backToEvents, '回到展覽目錄');
     assert.equal(demoCopy('en').sessions, 'Schedule');
     assert.equal(demoCopy('en').skipToContent, 'Skip to content');

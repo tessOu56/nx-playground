@@ -8,14 +8,18 @@ export type CatalogQuery = {
 };
 
 const CITIES: readonly CityFilter[] = ['all', 'TAIPEI', 'TOKYO'];
-const DATES: readonly DateFilter[] = ['all', 'now', 'upcoming', 'month', 'past'];
-const MAX_QUERY_TEXT = 80;
+const DATES: readonly DateFilter[] = [
+  'all',
+  'now',
+  'upcoming',
+  'month',
+  'past',
+];
+export const MAX_QUERY_TEXT = 80;
 
 export type CatalogEmptyKind = 'catalog' | 'search' | 'city' | 'ended';
 
-function first(
-  value: string | string[] | undefined | null
-): string {
+function first(value: string | string[] | undefined | null): string {
   if (Array.isArray(value)) return value[0] ?? '';
   return value ?? '';
 }
@@ -55,11 +59,65 @@ export function parseCatalogQuery(
   };
 
   return {
-    q: read('q').trim().slice(0, MAX_QUERY_TEXT),
+    q: commitSearchText(read('q')),
     city: parseCityFilter(read('city')),
     dates: parseDateFilter(read('dates')),
-    category: read('category').trim().slice(0, MAX_QUERY_TEXT),
+    category: commitSearchText(read('category')),
   };
+}
+
+/** Trim and cap free-text the same way URL parse does — not while the user is mid-keystroke. */
+export function commitSearchText(value: string): string {
+  return value.trim().slice(0, MAX_QUERY_TEXT);
+}
+
+export function sameCatalogQuery(a: CatalogQuery, b: CatalogQuery): boolean {
+  return (
+    a.q === b.q &&
+    a.city === b.city &&
+    a.dates === b.dates &&
+    a.category === b.category
+  );
+}
+
+export function catalogPath(locale: string): string {
+  return `/${locale}/events`;
+}
+
+export function isCatalogHref(locale: string, href: string): boolean {
+  if (!href.startsWith('/') || href.startsWith('//') || href.includes('\\')) {
+    return false;
+  }
+  const [path] = href.split('?');
+  return path === catalogPath(locale);
+}
+
+export function catalogHrefStorageKey(locale: string): string {
+  return `nx-catalog:${locale}`;
+}
+
+export function rememberCatalogHref(locale: string, href: string): void {
+  if (typeof sessionStorage === 'undefined') return;
+  if (!isCatalogHref(locale, href)) return;
+  try {
+    sessionStorage.setItem(catalogHrefStorageKey(locale), href);
+  } catch {
+    /* private mode / quota */
+  }
+}
+
+export function readRememberedCatalogHref(
+  locale: string,
+  fallback: string
+): string {
+  if (typeof sessionStorage === 'undefined') return fallback;
+  try {
+    const stored = sessionStorage.getItem(catalogHrefStorageKey(locale));
+    if (stored && isCatalogHref(locale, stored)) return stored;
+  } catch {
+    /* ignore */
+  }
+  return fallback;
 }
 
 export function catalogQueryString(query: CatalogQuery): string {
@@ -97,6 +155,7 @@ export function catalogEmptyKind({
   if (total === 0) return 'catalog';
   const hasSearch = query.q.length > 0 || query.category.length > 0;
   if (!hasSearch && query.dates === 'past') return 'ended';
-  if (!hasSearch && query.city !== 'all' && query.dates === 'all') return 'city';
+  if (!hasSearch && query.city !== 'all' && query.dates === 'all')
+    return 'city';
   return 'search';
 }

@@ -36,6 +36,7 @@ export function CatalogEmpty({
   return (
     <div
       className='rounded-xl border border-dashed border-gray-200 bg-white px-6 py-14 text-center'
+      role='status'
       data-testid={testId}
     >
       <h2 className='text-lg font-semibold text-gray-900'>{title}</h2>

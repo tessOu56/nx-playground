@@ -1,26 +1,39 @@
 'use client';
 
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import { useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
+import { CatalogSearchStatus } from './CatalogSearchStatus';
+import { EventCatalogSkeleton } from './EventCatalogSkeleton';
 import { EventStackCards } from './EventStackCards';
 
 import { Input } from '@/components';
-import {
-  type DateFilter,
-  uniqueCategories,
-} from '@/libs/api/catalog-filters';
+import { type DateFilter, uniqueCategories } from '@/libs/api/catalog-filters';
 import {
   catalogEmptyKind,
   catalogQueryString,
+  commitSearchText,
+  MAX_QUERY_TEXT,
   parseCatalogQuery,
+  rememberCatalogHref,
+  sameCatalogQuery,
+  type CatalogQuery,
 } from '@/libs/api/catalog-query';
+import {
+  SEARCH_DEBOUNCE_MS,
+  SEARCH_PENDING_MS,
+  SEARCH_SLOW_MS,
+  catalogSearchErrorFromStatus,
+  isAbortError,
+  parseRetryAfterSec,
+  type CatalogSearchErrorKind,
+} from '@/libs/api/catalog-search-ui';
 import { demoCopy } from '@/libs/i18n/demo-copy';
 import type { Event } from '@/types';
 
 function chipClass(active: boolean): string {
   return [
-    'rounded-full px-3 py-1.5 text-sm font-medium transition-colors',
+    'min-h-11 rounded-full px-3 py-1.5 text-sm font-medium transition-colors motion-reduce:transition-none sm:min-h-9',
     active
       ? 'bg-gray-900 text-white'
       : 'bg-white text-gray-800 ring-1 ring-inset ring-gray-200 hover:bg-gray-50',
@@ -47,40 +60,155 @@ export function EventCatalog({
   const source = catalog ?? events;
   const categories = useMemo(() => uniqueCategories(source), [source]);
   const [results, setResults] = useState(events);
+  const [draftQ, setDraftQ] = useState(filters.q);
+  const [pending, setPending] = useState(false);
+  const [slow, setSlow] = useState(false);
+  const [error, setError] = useState<CatalogSearchErrorKind | null>(null);
+  const [retryAfterSec, setRetryAfterSec] = useState<number | null>(null);
+  const [retryNonce, setRetryNonce] = useState(0);
+  const filtersRef = useRef(filters);
+  const skipUrlSync = useRef(false);
+  const composing = useRef(false);
+  const lastOkQs = useRef<string | null>(null);
+
+  filtersRef.current = filters;
+  if (lastOkQs.current === null) {
+    lastOkQs.current = catalogQueryString(filters);
+  }
 
   useEffect(() => {
     setResults(events);
+    lastOkQs.current = catalogQueryString(filtersRef.current);
+    setPending(false);
+    setSlow(false);
+    setError(null);
   }, [events]);
+
+  useEffect(() => {
+    if (skipUrlSync.current) {
+      skipUrlSync.current = false;
+      setDraftQ(prev =>
+        commitSearchText(prev) === filters.q ? prev : filters.q
+      );
+      return;
+    }
+    setDraftQ(filters.q);
+  }, [filters.q]);
+
+  const applyQuery = useCallback(
+    (query: CatalogQuery, history: 'replace' | 'push') => {
+      const next: CatalogQuery = {
+        ...query,
+        q: commitSearchText(query.q),
+        category: commitSearchText(query.category),
+      };
+      if (sameCatalogQuery(next, filtersRef.current)) return;
+      skipUrlSync.current = true;
+      const qs = catalogQueryString(next);
+      const href = qs ? `${pathname}?${qs}` : pathname;
+      rememberCatalogHref(locale, href);
+      if (history === 'push') {
+        router.push(href, { scroll: false });
+      } else {
+        router.replace(href, { scroll: false });
+      }
+    },
+    [locale, pathname, router]
+  );
+
+  useEffect(() => {
+    const committed = commitSearchText(draftQ);
+    if (committed === filtersRef.current.q) return;
+    const timer = window.setTimeout(() => {
+      if (composing.current) return;
+      applyQuery({ ...filtersRef.current, q: committed }, 'replace');
+    }, SEARCH_DEBOUNCE_MS);
+    return () => window.clearTimeout(timer);
+  }, [applyQuery, draftQ]);
+
+  useEffect(() => {
+    const qs = catalogQueryString(filters);
+    const href = qs ? `${pathname}?${qs}` : pathname;
+    rememberCatalogHref(locale, href);
+  }, [filters, locale, pathname]);
 
   useEffect(() => {
     const qs = catalogQueryString(filters);
     const controller = new AbortController();
-    const delay = filters.q.length > 0 ? 250 : 0;
-    const timer = window.setTimeout(() => {
-      void (async () => {
-        try {
-          const response = await fetch(
-            `/api/exhibitions/search?${qs}${qs ? '&' : ''}limit=48`,
-            { signal: controller.signal, cache: 'no-store' }
+    let pendingTimer: number | undefined;
+    let slowTimer: number | undefined;
+    let cancelled = false;
+
+    const backgroundRefresh = lastOkQs.current === qs;
+    if (!backgroundRefresh) {
+      pendingTimer = window.setTimeout(() => {
+        if (!cancelled) setPending(true);
+        slowTimer = window.setTimeout(() => {
+          if (!cancelled) setSlow(true);
+        }, SEARCH_SLOW_MS);
+      }, SEARCH_PENDING_MS);
+    }
+
+    void (async () => {
+      try {
+        const response = await fetch(
+          `/api/exhibitions/search?${qs}${qs ? '&' : ''}limit=48`,
+          { signal: controller.signal, cache: 'no-store' }
+        );
+        if (cancelled) return;
+        const kind = catalogSearchErrorFromStatus(response.status);
+        if (kind) {
+          setError(kind);
+          setRetryAfterSec(
+            parseRetryAfterSec(response.headers.get('retry-after'))
           );
-          if (!response.ok) return;
-          const body = (await response.json()) as { items?: Event[] };
-          if (Array.isArray(body.items)) setResults(body.items);
-        } catch {
-          /* keep SSR / last good results */
+          if (lastOkQs.current !== qs) setResults([]);
+          return;
         }
-      })();
-    }, delay);
+        const body = (await response.json()) as { items?: Event[] };
+        if (!Array.isArray(body.items)) {
+          setError('generic');
+          setRetryAfterSec(null);
+          if (lastOkQs.current !== qs) setResults([]);
+          return;
+        }
+        lastOkQs.current = qs;
+        setError(null);
+        setRetryAfterSec(null);
+        setResults(body.items);
+      } catch (caught) {
+        if (cancelled || isAbortError(caught)) return;
+        setError('network');
+        setRetryAfterSec(null);
+        if (lastOkQs.current !== qs) setResults([]);
+      } finally {
+        if (!cancelled) {
+          setPending(false);
+          setSlow(false);
+        }
+      }
+    })();
+
     return () => {
-      window.clearTimeout(timer);
+      cancelled = true;
+      window.clearTimeout(pendingTimer);
+      if (slowTimer) window.clearTimeout(slowTimer);
       controller.abort();
     };
-  }, [filters]);
+  }, [filters, retryNonce]);
 
-  const setFilters = (next: Partial<typeof filters>) => {
-    const query = { ...filters, ...next };
-    const qs = catalogQueryString(query);
-    router.replace(qs ? `${pathname}?${qs}` : pathname, { scroll: false });
+  const setFilters = (
+    next: Partial<CatalogQuery>,
+    history: 'replace' | 'push' = 'push'
+  ) => {
+    applyQuery(
+      {
+        ...filters,
+        q: commitSearchText(draftQ),
+        ...next,
+      },
+      history
+    );
   };
 
   const emptyKind = catalogEmptyKind({
@@ -96,15 +224,36 @@ export function EventCatalog({
     filters.category.length > 0;
 
   const clearFilters = () => {
-    setFilters({ q: '', city: 'all', dates: 'all', category: '' });
+    setDraftQ('');
+    setFilters({ q: '', city: 'all', dates: 'all', category: '' }, 'push');
   };
+
+  const onSearchChange = (value: string) => {
+    setDraftQ(value.slice(0, MAX_QUERY_TEXT));
+  };
+
+  const flushSearch = () => {
+    applyQuery({ ...filters, q: draftQ }, 'replace');
+  };
+
+  const clearSearch = () => {
+    setDraftQ('');
+    applyQuery({ ...filters, q: '' }, 'replace');
+  };
+
+  const showSkeleton = pending && results.length === 0 && !error;
+  const showEmpty = !pending && !error && results.length === 0;
 
   return (
     <div className='space-y-6'>
       <form
         className='space-y-4'
         role='search'
-        onSubmit={event => event.preventDefault()}
+        aria-label={copy.searchEvents}
+        onSubmit={event => {
+          event.preventDefault();
+          flushSearch();
+        }}
       >
         <div>
           <label
@@ -113,15 +262,66 @@ export function EventCatalog({
           >
             {copy.searchEvents}
           </label>
-          <Input
-            id='event-search'
-            type='search'
-            value={filters.q}
-            onChange={event => setFilters({ q: event.target.value })}
-            placeholder={copy.searchEventsPlaceholder}
-            className='w-full'
-            autoComplete='off'
-          />
+          <div className='relative'>
+            <Input
+              id='event-search'
+              name='q'
+              type='search'
+              value={draftQ}
+              onChange={event => onSearchChange(event.target.value)}
+              onCompositionStart={() => {
+                composing.current = true;
+              }}
+              onCompositionEnd={event => {
+                composing.current = false;
+                onSearchChange(event.currentTarget.value);
+                applyQuery(
+                  { ...filters, q: event.currentTarget.value },
+                  'replace'
+                );
+              }}
+              onKeyDown={event => {
+                if (event.key === 'Escape' && draftQ) {
+                  event.preventDefault();
+                  clearSearch();
+                }
+              }}
+              placeholder={copy.searchEventsPlaceholder}
+              className='h-11 w-full pr-12 text-base sm:h-10 sm:text-sm'
+              autoComplete='off'
+              enterKeyHint='search'
+              maxLength={MAX_QUERY_TEXT}
+              spellCheck={false}
+              aria-describedby='event-search-hint event-search-kbd'
+              aria-controls='catalog-results'
+            />
+            {draftQ ? (
+              <button
+                type='button'
+                onClick={clearSearch}
+                className='absolute right-1.5 top-1/2 min-h-9 min-w-9 -translate-y-1/2 rounded-md text-sm font-medium text-gray-600 hover:bg-gray-100 hover:text-gray-900'
+                aria-label={copy.clearSearch}
+              >
+                ×
+              </button>
+            ) : null}
+          </div>
+          <div className='mt-1.5 flex items-start justify-between gap-3'>
+            <p
+              id='event-search-hint'
+              className='text-xs leading-5 text-gray-500'
+            >
+              {copy.searchHint}
+            </p>
+            <p id='event-search-kbd' className='sr-only'>
+              {copy.searchKeyboardHint}
+            </p>
+            {draftQ.length >= 64 ? (
+              <p className='shrink-0 text-xs tabular-nums text-gray-500'>
+                {copy.queryLimit(draftQ.length, MAX_QUERY_TEXT)}
+              </p>
+            ) : null}
+          </div>
         </div>
 
         <fieldset className='space-y-2'>
@@ -141,7 +341,7 @@ export function EventCatalog({
                 type='button'
                 className={chipClass(filters.city === value)}
                 aria-pressed={filters.city === value}
-                onClick={() => setFilters({ city: value })}
+                onClick={() => setFilters({ city: value }, 'push')}
               >
                 {label}
               </button>
@@ -161,7 +361,7 @@ export function EventCatalog({
               id='event-dates'
               value={filters.dates}
               onChange={event =>
-                setFilters({ dates: event.target.value as DateFilter })
+                setFilters({ dates: event.target.value as DateFilter }, 'push')
               }
               className='flex h-11 w-full rounded-md border border-gray-300 bg-white px-3 text-base text-gray-800 sm:h-10 sm:text-sm'
             >
@@ -183,7 +383,9 @@ export function EventCatalog({
               <select
                 id='event-category'
                 value={filters.category}
-                onChange={event => setFilters({ category: event.target.value })}
+                onChange={event =>
+                  setFilters({ category: event.target.value }, 'push')
+                }
                 className='flex h-11 w-full rounded-md border border-gray-300 bg-white px-3 text-base text-gray-800 sm:h-10 sm:text-sm'
               >
                 <option value=''>{copy.allCategories}</option>
@@ -198,26 +400,51 @@ export function EventCatalog({
         </div>
       </form>
 
-      {hasActiveFilters ? (
-        <div className='flex flex-wrap items-center justify-between gap-2 text-sm text-gray-600'>
-          <p aria-live='polite'>{copy.eventCount(results.length)}</p>
+      <div className='flex flex-wrap items-center justify-between gap-2 text-sm text-gray-600'>
+        <p aria-live='polite'>{copy.eventCount(results.length)}</p>
+        {hasActiveFilters ? (
           <button
             type='button'
             onClick={clearFilters}
-            className='font-medium text-gray-800 underline-offset-2 hover:underline'
+            className='min-h-9 font-medium text-gray-800 underline-offset-2 hover:underline'
           >
             {copy.clearFilters}
           </button>
-        </div>
-      ) : null}
+        ) : null}
+      </div>
 
-      <EventStackCards
-        events={results}
+      <CatalogSearchStatus
         locale={locale}
-        empty={emptyKind ?? 'catalog'}
-        emptyQuery={filters}
-        onClearFilters={hasActiveFilters ? clearFilters : undefined}
+        pending={pending}
+        slow={slow}
+        error={error}
+        retryAfterSec={retryAfterSec}
+        onRetry={() => setRetryNonce(value => value + 1)}
       />
+
+      <div
+        id='catalog-results'
+        aria-busy={pending}
+        aria-label={copy.resultsLabel}
+        className={
+          pending && results.length > 0
+            ? 'opacity-70 transition-opacity motion-reduce:transition-none'
+            : undefined
+        }
+      >
+        {showSkeleton ? (
+          <EventCatalogSkeleton showFilters={false} />
+        ) : showEmpty || results.length > 0 ? (
+          <EventStackCards
+            events={showEmpty ? [] : results}
+            locale={locale}
+            empty={emptyKind ?? 'catalog'}
+            emptyQuery={filters}
+            highlightQuery={filters.q}
+            onClearFilters={hasActiveFilters ? clearFilters : undefined}
+          />
+        ) : null}
+      </div>
     </div>
   );
 }

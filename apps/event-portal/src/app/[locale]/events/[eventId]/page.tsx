@@ -1,14 +1,16 @@
 import Link from 'next/link';
+import { notFound } from 'next/navigation';
 import { connection } from 'next/server';
 
 import { EventInfoHeaderError } from './components';
 import { EventDetail } from './components/layout/EventDetail';
 
 import { LineOfficialCta } from '@/components/line/LineOfficialCta';
-import { loadPortalExhibition } from '@/libs/exhibition-search/load-portal';
-import { isMissingPortalEvent } from '@/libs/api/portal-event-error';
 import { catalogHref } from '@/libs/api/catalog-query';
+import { isMissingPortalEvent } from '@/libs/api/portal-event-error';
+import { loadPortalExhibition } from '@/libs/exhibition-search/load-portal';
 import { demoCopy } from '@/libs/i18n/demo-copy';
+import type { EventDetail as EventDetailModel } from '@/types';
 
 export const dynamic = 'force-dynamic';
 export const dynamicParams = true;
@@ -22,14 +24,22 @@ export default async function EventDetailPage({
   const { locale, eventId } = await params;
   const copy = demoCopy(locale);
 
+  let event: EventDetailModel | null = null;
+  let apiError = false;
   try {
-    const event = await loadPortalExhibition(eventId);
-    return <EventDetail event={event} locale={locale} />;
+    event = await loadPortalExhibition(eventId);
   } catch (error) {
-    const kind = isMissingPortalEvent(error) ? 'not-found' : 'api';
+    if (isMissingPortalEvent(error)) {
+      event = null;
+    } else {
+      apiError = true;
+    }
+  }
+
+  if (apiError) {
     return (
       <div className='space-y-6'>
-        <EventInfoHeaderError kind={kind} locale={locale} />
+        <EventInfoHeaderError kind='api' locale={locale} />
         <div className='flex flex-wrap items-center justify-center gap-3'>
           <Link
             href={catalogHref(locale)}
@@ -37,9 +47,15 @@ export default async function EventDetailPage({
           >
             {copy.browseOthers}
           </Link>
-          {kind === 'api' ? <LineOfficialCta locale={locale} /> : null}
+          <LineOfficialCta locale={locale} />
         </div>
       </div>
     );
   }
+
+  if (!event) {
+    notFound();
+  }
+
+  return <EventDetail event={event} locale={locale} />;
 }
