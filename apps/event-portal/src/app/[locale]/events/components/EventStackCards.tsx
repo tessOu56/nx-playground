@@ -2,10 +2,31 @@ import Link from 'next/link';
 
 import { CatalogEmpty } from './CatalogEmpty';
 import { Image } from '@/components';
+import { highlightSegments } from '@/libs/api/catalog-highlight';
 import type { CatalogEmptyKind, CatalogQuery } from '@/libs/api/catalog-query';
 import { eventListKind, regionTimeZone } from '@/libs/api/event-stack-map';
 import { catalogPriceLabel, demoCopy } from '@/libs/i18n/demo-copy';
 import type { Event } from '@/types';
+
+function HighlightedText({ text, query }: { text: string; query: string }) {
+  const segments = highlightSegments(text, query);
+  return (
+    <>
+      {segments.map((segment, index) =>
+        segment.match ? (
+          <mark
+            key={`h-${index}`}
+            className='rounded-sm bg-amber-100 px-0.5 text-inherit'
+          >
+            {segment.text}
+          </mark>
+        ) : (
+          <span key={`t-${index}`}>{segment.text}</span>
+        )
+      )}
+    </>
+  );
+}
 
 function formatListDateRange(event: Event, locale: string): string {
   const timeZone = regionTimeZone(event.region, event.timezone);
@@ -40,6 +61,7 @@ export function EventStackCards({
   emptyQuery,
   onClearFilters,
   layout = 'grid',
+  highlightQuery = '',
 }: {
   events: Event[];
   locale: string;
@@ -47,6 +69,7 @@ export function EventStackCards({
   emptyQuery?: CatalogQuery;
   onClearFilters?: () => void;
   layout?: 'grid' | 'stack';
+  highlightQuery?: string;
 }) {
   const copy = demoCopy(locale);
 
@@ -87,12 +110,13 @@ export function EventStackCards({
           <li key={event.id}>
             <Link
               href={`/${locale}/events/${event.id}`}
-              className='catalog-card group block h-full overflow-hidden rounded-xl border border-gray-200 bg-white text-left shadow-sm transition-[box-shadow,transform] duration-[var(--motion-duration-fast,150ms)] hover:shadow-md focus-visible:shadow-md'
+              aria-label={`${event.title} — ${copy.viewDetails}`}
+              className='catalog-card group block h-full overflow-hidden rounded-xl border border-gray-200 bg-white text-left shadow-sm transition-[box-shadow,transform] duration-[var(--motion-duration-fast,150ms)] motion-reduce:transition-none hover:shadow-md focus-visible:shadow-md'
             >
               <div className='aspect-[16/9] overflow-hidden bg-gray-100'>
                 <Image
                   src={event.image}
-                  alt={event.title}
+                  alt=''
                   width={640}
                   height={360}
                   className='h-full w-full object-cover'
@@ -119,12 +143,12 @@ export function EventStackCards({
                   ) : null}
                 </div>
                 <h2 className='line-clamp-2 text-base font-semibold tracking-tight text-gray-900'>
-                  {event.title}
+                  <HighlightedText text={event.title} query={highlightQuery} />
                 </h2>
                 <p className='mt-2 text-sm text-gray-700'>{dateRange}</p>
                 {venueLine ? (
                   <p className='mt-1 line-clamp-1 text-sm text-gray-600'>
-                    {venueLine}
+                    <HighlightedText text={venueLine} query={highlightQuery} />
                   </p>
                 ) : null}
                 <p className='mt-1 text-sm text-gray-700'>
@@ -132,7 +156,10 @@ export function EventStackCards({
                 </p>
                 {event.organizerName ? (
                   <p className='mt-1 line-clamp-1 text-xs text-gray-500'>
-                    {event.organizerName}
+                    <HighlightedText
+                      text={event.organizerName}
+                      query={highlightQuery}
+                    />
                   </p>
                 ) : null}
                 <p className='mt-auto pt-3 text-sm font-medium text-gray-900 group-hover:underline'>

@@ -1,14 +1,15 @@
 import assert from 'node:assert/strict';
 import { describe, it } from 'node:test';
 
-import { rankDocuments, scoreDocument } from './rank';
+import { hasKeywordMatch, rankDocuments, scoreDocument } from './rank';
 import { sampleDocuments } from './sample';
 import type { ExhibitionDocument } from './types';
 
 const NOW = new Date('2026-10-19T02:00:00.000Z');
 
 function listing(
-  partial: Partial<ExhibitionDocument> & Pick<ExhibitionDocument, 'id' | 'title'>
+  partial: Partial<ExhibitionDocument> &
+    Pick<ExhibitionDocument, 'id' | 'title'>
 ): ExhibitionDocument {
   return {
     description: null,
@@ -42,7 +43,10 @@ describe('scoreDocument / rankDocuments', () => {
     });
     assert.equal(ranked[0].id, 'exact');
     assert.ok(ranked[0].rank > ranked[1].rank);
-    assert.equal(ranked.some(item => item.id === 'other'), false);
+    assert.equal(
+      ranked.some(item => item.id === 'other'),
+      false
+    );
   });
 
   it('matches CJK bigrams in title and latin tags', () => {
@@ -83,7 +87,10 @@ describe('scoreDocument / rankDocuments', () => {
       dateMode: 'now',
       now: NOW,
     });
-    assert.deepEqual(tokyo.map(item => item.id), ['tokyo-now']);
+    assert.deepEqual(
+      tokyo.map(item => item.id),
+      ['tokyo-now']
+    );
   });
 
   it('ranks sample fixtures: design above unrelated art for "design"', () => {
@@ -95,5 +102,23 @@ describe('scoreDocument / rankDocuments', () => {
     assert.ok(ranked.length > 0);
     assert.equal(ranked[0].id, 'event_sample_huashan');
     assert.ok(ranked[0].rank >= (ranked[1]?.rank ?? 0));
+  });
+
+  it('does not keep unrelated listings for a nonsense keyword', () => {
+    const ranked = rankDocuments(sampleDocuments(), {
+      keyword: 'zzzznotfoundxyz',
+      now: NOW,
+      limit: 10,
+    });
+    assert.deepEqual(
+      ranked.map(item => item.id),
+      []
+    );
+    const tfam = sampleDocuments().find(
+      item => item.id === 'event_sample_tfam'
+    );
+    assert.ok(tfam);
+    assert.equal(hasKeywordMatch(tfam, 'zzzznotfoundxyz'), false);
+    assert.equal(hasKeywordMatch(tfam, 'tfam'), true);
   });
 });

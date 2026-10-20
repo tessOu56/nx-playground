@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { notFound } from 'next/navigation';
 import { connection } from 'next/server';
 
 import { EventInfoHeaderError } from './components';
@@ -26,10 +27,10 @@ export default async function EventDetailPage({
     const event = await loadPortalExhibition(eventId);
     return <EventDetail event={event} locale={locale} />;
   } catch (error) {
-    const kind = isMissingPortalEvent(error) ? 'not-found' : 'api';
+    if (isMissingPortalEvent(error)) notFound();
     return (
       <div className='space-y-6'>
-        <EventInfoHeaderError kind={kind} locale={locale} />
+        <EventInfoHeaderError kind='api' locale={locale} />
         <div className='flex flex-wrap items-center justify-center gap-3'>
           <Link
             href={catalogHref(locale)}
@@ -37,7 +38,7 @@ export default async function EventDetailPage({
           >
             {copy.browseOthers}
           </Link>
-          {kind === 'api' ? <LineOfficialCta locale={locale} /> : null}
+          <LineOfficialCta locale={locale} />
         </div>
       </div>
     );

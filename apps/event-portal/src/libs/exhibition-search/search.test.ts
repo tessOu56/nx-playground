@@ -39,6 +39,17 @@ describe('searchExhibitions sample fallback', () => {
     assert.ok(result.items.every(item => item.region === 'TOKYO'));
   });
 
+  it('returns no sample hits for a nonsense keyword', async () => {
+    delete process.env.DATABASE_URL;
+    const result = await searchExhibitions({
+      keyword: 'zzzznotfoundxyz',
+      now: NOW,
+      limit: 10,
+    });
+    assert.equal(result.source, 'sample');
+    assert.equal(result.items.length, 0);
+  });
+
   it('looks up a sample exhibition by id', async () => {
     delete process.env.DATABASE_URL;
     const found = await getExhibitionById('event_sample_tfam');

@@ -4,10 +4,14 @@ import { describe, it } from 'node:test';
 import {
   catalogEmptyKind,
   catalogHref,
+  catalogPath,
   catalogQueryString,
+  commitSearchText,
+  isCatalogHref,
   parseCatalogQuery,
   parseCityFilter,
   parseDateFilter,
+  sameCatalogQuery,
 } from './catalog-query';
 
 describe('catalog-query', () => {
@@ -47,6 +51,21 @@ describe('catalog-query', () => {
     );
     assert.equal(catalogHref('zh-TW', { city: 'TOKYO' }), '/zh-TW/events?city=TOKYO');
     assert.equal(catalogHref('en'), '/en/events');
+    assert.equal(catalogPath('ja'), '/ja/events');
+    assert.equal(
+      commitSearchText(`  mori  ${'x'.repeat(90)}`),
+      `mori  ${'x'.repeat(74)}`
+    );
+    assert.equal(
+      sameCatalogQuery(
+        { q: 'mori', city: 'TOKYO', dates: 'now', category: '' },
+        { q: 'mori', city: 'TOKYO', dates: 'now', category: '' }
+      ),
+      true
+    );
+    assert.equal(isCatalogHref('zh-TW', '/zh-TW/events?q=mori&city=TOKYO'), true);
+    assert.equal(isCatalogHref('zh-TW', '/zh-TW/events/event_sample_mori'), false);
+    assert.equal(isCatalogHref('zh-TW', '//evil.example/zh-TW/events'), false);
   });
 
   it('picks empty-state kinds without inventing listings', () => {

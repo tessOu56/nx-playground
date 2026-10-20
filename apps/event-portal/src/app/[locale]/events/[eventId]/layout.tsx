@@ -1,7 +1,7 @@
 import { headers } from 'next/headers';
 
 import { LabelledDemoBanner } from '@/components/demo/LabelledDemoBanner';
-import { BackLink } from '@/components/nav/BackLink';
+import { CatalogBackLink } from '@/components/nav/CatalogBackLink';
 import { demoCopy } from '@/libs/i18n/demo-copy';
 import { generateEventMetadata } from '@/libs/seo/metadataGenerators';
 
@@ -37,7 +37,7 @@ export default async function EventDetailLayout({
         {/* 頁面標題 - 只在非 checkout 頁面顯示 */}
         {!isCheckoutPage && (
           <div className='mb-4'>
-            <BackLink href={`/${locale}/events`} label={copy.backToEvents} />
+            <CatalogBackLink locale={locale} label={copy.backToEvents} />
             <div className='mt-3'>
               <LabelledDemoBanner locale={locale} />
             </div>

@@ -1,7 +1,8 @@
 'use client';
 
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useSearchParams } from 'next/navigation';
+import { Suspense } from 'react';
 
 import { SUPPORTED_LOCALES } from '@/libs/constants';
 import { demoCopy } from '@/libs/i18n/demo-copy';
@@ -24,11 +25,26 @@ function nextSupportedLocale(locale: string): string {
   return SUPPORTED_LOCALES[(current + 1) % SUPPORTED_LOCALES.length];
 }
 
-export function LocaleSwitcher({ locale }: { locale: string }) {
+function localeHref(
+  pathname: string,
+  nextLocale: string,
+  search: string
+): string {
+  const path = replaceLocale(pathname, nextLocale);
+  return search ? `${path}?${search}` : path;
+}
+
+function LocaleSwitcherLink({
+  locale,
+  search,
+}: {
+  locale: string;
+  search: string;
+}) {
   const pathname = usePathname() || `/${locale}`;
   const copy = demoCopy(locale);
   const nextLocale = nextSupportedLocale(locale);
-  const href = replaceLocale(pathname, nextLocale);
+  const href = localeHref(pathname, nextLocale, search);
 
   return (
     <Link
@@ -40,5 +56,20 @@ export function LocaleSwitcher({ locale }: { locale: string }) {
     >
       {localeLabel(nextLocale, copy)}
     </Link>
+  );
+}
+
+function LocaleSwitcherWithSearch({ locale }: { locale: string }) {
+  const searchParams = useSearchParams();
+  return (
+    <LocaleSwitcherLink locale={locale} search={searchParams.toString()} />
+  );
+}
+
+export function LocaleSwitcher({ locale }: { locale: string }) {
+  return (
+    <Suspense fallback={<LocaleSwitcherLink locale={locale} search='' />}>
+      <LocaleSwitcherWithSearch locale={locale} />
+    </Suspense>
   );
 }
