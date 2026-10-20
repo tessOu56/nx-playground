@@ -31,6 +31,8 @@ jobs:
             apps/event-portal/src/libs/api/catalog-query.test.ts \
             apps/event-portal/src/libs/api/catalog-search-ui.test.ts \
             apps/event-portal/src/libs/api/catalog-highlight.test.ts \
+            apps/event-portal/src/libs/api/catalog-image.test.ts \
             apps/event-portal/src/libs/api/event-stack-map.test.ts \
+            apps/event-portal/src/libs/api/portal-event-error.test.ts \
             apps/event-portal/src/libs/i18n/demo-copy.test.ts \
             apps/event-portal/src/components/editor/utils.test.ts

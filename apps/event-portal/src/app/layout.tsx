@@ -1,5 +1,4 @@
 import type { Metadata } from 'next';
-import { cookies } from 'next/headers';
 import { Inter } from 'next/font/google';
 import { type ReactNode } from 'react';
 import './globals.css';
@@ -76,13 +75,13 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
-export default async function RootLayout({ children }: { children: ReactNode }) {
-  const locale = (await cookies()).get('NEXT_LOCALE')?.value ?? 'zh-TW';
+export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html
-      lang={locale === 'en' ? 'en' : locale === 'ja' ? 'ja' : 'zh-TW'}
+      lang='zh-TW'
       data-app='nx-event'
       className={sans.variable}
+      suppressHydrationWarning
     >
       <head>
         <link rel='icon' href='/icon.svg' type='image/svg+xml' />

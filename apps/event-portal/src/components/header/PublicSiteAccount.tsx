@@ -38,10 +38,14 @@ export function PublicSiteAccount({ locale }: { locale: string }) {
         disabled={!isInitialized}
         className='rounded-md px-1.5 py-1 text-xs font-medium text-gray-800 hover:bg-gray-100 hover:text-gray-900 sm:px-2 sm:text-sm'
       >
-        {isInitialized ? copy.lineLogin : copy.linePreparing}
+        {error
+          ? copy.retryLogin
+          : isInitialized
+            ? copy.lineLogin
+            : copy.linePreparing}
       </button>
       {error ? (
-        <span className='max-w-[9rem] truncate text-xs text-red-800' role='alert'>
+        <span className='sr-only' role='alert'>
           {copy.lineLoginError}
         </span>
       ) : null}

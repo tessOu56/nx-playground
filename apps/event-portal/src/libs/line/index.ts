@@ -13,6 +13,11 @@ export {
 } from './verify-id-token';
 export type { LineVerifiedIdToken } from './verify-id-token';
 export { verifyLiffIdToken } from './verify-id-token-client';
+export {
+  safeLineLoginReturnPath,
+  stripLineOauthCallbackParams,
+  isLineLoginCancelledError,
+} from './login-return';
 export { LiffProvider, useLiff } from './LiffProvider';
 export { useAttendeeUserId } from './useAttendeeUserId';
 export {

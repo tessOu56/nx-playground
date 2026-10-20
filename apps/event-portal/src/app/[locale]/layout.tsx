@@ -7,6 +7,7 @@ import { Suspense } from 'react';
 import { EventsSidebar, ToastProvider } from '@/components';
 import { PublicSiteHeader } from '@/components/header/PublicSiteHeader';
 import { LineAuthNotice } from '@/components/line/LineAuthNotice';
+import { DocumentLang } from '@/components/site/DocumentLang';
 import { SiteFooter } from '@/components/site/SiteFooter';
 import { LiffProvider, ErrorBoundary, QueryProvider } from '@/libs';
 import { SUPPORTED_LOCALES } from '@/libs/constants';
@@ -43,6 +44,7 @@ export default async function LocaleLayout({
         <ErrorBoundary>
           <ToastProvider>
             <LiffProvider>
+              <DocumentLang locale={locale} />
               <a href='#main-content' className='skip-link'>
                 {copy.skipToContent}
               </a>

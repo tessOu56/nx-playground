@@ -17,14 +17,6 @@ function localeLabel(
   return copy.langZh;
 }
 
-function nextSupportedLocale(locale: string): string {
-  const index = SUPPORTED_LOCALES.indexOf(
-    locale as (typeof SUPPORTED_LOCALES)[number]
-  );
-  const current = index >= 0 ? index : 0;
-  return SUPPORTED_LOCALES[(current + 1) % SUPPORTED_LOCALES.length];
-}
-
 function localeHref(
   pathname: string,
   nextLocale: string,
@@ -34,7 +26,7 @@ function localeHref(
   return search ? `${path}?${search}` : path;
 }
 
-function LocaleSwitcherLink({
+function LocaleSwitcherNav({
   locale,
   search,
 }: {
@@ -43,32 +35,43 @@ function LocaleSwitcherLink({
 }) {
   const pathname = usePathname() || `/${locale}`;
   const copy = demoCopy(locale);
-  const nextLocale = nextSupportedLocale(locale);
-  const href = localeHref(pathname, nextLocale, search);
 
   return (
-    <Link
-      href={href}
-      hrefLang={nextLocale}
-      lang={nextLocale}
-      className='rounded-md px-1.5 py-1 text-xs font-medium text-gray-800 hover:bg-gray-100 hover:text-gray-900 sm:px-2 sm:text-sm'
-      aria-label={`${copy.language}: ${localeLabel(nextLocale, copy)}`}
-    >
-      {localeLabel(nextLocale, copy)}
-    </Link>
+    <nav aria-label={copy.language} className='flex items-center gap-0.5'>
+      {SUPPORTED_LOCALES.map(item => {
+        const active = item === locale;
+        return (
+          <Link
+            key={item}
+            href={localeHref(pathname, item, search)}
+            hrefLang={item}
+            lang={item}
+            aria-current={active ? 'page' : undefined}
+            className={[
+              'rounded-md px-1.5 py-1 text-xs font-medium sm:px-2 sm:text-sm',
+              active
+                ? 'bg-gray-100 text-gray-900'
+                : 'text-gray-800 hover:bg-gray-100 hover:text-gray-900',
+            ].join(' ')}
+          >
+            {localeLabel(item, copy)}
+          </Link>
+        );
+      })}
+    </nav>
   );
 }
 
 function LocaleSwitcherWithSearch({ locale }: { locale: string }) {
   const searchParams = useSearchParams();
   return (
-    <LocaleSwitcherLink locale={locale} search={searchParams.toString()} />
+    <LocaleSwitcherNav locale={locale} search={searchParams.toString()} />
   );
 }
 
 export function LocaleSwitcher({ locale }: { locale: string }) {
   return (
-    <Suspense fallback={<LocaleSwitcherLink locale={locale} search='' />}>
+    <Suspense fallback={<LocaleSwitcherNav locale={locale} search='' />}>
       <LocaleSwitcherWithSearch locale={locale} />
     </Suspense>
   );

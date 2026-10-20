@@ -3,10 +3,13 @@
  */
 
 import type { Metadata } from 'next';
+import { notFound } from 'next/navigation';
 
 import { fetchPortalEvent } from '@/libs/api/event-stack-fetch';
-import { loadPortalExhibition } from '@/libs/exhibition-search/load-portal';
+import { catalogImageSrc, PLACEHOLDER_EVENT_IMAGE } from '@/libs/api/catalog-image';
+import { resolvePortalExhibition } from '@/libs/exhibition-search/load-portal';
 import { demoCopy } from '@/libs/i18n/demo-copy';
+import { exhibitionShareUrl } from '@/libs/line/exhibition-share';
 import { getOrder } from '@nx-playground/api-client/event-stack';
 
 export async function generateEventMetadata({
@@ -16,37 +19,50 @@ export async function generateEventMetadata({
 }): Promise<Metadata> {
   const { eventId, locale = 'zh-TW' } = await params;
   const copy = demoCopy(locale);
-  try {
-    const event = await loadPortalExhibition(eventId);
-    const ogLocale =
-      locale === 'en' ? 'en_US' : locale === 'ja' ? 'ja_JP' : 'zh_TW';
+  const resolved = await resolvePortalExhibition(eventId);
+
+  if (resolved.status === 'missing') {
+    notFound();
+  }
+
+  if (resolved.status === 'error') {
     return {
-      title: `${event.title} — ${copy.navEvents}`,
-      description: event.description || copy.metaDescription,
-      keywords: [copy.navEvents, event.title, 'Taipei', 'Tokyo', 'LINE'],
-      openGraph: {
-        title: event.title,
-        description: event.description || copy.metaDescription,
-        type: 'website',
-        locale: ogLocale,
-        images: event.image
-          ? [{ url: event.image, alt: event.title }]
-          : undefined,
-      },
-      twitter: {
-        card: 'summary_large_image',
-        title: event.title,
-        description: event.description || copy.metaDescription,
-        images: event.image ? [event.image] : undefined,
-      },
-    };
-  } catch {
-    return {
-      title: `${copy.notFound} — NX Playground`,
-      description: copy.notFoundHint,
+      title: `${copy.loadError} — NX Playground`,
+      description: copy.loadErrorHint,
       robots: { index: false, follow: true },
     };
   }
+
+  const event = resolved.event;
+  const ogLocale =
+    locale === 'en' ? 'en_US' : locale === 'ja' ? 'ja_JP' : 'zh_TW';
+  const canonical = exhibitionShareUrl(locale, event.id);
+  const image = catalogImageSrc(event.image);
+  const ogImages =
+    image !== PLACEHOLDER_EVENT_IMAGE
+      ? [{ url: image, alt: event.title }]
+      : undefined;
+
+  return {
+    title: `${event.title} — ${copy.navEvents}`,
+    description: event.description || copy.metaDescription,
+    keywords: [copy.navEvents, event.title, 'Taipei', 'Tokyo', 'LINE'],
+    alternates: { canonical },
+    openGraph: {
+      title: event.title,
+      description: event.description || copy.metaDescription,
+      type: 'website',
+      locale: ogLocale,
+      url: canonical,
+      images: ogImages,
+    },
+    twitter: {
+      card: ogImages ? 'summary_large_image' : 'summary',
+      title: event.title,
+      description: event.description || copy.metaDescription,
+      images: ogImages?.map(item => item.url),
+    },
+  };
 }
 
 export async function generateOrderMetadata({

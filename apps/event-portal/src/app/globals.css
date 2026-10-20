@@ -82,5 +82,9 @@
       transform: none;
       transition: none;
     }
+
+    .animate-pulse {
+      animation: none;
+    }
   }
 }

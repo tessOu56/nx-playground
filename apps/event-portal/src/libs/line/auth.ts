@@ -17,6 +17,7 @@ import {
   markCallbackProcessed,
   isCallbackProcessed,
 } from './storage';
+import { isLineLoginCancelledError } from './login-return';
 import { verifyLiffIdToken } from './verify-id-token-client';
 
 // 檢查是否在 LIFF 應用內。必須呼叫 isInClient()；typeof 永遠是非空字串。
@@ -170,6 +171,9 @@ export const handleLineCallback = async () => {
   const state = urlParams.get('state');
   const error = urlParams.get('error');
 
+  if (isLineLoginCancelledError(error)) {
+    return null;
+  }
   if (error) {
     throw new Error(`LINE 登入失敗: ${error}`);
   }

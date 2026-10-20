@@ -1,3 +1,4 @@
+import { ExhibitionShareButton } from '@/components/line/ExhibitionShareButton';
 import { LineOfficialCta } from '@/components/line/LineOfficialCta';
 import { eventListKind } from '@/libs/api/event-stack-map';
 import { demoCopy } from '@/libs/i18n/demo-copy';
@@ -41,6 +42,11 @@ export function ExhibitionActions({
             {copy.officialSource}
           </a>
         ) : null}
+        <ExhibitionShareButton
+          locale={locale}
+          eventId={event.id}
+          title={event.title}
+        />
         <LineOfficialCta locale={locale} variant='panel' />
       </div>
       {event.sample ? (

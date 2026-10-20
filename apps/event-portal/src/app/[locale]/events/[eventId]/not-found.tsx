@@ -3,6 +3,7 @@ import { getLocale } from 'next-intl/server';
 
 import { EventInfoHeaderError } from './components';
 
+import { LineOfficialCta } from '@/components/line/LineOfficialCta';
 import { DEFAULT_LOCALE } from '@/libs/constants';
 import { catalogHref } from '@/libs/api/catalog-query';
 import { demoCopy } from '@/libs/i18n/demo-copy';
@@ -26,6 +27,7 @@ export default async function ExhibitionNotFound() {
         >
           {copy.browseOthers}
         </Link>
+        <LineOfficialCta locale={locale} />
       </div>
     </div>
   );

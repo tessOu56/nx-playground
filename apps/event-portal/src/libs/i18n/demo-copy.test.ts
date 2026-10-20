@@ -25,6 +25,9 @@ describe('demo-copy', () => {
     assert.equal(demoCopy('zh-TW').endedNotice, '這檔展覽已結束');
     assert.equal(demoCopy('en').lineLoginCancelled, 'LINE sign-in was cancelled');
     assert.equal(demoCopy('ja').lineOutside, 'このページは LINE で開いてください');
+    assert.equal(demoCopy('en').shareListing, 'Share this listing');
+    assert.equal(demoCopy('zh-TW').retryLogin, '再試一次登入');
+    assert.equal(demoCopy('ja').appError, 'ページで問題が起きました');
   });
 
   it('localizes Japanese discovery copy and retired ticketing keys', () => {

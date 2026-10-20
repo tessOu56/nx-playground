@@ -119,8 +119,9 @@ export function EventStackCards({
                   alt=''
                   width={640}
                   height={360}
+                  sizes='(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw'
                   className='h-full w-full object-cover'
-                  fallback='/placeholder-event.jpg'
+                  fallback='/placeholder-event.svg'
                 />
               </div>
               <div className='flex h-[calc(100%-56.25%)] flex-col p-4'>

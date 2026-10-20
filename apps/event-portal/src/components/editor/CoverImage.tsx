@@ -23,7 +23,7 @@ export function CoverImage({
         width={800}
         height={400}
         className='w-full h-auto rounded-lg shadow-sm'
-        fallback='/placeholder-event.jpg'
+        fallback='/placeholder-event.svg'
       />
       {caption && (
         <p className='text-sm text-gray-500 mt-2 text-center'>{caption}</p>

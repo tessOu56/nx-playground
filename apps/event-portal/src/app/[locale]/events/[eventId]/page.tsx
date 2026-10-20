@@ -1,16 +1,13 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { connection } from 'next/server';
 
 import { EventInfoHeaderError } from './components';
 import { EventDetail } from './components/layout/EventDetail';
 
 import { LineOfficialCta } from '@/components/line/LineOfficialCta';
 import { catalogHref } from '@/libs/api/catalog-query';
-import { isMissingPortalEvent } from '@/libs/api/portal-event-error';
-import { loadPortalExhibition } from '@/libs/exhibition-search/load-portal';
+import { resolvePortalExhibition } from '@/libs/exhibition-search/load-portal';
 import { demoCopy } from '@/libs/i18n/demo-copy';
-import type { EventDetail as EventDetailModel } from '@/types';
 
 export const dynamic = 'force-dynamic';
 export const dynamicParams = true;
@@ -20,23 +17,11 @@ export default async function EventDetailPage({
 }: {
   params: Promise<{ locale: string; eventId: string }>;
 }) {
-  await connection();
   const { locale, eventId } = await params;
   const copy = demoCopy(locale);
+  const resolved = await resolvePortalExhibition(eventId);
 
-  let event: EventDetailModel | null = null;
-  let apiError = false;
-  try {
-    event = await loadPortalExhibition(eventId);
-  } catch (error) {
-    if (isMissingPortalEvent(error)) {
-      event = null;
-    } else {
-      apiError = true;
-    }
-  }
-
-  if (apiError) {
+  if (resolved.status === 'error') {
     return (
       <div className='space-y-6'>
         <EventInfoHeaderError kind='api' locale={locale} />
@@ -53,9 +38,9 @@ export default async function EventDetailPage({
     );
   }
 
-  if (!event) {
+  if (resolved.status === 'missing') {
     notFound();
   }
 
-  return <EventDetail event={event} locale={locale} />;
+  return <EventDetail event={resolved.event} locale={locale} />;
 }

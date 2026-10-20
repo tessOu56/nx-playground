@@ -1,6 +1,7 @@
 'use client';
 
 import { Image } from '@/components';
+import { PLACEHOLDER_EVENT_IMAGE } from '@/libs/api/catalog-image';
 import { eventListKind, regionTimeZone } from '@/libs/api/event-stack-map';
 import { catalogPriceLabel, demoCopy } from '@/libs/i18n/demo-copy';
 import type { EventDetail, EventSpeaker, EventVenue } from '@/types';
@@ -86,7 +87,7 @@ function EventSpeakers({
                 width={56}
                 height={56}
                 className='h-14 w-14 rounded-full object-cover'
-                fallback='/placeholder-event.jpg'
+                fallback={PLACEHOLDER_EVENT_IMAGE}
               />
             ) : (
               <span className='flex h-14 w-14 items-center justify-center rounded-full bg-gray-100 text-lg font-medium text-gray-600'>
@@ -164,6 +165,23 @@ function EventVenueBlock({
   );
 }
 
+function Fact({
+  label,
+  value,
+}: {
+  label: string;
+  value: string;
+}) {
+  return (
+    <div>
+      <dt className='text-xs font-medium uppercase tracking-wide text-gray-500'>
+        {label}
+      </dt>
+      <dd className='mt-1 text-sm leading-6 text-gray-900 sm:text-base'>{value}</dd>
+    </div>
+  );
+}
+
 export function EventInfoHeader({
   event,
   locale = 'zh-TW',
@@ -173,6 +191,13 @@ export function EventInfoHeader({
   const domain = event.domainKind ?? 'exhibition';
   const timeZone = regionTimeZone(event.region, event.timezone);
   const ended = kind === 'completed' || kind === 'sale_ended';
+  const dateLabel = formatDateRange(
+    event.startsAt,
+    event.endsAt,
+    event.startTime,
+    locale,
+    timeZone
+  );
 
   return (
     <div className='space-y-6'>
@@ -180,16 +205,18 @@ export function EventInfoHeader({
         <div className='relative aspect-[16/9] bg-gray-100 sm:aspect-auto sm:h-72'>
           <Image
             src={event.image}
-            alt={event.title}
-            width={800}
-            height={288}
+            alt=''
+            width={1200}
+            height={675}
+            sizes='(max-width: 1024px) 100vw, 800px'
+            priority
             className='h-full w-full object-cover'
-            fallback='/placeholder-event.jpg'
+            fallback={PLACEHOLDER_EVENT_IMAGE}
           />
         </div>
 
-        <div className='p-6'>
-          <div className='mb-4 flex flex-wrap gap-1.5'>
+        <div className='p-5 sm:p-6'>
+          <div className='mb-3 flex flex-wrap gap-1.5'>
             {event.region ? (
               <span className='rounded-full bg-gray-900 px-2.5 py-0.5 text-xs font-medium text-white'>
                 {copy.region[event.region]}
@@ -207,12 +234,22 @@ export function EventInfoHeader({
               </span>
             ) : null}
           </div>
-          <h1 className='mb-4 font-display text-3xl font-semibold tracking-tight text-gray-900'>
+          <h1 className='font-display text-2xl font-semibold tracking-tight text-gray-900 sm:text-3xl'>
             {event.title}
           </h1>
+          <dl className='mt-4 grid grid-cols-1 gap-4 border-y border-gray-100 py-4 sm:grid-cols-2'>
+            <Fact label={copy.when} value={dateLabel} />
+            <Fact label={copy.price} value={catalogPriceLabel(event, locale)} />
+            {event.location ? (
+              <Fact label={copy.location} value={event.location} />
+            ) : null}
+            {event.organizerName ? (
+              <Fact label={copy.organizer} value={event.organizerName} />
+            ) : null}
+          </dl>
           {ended ? (
             <div
-              className='mb-4 rounded-lg border border-gray-200 bg-gray-50 px-4 py-3'
+              className='mt-4 rounded-lg border border-gray-200 bg-gray-50 px-4 py-3'
               role='status'
               data-testid='exhibition-ended-notice'
             >
@@ -224,8 +261,26 @@ export function EventInfoHeader({
               </p>
             </div>
           ) : null}
+          {event.description ? (
+            <p className='mt-5 text-base leading-7 text-gray-700'>
+              {event.description}
+            </p>
+          ) : null}
+          {event.sourceUrl ? (
+            <p className='mt-4'>
+              <a
+                href={event.sourceUrl}
+                target='_blank'
+                rel='noopener noreferrer'
+                className='text-sm font-medium text-gray-800 underline underline-offset-2 hover:text-gray-950'
+              >
+                {copy.officialSource}
+                <span className='sr-only'>（{copy.externalLink}）</span>
+              </a>
+            </p>
+          ) : null}
           {event.plinthLotUrl ? (
-            <p className='mb-4'>
+            <p className='mt-3'>
               <a
                 href={event.plinthLotUrl}
                 target='_blank'
@@ -236,47 +291,6 @@ export function EventInfoHeader({
               </a>
             </p>
           ) : null}
-          <p className='mb-6 text-lg leading-relaxed text-gray-700'>
-            {event.description}
-          </p>
-          <dl className='grid grid-cols-1 gap-4 text-gray-700 sm:grid-cols-2'>
-            <div>
-              <dt className='text-xs font-medium uppercase tracking-wide text-gray-500'>
-                {copy.when}
-              </dt>
-              <dd className='mt-1'>
-                {formatDateRange(
-                  event.startsAt,
-                  event.endsAt,
-                  event.startTime,
-                  locale,
-                  timeZone
-                )}
-              </dd>
-            </div>
-            <div>
-              <dt className='text-xs font-medium uppercase tracking-wide text-gray-500'>
-                {copy.price}
-              </dt>
-              <dd className='mt-1'>{catalogPriceLabel(event, locale)}</dd>
-            </div>
-            {event.organizerName ? (
-              <div>
-                <dt className='text-xs font-medium uppercase tracking-wide text-gray-500'>
-                  {copy.organizer}
-                </dt>
-                <dd className='mt-1'>{event.organizerName}</dd>
-              </div>
-            ) : null}
-            {event.location ? (
-              <div>
-                <dt className='text-xs font-medium uppercase tracking-wide text-gray-500'>
-                  {copy.location}
-                </dt>
-                <dd className='mt-1'>{event.location}</dd>
-              </div>
-            ) : null}
-          </dl>
           <EventSpeakers speakers={event.speakers} locale={locale} />
           <EventVenueBlock venue={event.venue} locale={locale} />
         </div>
