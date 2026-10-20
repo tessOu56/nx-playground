@@ -27,15 +27,15 @@ export function PublicSiteHeader({ locale }: { locale: string }) {
 
   return (
     <header className='sticky top-0 z-40 border-b border-gray-200 bg-[color:var(--color-base-white,#fff)]/95 backdrop-blur'>
-      <div className='mx-auto flex h-16 max-w-6xl items-center justify-between gap-2 px-3 sm:gap-3 sm:px-4'>
+      <div className='mx-auto flex min-h-16 max-w-6xl flex-wrap items-center justify-between gap-x-3 gap-y-2 px-3 py-2 sm:px-4'>
         <Link
           href={home}
-          className='min-w-0 flex-1 truncate text-sm font-semibold tracking-tight text-gray-900 sm:text-lg'
+          className='min-w-0 truncate font-display text-sm font-semibold tracking-tight text-gray-900 sm:text-lg'
         >
           {copy.siteName}
         </Link>
         <nav
-          className='flex shrink-0 items-center gap-0.5 overflow-x-auto text-sm sm:gap-2'
+          className='flex min-w-0 flex-wrap items-center gap-0.5 text-sm sm:gap-2'
           aria-label={copy.mainNav}
         >
           <Link

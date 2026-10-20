@@ -1,4 +1,5 @@
 import { LineOfficialCta } from '@/components/line/LineOfficialCta';
+import { eventListKind } from '@/libs/api/event-stack-map';
 import { demoCopy } from '@/libs/i18n/demo-copy';
 import type { EventDetail } from '@/types';
 
@@ -10,6 +11,8 @@ export function ExhibitionActions({
   locale: string;
 }) {
   const copy = demoCopy(locale);
+  const kind = eventListKind(event);
+  const ended = kind === 'completed' || kind === 'sale_ended';
 
   return (
     <aside
@@ -17,10 +20,14 @@ export function ExhibitionActions({
       aria-label={copy.step3Title}
     >
       <h2 className='text-base font-semibold tracking-tight text-gray-900'>
-        {copy.step3Title}
+        {ended ? copy.endedNotice : copy.step3Title}
       </h2>
       <p className='mt-1 text-sm leading-6 text-gray-600'>
-        {event.sourceUrl ? copy.officialSourceHint : copy.lineChatHint}
+        {ended
+          ? copy.endedNoticeHint
+          : event.sourceUrl
+            ? copy.officialSourceHint
+            : copy.lineChatHint}
       </p>
       <div className='mt-4 space-y-3'>
         {event.sourceUrl ? (

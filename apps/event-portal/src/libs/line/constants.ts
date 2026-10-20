@@ -63,7 +63,7 @@ export function getLineRedirectUri(
 }
 
 export const LINE_LOGIN_NOT_CONFIGURED =
-  '此公開示範尚未接 tessOu56 的 LINE Login（STOP-013）。請改從「瀏覽活動」用標示示範身分 user_demo 完成流程。';
+  'LINE Login is not configured on this host. Browse the catalog, or add the official account.';
 
 // LINE 專用常數配置
 export const LINE_CONSTANTS = {

@@ -1,16 +1,21 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { useMemo } from 'react';
 
 import { EventStackCards } from './EventStackCards';
 
 import { Input } from '@/components';
 import {
-  type CityFilter,
   type DateFilter,
   filterCatalog,
   uniqueCategories,
 } from '@/libs/api/catalog-filters';
+import {
+  catalogEmptyKind,
+  catalogQueryString,
+  parseCatalogQuery,
+} from '@/libs/api/catalog-query';
 import { demoCopy } from '@/libs/i18n/demo-copy';
 import type { Event } from '@/types';
 
@@ -31,25 +36,46 @@ export function EventCatalog({
   locale: string;
 }) {
   const copy = demoCopy(locale);
-  const [query, setQuery] = useState('');
-  const [city, setCity] = useState<CityFilter>('all');
-  const [dates, setDates] = useState<DateFilter>('all');
-  const [category, setCategory] = useState('');
+  const router = useRouter();
+  const pathname = usePathname() || `/${locale}/events`;
+  const searchParams = useSearchParams();
+  const filters = useMemo(
+    () => parseCatalogQuery(searchParams),
+    [searchParams]
+  );
   const categories = useMemo(() => uniqueCategories(events), [events]);
 
+  const setFilters = (next: Partial<typeof filters>) => {
+    const query = { ...filters, ...next };
+    const qs = catalogQueryString(query);
+    router.replace(qs ? `${pathname}?${qs}` : pathname, { scroll: false });
+  };
+
   const filtered = useMemo(
-    () => filterCatalog(events, { query, city, dates, category }),
-    [events, query, city, dates, category]
+    () =>
+      filterCatalog(events, {
+        query: filters.q,
+        city: filters.city,
+        dates: filters.dates,
+        category: filters.category,
+      }),
+    [events, filters]
   );
 
+  const emptyKind = catalogEmptyKind({
+    total: events.length,
+    filtered: filtered.length,
+    query: filters,
+  });
+
   const hasActiveFilters =
-    query.trim().length > 0 || city !== 'all' || dates !== 'all' || category;
+    filters.q.length > 0 ||
+    filters.city !== 'all' ||
+    filters.dates !== 'all' ||
+    filters.category.length > 0;
 
   const clearFilters = () => {
-    setQuery('');
-    setCity('all');
-    setDates('all');
-    setCategory('');
+    setFilters({ q: '', city: 'all', dates: 'all', category: '' });
   };
 
   return (
@@ -69,8 +95,8 @@ export function EventCatalog({
           <Input
             id='event-search'
             type='search'
-            value={query}
-            onChange={event => setQuery(event.target.value)}
+            value={filters.q}
+            onChange={event => setFilters({ q: event.target.value })}
             placeholder={copy.searchEventsPlaceholder}
             className='w-full'
             autoComplete='off'
@@ -92,9 +118,9 @@ export function EventCatalog({
               <button
                 key={value}
                 type='button'
-                className={chipClass(city === value)}
-                aria-pressed={city === value}
-                onClick={() => setCity(value)}
+                className={chipClass(filters.city === value)}
+                aria-pressed={filters.city === value}
+                onClick={() => setFilters({ city: value })}
               >
                 {label}
               </button>
@@ -112,9 +138,11 @@ export function EventCatalog({
             </label>
             <select
               id='event-dates'
-              value={dates}
-              onChange={event => setDates(event.target.value as DateFilter)}
-              className='flex h-10 w-full rounded-md border border-gray-300 bg-white px-3 text-sm text-gray-800'
+              value={filters.dates}
+              onChange={event =>
+                setFilters({ dates: event.target.value as DateFilter })
+              }
+              className='flex h-11 w-full rounded-md border border-gray-300 bg-white px-3 text-base text-gray-800 sm:h-10 sm:text-sm'
             >
               <option value='all'>{copy.allEvents}</option>
               <option value='now'>{copy.nowShowing}</option>
@@ -133,9 +161,9 @@ export function EventCatalog({
               </label>
               <select
                 id='event-category'
-                value={category}
-                onChange={event => setCategory(event.target.value)}
-                className='flex h-10 w-full rounded-md border border-gray-300 bg-white px-3 text-sm text-gray-800'
+                value={filters.category}
+                onChange={event => setFilters({ category: event.target.value })}
+                className='flex h-11 w-full rounded-md border border-gray-300 bg-white px-3 text-base text-gray-800 sm:h-10 sm:text-sm'
               >
                 <option value=''>{copy.allCategories}</option>
                 {categories.map(item => (
@@ -151,7 +179,7 @@ export function EventCatalog({
 
       {hasActiveFilters ? (
         <div className='flex flex-wrap items-center justify-between gap-2 text-sm text-gray-600'>
-          <p>{copy.eventCount(filtered.length)}</p>
+          <p aria-live='polite'>{copy.eventCount(filtered.length)}</p>
           <button
             type='button'
             onClick={clearFilters}
@@ -165,7 +193,8 @@ export function EventCatalog({
       <EventStackCards
         events={filtered}
         locale={locale}
-        empty={events.length === 0 ? 'catalog' : 'search'}
+        empty={emptyKind ?? 'catalog'}
+        emptyQuery={filters}
         onClearFilters={hasActiveFilters ? clearFilters : undefined}
       />
     </div>

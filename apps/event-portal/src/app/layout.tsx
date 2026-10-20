@@ -4,20 +4,27 @@ import { Inter } from 'next/font/google';
 import { type ReactNode } from 'react';
 import './globals.css';
 
-const inter = Inter({ subsets: ['latin'] });
+// Inter is a handful of latin files. Noto Sans/Serif TC via next/font/google
+// expands to 200+ unicode-range woff2 fetches at build time; one failed
+// fonts.gstatic.com request fails the whole Vercel compile.
+const sans = Inter({
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-sans',
+});
 
-const DEMO_TITLE = 'NX Playground Events — labelled Hobby demo';
-const DEMO_DESCRIPTION =
-  'Taiwan event-stack C-end labelled demo. Catalog and mock tickets use in-memory fixtures. Not the Nest funds API.';
+const SITE_TITLE = 'NX Playground — exhibitions in Taipei and Tokyo';
+const SITE_DESCRIPTION =
+  'Search exhibitions in Taipei and Tokyo, then confirm on the official page or LINE. The catalog includes sample rows and open-data summaries.';
 
 export async function generateMetadata(): Promise<Metadata> {
   return {
     title: {
-      default: DEMO_TITLE,
-      template: '%s | NX Playground Events',
+      default: SITE_TITLE,
+      template: '%s | NX Playground',
     },
-    description: DEMO_DESCRIPTION,
-    keywords: ['labelled demo', 'event stack', 'NX Playground'],
+    description: SITE_DESCRIPTION,
+    keywords: ['Taipei', 'Tokyo', 'exhibition', 'LINE', 'NX Playground'],
     authors: [{ name: 'NX Playground' }],
     creator: 'NX Playground',
     publisher: 'NX Playground',
@@ -42,23 +49,24 @@ export async function generateMetadata(): Promise<Metadata> {
     openGraph: {
       type: 'website',
       locale: 'zh_TW',
+      alternateLocale: ['en_US', 'ja_JP'],
       url: 'https://nx-event-portal.vercel.app',
-      siteName: 'NX Playground Events',
-      title: DEMO_TITLE,
-      description: DEMO_DESCRIPTION,
+      siteName: 'NX Playground',
+      title: SITE_TITLE,
+      description: SITE_DESCRIPTION,
       images: [
         {
           url: '/icon.svg',
           width: 512,
           height: 512,
-          alt: 'NX Playground Events',
+          alt: 'NX Playground exhibitions',
         },
       ],
     },
     twitter: {
       card: 'summary',
-      title: DEMO_TITLE,
-      description: DEMO_DESCRIPTION,
+      title: SITE_TITLE,
+      description: SITE_DESCRIPTION,
       images: ['/icon.svg'],
     },
     robots: {
@@ -74,12 +82,15 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
     <html
       lang={locale === 'en' ? 'en' : locale === 'ja' ? 'ja' : 'zh-TW'}
       data-app='nx-event'
+      className={sans.variable}
     >
       <head>
         <link rel='icon' href='/icon.svg' type='image/svg+xml' />
         <link rel='apple-touch-icon' href='/apple-icon.svg' />
       </head>
-      <body className={inter.className}>{children}</body>
+      <body className={`${sans.className} bg-gray-50 text-gray-900`}>
+        {children}
+      </body>
     </html>
   );
 }

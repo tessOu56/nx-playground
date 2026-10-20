@@ -41,7 +41,7 @@ export function PublicSiteAccount({ locale }: { locale: string }) {
         {isInitialized ? copy.lineLogin : copy.linePreparing}
       </button>
       {error ? (
-        <span className='sr-only' role='alert'>
+        <span className='max-w-[9rem] truncate text-xs text-red-800' role='alert'>
           {copy.lineLoginError}
         </span>
       ) : null}
