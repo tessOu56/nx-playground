@@ -3,24 +3,25 @@
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "projectType": "application",
   "prefix": "app",
-  "tags": ["type:app", "platform:angular"],
+  "tags": ["type:app", "stack:angular", "legacy", "scope:labs"],
+  "implicitDependencies": [],
   "targets": {
     "build": {
       "executor": "@angular/build:application",
       "outputs": ["{options.outputPath}"],
       "options": {
-        "outputPath": "dist/apps/enterprise-admin",
-        "index": "apps/enterprise-admin/src/index.html",
-        "browser": "apps/enterprise-admin/src/main.ts",
+        "outputPath": "dist/labs/enterprise-admin",
+        "index": "labs/enterprise-admin/src/index.html",
+        "browser": "labs/enterprise-admin/src/main.ts",
         "polyfills": ["zone.js"],
-        "tsConfig": "apps/enterprise-admin/tsconfig.app.json",
+        "tsConfig": "labs/enterprise-admin/tsconfig.app.json",
         "assets": [
           {
             "glob": "**/*",
-            "input": "apps/enterprise-admin/public"
+            "input": "labs/enterprise-admin/public"
           }
         ],
-        "styles": ["apps/enterprise-admin/src/styles.css"],
+        "styles": ["labs/enterprise-admin/src/styles.css"],
         "scripts": []
       },
       "configurations": {
@@ -68,7 +69,7 @@
     "test": {
       "executor": "@nx/jest:jest",
       "options": {
-        "jestConfig": "apps/enterprise-admin/jest.config.ts"
+        "jestConfig": "labs/enterprise-admin/jest.config.ts"
       }
     },
     "lint": {
@@ -78,7 +79,7 @@
       "executor": "nx:run-commands",
       "options": {
         "command": "playwright test",
-        "cwd": "apps/enterprise-admin"
+        "cwd": "labs/enterprise-admin"
       }
     }
   }

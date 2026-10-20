@@ -24,7 +24,7 @@ jobs:
       - uses: pnpm/action-setup@0977fd99725f1db4007ccb2928dbb4e90d06cc86 # v6.0.10
         with:
           version: 10.13.1
-      # T-2026-028: pnpm-lock.yaml is reconciled (vue-motion pinia included); root frozen
+      # T-2026-028: pnpm-lock.yaml is reconciled; root frozen. labs/ is not a workspace package.
       # install now works in CI, so contracts no longer needs an isolated npm toolchain.
       - name: Install workspace deps (frozen lockfile)
         run: pnpm install --frozen-lockfile

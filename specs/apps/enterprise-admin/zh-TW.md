@@ -158,7 +158,7 @@ lastUpdated: '2025-01-24'
 **設定摘要**：
 
 - Build command: `nx build enterprise-admin --configuration=production`
-- Output: `dist/apps/enterprise-admin`
+- Output: `dist/labs/enterprise-admin`（archived — 非產品路徑）
 - Node version: 20
 - 環境變數：API endpoint、SSE endpoint
 
@@ -202,7 +202,7 @@ MIT（開放使用與修改）
 
 - `specs/apps/enterprise-admin/en.md` - 英文規格說明
 - `specs/apps/enterprise-admin/zh-TW.md` - 繁中規格（本文件）
-- `apps/enterprise-admin/README.md` - 開發者文件
-- `apps/enterprise-admin/ARCHITECTURE.md` - 架構決策
+- `labs/enterprise-admin/README.md` - 開發者文件（legacy mirror — do not extend）
+- `labs/enterprise-admin/ARCHITECTURE.md` - 架構決策
 
 注意：RBAC 設定與審批工作流程配置請參考文件檔案。

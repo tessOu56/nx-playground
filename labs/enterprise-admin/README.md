@@ -19,6 +19,8 @@ features:
   - SSE Real-time Updates
 lastUpdated: '2025-10-21'
 ---
+> **Legacy mirror — do not extend.** Canonical: [angular-dashboard-sandbox](https://github.com/tessOu56/angular-dashboard-sandbox). This copy lives under `labs/` and is off the event-portal + LINE product path. See [`labs/README.md`](../README.md).
+
 # Angular Dashboard - 企業級管理系統
 
 > 展示企業級 Angular 架構、RBAC 權限控制、Dual-control 審批流程、即時事件監控與完整稽核軌跡
@@ -80,17 +82,18 @@ NX Playground 中的 Angular 應用，展示現代 Angular 開發的最佳實踐
 
 ## 🚀 快速開始
 
-### 在 Monorepo 中啟動
+### Archived — use the satellite repo
+
+This folder is a **legacy mirror**. Product demos do not start it.
 
 ```bash
-# 使用 Makefile
-make dev-angular
+# Canonical
+# https://github.com/tessOu56/angular-dashboard-sandbox
 
-# 或使用 pnpm
-pnpm dev:angular
-
-# 或使用 Nx
-nx serve angular-dashboard
+# Optional local copy (not on the Nx / pnpm workspace product path)
+cd labs/enterprise-admin
+pnpm install
+pnpm start
 ```
 
 服務運行在: **http://localhost:4200**

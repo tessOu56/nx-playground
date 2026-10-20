@@ -2,7 +2,7 @@
   "name": "@nx-playground/vue-motion",
   "version": "0.1.0",
   "private": false,
-  "description": "A Vue 3 sandbox for experimenting with motion effects, animations, and interactive web experiences using modern libraries like GSAP, Three.js, Lottie, and more",
+  "description": "Legacy mirror — do not extend. Canonical: vue-motion-sandbox. Archived Vue 3 motion lab.",
   "keywords": [
     "vue3",
     "effects",

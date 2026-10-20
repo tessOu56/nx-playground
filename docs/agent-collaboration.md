@@ -17,12 +17,11 @@ nx `libs/design-system` = Tailwind / Style Dictionary 適配層。
 
 ```bash
 pnpm design:tokens
-pnpm dev:vue-motion
 ```
 
 ## 跨 repo
 
 - **explore-design-sdk**：L2/L3 token SSOT；Angular／Vue 獨立後直接消費
-- **vue-motion-sandbox / angular-dashboard-sandbox**：canonical after inversion — do not double-write with nx apps
+- **vue-motion-sandbox / angular-dashboard-sandbox**：canonical. Leftover copies live under `labs/` — do not double-write.
 - Planning：platform-command only
 

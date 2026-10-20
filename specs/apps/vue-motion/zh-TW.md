@@ -154,7 +154,7 @@ lastUpdated: '2025-01-24'
 **設定摘要**：
 
 - Build command: `nx build vue-motion --configuration=production`
-- Output: `dist/apps/vue-motion`
+- Output: `dist/labs/vue-motion`（archived — 非產品路徑）
 - Node version: 20
 
 **功能**：
@@ -196,6 +196,6 @@ MIT（開放使用與修改）
 
 - `specs/apps/vue-motion/en.md` - 英文規格說明
 - `specs/apps/vue-motion/zh-TW.md` - 繁中規格（本文件）
-- `apps/vue-motion/README.md` - 開發者文件
+- `labs/vue-motion/README.md` - 開發者文件（legacy mirror — do not extend）
 
 注意：動畫範例與配置詳情請參考 README.md。

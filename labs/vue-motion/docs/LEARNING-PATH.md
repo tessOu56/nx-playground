@@ -1,6 +1,6 @@
 # Vue 3 學習路徑（React 開發者版）
 
-> **實作位置**：`apps/vue-motion` → 瀏覽器開啟 `/vue-basics`  
+> **實作位置**：`labs/vue-motion`（legacy — do not extend）→ 瀏覽器開啟 `/vue-basics`  
 > **鏡像預覽**：sync 至 `vue-motion-sandbox` 後 `pnpm serve`
 
 ## 目標

@@ -1,6 +1,7 @@
 {
   "name": "@nx-playground/enterprise-admin",
   "version": "0.0.0",
+  "description": "Legacy mirror — do not extend. Canonical: angular-dashboard-sandbox. Archived Angular admin console.",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
