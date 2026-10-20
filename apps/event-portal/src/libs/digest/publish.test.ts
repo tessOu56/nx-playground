@@ -10,8 +10,13 @@ import {
 import { redactSecrets } from './redact';
 import type { DigestMessage } from './types';
 
-const WEBHOOK =
-  'https://discord.com/api/webhooks/123456789012345678/abcdefghijklmnopqrstuvwxyzABCDEF';
+const WEBHOOK_ID = '123456789012345678';
+const WEBHOOK_TOKEN = 'digest-test-webhook-token';
+const WEBHOOK = `https://discord.com/api/webhooks/${WEBHOOK_ID}/${WEBHOOK_TOKEN}`;
+
+function assertNoWebhookSecret(value: string) {
+  assert.equal(value.includes(WEBHOOK_TOKEN), false);
+}
 
 const MESSAGES: DigestMessage[] = [
   { locale: 'zh', text: '台北摘要' },
@@ -106,7 +111,7 @@ describe('createDiscordPublisher', () => {
     });
     assert.equal(bodies.length, 3);
     assert.match(bodies[0] ?? '', /台北摘要/);
-    assert.ok(!JSON.stringify(result).includes(WEBHOOK));
+    assertNoWebhookSecret(JSON.stringify(result));
     assert.equal(urls[0], WEBHOOK);
   });
 
@@ -120,7 +125,7 @@ describe('createDiscordPublisher', () => {
     const result = await publisher.publish(MESSAGES);
     assert.equal(result.status, 'failed');
     assert.ok(result.reason);
-    assert.ok(!result.reason.includes(WEBHOOK));
+    assertNoWebhookSecret(result.reason);
     assert.match(result.reason, /\[redacted\]/);
   });
 });
