@@ -26,16 +26,6 @@ export interface EventRecord {
   updatedAt: string;
 }
 
-export interface OrderRecord {
-  id: string;
-  eventId: string;
-  userId: string;
-  status: string;
-  data: Record<string, unknown>;
-  createdAt: string;
-  updatedAt: string;
-}
-
 export interface UserRecord {
   id: string;
   email: string;
@@ -46,14 +36,6 @@ export interface UserRecord {
 
 export interface EventListResponse {
   items: EventRecord[];
-  total: number;
-  page: number;
-  limit: number;
-  totalPages: number;
-}
-
-export interface OrderListResponse {
-  items: OrderRecord[];
   total: number;
   page: number;
   limit: number;
@@ -80,12 +62,3 @@ export interface CreateEventInput {
   priceText?: string | null;
   lastSeenAt?: string | null;
 }
-
-export interface CreateOrderInput {
-  eventId: string;
-  userId?: string;
-  status?: string;
-  data?: Record<string, unknown>;
-}
-
-export type { TicketRecord } from './ticket';

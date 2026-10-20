@@ -112,8 +112,6 @@ export interface Event {
   priceText?: string;
   /** Fixture / sample row — not an official listing */
   sample?: boolean;
-
-  registrationFormTemplate?: import('./registrationForm').EventRegistrationTemplate;
 }
 
 // UI 顯示用的 Event 類型（包含完整資訊）

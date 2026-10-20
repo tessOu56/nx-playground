@@ -1,8 +1,7 @@
-import { EventStackStore } from './store.js';
+import { EventStackStore } from '@nx-playground/api-fixtures';
+
 import { createNeonStore } from './neon-store.js';
 import type { EventStackRepo } from './repo.js';
-
-/** Hobby/CI mock store. Not the Nest funds path (Prisma `users`/`events`/`orders`). */
 
 function memoryRepo(): EventStackRepo {
   const store = new EventStackStore();
@@ -14,25 +13,6 @@ function memoryRepo(): EventStackRepo {
     createEvent: async input => store.createEvent(input),
     updateEvent: async (id, input) => store.updateEvent(id, input),
     deleteEvent: async id => store.deleteEvent(id),
-    createOrder: async input => store.createOrder(input),
-    listOrders: async query => store.listOrders(query),
-    getOrder: async id => store.getOrder(id),
-    confirmOrder: async id => store.confirmOrder(id),
-    listTicketsByOrder: async orderId => {
-      if (!store.getOrder(orderId)) return { error: 'not_found' };
-      return { items: store.listTicketsByOrder(orderId) };
-    },
-    getTicket: async id => store.getTicket(id),
-    verifyTicket: async id => store.verifyTicket(id),
-    checkInTicket: async id => store.checkInTicket(id),
-    listPaymentIntentsByOrder: async orderId => {
-      if (!store.getOrder(orderId)) return { error: 'not_found' };
-      return { items: store.listPaymentIntentsByOrder(orderId) };
-    },
-    getPaymentIntent: async id => store.getPaymentIntent(id),
-    createPaymentIntent: async (orderId, options) =>
-      store.createPaymentIntent(orderId, options),
-    applyPaymentWebhook: async input => store.applyPaymentWebhook(input),
   };
 }
 
@@ -46,7 +26,6 @@ function useMemoryStore(): boolean {
   if (explicit === 'postgres' || explicit === 'neon') {
     return false;
   }
-  // Hobby C-end demo must not silently use Neon when DATABASE_URL leaks in.
   if (process.env.VERCEL === '1') {
     if (process.env.DATABASE_URL) {
       console.warn(
@@ -60,6 +39,8 @@ function useMemoryStore(): boolean {
 
 export function getEventStackRepo(): EventStackRepo {
   if (cached) return cached;
-  cached = useMemoryStore() ? memoryRepo() : createNeonStore(process.env.DATABASE_URL!);
+  cached = useMemoryStore()
+    ? memoryRepo()
+    : createNeonStore(process.env.DATABASE_URL!);
   return cached;
 }

@@ -44,6 +44,9 @@
       "@nx-playground/enterprise-admin": ["labs/enterprise-admin/src"],
       "@nx-playground/enterprise-data": ["libs/enterprise-data/src/index.ts"],
       "@nx-playground/error-handling": ["libs/error-handling/src/index.ts"],
+      "@nx-playground/exhibition-embeddings": [
+        "libs/exhibition-embeddings/src/index.ts"
+      ],
       "@nx-playground/event-cms": ["apps/event-cms/src"],
       "@nx-playground/event-portal": ["apps/event-portal/src"],
       "@nx-playground/hooks": ["dist/libs/hooks/src"],

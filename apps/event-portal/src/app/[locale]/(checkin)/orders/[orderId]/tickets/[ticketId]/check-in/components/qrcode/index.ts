@@ -1,1 +1,0 @@
-export { CheckInQRCodeSection } from './CheckInQRCodeSection';

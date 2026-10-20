@@ -53,29 +53,3 @@ export const createEventSchema = {
   },
 } as const;
 
-export const createOrderSchema = {
-  type: 'object',
-  additionalProperties: false,
-  required: ['eventId'],
-  properties: {
-    eventId: { type: 'string', minLength: 1 },
-    userId: { type: 'string' },
-    status: { enum: ['pending', 'confirmed', 'cancelled'] },
-    data: { type: 'object' },
-  },
-} as const;
-
-export const orderRecordSchema = {
-  type: 'object',
-  additionalProperties: false,
-  required: ['id', 'eventId', 'userId', 'status', 'data'],
-  properties: {
-    id: { type: 'string', minLength: 1 },
-    eventId: { type: 'string', minLength: 1 },
-    userId: { type: 'string', minLength: 1 },
-    status: { enum: ['pending', 'confirmed', 'cancelled'] },
-    data: { type: 'object' },
-    createdAt: { type: 'string' },
-    updatedAt: { type: 'string' },
-  },
-} as const;

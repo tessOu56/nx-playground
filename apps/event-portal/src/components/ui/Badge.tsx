@@ -1,3 +1,3 @@
 'use client';
 
-export { Badge } from '@nx-playground/ui-components';
+export { Badge } from '@is_tess/components/core';

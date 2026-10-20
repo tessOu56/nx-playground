@@ -1,0 +1,15 @@
+{
+  "name": "@nx-playground/exhibition-embeddings",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/exhibition-embeddings/src",
+  "projectType": "library",
+  "tags": ["type:lib", "scope:event-stack"],
+  "targets": {
+    "test": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "node --import tsx --test libs/exhibition-embeddings/src/*.test.ts"
+      }
+    }
+  }
+}

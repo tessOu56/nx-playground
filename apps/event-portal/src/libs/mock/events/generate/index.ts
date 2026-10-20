@@ -1,6 +1,3 @@
-import { generateTemplateByEventType } from '../../registrationForms/generate/templates';
-import { quickGenerateSessions } from '../../sessions/generate';
-
 import type { Event } from '@/types';
 
 // 活動類別
@@ -52,25 +49,13 @@ export function generateEvent(
     category?: string;
     tags?: string[];
     status?: 'upcoming' | 'ongoing' | 'completed' | 'cancelled';
-    sessionCount?: number;
-    eventType?: 'single_day' | 'multi_day';
-    ticketTypesPerSession?: number;
   } = {}
 ): Event {
   const {
     category = categories[Math.floor(Math.random() * categories.length)],
     tags: eventTags = tags[Math.floor(Math.random() * tags.length)],
     status = statuses[Math.floor(Math.random() * statuses.length)],
-    sessionCount = 2 + Math.floor(Math.random() * 4),
-    eventType = Math.random() > 0.5 ? 'single_day' : 'multi_day',
-    ticketTypesPerSession = 2 + Math.floor(Math.random() * 2),
   } = options;
-
-  const sessions = quickGenerateSessions(eventId, date, basePrice, capacity, {
-    sessionCount,
-    eventType,
-    ticketTypesPerSession,
-  });
 
   return {
     id: eventId,
@@ -80,15 +65,14 @@ export function generateEvent(
     date,
     location,
     price: basePrice,
-    image: `/images/events/${eventId}.jpg`, // 假設圖片路徑
+    image: `/images/events/${eventId}.jpg`,
     likes: Math.floor(Math.random() * 500),
     attendees: Math.floor(Math.random() * capacity * 0.8),
     capacity,
     category,
     tags: eventTags,
     status,
-    registrationFormTemplate: generateTemplateByEventType('standard'),
-    sessions,
+    sessions: [],
   };
 }
 

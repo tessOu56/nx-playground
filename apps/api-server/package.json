@@ -3,6 +3,9 @@
   "version": "0.1.0",
   "description": "NestJS API Server for NX Playground",
   "private": true,
+  "dependencies": {
+    "@nx-playground/exhibition-embeddings": "workspace:*"
+  },
   "scripts": {
     "start": "node dist/main.js",
     "start:dev": "nest start --watch",

@@ -35,8 +35,8 @@ function chipClass(active: boolean): string {
   return [
     'min-h-11 rounded-full px-3 py-1.5 text-sm font-medium transition-colors motion-reduce:transition-none sm:min-h-9',
     active
-      ? 'bg-gray-900 text-white'
-      : 'bg-white text-gray-800 ring-1 ring-inset ring-gray-200 hover:bg-gray-50',
+      ? 'bg-foreground text-background'
+      : 'bg-card text-foreground ring-1 ring-inset ring-border hover:bg-muted',
   ].join(' ');
 }
 

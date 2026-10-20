@@ -31,7 +31,7 @@ Seeded published titles include **React 19 技術分享會** (`event_react19`).
 
 ## Happy path (one line)
 
-CMS create/edit → **Nest** → portal list → detail → register (checkout).
+CMS create/edit → **Nest** → portal list → detail.
 
 ### Live Nest
 
@@ -47,7 +47,7 @@ make dev-event-portal  # :3000  attendees — not Kratos
 1. Sign in at http://localhost:3004/login (CMS write pages redirect here).
 2. CMS http://localhost:3002/events — set title/location, visibility **public**, save.
 3. Portal http://localhost:3000/zh-TW/events — new title appears (refresh). Portal does **not** use Kratos passwords.
-4. Open the card → detail → 報名／checkout.
+4. Open the card → exhibition detail (official source / LINE).
 
 ### Contract mock (Nest off — not funds)
 
@@ -68,10 +68,9 @@ Auth stays on **3004** if you start it; this script does not require it.
 
 ## Do not
 
-- Point portal/CMS at Hobby `nx-event-stack-api` for orders you treat as real.
+- Point portal/CMS at Hobby `nx-event-stack-api` as if it were the live catalog API.
 - Use `file:…sqlite` `DATABASE_URL`.
 - Create a fifth Vercel project, buy a domain, or upgrade Pro.
-- Live payments before STOP-014 (T-244). T-243 is mock paymentIntent until ECPay sandbox keys exist.
 - Force attendees through Kratos email/password (attendees are LIFF / `user_demo`).
 - Treat this local compose as a production Kratos host.
 - Replace polyglot-labs Go WebAuthn with this stack.
@@ -81,17 +80,6 @@ Auth stays on **3004** if you start it; this script does not require it.
 
 Organizer SSO is local **Ory Kratos** (password). LINE for attendees is the portal `LiffProvider` plus optional Next BFF `POST /api/line/auth/token`. Exhibition discovery chat is a **portal** Messaging webhook (`POST /api/line/webhook`) that queries Neon directly — not Nest, not the Render API. Setup: [`docs/runbooks/line-bot.md`](./runbooks/line-bot.md). Weekly digest (P4) is a Vercel cron on the portal: [`docs/runbooks/weekly-digest.md`](./runbooks/weekly-digest.md).
 
-| Browser | `userId` on orders |
-| --- | --- |
-| No owner LIFF / LINE Login env | labelled demo `user_demo` |
-| Owner STOP-013 LIFF or LINE Login | `line_<LINE userId>` |
+Public Vercel C-end talks to Hobby api-mock **memory** (`EVENT_STACK_STORE=memory`) or Neon for catalog search. Product updates events by editing `libs/api-fixtures/src/events.json` and redeploying, or via Nest writes.
 
-Real LINE users need Tess’s two channels — Messaging API `2012101436` (OA `@006dcvmv`) and Login/LIFF `2011182044` (`2011182044-WawDftvY`). Put **secrets** only in gitignored `.env` / Vercel `nx-event-portal`. Never use employer or leftover `2007835339*` channels. See [`docs/runbooks/line-bot.md`](./runbooks/line-bot.md).
-
-Cash / free checkout calls `POST /orders/{id}/confirm`, which **issues tickets**. Verify `GET /tickets/{id}/verify` and check-in `POST /tickets/{id}/check-in`. No live PSP in this path.
-
-Checkout **第三方支付** creates `POST /payments/intents` then opens mock checkout (`GET /payments/mock-complete/{id}`) until `ECPAY_MERCHANT_ID` / `ECPAY_HASH_KEY` / `ECPAY_HASH_IV` are set. Webhook `POST /payments/webhook` is idempotent and issues tickets via confirm. Live merchant remains T-244 / STOP-014. This app never collects card numbers.
-
-Public Vercel C-end (T-258) talks to Hobby api-mock **memory** (`EVENT_STACK_STORE=memory`). Catalog comes from fixtures; orders/tickets do not survive a cold start. Product updates events by editing `libs/api-fixtures/src/events.json` and redeploying the mock.
-
-Set `PUBLIC_API_BASE_URL` (API origin + `/api`) and `PORTAL_PUBLIC_URL` (portal origin) so mock checkout can redirect back.
+Set `PORTAL_PUBLIC_URL` (portal origin) for LINE Flex “open detail” links.

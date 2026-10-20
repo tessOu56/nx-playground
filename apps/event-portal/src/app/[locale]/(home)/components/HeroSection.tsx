@@ -16,34 +16,34 @@ export function HeroSection() {
   const displayName = profile?.displayName?.trim() ?? '';
 
   return (
-    <section className='relative overflow-hidden border-b border-gray-200 bg-white'>
+    <section className='relative overflow-hidden border-b border-border bg-card'>
       <div className='mx-auto max-w-6xl px-4 py-14 sm:px-6 sm:py-20 lg:px-8'>
         <div className='max-w-2xl'>
-          <p className='text-xs font-medium uppercase tracking-[0.18em] text-gray-500'>
+          <p className='text-xs font-medium uppercase tracking-[0.18em] text-muted-foreground'>
             {copy.homeBadge}
           </p>
-          <h1 className='mt-4 font-display text-4xl font-semibold tracking-tight text-gray-900 sm:text-5xl'>
+          <h1 className='mt-4 font-display text-4xl font-semibold tracking-tight text-foreground sm:text-5xl'>
             {isLoggedIn ? copy.welcomeBack(displayName) : copy.homeTitle}
           </h1>
-          <p className='mt-5 text-base leading-7 text-gray-600 sm:text-lg sm:leading-8'>
+          <p className='mt-5 text-base leading-7 text-muted-foreground sm:text-lg sm:leading-8'>
             {copy.homeLead}
           </p>
           <div className='mt-8 flex flex-wrap items-center gap-3'>
             <Link
               href={catalogHref(locale)}
-              className='inline-flex items-center justify-center rounded-md bg-gray-900 px-5 py-2.5 text-sm font-medium text-white hover:bg-gray-800'
+              className='inline-flex items-center justify-center rounded-md bg-foreground px-5 py-2.5 text-sm font-medium text-background hover:opacity-90'
             >
               {copy.browse}
             </Link>
             <Link
               href={catalogHref(locale, { city: 'TAIPEI' })}
-              className='inline-flex items-center justify-center rounded-md px-4 py-2.5 text-sm font-medium text-gray-800 ring-1 ring-inset ring-gray-300 hover:bg-gray-50'
+              className='inline-flex items-center justify-center rounded-md px-4 py-2.5 text-sm font-medium text-foreground ring-1 ring-inset ring-border hover:bg-muted'
             >
               {copy.seeCity('TAIPEI')}
             </Link>
             <Link
               href={catalogHref(locale, { city: 'TOKYO' })}
-              className='inline-flex items-center justify-center rounded-md px-4 py-2.5 text-sm font-medium text-gray-800 ring-1 ring-inset ring-gray-300 hover:bg-gray-50'
+              className='inline-flex items-center justify-center rounded-md px-4 py-2.5 text-sm font-medium text-foreground ring-1 ring-inset ring-border hover:bg-muted'
             >
               {copy.seeCity('TOKYO')}
             </Link>
@@ -52,7 +52,7 @@ export function HeroSection() {
                 type='button'
                 onClick={() => login()}
                 disabled={!isInitialized}
-                className='inline-flex items-center justify-center rounded-md px-4 py-2.5 text-sm font-medium text-gray-800 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 disabled:opacity-60'
+                className='inline-flex items-center justify-center rounded-md px-4 py-2.5 text-sm font-medium text-foreground ring-1 ring-inset ring-border hover:bg-muted disabled:opacity-60'
               >
                 {error
                   ? copy.retryLogin

@@ -1,3 +1,3 @@
 'use client';
 
-export { Skeleton } from '@nx-playground/ui-components';
+export { Skeleton } from '@is_tess/components/ux';

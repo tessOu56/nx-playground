@@ -1,28 +1,61 @@
-// apps/events/tailwind.config.js
 const { createGlobPatternsForDependencies } = require('@nx/react/tailwind');
 const { join } = require('path');
 
-// 匯入根目錄的配置
 const parentConfig = require('../../tailwind.config.js');
 
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  // 展開根目錄的配置
   ...parentConfig,
-
-  // 覆寫或擴展內容來源，確保包含這個應用程式的檔案
   content: [
     join(__dirname, 'src/**/*.{js,ts,jsx,tsx}'),
-    join(__dirname, 'app/**/*.{js,ts,jsx,tsx}'),
-    join(__dirname, 'components/**/*.{js,ts,jsx,tsx}'),
-    ...createGlobPatternsForDependencies(join(__dirname, 'apps/events')),
+    join(
+      __dirname,
+      '../../node_modules/.pnpm/@is_tess+components@*/node_modules/@is_tess/components/dist/**/*.{js,mjs}'
+    ),
+    ...createGlobPatternsForDependencies(__dirname),
   ],
-
-  // 可以在這裡擴展或修改主題
   theme: {
-    extend: {},
+    extend: {
+      ...(parentConfig.theme?.extend ?? {}),
+      colors: {
+        ...(parentConfig.theme?.extend?.colors ?? {}),
+        background: {
+          DEFAULT: 'var(--background)',
+          ...(parentConfig.theme?.extend?.colors?.background ?? {}),
+        },
+        foreground: {
+          DEFAULT: 'var(--foreground)',
+          muted: 'var(--muted-foreground)',
+        },
+        card: {
+          DEFAULT: 'var(--card)',
+          foreground: 'var(--card-foreground)',
+        },
+        muted: {
+          DEFAULT: 'var(--muted)',
+          foreground: 'var(--muted-foreground)',
+        },
+        border: {
+          DEFAULT: 'var(--border)',
+          ...(parentConfig.theme?.extend?.colors?.border ?? {}),
+        },
+        input: 'var(--input)',
+        ring: 'var(--ring)',
+        destructive: {
+          DEFAULT: 'var(--destructive)',
+          foreground: 'var(--destructive-foreground)',
+        },
+        line: {
+          DEFAULT: 'var(--line)',
+          strong: 'var(--line-strong)',
+          hover: 'var(--line-strong-hover)',
+          foreground: 'var(--line-foreground)',
+        },
+      },
+      borderRadius: {
+        ...(parentConfig.theme?.extend?.borderRadius ?? {}),
+        DEFAULT: 'var(--radius)',
+      },
+    },
   },
-
-  // 可以在這裡為這個應用程式添加額外的外掛
-  plugins: [],
 };

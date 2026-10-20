@@ -5,7 +5,7 @@ export const useDashboardTranslation = createFeatureTranslation('dashboard', [
   'dashboard.welcome',
   'dashboard.stats.totalEvents',
   'dashboard.stats.activeUsers',
-  'dashboard.stats.ticketsSold',
+  'dashboard.stats.totalUsers',
   'dashboard.stats.monthlyRevenue',
   'dashboard.stats.systemStatus',
   'dashboard.stats.normal',

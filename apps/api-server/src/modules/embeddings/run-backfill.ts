@@ -3,7 +3,8 @@ import { PrismaClient } from '@prisma/client';
 import { loadRootEnv } from '../../common/prisma/load-root-env';
 import { assertPostgresUrl } from '../../common/prisma/postgres-url';
 
-import { isEmbeddingConfigured } from './config';
+import { isEmbeddingConfigured } from '@nx-playground/exhibition-embeddings';
+
 import { backfillExhibitionEmbeddings } from './pipeline';
 
 async function main() {

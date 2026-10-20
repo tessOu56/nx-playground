@@ -18,16 +18,16 @@ export function RetiredFlow({
 
   return (
     <section className='mx-auto max-w-xl px-4 py-16 text-center'>
-      <h1 className='text-2xl font-semibold tracking-tight text-gray-900'>
+      <h1 className='text-2xl font-semibold tracking-tight text-foreground'>
         {title}
       </h1>
-      <p className='mt-3 text-sm leading-6 text-gray-600 sm:text-base'>
+      <p className='mt-3 text-sm leading-6 text-muted-foreground sm:text-base'>
         {lead}
       </p>
       <div className='mt-8 flex flex-wrap items-center justify-center gap-3'>
         <Link
           href={`/${locale}/events`}
-          className='inline-flex items-center justify-center rounded-md bg-gray-900 px-4 py-2.5 text-sm font-medium text-white hover:bg-gray-800'
+          className='inline-flex items-center justify-center rounded-md bg-foreground px-4 py-2.5 text-sm font-medium text-background hover:opacity-90'
         >
           {copy.backToEvents}
         </Link>

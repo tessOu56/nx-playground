@@ -111,9 +111,9 @@ export function EventStackCards({
             <Link
               href={`/${locale}/events/${event.id}`}
               aria-label={`${event.title} — ${copy.viewDetails}`}
-              className='catalog-card group block h-full overflow-hidden rounded-xl border border-gray-200 bg-white text-left shadow-sm transition-[box-shadow,transform] duration-[var(--motion-duration-fast,150ms)] motion-reduce:transition-none hover:shadow-md focus-visible:shadow-md'
+              className='catalog-card group block h-full overflow-hidden rounded-xl border border-border bg-card text-left shadow-sm transition-[box-shadow,transform] duration-[var(--motion-duration-fast,150ms)] motion-reduce:transition-none hover:shadow-md focus-visible:shadow-md'
             >
-              <div className='aspect-[16/9] overflow-hidden bg-gray-100'>
+              <div className='aspect-[16/9] overflow-hidden bg-muted'>
                 <Image
                   src={event.image}
                   alt=''
@@ -127,14 +127,14 @@ export function EventStackCards({
               <div className='flex h-[calc(100%-56.25%)] flex-col p-4'>
                 <div className='mb-3 flex flex-wrap items-center gap-1.5'>
                   {event.region ? (
-                    <span className='rounded-full bg-gray-900 px-2 py-0.5 text-xs font-medium text-white'>
+                    <span className='rounded-full bg-foreground px-2 py-0.5 text-xs font-medium text-background'>
                       {copy.region[event.region]}
                     </span>
                   ) : null}
-                  <span className='rounded-full bg-gray-100 px-2 py-0.5 text-xs font-medium text-gray-800'>
+                  <span className='rounded-full bg-muted px-2 py-0.5 text-xs font-medium text-foreground'>
                     {copy.domain[domain]}
                   </span>
-                  <span className='rounded-full bg-gray-100 px-2 py-0.5 text-xs font-medium text-gray-700'>
+                  <span className='rounded-full bg-muted px-2 py-0.5 text-xs font-medium text-muted-foreground'>
                     {copy.status[kind]}
                   </span>
                   {event.sample ? (
@@ -143,27 +143,27 @@ export function EventStackCards({
                     </span>
                   ) : null}
                 </div>
-                <h2 className='line-clamp-2 text-base font-semibold tracking-tight text-gray-900'>
+                <h2 className='line-clamp-2 text-base font-semibold tracking-tight text-foreground'>
                   <HighlightedText text={event.title} query={highlightQuery} />
                 </h2>
-                <p className='mt-2 text-sm text-gray-700'>{dateRange}</p>
+                <p className='mt-2 text-sm text-foreground'>{dateRange}</p>
                 {venueLine ? (
-                  <p className='mt-1 line-clamp-1 text-sm text-gray-600'>
+                  <p className='mt-1 line-clamp-1 text-sm text-muted-foreground'>
                     <HighlightedText text={venueLine} query={highlightQuery} />
                   </p>
                 ) : null}
-                <p className='mt-1 text-sm text-gray-700'>
+                <p className='mt-1 text-sm text-foreground'>
                   {catalogPriceLabel(event, locale)}
                 </p>
                 {event.organizerName ? (
-                  <p className='mt-1 line-clamp-1 text-xs text-gray-500'>
+                  <p className='mt-1 line-clamp-1 text-xs text-muted-foreground'>
                     <HighlightedText
                       text={event.organizerName}
                       query={highlightQuery}
                     />
                   </p>
                 ) : null}
-                <p className='mt-auto pt-3 text-sm font-medium text-gray-900 group-hover:underline'>
+                <p className='mt-auto pt-3 text-sm font-medium text-foreground group-hover:underline'>
                   {copy.viewDetails}
                 </p>
               </div>

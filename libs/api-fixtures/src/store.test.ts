@@ -8,8 +8,6 @@ import {
   createEventSchema,
   eventRecordSchema,
   loadFixtureEvents,
-  loadFixtureOrders,
-  orderRecordSchema,
 } from './index';
 
 const ajv = new Ajv({ allErrors: true, strict: false });
@@ -19,13 +17,6 @@ describe('event-stack fixtures', () => {
     const validate = ajv.compile(eventRecordSchema);
     for (const event of loadFixtureEvents()) {
       assert.equal(validate(event), true, ajv.errorsText(validate.errors));
-    }
-  });
-
-  it('seed orders match the Nest order schema', () => {
-    const validate = ajv.compile(orderRecordSchema);
-    for (const order of loadFixtureOrders()) {
-      assert.equal(validate(order), true, ajv.errorsText(validate.errors));
     }
   });
 
@@ -56,27 +47,6 @@ describe('event-stack fixtures', () => {
       | { name?: string }[]
       | undefined;
     assert.equal(speakers?.[0]?.name, '測試講者');
-  });
-
-  it('createOrder persists and can be read back', () => {
-    const store = new EventStackStore();
-    const created = store.createOrder({
-      eventId: 'event_react19',
-      data: { paymentMethod: 'cash', totalTickets: 1 },
-    });
-    assert.ok(!('error' in created));
-    if ('error' in created) return;
-    const fetched = store.getOrder(created.id);
-    assert.equal(fetched?.eventId, 'event_react19');
-    const listed = store.listOrders({ userId: created.userId, limit: 50 });
-    assert.ok(listed.items.some(order => order.id === created.id));
-  });
-
-  it('seed order_demo_1 is readable by GET id', () => {
-    const store = new EventStackStore();
-    const fetched = store.getOrder('order_demo_1');
-    assert.equal(fetched?.id, 'order_demo_1');
-    assert.equal(fetched?.userId, 'user_demo');
   });
 
   it('filters the catalog by exhibition region', () => {
@@ -119,19 +89,5 @@ describe('event-stack fixtures', () => {
     assert.equal(archived?.status, 'cancelled');
     const draft = loadFixtureEvents().find(event => event.id === 'event_nx');
     assert.equal(draft?.status, 'draft');
-  });
-
-  it('createOrder stubs a LINE attendee instead of requiring a seeded user', () => {
-    const store = new EventStackStore();
-    const created = store.createOrder({
-      eventId: 'event_react19',
-      userId: 'line_Uabc123',
-      data: { paymentMethod: 'cash', totalTickets: 1 },
-    });
-    assert.ok(!('error' in created));
-    if ('error' in created) return;
-    assert.equal(created.userId, 'line_Uabc123');
-    const listed = store.listOrders({ userId: 'line_Uabc123', limit: 50 });
-    assert.ok(listed.items.some(order => order.id === created.id));
   });
 });

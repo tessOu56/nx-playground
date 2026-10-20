@@ -16,10 +16,10 @@ export function LineOfficialCta({
 
   const className =
     variant === 'nav'
-      ? 'rounded-md px-1.5 py-1 text-xs font-medium text-gray-800 hover:bg-gray-100 hover:text-gray-900 sm:px-2 sm:text-sm'
+      ? 'rounded-md px-1.5 py-1 text-xs font-medium text-foreground hover:bg-muted hover:text-foreground sm:px-2 sm:text-sm'
       : variant === 'panel'
-        ? 'inline-flex w-full items-center justify-center gap-2 rounded-md bg-[#047857] px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-[#065f46]'
-        : 'inline-flex items-center justify-center gap-2 rounded-md bg-[#047857] px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-[#065f46]';
+        ? 'inline-flex w-full items-center justify-center gap-2 rounded-md bg-line-strong px-4 py-2.5 text-sm font-medium text-line-foreground transition-colors hover:bg-line-hover'
+        : 'inline-flex items-center justify-center gap-2 rounded-md bg-line-strong px-4 py-2.5 text-sm font-medium text-line-foreground transition-colors hover:bg-line-hover';
 
   return (
     <a
