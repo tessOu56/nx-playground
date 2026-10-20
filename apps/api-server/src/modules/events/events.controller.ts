@@ -19,6 +19,7 @@ import {
 } from '@nestjs/swagger';
 
 import { AdminBearerGuard } from '../../guards/admin-bearer.guard';
+
 import { CreateEventDto } from './dto/create-event.dto';
 import { EventListResponse } from './dto/event-list-response.dto';
 import { UpdateEventDto } from './dto/update-event.dto';

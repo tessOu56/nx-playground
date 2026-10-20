@@ -7,7 +7,7 @@ import {
 } from '@nestjs/swagger';
 
 import { AdminBearerGuard } from '../../guards/admin-bearer.guard';
-import { TicketListResponse } from './dto/ticket-list-response.dto';
+
 import { TicketVerifyResponse } from './dto/ticket-verify-response.dto';
 import { Ticket } from './entities/ticket.entity';
 import { TicketsService } from './tickets.service';

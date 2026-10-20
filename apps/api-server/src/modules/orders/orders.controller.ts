@@ -16,8 +16,9 @@ import {
 } from '@nestjs/swagger';
 
 import { AdminBearerGuard } from '../../guards/admin-bearer.guard';
-import { TicketsService } from '../tickets/tickets.service';
 import { TicketListResponse } from '../tickets/dto/ticket-list-response.dto';
+import { TicketsService } from '../tickets/tickets.service';
+
 import { CreateOrderDto } from './dto/create-order.dto';
 import { OrderListResponse } from './dto/order-list-response.dto';
 import { Order } from './entities/order.entity';
