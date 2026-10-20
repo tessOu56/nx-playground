@@ -28,10 +28,30 @@ describe('discord webhook config', () => {
   it('accepts only Discord webhook HTTPS URLs', () => {
     assert.equal(isDiscordWebhookUrl(WEBHOOK), true);
     assert.equal(
+      isDiscordWebhookUrl('https://ptb.discord.com/api/webhooks/1/token'),
+      true
+    );
+    assert.equal(
       isDiscordWebhookUrl('https://example.com/api/webhooks/1/token'),
       false
     );
     assert.equal(isDiscordWebhookUrl('http://discord.com/api/webhooks/1/t'), false);
+    assert.equal(
+      isDiscordWebhookUrl(
+        `https://evil.example/?next=${WEBHOOK}`
+      ),
+      false
+    );
+    assert.equal(
+      isDiscordWebhookUrl(
+        'https://discord.com.evil.example/api/webhooks/1/token'
+      ),
+      false
+    );
+    assert.equal(
+      isDiscordWebhookUrl(`${WEBHOOK}?wait=true`),
+      false
+    );
   });
 });
 

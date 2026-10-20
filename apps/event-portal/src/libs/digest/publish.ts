@@ -7,8 +7,14 @@ import type {
 
 export const DISCORD_WEBHOOK_ENV = 'DISCORD_WEBHOOK_URL';
 
-const DISCORD_WEBHOOK_RE =
-  /^https:\/\/(?:(?:canary|ptb)\.)?discord(?:app)?\.com\/api\/webhooks\/\d+\/[A-Za-z0-9_-]+$/;
+const DISCORD_WEBHOOK_HOSTS = new Set([
+  'discord.com',
+  'discordapp.com',
+  'ptb.discord.com',
+  'canary.discord.com',
+]);
+
+const WEBHOOK_PATH = /^\/api\/webhooks\/\d+\/[A-Za-z0-9_-]+$/;
 
 export function discordWebhookUrl(
   env: NodeJS.ProcessEnv = process.env
@@ -16,8 +22,24 @@ export function discordWebhookUrl(
   return env[DISCORD_WEBHOOK_ENV]?.trim() ?? '';
 }
 
+/** Parse + host-allowlist. Regex-on-string is not enough for open-redirect hosts. */
+export function parseDiscordWebhookUrl(value: string): URL | null {
+  let parsed: URL;
+  try {
+    parsed = new URL(value);
+  } catch {
+    return null;
+  }
+  if (parsed.protocol !== 'https:') return null;
+  if (parsed.username || parsed.password) return null;
+  if (parsed.search || parsed.hash) return null;
+  if (!DISCORD_WEBHOOK_HOSTS.has(parsed.hostname.toLowerCase())) return null;
+  if (!WEBHOOK_PATH.test(parsed.pathname)) return null;
+  return parsed;
+}
+
 export function isDiscordWebhookUrl(value: string): boolean {
-  return DISCORD_WEBHOOK_RE.test(value);
+  return parseDiscordWebhookUrl(value) !== null;
 }
 
 export type DiscordPublisherOptions = {
@@ -33,15 +55,16 @@ export function createDiscordPublisher(
   return {
     id: 'discord',
     async publish(messages: readonly DigestMessage[]): Promise<PublishResult> {
-      const webhookUrl = options.webhookUrl ?? discordWebhookUrl();
-      if (!webhookUrl) {
+      const configured = options.webhookUrl ?? discordWebhookUrl();
+      if (!configured) {
         return {
           publisher: 'discord',
           status: 'skipped',
           reason: 'webhook-unset',
         };
       }
-      if (!isDiscordWebhookUrl(webhookUrl)) {
+      const webhook = parseDiscordWebhookUrl(configured);
+      if (!webhook) {
         return {
           publisher: 'discord',
           status: 'skipped',
@@ -52,7 +75,7 @@ export function createDiscordPublisher(
       let posted = 0;
       try {
         for (const message of messages) {
-          const response = await fetchImpl(webhookUrl, {
+          const response = await fetchImpl(webhook.href, {
             method: 'POST',
             headers: { 'content-type': 'application/json' },
             body: JSON.stringify({

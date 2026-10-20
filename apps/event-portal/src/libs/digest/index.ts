@@ -16,6 +16,7 @@ export {
   createDiscordPublisher,
   discordWebhookUrl,
   isDiscordWebhookUrl,
+  parseDiscordWebhookUrl,
 } from './publish';
 export { digestRunSummary, runWeeklyDigest } from './run';
 export { digestWindow, WEEK_MS } from './window';
