@@ -37,7 +37,11 @@ function parseTimeoutMs(raw: string): number {
 }
 
 function normalizeBaseUrl(raw: string): string {
-  return raw.replace(/\/+$/, '');
+  let url = raw;
+  while (url.endsWith('/')) {
+    url = url.slice(0, -1);
+  }
+  return url;
 }
 
 /**
