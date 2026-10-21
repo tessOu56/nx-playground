@@ -49,6 +49,7 @@ export class UsersController {
   }
 
   @Get(':id')
+  @RequirePermissions('users:read')
   @ApiOperation({ summary: 'Get user by ID' })
   @ApiParam({ name: 'id', type: String })
   @ApiResponse({ status: 200, type: User })

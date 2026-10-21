@@ -8,6 +8,8 @@ import {
   Param,
   Query,
   BadRequestException,
+  Headers,
+  NotFoundException,
   UseGuards,
 } from '@nestjs/common';
 import {
@@ -26,6 +28,10 @@ import { UpdateEventDto } from './dto/update-event.dto';
 import { Event } from './entities/event.entity';
 import { EventsService } from './events.service';
 import { EXHIBITION_REGIONS, parseExhibitionRegion } from './exhibition-region';
+import {
+  canReadEventRecord,
+  eventListStatusForCaller,
+} from './public-event-read';
 
 @Controller('events')
 @ApiTags('events')
@@ -44,6 +50,7 @@ export class EventsController {
   @ApiQuery({ name: 'limit', required: false, type: Number })
   @ApiResponse({ status: 200, type: EventListResponse })
   async findAll(
+    @Headers('authorization') authorization?: string,
     @Query('status') status?: string,
     @Query('region') region?: string,
     @Query('page') page?: number,
@@ -56,7 +63,7 @@ export class EventsController {
       );
     }
     return this.eventsService.findAll({
-      status,
+      status: eventListStatusForCaller(authorization, status),
       region: parsedRegion,
       page,
       limit,
@@ -68,8 +75,15 @@ export class EventsController {
   @ApiParam({ name: 'id', type: String })
   @ApiResponse({ status: 200, type: Event })
   @ApiResponse({ status: 404, description: 'Event not found' })
-  async findOne(@Param('id') id: string) {
-    return this.eventsService.findOne(id);
+  async findOne(
+    @Param('id') id: string,
+    @Headers('authorization') authorization?: string
+  ) {
+    const event = await this.eventsService.findOne(id);
+    if (!canReadEventRecord(authorization, event.status)) {
+      throw new NotFoundException(`Event ${id} not found`);
+    }
+    return event;
   }
 
   @Post()

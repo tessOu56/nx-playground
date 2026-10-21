@@ -4,6 +4,10 @@ module.exports = {
   transform: {
     '^.+\\.[tj]s$': ['ts-jest', { tsconfig: '<rootDir>/tsconfig.spec.json' }],
   },
+  moduleNameMapper: {
+    '^@nx-playground/permissions/server$':
+      '<rootDir>/../../libs/permissions/src/server.ts',
+  },
   moduleFileExtensions: ['ts', 'js', 'html'],
   coverageDirectory: '../../coverage/apps/api-server',
 };

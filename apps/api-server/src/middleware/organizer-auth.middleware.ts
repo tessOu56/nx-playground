@@ -1,15 +1,61 @@
 import type { NestMiddleware } from '@nestjs/common';
 import type { NextFunction, Request, Response } from 'express';
 
-function parseAllowedEmails(): Set<string> {
-  const raw = process.env.ALLOWED_ORGANIZER_EMAILS?.trim() ?? '';
-  if (!raw) return new Set();
+import { isAdminBearerAuthorized } from '../common/auth/timing-safe-equal';
+
+export type OrganizerIdentity = { id: string; role: 'admin' };
+
+function parseAllowedEmails(raw: string | undefined): Set<string> {
+  const value = raw?.trim() ?? '';
+  if (!value) return new Set();
   return new Set(
-    raw
+    value
       .split(',')
       .map(email => email.trim().toLowerCase())
       .filter(Boolean)
   );
+}
+
+function headerString(value: string | string[] | undefined): string {
+  return typeof value === 'string' ? value : '';
+}
+
+/**
+ * Resolves organizer identity for CMS-protected routes.
+ * Production never honors EVENT_STACK_CMS_DEV_AUTH (fail closed).
+ * Email headers are not a proof of identity; they remain a local/dev
+ * convenience and an allowlist check in production.
+ */
+export function resolveOrganizerIdentity(input: {
+  authorizationHeader?: string;
+  organizerEmailHeader?: string | string[];
+  cmsOrganizerApiToken?: string;
+  allowedOrganizerEmails?: string;
+  eventStackCmsDevAuth?: string;
+  nodeEnv?: string;
+}): OrganizerIdentity | undefined {
+  if (
+    isAdminBearerAuthorized(
+      input.authorizationHeader,
+      input.cmsOrganizerApiToken
+    )
+  ) {
+    return { id: 'cms-token', role: 'admin' };
+  }
+
+  const email = headerString(input.organizerEmailHeader).trim().toLowerCase();
+  if (!email) {
+    return undefined;
+  }
+
+  const isProduction = input.nodeEnv === 'production';
+  const devAuth = !isProduction && input.eventStackCmsDevAuth === 'true';
+  const allowed = parseAllowedEmails(input.allowedOrganizerEmails);
+  if (devAuth || !isProduction || allowed.has(email)) {
+    return { id: email, role: 'admin' };
+  }
+
+  return undefined;
 }
 
 /**
@@ -23,32 +69,17 @@ export class OrganizerAuthMiddleware implements NestMiddleware {
       return;
     }
 
-    const apiToken = process.env.CMS_ORGANIZER_API_TOKEN?.trim();
-    const authHeader = req.headers.authorization?.trim() ?? '';
-    if (apiToken && authHeader === `Bearer ${apiToken}`) {
-      req.user = { id: 'cms-token', role: 'admin' };
-      next();
-      return;
+    const identity = resolveOrganizerIdentity({
+      authorizationHeader: req.headers.authorization,
+      organizerEmailHeader: req.headers['x-organizer-email'],
+      cmsOrganizerApiToken: process.env.CMS_ORGANIZER_API_TOKEN,
+      allowedOrganizerEmails: process.env.ALLOWED_ORGANIZER_EMAILS,
+      eventStackCmsDevAuth: process.env.EVENT_STACK_CMS_DEV_AUTH,
+      nodeEnv: process.env.NODE_ENV,
+    });
+    if (identity) {
+      req.user = identity;
     }
-
-    const emailHeader = req.headers['x-organizer-email'];
-    const email =
-      typeof emailHeader === 'string' ? emailHeader.trim().toLowerCase() : '';
-
-    if (email) {
-      const devAuth = process.env.EVENT_STACK_CMS_DEV_AUTH === 'true';
-      const allowed = parseAllowedEmails();
-      if (
-        devAuth ||
-        process.env.NODE_ENV !== 'production' ||
-        allowed.has(email)
-      ) {
-        req.user = { id: email, role: 'admin' };
-        next();
-        return;
-      }
-    }
-
     next();
   }
 }
