@@ -41,3 +41,6 @@ jobs:
 
       - name: Nest mutating API and payment callback tests
         run: pnpm exec nx test @nx-playground/api-server --skip-nx-cache
+
+      - name: CMS BFF fail-closed auth tests
+        run: pnpm exec nx test @nx-playground/event-cms --skip-nx-cache

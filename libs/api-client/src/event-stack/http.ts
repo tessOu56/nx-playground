@@ -1,5 +1,3 @@
-import { getEventStackOrganizerHeaders } from './auth';
-
 /** Hobby `nx-event-stack-api` currently serves the Next portal, not api-mock. */
 const BROKEN_HOBBY_MOCK = /nx-event-stack-api\.vercel\.app/i;
 
@@ -61,9 +59,9 @@ export async function eventStackRequest<T>(
   const url = `${getEventStackBaseUrl()}${path}`;
   const response = await fetch(url, {
     ...init,
+    credentials: init?.credentials ?? 'include',
     headers: {
       'Content-Type': 'application/json',
-      ...getEventStackOrganizerHeaders(),
       ...(init?.headers ?? {}),
     },
   });

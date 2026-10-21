@@ -14,8 +14,9 @@
 | Kratos (local) | 4433 / 4434 | public / admin — `make kratos-up` |
 | api-mock | 3011 | http://localhost:3011/api — CI / Nest-off only, **not funds** |
 
-Env: `NEXT_PUBLIC_API_BASE_URL` / `VITE_API_BASE_URL` = `http://localhost:3001/api` (Nest product path) or `http://localhost:3011/api` (mock).  
-`scripts/env-setup.sh` writes the Nest default. `DATABASE_URL` must be **postgresql** (Neon event-stack or `make db-up` on :5433). SQLite is rejected at boot.
+Env: portal `NEXT_PUBLIC_API_BASE_URL` = `http://localhost:3001/api` (Nest product path) or `http://localhost:3011/api` (mock).  
+CMS writes go through same-origin `/cms-api` (Vite BFF) and never carry `ADMIN_API_TOKEN` in the browser. Point the BFF at Nest with `EVENT_STACK_NEST_URL` (default `http://localhost:3001/api`) or at the mock with `EVENT_STACK_NEST_URL=http://localhost:3011/api`.  
+`scripts/env-setup.sh` writes the Nest default. `DATABASE_URL` must be **postgresql** (Neon event-stack or `make db-up` on :5433). SQLite is rejected at boot. Set `ADMIN_API_TOKEN` in `.env` (server-only) so the BFF can attach it after a Kratos session.
 
 ## Seed (no hand-editing the DB)
 
@@ -53,9 +54,9 @@ make dev-event-portal  # :3000  attendees — not Kratos
 
 ```bash
 make dev-api-mock
-# Portal + CMS:
+# Portal + CMS BFF upstream:
 NEXT_PUBLIC_API_BASE_URL=http://localhost:3011/api
-VITE_API_BASE_URL=http://localhost:3011/api
+EVENT_STACK_NEST_URL=http://localhost:3011/api
 ```
 
 ## Failure path (API down)

@@ -1,6 +1,7 @@
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 
 import {
+  eventStackRequest,
   getEventStackBaseUrl,
   labelledDemoBffBaseUrl,
   shouldUseLabelledDemoBff,
@@ -57,6 +58,28 @@ describe('labelledDemoBffBaseUrl', () => {
 
   it('uses a relative /api in the browser', () => {
     expect(labelledDemoBffBaseUrl({}, true)).toBe('/api');
+  });
+});
+
+describe('eventStackRequest credentials', () => {
+  it('sends cookies to same-origin BFF by default', async () => {
+    const fetchMock = vi.fn().mockResolvedValue({
+      ok: true,
+      status: 200,
+      headers: { get: () => 'application/json' },
+      text: async () => '{}',
+    });
+    const previous = globalThis.fetch;
+    globalThis.fetch = fetchMock as typeof fetch;
+    try {
+      await eventStackRequest('/stats');
+      expect(fetchMock).toHaveBeenCalledWith(
+        expect.any(String),
+        expect.objectContaining({ credentials: 'include' })
+      );
+    } finally {
+      globalThis.fetch = previous;
+    }
   });
 });
 

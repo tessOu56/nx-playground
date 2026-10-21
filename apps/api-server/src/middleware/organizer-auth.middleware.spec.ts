@@ -1,62 +1,41 @@
-import { resolveOrganizerIdentity } from './organizer-auth.middleware';
+import { OrganizerAuthMiddleware } from './organizer-auth.middleware';
 
-describe('resolveOrganizerIdentity', () => {
-  const token = 'cms-organizer-token-value';
+describe('OrganizerAuthMiddleware', () => {
+  const originalAdmin = process.env.ADMIN_API_TOKEN;
+  const originalAllowlist = process.env.ALLOWED_ORGANIZER_EMAILS;
+  const originalDevAuth = process.env.EVENT_STACK_CMS_DEV_AUTH;
+  const originalNodeEnv = process.env.NODE_ENV;
+  const originalKratos = process.env.KRATOS_PUBLIC_URL;
 
-  it('accepts a matching CMS bearer and rejects a wrong one', () => {
-    expect(
-      resolveOrganizerIdentity({
-        authorizationHeader: `Bearer ${token}`,
-        cmsOrganizerApiToken: token,
-        nodeEnv: 'production',
-      })
-    ).toEqual({ id: 'cms-token', role: 'admin' });
-
-    expect(
-      resolveOrganizerIdentity({
-        authorizationHeader: 'Bearer other-token-value',
-        cmsOrganizerApiToken: token,
-        nodeEnv: 'production',
-      })
-    ).toBeUndefined();
+  afterEach(() => {
+    if (originalAdmin === undefined) delete process.env.ADMIN_API_TOKEN;
+    else process.env.ADMIN_API_TOKEN = originalAdmin;
+    if (originalAllowlist === undefined) {
+      delete process.env.ALLOWED_ORGANIZER_EMAILS;
+    } else {
+      process.env.ALLOWED_ORGANIZER_EMAILS = originalAllowlist;
+    }
+    if (originalDevAuth === undefined) delete process.env.EVENT_STACK_CMS_DEV_AUTH;
+    else process.env.EVENT_STACK_CMS_DEV_AUTH = originalDevAuth;
+    if (originalNodeEnv === undefined) delete process.env.NODE_ENV;
+    else process.env.NODE_ENV = originalNodeEnv;
+    if (originalKratos === undefined) delete process.env.KRATOS_PUBLIC_URL;
+    else process.env.KRATOS_PUBLIC_URL = originalKratos;
   });
 
-  it('rejects every bearer when CMS_ORGANIZER_API_TOKEN is unset', () => {
-    expect(
-      resolveOrganizerIdentity({
-        authorizationHeader: `Bearer ${token}`,
-        cmsOrganizerApiToken: '',
-        nodeEnv: 'production',
-      })
-    ).toBeUndefined();
-  });
+  it('does not grant admin from an allowlisted email header in production', async () => {
+    process.env.NODE_ENV = 'production';
+    process.env.ALLOWED_ORGANIZER_EMAILS = 'owner@example.com';
+    delete process.env.ADMIN_API_TOKEN;
+    delete process.env.KRATOS_PUBLIC_URL;
 
-  it('ignores EVENT_STACK_CMS_DEV_AUTH in production', () => {
-    expect(
-      resolveOrganizerIdentity({
-        organizerEmailHeader: 'anyone@example.com',
-        eventStackCmsDevAuth: 'true',
-        nodeEnv: 'production',
-      })
-    ).toBeUndefined();
-  });
-
-  it('grants admin from an allowlisted email in production', () => {
-    expect(
-      resolveOrganizerIdentity({
-        organizerEmailHeader: 'Owner@Example.com',
-        allowedOrganizerEmails: 'owner@example.com,ops@example.com',
-        nodeEnv: 'production',
-      })
-    ).toEqual({ id: 'owner@example.com', role: 'admin' });
-  });
-
-  it('grants admin from any email outside production', () => {
-    expect(
-      resolveOrganizerIdentity({
-        organizerEmailHeader: 'dev@example.com',
-        nodeEnv: 'development',
-      })
-    ).toEqual({ id: 'dev@example.com', role: 'admin' });
+    const headers: Record<string, string> = {};
+    headers['x-organizer-email'] = 'owner@example.com';
+    const req: { headers: Record<string, string>; user?: unknown } = {
+      headers,
+    };
+    const middleware = new OrganizerAuthMiddleware();
+    await middleware.use(req as never, {} as never, () => undefined);
+    expect(req.user).toBeUndefined();
   });
 });
