@@ -9,7 +9,6 @@ export {
   shouldUseLabelledDemoBff,
   labelledDemoBffBaseUrl,
 } from './http';
-export { setEventStackOrganizerAuth } from './auth';
 export * from './types';
 export * from './operations';
 // Hooks stay off this entry so Next.js Server Components can import fetch ops.

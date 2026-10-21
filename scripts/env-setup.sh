@@ -84,6 +84,11 @@ values = {
     "VITE_ORY_PUBLIC_API": pick("VITE_ORY_PUBLIC_API", "http://localhost:4433"),
     "VITE_KRATOS_PUBLIC_URL": pick("VITE_KRATOS_PUBLIC_URL", "http://localhost:4433"),
     "VITE_AUTH_APP_URL": pick("VITE_AUTH_APP_URL", "http://localhost:3004"),
+    "KRATOS_PUBLIC_URL": pick("KRATOS_PUBLIC_URL", "http://localhost:4433"),
+    "EVENT_STACK_NEST_URL": pick("EVENT_STACK_NEST_URL", "http://localhost:3001/api"),
+    "ALLOWED_ORGANIZER_EMAILS": pick(
+        "ALLOWED_ORGANIZER_EMAILS", "organizer@nx-playground.local"
+    ),
     "DATABASE_URL": database_url,
     "VITE_APP_NAME": pick("VITE_APP_NAME", "NX Playground Console"),
     "VITE_APP_VERSION": pick("VITE_APP_VERSION", "1.0.0"),
@@ -92,7 +97,7 @@ values = {
 
 lines = [
     "# Events 專案的環境變數",
-    *[f"{k}={v}" for k, v in values.items() if k.startswith("NEXT_") or k in ("LINE_CLIENT_SECRET", "LINE_CHANNEL_SECRET", "LINE_CHANNEL_ACCESS_TOKEN", "PUBLIC_API_BASE_URL", "PORTAL_PUBLIC_URL", "VITE_API_BASE_URL", "VITE_ORY_PUBLIC_API", "VITE_KRATOS_PUBLIC_URL", "VITE_AUTH_APP_URL", "DATABASE_URL")],
+    *[f"{k}={v}" for k, v in values.items() if k.startswith("NEXT_") or k in ("LINE_CLIENT_SECRET", "LINE_CHANNEL_SECRET", "LINE_CHANNEL_ACCESS_TOKEN", "PUBLIC_API_BASE_URL", "PORTAL_PUBLIC_URL", "VITE_API_BASE_URL", "VITE_ORY_PUBLIC_API", "VITE_KRATOS_PUBLIC_URL", "VITE_AUTH_APP_URL", "KRATOS_PUBLIC_URL", "EVENT_STACK_NEST_URL", "ALLOWED_ORGANIZER_EMAILS", "DATABASE_URL")],
     "",
     "# Console 專案的環境變數",
     f"VITE_APP_NAME={values['VITE_APP_NAME']}",

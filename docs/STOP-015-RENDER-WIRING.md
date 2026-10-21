@@ -6,7 +6,7 @@ When owner reports STOP-015 with `https://<service>.onrender.com/health`:
 
 - Blueprint: [`render.yaml`](../render.yaml)
 - Build/start: [`scripts/render-event-stack-api.sh`](../scripts/render-event-stack-api.sh)
-- Env (Dashboard, never commit): `DATABASE_URL` (existing Neon **event-stack** / `snowy-bird-20372699`, **direct/unpooled**), `CORS_ORIGIN`, `ADMIN_API_TOKEN` (required for event writes / confirm / check-in; fail closed if unset), optional `CMS_ORGANIZER_API_TOKEN`, `ALLOWED_ORGANIZER_EMAILS`, `EVENT_STACK_CMS_DEV_AUTH=false`. Do not set `ALLOW_NONPROD_PAYMENTS` on the public host.
+- Env (Dashboard, never commit): `DATABASE_URL` (existing Neon **event-stack** / `snowy-bird-20372699`, **direct/unpooled**), `CORS_ORIGIN`, `ADMIN_API_TOKEN` (required for event writes; fail closed if unset; server-only), `KRATOS_PUBLIC_URL` (Kratos `sessions/whoami` for organizer users/stats; unset = session path fails closed), `ALLOWED_ORGANIZER_EMAILS` (verified session emails only), `EVENT_STACK_CMS_DEV_AUTH=false`. Do not set `ALLOW_NONPROD_PAYMENTS` on the public host. Do not set `VITE_CMS_ORGANIZER_API_TOKEN` or `CMS_ORGANIZER_API_TOKEN`.
 - Do **not** create a new Neon project. Copy DSN from Neon Console → Connect, or from Vercel `nx-event-stack-api` → `DATABASE_URL`. `render.yaml` has `sync: false` so Blueprint leaves the field empty until you paste it.
 - **Build** = `pnpm install` + Nest webpack only (`HUSKY=0`). **Start** = `prisma migrate deploy` then `node dist/apps/api-server/main.js`. Empty `DATABASE_URL` fails at **start** with a clear message (not a cryptic webpack exit).
 
@@ -22,19 +22,25 @@ Redeploy production after env change (`NEXT_PUBLIC_*` is build-time).
 
 ## Optional hosted CMS
 
-If event-cms is deployed later:
+If event-cms is deployed later, serve it with the Vite BFF (`/cms-api`) — do not point the browser at Nest. Server-only env on that host (never `VITE_*` secrets):
 
 ```
-VITE_API_BASE_URL=https://<render-host>.onrender.com/api
-VITE_CMS_ORGANIZER_API_TOKEN=<same as Render CMS_ORGANIZER_API_TOKEN>
+EVENT_STACK_NEST_URL=https://<render-host>.onrender.com/api
+ADMIN_API_TOKEN=<same as Render ADMIN_API_TOKEN>
+KRATOS_PUBLIC_URL=<production Kratos public URL>
+ALLOWED_ORGANIZER_EMAILS=<comma-separated organizer emails>
+EVENT_STACK_CMS_DEV_AUTH=false
+CMS_BFF_ORIGIN=https://<cms-host>
 ```
+
+The CMS browser bundle always calls same-origin `/cms-api`. Do not create a fifth Vercel project.
 
 ## Smoke (after switch)
 
 ```bash
 curl -sS "https://<render-host>.onrender.com/health"
 curl -sS "https://<render-host>.onrender.com/api/stats" \
-  -H "Authorization: Bearer <CMS_ORGANIZER_API_TOKEN>"
+  -H "Authorization: Bearer <ADMIN_API_TOKEN>"
 ```
 
 LIVE: create order → confirm → ticket verify on portal (sandbox payment or mock).
