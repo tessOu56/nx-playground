@@ -36,6 +36,103 @@ model User {
   @@map("users")
 }
 
+enum IdentityRoleName {
+  organizer
+  admin
+}
+
+/// Better Auth identity user. Email is optional (LINE often has none).
+model IdentityUser {
+  id            String    @id
+  name          String
+  email         String?
+  emailVerified Boolean   @default(false)
+  image         String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  sessions IdentitySession[]
+  accounts IdentityAccount[]
+  roles    UserRole[]
+
+  @@unique([email])
+  @@map("identity_user")
+}
+
+model IdentitySession {
+  id        String   @id
+  expiresAt DateTime
+  token     String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  ipAddress String?
+  userAgent String?
+  userId    String
+  user      IdentityUser @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("identity_session")
+}
+
+model IdentityAccount {
+  id                    String    @id
+  accountId             String
+  providerId            String
+  userId                String
+  user                  IdentityUser @relation(fields: [userId], references: [id], onDelete: Cascade)
+  accessToken           String?
+  refreshToken          String?
+  idToken               String?
+  accessTokenExpiresAt  DateTime?
+  refreshTokenExpiresAt DateTime?
+  scope                 String?
+  password              String?
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+
+  @@unique([providerId, accountId])
+  @@index([userId])
+  @@map("identity_account")
+}
+
+model IdentityVerification {
+  id         String   @id
+  identifier String
+  value      String
+  expiresAt  DateTime
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@index([identifier])
+  @@map("identity_verification")
+}
+
+model IdentityJwks {
+  id         String    @id
+  publicKey  String
+  privateKey String
+  createdAt  DateTime
+  expiresAt  DateTime?
+  alg        String?
+  crv        String?
+
+  @@map("identity_jwks")
+}
+
+/// Elevated roles only. Absence of a row means attendee (`user`).
+model UserRole {
+  id        String           @id @default(cuid())
+  userId    String
+  role      IdentityRoleName
+  grantedBy String?
+  grantedAt DateTime         @default(now())
+  user      IdentityUser     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, role])
+  @@index([userId])
+  @@map("user_role")
+}
+
 // ==================== 活動模組 ====================
 
 model Event {

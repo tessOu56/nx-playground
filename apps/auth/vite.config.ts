@@ -11,6 +11,9 @@ export default defineConfig(({ mode }) => {
   envDir,
   define: {
     'process.env': process.env,
+    'import.meta.env.VITE_AUTH_URL': JSON.stringify(
+      process.env.VITE_AUTH_URL ?? 'http://localhost:3000'
+    ),
   },
   server: {
     host: '0.0.0.0',
@@ -46,6 +49,7 @@ export default defineConfig(({ mode }) => {
     watch: false,
     globals: true,
     environment: 'jsdom',
+    include: ['src/**/*.{test,spec}.{ts,tsx}'],
     passWithNoTests: true,
   },
   };

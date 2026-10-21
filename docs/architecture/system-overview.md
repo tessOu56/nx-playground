@@ -15,7 +15,7 @@ flowchart TB
   subgraph be [Backend]
     Nest["api-server NestJS (:3001, /api/docs)"]
     Mock["api-mock in-memory (:3011, CI / Nest-off)"]
-    Auth["auth Kratos organizer UI (:3004)"]
+    Auth["auth SPA redirects to portal login (:3004)"]
   end
   subgraph data [Data]
     PG[("Postgres (Neon or make db-up :5433)")]
@@ -55,7 +55,7 @@ flowchart LR
 ## 對外整合（Integrations）
 
 - **資料**：Postgres（Neon event-stack 或 `make db-up` → `postgresql://event:event@127.0.0.1:5433/event_stack`）。SQLite 不允許。後端設計（Supabase Mode S + NestJS hybrid：RLS、Realtime、Edge Functions）見 [specs/BACKEND/ARCHITECTURE.md](../../specs/BACKEND/ARCHITECTURE.md)。
-- **身份**：雙身份 — Kratos（主辦，`auth` :3004）／LIFF（參加者）。LINE Official Account 展覽查詢 webhook 在 event-portal（`/api/line/webhook`），直連 Neon，不經過 Render Nest。
+- **身份**：Better Auth on event-portal（LINE Taiwan + Google；DB session cookies；Nest 用 JWKS 驗 JWT）。`user_role` 只有 organizer/admin（admin 指派，預設拒絕）。CMS BFF 走 organizer session。LINE Official Account 展覽查詢 webhook 在 event-portal（`/api/line/webhook`），直連 Neon，不經過 Render Nest。見 [`docs/runbooks/identity.md`](../runbooks/identity.md)。
 - **契約**：TypeSpec → OpenAPI（見 [docs/CONTRACT-PIPELINE.md](../CONTRACT-PIPELINE.md)）。
 - **Design system**：consume `explore-design-sdk`；`libs/design-system` 為其中一個 adapter。
 

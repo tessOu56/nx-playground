@@ -7,7 +7,10 @@ module.exports = {
   moduleNameMapper: {
     '^@nx-playground/permissions/server$':
       '<rootDir>/../../libs/permissions/src/server.ts',
+    '^@nx-playground/exhibition-embeddings$':
+      '<rootDir>/../../libs/exhibition-embeddings/src/index.ts',
   },
   moduleFileExtensions: ['ts', 'js', 'html'],
+  transformIgnorePatterns: ['node_modules/(?!.*jose)'],
   coverageDirectory: '../../coverage/apps/api-server',
 };

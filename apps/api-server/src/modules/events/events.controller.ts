@@ -20,7 +20,11 @@ import {
   ApiQuery,
 } from '@nestjs/swagger';
 
-import { AdminBearerGuard } from '../../guards/admin-bearer.guard';
+import { canReadUnpublished } from '../../common/auth/identity-roles';
+import { RequestIdentityService } from '../../common/auth/request-identity.service';
+import { Roles } from '../../decorators/roles.decorator';
+import { IdentityGuard } from '../../guards/identity.guard';
+import { RolesGuard } from '../../guards/roles.guard';
 
 import { CreateEventDto } from './dto/create-event.dto';
 import { EventListResponse } from './dto/event-list-response.dto';
@@ -36,7 +40,10 @@ import {
 @Controller('events')
 @ApiTags('events')
 export class EventsController {
-  constructor(private readonly eventsService: EventsService) {}
+  constructor(
+    private readonly eventsService: EventsService,
+    private readonly requestIdentity: RequestIdentityService
+  ) {}
 
   @Get()
   @ApiOperation({ summary: 'Get all events' })
@@ -62,8 +69,9 @@ export class EventsController {
         `Invalid region. Expected ${EXHIBITION_REGIONS.join(' | ')}.`
       );
     }
+    const identity = await this.requestIdentity.resolve(authorization);
     return this.eventsService.findAll({
-      status: eventListStatusForCaller(authorization, status),
+      status: eventListStatusForCaller(canReadUnpublished(identity), status),
       region: parsedRegion,
       page,
       limit,
@@ -80,14 +88,16 @@ export class EventsController {
     @Headers('authorization') authorization?: string
   ) {
     const event = await this.eventsService.findOne(id);
-    if (!canReadEventRecord(authorization, event.status)) {
+    const identity = await this.requestIdentity.resolve(authorization);
+    if (!canReadEventRecord(canReadUnpublished(identity), event.status)) {
       throw new NotFoundException(`Event ${id} not found`);
     }
     return event;
   }
 
   @Post()
-  @UseGuards(AdminBearerGuard)
+  @UseGuards(IdentityGuard, RolesGuard)
+  @Roles('organizer', 'admin')
   @ApiOperation({ summary: 'Create new event' })
   @ApiResponse({ status: 201, type: Event })
   @ApiResponse({ status: 400, description: 'Invalid input' })
@@ -96,7 +106,8 @@ export class EventsController {
   }
 
   @Put(':id')
-  @UseGuards(AdminBearerGuard)
+  @UseGuards(IdentityGuard, RolesGuard)
+  @Roles('organizer', 'admin')
   @ApiOperation({ summary: 'Update event' })
   @ApiParam({ name: 'id', type: String })
   @ApiResponse({ status: 200, type: Event })
@@ -109,7 +120,8 @@ export class EventsController {
   }
 
   @Delete(':id')
-  @UseGuards(AdminBearerGuard)
+  @UseGuards(IdentityGuard, RolesGuard)
+  @Roles('organizer', 'admin')
   @ApiOperation({ summary: 'Delete event' })
   @ApiParam({ name: 'id', type: String })
   @ApiResponse({ status: 200, description: 'Event deleted' })

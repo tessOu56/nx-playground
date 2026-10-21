@@ -1,26 +1,20 @@
-import { isAdminBearerAuthorized } from '../../common/auth/timing-safe-equal';
-
-export function isEventAdmin(authorizationHeader?: string): boolean {
-  return isAdminBearerAuthorized(authorizationHeader);
-}
-
 /**
- * Public list is published-only. Admin bearer may omit status (all rows)
- * or pass a filter. Attacker-supplied status=draft is ignored.
+ * Public list is published-only. Organizer/admin/machine callers may omit
+ * status (all rows) or pass a filter. Attacker-supplied status=draft is ignored.
  */
 export function eventListStatusForCaller(
-  authorizationHeader: string | undefined,
+  canReadUnpublished: boolean,
   requestedStatus: string | undefined
 ): string | undefined {
-  if (isEventAdmin(authorizationHeader)) {
+  if (canReadUnpublished) {
     return requestedStatus;
   }
   return 'published';
 }
 
 export function canReadEventRecord(
-  authorizationHeader: string | undefined,
+  canReadUnpublished: boolean,
   status: string
 ): boolean {
-  return status === 'published' || isEventAdmin(authorizationHeader);
+  return status === 'published' || canReadUnpublished;
 }

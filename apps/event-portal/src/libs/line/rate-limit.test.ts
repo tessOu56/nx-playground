@@ -2,7 +2,6 @@ import assert from 'node:assert/strict';
 import { afterEach, describe, it } from 'node:test';
 
 import {
-  consumeLineAuthTokenRateLimit,
   consumeLineWebhookRateLimit,
   enforceLineRateLimit,
   lineRateLimitDisabled,
@@ -20,16 +19,12 @@ describe('LINE rate limits', () => {
     assert.equal(lineRateLimitDisabled({ LINE_RATE_LIMIT: '0' }), true);
   });
 
-  it('uses separate buckets for webhook and token exchange', async () => {
+  it('rate-limits webhook deliveries per key', async () => {
     const now = 2_000_000;
     assert.equal((await consumeLineWebhookRateLimit('9.9.9.9', now, 1)).ok, true);
     assert.equal(
       (await consumeLineWebhookRateLimit('9.9.9.9', now + 1, 1)).ok,
       false
-    );
-    assert.equal(
-      (await consumeLineAuthTokenRateLimit('9.9.9.9', now, 1)).ok,
-      true
     );
   });
 

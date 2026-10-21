@@ -2,12 +2,12 @@ import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 
 /**
- * Redirect unauthenticated organizers to the auth app (Kratos UI).
- * Attendee LIFF is event-portal (T-226), not this path.
+ * Redirect unauthenticated organizers to event-portal Better Auth login.
+ * Attendee LIFF is event-portal, not this path.
  */
 export function useAuthRedirect(
   isAuthenticated: boolean,
-  ssoUrl = 'http://localhost:3004/login',
+  ssoUrl = 'http://localhost:3000/zh-TW/login',
   isLoading = false,
 ) {
   const location = useLocation();

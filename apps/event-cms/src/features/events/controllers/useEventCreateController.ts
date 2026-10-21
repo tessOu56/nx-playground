@@ -35,7 +35,7 @@ export function useEventCreateController() {
    */
   const handleSubmit = useCallback(async (data: EventFormValue) => {
     if (!isAuthenticated) {
-      window.alert('請先以主辦身份登入（Kratos）。參加者請走 portal／LIFF，不要用這頁註冊。');
+      window.alert('請先以主辦身份登入。參加者請走 portal／LIFF，不要用這頁註冊。');
       return null;
     }
     try {

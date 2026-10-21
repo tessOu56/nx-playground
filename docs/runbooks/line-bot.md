@@ -16,7 +16,7 @@ Tess has **two different LINE Developers channels**. Secrets from one will not w
 | --- | --- | --- |
 | Channel ID | `2012101436` | `2011182044` |
 | Product | Official Account **@006dcvmv** | LIFF ID `2011182044-WawDftvY` |
-| Used for | Webhook HMAC + Reply API | ID token verify (`aud` = Login channel ID) |
+| Used for | Webhook HMAC + Reply API | Better Auth LINE Login (`line-tw`) + LIFF |
 | Vercel env | `LINE_CHANNEL_SECRET` | `NEXT_PUBLIC_LINE_CLIENT_ID` (= `2011182044`) |
 | | `LINE_CHANNEL_ACCESS_TOKEN` | `LINE_CLIENT_SECRET` |
 | | | `NEXT_PUBLIC_LIFF_ID` (= `2011182044-WawDftvY`) |
@@ -55,13 +55,11 @@ Use Tess’s Official Account **@006dcvmv** (Messaging API). The Login/LIFF chan
 
 The handler verifies `x-line-signature = base64(HMAC-SHA256(raw body, LINE_CHANNEL_SECRET))` with a timing-safe compare, then replies with the **Reply API** only (no Push in this phase).
 
-In-app fixed-window limits (60s) run **before** HMAC / LINE OAuth: webhook `180`, token exchange `20`, id-token verify `30`. Exceeded requests return **429** + `Retry-After`. Counters are shared across Vercel isolates via Upstash Redis REST (`UPSTASH_REDIS_REST_URL` + `UPSTASH_REDIS_REST_TOKEN`) or Neon `portal_kv` (when `DATABASE_URL` is set), and fall back to in-process memory if the store is down. Set `LINE_RATE_LIMIT=0` to disable locally. This is not a substitute for Vercel Firewall.
+In-app fixed-window limits (60s) run **before** HMAC: webhook `180`. Exceeded requests return **429** + `Retry-After`. Counters are shared across Vercel isolates via Upstash Redis REST (`UPSTASH_REDIS_REST_URL` + `UPSTASH_REDIS_REST_TOKEN`) or Neon `portal_kv` (when `DATABASE_URL` is set), and fall back to in-process memory if the store is down. Set `LINE_RATE_LIMIT=0` to disable locally. This is not a substitute for Vercel Firewall.
 
-LINE Login tokens from `/api/line/auth/token` and `/api/line/auth/session` are stored in **httpOnly Secure SameSite=Lax** cookies (`nx_line_at`, `nx_line_it`). JSON responses never include `accessToken` / `idToken`. `GET /api/line/auth/session` returns profile claims; `DELETE` logs out.
+LINE Login is Better Auth on the portal (`/api/auth/*`, provider `line-tw`). Callback URL in LINE Developers must be `{BETTER_AUTH_URL}/api/auth/callback/line-tw`. Sessions are httpOnly Secure SameSite=Lax cookies. See [`identity.md`](./identity.md).
 
-Signed webhooks are processed only when `timestamp` is within 10 minutes and `webhookEventId` has not been seen (24h TTL in the same shared store).
-
-LINE Login ID-token verification (P1) stays on `/api/line/auth/token` and `/api/line/auth/id-token` using `NEXT_PUBLIC_LINE_CLIENT_ID` = `2011182044`.
+Signed webhooks are processed only when `timestamp` is within 10 minutes and `webhookEventId` has not been seen (24h TTL in the same shared store). The Messaging webhook is unchanged and does not go through Better Auth.
 
 ## 3. GitHub collector secrets (least-privilege)
 
@@ -161,7 +159,7 @@ pnpm exec tsx tools/collectors/tokyo/run.ts
 4. Send a nonsense keyword. Expect a friendly no-results message plus the same chips.
 5. LINE Developers (channel **2012101436**) → Verify still succeeds after these chats.
 
-If Verify fails: confirm Production env vars are the **Messaging** secret/token (not Login), latest production deploy, and that the webhook path is `/api/line/webhook` (not the Login `/api/line/auth/token` route).
+If Verify fails: confirm Production env vars are the **Messaging** secret/token (not Login), latest production deploy, and that the webhook path is `/api/line/webhook` (not Better Auth `/api/auth/callback/line-tw`).
 
 ## Source terms (Ministry of Culture)
 

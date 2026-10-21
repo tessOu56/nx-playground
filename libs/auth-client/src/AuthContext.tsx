@@ -9,9 +9,10 @@ import {
 
 import {
   type AuthUser,
-  createKratosLogoutUrl,
-  fetchKratosSession,
-} from './kratos-session';
+  fetchBetterAuthSession,
+  hasOrganizerAccess,
+  signOutBetterAuth,
+} from './session';
 
 interface AuthContextType {
   user: AuthUser | null;
@@ -27,13 +28,13 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 interface AuthProviderProps {
   children: ReactNode;
   initialUser?: AuthUser | null;
-  kratosPublicUrl?: string;
+  authUrl?: string;
 }
 
 export function AuthProvider({
   children,
   initialUser = null,
-  kratosPublicUrl = 'http://localhost:4433',
+  authUrl = 'http://localhost:3000',
 }: AuthProviderProps) {
   const [user, setUser] = useState<AuthUser | null>(initialUser);
   const [isLoading, setIsLoading] = useState(!initialUser);
@@ -44,9 +45,11 @@ export function AuthProvider({
       return;
     }
     let cancelled = false;
-    fetchKratosSession(kratosPublicUrl)
+    fetchBetterAuthSession(authUrl)
       .then(sessionUser => {
-        if (!cancelled) setUser(sessionUser);
+        if (!cancelled) {
+          setUser(hasOrganizerAccess(sessionUser) ? sessionUser : null);
+        }
       })
       .catch(() => {
         if (!cancelled) setUser(null);
@@ -57,18 +60,15 @@ export function AuthProvider({
     return () => {
       cancelled = true;
     };
-  }, [initialUser, kratosPublicUrl]);
+  }, [initialUser, authUrl]);
 
   const login = (userData: AuthUser) => {
     setUser(userData);
   };
 
   const logout = async () => {
-    const logoutUrl = await createKratosLogoutUrl(kratosPublicUrl);
+    await signOutBetterAuth(authUrl);
     setUser(null);
-    if (logoutUrl) {
-      window.location.href = logoutUrl;
-    }
   };
 
   const updateUser = (userData: Partial<AuthUser>) => {
@@ -84,7 +84,7 @@ export function AuthProvider({
       logout,
       updateUser,
     }),
-    [user, isLoading],
+    [user, isLoading, authUrl]
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

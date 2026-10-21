@@ -12,7 +12,7 @@ Local Nest + Postgres remains the interview / future money spine. Do not point l
 | Hobby api-mock | https://nx-event-stack-api.vercel.app/api | Memory catalog + mock pay / tickets |
 | Nest API (STOP-015 Render) | set after Blueprint apply (`nx-event-stack-nest`) | Interview / funds path (not the public URL) |
 
-Public portal `NEXT_PUBLIC_API_BASE_URL` = Hobby `/api` when that project is a real mock. If `nx-event-stack-api.vercel.app` is serving the Next portal instead of api-mock, event-portal uses a **same-origin labelled-demo BFF** (`/api/events`, memory `api-fixtures`). That BFF is **not** the Nest funds path and must not be described as a money API. Local CMS calls same-origin `/cms-api`; the Vite BFF attaches `ADMIN_API_TOKEN` after a Kratos session and proxies to Nest (`EVENT_STACK_NEST_URL`, default `http://localhost:3001/api`). Do not create a fifth Vercel project.
+Public portal `NEXT_PUBLIC_API_BASE_URL` = Hobby `/api` when that project is a real mock. If `nx-event-stack-api.vercel.app` is serving the Next portal instead of api-mock, event-portal uses a **same-origin labelled-demo BFF** (`/api/events`, memory `api-fixtures`). That BFF is **not** the Nest funds path and must not be described as a money API. Local CMS calls same-origin `/cms-api`; the Vite BFF verifies a Better Auth organizer session and forwards a short-lived JWT to Nest (`EVENT_STACK_NEST_URL`, default `http://localhost:3001/api`). Do not create a fifth Vercel project.
 
 **Fixture updates:** edit `libs/api-fixtures/src/events.json` (and keep `apps/api-mock/src/data/events.json` in sync). Redeploying `nx-event-stack-api` refreshes the dedicated mock; the portal BFF reads bundled fixtures on the next portal deploy. Check portal `GET /api/health` for `catalogEvents` + `labelledDemo: true`. Until the dedicated mock is a real api-mock, event-portal merges / falls back to bundled fixtures for labelled demo fields (speakers, venue, organizer).
 
@@ -20,9 +20,11 @@ Local CMS → Nest (browser never holds the admin token):
 
 ```
 EVENT_STACK_NEST_URL=http://localhost:3001/api
-ADMIN_API_TOKEN=<local server-only token>
-KRATOS_PUBLIC_URL=http://localhost:4433
-ALLOWED_ORGANIZER_EMAILS=organizer@nx-playground.local
+VITE_AUTH_URL=http://localhost:3000
+BETTER_AUTH_URL=http://localhost:3000
+AUTH_JWKS_URL=http://localhost:3000/api/auth/jwks
+AUTH_JWT_ISSUER=http://localhost:3000
+ADMIN_API_TOKEN=<local server-only token for cron/collector only>
 ```
 
 ## Vercel vs Render

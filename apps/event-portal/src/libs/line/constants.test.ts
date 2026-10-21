@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import { describe, it } from 'node:test';
 
-import { getLineRedirectUri } from './constants';
+import { getLineRedirectUri, lineTwCallbackUrl } from './constants';
 
 describe('getLineRedirectUri', () => {
   it('uses the page origin on a hosted site when env is localhost', () => {
@@ -43,6 +43,13 @@ describe('getLineRedirectUri', () => {
         'https://nx-event-portal.vercel.app'
       ),
       'https://nx-event-portal.vercel.app'
+    );
+  });
+
+  it('names the Better Auth LINE Taiwan callback path', () => {
+    assert.equal(
+      lineTwCallbackUrl('https://nx-event-portal.vercel.app/'),
+      'https://nx-event-portal.vercel.app/api/auth/callback/line-tw'
     );
   });
 });

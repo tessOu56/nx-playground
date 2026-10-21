@@ -39,6 +39,10 @@ export function canStartLineLogin(): boolean {
  * LINE Login `redirect_uri`. Hosted demo must not send localhost when the
  * page is on Vercel — LINE Developers callback must still allowlist this origin.
  */
+export function lineTwCallbackUrl(origin: string): string {
+  return `${origin.replace(/\/$/, '')}/api/auth/callback/line-tw`;
+}
+
 export function getLineRedirectUri(
   location?: {
     protocol: string;

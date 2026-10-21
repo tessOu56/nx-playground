@@ -6,14 +6,6 @@ export * from './share';
 export * from './auth';
 export * from './storage';
 export {
-  LINE_ID_TOKEN_ISSUER,
-  LINE_ID_TOKEN_VERIFY_URL,
-  LineIdTokenVerificationError,
-  verifyLineIdToken,
-} from './verify-id-token';
-export type { LineVerifiedIdToken } from './verify-id-token';
-export { verifyLiffIdToken } from './verify-id-token-client';
-export {
   safeLineLoginReturnPath,
   stripLineOauthCallbackParams,
   isLineLoginCancelledError,

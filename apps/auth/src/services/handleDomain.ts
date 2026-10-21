@@ -1,28 +1,23 @@
-export function getKratosPublicUrl(): string {
+export function getPortalAuthUrl(): string {
   const fromEnv =
     (typeof import.meta !== 'undefined' &&
       import.meta.env &&
-      import.meta.env.VITE_ORY_PUBLIC_API) ||
-    'http://localhost:4433';
+      import.meta.env.VITE_AUTH_URL) ||
+    'http://localhost:3000';
   return String(fromEnv).replace(/\/$/, '');
 }
 
-/** Kratos public origin used by the auth UI on :3004. */
-export function handleDomain() {
-  return getKratosPublicUrl();
-}
-
-export function startKratosBrowserFlow(
-  flow: 'login' | 'registration',
-  returnTo?: string,
-) {
-  const kratos = getKratosPublicUrl();
+export function portalLoginUrl(returnTo?: string): string {
+  const portal = getPortalAuthUrl();
   const target =
     returnTo ||
     (typeof window !== 'undefined'
       ? new URLSearchParams(window.location.search).get('return_to')
       : null) ||
     'http://localhost:3002/events';
-  const url = `${kratos}/self-service/${flow}/browser?return_to=${encodeURIComponent(target)}`;
-  window.location.replace(url);
+  return `${portal}/zh-TW/login?return_to=${encodeURIComponent(target)}`;
+}
+
+export function redirectToPortalLogin(returnTo?: string): void {
+  window.location.replace(portalLoginUrl(returnTo));
 }

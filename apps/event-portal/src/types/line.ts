@@ -23,9 +23,9 @@ export interface LiffUserInfo {
     pictureUrl?: string;
     statusMessage?: string;
   };
-  idToken: string | null;
-  accessToken: string | null;
-  decodedIdToken: {
+  idToken?: string | null;
+  accessToken?: string | null;
+  decodedIdToken?: {
     sub: string; // LINE ID
     name?: string;
     picture?: string;
