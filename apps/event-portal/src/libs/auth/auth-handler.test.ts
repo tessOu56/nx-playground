@@ -14,10 +14,19 @@ describe('Better Auth passkey and linking HTTP routes', () => {
   let GET: AuthHandler;
   let POST: AuthHandler;
 
-  before(async () => {
-    const route = await import('../../app/api/auth/[...all]/route');
-    GET = route.GET;
-    POST = route.POST;
+  before(async t => {
+    try {
+      const route = await import('../../app/api/auth/[...all]/route');
+      GET = route.GET;
+      POST = route.POST;
+    } catch (error) {
+      const message = error instanceof Error ? error.message : String(error);
+      if (message.includes('.prisma/client')) {
+        t.skip('requires prisma generate');
+        return;
+      }
+      throw error;
+    }
   });
 
   async function authRequest(
