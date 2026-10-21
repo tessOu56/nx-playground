@@ -49,6 +49,7 @@ export default defineConfig(({ mode }) => {
     watch: false,
     globals: true,
     environment: 'jsdom',
+    include: ['src/**/*.{test,spec}.{ts,tsx}'],
     passWithNoTests: true,
   },
   };
