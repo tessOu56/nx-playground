@@ -10,14 +10,10 @@ import {
   type CmsBffConfig,
 } from '../server/cms-bff';
 
-const token = 'server-only-admin-token';
-
 function config(overrides: Partial<CmsBffConfig> = {}): CmsBffConfig {
   return {
     nestApiBaseUrl: 'http://localhost:3001/api',
-    adminApiToken: token,
-    kratosPublicUrl: 'http://localhost:4433',
-    allowedOrganizerEmails: 'owner@example.com',
+    authUrl: 'http://localhost:3000',
     nodeEnv: 'production',
     allowedOrigins: ['http://localhost:3002'],
     ...overrides,
@@ -25,94 +21,106 @@ function config(overrides: Partial<CmsBffConfig> = {}): CmsBffConfig {
 }
 
 describe('authorizeCmsBffRequest', () => {
-  it('fails closed when ADMIN_API_TOKEN is unset', async () => {
-    const verifySession = vi.fn();
+  it('fails closed without an organizer session', async () => {
+    const issueOrganizerAccess = vi.fn(async () => null);
     await expect(
       authorizeCmsBffRequest({
         method: 'POST',
         origin: 'http://localhost:3002',
-        cookie: 'ory_kratos_session=abc',
-        config: config({ adminApiToken: '', verifySession }),
+        cookie: 'better-auth.session_token=abc',
+        config: config({ issueOrganizerAccess }),
       })
     ).resolves.toEqual({
       ok: false,
       status: 401,
       body: '{"message":"Unauthorized"}',
     });
-    expect(verifySession).not.toHaveBeenCalled();
+    expect(issueOrganizerAccess).toHaveBeenCalled();
   });
 
-  it('rejects production writes without a verified session', async () => {
-    await expect(
-      authorizeCmsBffRequest({
-        method: 'POST',
-        origin: 'http://localhost:3002',
-        config: config({
-          verifySession: async () => null,
-        }),
-      })
-    ).resolves.toMatchObject({ ok: false, status: 401 });
-  });
-
-  it('rejects a verified session that is not on the allowlist', async () => {
+  it('rejects an attendee session without organizer/admin', async () => {
     await expect(
       authorizeCmsBffRequest({
         method: 'GET',
-        cookie: 'ory_kratos_session=abc',
+        cookie: 'better-auth.session_token=abc',
         config: config({
-          verifySession: async () => ({
-            id: 'id_1',
-            email: 'stranger@example.com',
-          }),
+          issueOrganizerAccess: async () => null,
         }),
       })
     ).resolves.toMatchObject({ ok: false, status: 401 });
   });
 
-  it('attaches the server token after a verified allowlisted session', async () => {
+  it('forwards a Better Auth JWT after an organizer session', async () => {
     const result = await authorizeCmsBffRequest({
       method: 'POST',
       origin: 'http://localhost:3002',
-      cookie: 'ory_kratos_session=abc',
+      cookie: 'better-auth.session_token=abc',
       config: config({
-        verifySession: async () => ({
-          id: 'id_1',
-          email: 'owner@example.com',
+        issueOrganizerAccess: async () => ({
+          id: 'user_1',
+          roles: ['organizer'],
+          token: 'short-lived-jwt',
         }),
       }),
     });
     expect(result).toEqual({
       ok: true,
-      authorization: `Bearer ${token}`,
+      authorization: 'Bearer short-lived-jwt',
     });
   });
 
-  it('ignores EVENT_STACK_CMS_DEV_AUTH in production', async () => {
+  it('issues a JWT only after get-session shows organizer or admin', async () => {
+    const fetchImpl = vi.fn(async (input: RequestInfo | URL) => {
+      const url = String(input);
+      if (url.endsWith('/api/auth/get-session')) {
+        return new Response(
+          JSON.stringify({
+            user: { id: 'user_1', roles: ['organizer'] },
+          }),
+          { status: 200 }
+        );
+      }
+      if (url.endsWith('/api/auth/token')) {
+        return new Response(JSON.stringify({ token: 'short-lived-jwt' }), {
+          status: 200,
+        });
+      }
+      return new Response('not found', { status: 404 });
+    });
     await expect(
       authorizeCmsBffRequest({
         method: 'POST',
         origin: 'http://localhost:3002',
-        config: config({
-          eventStackCmsDevAuth: 'true',
-          verifySession: async () => null,
-        }),
+        cookie: 'better-auth.session_token=abc',
+        config: config({ fetchImpl: fetchImpl as unknown as typeof fetch }),
       })
-    ).resolves.toMatchObject({ ok: false, status: 401 });
+    ).resolves.toEqual({
+      ok: true,
+      authorization: 'Bearer short-lived-jwt',
+    });
   });
 
-  it('allows the local-only dev path when not in production', async () => {
+  it('denies CMS access for an attendee session', async () => {
+    const fetchImpl = vi.fn(async (input: RequestInfo | URL) => {
+      const url = String(input);
+      if (url.endsWith('/api/auth/get-session')) {
+        return new Response(
+          JSON.stringify({ user: { id: 'attendee', roles: [] } }),
+          { status: 200 }
+        );
+      }
+      return new Response(JSON.stringify({ token: 'should-not-issue' }), {
+        status: 200,
+      });
+    });
     await expect(
       authorizeCmsBffRequest({
-        method: 'POST',
-        config: config({
-          nodeEnv: 'development',
-          eventStackCmsDevAuth: 'true',
-          verifySession: async () => {
-            throw new Error('whoami must not run for local dev auth');
-          },
-        }),
+        method: 'GET',
+        cookie: 'better-auth.session_token=abc',
+        config: config({ fetchImpl: fetchImpl as unknown as typeof fetch }),
       })
-    ).resolves.toEqual({ ok: true, authorization: `Bearer ${token}` });
+    ).resolves.toMatchObject({ ok: false, status: 401 });
+    expect(fetchImpl).toHaveBeenCalledTimes(1);
   });
 
   it('rejects production mutations from an unexpected Origin', async () => {
@@ -120,11 +128,12 @@ describe('authorizeCmsBffRequest', () => {
       authorizeCmsBffRequest({
         method: 'DELETE',
         origin: 'https://evil.example',
-        cookie: 'ory_kratos_session=abc',
+        cookie: 'better-auth.session_token=abc',
         config: config({
-          verifySession: async () => ({
-            id: 'id_1',
-            email: 'owner@example.com',
+          issueOrganizerAccess: async () => ({
+            id: 'user_1',
+            roles: ['admin'],
+            token: 'short-lived-jwt',
           }),
         }),
       })
@@ -160,9 +169,7 @@ describe('CMS client bundle', () => {
   it('does not inline privileged tokens into Vite define', () => {
     const src = readFileSync(resolve(__dirname, '../vite.config.ts'), 'utf8');
     expect(src).not.toMatch(/VITE_CMS_ORGANIZER_API_TOKEN/);
-    expect(src).not.toMatch(
-      /['"]process\.env\.ADMIN_API_TOKEN['"]\s*:/
-    );
+    expect(src).not.toMatch(/['"]process\.env\.ADMIN_API_TOKEN['"]\s*:/);
     expect(src).toMatch(/['"]\/cms-api['"]/);
   });
 });

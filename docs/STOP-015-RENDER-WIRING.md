@@ -6,7 +6,7 @@ When owner reports STOP-015 with `https://<service>.onrender.com/health`:
 
 - Blueprint: [`render.yaml`](../render.yaml)
 - Build/start: [`scripts/render-event-stack-api.sh`](../scripts/render-event-stack-api.sh)
-- Env (Dashboard, never commit): `DATABASE_URL` (existing Neon **event-stack** / `snowy-bird-20372699`, **direct/unpooled**), `CORS_ORIGIN`, `ADMIN_API_TOKEN` (required for event writes; fail closed if unset; server-only), `KRATOS_PUBLIC_URL` (Kratos `sessions/whoami` for organizer users/stats; unset = session path fails closed), `ALLOWED_ORGANIZER_EMAILS` (verified session emails only), `EVENT_STACK_CMS_DEV_AUTH=false`. Do not set `ALLOW_NONPROD_PAYMENTS` on the public host. Do not set `VITE_CMS_ORGANIZER_API_TOKEN` or `CMS_ORGANIZER_API_TOKEN`.
+- Env (Dashboard, never commit): `DATABASE_URL` (existing Neon **event-stack** / `snowy-bird-20372699`, **direct/unpooled**), `CORS_ORIGIN`, `ADMIN_API_TOKEN` (cron/collector Nest writes only; fail closed if unset; server-only), `AUTH_JWKS_URL` (`{BETTER_AUTH_URL}/api/auth/jwks`), `AUTH_JWT_ISSUER` (same as `BETTER_AUTH_URL`), `AUTH_JWT_AUDIENCE=event-stack-api`. Do not set `ALLOW_NONPROD_PAYMENTS` on the public host. Do not set `VITE_CMS_ORGANIZER_API_TOKEN` or `CMS_ORGANIZER_API_TOKEN`. See [`docs/runbooks/identity.md`](./runbooks/identity.md).
 - Do **not** create a new Neon project. Copy DSN from Neon Console → Connect, or from Vercel `nx-event-stack-api` → `DATABASE_URL`. `render.yaml` has `sync: false` so Blueprint leaves the field empty until you paste it.
 - **Build** = `pnpm install` + Nest webpack only (`HUSKY=0`). **Start** = `prisma migrate deploy` then `node dist/apps/api-server/main.js`. Empty `DATABASE_URL` fails at **start** with a clear message (not a cryptic webpack exit).
 
@@ -26,10 +26,8 @@ If event-cms is deployed later, serve it with the Vite BFF (`/cms-api`) — do n
 
 ```
 EVENT_STACK_NEST_URL=https://<render-host>.onrender.com/api
-ADMIN_API_TOKEN=<same as Render ADMIN_API_TOKEN>
-KRATOS_PUBLIC_URL=<production Kratos public URL>
-ALLOWED_ORGANIZER_EMAILS=<comma-separated organizer emails>
-EVENT_STACK_CMS_DEV_AUTH=false
+VITE_AUTH_URL=https://nx-event-portal.vercel.app
+BETTER_AUTH_URL=https://nx-event-portal.vercel.app
 CMS_BFF_ORIGIN=https://<cms-host>
 ```
 

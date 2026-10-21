@@ -84,6 +84,7 @@ export const techToCategoryMap: Record<string, TechCategory> = {
   NestJS: 'backend',
   Prisma: 'backend',
   PostgreSQL: 'backend',
+  'Better Auth': 'backend',
   'Ory Kratos': 'backend',
   'OAuth 2.0': 'backend',
   Authentication: 'backend',

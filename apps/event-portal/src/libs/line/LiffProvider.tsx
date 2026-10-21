@@ -11,39 +11,28 @@ import React, {
   type ReactNode,
 } from 'react';
 
-import {
-  lineLogin,
-  lineLogout,
-  isLiffEnvironment,
-  handleLineCallback,
-  fetchLineServerSession,
-} from './auth';
+import { authClient } from '../auth/auth-client';
+import { extractLocale } from '../i18n/localeRoutes';
+
+import { lineLogin, lineLogout, isLiffEnvironment } from './auth';
 import {
   initializeLiff,
   getLiffContext,
-  getFullUserInfo,
   isLiffInitialized,
 } from './liff';
 import {
   saveLineLoginReturnPath,
-  stripLineOauthCallbackParams,
   takeLineLoginReturnPath,
 } from './login-return';
-import { extractLocale } from '../i18n/localeRoutes';
-import { saveUserInfo, restoreUserInfo, clearLiffState } from './storage';
+import { clearLiffState } from './storage';
 
 import type { LiffUserInfo, LiffContextType } from '@/types';
 
-// 創建 LIFF Context
-// 由於檔案開頭有 'use client'，這個操作只會在客戶端執行，不會有 SSR 錯誤
 const LiffContext = createContext<LiffContextType | undefined>(undefined);
 
-// 方便的 Hooks 讓子元件能使用 LIFF 狀態
 export const useLiff = (): LiffContextType => {
   const context = useContext(LiffContext);
   if (!context) {
-    // 雖然 `useLiff` 應該被 `LiffProvider` 包裹，
-    // 但為了安全，如果沒有 Provider，仍返回預設值。
     return {
       isInitialized: false,
       isInClient: false,
@@ -60,20 +49,23 @@ export const useLiff = (): LiffContextType => {
   return context;
 };
 
-function finishLineOauthReturn(loggedIn: boolean) {
-  if (typeof window === 'undefined' || !loggedIn) return;
-  const locale = extractLocale(window.location.pathname) ?? 'zh-TW';
-  const returnPath = takeLineLoginReturnPath(locale);
-  const qs = stripLineOauthCallbackParams(window.location.search);
-  const next = qs ? `${returnPath}?${qs}` : returnPath;
-  if (returnPath !== window.location.pathname) {
-    window.location.replace(next);
-    return;
-  }
-  const currentQs = window.location.search.replace(/^\?/, '');
-  if (qs !== currentQs) {
-    window.history.replaceState({}, '', next);
-  }
+function userInfoFromSession(session: {
+  user: {
+    id: string;
+    name?: string | null;
+    image?: string | null;
+    lineId?: string | null;
+  };
+}): LiffUserInfo {
+  const lineId = session.user.lineId ?? null;
+  return {
+    profile: {
+      userId: lineId ?? session.user.id,
+      displayName: session.user.name ?? '',
+      pictureUrl: session.user.image ?? undefined,
+    },
+    lineId,
+  };
 }
 
 interface LiffProviderProps {
@@ -94,12 +86,9 @@ export const LiffProvider: FC<LiffProviderProps> = ({ children }) => {
     logout: () => {},
   });
 
-  // 使用 ref 來追蹤初始化狀態，避免重複初始化
   const initRef = useRef(false);
 
-  // 初始化 LIFF 相關邏輯
   useEffect(() => {
-    // 確保程式碼只在客戶端運行一次
     if (initRef.current || typeof window === 'undefined') {
       return;
     }
@@ -118,57 +107,32 @@ export const LiffProvider: FC<LiffProviderProps> = ({ children }) => {
       };
 
       try {
-        const urlParams = new URLSearchParams(window.location.search);
-        const hasCallback = urlParams.has('code') && urlParams.has('state');
+        if (finalState.isInClient && !isLiffInitialized()) {
+          const liffSuccess = await initializeLiff();
+          if (liffSuccess) {
+            finalState.context = await getLiffContext();
+          }
+        }
 
-        let userInfo: LiffUserInfo | null = null;
-        let liffContext = null;
-
-        // 步驟 1: 優先處理 LINE 登入回調
-        if (hasCallback) {
+        let { data } = await authClient.getSession();
+        if (!data?.user && finalState.isInClient) {
           try {
-            userInfo = await handleLineCallback();
-          } catch (callbackError) {
-            logger.warn('LINE callback processing failed (may be navigation)', {
-              error: callbackError instanceof Error ? callbackError.message : String(callbackError)
+            await lineLogin();
+            ({ data } = await authClient.getSession());
+          } catch (error) {
+            logger.warn('LIFF Better Auth sign-in skipped', {
+              error: error instanceof Error ? error.message : String(error),
             });
           }
         }
 
-        // 步驟 2: 如果回調失敗或不存在，嘗試從 LIFF 環境或本地儲存獲取資訊
-        if (!userInfo) {
-          if (finalState.isInClient && !isLiffInitialized()) {
-            const liffSuccess = await initializeLiff();
-            if (liffSuccess) {
-              liffContext = await getLiffContext();
-              if (liffContext?.isLoggedIn) {
-                userInfo = await getFullUserInfo();
-              }
-            }
-          }
-          if (!userInfo) {
-            userInfo = await fetchLineServerSession();
-          }
-          if (!userInfo) {
-            userInfo = restoreUserInfo();
-          }
-        }
-
-        // 步驟 3: 統一更新狀態
-        if (liffContext) {
-          finalState.isInitialized = true;
-          finalState.isLoggedIn = liffContext.isLoggedIn;
-          finalState.context = liffContext;
-        } else {
-          finalState.isInitialized = true;
-          finalState.isLoggedIn = !!userInfo;
-        }
-
-        if (userInfo) {
-          finalState.profile = userInfo.profile;
+        finalState.isInitialized = true;
+        if (data?.user) {
+          const userInfo = userInfoFromSession(data);
+          finalState.isLoggedIn = true;
           finalState.userInfo = userInfo;
+          finalState.profile = userInfo.profile;
           finalState.lineId = userInfo.lineId;
-          saveUserInfo(userInfo);
         }
 
         setLiffState(prev => ({
@@ -176,8 +140,12 @@ export const LiffProvider: FC<LiffProviderProps> = ({ children }) => {
           ...finalState,
         }));
 
-        if (hasCallback) {
-          finishLineOauthReturn(Boolean(userInfo));
+        if (data?.user) {
+          const locale = extractLocale(window.location.pathname) ?? 'zh-TW';
+          const returnPath = takeLineLoginReturnPath(locale);
+          if (returnPath !== window.location.pathname) {
+            window.location.replace(returnPath);
+          }
         }
       } catch (error) {
         setLiffState(prev => ({
@@ -191,7 +159,6 @@ export const LiffProvider: FC<LiffProviderProps> = ({ children }) => {
     initLiffAuth();
   }, []);
 
-  // 登入與登出處理函數
   const handleLogin = async () => {
     try {
       saveLineLoginReturnPath(window.location.pathname);

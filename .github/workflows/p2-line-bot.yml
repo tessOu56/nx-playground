@@ -28,10 +28,8 @@ jobs:
             apps/event-portal/src/libs/http/*.test.ts \
             apps/event-portal/src/libs/line/*.test.ts \
             apps/event-portal/src/libs/line/bot/*.test.ts \
-            apps/event-portal/src/app/api/line/webhook/route.test.ts \
-            apps/event-portal/src/app/api/line/auth/token/route.test.ts \
-            apps/event-portal/src/app/api/line/auth/id-token/route.test.ts \
-            apps/event-portal/src/app/api/line/auth/session/route.test.ts
+            apps/event-portal/src/libs/auth/*.test.ts \
+            apps/event-portal/src/app/api/line/webhook/route.test.ts
 
       - name: Collector tests (Taipei + Tokyo)
         run: |
@@ -45,3 +43,9 @@ jobs:
 
       - name: CMS BFF fail-closed auth tests
         run: pnpm exec nx test @nx-playground/event-cms --skip-nx-cache
+
+      - name: Auth-client session mapping tests
+        run: pnpm exec nx test auth-client --skip-nx-cache
+
+      - name: Auth app portal-redirect tests
+        run: pnpm exec nx test @nx-playground/auth --skip-nx-cache

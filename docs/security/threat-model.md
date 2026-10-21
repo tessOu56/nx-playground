@@ -2,7 +2,7 @@
 
 ## Executive summary
 
-The internet-facing risk concentrates on **event-portal** (Vercel: LINE webhook, LINE Login token proxy, public exhibition search, weekly Discord digest) and **api-server** (Render: public catalog reads, shared-secret writes, organizer user/stats). Neon holds the published exhibition catalog, embeddings, and organizer `users` rows. LINE/Discord secrets and `DATABASE_URL` are the highest-value credentials. This pass closed two High gaps on Nest (unauthenticated `GET /users/:id`, public draft-event reads) and two further High organizer-auth gaps: production `X-Organizer-Email` is no longer an identity proof, and CMS no longer inlines `ADMIN_API_TOKEN` / organizer secrets into the Vite bundle. Medium leftovers TM-005–008 are closed in source (httpOnly LINE session cookies, shared rate-limit/replay store, collector least-privilege role). Residual High items in this model are closed; remaining open items are Low plus operator follow-through (hosted Kratos still absent; collector password must be set).
+The internet-facing risk concentrates on **event-portal** (Vercel: LINE webhook, Better Auth `/api/auth/*`, public exhibition search, weekly Discord digest) and **api-server** (Render: public catalog reads, JWKS JWT writes, organizer user/stats). Neon holds the published exhibition catalog, embeddings, catalog `users` rows, and identity tables (`identity_*`, `user_role`). LINE/Discord secrets, `BETTER_AUTH_SECRET`, JWKS private keys, and `DATABASE_URL` are the highest-value credentials. Phase 1 identity replaces custom LINE PKCE cookies and local Kratos with Better Auth (LINE Taiwan + Google, database httpOnly sessions) and Nest JWKS verification. Residual High items in this model are closed; remaining open items are Low plus operator follow-through (Google/LINE console callbacks, first admin grant, collector password, hosted CMS cookie domain).
 
 ## Scope and assumptions
 
@@ -14,7 +14,7 @@ The internet-facing risk concentrates on **event-portal** (Vercel: LINE webhook,
 
 - Production C-end is `nx-event-portal.vercel.app` with Neon `DATABASE_URL` on the Next.js server and LINE Messaging/Login configured.
 - Nest is intended to be internet-reachable (`render.yaml` public web service) against the same Neon database.
-- Organizers authenticate to **Ory Kratos only in local docker-compose** (`make kratos-up` → `:4433`). There is **no hosted Kratos** in `render.yaml`, Vercel, or env examples. Nest/CMS call `sessions/whoami` when `KRATOS_PUBLIC_URL` is set; production organizer writes already work with server-only `ADMIN_API_TOKEN`. Production does not honor `X-Organizer-Email` alone.
+- Organizers and attendees authenticate to **Better Auth on event-portal** (`/api/auth/*`, LINE `line-tw` + Google, no passwords). Elevated roles (`organizer` / `admin`) live in `user_role` and are admin-assigned (CLI `grant-identity-role`). Nest verifies Bearer JWTs via JWKS (`iss`/`aud`/`exp`). `ADMIN_API_TOKEN` is machine-only (cron/collector). CMS BFF requires an organizer/admin session and never attaches the admin token.
 - Collectors run only as GitHub Actions / local CLI (no HTTP listener).
 - `api-mock` on Vercel stays in-memory (`EVENT_STACK_STORE` not postgres).
 - Catalog content is public once `status = 'published'`; drafts and `users` emails are not.
@@ -23,7 +23,7 @@ The internet-facing risk concentrates on **event-portal** (Vercel: LINE webhook,
 
 1. Is Nest on Render live today against production Neon, or still dark?
 2. Is event-cms hosted (it must run the Vite `/cms-api` BFF; static-only hosting cannot write)?
-3. **Answered:** no production Kratos URL exists. Kratos is local-only (`docker-compose.kratos.yml`, localhost CORS/cookies, `--dev`, SQLite). `KRATOS_PUBLIC_URL` on Render is an unset dashboard field (`sync: false`). Vercel has `nx-event-portal` only — no auth/Kratos project. **Recommendation (single operator):** keep production CMS/Nest on `ADMIN_API_TOKEN`; do not stand up self-hosted Kratos on Render for one person. If a second organizer needs login later, use **Ory Network free tier** and point `KRATOS_PUBLIC_URL` at it (matches existing `sessions/whoami`). Do not implement a new IdP in this change.
+3. **Answered:** identity is Better Auth on the portal (same Vercel project). Hosted CMS on a different site needs a shared parent cookie domain or OIDC (phase 1 is localhost / same-site). First admin must be granted via CLI after a social sign-in. Passkeys are phase 2.
 
 ## System model
 
@@ -34,7 +34,7 @@ The internet-facing risk concentrates on **event-portal** (Vercel: LINE webhook,
 | event-portal             | Next.js on Vercel         | `vercel.json`, `apps/event-portal/src/app/api/**`             |
 | api-server               | NestJS + Prisma on Render | `apps/api-server/src/main.ts`, `render.yaml`                  |
 | event-cms                | Vite SPA                  | `apps/event-cms/vite.config.ts`                               |
-| auth                     | Vite SPA → Kratos         | `apps/auth/src/route.tsx`                                     |
+| auth                     | Vite SPA → portal login   | `apps/auth/src/route.tsx`                                     |
 | api-mock                 | In-memory OpenAPI mock    | `apps/api-mock/src/handler.ts`                                |
 | Collectors               | CLI / GitHub Actions      | `tools/collectors/**`, `.github/workflows/collect-taipei.yml` |
 | Neon Postgres + pgvector | Shared catalog + users    | `apps/api-server/prisma/schema.prisma`                        |
@@ -42,14 +42,14 @@ The internet-facing risk concentrates on **event-portal** (Vercel: LINE webhook,
 
 ### Data flows and trust boundaries
 
-- **Internet → event-portal (HTTPS).** Search query strings, LINE OAuth `code` + PKCE verifier, LINE webhook raw body. Controls: origin allowlist on token routes (`apps/event-portal/src/libs/line/request-origin.ts:12-25`), HMAC on webhook (`apps/event-portal/src/libs/line/bot/signature.ts:17-30`), shared rate limits (Upstash or Neon `portal_kv`, memory fallback), `CRON_SECRET` on digest. Validation: query length cap 2048 (`search/route.ts:17-25`); webhook 256 KiB (`webhook/route.ts:16-44`).
+- **Internet → event-portal (HTTPS).** Search query strings, Better Auth OAuth callbacks, LINE webhook raw body. Controls: Better Auth trusted origins + PKCE on LINE; HMAC on webhook (`apps/event-portal/src/libs/line/bot/signature.ts:17-30`), shared rate limits (Upstash or Neon `portal_kv`, memory fallback), `CRON_SECRET` on digest. Validation: query length cap 2048 (`search/route.ts:17-25`); webhook 256 KiB (`webhook/route.ts:16-44`).
 - **LINE → event-portal webhook (HTTPS).** Messaging events. Control: `x-line-signature` HMAC-SHA256 over raw bytes; fail closed if `LINE_CHANNEL_SECRET` unset (`webhook/route.ts:36-48`). Replay: reject stale `timestamp` (>10 min) and dedupe `webhookEventId` (24h TTL).
 - **event-portal → Neon (TLS, tagged SQL).** Keyword / region / date / optional embedding vector. Control: server-only `DATABASE_URL`; `status = 'published'` (`sql.ts:247`); bound parameters (`sql.ts:229-261`); ILIKE wildcards stripped (`sql.ts:99-104`).
-- **event-portal → LINE token/profile APIs (HTTPS).** Authorization code + `LINE_CLIENT_SECRET`. Control: PKCE required; `redirect_uri` pinned server-side (`token/route.ts:97-110`). Access/id tokens stay in httpOnly cookies (`session-cookies.ts`); JSON returns profile only.
+- **event-portal → LINE / Google token endpoints (HTTPS).** Authorization code + channel/client secrets via Better Auth. Control: PKCE on LINE; provider tokens stripped before persist (`line-account-map.ts`); session cookie httpOnly Secure SameSite=Lax. Email is optional and never used as an account-link key.
 - **event-portal → Discord (HTTPS POST).** Digest text. Control: `CRON_SECRET` bearer (`digest/auth.ts:21-30`); webhook URL host/path allowlist (`publish.ts:10-38`); `allowed_mentions.parse = []` (`publish.ts:81-84`).
-- **Internet → api-server (HTTPS `/api`).** Public event/catalog reads; Bearer `ADMIN_API_TOKEN` on event mutations; organizer users/stats require a verified Kratos session (allowlisted email) or `ADMIN_API_TOKEN`. Controls: CORS allowlist (`main.ts:29-38`); `ValidationPipe` whitelist (`main.ts:41-47`); `AdminBearerGuard` timing-safe fail-closed (`timing-safe-equal.ts:21-31`); `PermissionsGuard` fail-closed (`permissions.guard.ts:16-18`); production email-header deny (`organizer-identity.ts`).
-- **event-cms browser → CMS BFF `/cms-api` → api-server.** Browser sends the Kratos cookie only. The Vite BFF verifies `sessions/whoami`, then attaches server-only `ADMIN_API_TOKEN` (`apps/event-cms/server/cms-bff.ts`). No organizer/admin secret is in the client bundle (`event-cms/vite.config.ts` `define`).
-- **event-cms / auth → Kratos.** Browser cookie `sessions/whoami`. Control lives in Kratos, not this repo.
+- **Internet → api-server (HTTPS `/api`).** Public event/catalog reads; Bearer JWT (JWKS) or `ADMIN_API_TOKEN` (machine) on mutations. Organizer users/stats require `organizer`/`admin` (`RolesGuard` default-deny). Controls: CORS allowlist (`main.ts:29-38`); `ValidationPipe` whitelist (`main.ts:41-47`); `IdentityGuard` + `RolesGuard` (`identity.guard.ts`, `roles.guard.ts`); JWT `iss`/`aud`/`exp` (`jwt-verify.ts`).
+- **event-cms browser → CMS BFF `/cms-api` → api-server.** Browser sends the Better Auth cookie only. The Vite BFF calls portal `get-session` + `token`, requires organizer/admin, then forwards `Authorization: Bearer <jwt>` (`apps/event-cms/server/cms-bff.ts`). No organizer/admin secret is in the client bundle (`event-cms/vite.config.ts` `define`).
+- **event-cms / auth SPA → event-portal Better Auth.** Session cookie on localhost (host-only, shared across ports). Hosted CMS on another site cannot reuse the cookie without a shared parent domain (phase 1 gap).
 - **GitHub Actions collectors → Neon.** `COLLECTOR_DATABASE_URL` (role `event_collector`: SELECT/INSERT/UPDATE on `events` + `event_embeddings` only). Owner `DATABASE_URL` is migrate-only. Outbound fetch: HTTPS allowlist + `redirect: 'error'` (`tools/collectors/shared/ssrf.ts:60-100`).
 - **Internet → api-mock.** Unauthenticated event writes if that process is reachable (`handler.ts` POST/PUT/DELETE). Assumed not production.
 
@@ -63,7 +63,6 @@ flowchart TD
   Nest["api-server"]
   CMS["event-cms"]
   AuthUI["auth SPA"]
-  Kratos["Ory Kratos"]
   Neon["Neon Postgres"]
   Discord["Discord"]
   GHA["Collectors GHA"]
@@ -71,13 +70,13 @@ flowchart TD
   Internet -->|HTTPS| Portal
   Internet -->|HTTPS| Nest
   LINE -->|webhook HMAC| Portal
-  Portal -->|OAuth| LINE
-  Portal -->|tagged SQL| Neon
+  Portal -->|OAuth LINE/Google| LINE
+  Portal -->|tagged SQL + identity_*| Neon
   Portal -->|digest POST| Discord
   CMS -->|same-origin /cms-api| BFF["CMS BFF"]
-  BFF -->|ADMIN_API_TOKEN after whoami| Nest
-  CMS -->|session cookie| Kratos
-  AuthUI -->|session cookie| Kratos
+  BFF -->|Bearer JWT after organizer session| Nest
+  CMS -->|session cookie| Portal
+  AuthUI -->|redirect| Portal
   Nest -->|Prisma| Neon
   GHA -->|upsert| Neon
 ```
@@ -88,12 +87,13 @@ flowchart TD
 | --------------------------------------------- | ----------------------------------------------------- | -------------------------- |
 | Neon `events` + embeddings                    | Public catalog integrity; drafts are unpublished work | I, A (C for drafts)        |
 | Neon `users` (email, role, status)            | Organizer PII and privilege state                     | C, I                       |
-| Neon `sessions.token`                         | Session material if ever exposed via includes         | C                          |
-| `DATABASE_URL`                                | Full catalog/user read-write                          | C, I                       |
+| Neon `identity_session.token` / JWKS keys     | Session takeover; forge Nest JWTs                     | C, I                       |
+| `user_role`                                   | CMS / Nest privilege                                  | I                          |
+| `DATABASE_URL`                                | Full catalog/user/identity read-write                 | C, I                       |
+| `BETTER_AUTH_SECRET`                          | Forge portal sessions                                 | C, I                       |
 | `LINE_CHANNEL_SECRET` / access token          | Forge webhooks; reply as the OA                       | C, I                       |
-| `LINE_CLIENT_SECRET`                          | Token-proxy abuse                                     | C                          |
-| LINE user access/id tokens                    | Impersonate the attendee on LINE APIs                 | C                          |
-| `ADMIN_API_TOKEN` (server-only)               | Mutate catalog; admin on users/stats                  | C, I                       |
+| `LINE_CLIENT_SECRET` / `GOOGLE_CLIENT_SECRET` | OAuth code exchange                                   | C                          |
+| `ADMIN_API_TOKEN` (server-only)               | Machine Nest writes (cron/collector)                  | C, I                       |
 | `CRON_SECRET` / `DISCORD_WEBHOOK_URL`         | Spam or hijack the digest channel                     | I, A                       |
 | `EMBEDDING_API_KEY`                           | Paid outbound inference                               | C, A                       |
 | Published search availability                 | LINE bot + portal discovery                           | A                          |
@@ -105,7 +105,7 @@ flowchart TD
 - Unauthenticated HTTPS to portal and Nest from the internet.
 - Ability to POST LINE-shaped JSON (without a valid HMAC unless the channel secret leaks).
 - Ability to set arbitrary HTTP headers (`X-Organizer-Email`, `Authorization`, `Origin`).
-- XSS in the portal origin can still read PKCE verifier from `localStorage` during the login redirect; LINE access/id tokens are no longer in JS storage.
+- XSS in the portal origin can still CSRF same-origin APIs with the Better Auth cookie; provider tokens are not in JS storage.
 - Read public CMS JavaScript if event-cms is hosted.
 - Trigger or observe GitHub Actions if they have a compromised `repo`/`workflow` token (separate from app attackers).
 
@@ -123,13 +123,12 @@ flowchart TD
 | ---------------------------------------- | -------------------- | -------------------------------- | ------------------------------------- | -------------------------------------------------- |
 | `GET /api/exhibitions/search`            | Public               | Internet → portal → Neon         | Rate limited; published only          | `search/route.ts:19-64`                            |
 | `POST /api/line/webhook`                 | LINE / anyone        | Internet → portal                | HMAC + 256 KiB + replay window/dedupe | `webhook/route.ts:28-57`, `bot/replay.ts`          |
-| `POST /api/line/auth/token`              | Browser / script     | Internet → portal → LINE         | PKCE; missing Origin allowed          | `token/route.ts:49-110`, `request-origin.ts:12-14` |
-| `POST /api/line/auth/id-token`           | Browser / script     | Internet → portal → LINE         | Origin + LINE verify                  | `id-token/route.ts`                                |
+| `GET\|POST /api/auth/*`                  | Browser              | Internet → portal → LINE/Google  | Better Auth PKCE + httpOnly session   | `apps/event-portal/src/libs/auth/auth.ts`          |
 | `GET\|POST /api/cron/weekly-digest`      | Vercel cron / anyone | Internet → portal → Discord/Neon | Fail-closed bearer                    | `digest/auth.ts:21-30`                             |
 | `GET /api/events`, `GET /api/events/:id` | Public               | Internet → Nest → Neon           | Published-only unless admin bearer    | `events.controller.ts:52-86`                       |
-| `POST\|PUT\|DELETE /api/events`          | Bearer               | Internet → Nest                  | `ADMIN_API_TOKEN`                     | `events.controller.ts:89-118`                      |
-| `GET\|POST\|PUT\|DELETE /api/users`      | Organizer middleware | Internet → Nest                  | Permissions required on every handler | `users.controller.ts:28-52`                        |
-| `GET /api/stats`                         | Organizer middleware | Internet → Nest                  | `users:read`                          | `stats.controller.ts:9-20`                         |
+| `POST\|PUT\|DELETE /api/events`          | Bearer JWT or machine token | Internet → Nest           | `@Roles('organizer','admin')`         | `events.controller.ts`                             |
+| `GET\|POST\|PUT\|DELETE /api/users`      | Bearer JWT or machine token | Internet → Nest           | `@Roles`; mutate is `admin`           | `users.controller.ts`                              |
+| `GET /api/stats`                         | Bearer JWT or machine token | Internet → Nest           | `@Roles('organizer','admin')`         | `stats.controller.ts`                              |
 | `POST /api/catalog/items`                | Public               | Internet → Nest memory           | In-process demo catalog, not Neon     | `catalog.controller.ts:42-46`                      |
 | `/api/docs`, `/api-json`                 | Public               | Internet → Nest                  | OpenAPI disclosure                    | `main.ts:49-68`                                    |
 | Labelled-demo `/api/[...path]`           | Public               | Internet → portal memory         | GET events only                       | `labelled-demo-bff.ts:25-37`                       |
@@ -137,11 +136,11 @@ flowchart TD
 
 ## Top abuse paths
 
-1. **Spoof organizer admin (fixed).** `X-Organizer-Email` is ignored in production. Nest requires a verified Kratos session on `ALLOWED_ORGANIZER_EMAILS` or `ADMIN_API_TOKEN`.
-2. **Extract CMS bearer from static JS (fixed).** The Vite bundle no longer defines organizer/admin tokens. CMS writes go through `/cms-api`, which attaches `ADMIN_API_TOKEN` only after whoami.
+1. **Spoof organizer admin (fixed).** Email headers are not identity. Nest requires a JWKS-verified JWT with `organizer`/`admin` or `ADMIN_API_TOKEN` (machine). Roles are not inferred from email.
+2. **Extract CMS bearer from static JS (fixed).** The Vite bundle no longer defines organizer/admin tokens. CMS writes go through `/cms-api`, which forwards a short-lived JWT only after an organizer/admin session.
 3. **Read unpublished catalog (fixed).** `GET /api/events?status=draft` or `GET /api/events/<draftId>` used to return drafts; portal search did not. Now anonymous callers are forced to `published`.
 4. **Enumerate users (fixed).** `GET /api/users/:id` had `PermissionsGuard` but no `@RequirePermissions`, and the guard allowed empty metadata. Now denied.
-5. **Steal LINE tokens via XSS (fixed).** Tokens are httpOnly cookies; `localStorage` keeps profile only. XSS can still drive same-origin calls with the cookie (session-riding), but cannot `localStorage.getItem` the LINE access token.
+5. **Steal LINE tokens via XSS (fixed).** Better Auth session cookies are httpOnly; provider tokens are stripped from `identity_account`. XSS can still drive same-origin calls with the cookie (session-riding).
 6. **Replay a captured LINE webhook (fixed).** Stale timestamps and repeat `webhookEventId` are dropped before reply.
 7. **Saturate search/LINE isolates (mitigated).** Shared Upstash/Postgres counters apply across isolates; memory fallback if the store is down. Vercel WAF remains recommended.
 8. **Poison the catalog via collector credentials (mitigated).** Actions collect/backfill use `COLLECTOR_DATABASE_URL` (no user/session/forms/DDL). Owner `DATABASE_URL` stays migrate-only. Source compromise can still upsert catalog rows the role can write.
@@ -151,16 +150,18 @@ flowchart TD
 
 | Threat ID | Threat source                         | Prerequisites                                        | Threat action                                         | Impact                                                            | Impacted assets               | Existing controls (evidence)                                                                                                                                                    | Gaps                                                                                         | Recommended mitigations                                                            | Detection ideas                                              | Likelihood      | Impact severity | Priority          |
 | --------- | ------------------------------------- | ---------------------------------------------------- | ----------------------------------------------------- | ----------------------------------------------------------------- | ----------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------- | ------------------------------------------------------------ | --------------- | --------------- | ----------------- |
-| TM-001    | Remote unauthenticated                | Nest reachable; user id guessable/leaked             | `GET /api/users/:id` without credentials              | Organizer email/role disclosure                                   | Neon `users`                  | **Fixed:** `@RequirePermissions('users:read')` (`users.controller.ts:51-52`); guard fail-closed (`permissions.guard.ts:16-18`); stale `orders` include removed                  | Class-level guard still depends on decorators; no Nest-wide default deny                     | Keep fail-closed; add e2e that unauthenticated `:id` is 403                        | 403/401 spike on `/api/users`                                | Low (after fix) | High            | **high (fixed)**  |
-| TM-002    | Remote unauthenticated                | Nest reachable; event id known                       | Read or filter `draft` events on public GET           | Unpublished catalog leak                                          | Neon `events` drafts          | **Fixed:** anonymous list forced to `published`; unpublished detail → 404 (`public-event-read.ts`, `events.controller.ts:65-85`). Portal search already filtered (`sql.ts:247`) | CMS draft list now requires `ADMIN_API_TOKEN`                                                | Same bearer for CMS list as for writes; do not add a second public status filter   | Queries with `status=draft` from non-admin IPs               | Low (after fix) | High            | **high (fixed)**  |
-| TM-003    | Remote with guessed email             | Production Nest; email in `ALLOWED_ORGANIZER_EMAILS` | Send `X-Organizer-Email` only                         | Full admin on users/stats (`*:*`)                                 | Users, stats                  | **Fixed:** production ignores email headers and `EVENT_STACK_CMS_DEV_AUTH`; Kratos `sessions/whoami` + allowlist or `ADMIN_API_TOKEN` (`organizer-identity.ts`)                  | Dev-only email path remains when `EVENT_STACK_CMS_DEV_AUTH=true` and `NODE_ENV!==production` | Keep production fail-closed; do not re-enable header-only auth                     | Auth successes with no session/bearer                        | Low (after fix) | High            | **high (fixed)**  |
-| TM-004    | Anyone who can fetch CMS JS           | Hosted CMS static bundle                             | Extract token from bundle; replay to Nest             | Admin users/stats; catalog mutation                               | Tokens, events, users         | **Fixed:** no `VITE_*` admin/organizer token in `define`; `/cms-api` BFF attaches `ADMIN_API_TOKEN` after whoami (`event-cms/server/cms-bff.ts`)                                 | Hosted CMS must run the BFF (static-only cannot write)                                       | Keep `ADMIN_API_TOKEN` server-only; never add `VITE_CMS_*` tokens                   | Token use from non-CMS origins                               | Low (after fix) | High            | **high (fixed)**  |
-| TM-005    | XSS on portal origin                  | XSS gadget in portal                                 | Read `localStorage` LINE tokens                       | Attendee LINE session theft                                       | LINE access/id tokens         | **Fixed:** httpOnly `nx_line_at` / `nx_line_it` (`session-cookies.ts`); token/session JSON omits tokens; `saveUserInfo` strips secrets                                           | XSS can still CSRF same-origin APIs with the cookie; PKCE verifier still in `localStorage` during login | Keep cookies httpOnly; consider moving PKCE verifier server-side later             | CSP violation reports; token-endpoint anomalies              | Low (after fix) | Medium          | **medium (fixed)** |
+| TM-001    | Remote unauthenticated                | Nest reachable; user id guessable/leaked             | `GET /api/users/:id` without credentials              | Organizer email/role disclosure                                   | Neon `users`                  | **Fixed:** `IdentityGuard` + `RolesGuard` default-deny (`users.controller.ts`, `roles.guard.ts`)                                                                                 | Class-level `@Roles` must stay on every privileged controller                                | Keep fail-closed; add e2e that unauthenticated `:id` is 401                        | 403/401 spike on `/api/users`                                | Low (after fix) | High            | **high (fixed)**  |
+| TM-002    | Remote unauthenticated                | Nest reachable; event id known                       | Read or filter `draft` events on public GET           | Unpublished catalog leak                                          | Neon `events` drafts          | **Fixed:** anonymous list forced to `published`; unpublished detail → 404 (`public-event-read.ts`, `events.controller.ts`). Portal search already filtered (`sql.ts:247`)        | CMS draft list requires organizer/admin JWT or machine token                                 | Do not add a second public status filter                                           | Queries with `status=draft` from non-admin IPs               | Low (after fix) | High            | **high (fixed)**  |
+| TM-003    | Remote with guessed email             | Production Nest                                      | Send `X-Organizer-Email` or an attendee JWT           | Full admin on users/stats                                         | Users, stats                  | **Fixed:** email is not an identity proof; JWT roles come from `user_role`; `RolesGuard` default-deny (`roles.guard.ts`); CMS rejects attendees (`cms-bff.ts`)                   | First admin is a CLI grant (operator must not skip)                                          | Keep roles admin-assigned; do not auto-promote by email                            | Auth successes with empty roles                              | Low (after fix) | High            | **high (fixed)**  |
+| TM-004    | Anyone who can fetch CMS JS           | Hosted CMS static bundle                             | Extract token from bundle; replay to Nest             | Admin users/stats; catalog mutation                               | Tokens, events, users         | **Fixed:** no `VITE_*` admin/organizer token in `define`; `/cms-api` BFF forwards a JWT after organizer session (`event-cms/server/cms-bff.ts`)                                  | Hosted CMS must run the BFF (static-only cannot write); cross-site cookies need a parent domain | Keep `ADMIN_API_TOKEN` server-only; never add `VITE_CMS_*` tokens                   | Token use from non-CMS origins                               | Low (after fix) | High            | **high (fixed)**  |
+| TM-005    | XSS on portal origin                  | XSS gadget in portal                                 | Read JS-visible LINE tokens                           | Attendee session theft                                            | Better Auth session cookie    | **Fixed:** httpOnly Secure SameSite=Lax session cookie; provider tokens not persisted (`stripProviderSecrets`)                                                                  | XSS can still CSRF same-origin `/api/auth` and portal APIs with the cookie                   | Keep cookies httpOnly; passkeys/step-up in phase 2                                 | CSP violation reports; auth-endpoint anomalies               | Low (after fix) | Medium          | **medium (fixed)** |
 | TM-006    | Unauthenticated flood                 | Portal URL known                                     | Burst search / webhook / token routes across isolates | Neon/embed cost; LINE bot unavailable                             | Search, LINE, compute         | **Fixed:** shared incr via Upstash or Neon `portal_kv` (`shared-kv.ts`); memory fallback; query cap 2048                                                                        | Memory fallback is per-isolate if the store is down; WAF still recommended                   | Optional `UPSTASH_REDIS_REST_*`; keep Vercel WAF                                   | 429 ratio; Neon CU spikes                                    | Medium          | Medium          | **medium (fixed)** |
 | TM-007    | Network observer / retry              | Captured valid LINE POST                             | Replay signed webhook                                 | Duplicate replies; search amplification                           | LINE channel, Neon read       | **Fixed:** HMAC + body cap; stale timestamp (>10 min) rejected; `webhookEventId` SET NX 24h (`bot/replay.ts`)                                                                   | Events without `webhookEventId` are only timestamp-gated                                     | Keep requiring LINE Messaging v2 event ids                                         | Repeat `webhookEventId`                                      | Low (after fix) | Low             | **medium (fixed)** |
 | TM-008    | Compromised GHA secret or source host | Collector DSN in Actions or allowlisted origin       | Upsert attacker-controlled published events           | Visitors/LINE see poisoned catalog                                | Events integrity              | **Fixed:** `event_collector` role + `COLLECTOR_DATABASE_URL` (events/embeddings write only); SSRF allowlist; unique `(source, externalId)`                                      | Operator must set role password + Actions secret; source feeds remain trusted                | Rotate collector password; review upsert diffs                                     | Unusual upsert volume/source                                 | Low             | High            | **medium (fixed)** |
 | TM-009    | Remote unauthenticated                | api-mock or catalog demo exposed                     | Unauthenticated writes                                | Mock/demo integrity; Neon if mock mis-wired                       | api-mock store; possibly Neon | Portal labelled-demo is GET-only; mock defaults to memory on Vercel                                                                                                             | `POST /catalog/items` has no guard; mock handler writes are open                             | Gate mock writes; add bearer on catalog POST or disable in prod                    | Write verbs on mock/catalog hosts                            | Low             | Medium          | **low (open)**    |
 | TM-010    | Internet scanner                      | Nest `/api/docs` public                              | Map mutating routes and auth scheme                   | Faster follow-on attacks                                          | API surface                   | Intended demo Swagger (`main.ts:49-68`)                                                                                                                                         | No auth on OpenAPI JSON                                                                      | Disable Swagger in production or gate it                                           | Unusual `/api-json` traffic                                  | High            | Low             | **low (open)**    |
+| TM-011    | Remote with a crafted JWT             | Nest JWKS URL reachable                              | Present HS256/none or wrong-iss JWT                   | Nest privilege if verification is loose                           | Events, users, stats          | **Fixed:** `jose` remote JWKS; allowlist EdDSA/ES256/RS256; require `iss`/`aud`/`sub` (`jwt-verify.ts`)                                                                          | JWKS fetch fail-closed (no issuer → no JWT path)                                             | Keep `AUTH_JWT_ISSUER` aligned with `BETTER_AUTH_URL`                              | 401 spike on mutating Nest routes                            | Low (after fix) | High            | **high (fixed)**  |
+| TM-012    | Attendee with a portal session        | Localhost CMS; cookie shared by host                 | Open CMS and call `/cms-api`                          | Catalog mutation if BFF skipped role check                        | Events                        | **Fixed:** BFF requires `organizer`/`admin` on `get-session` before minting a JWT (`cms-bff.ts`)                                                                                 | Hosted CMS on another origin will not see the cookie (phase 1)                               | Shared parent domain or OIDC when a second product hosts CMS                       | CMS 401 from attendee sessions                               | Low (after fix) | High            | **high (fixed)**  |
 
 ## Criticality calibration
 
@@ -175,16 +176,16 @@ For this repo (public exhibition catalog + organizer emails + LINE bot):
 
 | Path                                                          | Why it matters                             | Related Threat IDs     |
 | ------------------------------------------------------------- | ------------------------------------------ | ---------------------- |
-| `apps/api-server/src/common/auth/organizer-identity.ts`       | Session + allowlist; production email deny | TM-003                 |
-| `apps/api-server/src/middleware/organizer-auth.middleware.ts` | Applies identity to users/stats            | TM-003                 |
-| `apps/api-server/src/guards/permissions.guard.ts`             | AuthZ choke point for users/stats          | TM-001                 |
+| `apps/api-server/src/common/auth/jwt-verify.ts`               | JWKS iss/aud/exp                           | TM-011                 |
+| `apps/api-server/src/guards/roles.guard.ts`                   | Default-deny RBAC                          | TM-001, TM-003, TM-012 |
+| `apps/api-server/src/guards/identity.guard.ts`                | JWT or machine token                       | TM-003, TM-011         |
 | `apps/api-server/src/modules/users/users.controller.ts`       | User PII API                               | TM-001, TM-003         |
-| `apps/api-server/src/modules/events/events.controller.ts`     | Public vs admin event reads/writes         | TM-002                 |
+| `apps/api-server/src/modules/events/events.controller.ts`     | Public vs organizer event reads/writes     | TM-002                 |
 | `apps/api-server/src/modules/events/public-event-read.ts`     | Published-only rule                        | TM-002                 |
 | `apps/event-cms/vite.config.ts`                               | Client define has no secrets               | TM-004                 |
-| `apps/event-cms/server/cms-bff.ts`                            | Same-origin write proxy                    | TM-003, TM-004         |
+| `apps/event-cms/server/cms-bff.ts`                            | Same-origin write proxy                    | TM-003, TM-004, TM-012 |
+| `apps/event-portal/src/libs/auth/auth.ts`                     | Better Auth LINE+Google                    | TM-005, TM-011         |
 | `apps/event-portal/src/app/api/line/webhook/route.ts`         | Inbound LINE                               | TM-006, TM-007         |
-| `apps/event-portal/src/app/api/line/auth/token/route.ts`      | Client-secret proxy                        | TM-005                 |
 | `apps/event-portal/src/libs/exhibition-search/sql.ts`         | Hybrid FTS + pgvector                      | TM-006                 |
 | `tools/collectors/shared/ssrf.ts`                             | Outbound fetch policy                      | TM-008                 |
 | `.github/workflows/collect-taipei.yml`                        | Privileged DB writes from CI               | TM-008                 |
@@ -194,9 +195,9 @@ For this repo (public exhibition catalog + organizer emails + LINE bot):
 
 ## Notes on residual controls
 
-Portal search, LINE webhook HMAC, collector SSRF, Discord URL allowlist, cron bearer, and Nest event-mutation bearer were already in good shape (see `docs/security/audit-2026-10.md`). Nest **read** hardening (users + drafts) landed in #55. Organizer identity now requires a Kratos session or `ADMIN_API_TOKEN`; CMS writes go through a server-side BFF so no admin/organizer secret reaches the browser. LINE attendee tokens are httpOnly cookies; rate limits and webhook replay share Upstash/Postgres; collectors no longer receive the owner DB URL.
+Portal search, LINE webhook HMAC, collector SSRF, Discord URL allowlist, cron bearer, and Nest published-only reads were already in good shape (see `docs/security/audit-2026-10.md`). Identity phase 1: Better Auth on event-portal (LINE Taiwan + Google, no passwords), database httpOnly sessions, Nest JWKS JWT + default-deny roles, CMS organizer session (no admin token), Kratos removed. Rate limits and webhook replay share Upstash/Postgres; collectors no longer receive the owner DB URL.
 
-**Kratos deployment (Part A):** only `docker-compose.kratos.yml` + `apps/auth/kratos/kratos.yml` (localhost, `--dev`, SQLite). Not in Render services, not a Vercel project, no production hostname. Single-operator production should keep using `ADMIN_API_TOKEN`. Hosted Kratos (Ory Network) is a later ticket, not this change.
+**Identity (phase 1):** auth handler is event-portal `/api/auth/*`. Passkeys and explicit account linking are phase 2. Hosted CMS on a different site needs a shared cookie domain or OIDC. Operator must set `BETTER_AUTH_SECRET`, OAuth console callbacks, and grant the first admin (`docs/runbooks/identity.md`).
 
 ## Quality check
 

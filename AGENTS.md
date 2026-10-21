@@ -20,11 +20,11 @@ Nx monorepo for the **event + commerce integration stack**: `event-portal`, `eve
 ```bash
 make setup          # or: pnpm install && scripts/env-setup.sh
 # Platform differences: docs/DEV-ENVIRONMENT.md
-pnpm dev:event-portal  # localhost:3000
-pnpm dev:event-cms     # localhost:3002
+pnpm dev:event-portal  # localhost:3000 (Better Auth /api/auth/*)
+pnpm dev:event-cms     # localhost:3002 (organizer session via portal)
 pnpm dev:api           # localhost:3001
 pnpm dev:api-mock      # localhost:3011 (same OpenAPI, in-memory)
-pnpm dev:auth          # localhost:3004
+pnpm dev:auth          # localhost:3004 (redirects to portal login)
 ```
 
 `profile` / `mobile-approvals` still exist under `apps/`; **no new features** until graduate tickets (platform-command T-228–230). Vue / Angular leftovers live under [`labs/`](labs/README.md) (legacy mirrors — do not extend).

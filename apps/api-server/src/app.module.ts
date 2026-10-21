@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 
-import { AppOrganizerAuthModule } from './app-organizer-auth.module';
+import { IdentityModule } from './identity.module';
 import { PrismaModule } from './common/prisma/prisma.module';
 import { HealthModule } from './health/health.module';
 import { CatalogModule } from './modules/catalog/catalog.module';
@@ -16,7 +16,7 @@ import { UsersModule } from './modules/users/users.module';
     UsersModule,
     StatsModule,
     CatalogModule,
-    AppOrganizerAuthModule,
+    IdentityModule,
   ],
   controllers: [],
   providers: [],

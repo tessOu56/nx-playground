@@ -14,8 +14,8 @@ Angular / Vue / profile / mobile-approvals are leaving or already have independe
 
 | App | Port | Notes |
 |-----|------|--------|
-| event-portal | 3000 | C-end Next app |
-| auth | 3004 | Organizer Kratos UI (`make kratos-up` → `:4433`) |
+| event-portal | 3000 | C-end Next app + Better Auth (`/api/auth/*`) |
+| auth | 3004 | Redirects to portal login |
 | api-mock | 3011 | Stateful mock of the Nest event-stack OpenAPI |
 | api-server | 3001 | NestJS + Prisma; Swagger `/api/docs` |
 | api-mock | 3011 | Stateful mock of the Nest event-stack OpenAPI |

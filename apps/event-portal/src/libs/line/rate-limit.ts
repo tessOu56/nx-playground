@@ -17,10 +17,6 @@ const WINDOW_MS = 60_000;
  * that a busy Official Account does not 429 legitimate deliveries.
  */
 export const LINE_WEBHOOK_MAX_PER_WINDOW = 180;
-/** Authorization-code exchange calls LINE OAuth with the channel secret. */
-export const LINE_AUTH_TOKEN_MAX_PER_WINDOW = 20;
-/** LIFF /api/line/auth/id-token verify; slightly looser than token exchange. */
-export const LINE_AUTH_ID_TOKEN_MAX_PER_WINDOW = 30;
 
 async function consumeShared(
   prefix: string,
@@ -50,22 +46,6 @@ export function consumeLineWebhookRateLimit(
   max = LINE_WEBHOOK_MAX_PER_WINDOW
 ): Promise<RateLimitDecision> {
   return consumeShared('line:webhook', key, now, max);
-}
-
-export function consumeLineAuthTokenRateLimit(
-  key: string,
-  now = Date.now(),
-  max = LINE_AUTH_TOKEN_MAX_PER_WINDOW
-): Promise<RateLimitDecision> {
-  return consumeShared('line:auth-token', key, now, max);
-}
-
-export function consumeLineAuthIdTokenRateLimit(
-  key: string,
-  now = Date.now(),
-  max = LINE_AUTH_ID_TOKEN_MAX_PER_WINDOW
-): Promise<RateLimitDecision> {
-  return consumeShared('line:auth-id-token', key, now, max);
 }
 
 export function resetLineRateLimit() {

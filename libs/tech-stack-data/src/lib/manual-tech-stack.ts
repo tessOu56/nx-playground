@@ -112,7 +112,7 @@ export const manualTechStack: TechItem[] = [
 
   // Authentication
   {
-    name: 'Ory Kratos',
+    name: 'Better Auth',
     category: 'backend',
     level: 'advanced',
     color: '#5528FF',

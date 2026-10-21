@@ -31,7 +31,7 @@ Interview second case after [AI Search Portal](https://github.com/tessOu56/ai-se
 - 📊 **event-cms** — 活動營運（React 19，:3002）
 - 🔧 **api-server** — NestJS + Prisma（:3001，Swagger `/api/docs`）
 - 🧪 **api-mock** — 同一份 event-stack OpenAPI 的 stateful mock（:3011）
-- 🔐 **auth** — Kratos + LINE（:3004）
+- 🔐 **auth** — redirects to event-portal Better Auth（:3004 → :3000/zh-TW/login）
 
 其餘 leftover（`profile`、`mobile-approvals`）仍在 `apps/`，轉型完成前**不加功能**。  
 Vue / Angular 鏡像已移到 [`labs/`](./labs/README.md)（legacy — do not extend）；canonical 是 [vue-motion-sandbox](https://github.com/tessOu56/vue-motion-sandbox) 與 [angular-dashboard-sandbox](https://github.com/tessOu56/angular-dashboard-sandbox)。

@@ -26,7 +26,12 @@ const nextConfig = {
     '@nx-playground/logger',
     '@nx-playground/validation',
   ],
-  serverExternalPackages: ['@neondatabase/serverless'],
+  serverExternalPackages: [
+    '@neondatabase/serverless',
+    '@prisma/client',
+    'better-auth',
+    'jose',
+  ],
   typescript: {
     ignoreBuildErrors: false,
   },

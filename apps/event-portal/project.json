@@ -15,6 +15,10 @@
         {
           "target": "build",
           "projects": "dependencies"
+        },
+        {
+          "target": "prisma-generate",
+          "projects": ["@nx-playground/api-server"]
         }
       ]
     },
@@ -51,7 +55,7 @@
     "test-line-bot": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "node --import tsx --test apps/event-portal/src/libs/http/*.test.ts apps/event-portal/src/libs/line/*.test.ts apps/event-portal/src/libs/line/bot/*.test.ts apps/event-portal/src/app/api/line/webhook/route.test.ts apps/event-portal/src/app/api/line/auth/token/route.test.ts apps/event-portal/src/app/api/line/auth/id-token/route.test.ts"
+        "command": "node --import tsx --test apps/event-portal/src/libs/http/*.test.ts apps/event-portal/src/libs/line/*.test.ts apps/event-portal/src/libs/line/bot/*.test.ts apps/event-portal/src/libs/auth/*.test.ts apps/event-portal/src/app/api/line/webhook/route.test.ts"
       }
     },
     "test": {

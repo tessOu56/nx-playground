@@ -9,5 +9,6 @@ module.exports = {
       '<rootDir>/../../libs/permissions/src/server.ts',
   },
   moduleFileExtensions: ['ts', 'js', 'html'],
+  transformIgnorePatterns: ['/node_modules/(?!jose/)'],
   coverageDirectory: '../../coverage/apps/api-server',
 };

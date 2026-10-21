@@ -1,8 +1,8 @@
 /**
- * Jump to the organizer auth app (Kratos UI on :3004).
+ * Jump to event-portal Better Auth login.
  */
 export function redirectToSSO(
-  ssoUrl = 'http://localhost:3004/login',
+  ssoUrl = 'http://localhost:3000/zh-TW/login',
   returnTo?: string,
 ) {
   if (typeof window === 'undefined') return;

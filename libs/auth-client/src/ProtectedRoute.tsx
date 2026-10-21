@@ -11,7 +11,7 @@ interface ProtectedRouteProps {
 
 export function ProtectedRoute({
   children,
-  ssoUrl = 'http://localhost:3004/login',
+  ssoUrl = 'http://localhost:3000/zh-TW/login',
   fallback = null,
 }: ProtectedRouteProps) {
   const { isAuthenticated, isLoading } = useAuth();

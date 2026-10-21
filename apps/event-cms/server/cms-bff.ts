@@ -23,43 +23,29 @@ const HOP_BY_HOP = new Set([
   'x-session-token',
 ]);
 
+const ELEVATED_ROLES = new Set(['organizer', 'admin']);
+
+export type CmsOrganizerSession = {
+  token: string;
+  roles: string[];
+  id: string;
+};
+
 export type CmsBffConfig = {
   nestApiBaseUrl: string;
-  adminApiToken?: string;
-  kratosPublicUrl?: string;
-  allowedOrganizerEmails?: string;
-  eventStackCmsDevAuth?: string;
+  authUrl?: string;
   nodeEnv?: string;
   allowedOrigins: string[];
-  verifySession?: (args: {
-    kratosPublicUrl?: string;
+  issueOrganizerAccess?: (args: {
+    authUrl?: string;
     cookie?: string;
-    sessionToken?: string;
-  }) => Promise<{ id: string; email: string } | null>;
+  }) => Promise<CmsOrganizerSession | null>;
   fetchImpl?: typeof fetch;
 };
 
 export type CmsBffAuthorization =
   | { ok: true; authorization: string }
   | { ok: false; status: number; body: string };
-
-function parseAllowedEmails(raw: string | undefined): Set<string> {
-  const value = raw?.trim() ?? '';
-  if (!value) return new Set();
-  return new Set(
-    value
-      .split(',')
-      .map(email => email.trim().toLowerCase())
-      .filter(Boolean)
-  );
-}
-
-function isDevOrganizerAuthEnabled(
-  nodeEnv: string | undefined,
-  eventStackCmsDevAuth: string | undefined
-): boolean {
-  return nodeEnv !== 'production' && eventStackCmsDevAuth === 'true';
-}
 
 function isMutatingMethod(method: string): boolean {
   return !['GET', 'HEAD', 'OPTIONS'].includes(method.toUpperCase());
@@ -74,54 +60,64 @@ export function isAllowedCmsOrigin(
   return allowedOrigins.some(allowed => allowed === value);
 }
 
-function kratosWhoamiUrl(kratosPublicUrl: string | undefined): string | null {
-  const trimmed = kratosPublicUrl?.trim() ?? '';
+export function parseAuthBaseUrl(authUrl: string | undefined): string | null {
+  const trimmed = authUrl?.trim() ?? '';
   if (!trimmed) return null;
   try {
     const url = new URL(trimmed);
     if (url.protocol !== 'http:' && url.protocol !== 'https:') {
       return null;
     }
-    return `${url.origin}${url.pathname.replace(/\/$/, '')}/sessions/whoami`;
+    return `${url.origin}${url.pathname.replace(/\/$/, '')}`;
   } catch {
     return null;
   }
 }
 
-async function defaultVerifySession(input: {
-  kratosPublicUrl?: string;
-  cookie?: string;
-  sessionToken?: string;
-  fetchImpl?: typeof fetch;
-}): Promise<{ id: string; email: string } | null> {
-  const whoami = kratosWhoamiUrl(input.kratosPublicUrl);
-  const cookie = input.cookie?.trim() ?? '';
-  const sessionToken = input.sessionToken?.trim() ?? '';
-  if (!whoami || (!cookie && !sessionToken)) {
-    return null;
-  }
+function hasOrganizerRole(roles: unknown): boolean {
+  if (!Array.isArray(roles)) return false;
+  return roles.some(role => typeof role === 'string' && ELEVATED_ROLES.has(role));
+}
 
-  const headers: Record<string, string> = { Accept: 'application/json' };
-  if (cookie) headers.cookie = cookie;
-  if (sessionToken) headers['x-session-token'] = sessionToken;
+async function defaultIssueOrganizerAccess(input: {
+  authUrl?: string;
+  cookie?: string;
+  fetchImpl?: typeof fetch;
+}): Promise<CmsOrganizerSession | null> {
+  const base = parseAuthBaseUrl(input.authUrl);
+  const cookie = input.cookie?.trim() ?? '';
+  if (!base || !cookie) return null;
 
   const fetchImpl = input.fetchImpl ?? fetch;
+  const headers = { Accept: 'application/json', cookie };
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), 3000);
   try {
-    const response = await fetchImpl(whoami, {
+    const sessionResponse = await fetchImpl(`${base}/api/auth/get-session`, {
       method: 'GET',
       headers,
       signal: controller.signal,
     });
-    if (!response.ok) return null;
-    const body = (await response.json()) as {
-      identity?: { id?: string; traits?: { email?: string } };
+    if (!sessionResponse.ok) return null;
+    const session = (await sessionResponse.json()) as {
+      user?: { id?: string; roles?: unknown };
     };
-    const id = body.identity?.id?.trim();
-    const email = body.identity?.traits?.email?.trim().toLowerCase();
-    if (!id || !email) return null;
-    return { id, email };
+    const id = session.user?.id?.trim();
+    const roles = Array.isArray(session.user?.roles)
+      ? session.user.roles.filter((role): role is string => typeof role === 'string')
+      : [];
+    if (!id || !hasOrganizerRole(roles)) return null;
+
+    const tokenResponse = await fetchImpl(`${base}/api/auth/token`, {
+      method: 'GET',
+      headers,
+      signal: controller.signal,
+    });
+    if (!tokenResponse.ok) return null;
+    const body = (await tokenResponse.json()) as { token?: unknown };
+    const token = typeof body.token === 'string' ? body.token.trim() : '';
+    if (!token) return null;
+    return { id, roles, token };
   } catch {
     return null;
   } finally {
@@ -130,21 +126,15 @@ async function defaultVerifySession(input: {
 }
 
 /**
- * Gate for CMS → Nest proxy. Never forwards a client secret; attaches
- * ADMIN_API_TOKEN only after a verified session (or the local-only flag).
+ * Gate for CMS → Nest proxy. Forwards a Better Auth JWT after an organizer
+ * session; never attaches ADMIN_API_TOKEN.
  */
 export async function authorizeCmsBffRequest(input: {
   method: string;
   origin?: string;
   cookie?: string;
-  sessionToken?: string;
   config: CmsBffConfig;
 }): Promise<CmsBffAuthorization> {
-  const token = input.config.adminApiToken?.trim() ?? '';
-  if (!token) {
-    return { ok: false, status: 401, body: '{"message":"Unauthorized"}' };
-  }
-
   const method = input.method.toUpperCase();
   if (
     input.config.nodeEnv === 'production' &&
@@ -154,34 +144,23 @@ export async function authorizeCmsBffRequest(input: {
     return { ok: false, status: 403, body: '{"message":"Forbidden"}' };
   }
 
-  if (
-    isDevOrganizerAuthEnabled(
-      input.config.nodeEnv,
-      input.config.eventStackCmsDevAuth
-    )
-  ) {
-    return { ok: true, authorization: `Bearer ${token}` };
-  }
+  const issue =
+    input.config.issueOrganizerAccess ??
+    (args =>
+      defaultIssueOrganizerAccess({
+        ...args,
+        fetchImpl: input.config.fetchImpl,
+      }));
 
-  const verify =
-    input.config.verifySession ??
-    ((args: {
-      kratosPublicUrl?: string;
-      cookie?: string;
-      sessionToken?: string;
-    }) => defaultVerifySession({ ...args, fetchImpl: input.config.fetchImpl }));
-
-  const session = await verify({
-    kratosPublicUrl: input.config.kratosPublicUrl,
+  const session = await issue({
+    authUrl: input.config.authUrl,
     cookie: input.cookie,
-    sessionToken: input.sessionToken,
   });
-  const allowed = parseAllowedEmails(input.config.allowedOrganizerEmails);
-  if (!session || !allowed.has(session.email)) {
+  if (!session) {
     return { ok: false, status: 401, body: '{"message":"Unauthorized"}' };
   }
 
-  return { ok: true, authorization: `Bearer ${token}` };
+  return { ok: true, authorization: `Bearer ${session.token}` };
 }
 
 function headerValue(
@@ -224,7 +203,6 @@ export function createCmsBffMiddleware(config: CmsBffConfig) {
         method,
         origin: headerValue(req.headers, 'origin'),
         cookie: headerValue(req.headers, 'cookie'),
-        sessionToken: headerValue(req.headers, 'x-session-token'),
         config,
       });
       if (!decision.ok) {
@@ -301,6 +279,16 @@ export function nestApiBaseFromEnv(
     return vite.replace(/\/$/, '');
   }
   return 'http://localhost:3001/api';
+}
+
+export function cmsAuthUrlFromEnv(
+  env: Record<string, string | undefined>
+): string {
+  return (
+    env.BETTER_AUTH_URL?.trim() ||
+    env.VITE_AUTH_URL?.trim() ||
+    'http://localhost:3000'
+  );
 }
 
 export function cmsBffOriginsFromEnv(

@@ -2,7 +2,6 @@
 import { logger } from '@nx-playground/logger';
 import { LINE_CONSTANTS, hasOwnerLiffId, liffConfig } from './constants';
 import { restoreLiffState, saveLiffState } from './storage';
-import { verifyLiffIdToken } from './verify-id-token-client';
 
 let liff: unknown = null;
 
@@ -354,31 +353,11 @@ export const getFullUserInfo = async () => {
   }
 
   try {
-    // 並行獲取所有資訊
-    const [profile, idToken, accessToken] = await Promise.all([
-      (liff as any).getProfile(),
-      (liff as any).getIDToken(),
-      (liff as any).getAccessToken(),
-    ]);
-
-    const _context = await getLiffContext();
-    if (!idToken) return null;
-    const decodedIdToken = await verifyLiffIdToken(idToken);
-    if (!decodedIdToken) return null;
-    const lineId = decodedIdToken.sub;
-
-    await fetch('/api/line/auth/session', {
-      method: 'POST',
-      credentials: 'same-origin',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ idToken, accessToken }),
-    }).catch(() => undefined);
-
+    const profile = await (liff as any).getProfile();
+    const lineId =
+      typeof profile?.userId === 'string' ? profile.userId : null;
     return {
       profile,
-      idToken: null,
-      accessToken: null,
-      decodedIdToken,
       lineId,
     };
   } catch (_error) {

@@ -18,8 +18,9 @@ import {
 } from '@nestjs/swagger';
 import { logger } from '@nx-playground/logger';
 
-import { PermissionsGuard } from '../../guards/permissions.guard';
-import { RequirePermissions } from '../../decorators/permissions.decorator';
+import { Roles } from '../../decorators/roles.decorator';
+import { IdentityGuard } from '../../guards/identity.guard';
+import { RolesGuard } from '../../guards/roles.guard';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
@@ -27,12 +28,12 @@ import { UsersService } from './users.service';
 
 @Controller('users')
 @ApiTags('users')
-@UseGuards(PermissionsGuard)
+@UseGuards(IdentityGuard, RolesGuard)
+@Roles('organizer', 'admin')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Get()
-  @RequirePermissions('users:read')
   @ApiOperation({ summary: 'Get all users' })
   @ApiQuery({ name: 'role', required: false })
   @ApiQuery({ name: 'status', required: false })
@@ -49,7 +50,6 @@ export class UsersController {
   }
 
   @Get(':id')
-  @RequirePermissions('users:read')
   @ApiOperation({ summary: 'Get user by ID' })
   @ApiParam({ name: 'id', type: String })
   @ApiResponse({ status: 200, type: User })
@@ -71,7 +71,7 @@ export class UsersController {
   }
 
   @Post()
-  @RequirePermissions('users:create')
+  @Roles('admin')
   @ApiOperation({ summary: 'Create new user' })
   @ApiResponse({ status: 201, type: User })
   @ApiResponse({ status: 400, description: 'Invalid input' })
@@ -98,7 +98,7 @@ export class UsersController {
   }
 
   @Put(':id')
-  @RequirePermissions('users:update')
+  @Roles('admin')
   @ApiOperation({ summary: 'Update user' })
   @ApiParam({ name: 'id', type: String })
   @ApiResponse({ status: 200, type: User })
@@ -108,7 +108,7 @@ export class UsersController {
   }
 
   @Delete(':id')
-  @RequirePermissions('users:delete')
+  @Roles('admin')
   @ApiOperation({ summary: 'Delete user' })
   @ApiParam({ name: 'id', type: String })
   @ApiResponse({ status: 200, description: 'User deleted' })

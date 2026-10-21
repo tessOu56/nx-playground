@@ -14,10 +14,7 @@ import {
 function cmsOrganizerBffPlugin(env: Record<string, string | undefined>): Plugin {
   const middleware = createCmsBffMiddleware({
     nestApiBaseUrl: nestApiBaseFromEnv(env),
-    adminApiToken: env.ADMIN_API_TOKEN,
-    kratosPublicUrl: env.KRATOS_PUBLIC_URL ?? env.VITE_KRATOS_PUBLIC_URL,
-    allowedOrganizerEmails: env.ALLOWED_ORGANIZER_EMAILS,
-    eventStackCmsDevAuth: env.EVENT_STACK_CMS_DEV_AUTH,
+    authUrl: env.BETTER_AUTH_URL ?? env.VITE_AUTH_URL ?? 'http://localhost:3000',
     nodeEnv: env.NODE_ENV,
     allowedOrigins: cmsBffOriginsFromEnv(env),
   });
@@ -40,9 +37,7 @@ export default defineConfig(({ mode }) => {
     ...process.env,
     NODE_ENV: process.env.NODE_ENV ?? mode,
   };
-  const kratosPublicUrl =
-    env.VITE_KRATOS_PUBLIC_URL ?? 'http://localhost:4433';
-  const authAppUrl = env.VITE_AUTH_APP_URL ?? 'http://localhost:3004';
+  const authUrl = env.VITE_AUTH_URL ?? 'http://localhost:3000';
 
   return {
   root: __dirname,
@@ -58,8 +53,7 @@ export default defineConfig(({ mode }) => {
   plugins: [react(), vanillaExtractPlugin(), cmsOrganizerBffPlugin(env)],
   define: {
     'process.env.VITE_API_BASE_URL': JSON.stringify('/cms-api'),
-    'process.env.VITE_KRATOS_PUBLIC_URL': JSON.stringify(kratosPublicUrl),
-    'process.env.VITE_AUTH_APP_URL': JSON.stringify(authAppUrl),
+    'process.env.VITE_AUTH_URL': JSON.stringify(authUrl),
     'process.env.NODE_ENV': JSON.stringify(mode),
   },
 
