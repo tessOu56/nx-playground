@@ -2,6 +2,7 @@ import liff from '@line/liff';
 
 import { authClient } from '../auth/auth-client';
 import { LINE_TW_PROVIDER_ID } from '../auth/line-account-map';
+import { readPortalSessionUser } from '../auth/session-user';
 
 import {
   LINE_LOGIN_NOT_CONFIGURED,
@@ -78,15 +79,14 @@ export const lineLogout = async (): Promise<void> => {
 
 export const getLineUserInfo = async () => {
   const { data } = await authClient.getSession();
-  const lineId =
-    typeof data?.user?.lineId === 'string' ? data.user.lineId : null;
-  if (!data?.user) return null;
+  const user = readPortalSessionUser(data?.user);
+  if (!user) return null;
   return {
     profile: {
-      userId: lineId ?? data.user.id,
-      displayName: data.user.name ?? '',
-      pictureUrl: data.user.image ?? undefined,
+      userId: user.lineId ?? user.id,
+      displayName: user.name ?? '',
+      pictureUrl: user.image ?? undefined,
     },
-    lineId,
+    lineId: user.lineId,
   };
 };

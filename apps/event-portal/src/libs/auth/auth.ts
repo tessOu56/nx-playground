@@ -76,7 +76,7 @@ export const auth = betterAuth({
         before: async user => ({
           data: {
             ...user,
-            email: optionalEmail(user.email) ?? null,
+            email: optionalEmail(user.email),
           },
         }),
       },
@@ -87,7 +87,7 @@ export const auth = betterAuth({
             email:
               user.email === undefined
                 ? undefined
-                : optionalEmail(user.email) ?? null,
+                : optionalEmail(user.email),
           },
         }),
       },

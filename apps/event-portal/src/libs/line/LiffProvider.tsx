@@ -12,6 +12,10 @@ import React, {
 } from 'react';
 
 import { authClient } from '../auth/auth-client';
+import {
+  readPortalSessionUser,
+  type PortalSessionUser,
+} from '../auth/session-user';
 import { extractLocale } from '../i18n/localeRoutes';
 
 import { lineLogin, lineLogout, isLiffEnvironment } from './auth';
@@ -49,20 +53,13 @@ export const useLiff = (): LiffContextType => {
   return context;
 };
 
-function userInfoFromSession(session: {
-  user: {
-    id: string;
-    name?: string | null;
-    image?: string | null;
-    lineId?: string | null;
-  };
-}): LiffUserInfo {
-  const lineId = session.user.lineId ?? null;
+function userInfoFromSession(user: PortalSessionUser): LiffUserInfo {
+  const lineId = user.lineId ?? null;
   return {
     profile: {
-      userId: lineId ?? session.user.id,
-      displayName: session.user.name ?? '',
-      pictureUrl: session.user.image ?? undefined,
+      userId: lineId ?? user.id,
+      displayName: user.name ?? '',
+      pictureUrl: user.image ?? undefined,
     },
     lineId,
   };
@@ -127,8 +124,9 @@ export const LiffProvider: FC<LiffProviderProps> = ({ children }) => {
         }
 
         finalState.isInitialized = true;
-        if (data?.user) {
-          const userInfo = userInfoFromSession(data);
+        const user = readPortalSessionUser(data?.user);
+        if (user) {
+          const userInfo = userInfoFromSession(user);
           finalState.isLoggedIn = true;
           finalState.userInfo = userInfo;
           finalState.profile = userInfo.profile;
@@ -140,7 +138,7 @@ export const LiffProvider: FC<LiffProviderProps> = ({ children }) => {
           ...finalState,
         }));
 
-        if (data?.user) {
+        if (user) {
           const locale = extractLocale(window.location.pathname) ?? 'zh-TW';
           const returnPath = takeLineLoginReturnPath(locale);
           if (returnPath !== window.location.pathname) {
