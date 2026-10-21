@@ -65,6 +65,8 @@ module.exports = {
     '/.next/',
     '/out/',
     '/.nx/',
+    '/.agents/',
+    '/.cursor/',
     'jest.config.js',
     'jest.setup.js',
     'tailwind.config.js',

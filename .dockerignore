@@ -20,3 +20,7 @@ pnpm-debug.log*
 # Nx related cache and temporary files
 .nx/
 tmp/
+
+# Vendored agent skills
+.agents/
+.cursor/

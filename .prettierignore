@@ -29,3 +29,7 @@ pnpm-lock.yaml
 # Documentation that should not be formatted
 CHANGELOG.md
 .nx/self-healing
+
+# Vendored agent skills (verbatim upstream copies)
+.agents/skills
+.cursor/skills

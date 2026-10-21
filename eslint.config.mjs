@@ -23,6 +23,8 @@ export default [
       'apps/auth/**',
       'labs/**',
       'libs/api-client/src/generated/**',
+      '.agents/**',
+      '.cursor/skills/**',
     ],
   },
   {

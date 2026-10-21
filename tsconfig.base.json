@@ -72,5 +72,5 @@
       "name": "@vanilla-extract/typescript-plugin"
     }
   ],
-  "exclude": ["node_modules", "tmp"]
+  "exclude": ["node_modules", "tmp", ".agents", ".cursor"]
 }
