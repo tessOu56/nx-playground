@@ -1,12 +1,15 @@
 'use client';
 
-import { canStartLineLogin, useLiff } from '@/libs';
+import Link from 'next/link';
+
+import { useLiff } from '@/libs';
 import { demoCopy } from '@/libs/i18n/demo-copy';
 
 export function PublicSiteAccount({ locale }: { locale: string }) {
-  const { isLoggedIn, profile, logout, login, isInitialized, error } = useLiff();
+  const { isLoggedIn, profile, logout } = useLiff();
   const copy = demoCopy(locale);
-  const lineLoginReady = canStartLineLogin();
+  const accountHref = `/${locale}/account`;
+  const loginHref = `/${locale}/login`;
 
   if (isLoggedIn) {
     const name = profile?.displayName?.trim() ?? '';
@@ -15,6 +18,12 @@ export function PublicSiteAccount({ locale }: { locale: string }) {
         {name ? (
           <span className='max-w-[9rem] truncate text-foreground'>{name}</span>
         ) : null}
+        <Link
+          href={accountHref}
+          className='rounded-md px-1.5 py-1 text-xs font-medium text-foreground hover:bg-muted sm:px-2 sm:text-sm'
+        >
+          {copy.navAccount}
+        </Link>
         <button
           type='button'
           onClick={() => logout()}
@@ -26,29 +35,12 @@ export function PublicSiteAccount({ locale }: { locale: string }) {
     );
   }
 
-  if (!lineLoginReady) {
-    return null;
-  }
-
   return (
-    <div className='flex items-center gap-2'>
-      <button
-        type='button'
-        onClick={() => login()}
-        disabled={!isInitialized}
-        className='rounded-md px-1.5 py-1 text-xs font-medium text-foreground hover:bg-muted sm:px-2 sm:text-sm'
-      >
-        {error
-          ? copy.retryLogin
-          : isInitialized
-            ? copy.lineLogin
-            : copy.linePreparing}
-      </button>
-      {error ? (
-        <span className='sr-only' role='alert'>
-          {copy.lineLoginError}
-        </span>
-      ) : null}
-    </div>
+    <Link
+      href={loginHref}
+      className='rounded-md px-1.5 py-1 text-xs font-medium text-foreground hover:bg-muted sm:px-2 sm:text-sm'
+    >
+      {copy.signIn}
+    </Link>
   );
 }
