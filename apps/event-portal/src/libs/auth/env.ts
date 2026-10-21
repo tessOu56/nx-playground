@@ -29,7 +29,10 @@ export function betterAuthBaseUrl(): string {
 export function betterAuthSecret(): string {
   const secret = process.env.BETTER_AUTH_SECRET?.trim();
   if (secret) return secret;
-  if (process.env.NODE_ENV === 'production') {
+  if (
+    process.env.NODE_ENV === 'production' &&
+    process.env.NEXT_PHASE !== 'phase-production-build'
+  ) {
     throw new Error('BETTER_AUTH_SECRET is required');
   }
   return 'dev-only-better-auth-secret-change-me';
