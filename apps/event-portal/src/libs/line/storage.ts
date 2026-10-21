@@ -33,13 +33,24 @@ export const saveLiffState = (initialized: boolean): void => {
   } catch (error) {}
 };
 
+/** Profile cache only — never persist LINE access/id tokens (TM-005). */
+export function publicUserInfo<T extends Record<string, unknown>>(
+  userInfo: T
+): T {
+  return {
+    ...userInfo,
+    idToken: null,
+    accessToken: null,
+  };
+}
+
 // 保存用戶資訊到 localStorage
 export const saveUserInfo = (userInfo: any): void => {
   try {
     if (typeof window === 'undefined') return;
 
     const data = {
-      userInfo,
+      userInfo: publicUserInfo(userInfo ?? {}),
       timestamp: Date.now(),
     };
     localStorage.setItem(
@@ -61,7 +72,9 @@ export const restoreUserInfo = (): any => {
 
       // 檢查用戶資訊是否過期（1小時）
       if (data.timestamp && now - data.timestamp < 60 * 60 * 1000) {
-        return data.userInfo;
+        const userInfo = data.userInfo;
+        if (!userInfo || typeof userInfo !== 'object') return null;
+        return publicUserInfo(userInfo);
       }
     }
   } catch (error) {}

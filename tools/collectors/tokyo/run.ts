@@ -1,6 +1,10 @@
 import { PrismaClient } from '@prisma/client';
 
-import { assertPostgresUrl, loadRootEnv } from '../shared/env';
+import {
+  assertPostgresUrl,
+  collectorDatabaseUrl,
+  loadRootEnv,
+} from '../shared/env';
 import { upsertNormalizedEvents } from '../shared/persist';
 import type { CollectorBatch } from '../shared/types';
 
@@ -33,15 +37,17 @@ async function collectAll(): Promise<CollectorBatch[]> {
 
 async function main() {
   loadRootEnv();
-  const databaseUrl = process.env.DATABASE_URL?.trim() ?? '';
+  const databaseUrl = collectorDatabaseUrl();
   if (!databaseUrl) {
-    console.log('DATABASE_URL is not set; skipping Tokyo collectors.');
+    console.log(
+      'COLLECTOR_DATABASE_URL is not set; skipping Tokyo collectors.'
+    );
     process.exit(0);
   }
   assertPostgresUrl(databaseUrl);
 
   const batches = await collectAll();
-  const prisma = new PrismaClient();
+  const prisma = new PrismaClient({ datasourceUrl: databaseUrl });
   try {
     const summary = [];
     for (const batch of batches) {

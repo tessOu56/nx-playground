@@ -16,7 +16,7 @@ const UNAUTHORIZED = 'Invalid LINE signature';
 export const MAX_LINE_WEBHOOK_BYTES = 256 * 1024;
 
 export async function GET(request: NextRequest) {
-  const limited = enforceLineRateLimit(
+  const limited = await enforceLineRateLimit(
     request,
     consumeLineWebhookRateLimit,
     'text'
@@ -26,7 +26,7 @@ export async function GET(request: NextRequest) {
 }
 
 export async function POST(request: NextRequest) {
-  const limited = enforceLineRateLimit(
+  const limited = await enforceLineRateLimit(
     request,
     consumeLineWebhookRateLimit,
     'text'

@@ -20,21 +20,27 @@ describe('LINE rate limits', () => {
     assert.equal(lineRateLimitDisabled({ LINE_RATE_LIMIT: '0' }), true);
   });
 
-  it('uses separate buckets for webhook and token exchange', () => {
+  it('uses separate buckets for webhook and token exchange', async () => {
     const now = 2_000_000;
-    assert.equal(consumeLineWebhookRateLimit('9.9.9.9', now, 1).ok, true);
-    assert.equal(consumeLineWebhookRateLimit('9.9.9.9', now + 1, 1).ok, false);
-    assert.equal(consumeLineAuthTokenRateLimit('9.9.9.9', now, 1).ok, true);
+    assert.equal((await consumeLineWebhookRateLimit('9.9.9.9', now, 1)).ok, true);
+    assert.equal(
+      (await consumeLineWebhookRateLimit('9.9.9.9', now + 1, 1)).ok,
+      false
+    );
+    assert.equal(
+      (await consumeLineAuthTokenRateLimit('9.9.9.9', now, 1)).ok,
+      true
+    );
   });
 
-  it('returns a 429 Response with Retry-After', () => {
+  it('returns a 429 Response with Retry-After', async () => {
     const request = new Request('http://localhost/api/line/webhook', {
       headers: { 'x-forwarded-for': '203.0.113.10' },
     });
-    consumeLineWebhookRateLimit('203.0.113.10', Date.now(), 1);
-    const response = enforceLineRateLimit(
+    await consumeLineWebhookRateLimit('203.0.113.10', Date.now(), 1);
+    const response = await enforceLineRateLimit(
       request,
-      (key) => consumeLineWebhookRateLimit(key, Date.now(), 1),
+      key => consumeLineWebhookRateLimit(key, Date.now(), 1),
       'text'
     );
     assert.ok(response);

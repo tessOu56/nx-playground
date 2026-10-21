@@ -16,6 +16,8 @@ import {
   clearLineLoginState,
   markCallbackProcessed,
   isCallbackProcessed,
+  publicUserInfo,
+  saveUserInfo,
 } from './storage';
 import { isLineLoginCancelledError } from './login-return';
 import { verifyLiffIdToken } from './verify-id-token-client';
@@ -80,8 +82,53 @@ export const lineLogin = async (): Promise<void> => {
   window.location.href = loginUrl;
 };
 
+export async function fetchLineServerSession() {
+  if (typeof window === 'undefined') return null;
+  try {
+    const response = await fetch('/api/line/auth/session', {
+      method: 'GET',
+      credentials: 'same-origin',
+      headers: { Accept: 'application/json' },
+    });
+    if (!response.ok) return null;
+    const body = (await response.json()) as Record<string, unknown>;
+    if (typeof body.lineId !== 'string' || !body.lineId) return null;
+    return publicUserInfo(body);
+  } catch {
+    return null;
+  }
+}
+
+async function establishLineServerSession(tokens: {
+  idToken: string;
+  accessToken: string;
+}) {
+  const response = await fetch('/api/line/auth/session', {
+    method: 'POST',
+    credentials: 'same-origin',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(tokens),
+  });
+  if (!response.ok) return null;
+  const body = (await response.json()) as Record<string, unknown>;
+  if (typeof body.lineId !== 'string' || !body.lineId) return null;
+  return publicUserInfo(body);
+}
+
+async function clearLineServerSession() {
+  if (typeof window === 'undefined') return;
+  try {
+    await fetch('/api/line/auth/session', {
+      method: 'DELETE',
+      credentials: 'same-origin',
+    });
+  } catch {
+    // Cookie clear is best-effort; local profile cache is still wiped.
+  }
+}
+
 // 統一的 LINE 登出函數
-export const lineLogout = (): void => {
+export const lineLogout = async (): Promise<void> => {
   try {
     if (isLiffEnvironment()) {
       liff.logout();
@@ -89,6 +136,7 @@ export const lineLogout = (): void => {
   } catch {
     // LIFF 未初始化時仍清掉本機 OAuth session
   }
+  await clearLineServerSession();
   clearLineLoginState();
   localStorage.removeItem(LINE_CONSTANTS.LIFF_USER_INFO_KEY);
 };
@@ -107,19 +155,16 @@ export const getFullUserInfoFromLiff = async () => {
     if (!decodedIdToken) return null;
     const lineId = decodedIdToken.sub;
 
-    const userInfo = {
+    const session = accessToken
+      ? await establishLineServerSession({ idToken, accessToken })
+      : null;
+    const userInfo = publicUserInfo({
       profile,
-      idToken,
-      accessToken,
       decodedIdToken,
       lineId,
-    };
-
-    // 保存到本地存儲
-    localStorage.setItem(
-      LINE_CONSTANTS.LIFF_USER_INFO_KEY,
-      JSON.stringify(userInfo)
-    );
+      ...(session ?? {}),
+    });
+    saveUserInfo(userInfo);
     return userInfo;
   } catch (_error) {
     return null;
@@ -134,13 +179,20 @@ export const getLineUserInfo = async () => {
       return await getFullUserInfoFromLiff();
     }
 
-    // 2. 檢查本地存儲
+    const serverSession = await fetchLineServerSession();
+    if (serverSession) return serverSession;
+
+    // 2. 檢查本地存儲（profile only; tokens are stripped）
     const savedUserInfo = localStorage.getItem(
       LINE_CONSTANTS.LIFF_USER_INFO_KEY
     );
     if (savedUserInfo) {
       try {
-        return JSON.parse(savedUserInfo);
+        const parsed = JSON.parse(savedUserInfo);
+        const nested = parsed?.userInfo ?? parsed;
+        if (nested && typeof nested === 'object') {
+          return publicUserInfo(nested);
+        }
       } catch (_parseError) {
         localStorage.removeItem(LINE_CONSTANTS.LIFF_USER_INFO_KEY);
       }
@@ -187,22 +239,15 @@ export const handleLineCallback = async () => {
     return null;
   }
 
-  // 檢查已存在的用戶信息
-  const existingUserInfo = localStorage.getItem(
-    LINE_CONSTANTS.LIFF_USER_INFO_KEY
-  );
-  if (existingUserInfo) {
+  const existingSession = await fetchLineServerSession();
+  if (existingSession) {
     markCallbackProcessed(state);
-    return JSON.parse(existingUserInfo);
+    return existingSession;
   }
 
   // 驗證 state
   const savedState = getLineLoginState();
   if (!savedState || state !== savedState) {
-    if (existingUserInfo) {
-      markCallbackProcessed(state);
-      return JSON.parse(existingUserInfo);
-    }
     throw new Error('State 驗證失敗');
   }
 
@@ -224,6 +269,7 @@ export const handleLineCallback = async () => {
 
     const tokenResponse = await fetch('/api/line/auth/token', {
       method: 'POST',
+      credentials: 'same-origin',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         code,
@@ -235,21 +281,16 @@ export const handleLineCallback = async () => {
       throw new Error('獲取 access token 失敗');
     }
 
-    const tokenData = await tokenResponse.json();
-    const realUserInfo = {
+    const tokenData = (await tokenResponse.json()) as Record<string, unknown>;
+    const realUserInfo = publicUserInfo({
       profile: tokenData.profile,
-      idToken: tokenData.idToken,
-      accessToken: tokenData.accessToken,
       decodedIdToken: tokenData.decodedIdToken,
       lineId: tokenData.lineId,
       tokenType: tokenData.tokenType,
       expiresIn: tokenData.expiresIn,
-    };
+    });
 
-    localStorage.setItem(
-      LINE_CONSTANTS.LIFF_USER_INFO_KEY,
-      JSON.stringify(realUserInfo)
-    );
+    saveUserInfo(realUserInfo);
     clearLineLoginState();
     return realUserInfo;
   } catch (error) {

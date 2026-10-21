@@ -367,10 +367,17 @@ export const getFullUserInfo = async () => {
     if (!decodedIdToken) return null;
     const lineId = decodedIdToken.sub;
 
+    await fetch('/api/line/auth/session', {
+      method: 'POST',
+      credentials: 'same-origin',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ idToken, accessToken }),
+    }).catch(() => undefined);
+
     return {
       profile,
-      idToken,
-      accessToken,
+      idToken: null,
+      accessToken: null,
       decodedIdToken,
       lineId,
     };

@@ -55,25 +55,60 @@ Use Tess’s Official Account **@006dcvmv** (Messaging API). The Login/LIFF chan
 
 The handler verifies `x-line-signature = base64(HMAC-SHA256(raw body, LINE_CHANNEL_SECRET))` with a timing-safe compare, then replies with the **Reply API** only (no Push in this phase).
 
-In-app fixed-window limits (per isolate, 60s) run **before** HMAC / LINE OAuth: webhook `180`, token exchange `20`, id-token verify `30`. Exceeded requests return **429** + `Retry-After`. Set `LINE_RATE_LIMIT=0` to disable locally. This is not a substitute for Vercel Firewall.
+In-app fixed-window limits (60s) run **before** HMAC / LINE OAuth: webhook `180`, token exchange `20`, id-token verify `30`. Exceeded requests return **429** + `Retry-After`. Counters are shared across Vercel isolates via Upstash Redis REST (`UPSTASH_REDIS_REST_URL` + `UPSTASH_REDIS_REST_TOKEN`) or Neon `portal_kv` (when `DATABASE_URL` is set), and fall back to in-process memory if the store is down. Set `LINE_RATE_LIMIT=0` to disable locally. This is not a substitute for Vercel Firewall.
+
+LINE Login tokens from `/api/line/auth/token` and `/api/line/auth/session` are stored in **httpOnly Secure SameSite=Lax** cookies (`nx_line_at`, `nx_line_it`). JSON responses never include `accessToken` / `idToken`. `GET /api/line/auth/session` returns profile claims; `DELETE` logs out.
+
+Signed webhooks are processed only when `timestamp` is within 10 minutes and `webhookEventId` has not been seen (24h TTL in the same shared store).
 
 LINE Login ID-token verification (P1) stays on `/api/line/auth/token` and `/api/line/auth/id-token` using `NEXT_PUBLIC_LINE_CLIENT_ID` = `2011182044`.
 
-## 3. GitHub `DATABASE_URL` secret (Taipei collector)
+## 3. GitHub collector secrets (least-privilege)
 
-Repo **tessOu56/nx-playground** → Settings → Secrets and variables → Actions → New repository secret:
+Repo **tessOu56/nx-playground** → Settings → Secrets and variables → Actions:
 
 | Name | Value |
 | --- | --- |
-| `DATABASE_URL` | Same Neon URL the webhook uses |
+| `COLLECTOR_DATABASE_URL` | Neon URL for role `event_collector` (SELECT/INSERT/UPDATE on `events` + `event_embeddings` only) |
+| `DATABASE_URL` | Owner/admin Neon URL — **migrate deploy only**, not collect/backfill |
+
+Collect and embedding backfill steps receive **only** `COLLECTOR_DATABASE_URL`. They do not get the owner `DATABASE_URL`. Local CLI still falls back to `DATABASE_URL` when `COLLECTOR_DATABASE_URL` is unset.
+
+### One-time Neon / local Postgres steps (owner role)
+
+1. Apply migrations (creates `portal_kv` and role `event_collector`):
+
+```bash
+pnpm exec prisma migrate deploy --schema=apps/api-server/prisma/schema.prisma
+```
+
+2. Set a strong password (do not commit it):
+
+```sql
+ALTER ROLE event_collector PASSWORD '<generate-a-long-random-secret>';
+```
+
+3. Build the collector DSN from the same host/db as the owner URL, swapping the user:
+
+`postgresql://event_collector:<password>@<neon-host>/<db>?sslmode=require`
+
+Local docker example after `make db-up`:
+
+`COLLECTOR_DATABASE_URL=postgresql://event_collector:<password>@127.0.0.1:5433/event_stack`
+
+4. Add GitHub Actions secret `COLLECTOR_DATABASE_URL`. Keep owner `DATABASE_URL` for `prisma migrate deploy` in CI/Render only.
+
+5. Optional: remove `DATABASE_URL` from the collect/backfill mental model. Do not paste the owner URL into `COLLECTOR_DATABASE_URL`.
+
+The role cannot read `users`, `sessions`, `forms`, or `portal_kv`, and cannot DELETE catalog rows or run DDL.
 
 Workflow: `.github/workflows/collect-taipei.yml`
 
 - Cron: `0 19 * * *` (03:00 Asia/Taipei)
 - Also **workflow_dispatch** (Actions → “Taipei exhibition collector” → Run workflow)
-- If the secret is missing, the job **exits 0** and prints a skip notice (no failed red X).
+- If `COLLECTOR_DATABASE_URL` is missing, the job **exits 0** and prints a skip notice (no failed red X).
 
-The collector applies Prisma migrations (including `pg_trgm`, CJK FTS `search_tsv`, and pgvector `event_embeddings.embedding`) then upserts Ministry of Culture open data for **Taipei City** (`source = moc-opendata`). When `EMBEDDING_PROVIDER` + `EMBEDDING_API_KEY` are set, it also backfills document embeddings; otherwise that step is a no-op. Tokyo collectors are a separate workflow (`.github/workflows/collect-tokyo.yml`); they apply the same Prisma migrations. Embedding backfill is optional and no-ops when provider env is unset.
+The collector applies Prisma migrations **when owner `DATABASE_URL` is set** (including `pg_trgm`, CJK FTS `search_tsv`, pgvector, `portal_kv`, and the collector role) then upserts Ministry of Culture open data for **Taipei City** (`source = moc-opendata`). When `EMBEDDING_PROVIDER` + `EMBEDDING_API_KEY` are set, it also backfills document embeddings; otherwise that step is a no-op. Tokyo collectors are a separate workflow (`.github/workflows/collect-tokyo.yml`). Embedding backfill is optional and no-ops when provider env is unset.
 
 ## 3b. Exhibition search (Phase 3)
 
@@ -140,6 +175,6 @@ Tokyo listings come from official RSS/APIs and TMG open data only. Each source, 
 | --- | --- |
 | `0 18 * * *` (03:00 Asia/Tokyo) | `.github/workflows/collect-tokyo.yml` |
 
-Same `DATABASE_URL` secret as Taipei. Missing secret → skip with exit 0.
+Same `COLLECTOR_DATABASE_URL` secret as Taipei. Missing secret → skip with exit 0.
 
 Sources in this phase: Tokyo Metropolitan Teien Art Museum exhibition REST (ja/en/zh-tw), Arts Council Tokyo festivals RSS, CCBT events RSS, TMG recommended event CSV (CC BY 4.0; live file is still the 2018–19 snapshot).

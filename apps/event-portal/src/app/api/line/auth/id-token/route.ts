@@ -21,7 +21,7 @@ function ownerChannelId(value: string | undefined): string {
 }
 
 export async function POST(request: NextRequest) {
-  const limited = enforceLineRateLimit(
+  const limited = await enforceLineRateLimit(
     request,
     consumeLineAuthIdTokenRateLimit,
     'json'

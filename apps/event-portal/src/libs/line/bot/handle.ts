@@ -2,6 +2,11 @@ import { searchExhibitions } from '../../exhibition-search';
 
 import { searchCatalog, type CatalogEvent } from './catalog-search';
 import {
+  claimLineWebhookEventId,
+  isStaleLineWebhookEvent,
+  lineWebhookEventId,
+} from './replay';
+import {
   catalogUnavailableMessage,
   exhibitionCarousel,
   helpMessage,
@@ -15,15 +20,22 @@ import { replyMessages } from './reply';
 type LineTextEvent = {
   type: 'message';
   replyToken?: string;
+  timestamp?: number;
+  webhookEventId?: string;
   message?: { type: string; text?: string };
 };
 
 type LineFollowEvent = {
   type: 'follow';
   replyToken?: string;
+  timestamp?: number;
+  webhookEventId?: string;
 };
 
-type LineWebhookEvent = LineTextEvent | LineFollowEvent | { type: string; replyToken?: string };
+type LineWebhookEvent =
+  | LineTextEvent
+  | LineFollowEvent
+  | { type: string; replyToken?: string; timestamp?: number; webhookEventId?: string };
 
 type LineWebhookBody = {
   events?: LineWebhookEvent[];
@@ -34,6 +46,7 @@ export type LineBotDeps = {
   search?: (input: Parameters<typeof searchCatalog>[0]) => Promise<CatalogEvent[]>;
   reply?: typeof replyMessages;
   portalOrigin?: string;
+  claimEventId?: (webhookEventId: string, now: number) => Promise<boolean>;
 };
 
 function asBody(rawBody: string): LineWebhookBody {
@@ -90,8 +103,17 @@ export async function handleLineWebhookBody(
 ): Promise<void> {
   const body = asBody(rawBody);
   const reply = deps.reply ?? replyMessages;
+  const nowMs = (deps.now ?? new Date()).getTime();
+  const claim = deps.claimEventId ?? claimLineWebhookEventId;
 
   for (const event of body.events ?? []) {
+    if (isStaleLineWebhookEvent(event, nowMs)) continue;
+    const eventId = lineWebhookEventId(event);
+    if (eventId) {
+      const claimed = await claim(eventId, nowMs);
+      if (!claimed) continue;
+    }
+
     const replyToken = event.replyToken?.trim();
     if (!replyToken) continue;
 

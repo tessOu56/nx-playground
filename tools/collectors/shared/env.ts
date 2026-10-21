@@ -25,6 +25,14 @@ export function loadRootEnv(cwd = process.cwd()) {
   }
 }
 
+export function collectorDatabaseUrl(
+  env: NodeJS.ProcessEnv = process.env
+): string {
+  return (
+    env.COLLECTOR_DATABASE_URL?.trim() || env.DATABASE_URL?.trim() || ''
+  );
+}
+
 export function assertPostgresUrl(url: string): string {
   const trimmed = url.trim();
   if (
@@ -32,7 +40,9 @@ export function assertPostgresUrl(url: string): string {
     trimmed.includes('mode=memory') ||
     !/^postgres(ql)?:\/\//i.test(trimmed)
   ) {
-    throw new Error('DATABASE_URL must be postgresql.');
+    throw new Error(
+      'COLLECTOR_DATABASE_URL (or local DATABASE_URL fallback) must be postgresql.'
+    );
   }
   return trimmed;
 }

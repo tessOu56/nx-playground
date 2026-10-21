@@ -8,6 +8,10 @@ import {
 } from '../../../../../libs/line/rate-limit';
 import { isAllowedPortalOrigin } from '../../../../../libs/line/request-origin';
 import {
+  attachLineSessionCookies,
+  publicLineSessionFromClaims,
+} from '../../../../../libs/line/session-cookies';
+import {
   LineIdTokenVerificationError,
   verifyLineIdToken,
 } from '../../../../../libs/line/verify-id-token';
@@ -48,7 +52,7 @@ function lineOauthConfig(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   try {
-    const limited = enforceLineRateLimit(
+    const limited = await enforceLineRateLimit(
       request,
       consumeLineAuthTokenRateLimit,
       'json'
@@ -169,17 +173,32 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const lineId = decodedIdToken.sub;
-
-    return NextResponse.json({
+    const expiresIn =
+      typeof tokenData.expires_in === 'number' && tokenData.expires_in > 0
+        ? tokenData.expires_in
+        : 3600;
+    const response = NextResponse.json({
+      ...publicLineSessionFromClaims({
+        sub: decodedIdToken.sub,
+        name: decodedIdToken.name,
+        picture: decodedIdToken.picture,
+        email: decodedIdToken.email,
+        exp: decodedIdToken.exp,
+      }),
       profile,
-      idToken: tokenData.id_token,
-      accessToken: tokenData.access_token,
       decodedIdToken,
-      lineId,
       tokenType: tokenData.token_type,
-      expiresIn: tokenData.expires_in,
+      expiresIn,
     });
+    return attachLineSessionCookies(
+      response,
+      {
+        accessToken: tokenData.access_token,
+        idToken: tokenData.id_token,
+        expiresIn,
+      },
+      request
+    );
   } catch {
     return NextResponse.json(
       { error: 'Internal server error' },
