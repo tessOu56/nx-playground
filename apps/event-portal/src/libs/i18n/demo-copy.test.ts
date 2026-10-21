@@ -8,7 +8,10 @@ describe('demo-copy', () => {
     assert.equal(priceFromLabel(800, 'zh-TW'), 'NT$ 800 起');
     assert.equal(priceFromLabel(800, 'en'), 'From NT$ 800');
     assert.equal(priceFromLabel(0, 'en'), 'Free');
-    assert.equal(catalogPriceLabel({ price: 0, priceText: '¥1,800' }, 'en'), '¥1,800');
+    assert.equal(
+      catalogPriceLabel({ price: 0, priceText: '¥1,800' }, 'en'),
+      '¥1,800'
+    );
     assert.match(demoCopy('en').homeLead, /Taipei and Tokyo/);
     assert.match(demoCopy('zh-TW').demoBannerBody, /官方頁面/);
     assert.equal(demoCopy('en').searchEvents, 'Search exhibitions');
@@ -21,13 +24,30 @@ describe('demo-copy', () => {
     assert.equal(demoCopy('en').skipToContent, 'Skip to content');
     assert.equal(demoCopy('en').lineChat, 'Ask on LINE');
     assert.equal(demoCopy('zh-TW').officialSource, '官方頁面');
-    assert.equal(demoCopy('en').emptyCity('TOKYO'), 'No exhibitions listed in Tokyo');
+    assert.equal(
+      demoCopy('en').emptyCity('TOKYO'),
+      'No exhibitions listed in Tokyo'
+    );
     assert.equal(demoCopy('zh-TW').endedNotice, '這檔展覽已結束');
-    assert.equal(demoCopy('en').lineLoginCancelled, 'LINE sign-in was cancelled');
-    assert.equal(demoCopy('ja').lineOutside, 'このページは LINE で開いてください');
+    assert.equal(
+      demoCopy('en').lineLoginCancelled,
+      'LINE sign-in was cancelled'
+    );
+    assert.equal(
+      demoCopy('ja').lineOutside,
+      'このページは LINE で開いてください'
+    );
     assert.equal(demoCopy('en').shareListing, 'Share this listing');
     assert.equal(demoCopy('zh-TW').retryLogin, '再試一次登入');
     assert.equal(demoCopy('ja').appError, 'ページで問題が起きました');
+    assert.equal(demoCopy('en').navAccount, 'Account');
+    assert.equal(demoCopy('en').passkeyLogin, 'Sign in with passkey');
+    assert.match(
+      demoCopy('en').alreadyLinkedToOtherUser,
+      /already linked to another user/
+    );
+    assert.match(demoCopy('zh-TW').lastSignInMethod, /至少要保留/);
+    assert.match(demoCopy('en').sessionNotFresh, /Sign in again/);
   });
 
   it('localizes Japanese discovery copy and retired ticketing keys', () => {

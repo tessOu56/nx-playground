@@ -1,5 +1,11 @@
+import { passkey } from '@better-auth/passkey';
 import { betterAuth } from 'better-auth';
 import { prismaAdapter } from 'better-auth/adapters/prisma';
+import {
+  APIError,
+  createAuthMiddleware,
+  getSessionFromCtx,
+} from 'better-auth/api';
 import { nextCookies } from 'better-auth/next-js';
 import { customSession, genericOAuth, jwt, line } from 'better-auth/plugins';
 
@@ -16,13 +22,31 @@ import {
   optionalEmail,
   stripProviderSecrets,
 } from './line-account-map';
+import { passkeyRelyingParty } from './passkey-rp';
 import { identityPrisma } from './prisma';
 import { listIdentityRoles } from './roles';
+import {
+  LastSignInMethodError,
+  LAST_SIGN_IN_METHOD_CODE,
+  assertNotRemovingLastSignInMethod,
+  removalForAuthPath,
+} from './sign-in-methods';
 
 const lineTw = lineTwCredentials();
 const google = googleCredentials();
 const baseURL = betterAuthBaseUrl();
 const isProduction = process.env.NODE_ENV === 'production';
+const passkeyRp = passkeyRelyingParty(baseURL);
+
+function rethrowLastSignInMethod(error: unknown): never {
+  if (error instanceof LastSignInMethodError) {
+    throw new APIError('BAD_REQUEST', {
+      message: error.message,
+      code: LAST_SIGN_IN_METHOD_CODE,
+    });
+  }
+  throw error;
+}
 
 export const auth = betterAuth({
   baseURL,
@@ -36,7 +60,10 @@ export const auth = betterAuth({
   },
   account: {
     accountLinking: {
-      enabled: false,
+      enabled: true,
+      disableImplicitLinking: true,
+      allowDifferentEmails: true,
+      allowUnlinkingAll: true,
     },
     modelName: 'identityAccount',
   },
@@ -70,6 +97,23 @@ export const auth = betterAuth({
       path: '/',
     },
   },
+  hooks: {
+    before: createAuthMiddleware(async ctx => {
+      const removing = removalForAuthPath(ctx.path);
+      if (!removing) return;
+      const session = await getSessionFromCtx(ctx);
+      if (!session?.user?.id) return;
+      try {
+        await assertNotRemovingLastSignInMethod({
+          db: identityPrisma,
+          userId: session.user.id,
+          removing,
+        });
+      } catch (error) {
+        rethrowLastSignInMethod(error);
+      }
+    }),
+  },
   databaseHooks: {
     user: {
       create: {
@@ -85,9 +129,7 @@ export const auth = betterAuth({
           data: {
             ...user,
             email:
-              user.email === undefined
-                ? undefined
-                : optionalEmail(user.email),
+              user.email === undefined ? undefined : optionalEmail(user.email),
           },
         }),
       },
@@ -102,6 +144,19 @@ export const auth = betterAuth({
         before: async account => ({
           data: stripProviderSecrets(account),
         }),
+      },
+      delete: {
+        before: async account => {
+          try {
+            await assertNotRemovingLastSignInMethod({
+              db: identityPrisma,
+              userId: account.userId,
+              removing: 'account',
+            });
+          } catch (error) {
+            rethrowLastSignInMethod(error);
+          }
+        },
       },
     },
   },
@@ -158,6 +213,16 @@ export const auth = betterAuth({
         },
         session,
       };
+    }),
+    passkey({
+      rpID: passkeyRp.rpID,
+      rpName: 'NX Playground Exhibitions',
+      origin: passkeyRp.origin,
+      schema: {
+        passkey: {
+          modelName: 'identityPasskey',
+        },
+      },
     }),
     nextCookies(),
   ],

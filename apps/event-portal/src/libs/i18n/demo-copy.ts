@@ -30,6 +30,8 @@ export function demoCopy(locale: string | undefined) {
     navEvents: t(locale, '展覽', 'Exhibitions', '展覧会'),
     navLine: t(locale, 'LINE', 'LINE', 'LINE'),
     logout: t(locale, '登出', 'Log out', 'ログアウト'),
+    navAccount: t(locale, '帳號', 'Account', 'アカウント'),
+    signIn: t(locale, '登入', 'Sign in', 'ログイン'),
     upcoming: t(locale, '即將開始', 'Upcoming', '開催予定'),
     upcomingLead: t(
       locale,
@@ -403,12 +405,81 @@ export function demoCopy(locale: string | undefined) {
       '公式ページで確認するか、あとでもう一度見てください。'
     ),
     lineLogin: t(locale, 'LINE 登入', 'Sign in with LINE', 'LINE でログイン'),
+    googleLogin: t(locale, 'Google 登入', 'Sign in with Google', 'Google でログイン'),
+    passkeyLogin: t(locale, '通行金鑰登入', 'Sign in with passkey', 'パスキーでログイン'),
+    passkeyUsername: t(
+      locale,
+      '帳號名稱（通行金鑰）',
+      'Username (passkey)',
+      'ユーザー名（パスキー）'
+    ),
     linePreparing: t(locale, '準備中…', 'Preparing…', '準備中…'),
     lineLoginError: t(
       locale,
       'LINE 登入失敗，請再試一次。',
       'LINE sign-in failed. Please try again.',
       'LINE ログインに失敗しました。もう一度お試しください。'
+    ),
+    alreadyLinkedToOtherUser: t(
+      locale,
+      '這個 LINE 或 Google 帳號已經綁在另一個使用者上。請用原本的方式登入，或先在該帳號解除綁定。',
+      'This LINE or Google account is already linked to another user. Sign in with that account, or unlink it there first.',
+      'この LINE または Google アカウントは別のユーザーに既にリンクされています。そのアカウントでログインするか、先にリンクを解除してください。'
+    ),
+    lastSignInMethod: t(
+      locale,
+      '至少要保留一種登入方式（社群帳號或通行金鑰）。',
+      'Keep at least one sign-in method (a social account or a passkey).',
+      'サインイン方法は少なくとも1つ残してください（ソーシャルまたはパスキー）。'
+    ),
+    accountNotLinked: t(
+      locale,
+      '這個登入方式尚未綁到你的帳號。請用現有方式登入，再到帳號設定裡連結。',
+      'This sign-in method is not linked yet. Sign in with your existing method, then link it in account settings.',
+      'このサインイン方法はまだリンクされていません。既存の方法でログインし、アカウント設定でリンクしてください。'
+    ),
+    sessionNotFresh: t(
+      locale,
+      '請再登入一次後，才能變更登入方式。',
+      'Sign in again to change sign-in methods.',
+      'サインイン方法を変更するには、もう一度ログインしてください。'
+    ),
+    accountTitle: t(locale, '帳號設定', 'Account settings', 'アカウント設定'),
+    accountLead: t(
+      locale,
+      '連結 LINE 或 Google，並管理通行金鑰。沒有密碼。',
+      'Link LINE or Google, and manage passkeys. There is no password.',
+      'LINE または Google をリンクし、パスキーを管理します。パスワードはありません。'
+    ),
+    linkedAccounts: t(locale, '登入方式', 'Sign-in methods', 'サインイン方法'),
+    linked: t(locale, '已連結', 'Linked', 'リンク済み'),
+    notLinked: t(locale, '未連結', 'Not linked', '未リンク'),
+    linkAccount: t(locale, '連結', 'Link', 'リンク'),
+    unlinkAccount: t(locale, '解除連結', 'Unlink', 'リンク解除'),
+    passkeysTitle: t(locale, '通行金鑰', 'Passkeys', 'パスキー'),
+    addPasskey: t(locale, '新增通行金鑰', 'Add a passkey', 'パスキーを追加'),
+    renamePasskey: t(locale, '重新命名', 'Rename', '名前を変更'),
+    deletePasskey: t(locale, '刪除', 'Delete', '削除'),
+    unnamedPasskey: t(locale, '未命名通行金鑰', 'Unnamed passkey', '無名のパスキー'),
+    passkeyName: t(locale, '通行金鑰名稱', 'Passkey name', 'パスキー名'),
+    savePasskeyName: t(locale, '儲存', 'Save', '保存'),
+    noPasskeys: t(
+      locale,
+      '還沒有通行金鑰。新增後就可以用裝置登入。',
+      'No passkeys yet. Add one to sign in with this device.',
+      'パスキーはまだありません。このデバイスでログインするには追加してください。'
+    ),
+    signInRequired: t(
+      locale,
+      '請先登入才能管理帳號。',
+      'Sign in to manage your account.',
+      'アカウントを管理するにはログインしてください。'
+    ),
+    lastMethodHint: t(
+      locale,
+      '這是最後一種登入方式，無法移除。',
+      'This is your last sign-in method, so it cannot be removed.',
+      'これが最後のサインイン方法のため削除できません。'
     ),
     lineChat: t(locale, '在 LINE 問展覽', 'Ask on LINE', 'LINE で聞く'),
     lineAddFriend: t(locale, '加入官方帳號', 'Add official account', '公式アカウントを追加'),

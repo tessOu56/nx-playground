@@ -53,6 +53,7 @@ model IdentityUser {
 
   sessions IdentitySession[]
   accounts IdentityAccount[]
+  passkeys IdentityPasskey[]
   roles    UserRole[]
 
   @@unique([email])
@@ -117,6 +118,24 @@ model IdentityJwks {
   crv        String?
 
   @@map("identity_jwks")
+}
+
+model IdentityPasskey {
+  id           String    @id
+  name         String?
+  publicKey    String
+  userId       String
+  user         IdentityUser @relation(fields: [userId], references: [id], onDelete: Cascade)
+  credentialID String    @unique
+  counter      Int
+  deviceType   String
+  backedUp     Boolean
+  transports   String?
+  createdAt    DateTime?
+  aaguid       String?
+
+  @@index([userId])
+  @@map("identity_passkey")
 }
 
 /// Elevated roles only. Absence of a row means attendee (`user`).
