@@ -13,8 +13,9 @@ export class PermissionsGuard implements CanActivate {
       context.getHandler()
     );
 
+    // Fail closed: handlers that mount this guard must declare permissions.
     if (!requiredPermissions || requiredPermissions.length === 0) {
-      return true;
+      return false;
     }
 
     const request = context.switchToHttp().getRequest();
@@ -29,4 +30,3 @@ export class PermissionsGuard implements CanActivate {
     );
   }
 }
-
