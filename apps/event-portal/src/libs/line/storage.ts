@@ -1,4 +1,6 @@
 // LINE 本地存儲管理
+import type { LiffUserInfo } from '@/types';
+
 import { LINE_CONSTANTS } from './constants';
 
 // 從 localStorage 恢復 LIFF 狀態
@@ -34,13 +36,54 @@ export const saveLiffState = (initialized: boolean): void => {
 };
 
 /** Profile cache only — never persist LINE access/id tokens (TM-005). */
-export function publicUserInfo<T extends Record<string, unknown>>(
-  userInfo: T
-): T {
+export function publicUserInfo(
+  userInfo: Partial<LiffUserInfo> | Record<string, unknown>
+): LiffUserInfo {
+  const record = userInfo as Record<string, unknown>;
+  const rawProfile =
+    record.profile && typeof record.profile === 'object'
+      ? (record.profile as Record<string, unknown>)
+      : {};
+  const profile = {
+    userId:
+      typeof rawProfile.userId === 'string'
+        ? rawProfile.userId
+        : typeof record.lineId === 'string'
+          ? record.lineId
+          : '',
+    displayName:
+      typeof rawProfile.displayName === 'string' ? rawProfile.displayName : '',
+    pictureUrl:
+      typeof rawProfile.pictureUrl === 'string' ? rawProfile.pictureUrl : undefined,
+    statusMessage:
+      typeof rawProfile.statusMessage === 'string'
+        ? rawProfile.statusMessage
+        : undefined,
+  };
+  const rawClaims =
+    record.decodedIdToken && typeof record.decodedIdToken === 'object'
+      ? (record.decodedIdToken as Record<string, unknown>)
+      : null;
   return {
-    ...userInfo,
+    profile,
     idToken: null,
     accessToken: null,
+    decodedIdToken:
+      rawClaims && typeof rawClaims.sub === 'string'
+        ? {
+            sub: rawClaims.sub,
+            name: typeof rawClaims.name === 'string' ? rawClaims.name : undefined,
+            picture:
+              typeof rawClaims.picture === 'string' ? rawClaims.picture : undefined,
+            email: typeof rawClaims.email === 'string' ? rawClaims.email : undefined,
+            iss: typeof rawClaims.iss === 'string' ? rawClaims.iss : undefined,
+            aud: typeof rawClaims.aud === 'string' ? rawClaims.aud : undefined,
+            exp: typeof rawClaims.exp === 'number' ? rawClaims.exp : undefined,
+            iat: typeof rawClaims.iat === 'number' ? rawClaims.iat : undefined,
+            nonce: typeof rawClaims.nonce === 'string' ? rawClaims.nonce : undefined,
+          }
+        : null,
+    lineId: typeof record.lineId === 'string' ? record.lineId : profile.userId || null,
   };
 }
 
@@ -61,7 +104,7 @@ export const saveUserInfo = (userInfo: any): void => {
 };
 
 // 從 localStorage 恢復用戶資訊
-export const restoreUserInfo = (): any => {
+export const restoreUserInfo = (): LiffUserInfo | null => {
   try {
     if (typeof window === 'undefined') return null;
 

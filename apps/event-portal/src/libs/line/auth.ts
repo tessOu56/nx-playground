@@ -22,6 +22,8 @@ import {
 import { isLineLoginCancelledError } from './login-return';
 import { verifyLiffIdToken } from './verify-id-token-client';
 
+import type { LiffUserInfo } from '@/types';
+
 // 檢查是否在 LIFF 應用內。必須呼叫 isInClient()；typeof 永遠是非空字串。
 export const isLiffEnvironment = (): boolean => {
   if (typeof window === 'undefined') return false;
@@ -82,7 +84,7 @@ export const lineLogin = async (): Promise<void> => {
   window.location.href = loginUrl;
 };
 
-export async function fetchLineServerSession() {
+export async function fetchLineServerSession(): Promise<LiffUserInfo | null> {
   if (typeof window === 'undefined') return null;
   try {
     const response = await fetch('/api/line/auth/session', {
@@ -158,12 +160,7 @@ export const getFullUserInfoFromLiff = async () => {
     const session = accessToken
       ? await establishLineServerSession({ idToken, accessToken })
       : null;
-    const userInfo = publicUserInfo({
-      profile,
-      decodedIdToken,
-      lineId,
-      ...(session ?? {}),
-    });
+    const userInfo = publicUserInfo(session ?? { profile, decodedIdToken, lineId });
     saveUserInfo(userInfo);
     return userInfo;
   } catch (_error) {
@@ -215,7 +212,7 @@ export const getLineUserInfo = async () => {
 };
 
 // 處理 LINE 登入回調
-export const handleLineCallback = async () => {
+export const handleLineCallback = async (): Promise<LiffUserInfo | null> => {
   if (typeof window === 'undefined') return null;
 
   const urlParams = new URLSearchParams(window.location.search);
