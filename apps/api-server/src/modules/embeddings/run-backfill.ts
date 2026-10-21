@@ -9,7 +9,10 @@ import { backfillExhibitionEmbeddings } from './pipeline';
 
 async function main() {
   loadRootEnv();
-  const databaseUrl = process.env.DATABASE_URL?.trim() ?? '';
+  const databaseUrl =
+    process.env.COLLECTOR_DATABASE_URL?.trim() ||
+    process.env.DATABASE_URL?.trim() ||
+    '';
   if (!databaseUrl) {
     console.log(
       JSON.stringify({
@@ -33,7 +36,7 @@ async function main() {
     return;
   }
 
-  const prisma = new PrismaClient();
+  const prisma = new PrismaClient({ datasourceUrl: databaseUrl });
   try {
     const counts = await backfillExhibitionEmbeddings(prisma);
     console.log(JSON.stringify({ embeddings: counts }));

@@ -7,6 +7,17 @@ import type { LineMessage } from './messages';
 
 const NOW = new Date('2026-10-19T02:00:00.000Z');
 
+function lineEvent(
+  event: Record<string, unknown>,
+  webhookEventId: string
+): Record<string, unknown> {
+  return {
+    timestamp: NOW.getTime(),
+    webhookEventId,
+    ...event,
+  };
+}
+
 function catalogEvent(overrides: Partial<CatalogEvent> = {}): CatalogEvent {
   return {
     id: 'event_sample_tfam',
@@ -35,11 +46,14 @@ describe('handleLineWebhookBody', () => {
     await handleLineWebhookBody(
       JSON.stringify({
         events: [
-          {
-            type: 'message',
-            replyToken: 'token-1',
-            message: { type: 'text', text: '台北 本週' },
-          },
+          lineEvent(
+            {
+              type: 'message',
+              replyToken: 'token-1',
+              message: { type: 'text', text: '台北 本週' },
+            },
+            '01EVTTOKEN1'
+          ),
         ],
       }),
       {
@@ -67,16 +81,22 @@ describe('handleLineWebhookBody', () => {
     await handleLineWebhookBody(
       JSON.stringify({
         events: [
-          {
-            type: 'message',
-            replyToken: 't-help',
-            message: { type: 'text', text: '說明' },
-          },
-          {
-            type: 'message',
-            replyToken: 't-empty',
-            message: { type: 'text', text: '台北 本週 xyz-no-such' },
-          },
+          lineEvent(
+            {
+              type: 'message',
+              replyToken: 't-help',
+              message: { type: 'text', text: '說明' },
+            },
+            '01EVTHELP'
+          ),
+          lineEvent(
+            {
+              type: 'message',
+              replyToken: 't-empty',
+              message: { type: 'text', text: '台北 本週 xyz-no-such' },
+            },
+            '01EVTEMPTY'
+          ),
         ],
       }),
       {
@@ -107,11 +127,14 @@ describe('handleLineWebhookBody', () => {
       await handleLineWebhookBody(
         JSON.stringify({
           events: [
-            {
-              type: 'message',
-              replyToken: 'sample-search',
-              message: { type: 'text', text: '台北 design' },
-            },
+            lineEvent(
+              {
+                type: 'message',
+                replyToken: 'sample-search',
+                message: { type: 'text', text: '台北 design' },
+              },
+              '01EVTSAMPLE'
+            ),
           ],
         }),
         {
@@ -137,20 +160,70 @@ describe('handleLineWebhookBody', () => {
     await handleLineWebhookBody(
       JSON.stringify({
         events: [
-          { type: 'follow', replyToken: 'welcome' },
-          {
-            type: 'message',
-            replyToken: 'sticker',
-            message: { type: 'sticker' },
-          },
+          lineEvent({ type: 'follow', replyToken: 'welcome' }, '01EVTFOLLOW'),
+          lineEvent(
+            {
+              type: 'message',
+              replyToken: 'sticker',
+              message: { type: 'sticker' },
+            },
+            '01EVTSTICKER'
+          ),
         ],
       }),
       {
+        now: NOW,
         reply: async token => {
           tokens.push(token);
         },
       }
     );
     assert.deepEqual(tokens, ['welcome']);
+  });
+
+  it('skips stale timestamps and duplicate webhookEventId', async () => {
+    const tokens: string[] = [];
+    const seen = new Set<string>();
+    await handleLineWebhookBody(
+      JSON.stringify({
+        events: [
+          lineEvent(
+            {
+              type: 'message',
+              replyToken: 'fresh',
+              message: { type: 'text', text: '說明' },
+            },
+            '01EVTREPLAY'
+          ),
+          lineEvent(
+            {
+              type: 'message',
+              replyToken: 'dup',
+              message: { type: 'text', text: '說明' },
+            },
+            '01EVTREPLAY'
+          ),
+          {
+            type: 'message',
+            timestamp: NOW.getTime() - 11 * 60 * 1000,
+            webhookEventId: '01EVTSTALE',
+            replyToken: 'stale',
+            message: { type: 'text', text: '說明' },
+          },
+        ],
+      }),
+      {
+        now: NOW,
+        claimEventId: async id => {
+          if (seen.has(id)) return false;
+          seen.add(id);
+          return true;
+        },
+        reply: async token => {
+          tokens.push(token);
+        },
+      }
+    );
+    assert.deepEqual(tokens, ['fresh']);
   });
 });

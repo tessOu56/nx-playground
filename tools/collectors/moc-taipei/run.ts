@@ -1,6 +1,10 @@
 import { PrismaClient } from '@prisma/client';
 
-import { assertPostgresUrl, loadRootEnv } from '../shared/env';
+import {
+  assertPostgresUrl,
+  collectorDatabaseUrl,
+  loadRootEnv,
+} from '../shared/env';
 import { upsertNormalizedEvents } from '../shared/persist';
 
 import { fetchMocExhibitions } from './fetch';
@@ -8,9 +12,11 @@ import { normalizeMocRecords } from './normalize';
 
 async function main() {
   loadRootEnv();
-  const databaseUrl = process.env.DATABASE_URL?.trim() ?? '';
+  const databaseUrl = collectorDatabaseUrl();
   if (!databaseUrl) {
-    console.log('DATABASE_URL is not set; skipping Taipei collector.');
+    console.log(
+      'COLLECTOR_DATABASE_URL is not set; skipping Taipei collector.'
+    );
     process.exit(0);
   }
   assertPostgresUrl(databaseUrl);
@@ -18,7 +24,7 @@ async function main() {
   const raw = await fetchMocExhibitions();
   const incoming = Array.isArray(raw) ? raw.length : 0;
   const events = normalizeMocRecords(raw);
-  const prisma = new PrismaClient();
+  const prisma = new PrismaClient({ datasourceUrl: databaseUrl });
   try {
     const counts = await upsertNormalizedEvents(prisma, events);
     console.log(

@@ -119,3 +119,13 @@ model Session {
 
   @@map("sessions")
 }
+
+// Shared TTL store for portal isolates (rate limits + LINE webhook replay).
+model PortalKv {
+  key       String   @id
+  value     String
+  expiresAt DateTime @map("expires_at")
+
+  @@index([expiresAt])
+  @@map("portal_kv")
+}

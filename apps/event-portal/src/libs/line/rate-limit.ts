@@ -2,10 +2,10 @@ import { NextResponse } from 'next/server';
 
 import {
   clientIp,
-  createFixedWindowRateLimit,
   envFlagDisabled,
   type RateLimitDecision,
 } from '../http/fixed-window-rate-limit';
+import { resetSharedKvMemory, sharedIncr } from '../http/shared-kv';
 
 export { clientIp };
 export type { RateLimitDecision };
@@ -22,18 +22,21 @@ export const LINE_AUTH_TOKEN_MAX_PER_WINDOW = 20;
 /** LIFF /api/line/auth/id-token verify; slightly looser than token exchange. */
 export const LINE_AUTH_ID_TOKEN_MAX_PER_WINDOW = 30;
 
-const webhookLimit = createFixedWindowRateLimit({
-  windowMs: WINDOW_MS,
-  max: LINE_WEBHOOK_MAX_PER_WINDOW,
-});
-const authTokenLimit = createFixedWindowRateLimit({
-  windowMs: WINDOW_MS,
-  max: LINE_AUTH_TOKEN_MAX_PER_WINDOW,
-});
-const authIdTokenLimit = createFixedWindowRateLimit({
-  windowMs: WINDOW_MS,
-  max: LINE_AUTH_ID_TOKEN_MAX_PER_WINDOW,
-});
+async function consumeShared(
+  prefix: string,
+  key: string,
+  now: number,
+  max: number
+): Promise<RateLimitDecision> {
+  const result = await sharedIncr(`${prefix}:${key}`, WINDOW_MS, now);
+  if (result.count > max) {
+    return {
+      ok: false,
+      retryAfterSec: Math.max(1, Math.ceil((result.resetAt - now) / 1000)),
+    };
+  }
+  return { ok: true };
+}
 
 export function lineRateLimitDisabled(
   env: NodeJS.ProcessEnv = process.env
@@ -43,32 +46,30 @@ export function lineRateLimitDisabled(
 
 export function consumeLineWebhookRateLimit(
   key: string,
-  now?: number,
+  now = Date.now(),
   max = LINE_WEBHOOK_MAX_PER_WINDOW
-): RateLimitDecision {
-  return webhookLimit.consume(key, now, max);
+): Promise<RateLimitDecision> {
+  return consumeShared('line:webhook', key, now, max);
 }
 
 export function consumeLineAuthTokenRateLimit(
   key: string,
-  now?: number,
+  now = Date.now(),
   max = LINE_AUTH_TOKEN_MAX_PER_WINDOW
-): RateLimitDecision {
-  return authTokenLimit.consume(key, now, max);
+): Promise<RateLimitDecision> {
+  return consumeShared('line:auth-token', key, now, max);
 }
 
 export function consumeLineAuthIdTokenRateLimit(
   key: string,
-  now?: number,
+  now = Date.now(),
   max = LINE_AUTH_ID_TOKEN_MAX_PER_WINDOW
-): RateLimitDecision {
-  return authIdTokenLimit.consume(key, now, max);
+): Promise<RateLimitDecision> {
+  return consumeShared('line:auth-id-token', key, now, max);
 }
 
 export function resetLineRateLimit() {
-  webhookLimit.reset();
-  authTokenLimit.reset();
-  authIdTokenLimit.reset();
+  resetSharedKvMemory();
 }
 
 export function lineTooManyRequests(
@@ -88,13 +89,13 @@ export function lineTooManyRequests(
   return new Response('Too many requests', { status: 429, headers });
 }
 
-export function enforceLineRateLimit(
+export async function enforceLineRateLimit(
   request: Request,
-  consume: (key: string) => RateLimitDecision,
+  consume: (key: string) => RateLimitDecision | Promise<RateLimitDecision>,
   format: 'json' | 'text'
-): Response | null {
+): Promise<Response | null> {
   if (lineRateLimitDisabled()) return null;
-  const decision = consume(clientIp(request));
+  const decision = await consume(clientIp(request));
   if (decision.ok) return null;
   return lineTooManyRequests(decision, format);
 }

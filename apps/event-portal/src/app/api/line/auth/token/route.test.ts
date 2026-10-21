@@ -83,11 +83,20 @@ describe('POST /api/line/auth/token', () => {
       const body = (await response.json()) as {
         lineId?: string;
         refreshToken?: unknown;
-        accessToken?: string;
+        accessToken?: unknown;
+        idToken?: unknown;
       };
       assert.equal(body.lineId, 'U_verified_sub');
       assert.equal(body.refreshToken, undefined);
-      assert.equal(body.accessToken, 'access');
+      assert.equal(body.accessToken, null);
+      assert.equal(body.idToken, null);
+      const cookies = response.headers.getSetCookie();
+      assert.ok(
+        cookies.some(
+          cookie =>
+            cookie.includes('nx_line_at=access') && cookie.includes('HttpOnly')
+        )
+      );
     } finally {
       globalThis.fetch = originalFetch;
     }

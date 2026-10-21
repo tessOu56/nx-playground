@@ -26,7 +26,7 @@ export async function GET(request: Request) {
   }
 
   if (!searchRateLimitDisabled()) {
-    const limited = consumeSearchRateLimit(clientIp(request));
+    const limited = await consumeSearchRateLimit(clientIp(request));
     if (!limited.ok) {
       return NextResponse.json(
         { error: 'Too many requests' },

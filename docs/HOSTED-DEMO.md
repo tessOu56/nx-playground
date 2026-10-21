@@ -37,7 +37,7 @@ Do not name a Vercel project `platform-command`, `platform-api`, `plinth`, or `m
 
 Hosted portal without owner LIFF env is a **labelled demo** (`user_demo`). Binding real LINE attendees needs STOP-013 on **tessOu56** LINE Developers — never another company's channel. Nest does not host LINE webhooks. The Official Account Messaging webhook lives on **event-portal** (`/api/line/webhook`) and shares exhibition search with the catalog (`GET /api/exhibitions/search`). With `DATABASE_URL` it uses Neon FTS (CJK bigrams + `pg_trgm`); with optional embedding env it hybrid-ranks FTS against pgvector cosine; without `DATABASE_URL`, sample fixtures. See [`docs/runbooks/line-bot.md`](./runbooks/line-bot.md).
 
-Taipei catalog rows are collected from [文化部開放資料](https://cloud.culture.tw/) exhibition JSON (Taipei City only; summary + link, not full copyrighted text). Cron: `.github/workflows/collect-taipei.yml`. Tokyo rows use official museum/RSS/open-data collectors (`.github/workflows/collect-tokyo.yml`; sources in `tools/collectors/tokyo/SOURCES.md`).
+Taipei catalog rows are collected from [文化部開放資料](https://cloud.culture.tw/) exhibition JSON (Taipei City only; summary + link, not full copyrighted text). Cron: `.github/workflows/collect-taipei.yml` (secret `COLLECTOR_DATABASE_URL`, role `event_collector`). Tokyo rows use official museum/RSS/open-data collectors (`.github/workflows/collect-tokyo.yml`; sources in `tools/collectors/tokyo/SOURCES.md`). See [`docs/runbooks/line-bot.md`](./runbooks/line-bot.md) for the one-time role password + secret steps.
 
 Public C-end uses Hobby **memory** api-mock for the fixture catalog. Nest + Neon is the write path for CMS and collectors.
 

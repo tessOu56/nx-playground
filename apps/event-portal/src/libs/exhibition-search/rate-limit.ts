@@ -1,18 +1,13 @@
 import {
   clientIp,
-  createFixedWindowRateLimit,
   envFlagDisabled,
 } from '../http/fixed-window-rate-limit';
+import { resetSharedKvMemory, sharedIncr } from '../http/shared-kv';
 
 export { clientIp };
 
 const WINDOW_MS = 60_000;
 const DEFAULT_MAX = 60;
-
-const limiter = createFixedWindowRateLimit({
-  windowMs: WINDOW_MS,
-  max: DEFAULT_MAX,
-});
 
 export function searchRateLimitDisabled(
   env: NodeJS.ProcessEnv = process.env
@@ -20,14 +15,21 @@ export function searchRateLimitDisabled(
   return envFlagDisabled(env.EXHIBITION_SEARCH_RATE_LIMIT);
 }
 
-export function consumeSearchRateLimit(
+export async function consumeSearchRateLimit(
   key: string,
   now = Date.now(),
   max = DEFAULT_MAX
-): { ok: true } | { ok: false; retryAfterSec: number } {
-  return limiter.consume(key, now, max);
+): Promise<{ ok: true } | { ok: false; retryAfterSec: number }> {
+  const result = await sharedIncr(`search:${key}`, WINDOW_MS, now);
+  if (result.count > max) {
+    return {
+      ok: false,
+      retryAfterSec: Math.max(1, Math.ceil((result.resetAt - now) / 1000)),
+    };
+  }
+  return { ok: true };
 }
 
 export function resetSearchRateLimit() {
-  limiter.reset();
+  resetSharedKvMemory();
 }

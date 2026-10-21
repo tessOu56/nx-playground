@@ -16,6 +16,7 @@ import {
   lineLogout,
   isLiffEnvironment,
   handleLineCallback,
+  fetchLineServerSession,
 } from './auth';
 import {
   initializeLiff,
@@ -144,6 +145,9 @@ export const LiffProvider: FC<LiffProviderProps> = ({ children }) => {
                 userInfo = await getFullUserInfo();
               }
             }
+          }
+          if (!userInfo) {
+            userInfo = await fetchLineServerSession();
           }
           if (!userInfo) {
             userInfo = restoreUserInfo();

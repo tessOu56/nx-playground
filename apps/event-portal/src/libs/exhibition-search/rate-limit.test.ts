@@ -9,15 +9,15 @@ import {
 } from './rate-limit';
 
 describe('consumeSearchRateLimit', () => {
-  it('allows a burst then returns 429-shaped retry', () => {
+  it('allows a burst then returns 429-shaped retry', async () => {
     resetSearchRateLimit();
     const now = 1_000_000;
-    assert.equal(consumeSearchRateLimit('1.1.1.1', now, 2).ok, true);
-    assert.equal(consumeSearchRateLimit('1.1.1.1', now + 10, 2).ok, true);
-    const blocked = consumeSearchRateLimit('1.1.1.1', now + 20, 2);
+    assert.equal((await consumeSearchRateLimit('1.1.1.1', now, 2)).ok, true);
+    assert.equal((await consumeSearchRateLimit('1.1.1.1', now + 10, 2)).ok, true);
+    const blocked = await consumeSearchRateLimit('1.1.1.1', now + 20, 2);
     assert.equal(blocked.ok, false);
     if (!blocked.ok) assert.ok(blocked.retryAfterSec >= 1);
-    assert.equal(consumeSearchRateLimit('8.8.8.8', now + 20, 2).ok, true);
+    assert.equal((await consumeSearchRateLimit('8.8.8.8', now + 20, 2)).ok, true);
   });
 });
 
