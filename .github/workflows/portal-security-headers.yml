@@ -1,0 +1,47 @@
+name: Portal security headers
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - uses: pnpm/action-setup@0977fd99725f1db4007ccb2928dbb4e90d06cc86 # v6.0.10
+        with:
+          version: 10.13.1
+
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      - name: Generate Prisma client
+        run: pnpm exec prisma generate --schema=apps/api-server/prisma/schema.prisma
+
+      - name: Security header unit tests
+        run: node --import tsx --test apps/event-portal/src/libs/http/*.test.ts
+
+      - name: Install Playwright Chromium
+        run: pnpm exec playwright install --with-deps chromium
+
+      - name: Build event-portal
+        run: pnpm exec nx build @nx-playground/event-portal --skip-nx-cache
+        env:
+          NEXT_PUBLIC_SITE_URL: http://127.0.0.1:3000
+          BETTER_AUTH_URL: http://127.0.0.1:3000
+          BETTER_AUTH_SECRET: ci-only-better-auth-secret
+
+      - name: Playwright smoke
+        run: pnpm exec playwright test --config=apps/event-portal/playwright.config.ts
+        env:
+          CI: true
+          NEXT_PUBLIC_SITE_URL: http://127.0.0.1:3000
+          BETTER_AUTH_URL: http://127.0.0.1:3000
+          BETTER_AUTH_SECRET: ci-only-better-auth-secret
