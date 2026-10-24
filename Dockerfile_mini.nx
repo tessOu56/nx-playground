@@ -1,9 +1,9 @@
 # ==================== Dependencies ====================
-FROM node:18-alpine AS deps
+FROM node:24-alpine AS deps
 
 WORKDIR /app
 
-ARG PNPM_VERSION=10.13.1
+ARG PNPM_VERSION=11.28.8
 RUN npm install -g pnpm@$PNPM_VERSION
 
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml nx.json ./
@@ -13,13 +13,13 @@ COPY libs/*/package.json ./libs/
 RUN pnpm install --prod --no-frozen-lockfile --ignore-scripts
 
 # ==================== Builder ====================
-FROM node:18-alpine AS builder
+FROM node:24-alpine AS builder
 
 RUN apk add --no-cache git bash && rm -rf /var/cache/apk/*
 
 WORKDIR /app
 
-ARG PNPM_VERSION=10.13.1
+ARG PNPM_VERSION=11.28.8
 RUN npm install -g pnpm@$PNPM_VERSION
 
 COPY . .
@@ -40,13 +40,13 @@ RUN pnpm exec nx build event-portal --configuration=$BUILD_CONFIG --skip-nx-cach
 RUN pnpm exec nx build event-cms --configuration=$BUILD_CONFIG --skip-nx-cache
 
 # ==================== Event Portal Runner (Next.js with Node.js) ====================
-FROM node:18-alpine AS event-portal-runner
+FROM node:24-alpine AS event-portal-runner
 
 WORKDIR /app
 
 RUN adduser --system --uid 1001 --shell /bin/sh nextjs
 
-ARG PNPM_VERSION=10.13.1
+ARG PNPM_VERSION=11.28.8
 RUN npm install -g pnpm@$PNPM_VERSION
 
 # Copy Next.js files
@@ -137,7 +137,7 @@ WORKDIR /app
 RUN adduser -D -s /bin/sh -u 1001 nextjs
 
 # Install minimal tools
-ARG PNPM_VERSION=10.13.1
+ARG PNPM_VERSION=11.28.8
 RUN npm install -g pnpm@$PNPM_VERSION --production
 
 # Copy Next.js files

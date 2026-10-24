@@ -50,15 +50,15 @@ echo -e "${BLUE}--- NX Playground 本地開發環境設置 ---${NC}"
 print_step "檢查 Node.js 環境"
 
 if ! command -v node &> /dev/null; then
-    print_error "Node.js 未安裝，請安裝 Node.js 18+"
+    print_error "Node.js 未安裝，請安裝 Node.js 24 LTS (>=24.22.1)"
     exit 1
 fi
 
 NODE_VERSION=$(node --version | sed 's/v//')
-REQUIRED_VERSION="18.0.0"
+REQUIRED_VERSION="24.22.1"
 
 if ! node -e "process.exit(require('semver').gte('$NODE_VERSION', '$REQUIRED_VERSION') ? 0 : 1)" 2>/dev/null; then
-    print_error "Node.js 版本過低，需要 18+，當前版本: $NODE_VERSION"
+    print_error "Node.js 版本過低，需要 >=24.22.1 <25，當前版本: $NODE_VERSION"
     exit 1
 fi
 

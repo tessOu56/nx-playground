@@ -2,9 +2,9 @@
   "name": "@nx-playground/source",
   "version": "0.0.0",
   "license": "MIT",
-  "packageManager": "pnpm@10.13.1",
+  "packageManager": "pnpm@11.28.8",
   "engines": {
-    "node": ">=22"
+    "node": ">=24.22.1 <25"
   },
   "scripts": {
     "prepare": "husky",
@@ -204,20 +204,6 @@
     "zod": "^3.25.76",
     "zone.js": "~0.15.0",
     "zustand": "^5.0.6"
-  },
-  "pnpm": {
-    "overrides": {
-      "react": "19.3.1",
-      "react-dom": "19.3.1",
-      "react-router-dom": "7.18.4",
-      "tmp@<=0.2.3": ">=0.2.4",
-      "next": "16.4.2",
-      "sharp": "0.35.5",
-      "react-hook-form": "7.62.0",
-      "@is_tess/tokens": "^0.1.2",
-      "axios": "1.20.0",
-      "swiper": "12.1.2"
-    }
   },
   "devDependencies": {
     "@angular/build": "^20.3.3",
