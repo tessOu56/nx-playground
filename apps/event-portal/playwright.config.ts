@@ -21,5 +21,12 @@ export default defineConfig({
     reuseExistingServer: !process.env.CI,
     timeout: 120_000,
     cwd: __dirname,
+    env: {
+      ...process.env,
+      NEXT_PUBLIC_SITE_URL: process.env.NEXT_PUBLIC_SITE_URL ?? baseURL,
+      BETTER_AUTH_URL: process.env.BETTER_AUTH_URL ?? baseURL,
+      BETTER_AUTH_SECRET:
+        process.env.BETTER_AUTH_SECRET ?? 'ci-only-better-auth-secret',
+    },
   },
 });

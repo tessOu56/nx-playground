@@ -36,6 +36,7 @@ jobs:
         env:
           NEXT_PUBLIC_SITE_URL: http://127.0.0.1:3000
           BETTER_AUTH_URL: http://127.0.0.1:3000
+          BETTER_AUTH_SECRET: ci-only-better-auth-secret
 
       - name: Playwright smoke
         run: pnpm exec playwright test --config=apps/event-portal/playwright.config.ts
@@ -43,3 +44,4 @@ jobs:
           CI: true
           NEXT_PUBLIC_SITE_URL: http://127.0.0.1:3000
           BETTER_AUTH_URL: http://127.0.0.1:3000
+          BETTER_AUTH_SECRET: ci-only-better-auth-secret
