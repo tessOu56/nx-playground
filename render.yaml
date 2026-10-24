@@ -15,9 +15,9 @@ services:
     startCommand: bash scripts/render-event-stack-api.sh start
     envVars:
       - key: NODE_VERSION
-        value: "22"
+        value: '24'
       - key: CORS_ORIGIN
-        value: "https://nx-event-portal.vercel.app,http://localhost:3000,http://localhost:3002,http://localhost:3004"
+        value: 'https://nx-event-portal.vercel.app,http://localhost:3000,http://localhost:3002,http://localhost:3004'
       - key: DATABASE_URL
         sync: false
       - key: ADMIN_API_TOKEN
@@ -27,6 +27,6 @@ services:
       - key: AUTH_JWT_ISSUER
         sync: false
       - key: AUTH_JWT_AUDIENCE
-        value: "event-stack-api"
+        value: 'event-stack-api'
       - key: BETTER_AUTH_URL
         sync: false

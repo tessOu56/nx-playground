@@ -1,11 +1,11 @@
 # ==================== 第一階段：依賴快取 (生產環境) ====================
 # 這個階段只負責安裝最終應用程式運行時所需的生產依賴。
-FROM node:18-alpine AS deps
+FROM node:24-alpine AS deps
 
 WORKDIR /app
 
 # 安裝 pnpm
-ARG PNPM_VERSION=10.13.1
+ARG PNPM_VERSION=11.28.8
 RUN npm install -g pnpm@$PNPM_VERSION
 
 # 複製 Nx Monorepo 根目錄的配置和 pnpm 相關文件
@@ -22,7 +22,7 @@ RUN pnpm install --prod --no-frozen-lockfile --ignore-scripts
 
 # ==================== 第二階段：建構應用程式 (所有依賴) ====================
 # 這個階段會安裝所有依賴，包含開發依賴，以確保所有建構步驟都成功執行。
-FROM node:18-alpine AS builder
+FROM node:24-alpine AS builder
 
 # 安裝建構時需要的系統依賴，並清理快取
 RUN apk add --no-cache \
@@ -36,7 +36,7 @@ RUN apk add --no-cache \
 WORKDIR /app
 
 # 安裝 pnpm
-ARG PNPM_VERSION=10.13.1
+ARG PNPM_VERSION=11.28.8
 RUN npm install -g pnpm@$PNPM_VERSION
 
 # 複製所有原始碼
@@ -109,7 +109,7 @@ RUN echo "=== 開始建置專案: $PROJECT_NAME (配置: $BUILD_CONFIG) ===" && 
 
 # ==================== 第三階段：生產運行環境 ====================
 # 這個階段只包含運行應用程式所需的最小化環境。
-FROM node:18-alpine AS runner
+FROM node:24-alpine AS runner
 
 # 建立非 root 用戶
 RUN addgroup --system --gid 1001 nodejs
@@ -161,7 +161,7 @@ RUN if [ "$PROJECT_NAME" != "event-portal" ] && [ "$PROJECT_NAME" != "@nx-playgr
     fi
 
 # 根據專案類型安裝必要的工具
-ARG PNPM_VERSION=10.13.1
+ARG PNPM_VERSION=11.28.8
 RUN if [ "$PROJECT_NAME" = "event-portal" ] || [ "$PROJECT_NAME" = "@nx-playground/event-portal" ]; then \
         echo "=== 安裝 Next.js 運行時工具 ===" && \
         npm install -g pnpm@$PNPM_VERSION; \

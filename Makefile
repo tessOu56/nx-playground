@@ -72,7 +72,7 @@ help: ## 顯示此幫助信息
 	@echo "    3. 停止服務: make docker-stop"
 	@echo ""
 	@echo "$(BLUE)📖 注意事項:$(NC)"
-	@echo "  - 本地開發: 需要 Node.js 18+ 和 pnpm"
+	@echo "  - 本地開發: 需要 Node.js 24 LTS (>=24.22.1) 和 pnpm 11"
 	@echo "  - Docker 開發: 需要 Docker 和 Docker Compose (使用優化版本)"
 	@echo "  - 服務網址: Event Portal (http://localhost:3000), Event CMS (http://localhost:3002)"
 	@echo "  - Vue / Angular leftovers live under labs/ (not product). See labs/README.md."

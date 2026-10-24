@@ -4,7 +4,7 @@
 # 避免在多個腳本中硬編碼版本號
 
 # 版本配置
-export PNPM_VERSION="10.13.1"
+export PNPM_VERSION="11.28.8"
 
 # 文件配置
 export OVERRIDE_FILE="docker-compose.override.yml"

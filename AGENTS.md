@@ -48,5 +48,5 @@ pnpm dev:auth          # localhost:3004 (redirects to portal login)
 
 ## 開發環境
 
-- Node 22（`.nvmrc`/`engines`）· pnpm 10.13.1（`packageManager`，`corepack enable`）
+- Node 24（`.nvmrc`/`engines` `>=24.22.1 <25`）· pnpm 11.28.8（`packageManager`，`corepack enable`）
 - 平台差異：[docs/DEV-ENVIRONMENT.md](docs/DEV-ENVIRONMENT.md)
