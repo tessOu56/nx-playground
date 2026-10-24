@@ -44,32 +44,46 @@ const nextConfig = {
       { protocol: 'https', hostname: 'cloud.culture.tw' },
     ],
   },
+  poweredByHeader: false,
   // 配置開發環境指示器
   devIndicators: {
     position: 'bottom-right',
   },
   // 允許開發環境的跨域請求
   allowedDevOrigins: ['frontend.nx-playground.local'],
-  // 簡化的 Safari 相容性配置 - 僅在非靜態導出時啟用
-  ...(process.env.NODE_ENV !== 'production' && {
-    async headers() {
-      return [
-        {
-          source: '/(.*)',
-          headers: [
-            {
-              key: 'Cross-Origin-Embedder-Policy',
-              value: 'unsafe-none',
-            },
-            {
-              key: 'Cross-Origin-Opener-Policy',
-              value: 'unsafe-none',
-            },
-          ],
-        },
-      ];
-    },
-  }),
+  async headers() {
+    /** Keep in sync with `src/libs/http/security-headers.ts`. */
+    const permissionsPolicy = [
+      'accelerometer=()',
+      'autoplay=()',
+      'bluetooth=()',
+      'camera=()',
+      'display-capture=()',
+      'geolocation=()',
+      'gyroscope=()',
+      'hid=()',
+      'idle-detection=()',
+      'magnetometer=()',
+      'microphone=()',
+      'midi=()',
+      'payment=()',
+      'picture-in-picture=()',
+      'publickey-credentials-create=(self)',
+      'publickey-credentials-get=(self)',
+      'screen-wake-lock=()',
+      'serial=()',
+      'usb=()',
+      'xr-spatial-tracking=()',
+    ].join(', ');
+    const headers = [{ key: 'Permissions-Policy', value: permissionsPolicy }];
+    if (process.env.NODE_ENV !== 'production') {
+      headers.push(
+        { key: 'Cross-Origin-Embedder-Policy', value: 'unsafe-none' },
+        { key: 'Cross-Origin-Opener-Policy', value: 'unsafe-none' }
+      );
+    }
+    return [{ source: '/(.*)', headers }];
+  },
   // 啟用編譯優化
   experimental: {
     optimizeCss: false, // 暫時禁用以避免 critters 問題

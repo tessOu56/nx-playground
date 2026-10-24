@@ -1,14 +1,17 @@
+import { headers } from 'next/headers';
+
 import type { EventDetail } from '@/types';
 import { catalogImageSrc, PLACEHOLDER_EVENT_IMAGE } from '@/libs/api/catalog-image';
 import { exhibitionShareUrl } from '@/libs/line/exhibition-share';
 
-export function ExhibitionJsonLd({
+export async function ExhibitionJsonLd({
   event,
   locale,
 }: {
   event: EventDetail;
   locale: string;
 }) {
+  const nonce = (await headers()).get('x-nonce') ?? undefined;
   const image = catalogImageSrc(event.image);
   const country =
     event.region === 'TOKYO' ? 'JP' : event.region === 'TAIPEI' ? 'TW' : undefined;
@@ -47,6 +50,7 @@ export function ExhibitionJsonLd({
   return (
     <script
       type='application/ld+json'
+      nonce={nonce}
       dangerouslySetInnerHTML={{
         __html: JSON.stringify(jsonLd).replace(/</g, '\\u003c'),
       }}
