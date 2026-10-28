@@ -43,10 +43,118 @@ overrides:
   react: '19.3.1'
   react-dom: '19.3.1'
   react-router-dom: '7.18.4'
-  tmp@<=0.2.3: '>=0.2.4'
+  tmp: '^0.2.6'
   next: '16.4.2'
   sharp: '0.35.5'
   react-hook-form: '7.62.0'
   '@is_tess/tokens': '^0.1.2'
   axios: '1.20.0'
   swiper: '12.1.2'
+  brace-expansion@1: '^1.1.20'
+  brace-expansion@2: '^2.1.6'
+  brace-expansion@5: '^5.0.11'
+  browserslist: '^4.28.7'
+  compression: '^1.8.2'
+  body-parser@1: '^1.20.9'
+  body-parser@2: '^2.4.0'
+  defu: '^6.1.5'
+  engine.io: '^6.6.10'
+  fast-uri: '^3.1.7'
+  flatted: '^3.4.2'
+  follow-redirects: '^1.16.1'
+  handlebars: '^4.7.10'
+  http-cache-semantics: '^4.3.0'
+  http-proxy-middleware@3: '^3.0.7'
+  immutable: '^5.1.8'
+  ip-address: '^10.3.1'
+  joi: '^17.13.7'
+  js-yaml@3: '^3.15.2'
+  js-yaml@4: '^4.3.2'
+  launch-editor: '^2.14.2'
+  linkify-it: '^5.0.2'
+  lodash: '^4.18.1'
+  markdown-it: '^14.3.3'
+  minimatch@3: '^3.1.4'
+  minimatch@5: '^5.1.8'
+  minimatch@6: '^6.2.2'
+  minimatch@9: '^9.0.7'
+  minimatch@10: '^10.2.3'
+  multer: '^2.5.0'
+  nanoid@3: '^3.3.18'
+  node-forge: '^1.4.1'
+  pacote: '^21.5.1'
+  path-to-regexp@0.1: '^0.1.13'
+  path-to-regexp@8: '^8.4.0'
+  picomatch@2: '^2.3.2'
+  picomatch@4: '^4.0.4'
+  piscina@4: '^4.9.4'
+  piscina@5: '^5.3.2'
+  postcss@8: '^8.5.18'
+  proxy-addr: '^2.0.8'
+  rollup: '^4.59.0'
+  shell-quote: '^1.9.0'
+  smol-toml: '^1.7.1'
+  socket.io-parser: '^4.2.7'
+  source-map-js: '^1.2.2'
+  storybook: '^9.1.21'
+  style-dictionary: '^5.4.4'
+  svgo@2: '^2.8.4'
+  svgo@3: '^3.3.5'
+  tar@7: '^7.5.21'
+  undici@6: '^6.29.1'
+  undici@7: '^7.30.1'
+  validator: '^13.15.22'
+  vite: '^7.3.7'
+  webpack-dev-middleware@7: '^7.4.5'
+  websocket-driver: '^0.7.5'
+  ws@7: '^7.5.11'
+  ws@8: '^8.21.0'
+  basic-ftp: '6.2.1'
+  '@vue/server-renderer': '^3.5.42'
+  '@modelcontextprotocol/sdk': '^1.32.0'
+  '@xhmikosr/decompress': '^10.2.2'
+  '@xmldom/xmldom@0.8': '^0.8.15'
+  '@xmldom/xmldom@0.9': '^0.9.12'
+  '@isaacs/brace-expansion': '^5.0.1'
+  '@babel/plugin-transform-modules-systemjs': '^7.29.4'
+  '@angular/common': '^20.3.34'
+  '@angular/compiler': '^20.3.34'
+  '@angular/core': '^20.3.34'
+  '@angular/router': '^20.3.34'
+  '@angular/animations': '^20.3.34'
+  '@angular/forms': '^20.3.34'
+  '@angular/platform-browser': '^20.3.34'
+  '@angular/compiler-cli': '^20.3.34'
+  '@angular/platform-browser-dynamic': '^20.3.34'
+  '@orval/core': '^7.21.0'
+  '@orval/mcp': '^7.21.0'
+  '@orval/mock': '^7.21.0'
+  '@typespec/compiler': '^1.16.0'
+  '@typespec/openapi3': '^1.16.0'
+  serialize-javascript@7: '^7.0.3'
+
+# Majors with no same-line patch (orval 7→8, faker 9→10, glob 10/11→12, image-size 1→2, zod 3→4).
+auditConfig:
+  ignoreGhsas:
+    - GHSA-mrhx-c7xc-m3w5
+    - GHSA-qxc2-j82w-r537
+    - GHSA-5j98-mcp5-4vw2
+    - GHSA-w3rx-r6r6-pgpr
+    - GHSA-5p2g-fcmc-qvqq
+    - GHSA-3xgq-45jj-v275
+    - GHSA-5c6j-r48x-rmvq
+    - GHSA-g84c-rxfj-3j2c
+    - GHSA-2h9g-j24r-h63g
+    - GHSA-2w86-xfrc-g85r
+    - GHSA-3575-w9fc-c2j6
+    - GHSA-6437-gxhq-pqv8
+    - GHSA-653q-5476-x79g
+    - GHSA-6mr6-jvcr-2f25
+    - GHSA-88f2-fpv8-89q2
+    - GHSA-8j6p-r8jg-mxqh
+    - GHSA-fg9p-mrxr-hvq7
+    - GHSA-p4cg-3328-rvfg
+    - GHSA-w727-8j6c-2rj4
+    - GHSA-cxq5-97v7-87j8
+    - GHSA-6g55-p6wh-862q
+    - GHSA-r28c-9q8g-f849

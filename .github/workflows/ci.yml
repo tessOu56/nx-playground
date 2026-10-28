@@ -1,62 +1,22 @@
-# nx affected lint / test / build (excludes tag:legacy)
-name: ci
+# CI: shared node/audit/smoke + deps-track guard
+name: CI
 
 on:
-  pull_request:
   push:
     branches: [main]
-
-concurrency:
-  group: ci-${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
+  pull_request:
+    branches: [main]
 
 permissions:
   contents: read
 
 jobs:
-  affected:
-    name: nx affected
-    runs-on: ubuntu-latest
-    timeout-minutes: 30
-    steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-        with:
-          fetch-depth: 0
-          persist-credentials: false
+  ci-node:
+    uses: tessOu56/renovate-config/.github/workflows/ci-node.yml@cac28048c136409a6a4279a00e42b8a39f2f0791 # main
+    with:
+      command: pnpm test
+      audit: true
+      audit-level: high
 
-      - uses: pnpm/action-setup@0977fd99725f1db4007ccb2928dbb4e90d06cc86 # v6.0.10
-        with:
-          version: 11.28.8
-
-      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
-        with:
-          node-version-file: .nvmrc
-          cache: pnpm
-
-      - run: pnpm install --frozen-lockfile
-
-      - name: nx affected lint, test, build
-        run: |
-          set -euo pipefail
-          if [ "${{ github.event_name }}" = "pull_request" ]; then
-            BASE="${{ github.event.pull_request.base.sha }}"
-          else
-            BASE="${{ github.event.before }}"
-          fi
-          if [ -z "$BASE" ] || [ "$BASE" = "0000000000000000000000000000000000000000" ]; then
-            BASE=origin/main
-          fi
-          # Importer-only lockfile edits mark the whole graph affected.
-          # Drive affected from non-lockfile paths so pre-existing lib lint
-          # debt is not a gate for sandbox imports.
-          mapfile -t CHANGED < <(
-            git diff --name-only "$BASE" HEAD | grep -vE '^pnpm-lock\.yaml$' || true
-          )
-          if [ "${#CHANGED[@]}" -eq 0 ]; then
-            echo 'No non-lockfile changes; skip nx affected.'
-            exit 0
-          fi
-          printf 'Changed files:\n%s\n' "${CHANGED[*]}"
-          pnpm exec nx affected -t lint,test,build \
-            --exclude=tag:legacy,APP_NAME,LIB_NAME,ext-ai-search-portal,@nx-playground/source \
-            --files="${CHANGED[@]}"
+  deps-track-guard:
+    uses: tessOu56/renovate-config/.github/workflows/deps-track-guard.yml@cac28048c136409a6a4279a00e42b8a39f2f0791 # main
