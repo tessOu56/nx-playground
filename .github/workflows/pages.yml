@@ -1,4 +1,4 @@
-# GitHub Pages for sandbox demos (angular-dashboard, vue-motion)
+# GitHub Pages for sandbox demos (angular-dashboard, vue-motion, mfe-host)
 name: pages
 
 on:
@@ -7,11 +7,15 @@ on:
     paths:
       - 'apps/angular-dashboard/**'
       - 'apps/vue-motion/**'
+      - 'apps/mfe-host/**'
+      - 'apps/mfe-ui/**'
       - '.github/workflows/pages.yml'
   pull_request:
     paths:
       - 'apps/angular-dashboard/**'
       - 'apps/vue-motion/**'
+      - 'apps/mfe-host/**'
+      - 'apps/mfe-ui/**'
       - '.github/workflows/pages.yml'
   workflow_dispatch:
 
@@ -49,7 +53,7 @@ jobs:
         run: |
           set -euo pipefail
           SITE=_site
-          mkdir -p "$SITE/angular-dashboard" "$SITE/vue-motion"
+          mkdir -p "$SITE/angular-dashboard" "$SITE/vue-motion" "$SITE/mfe-host" "$SITE/mfe-ui"
           pnpm exec nx build angular-dashboard --configuration=pages
           BROWSER=dist/apps/angular-dashboard/browser
           if [ ! -d "$BROWSER" ]; then
@@ -60,6 +64,10 @@ jobs:
           pnpm exec nx build vue-motion
           node apps/vue-motion/scripts/postbuild-pages.mjs
           cp -a dist/apps/vue-motion/. "$SITE/vue-motion/"
+          pnpm exec nx build mfe-ui --configuration=production
+          pnpm exec nx build mfe-host --configuration=production
+          cp -a dist/apps/mfe-ui/. "$SITE/mfe-ui/"
+          cp -a dist/apps/mfe-host/. "$SITE/mfe-host/"
           cat > "$SITE/index.html" <<'HTML'
           <!doctype html>
           <html lang="en">
@@ -73,6 +81,7 @@ jobs:
               <ul>
                 <li><a href="./angular-dashboard/">angular-dashboard</a></li>
                 <li><a href="./vue-motion/">vue-motion</a></li>
+                <li><a href="./mfe-host/">mfe-host</a></li>
               </ul>
             </body>
           </html>

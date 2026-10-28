@@ -23,8 +23,10 @@ Angular / Vue / profile / mobile-approvals are leaving or already have independe
 | profile | 3003 | Personal site — no new features (graduate) |
 | angular-dashboard | 4200 | Nx import of angular-dashboard-sandbox (Angular 20.3.3) |
 | vue-motion | 8080 | Nx import of vue-motion-sandbox (Vue 3 + Vite) |
+| mfe-host | 5173 | Nx Module Federation host (micro_frontends Web3 demo) |
+| mfe-ui | 5174 | Nx Module Federation remote (shared Button) |
 
-Archived (not product): `labs/vue-motion` and `labs/enterprise-admin` — see [`labs/README.md`](../labs/README.md). Canonical Vue/Angular remains the satellite sandboxes; `apps/angular-dashboard` and `apps/vue-motion` are the Nx imports.
+Archived (not product): `labs/vue-motion` and `labs/enterprise-admin` — see [`labs/README.md`](../labs/README.md). Canonical Vue/Angular remains the satellite sandboxes; `apps/angular-dashboard` and `apps/vue-motion` are the Nx imports. `mfe-host` / `mfe-ui` replace the Turbo micro_frontends lab (source repo unmodified).
 
 ## Bootstrap
 
@@ -41,4 +43,4 @@ Runnable how-to that stays in-repo: [`EVENT-STACK-DEMO.md`](./EVENT-STACK-DEMO.m
 - Treat this file or `docs/EXECUTION-PLAN-2026H2.md` as stage SSOT
 - Develop Angular/Vue features in the satellite repos **and** in nx in parallel (inversion is T-228)
 - Rely on Cloudflare profile deploy (retired — `DEPLOY-CLOUDFLARE-RETIREMENT.md`)
-- Re-open Module Federation
+- Re-open Module Federation on the event-stack product path (`event-portal` / CMS). The sandbox host+remote (`mfe-host` / `mfe-ui`) is a labelled lab only.

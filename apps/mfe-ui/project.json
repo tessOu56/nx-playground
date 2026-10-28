@@ -1,0 +1,77 @@
+{
+  "name": "mfe-ui",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/mfe-ui/src",
+  "projectType": "application",
+  "tags": ["type:app", "stack:react", "scope:sandbox", "mf:remote"],
+  "targets": {
+    "build": {
+      "executor": "@nx/webpack:webpack",
+      "outputs": ["{options.outputPath}"],
+      "defaultConfiguration": "production",
+      "options": {
+        "compiler": "babel",
+        "outputPath": "dist/apps/mfe-ui",
+        "index": "apps/mfe-ui/src/index.html",
+        "baseHref": "/",
+        "main": "apps/mfe-ui/src/main.js",
+        "tsConfig": "apps/mfe-ui/tsconfig.app.json",
+        "assets": [],
+        "styles": ["apps/mfe-ui/src/styles.css"],
+        "scripts": [],
+        "webpackConfig": "apps/mfe-ui/webpack.config.js"
+      },
+      "configurations": {
+        "development": {
+          "extractLicenses": false,
+          "optimization": false,
+          "sourceMap": true,
+          "vendorChunk": true
+        },
+        "production": {
+          "baseHref": "/nx-playground/mfe-ui/",
+          "optimization": true,
+          "outputHashing": "all",
+          "sourceMap": false,
+          "namedChunks": false,
+          "extractLicenses": true,
+          "vendorChunk": false,
+          "webpackConfig": "apps/mfe-ui/webpack.config.prod.js"
+        }
+      }
+    },
+    "serve": {
+      "executor": "@nx/react:module-federation-dev-server",
+      "defaultConfiguration": "development",
+      "options": {
+        "buildTarget": "mfe-ui:build",
+        "port": 5174,
+        "hmr": true
+      },
+      "configurations": {
+        "development": {
+          "buildTarget": "mfe-ui:build:development"
+        },
+        "production": {
+          "buildTarget": "mfe-ui:build:production",
+          "hmr": false
+        }
+      }
+    },
+    "test": {
+      "executor": "@nx/vitest:test",
+      "outputs": ["{workspaceRoot}/coverage/apps/mfe-ui"],
+      "options": {
+        "config": "apps/mfe-ui/vite.config.js",
+        "passWithNoTests": true,
+        "reportsDirectory": "../../coverage/apps/mfe-ui"
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint",
+      "options": {
+        "lintFilePatterns": ["apps/mfe-ui/src/**/*.{js,jsx}"]
+      }
+    }
+  }
+}

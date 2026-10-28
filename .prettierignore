@@ -37,3 +37,5 @@ CHANGELOG.md
 # Imported sandbox source — keep satellite formatting
 apps/angular-dashboard/**
 apps/vue-motion/**
+apps/mfe-host/**
+apps/mfe-ui/**

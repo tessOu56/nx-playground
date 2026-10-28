@@ -1,0 +1,9 @@
+{
+  "name": "@nx-playground/mfe-host",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Nx Module Federation host for the micro_frontends Web3 demo.",
+  "devDependencies": {
+    "@nx/module-federation": "22.7.12"
+  }
+}
