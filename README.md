@@ -34,7 +34,7 @@ Interview second case after [AI Search Portal](https://github.com/tessOu56/ai-se
 - 🔐 **auth** — redirects to event-portal Better Auth（:3004 → :3000/zh-TW/login）
 
 其餘 leftover（`profile`、`mobile-approvals`）仍在 `apps/`，轉型完成前**不加功能**。  
-Vue / Angular 鏡像已移到 [`labs/`](./labs/README.md)（legacy — do not extend）。Nx import：[`apps/angular-dashboard`](./apps/angular-dashboard/README.md)（[angular-dashboard-sandbox](https://github.com/tessOu56/angular-dashboard-sandbox)，對齊本 repo Angular 20.3.3）。
+Vue / Angular 鏡像已移到 [`labs/`](./labs/README.md)（legacy — do not extend）。Nx imports：[`apps/angular-dashboard`](./apps/angular-dashboard/README.md)（[angular-dashboard-sandbox](https://github.com/tessOu56/angular-dashboard-sandbox)，對齊本 repo Angular 20.3.3）、[`apps/vue-motion`](./apps/vue-motion/README.md)（[vue-motion-sandbox](https://github.com/tessOu56/vue-motion-sandbox)）。
 
 ## 🚀 快速開始
 
@@ -98,7 +98,8 @@ nx-playground/
 │   ├── event-portal/       # 🎫 展覽探索 + LINE (Next.js 15, Port 3000)
 │   ├── profile/            # 🎯 技術展示 (React + Vite, Port 3003) — no new features
 │   ├── mobile-approvals/   # leftover — no new features
-│   └── angular-dashboard/  # Angular ops sandbox import (Port 4200)
+│   ├── angular-dashboard/  # Angular ops sandbox import (Port 4200)
+│   └── vue-motion/         # Vue motion sandbox import (Port 8080)
 ├── labs/                    # archived Vue / Angular mirrors — see labs/README.md
 ├── libs/                    # 共享函式庫
 │   ├── api-client/         # API 客戶端 (React Query + Orval)

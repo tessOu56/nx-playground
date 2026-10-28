@@ -1,0 +1,101 @@
+{
+  "labelledMock": true,
+  "note": "Demo gallery only — not a dishes REST API or Vue event site (T-2026-284).",
+  "recipes": [
+    {
+      "id": "recipe-sesame-oil-chicken",
+      "title": "Sesame oil chicken",
+      "titleZh": "麻油雞",
+      "summary": "Winter comfort broth with sesame oil, ginger, and rice wine.",
+      "summaryZh": "麻油、薑片與米酒的冬令湯品。",
+      "timeMinutes": 45,
+      "materialIds": ["mat-sesame-oil", "mat-ginger", "mat-rice-wine", "mat-chicken"]
+    },
+    {
+      "id": "recipe-tomato-egg",
+      "title": "Tomato scrambled eggs",
+      "titleZh": "番茄炒蛋",
+      "summary": "Quick weekday stir-fry; soft eggs, ripe tomatoes.",
+      "summaryZh": "平日常見快炒：嫩蛋與番茄。",
+      "timeMinutes": 15,
+      "materialIds": ["mat-egg", "mat-tomato", "mat-scallion"]
+    },
+    {
+      "id": "recipe-basil-pork",
+      "title": "Thai basil minced pork",
+      "titleZh": "打拋豬",
+      "summary": "Garlic, chili, and holy basil over rice — labelled demo plate.",
+      "summaryZh": "蒜、辣椒與九層塔蓋飯——示範盤。",
+      "timeMinutes": 25,
+      "materialIds": ["mat-pork", "mat-basil", "mat-garlic", "mat-chili"]
+    }
+  ],
+  "materials": [
+    {
+      "id": "mat-sesame-oil",
+      "name": "Sesame oil",
+      "nameZh": "麻油",
+      "kind": "oil"
+    },
+    {
+      "id": "mat-ginger",
+      "name": "Ginger",
+      "nameZh": "薑",
+      "kind": "aromatic"
+    },
+    {
+      "id": "mat-rice-wine",
+      "name": "Rice wine",
+      "nameZh": "米酒",
+      "kind": "liquid"
+    },
+    {
+      "id": "mat-chicken",
+      "name": "Chicken pieces",
+      "nameZh": "雞肉塊",
+      "kind": "protein"
+    },
+    {
+      "id": "mat-egg",
+      "name": "Eggs",
+      "nameZh": "蛋",
+      "kind": "protein"
+    },
+    {
+      "id": "mat-tomato",
+      "name": "Tomato",
+      "nameZh": "番茄",
+      "kind": "produce"
+    },
+    {
+      "id": "mat-scallion",
+      "name": "Scallion",
+      "nameZh": "蔥",
+      "kind": "aromatic"
+    },
+    {
+      "id": "mat-pork",
+      "name": "Minced pork",
+      "nameZh": "絞肉",
+      "kind": "protein"
+    },
+    {
+      "id": "mat-basil",
+      "name": "Thai basil",
+      "nameZh": "九層塔",
+      "kind": "herb"
+    },
+    {
+      "id": "mat-garlic",
+      "name": "Garlic",
+      "nameZh": "蒜",
+      "kind": "aromatic"
+    },
+    {
+      "id": "mat-chili",
+      "name": "Chili",
+      "nameZh": "辣椒",
+      "kind": "spice"
+    }
+  ]
+}

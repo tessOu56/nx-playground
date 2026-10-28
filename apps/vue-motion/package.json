@@ -1,0 +1,14 @@
+{
+  "name": "@nx-playground/vue-motion",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Nx Vue/Vite motion sandbox imported from tessOu56/vue-motion-sandbox.",
+  "dependencies": {
+    "pinia": "^3.0.4"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^6.0.9",
+    "@vue/test-utils": "^2.4.6"
+  }
+}
