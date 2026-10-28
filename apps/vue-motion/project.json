@@ -1,0 +1,65 @@
+{
+  "name": "vue-motion",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/vue-motion/src",
+  "projectType": "application",
+  "tags": ["type:app", "stack:vue", "scope:sandbox"],
+  "targets": {
+    "build": {
+      "executor": "@nx/vite:build",
+      "outputs": ["{options.outputPath}"],
+      "defaultConfiguration": "production",
+      "options": {
+        "outputPath": "dist/apps/vue-motion",
+        "skipTypeCheck": true
+      },
+      "configurations": {
+        "development": {
+          "mode": "development"
+        },
+        "production": {
+          "mode": "production"
+        }
+      }
+    },
+    "serve": {
+      "executor": "@nx/vite:dev-server",
+      "defaultConfiguration": "development",
+      "options": {
+        "buildTarget": "vue-motion:build"
+      },
+      "configurations": {
+        "development": {
+          "buildTarget": "vue-motion:build:development",
+          "hmr": true
+        },
+        "production": {
+          "buildTarget": "vue-motion:build:production",
+          "hmr": false
+        }
+      }
+    },
+    "preview": {
+      "executor": "@nx/vite:preview-server",
+      "defaultConfiguration": "production",
+      "options": {
+        "buildTarget": "vue-motion:build"
+      }
+    },
+    "test": {
+      "executor": "@nx/vitest:test",
+      "outputs": ["{workspaceRoot}/coverage/apps/vue-motion"],
+      "options": {
+        "config": "apps/vue-motion/vite.config.js",
+        "passWithNoTests": true,
+        "reportsDirectory": "../../coverage/apps/vue-motion"
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint",
+      "options": {
+        "lintFilePatterns": ["apps/vue-motion/src/**/*.{js,mjs}"]
+      }
+    }
+  }
+}
