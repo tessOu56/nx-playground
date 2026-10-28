@@ -8,6 +8,6 @@
     "@nx-playground/api-fixtures": "workspace:*"
   },
   "devDependencies": {
-    "@types/node": "^20.19.0"
+    "@types/node": "^24"
   }
 }
