@@ -27,7 +27,7 @@ pnpm dev:api-mock      # localhost:3011 (same OpenAPI, in-memory)
 pnpm dev:auth          # localhost:3004 (redirects to portal login)
 ```
 
-`profile` / `mobile-approvals` still exist under `apps/`; **no new features** until graduate tickets (platform-command T-228–230). Vue / Angular leftovers live under [`labs/`](labs/README.md) (legacy mirrors — do not extend). `apps/angular-dashboard` and `apps/vue-motion` are Nx imports of the satellite sandboxes (do not double-write features).
+`profile` / `mobile-approvals` still exist under `apps/`; **no new features** until graduate tickets (platform-command T-228–230). Vue / Angular leftovers live under [`labs/`](labs/README.md) (legacy mirrors — do not extend). `apps/angular-dashboard` and `apps/vue-motion` are Nx imports of the satellite sandboxes (do not double-write features). `apps/mfe-host` + `apps/mfe-ui` are the Nx Module Federation reimplementation of [micro_frontends](https://github.com/tessOu56/micro_frontends) (Turbo/history not copied).
 
 ## Allowed
 

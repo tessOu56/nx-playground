@@ -1,0 +1,79 @@
+{
+  "name": "mfe-host",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/mfe-host/src",
+  "projectType": "application",
+  "tags": ["type:app", "stack:react", "scope:sandbox", "mf:host"],
+  "implicitDependencies": ["mfe-ui"],
+  "targets": {
+    "build": {
+      "executor": "@nx/webpack:webpack",
+      "outputs": ["{options.outputPath}"],
+      "defaultConfiguration": "production",
+      "options": {
+        "compiler": "babel",
+        "outputPath": "dist/apps/mfe-host",
+        "index": "apps/mfe-host/src/index.html",
+        "baseHref": "/",
+        "main": "apps/mfe-host/src/main.js",
+        "tsConfig": "apps/mfe-host/tsconfig.app.json",
+        "assets": [],
+        "styles": ["apps/mfe-host/src/styles.css"],
+        "scripts": [],
+        "webpackConfig": "apps/mfe-host/webpack.config.js"
+      },
+      "configurations": {
+        "development": {
+          "extractLicenses": false,
+          "optimization": false,
+          "sourceMap": true,
+          "vendorChunk": true
+        },
+        "production": {
+          "baseHref": "/nx-playground/mfe-host/",
+          "optimization": true,
+          "outputHashing": "all",
+          "sourceMap": false,
+          "namedChunks": false,
+          "extractLicenses": false,
+          "vendorChunk": false,
+          "webpackConfig": "apps/mfe-host/webpack.config.prod.js"
+        }
+      }
+    },
+    "serve": {
+      "executor": "@nx/react:module-federation-dev-server",
+      "defaultConfiguration": "development",
+      "options": {
+        "buildTarget": "mfe-host:build",
+        "port": 5173,
+        "hmr": true,
+        "devRemotes": ["mfe-ui"]
+      },
+      "configurations": {
+        "development": {
+          "buildTarget": "mfe-host:build:development"
+        },
+        "production": {
+          "buildTarget": "mfe-host:build:production",
+          "hmr": false
+        }
+      }
+    },
+    "test": {
+      "executor": "@nx/vitest:test",
+      "outputs": ["{workspaceRoot}/coverage/apps/mfe-host"],
+      "options": {
+        "config": "apps/mfe-host/vite.config.js",
+        "passWithNoTests": true,
+        "reportsDirectory": "../../coverage/apps/mfe-host"
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint",
+      "options": {
+        "lintFilePatterns": ["apps/mfe-host/src/**/*.{js,jsx}"]
+      }
+    }
+  }
+}
