@@ -1,0 +1,9 @@
+{
+  "name": "@nx-playground/angular-dashboard",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Nx Angular dashboard sandbox imported from tessOu56/angular-dashboard-sandbox. Aligned to workspace Angular 20.3.3.",
+  "dependencies": {
+    "rxjs": "~7.8.0"
+  }
+}

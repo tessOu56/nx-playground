@@ -21,6 +21,7 @@ export default [
       '**/.nx/**',
       '!**/src/**',
       'apps/auth/**',
+      'apps/angular-dashboard/**',
       'labs/**',
       'libs/api-client/src/generated/**',
       '.agents/**',

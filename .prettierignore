@@ -33,3 +33,6 @@ CHANGELOG.md
 # Vendored agent skills (verbatim upstream copies)
 .agents/skills
 .cursor/skills
+
+# Imported sandbox source — keep satellite formatting
+apps/angular-dashboard/**
