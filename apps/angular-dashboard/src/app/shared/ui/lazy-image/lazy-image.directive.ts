@@ -79,5 +79,17 @@ export class LazyImageDirective implements OnInit, OnDestroy {
 
 function isSafeImageUrl(url: string): boolean {
   const trimmed = url.trim().toLowerCase();
-  return !trimmed.startsWith('javascript:') && !trimmed.startsWith('vbscript:');
+  if (
+    trimmed.startsWith('javascript:') ||
+    trimmed.startsWith('vbscript:') ||
+    trimmed.startsWith('data:')
+  ) {
+    return false;
+  }
+  return (
+    trimmed.startsWith('https:') ||
+    trimmed.startsWith('http:') ||
+    trimmed.startsWith('/') ||
+    trimmed.startsWith('./')
+  );
 }

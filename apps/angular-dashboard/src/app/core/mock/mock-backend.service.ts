@@ -31,6 +31,7 @@ export class MockBackendService {
   private events: Event[] = [];
   private auditLogs: AuditLog[] = [];
   private users: User[] = [];
+  private eventSeq = 0;
 
   constructor() {
     this.initializeMockData();
@@ -413,16 +414,18 @@ export class MockBackendService {
     const types = Object.values(EventType);
     const severities = Object.values(EventSeverity);
     const sources = ['auth-service', 'approval-service', 'flag-service', 'monitoring-service'];
+    const seq = this.eventSeq++;
+    const user = this.users[seq % this.users.length];
 
     return {
-      id: `event-${Date.now()}-${Math.random()}`,
-      type: types[Math.floor(Math.random() * types.length)],
+      id: `event-${Date.now()}-${seq}`,
+      type: types[seq % types.length],
       timestamp: new Date().toISOString(),
-      userId: this.users[Math.floor(Math.random() * this.users.length)].id,
-      username: this.users[Math.floor(Math.random() * this.users.length)].username,
-      details: { random: Math.random(), test: true },
-      severity: severities[Math.floor(Math.random() * severities.length)],
-      source: sources[Math.floor(Math.random() * sources.length)],
+      userId: user.id,
+      username: user.username,
+      details: { seq, test: true },
+      severity: severities[seq % severities.length],
+      source: sources[seq % sources.length],
     };
   }
 

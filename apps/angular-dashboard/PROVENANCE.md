@@ -24,6 +24,8 @@ The satellite stays canonical on GitHub at Angular 22. This app is the same prod
 - Build/serve/test/lint via Nx (`@angular/build:application`, `@nx/jest:jest`, `@nx/eslint:lint`)
 - `zone.js` polyfill + `provideZoneChangeDetection` (Angular 20)
 - `CanMatchFn` is the Angular 20 two-argument form (`route`, `segments`); Angular 22 added a third snapshot argument
+- Mock SSE event ids use a sequence (not `Math.random`) so CodeQL does not treat demo user picks as a CSPRNG
+- Lazy-image URL check allowlists `http(s):` and relative paths and rejects `data:` / `javascript:` / `vbscript:`
 - Unit tests use `jest-preset-angular` (workspace test runner); `vi.*` fake timers mapped to `jest.*`
 - GitHub Pages `baseHref` `/nx-playground/angular-dashboard/` (the satellite had no Pages site)
 
