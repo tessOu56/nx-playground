@@ -21,8 +21,9 @@ Angular / Vue / profile / mobile-approvals are leaving or already have independe
 | api-mock | 3011 | Stateful mock of the Nest event-stack OpenAPI |
 | event-cms | 3002 | React ops console |
 | profile | 3003 | Personal site — no new features (graduate) |
+| angular-dashboard | 4200 | Nx import of angular-dashboard-sandbox (Angular 20.3.3) |
 
-Archived (not product): `labs/vue-motion` and `labs/enterprise-admin` — see [`labs/README.md`](../labs/README.md). Canonical Vue/Angular is the satellite sandboxes.
+Archived (not product): `labs/vue-motion` and `labs/enterprise-admin` — see [`labs/README.md`](../labs/README.md). Canonical Vue/Angular remains the satellite sandboxes; `apps/angular-dashboard` is the Nx import.
 
 ## Bootstrap
 

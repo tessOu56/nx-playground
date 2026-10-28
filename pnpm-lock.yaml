@@ -691,6 +691,12 @@ importers:
         specifier: ^5.20.2
         version: 5.102.1(@swc/core@1.16.2(@swc/helpers@0.5.23))(esbuild@0.28.2)(uglify-js@3.19.3)
 
+  apps/angular-dashboard:
+    dependencies:
+      rxjs:
+        specifier: ~7.8.0
+        version: 7.8.2
+
   apps/api-mock:
     dependencies:
       '@neondatabase/serverless':

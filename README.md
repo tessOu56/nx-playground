@@ -34,7 +34,7 @@ Interview second case after [AI Search Portal](https://github.com/tessOu56/ai-se
 - 🔐 **auth** — redirects to event-portal Better Auth（:3004 → :3000/zh-TW/login）
 
 其餘 leftover（`profile`、`mobile-approvals`）仍在 `apps/`，轉型完成前**不加功能**。  
-Vue / Angular 鏡像已移到 [`labs/`](./labs/README.md)（legacy — do not extend）；canonical 是 [vue-motion-sandbox](https://github.com/tessOu56/vue-motion-sandbox) 與 [angular-dashboard-sandbox](https://github.com/tessOu56/angular-dashboard-sandbox)。
+Vue / Angular 鏡像已移到 [`labs/`](./labs/README.md)（legacy — do not extend）。Nx import：[`apps/angular-dashboard`](./apps/angular-dashboard/README.md)（[angular-dashboard-sandbox](https://github.com/tessOu56/angular-dashboard-sandbox)，對齊本 repo Angular 20.3.3）。
 
 ## 🚀 快速開始
 
@@ -84,6 +84,7 @@ make seed
 - **Event Portal** (展覽探索 + LINE): http://localhost:3000
 - **Event CMS** (活動管理): http://localhost:3002
 - **Auth**: http://localhost:3004
+- **Angular dashboard** (sandbox import): http://localhost:4200
 
 ## 📦 專案結構
 
@@ -96,7 +97,8 @@ nx-playground/
 │   ├── event-cms/          # 📊 活動 CMS (React + Vite, Port 3002)
 │   ├── event-portal/       # 🎫 展覽探索 + LINE (Next.js 15, Port 3000)
 │   ├── profile/            # 🎯 技術展示 (React + Vite, Port 3003) — no new features
-│   └── mobile-approvals/   # leftover — no new features
+│   ├── mobile-approvals/   # leftover — no new features
+│   └── angular-dashboard/  # Angular ops sandbox import (Port 4200)
 ├── labs/                    # archived Vue / Angular mirrors — see labs/README.md
 ├── libs/                    # 共享函式庫
 │   ├── api-client/         # API 客戶端 (React Query + Orval)

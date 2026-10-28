@@ -1,0 +1,94 @@
+# GitHub Pages for sandbox demos (angular-dashboard, later vue-motion)
+name: pages
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'apps/angular-dashboard/**'
+      - 'apps/vue-motion/**'
+      - '.github/workflows/pages.yml'
+  pull_request:
+    paths:
+      - 'apps/angular-dashboard/**'
+      - 'apps/vue-motion/**'
+      - '.github/workflows/pages.yml'
+  workflow_dispatch:
+
+concurrency:
+  group: pages-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: read
+      pages: write
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - uses: pnpm/action-setup@0977fd99725f1db4007ccb2928dbb4e90d06cc86 # v6.0.10
+        with:
+          version: 11.28.8
+
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      - name: Build Pages site
+        run: |
+          set -euo pipefail
+          SITE=_site
+          mkdir -p "$SITE/angular-dashboard"
+          pnpm exec nx build angular-dashboard --configuration=pages
+          BROWSER=dist/apps/angular-dashboard/browser
+          if [ ! -d "$BROWSER" ]; then
+            BROWSER=dist/apps/angular-dashboard
+          fi
+          cp -a "$BROWSER"/. "$SITE/angular-dashboard/"
+          cp "$SITE/angular-dashboard/index.html" "$SITE/angular-dashboard/404.html"
+          cat > "$SITE/index.html" <<'HTML'
+          <!doctype html>
+          <html lang="en">
+            <head>
+              <meta charset="utf-8" />
+              <meta name="viewport" content="width=device-width, initial-scale=1" />
+              <title>nx-playground demos</title>
+            </head>
+            <body>
+              <h1>nx-playground demos</h1>
+              <ul>
+                <li><a href="./angular-dashboard/">angular-dashboard</a></li>
+              </ul>
+            </body>
+          </html>
+          HTML
+
+      - uses: actions/upload-pages-artifact@56afc609e74202658d3ffba0e8f6dda462b719fa # v3.0.1
+        if: github.ref == 'refs/heads/main'
+        with:
+          path: _site
+
+  deploy:
+    if: github.ref == 'refs/heads/main'
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@d6db90164ac5ed86f2b6aed7e0febac5b3c0c03e # v4.0.5
