@@ -9,7 +9,7 @@ services:
     plan: free
     region: oregon
     branch: main
-    autoDeployTrigger: commit
+    autoDeployTrigger: off
     healthCheckPath: /health
     buildCommand: bash scripts/render-event-stack-api.sh build
     startCommand: bash scripts/render-event-stack-api.sh start
