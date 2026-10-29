@@ -100,7 +100,9 @@
 </template>
 
 <script>
-import { ref, onMounted, onUnmounted } from "vue"
+import { ref, onMounted, onUnmounted, watch } from "vue"
+
+import { usePrefersReducedMotion } from "../../composables/usePrefersReducedMotion.js"
 
 export default {
   name: "ParticlesEffect",
@@ -109,7 +111,8 @@ export default {
     const particleCount = ref(150)
     const connectionDistance = ref(100)
     const particleSpeed = ref(1.5)
-    const isAnimating = ref(true)
+    const prefersReducedMotion = usePrefersReducedMotion()
+    const isAnimating = ref(!prefersReducedMotion.value)
 
     let ctx = null
     let animationId = null
@@ -207,24 +210,33 @@ export default {
       }
     }
 
-    const animate = () => {
-      if (!isAnimating.value) {
-        animationId = requestAnimationFrame(animate)
-        return
-      }
+    const drawFrame = (updateParticlesFrame = true) => {
+      if (!ctx || !canvas.value) return
 
       ctx.clearRect(0, 0, canvas.value.width, canvas.value.height)
-
-      // 更新和繪製粒子
       particles.forEach(particle => {
-        particle.update()
+        if (updateParticlesFrame) particle.update()
         particle.draw()
       })
-
-      // 繪製連接線
       drawConnections()
+    }
 
+    const stopLoop = () => {
+      if (animationId) {
+        cancelAnimationFrame(animationId)
+        animationId = null
+      }
+    }
+
+    const animate = () => {
+      if (!isAnimating.value) return
+      drawFrame(true)
       animationId = requestAnimationFrame(animate)
+    }
+
+    const startLoop = () => {
+      if (animationId) return
+      animate()
     }
 
     const updateParticles = () => {
@@ -237,10 +249,17 @@ export default {
           )
         )
       }
+      if (!isAnimating.value) drawFrame(false)
     }
 
     const toggleAnimation = () => {
       isAnimating.value = !isAnimating.value
+      if (isAnimating.value) {
+        startLoop()
+      } else {
+        stopLoop()
+        drawFrame(false)
+      }
     }
 
     const onMouseMove = event => {
@@ -254,18 +273,40 @@ export default {
       mouse.y = 0
     }
 
+    const handleResize = () => {
+      resizeCanvas()
+      if (!isAnimating.value) drawFrame(false)
+    }
+
     onMounted(() => {
       initCanvas()
-      animate()
+      if (isAnimating.value) {
+        startLoop()
+      } else {
+        drawFrame(false)
+      }
 
-      window.addEventListener("resize", resizeCanvas)
+      window.addEventListener("resize", handleResize)
+    })
+
+    watch(prefersReducedMotion, reduced => {
+      if (reduced) {
+        isAnimating.value = false
+        stopLoop()
+        drawFrame(false)
+      } else {
+        isAnimating.value = true
+        startLoop()
+      }
+    })
+
+    watch(connectionDistance, () => {
+      if (!isAnimating.value) drawFrame(false)
     })
 
     onUnmounted(() => {
-      if (animationId) {
-        cancelAnimationFrame(animationId)
-      }
-      window.removeEventListener("resize", resizeCanvas)
+      stopLoop()
+      window.removeEventListener("resize", handleResize)
     })
 
     return {

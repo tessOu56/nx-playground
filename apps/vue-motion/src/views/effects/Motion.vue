@@ -20,8 +20,8 @@
           <div
             v-motion
             :initial="{ opacity: 0, y: 50 }"
-            :enter="{ opacity: 1, y: 0, transition: { duration: 1000 } }"
-            :visible="{ scale: 1.1, transition: { duration: 500 } }"
+            :enter="{ opacity: 1, y: 0, transition: { duration: motionMs(1000) } }"
+            :visible="{ scale: 1.1, transition: { duration: motionMs(500) } }"
             :visibleOnce="{ scale: 1 }"
             class="motion-box basic-motion"
           >
@@ -40,9 +40,9 @@
             :enter="{
               x: 0,
               opacity: 1,
-              transition: { duration: 800, delay: 200 },
+              transition: { duration: motionMs(800), delay: prefersReducedMotion ? 0 : 200 },
             }"
-            :hovered="{ x: 20, transition: { duration: 300 } }"
+            :hovered="{ x: 20, transition: { duration: motionMs(300) } }"
             class="motion-box slide-motion"
           >
             左滑入
@@ -53,9 +53,9 @@
             :enter="{
               x: 0,
               opacity: 1,
-              transition: { duration: 800, delay: 400 },
+              transition: { duration: motionMs(800), delay: prefersReducedMotion ? 0 : 400 },
             }"
-            :hovered="{ x: -20, transition: { duration: 300 } }"
+            :hovered="{ x: -20, transition: { duration: motionMs(300) } }"
             class="motion-box slide-motion"
           >
             右滑入
@@ -73,12 +73,12 @@
             :enter="{
               rotation: 360,
               scale: 1,
-              transition: { duration: 1500, ease: 'easeOut' },
+              transition: { duration: motionMs(1500), ease: 'easeOut' },
             }"
             :hovered="{
               rotation: 180,
               scale: 1.2,
-              transition: { duration: 500 },
+              transition: { duration: motionMs(500) },
             }"
             class="motion-box rotate-motion"
           >
@@ -97,12 +97,12 @@
             :enter="{
               scale: 1,
               y: 0,
-              transition: { duration: 800, ease: 'backOut' },
+              transition: { duration: motionMs(800), ease: 'backOut' },
             }"
             :hovered="{
               scale: 1.1,
               y: -10,
-              transition: { duration: 300, ease: 'backOut' },
+              transition: { duration: motionMs(300), ease: 'backOut' },
             }"
             class="motion-box elastic-motion"
           >
@@ -123,9 +123,9 @@
             :enter="{
               opacity: 1,
               y: 0,
-              transition: { duration: 500, delay: index * 100 },
+              transition: { duration: motionMs(500), delay: prefersReducedMotion ? 0 : index * 100 },
             }"
-            :hovered="{ scale: 1.05, transition: { duration: 200 } }"
+            :hovered="{ scale: 1.05, transition: { duration: motionMs(200) } }"
             class="sequence-item"
           >
             {{ item }}
@@ -140,15 +140,7 @@
           <div
             v-motion
             :initial="{ x: 0, y: 0 }"
-            :enter="{
-              x: [0, 100, 200, 100, 0],
-              y: [0, -50, 0, 50, 0],
-              transition: {
-                duration: 3000,
-                ease: 'easeInOut',
-                repeat: Infinity,
-              },
-            }"
+            :enter="pathEnter"
             class="motion-box path-motion"
           >
             路徑移動
@@ -182,11 +174,15 @@
 </template>
 
 <script>
-import { ref, onMounted } from "vue"
+import { computed, ref, onMounted } from "vue"
+
+import { usePrefersReducedMotion } from "../../composables/usePrefersReducedMotion.js"
 
 export default {
   name: "MotionEffect",
   setup() {
+    const prefersReducedMotion = usePrefersReducedMotion()
+    const motionMs = duration => (prefersReducedMotion.value ? 0 : duration)
     const isAnimating = ref(true)
     const sequenceItems = ref([
       "項目 1",
@@ -198,22 +194,36 @@ export default {
 
     const toggleAnimations = () => {
       isAnimating.value = !isAnimating.value
-      // 這裡可以添加控制動畫的邏輯
     }
 
     const resetAnimations = () => {
-      // 重新載入頁面來重置動畫
       window.location.reload()
     }
 
+    const pathEnter = computed(() =>
+      prefersReducedMotion.value
+        ? { x: 0, y: 0 }
+        : {
+            x: [0, 100, 200, 100, 0],
+            y: [0, -50, 0, 50, 0],
+            transition: {
+              duration: 3000,
+              ease: "easeInOut",
+              repeat: Infinity,
+            },
+          }
+    )
+
     onMounted(() => {
-      // 確保動畫在組件掛載後開始
       setTimeout(() => {
         isAnimating.value = true
       }, 100)
     })
 
     return {
+      prefersReducedMotion,
+      motionMs,
+      pathEnter,
       isAnimating,
       sequenceItems,
       toggleAnimations,

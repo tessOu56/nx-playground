@@ -6,6 +6,8 @@ Source: [`tessOu56/vue-motion-sandbox`](https://github.com/tessOu56/vue-motion-s
 
 Aligned to this workspace: **Vue 3.5**, Vite 7, Tailwind 3, Node 24, pnpm 11. The satellite repo remains unmodified.
 
+Effect demos honor the OS `prefers-reduced-motion` setting: looping Three.js / Particles rAF stops on a still frame, Pause cancels the loop, infinite GSAP tweens and SVG `animateMotion` are skipped, and Lottie does not autoplay. This is a convenience gate, not a WCAG audit.
+
 ## Run
 
 ```bash

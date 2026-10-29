@@ -158,9 +158,12 @@
 <script>
 import { ref, onMounted, onUnmounted } from "vue"
 
+import { usePrefersReducedMotion } from "../../composables/usePrefersReducedMotion.js"
+
 export default {
   name: "InteractiveEffect",
   setup() {
+    const prefersReducedMotion = usePrefersReducedMotion()
     const interactionMode = ref("mouse")
     const mouseFollower = ref(null)
     const mousePos = ref({ x: 0, y: 0 })
@@ -195,6 +198,8 @@ export default {
     }
 
     const createRipple = event => {
+      if (prefersReducedMotion.value) return
+
       const rect = event.currentTarget.getBoundingClientRect()
       const x = event.clientX - rect.left
       const y = event.clientY - rect.top
@@ -521,6 +526,12 @@ export default {
   100% {
     transform: scale(4);
     opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ripple {
+    animation: none;
   }
 }
 
