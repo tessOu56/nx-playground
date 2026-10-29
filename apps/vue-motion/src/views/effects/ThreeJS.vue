@@ -58,8 +58,10 @@
 </template>
 
 <script>
-import { ref, onMounted, onUnmounted } from "vue"
+import { ref, onMounted, onUnmounted, watch } from "vue"
 import * as THREE from "three"
+
+import { usePrefersReducedMotion } from "../../composables/usePrefersReducedMotion.js"
 
 export default {
   name: "ThreeJSEffect",
@@ -67,7 +69,8 @@ export default {
     const canvas = ref(null)
     const rotationSpeed = ref(0.01)
     const scale = ref(1)
-    const isAnimating = ref(true)
+    const prefersReducedMotion = usePrefersReducedMotion()
+    const isAnimating = ref(!prefersReducedMotion.value)
 
     let scene = null
     let camera = null
@@ -109,8 +112,10 @@ export default {
       // 創建光照
       createLights()
 
-      // 開始動畫循環
-      animate()
+      renderFrame()
+      if (isAnimating.value) {
+        startLoop()
+      }
     }
 
     const createGeometries = () => {
@@ -187,43 +192,65 @@ export default {
       scene.add(spotLight)
     }
 
-    const animate = () => {
-      if (!isAnimating.value) {
-        animationId = requestAnimationFrame(animate)
-        return
-      }
+    const applyModelScale = () => {
+      if (cube && cube.visible) cube.scale.setScalar(scale.value)
+      if (sphere && sphere.visible) sphere.scale.setScalar(scale.value)
+      if (torus && torus.visible) torus.scale.setScalar(scale.value)
+    }
 
-      // 旋轉模型
+    const renderFrame = () => {
+      if (!renderer || !scene || !camera) return
+      applyModelScale()
+      renderer.render(scene, camera)
+    }
+
+    const stopLoop = () => {
+      if (animationId) {
+        cancelAnimationFrame(animationId)
+        animationId = null
+      }
+    }
+
+    const animate = () => {
+      if (!isAnimating.value) return
+
       if (cube && cube.visible) {
         cube.rotation.x += rotationSpeed.value
         cube.rotation.y += rotationSpeed.value
-        cube.scale.setScalar(scale.value)
       }
 
       if (sphere && sphere.visible) {
         sphere.rotation.x += rotationSpeed.value
         sphere.rotation.y += rotationSpeed.value
-        sphere.scale.setScalar(scale.value)
       }
 
       if (torus && torus.visible) {
         torus.rotation.x += rotationSpeed.value
         torus.rotation.y += rotationSpeed.value
-        torus.scale.setScalar(scale.value)
       }
 
-      // 相機環繞
       const time = Date.now() * 0.001
       camera.position.x = Math.cos(time * 0.2) * 8
       camera.position.z = Math.sin(time * 0.2) * 8
       camera.lookAt(0, 0, 0)
 
-      renderer.render(scene, camera)
+      renderFrame()
       animationId = requestAnimationFrame(animate)
+    }
+
+    const startLoop = () => {
+      if (animationId) return
+      animate()
     }
 
     const toggleAnimation = () => {
       isAnimating.value = !isAnimating.value
+      if (isAnimating.value) {
+        startLoop()
+      } else {
+        stopLoop()
+        renderFrame()
+      }
     }
 
     const changeModel = () => {
@@ -249,6 +276,8 @@ export default {
           cube.visible = true
           break
       }
+
+      renderFrame()
     }
 
     const handleResize = () => {
@@ -260,6 +289,7 @@ export default {
       camera.aspect = width / height
       camera.updateProjectionMatrix()
       renderer.setSize(width, height)
+      renderFrame()
     }
 
     onMounted(() => {
@@ -267,10 +297,23 @@ export default {
       window.addEventListener("resize", handleResize)
     })
 
-    onUnmounted(() => {
-      if (animationId) {
-        cancelAnimationFrame(animationId)
+    watch(scale, () => {
+      if (!isAnimating.value) renderFrame()
+    })
+
+    watch(prefersReducedMotion, reduced => {
+      if (reduced) {
+        isAnimating.value = false
+        stopLoop()
+        renderFrame()
+      } else {
+        isAnimating.value = true
+        startLoop()
       }
+    })
+
+    onUnmounted(() => {
+      stopLoop()
       window.removeEventListener("resize", handleResize)
 
       if (renderer) {

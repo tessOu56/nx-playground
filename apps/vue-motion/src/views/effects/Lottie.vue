@@ -81,8 +81,10 @@
 </template>
 
 <script>
-import { ref, onMounted, onUnmounted } from "vue"
+import { ref, onMounted, onUnmounted, watch } from "vue"
 import lottie from "lottie-web"
+
+import { usePrefersReducedMotion } from "../../composables/usePrefersReducedMotion.js"
 
 export default {
   name: "LottieEffect",
@@ -94,6 +96,7 @@ export default {
 
     const isPlaying = ref(false)
     const currentSpeed = ref(1)
+    const prefersReducedMotion = usePrefersReducedMotion()
 
     let loadingAnimation = null
     let successAnimation = null
@@ -419,14 +422,40 @@ export default {
       }
     }
 
+    const freezeAtEnd = anim => {
+      if (!anim) return
+      const stop = () => {
+        const lastFrame = Math.max(0, anim.totalFrames - 1)
+        anim.goToAndStop(lastFrame, true)
+      }
+      if (anim.isLoaded) {
+        stop()
+        return
+      }
+      anim.addEventListener("DOMLoaded", stop)
+    }
+
+    const destroyAnimations = () => {
+      if (loadingAnimation) loadingAnimation.destroy()
+      if (successAnimation) successAnimation.destroy()
+      if (errorAnimation) errorAnimation.destroy()
+      if (customAnimation) customAnimation.destroy()
+      loadingAnimation = null
+      successAnimation = null
+      errorAnimation = null
+      customAnimation = null
+    }
+
     const initAnimations = () => {
+      const reduceMotion = prefersReducedMotion.value
+
       // 載入動畫
       if (loadingContainer.value) {
         loadingAnimation = lottie.loadAnimation({
           container: loadingContainer.value,
           renderer: "svg",
-          loop: true,
-          autoplay: true,
+          loop: !reduceMotion,
+          autoplay: !reduceMotion,
           animationData: createLoadingAnimation(),
         })
       }
@@ -458,13 +487,21 @@ export default {
         customAnimation = lottie.loadAnimation({
           container: customContainer.value,
           renderer: "svg",
-          loop: true,
-          autoplay: true,
+          loop: !reduceMotion,
+          autoplay: !reduceMotion,
           animationData: createLoadingAnimation(),
         })
       }
 
-      isPlaying.value = true
+      if (reduceMotion) {
+        freezeAtEnd(loadingAnimation)
+        freezeAtEnd(successAnimation)
+        freezeAtEnd(errorAnimation)
+        freezeAtEnd(customAnimation)
+        isPlaying.value = false
+      } else {
+        isPlaying.value = true
+      }
     }
 
     const playAnimation = () => {
@@ -504,11 +541,13 @@ export default {
       initAnimations()
     })
 
+    watch(prefersReducedMotion, () => {
+      destroyAnimations()
+      initAnimations()
+    })
+
     onUnmounted(() => {
-      if (loadingAnimation) loadingAnimation.destroy()
-      if (successAnimation) successAnimation.destroy()
-      if (errorAnimation) errorAnimation.destroy()
-      if (customAnimation) customAnimation.destroy()
+      destroyAnimations()
     })
 
     return {
