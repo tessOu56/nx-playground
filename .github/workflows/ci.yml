@@ -46,14 +46,14 @@ jobs:
           if [ -z "$BASE" ] || [ "$BASE" = "0000000000000000000000000000000000000000" ]; then
             BASE=origin/main
           fi
-          # Importer-only lockfile edits mark the whole graph affected.
-          # Drive affected from non-lockfile paths so pre-existing lib lint
-          # debt is not a gate for sandbox imports.
+          # Root package.json / lockfile-only edits mark the whole graph
+          # affected. Drive affected from other paths so pre-existing lib
+          # lint debt is not a gate for sandbox imports or dep bumps.
           mapfile -t CHANGED < <(
-            git diff --name-only "$BASE" HEAD | grep -vE '^pnpm-lock\.yaml$' || true
+            git diff --name-only "$BASE" HEAD | grep -vE '^(pnpm-lock\.yaml|package\.json)$' || true
           )
           if [ "${#CHANGED[@]}" -eq 0 ]; then
-            echo 'No non-lockfile changes; skip nx affected.'
+            echo 'No non-manifest changes; skip nx affected.'
             exit 0
           fi
           printf 'Changed files:\n%s\n' "${CHANGED[*]}"
