@@ -138,7 +138,7 @@
     "@vanilla-extract/next-plugin": "2.5.2",
     "@vanilla-extract/recipes": "^0.3.0",
     "@vanilla-extract/sprinkles": "^1.6.5",
-    "@vueuse/core": "^13.9.0",
+    "@vueuse/core": "^15.0.0",
     "@vueuse/motion": "^3.0.3",
     "@xyflow/react": "^12.11.0",
     "axios": "1.20.0",
