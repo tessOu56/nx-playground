@@ -485,8 +485,8 @@ importers:
         specifier: ^9.8.0
         version: 9.37.0
       '@faker-js/faker':
-        specifier: 9.9.0
-        version: 9.9.0
+        specifier: 10.5.0
+        version: 10.5.0
       '@nestjs/cli':
         specifier: ^10.4.9
         version: 10.4.9(@swc/cli@0.7.10(@swc/core@1.16.2(@swc/helpers@0.5.23))(chokidar@4.0.3)(supports-color@10.2.2))(@swc/core@1.16.2(@swc/helpers@0.5.23))(esbuild@0.28.2)(uglify-js@3.19.3)
@@ -3294,9 +3294,9 @@ packages:
     resolution: {integrity: sha512-4aQzz9vgxcNXFfo/iyNgDDYfsU5XGKKxWxZopw0cVotHiW+U8IJbIxMaxsINs6bHhtkG3StKNPcOrn3eBuxKPw==}
     hasBin: true
 
-  '@faker-js/faker@9.9.0':
-    resolution: {integrity: sha512-OEl393iCOoo/z8bMezRlJu+GlRGlsKbUAN7jKB6LhnKoqKve5DXRpalbItIIcwnCjs1k/FOPjFzcA6Qn+H+YbA==}
-    engines: {node: '>=18.0.0', npm: '>=9.0.0'}
+  '@faker-js/faker@10.5.0':
+    resolution: {integrity: sha512-bsxD8WLS5lIj7aaoCx1YJkktqYj5vlBUE6HWzu2Q51ksrGJ0H737ECCKlFU7Yf8Br45z9t99frBp/J7kzbMPAg==}
+    engines: {node: ^20.19.0 || ^22.13.0 || ^23.5.0 || >=24.0.0, npm: '>=10'}
 
   '@floating-ui/core@1.7.3':
     resolution: {integrity: sha512-sGnvb5dmrJaKEZ+LDIpguvdX3bDlEllmv4/ClQ9awcmCZrlx5jQyyMWFM5kBI+EyNOCDDiKk8il0zeuX3Zlg/w==}
@@ -12212,6 +12212,7 @@ packages:
   image-size@0.5.5:
     resolution: {integrity: sha512-6TDAlDPZxUFCv+fuOkIoXT/V/f3Qbq8e37p+YOiYrUv3v9cc3/6x78VdfPgFVaB9dZYeLUfKgHRebpkm/oP2VQ==}
     engines: {node: '>=0.10.0'}
+    deprecated: Please migrate to image-size@2.x
     hasBin: true
 
   image-size@1.2.1:
@@ -20888,7 +20889,7 @@ snapshots:
       chalk: 4.1.2
       js-yaml: 4.3.2
 
-  '@faker-js/faker@9.9.0': {}
+  '@faker-js/faker@10.5.0': {}
 
   '@floating-ui/core@1.7.3':
     dependencies:
