@@ -235,7 +235,7 @@
     "@nx/webpack": "22.7.12",
     "@nx/workspace": "22.7.12",
     "@openapitools/openapi-generator-cli": "^2.14.0",
-    "@playwright/test": "^1.56.0",
+    "@playwright/test": "^1.65.0",
     "@storybook/addon-a11y": "^9.1.16",
     "@storybook/addon-essentials": "^8.6.14",
     "@storybook/addon-interactions": "^8.6.14",
