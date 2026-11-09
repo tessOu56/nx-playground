@@ -56,7 +56,13 @@ jobs:
             echo 'No non-manifest changes; skip nx affected.'
             exit 0
           fi
-          printf 'Changed files:\n%s\n' "${CHANGED[*]}"
+          printf 'Changed files:\n'
+          printf '  %s\n' "${CHANGED[@]}"
+          # nx expects one comma-separated --files value. Expanding the array
+          # inside the flag ("--files=${CHANGED[@]}") turns every file after
+          # the first into a positional arg that nx forwards to each target
+          # (e.g. `next build --webpack pnpm-workspace.yaml`).
+          FILES="$(IFS=,; printf '%s' "${CHANGED[*]}")"
           pnpm exec nx affected -t lint,test,build \
             --exclude=tag:legacy,APP_NAME,LIB_NAME,ext-ai-search-portal,@nx-playground/source \
-            --files="${CHANGED[@]}"
+            --files="$FILES"
