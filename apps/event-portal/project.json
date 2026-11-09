@@ -65,18 +65,17 @@
       }
     },
     "test": {
-      "executor": "@nx/jest:jest",
-      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "executor": "nx:run-commands",
       "options": {
-        "jestConfig": "apps/event-portal/jest.config.ts",
-        "passWithNoTests": true
+        "command": "node --import tsx --test $(grep -rlE \"from ['\\\"]node:test['\\\"]\" src --include='*.test.ts' --include='*.test.tsx')",
+        "cwd": "apps/event-portal"
       },
-      "configurations": {
-        "ci": {
-          "ci": true,
-          "codeCoverage": true
+      "dependsOn": [
+        {
+          "target": "prisma-generate",
+          "projects": ["@nx-playground/api-server"]
         }
-      }
+      ]
     },
     "lint": {
       "executor": "nx:run-commands",
