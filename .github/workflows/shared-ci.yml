@@ -14,7 +14,12 @@ jobs:
   ci-node:
     uses: tessOu56/renovate-config/.github/workflows/ci-node.yml@cac28048c136409a6a4279a00e42b8a39f2f0791 # main
     with:
-      command: pnpm test
+      # Root `pnpm test` is a stale jest config (apps/events no longer exists,
+      # "No tests found" → exit 1). Run the real node:test suite instead;
+      # per-project jest/vitest runs in ci.yml via nx affected.
+      command: >-
+        pnpm exec prisma generate --schema=apps/api-server/prisma/schema.prisma &&
+        BETTER_AUTH_SECRET=ci-only-better-auth-secret pnpm run test:line-bot
       audit: true
       audit-level: high
 
